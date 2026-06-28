@@ -1,9 +1,7 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTBase;
@@ -19,6 +17,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -356,19 +355,29 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private static final int MAX_FUELING_SPEED = 100;
 
     private void loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.inputInventory, selectedRocket.cargo);
-
+        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.cargo);
         RocketFuelEntry fuelEntry = selectedRocket.getFuel();
+
         if (fuelEntry == null) {
-            return;
+            List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()
+                    .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid())
+                    .distinct()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
+            if (possibleEntry.isEmpty()) {
+                return;
+            }
+            fuelEntry = possibleEntry.get();
+            selectedRocket.setFuel(fuelEntry);
         }
         var composition = fuelEntry.getComposition();
         int unitsDrained = Math.min(selectedRocket.getFuelVolume() - this.fuelingProgress, MAX_FUELING_SPEED);
         for (var comp : composition) {
             FluidStack drained = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
-            int amount = drained == null ? 0 : drained.amount;
             // Intentional integer division moment
-            unitsDrained = Math.min(amount, unitsDrained / comp.getSecond());
+            unitsDrained = Math.min(drained.amount, unitsDrained / comp.getSecond());
         }
         setFuelingProgress(this.fuelingProgress + unitsDrained);
         for (var comp : composition) {
