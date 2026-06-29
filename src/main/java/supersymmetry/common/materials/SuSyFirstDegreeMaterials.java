@@ -202,7 +202,7 @@ public class SuSyFirstDegreeMaterials {
                 .build();
         AluminiumAlloy7075.addFlags(GENERATE_FINE_WIRE);
 
-        AluminiumAlloyMg6 = new Material.Builder(8761, SuSyUtility.susyId("aluminium_alloy_Mg_6"))
+        AluminiumAlloyMg6 = new Material.Builder(27151, SuSyUtility.susyId("aluminium_alloy_Mg_6"))
                 .ingot().liquid(new FluidBuilder().temperature(960))
                 .color(0xAceAf1)
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST, GENERATE_PLATE)
