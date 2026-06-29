@@ -55,8 +55,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
     public ClickButtonWidget previousButton;
     public ClickButtonWidget nextButton;
-    public DynamicLabelWidget amountTextField;
-    public DynamicLabelWidget stageName;
+    public DynamicLabelWidget selectedStageText;
 
     public Map<String, StageContainerWidget> stageContainers = new TreeMap<>();
 
@@ -103,57 +102,46 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                         .setShouldClientCallback(true)
                         .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
 
-        amountTextField = new DynamicLabelWidget(
-                (int) ((size.width / 5) * 2.5),
+        selectedStageText = new DynamicLabelWidget(
+                (int) ((size.width / 5) * 1.5),
                 -1,
                 () -> {
                     AbstractRocketBlueprint bp = blueprintProvider.get();
                     if (bp == null || bp.getStages().isEmpty()) {
                         return "0/0";
                     }
-                    return (selectedStageIndex + 1) + "/" + bp.getStages().size();
-                });
 
-        stageName = new DynamicLabelWidget(
-                2,
-                12,
-                () -> {
-                    AbstractRocketBlueprint bp = blueprintProvider.get();
-                    if (bp == null || bp.getStages().isEmpty()) {
-                        return "";
-                    }
                     RocketStage stage = getSelectedStage();
                     if (stage == null) {
-                        return "";
+                        return "0/" + bp.getStages().size();
                     }
                     return I18n.format(
                             "susy.machine.blueprint_assembler.stagename",
+                            (selectedStageIndex + 1) + "/" + bp.getStages().size(),
                             I18n.format(stage.getLocalizationKey()));
-                },
-                0xffffff);
+                });
 
-        this.addWidget(amountTextField);
+
+
+        this.addWidget(selectedStageText);
         this.addWidget(nextButton);
         this.addWidget(previousButton);
-        this.addWidget(stageName);
     }
 
     @Override
     public void setVisible(boolean v) {
         super.setVisible(v);
-        this.amountTextField.setVisible(v);
+        this.selectedStageText.setVisible(v);
         this.nextButton.setVisible(v);
         this.previousButton.setVisible(v);
-        this.stageName.setVisible(v);
     }
 
     @Override
     public void setActive(boolean a) {
         super.setActive(a);
-        this.amountTextField.setActive(a);
+        this.selectedStageText.setActive(a);
         this.nextButton.setActive(a);
         this.previousButton.setActive(a);
-        this.stageName.setActive(a);
     }
 
     public int getSelectedIndex() {
@@ -210,7 +198,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
         for (RocketStage stage : bp.getStages()) {
             StageContainerWidget stageView = new StageContainerWidget(
-                    new Position(0, 15),
+                    new Position(0, 0),
                     new Size(this.getSize().width, this.getSize().height - 15),
                     stage,
                     rowStateProvider,
@@ -309,6 +297,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
                 slotsw.setSliderActive(slotsw.widgets.size() > 5);
 
+                //dial button
                 ComponentEntryWidget entry = new ComponentEntryWidget(
                         new Position(0, 0), new Size(18 * 5, 28), slotsw, rowState, markDirty);
 
@@ -322,9 +311,14 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             boolean naturalSlider = entry.shortView ? entry.previousSliderState : entry.itemList.sliderActive;
             int scrollbarPadding = naturalSlider ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
 
+            entry.setSelfPosition(new Position(0, rowSkip + ROW_SEPARATION + scrollbarPadding));
+            entry.setSize(new Size(90, 28));
+            this.addWidget(entry);
+
+            //part name
             String text = I18n.format(localizationKey);
             int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-            int xPos = this.getSize().width - textWidth - 2;
+            int xPos = this.getSize().width - textWidth - 10;
 
             DynamicLabelWidget textWidget = new DynamicLabelWidget(
                     xPos,
@@ -333,10 +327,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     0xffffff);
 
             this.addWidget(textWidget);
-
-            entry.setSelfPosition(new Position(9, rowSkip + ROW_SEPARATION + scrollbarPadding));
-            entry.setSize(new Size(90, 28));
-            this.addWidget(entry);
 
             rowEntries.add(new RowLayoutEntry(textWidget, entry, xPos));
 
