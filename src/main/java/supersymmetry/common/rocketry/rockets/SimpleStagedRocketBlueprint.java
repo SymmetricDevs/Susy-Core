@@ -11,7 +11,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
-import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
@@ -19,7 +18,6 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
-import supersymmetry.common.rocketry.components.ComponentSpacecraft;
 import supersymmetry.common.world.SuSyDimensions;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSImprovable {
@@ -160,7 +158,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
                 remainingWeight -= stage.getMass() + currentFuelWeight;
             }
             f -= escapeVelocity;
-
+            if (guess == 0 && f < 0) {
+                return 0; // Exit early as to not blow up
+            }
             guess -= f / fprime;
             if (f < 1e-8) break;
         }

@@ -10,6 +10,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -303,7 +304,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     break;
                 }
             case LOADING:
-                if (this.selectedErector == null || this.selectedErector.isDead()) {
+                if (this.selectedErector == null || this.selectedErector.isDead() ||
+                        !this.selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
                     break;
                 }
@@ -324,8 +326,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
-                loadCargo();
-                if (this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
+                if (!loadCargo() && this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
@@ -354,7 +355,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     // In liters per second
     private static final int MAX_FUELING_SPEED = 100;
 
-    private void loadCargo() {
+    private boolean loadCargo() {
         GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.cargo);
         RocketFuelEntry fuelEntry = selectedRocket.getFuel();
 
@@ -367,13 +368,16 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
             Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
             if (possibleEntry.isEmpty()) {
-                return;
+                return false;
             }
             fuelEntry = possibleEntry.get();
             selectedRocket.setFuel(fuelEntry);
         }
         var composition = fuelEntry.getComposition();
-        int unitsDrained = Math.min(selectedRocket.getFuelVolume() - this.fuelingProgress, MAX_FUELING_SPEED);
+        // Round up for the composition
+        int totalMBPerUnit = composition.stream().mapToInt(Tuple::getSecond).sum();
+        int maxFuelingProgress = selectedRocket.getFuelVolume() * 1000 + totalMBPerUnit - 1;
+        int unitsDrained = Math.min(maxFuelingProgress - this.fuelingProgress, MAX_FUELING_SPEED);
         for (var comp : composition) {
             FluidStack drained = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
             // Intentional integer division moment
@@ -383,6 +387,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         for (var comp : composition) {
             inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
+
+        return this.fuelingProgress >= selectedRocket.getFuelVolume() * 1000;
     }
 
     private void setFuelingProgress(int fuelingProgress) {

@@ -2,8 +2,6 @@ package supersymmetry.common.entities;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 import cam72cam.immersiverailroading.entity.Freight;
@@ -13,7 +11,6 @@ import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagField;
-import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
@@ -77,7 +74,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     }
 
     public void setRocketLoaded(boolean rocketLoaded) {
-        assemblyProgress = rocketLoaded ? 1f : 0f;
+        nextAssemblyProgress = assemblyProgress = rocketLoaded ? 1f : 0f;
     }
 
     public float getAssemblyProgress(float renderTime) {
