@@ -315,7 +315,7 @@ susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
 susy.machine.aerospace_flight_simulator.gui.no_coolant_warning=Insufficient FC-75 coolant flow
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
-susy.machine.blueprint_assembler.stagename=Stage: %s
+susy.machine.blueprint_assembler.stagename=Stage %s: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
 
@@ -1690,3 +1690,9 @@ susy.command.faction.invalid=Invalid argument. Use get, add, or set.
 # Advancements
 gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)
 gregtech.advancement.extreme_voltage.rocket_launch.desc=Get in a launching rocket.
+
+susy.earth=Earth
+susy.moon=Moon
+susy.gui.rocket_programmer.manned=Manned Mission
+susy.gui.rocket_programmer.unmanned_cargo=Unmanned Cargo Mission
+susy.gui.rocket_programmer.unmanned_collection=Unmanned Collection Mission

@@ -457,14 +457,14 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 lastErrorStage == null ? "" : I18n.format("susy.rocketry.stages." + lastErrorStage + ".name"),
                 lastErrorComponent == null ? "" :
                         I18n.format("susy.rocketry.components." + lastErrorComponent + ".name"));
-        if (message.length() <= 30) {
+        if (message.length() <= 35) {
             return message;
         }
         StringBuilder wrapped = new StringBuilder();
         String[] words = message.split(" ");
         int lineLength = 0;
         for (String word : words) {
-            if (lineLength + word.length() + 1 > 30 && lineLength > 0) {
+            if (lineLength + word.length() + 1 > 35 && lineLength > 0) {
                 wrapped.append("\n");
                 lineLength = 0;
             }
@@ -784,9 +784,15 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         }
     }
 
+    //If an extra stage would be added at some point CHANGE THIS NUMBER!!!
+    private final int STAGES = 4;
+    private final int SLOT_SIZE = 18;
+    private final int INV_HEIGHT = SLOT_SIZE * 4 + 4;
+
+
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
-        int width = 300;
-        int height = 280;
+        int width = 250;
+        int height = 72 + INV_HEIGHT + STAGES * SLOT_SIZE;
 
         hadBlueprint = hasBlueprint();
         if (hasBlueprint() && stageRows.isEmpty()) {
@@ -794,7 +800,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         }
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
-        builder.image(4, 4, width - 8, height - 8, GuiTextures.DISPLAY);
+        builder.image(4, 4, width - 8, height - 83, GuiTextures.DISPLAY);
 
         ConditionalWidget conditional = new ConditionalWidget(0, 0, width, height, () -> !hasBlueprint());
         conditional.addWidget(
@@ -806,51 +812,37 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         builder.widget(conditional);
 
         builder.widget(
-                new IndicatorImageWidget(width - 23, height - 23, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
+                new IndicatorImageWidget(width - 23, height - INV_HEIGHT - 22, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
                         .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
                         .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
         RocketStageDisplayWidget mainw = new RocketStageDisplayWidget(
                 new Position(9, 20),
-                new Size(width - 20, 28 * 4),
+                new Size(width - 9, 28 * STAGES),
                 this::getCurrentBlueprint,
                 this::getRowState,
                 this::markDirty);
 
         if (hasBlueprint()) {
             mainw.buildContainers();
-            mainw.setVisible(true);
-            mainw.setActive(true);
-        } else {
-            mainw.setVisible(false);
-            mainw.setActive(false);
         }
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
 
-        builder.bindPlayerInventory(entityPlayer.inventory, height - 80);
+        builder.bindPlayerInventory(entityPlayer.inventory, GuiTextures.SLOT, width / 2 - 81, height - 80);
 
         SlotWidgetMentallyStable blueprintSlot = new SlotWidgetMentallyStable(
                 rocketBlueprintSlot, 0, width / 2 - 9, height / 2, true, true)
                         .setBackgroundTexture(GuiTextures.SLOT_DARK);
-        rocketBlueprintSlot.setLocked(!slotsEmpty());
+        blueprintSlot.setChangeListener(() -> this.onBlueprintSlotChanged(mainw));
+        conditional.addWidgetWithTest(blueprintSlot, () -> blueprintBuilt || !hasBlueprint());
 
-        blueprintSlot.setChangeListener(
-                () -> {
-                    this.onBlueprintSlotChanged(mainw);
-                    if (hasBlueprint()) {
-                        blueprintSlot.setSelfPosition(new Position(width - 48, height - 28));
-                    } else {
-                        blueprintSlot.setSelfPosition(new Position(width / 2 - 9, height / 2 - 18));
-                    }
-                });
 
-        builder.widget(mainw);
-        builder.widget(blueprintSlot);
+        conditional.addWidgetWithTest(mainw, () -> !blueprintBuilt && hasBlueprint());
 
         conditional.addWidgetWithTest(
                 new ClickButtonWidget(
-                        7,
-                        height - 115,
+                        9,
+                        height - INV_HEIGHT - 30,
                         35,
                         25,
                         I18n.format(this.getMetaName() + ".build_button"),
@@ -874,11 +866,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                                 }
                             }
                         }),
-                () -> hasBlueprint() && !buildInProgress);
+                () -> hasBlueprint() && !buildInProgress && !blueprintBuilt);
 
         conditional.addWidgetWithTest(
                 new DynamicLabelWidget(
-                        7, height - 115,
+                        width - 80, 8,
                         () -> I18n.format(
                                 this.getMetaName() + ".compiling",
                                 buildDuration > 0 ? (buildProgress * 100 / buildDuration) : 0),
@@ -886,16 +878,16 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                 () -> buildInProgress && hasBlueprint());
 
         conditional.addWidgetWithTest(
-                new DynamicLabelWidget(50, height - 130, this::getLastErrorMessage, 0xFF5555),
+                new DynamicLabelWidget(45, height - INV_HEIGHT - 28, this::getLastErrorMessage, 0xFF5555),
                 () -> this.lastErrorResult != null &&
                         this.lastErrorResult != RocketStage.ComponentValidationResult.SUCCESS &&
                         hasBlueprint() && !buildInProgress);
         conditional.addWidgetWithTest(
-                new LabelWidget(50, height - 130, this.getMetaName() + ".build_error.success", 0x55FF55),
+                new LabelWidget(55, height / 2 - 29, this.getMetaName() + ".build_error.success", 0x55FF55),
                 () -> blueprintBuilt && this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS &&
                         hasBlueprint());
         conditional.addWidgetWithTest(
-                new LabelWidget(50, height - 118, this.getMetaName() + ".build_error.success.extract", 0x55FF55),
+                new LabelWidget(55, height / 2 - 17, this.getMetaName() + ".build_error.success.extract", 0x55FF55),
                 () -> blueprintBuilt && this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS &&
                         hasBlueprint());
 
