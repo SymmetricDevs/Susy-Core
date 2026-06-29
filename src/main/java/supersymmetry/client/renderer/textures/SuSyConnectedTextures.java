@@ -27,6 +27,8 @@ public class SuSyConnectedTextures {
     public static final VisualStateRenderer MONEL_500_CASING_CTM;
     public static final VisualStateRenderer CONDUCTIVE_COPPER_PIPE_CTM;
     public static final VisualStateRenderer ULV_STRUCTURAL_CASING_CTM;
+    public static final VisualStateRenderer HYDROSTATIC_CASING_CTM;
+    public static final VisualStateRenderer ALUMINIUM_GEARBOX_CTM;
 
     static {
         WOODEN_COAGULATION_TANK_WALL_CTM = from(
@@ -35,6 +37,8 @@ public class SuSyConnectedTextures {
         MONEL_500_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(MONEL_500_CASING));
         CONDUCTIVE_COPPER_PIPE_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(COPPER_PIPE));
         ULV_STRUCTURAL_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(ULV_STRUCTURAL_CASING));
+        HYDROSTATIC_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(HYDROSTATIC_CASING));
+        ALUMINIUM_GEARBOX_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(ALUMINIUM_GEARBOX));
     }
 
     public static void init() {
@@ -98,6 +102,7 @@ public class SuSyConnectedTextures {
         WOODEN_COAGULATION_TANK_WALL_CTM.override(susyId("coagulation_tank"));
         MONEL_500_CASING_CTM.override(susyId("strand_cooler"));
         ULV_STRUCTURAL_CASING_CTM.override(susyId("sintering_oven"));
+        HYDROSTATIC_CASING_CTM.override(susyId("attrition_scrubber"));
         ROBUST_TUNGSTENSTEEL_CASING_CTM.override(susyId("magnetohydrodynamic_generator"));
         STRESS_PROOF_CTM.override(susyId("arc_furnace_complex"));
         VOLTAGE_CASING_ULV_CTM.override(susyId("fermentation_vat"));

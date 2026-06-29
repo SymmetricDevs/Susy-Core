@@ -33,7 +33,6 @@ import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
-import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class SuSyMetaItems {
 

@@ -83,7 +83,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
     protected boolean renderBoundingBox = false;
     protected boolean highlightSelectedStock = false;
 
-    public static final int TICK_RATE = 10;
+    public static final int TICK_RATE = 3;
     private static final int SYNC_STOCK = 1377;
     private static final int SYNC_STOCK_LEAVE = 1378;
 

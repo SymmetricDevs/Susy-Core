@@ -36,10 +36,15 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
     // TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
     // TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
 
+    @Override
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        return false;
+    }
+
     @NotNull
     @Override
     public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.SOLID;
+        return BlockRenderLayer.CUTOUT;
     }
 
     public enum DrillHeadType implements IStringSerializable, IStateHarvestLevel {

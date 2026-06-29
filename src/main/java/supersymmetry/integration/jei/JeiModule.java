@@ -1,5 +1,7 @@
 package supersymmetry.integration.jei;
 
+import static supersymmetry.api.fluids.SusyGeneratedFluidHandler.CAST_MATERIALS;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,8 @@ import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.integration.jei.category.StrandCategory;
+import supersymmetry.integration.jei.category.StrandInfo;
 import supersymmetry.integration.jei.ingredient.ParticleBeamHelper;
 import supersymmetry.integration.jei.ingredient.ParticleBeamListFactory;
 import supersymmetry.integration.jei.ingredient.ParticleBeamRenderer;
@@ -67,6 +71,16 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
+        String strandCastingId = GTValues.MODID + ":strand_casting";
+        registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.ROLLING_MILL.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.CLUSTER_MILL.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.FLYING_SHEAR.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.SLAB_MOLD.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.BILLET_MOLD.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.STRAND_COOLER.getStackForm(), strandCastingId);
+
         registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
                 .collect(Collectors.toList()), RocketFuelCategory.UID);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
@@ -75,7 +89,8 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
     }
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registry) {
+    public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
+        registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }
