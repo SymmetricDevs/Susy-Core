@@ -784,11 +784,10 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         }
     }
 
-    //If an extra stage would be added at some point CHANGE THIS NUMBER!!!
+    // If an extra stage would be added at some point CHANGE THIS NUMBER!!!
     private final int STAGES = 4;
     private final int SLOT_SIZE = 18;
     private final int INV_HEIGHT = SLOT_SIZE * 4 + 4;
-
 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         int width = 250;
@@ -835,7 +834,6 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                         .setBackgroundTexture(GuiTextures.SLOT_DARK);
         blueprintSlot.setChangeListener(() -> this.onBlueprintSlotChanged(mainw));
         conditional.addWidgetWithTest(blueprintSlot, () -> blueprintBuilt || !hasBlueprint());
-
 
         conditional.addWidgetWithTest(mainw, () -> !blueprintBuilt && hasBlueprint());
 

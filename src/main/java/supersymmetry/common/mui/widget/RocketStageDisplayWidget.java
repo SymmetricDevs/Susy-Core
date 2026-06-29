@@ -121,8 +121,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                             I18n.format(stage.getLocalizationKey()));
                 });
 
-
-
         this.addWidget(selectedStageText);
         this.addWidget(nextButton);
         this.addWidget(previousButton);
@@ -297,7 +295,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
                 slotsw.setSliderActive(slotsw.widgets.size() > 5);
 
-                //dial button
+                // dial button
                 ComponentEntryWidget entry = new ComponentEntryWidget(
                         new Position(0, 0), new Size(18 * 5, 28), slotsw, rowState, markDirty);
 
@@ -315,7 +313,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             entry.setSize(new Size(90, 28));
             this.addWidget(entry);
 
-            //part name
+            // part name
             String text = I18n.format(localizationKey);
             int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
             int xPos = this.getSize().width - textWidth - 10;

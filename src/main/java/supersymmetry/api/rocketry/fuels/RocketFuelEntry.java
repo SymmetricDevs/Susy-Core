@@ -4,6 +4,7 @@ import java.util.*;
 
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
+
 import org.jetbrains.annotations.NotNull;
 
 public class RocketFuelEntry {
