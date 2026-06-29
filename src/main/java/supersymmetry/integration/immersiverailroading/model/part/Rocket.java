@@ -17,8 +17,9 @@ public class Rocket {
         // draws a length-sorted prefix of the rocket geometry itself, so here we simply hide the
         // rocket groups from the standard group draw.
         state.push(settings -> settings
-                .add((ModelState.GroupVisibility) (stock, string) ->
-                        rocket != null && rocket.modelIDs.contains(string) ? Boolean.FALSE : null))
+                .add((ModelState.GroupVisibility) (stock,
+                                                   string) -> rocket != null && rocket.modelIDs.contains(string) ?
+                                                           Boolean.FALSE : null))
                 .include(rocket);
     }
 

@@ -9,9 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import gregtech.api.util.ItemStackHashStrategy;
-import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -26,6 +23,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import gregtech.api.util.ItemStackHashStrategy;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.util.StructAnalysis;
@@ -109,8 +108,10 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     public void writeBlocksToNBT(Set<BlockPos> blocks, World world) {
-        Map<ItemStack, Integer> blockCounts = new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
-        Map<ItemStack, Integer> coverCounts = new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount());
+        Map<ItemStack, Integer> blockCounts = new Object2IntOpenCustomHashMap<>(
+                ItemStackHashStrategy.comparingAllButCount());
+        Map<ItemStack, Integer> coverCounts = new Object2IntOpenCustomHashMap<>(
+                ItemStackHashStrategy.comparingAllButCount());
 
         for (BlockPos pos : blocks) {
             IBlockState state = world.getBlockState(pos);

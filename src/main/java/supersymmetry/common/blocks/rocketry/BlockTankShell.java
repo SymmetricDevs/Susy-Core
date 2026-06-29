@@ -16,12 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.ore.OrePrefix;
-import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
-import supersymmetry.common.materials.SusyMaterials;
 
 public class BlockTankShell extends VariantDirectionalRotatableBlock<BlockTankShell.TankCoverType>
                             implements WeightedBlock<BlockTankShell.TankCoverType> {
