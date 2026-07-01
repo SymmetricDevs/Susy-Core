@@ -154,7 +154,7 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(_ -> {}, Arrays.asList("rocketType")));
+                .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));
 
         TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode").setMaxStackSize(1)
                 .addComponents(ElectrodeDurabilityManager.INSTANCE);
