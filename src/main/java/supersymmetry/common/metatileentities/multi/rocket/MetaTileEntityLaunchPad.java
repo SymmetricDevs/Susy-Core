@@ -111,37 +111,39 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
         String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
         String l23 = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
+        String dad23 = "DDDDDDDD       DDDDDDDD"; // 8C + 7sp + 8C = 23
+        String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 R's
 
         FactoryBlockPattern p = FactoryBlockPattern.start();
         // 11 erector approach aisles (original 6 + 5 new)
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
         // Main platform (front half)
-        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Main platform (center — support pillars)
-        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
-        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
-        aisleWithSpace(p, l23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
         // Main platform (back half)
-        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        aisleWithSpace(p, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Transition
-        aisleWithSpace(p, sp23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Back frame separator
-        aisleWithSpace(p, fff23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        aisleWithSpace(p, fff23, allC, dad23, dad23, dad23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
         // Controller
-        aisleWithSpace(p, sp23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         return p.where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
@@ -155,9 +157,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
                                 String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
-                                String v9) {
+                                String v9, String v10, String v11, String v12, String v13) {
         // Repeat 30 times
-        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
                 repeat, repeat, repeat, repeat, repeat,
                 repeat, repeat, repeat, repeat, repeat,
                 repeat, repeat, repeat, repeat, repeat,
