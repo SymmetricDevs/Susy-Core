@@ -52,7 +52,6 @@ public class SusyRocketComponents {
                     .register();
         }
 
-        // TODO add the emergency escape system
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
                 .stage(
                         new RocketStage.Builder("boosters")
