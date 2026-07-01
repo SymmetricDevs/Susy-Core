@@ -83,7 +83,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         tag.setBoolean("buildstat", complete);
 
         tag.setLong("AFSimprovement", this.AFSimprovement);
-        tag.setDouble("maxVolume", this.getCargoVolume());
+        tag.setDouble("maxVolume", this.getFuelVolume());
+        tag.setDouble("maxCargoVolume", this.getCargoVolume());
 
         return tag;
     }
@@ -231,7 +232,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double thrustToWeightRatio = thrust / weight;
 
         if (thrustToWeightRatio < 1) {
-            return SuccessCalculation.LaunchResult.DOES_NOT_LAUNCH;
+            return SuccessCalculation.LaunchResult.CRASHES;
         } else {
             success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         }

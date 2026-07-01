@@ -4,13 +4,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.Tuple;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -28,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import cam72cam.mod.entity.ModdedEntity;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -60,11 +59,13 @@ import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
+import supersymmetry.common.item.SuSyMetaItems;
 
 public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE {
 
@@ -314,7 +315,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 this.supportAngle = this.selectedErector.getLifterAngle();
                 if (this.selectedErector.getLifterAngle() >= Math.PI / 2) {
                     this.selectedErector.setRocketLoaded(false);
-                    spawnRocket();
+                    spawnRocket(this.selectedErector.getRocketNBT());
                     setFuelingProgress(0);
                     this.setLaunchPadState(LaunchPadState.LOADED);
                 } else {
@@ -328,7 +329,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
-                if (!loadCargo() && this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
+                if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
@@ -356,7 +357,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     // In liters per second
-    private static final int MAX_FUELING_SPEED = 100;
+    private static final int MAX_FUELING_SPEED = 8000;
 
     private boolean loadCargo() {
         GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
@@ -379,19 +380,20 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         var composition = fuelEntry.getComposition();
         // Round up for the composition
         int totalMBPerUnit = composition.stream().mapToInt(Tuple::getSecond).sum();
-        int maxFuelingProgress = selectedRocket.getFuelVolume() * 1000 + totalMBPerUnit - 1;
-        int unitsDrained = Math.min(maxFuelingProgress - this.fuelingProgress, MAX_FUELING_SPEED);
+        int maxFuelingProgress = selectedRocket.getFuelVolume() + totalMBPerUnit - 1;
+        int unitsDrained = Math.min(maxFuelingProgress - this.fuelingProgress, MAX_FUELING_SPEED / totalMBPerUnit);
         for (var comp : composition) {
-            FluidStack drained = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
+            FluidStack tryToDrain = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
+            FluidStack drained = inputFluidInventory.drain(tryToDrain, false);
             // Intentional integer division moment
-            unitsDrained = Math.min(drained.amount, unitsDrained / comp.getSecond());
+            unitsDrained = Math.min(drained.amount / comp.getSecond(), unitsDrained);
         }
-        setFuelingProgress(this.fuelingProgress + unitsDrained);
+        setFuelingProgress(this.fuelingProgress + (unitsDrained * totalMBPerUnit));
         for (var comp : composition) {
             inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
 
-        return this.fuelingProgress >= selectedRocket.getFuelVolume() * 1000;
+        return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
     private void setFuelingProgress(int fuelingProgress) {
@@ -440,13 +442,13 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
     }
 
-    public void spawnRocket() {
+    public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
-        if (this.selectedErector.getRocketNBT() != null) {
+        if (tag != null) {
             // Copy in all tags
-            for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
-                this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
+            for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {
+                this.selectedRocket.getEntityData().setTag(info.getKey(), info.getValue());
             }
         }
         this.getWorld().spawnEntity(this.selectedRocket);
@@ -574,6 +576,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         textList.add(new TextComponentTranslation("susy.launch_pad." + this.state.name().toLowerCase()));
+        if (this.state == LaunchPadState.LOADED && this.selectedRocket != null) {
+            int maxFuelingProgress = this.selectedRocket.getFuelVolume();
+            textList.add(new TextComponentTranslation("susy.launch_pad.gui.fuel_progress", this.fuelingProgress,
+                    maxFuelingProgress));
+        }
     }
 
     public enum LaunchPadState {
@@ -623,5 +630,25 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.transformation = new Vec3i(xOff, yOff, zOff);
         }
         return transformation;
+    }
+
+    @Override
+    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                CuboidRayTraceResult hitResult) {
+        if (this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
+                playerIn.getHeldItem(hand).isItemEqual(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm())) {
+            NBTTagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
+            if (tag != null) {
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                bp.readFromNBT(tag);
+                NBTTagCompound rocketTag = new NBTTagCompound();
+                rocketTag.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
+                rocketTag.setTag("rocket", bp.writeToNBT());
+                spawnRocket(rocketTag);
+                setFuelingProgress(0);
+                setLaunchPadState(LaunchPadState.LOADED);
+            }
+        }
+        return super.onRightClick(playerIn, hand, facing, hitResult);
     }
 }

@@ -17,7 +17,6 @@ public class SuccessCalculation {
     }
 
     public enum LaunchResult {
-        DOES_NOT_LAUNCH,
         LAUNCHES,
         CRASHES,
         EXPLODES

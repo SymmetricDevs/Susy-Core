@@ -169,8 +169,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         // Clear any partially-built rocket left on the erector.
         EntityTransporterErector erector = findTransporterErector();
         if (erector != null) {
-            erector.setAssemblyProgress(0f, 0f,
-                    this.getWorld().getWorldTime(), this.getWorld().getWorldTime());
+            erector.setRocketLoaded(false);
         }
         this.recipeMapWorkable.invalidate(); // this can break some things
     }
@@ -183,7 +182,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         EntityTransporterErector erector = findTransporterErector();
 
         if (erector != null) {
-            erector.setAssemblyProgress(1f, 1f, 0, 0);
             erector.setRocketLoaded(true);
             NBTTagCompound rocketNBT = erector.getRocketNBT();
             rocketNBT.setLong("assemblerPosition", this.getPos().toLong());
