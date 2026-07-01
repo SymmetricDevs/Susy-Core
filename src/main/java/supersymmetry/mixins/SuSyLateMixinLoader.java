@@ -22,8 +22,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "littletiles",
             "celeritas",
             "projectred-core",
-            "icbmclassic",
-            "immersiverailroading");
+            "icbmclassic");
 
     @Override
     public List<String> getMixinConfigs() {
