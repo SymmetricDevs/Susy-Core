@@ -296,7 +296,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             case EMPTY:
                 if (this.getOffsetTimer() % 20 == 0) {
                     updateSelectedErector();
-                    if (this.selectedErector != null) {
+                    if (this.selectedErector != null && selectedErector.isRocketLoaded()) {
                         this.setLaunchPadState(LaunchPadState.LOADING);
                         this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                     }
@@ -304,7 +304,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     break;
                 }
             case LOADING:
-                if (this.selectedErector == null || this.selectedErector.isDead() ||
+                if (this.selectedErector == null ||
                         !this.selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
                     break;
@@ -331,6 +331,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
             case LAUNCHING:
+                updateSelectedErector();
                 if (this.selectedErector != null) {
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
                 }

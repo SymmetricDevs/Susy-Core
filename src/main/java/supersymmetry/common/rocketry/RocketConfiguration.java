@@ -62,7 +62,8 @@ public class RocketConfiguration {
     public RocketConfiguration(NBTTagCompound tag) {
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
-            if (!missionTag.isEmpty() && missionTag.getInteger("landing_y") != 0) {
+            if (!missionTag.isEmpty() && (missionTag.getInteger("landing_y") != 0 ||
+                    missionTag.getInteger("mission_type") != MissionType.Manned.ordinal())) {
                 missions.add(new MissionConfiguration(missionTag));
             }
         }
