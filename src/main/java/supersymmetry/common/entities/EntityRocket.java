@@ -12,6 +12,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -39,10 +42,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     private static final Random rnd = new Random();
     protected static final float jerk = 0.0001F;
-    public CargoItemStackHandler cargo;
-    private RocketFuelEntry fuelEntry;
+
+    protected static final DataParameter<String> FUEL = EntityDataManager.createKey(EntityRocket.class,
+            DataSerializers.STRING);
     private int maxFuelVolume;
-    private long augmentation;
 
     // Troll mode - rocket curves back towards launch pad
     private LaunchResult launchResult = LaunchResult.LAUNCHES;
@@ -72,6 +75,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     public EntityRocket(World worldIn, Vec3d pos, float rotationYaw) {
         this(worldIn, pos.x, pos.y, pos.z, rotationYaw);
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(FUEL, "");
     }
 
     public void launchRocket() {
@@ -137,12 +146,13 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         }
     }
 
-    public void initializeLaunch() {
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
         if (!this.getEntityData().hasKey("maxVolume")) {
             // Testing only
             this.cargo = new CargoItemStackHandler(10000, 10000);
             this.maxFuelVolume = 1;
-            this.augmentation = 0;
         } else {
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(this.getEntityData().getCompoundTag("rocket").getString("name"));
@@ -150,13 +160,14 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                     Integer.MAX_VALUE);
             blueprint.readFromNBT(this.getEntityData().getCompoundTag("rocket"));
             BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
+
             if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
                     this.getPosition().distanceSq(assemblerPosition) < 100) {
                 this.trollTargetPos = assemblerPosition;
                 this.launchResult = LaunchResult.CRASHES;
             } else {
-                this.augmentation = this.getEntityData().getLong("AFSimprovement");
-                this.launchResult = blueprint.calculateSuccess(this, this.augmentation);
+                long augmentation = this.getEntityData().getLong("AFSimprovement");
+                this.launchResult = blueprint.calculateSuccess(this, augmentation);
             }
 
             this.maxFuelVolume = (int) blueprint.getFuelVolume();
@@ -344,11 +355,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     }
 
     @Override
-    public RocketFuelEntry getFuel() {
-        return fuelEntry;
-    }
-
-    @Override
     public double getCargoMass() {
         return cargo.mass();
     }
@@ -421,16 +427,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         return this.launchResult;
     }
 
-    public void setTrollTargetPos(@Nullable BlockPos pos) {
-        this.trollTargetPos = pos;
-    }
-
-    @Nullable
-    public BlockPos getTrollTargetPos() {
-        return this.trollTargetPos;
-    }
-
     public void setFuel(RocketFuelEntry fuelEntry) {
-        this.fuelEntry = fuelEntry;
+        this.dataManager.set(FUEL, fuelEntry.getRegistryName());
+    }
+
+    @Override
+    public RocketFuelEntry getFuel() {
+        return RocketFuelEntry.getCopyOf(this.dataManager.get(FUEL));
     }
 }

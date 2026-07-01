@@ -356,7 +356,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private static final int MAX_FUELING_SPEED = 100;
 
     private boolean loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.cargo);
+        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
         RocketFuelEntry fuelEntry = selectedRocket.getFuel();
 
         if (fuelEntry == null) {
@@ -445,7 +445,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
                 this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
             }
-            this.selectedRocket.initializeLaunch();
         }
         this.getWorld().spawnEntity(this.selectedRocket);
     }
