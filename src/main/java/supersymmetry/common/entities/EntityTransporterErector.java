@@ -77,10 +77,14 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         nextAssemblyProgress = assemblyProgress = rocketLoaded ? 1f : 0f;
     }
 
-    public float getAssemblyProgress(float renderTime) {
+    public float getVisualAssemblyProgress(float renderTime) {
         // Safely lerp (even if start = end)
-        float interpTime = (renderTime - start) / Math.max((end - start), 0.000001f);
+        float interpTime = Math.clamp((renderTime - start) / Math.max((end - start), 0.000001f), 0, 1);
         return (1 - interpTime) * assemblyProgress + interpTime * nextAssemblyProgress;
+    }
+
+    public float getAssemblyProgress() {
+        return assemblyProgress;
     }
 
     // Set the assembly progress to a specific value, and the assembler for tracking progress more closely

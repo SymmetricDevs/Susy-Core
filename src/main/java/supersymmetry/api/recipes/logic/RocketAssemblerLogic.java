@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     @Override
     protected @Nullable Recipe findRecipe(
-                                          long maxVoltage, IItemHandlerModifiable inputs,
-                                          IMultipleTankHandler fluidInputs) {
+            long maxVoltage, IItemHandlerModifiable inputs,
+            IMultipleTankHandler fluidInputs) {
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         EntityTransporterErector erector = assembler.findTransporterErector();
         if (erector == null) return null;
@@ -80,7 +81,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     // The lists are null
     @Override
-    protected void outputRecipeOutputs() {}
+    protected void outputRecipeOutputs() {
+    }
 
     // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch amperage draws
     @Override
@@ -98,6 +100,23 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected void trySearchNewRecipe() {
         hasEnoughElectrodes = true;
         super.trySearchNewRecipe();
+    }
+
+    @Override
+    public void updateWorkable() {
+        super.update();
+        World world = getMetaTileEntity().getWorld();
+        if (world != null && !world.isRemote) {
+            if (workingEnabled && progressTime == 0) {
+                // check the assembler to see if it can finish
+                MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
+                if (assembler.componentIndex == assembler.componentList.size()) {
+                    if (assembler.hasSuitableErector()) {
+                        assembler.finishAssembly();
+                    }
+                }
+            }
+        }
     }
 
     // mostly taken from the ball mill logic
@@ -125,15 +144,15 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             return false;
         }
 
-        return super.checkRecipe(recipe);
+        return assembler.hasSuitableErector() && super.checkRecipe(recipe);
     }
 
     // mostly taken from the ball mill logic
     @Override
     protected boolean setupAndConsumeRecipeInputs(
-                                                  @NotNull Recipe recipe,
-                                                  @NotNull IItemHandlerModifiable importInventory,
-                                                  @NotNull IMultipleTankHandler importFluids) {
+            @NotNull Recipe recipe,
+            @NotNull IItemHandlerModifiable importInventory,
+            @NotNull IMultipleTankHandler importFluids) {
         if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
             return false;
         }
@@ -162,6 +181,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     @Override
     protected void setupRecipe(Recipe recipe) {
         super.setupRecipe(recipe);
+
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         assembler.displayAssemblerProgress();
     }
