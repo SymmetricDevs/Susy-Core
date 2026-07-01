@@ -16,7 +16,7 @@ public class Planetoid extends CelestialObject {
     private int dimension;
     public static BiMap<Planetoid, Integer> PLANETOIDS = HashBiMap.create();
 
-    public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ, double gravity,
+    public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ,
                      @Nullable CelestialObject parentBody, PlanetType planetType) {
         super(translationKey, posT, posX, posY, posZ, mass, CelestialBodyType.PLANETOID, parentBody);
         this.planetType = planetType;
