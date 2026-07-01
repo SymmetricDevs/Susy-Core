@@ -331,6 +331,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             this.computationPerTick = buf.readInt();
             this.coolantPerTick = buf.readInt();
             this.energyPerTick = buf.readInt();
+            this.progress = buf.readLong();
             this.stats = AFSStats.readFromBuffer(buf);
         }
     }
@@ -505,6 +506,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             buf.writeInt(this.computationPerTick);
             buf.writeInt(this.coolantPerTick);
             buf.writeInt(this.energyPerTick);
+            buf.writeLong(this.progress);
             this.stats.writeToBuffer(buf);
         });
     }
@@ -801,7 +803,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         10,
                         52,
                         () -> I18n.format(getMetaName() + ".gui.success_chance",
-                                String.format("%.2f", this.stats.success())),
+                                String.format("%.2f%%", 100 * this.stats.success())),
                         0xffffff),
                 () -> this.isActive() && !this.stats.isNone());
         workingGroup.addWidgetWithTest(

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +22,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import org.jetbrains.annotations.NotNull;
 
 import cam72cam.mod.entity.ModdedEntity;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -184,12 +186,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         EntityTransporterErector erector = findTransporterErector();
 
         if (erector != null) {
+            erector.setAssemblyProgress(1f, 1f, 0, 0);
             erector.setRocketLoaded(true);
             NBTTagCompound rocketNBT = erector.getRocketNBT();
             rocketNBT.setLong("assemblerPosition", this.getPos().toLong());
             rocketNBT.setTag("rocket", this.getCurrentBlueprint().writeToNBT());
-        } else {
-            doExplosion(1000);
         }
     }
 
@@ -236,11 +237,15 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     // meant to be called after a recipe is done
     public void nextComponent() {
         if (!isAssemblyWorking) return;
-        if (this.componentList.size() - 1 > this.componentIndex) {
-            this.componentIndex++;
-        } else {
-            finishAssembly();
+        this.componentIndex++;
+    }
+
+    public boolean hasSuitableErector() {
+        EntityTransporterErector erector = findTransporterErector();
+        if (erector == null) {
+            return false;
         }
+        return erector.getAssemblyProgress() == (float) this.componentIndex / this.componentList.size();
     }
 
     public void displayAssemblerProgress() {
@@ -811,5 +816,15 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     public TextureArea getProgressBarTexture(int index) {
         return index == 0 ? SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT :
                 SusyGuiTextures.PROGRESS_BAR_ROCKET_ASSEMBLER_OVERALL;
+    }
+
+    @Override
+    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                      CuboidRayTraceResult hitResult) {
+        if (playerIn.isCreative() && this.getCurrentBlueprint() != null) {
+            finishAssembly();
+            return true;
+        }
+        return false;
     }
 }

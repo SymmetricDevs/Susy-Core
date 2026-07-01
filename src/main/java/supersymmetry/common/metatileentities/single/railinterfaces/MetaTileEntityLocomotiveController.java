@@ -248,4 +248,9 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     protected boolean canMachineConnectRedstone(EnumFacing side) {
         return true;
     }
+
+    @Override
+    public boolean shouldDropWhenDestroyed() {
+        return super.shouldDropWhenDestroyed();
+    }
 }

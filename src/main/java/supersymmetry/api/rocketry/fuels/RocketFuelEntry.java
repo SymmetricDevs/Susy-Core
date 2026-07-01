@@ -61,9 +61,9 @@ public class RocketFuelEntry {
     }
 
     public static RocketFuelEntry getCopyOf(String name) {
-        try {
+        if (name != null) {
             return RocketFuelEntry.getFuelRegistry().get(name).clone();
-        } catch (Exception e) {
+        } else {
             return null;
         }
     }

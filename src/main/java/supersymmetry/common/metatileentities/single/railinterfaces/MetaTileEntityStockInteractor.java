@@ -108,7 +108,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
                 if (newStock != null) {
                     this.writeCustomData(SYNC_STOCK, (buf) -> buf.writeInt(newStock.getId()));
                 } else {
-                    this.writeCustomData(SYNC_STOCK_LEAVE, (buf) -> buf.writeBoolean(true));
+                    this.writeCustomData(SYNC_STOCK_LEAVE, (buf) -> {});
                 }
             }
         }

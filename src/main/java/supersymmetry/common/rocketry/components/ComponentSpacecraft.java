@@ -53,6 +53,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.mass = 1000.0;
         this.guidanceMultiplier = 0.9;
         this.hasAir = true;
+        this.instruments.put("lander", 1);
         return true;
     }
 
