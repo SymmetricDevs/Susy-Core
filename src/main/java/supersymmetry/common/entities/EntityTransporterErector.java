@@ -10,6 +10,7 @@ import cam72cam.mod.entity.Entity;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
@@ -39,9 +40,9 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     @TagField("liftingMode")
     @TagSync
     private LiftingMode liftingMode = LiftingMode.STOP;
-    @TagField("rocketNBT")
+    @TagField(value = "rocketNBT")
     @TagSync
-    private final NBTTagCompound rocketNBT = new NBTTagCompound();
+    private TagCompound rocketNBT = new TagCompound();
 
     // In radians per tick
     private double liftingSpeed = 0.087 / 20;
@@ -109,7 +110,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     }
 
     public NBTTagCompound getRocketNBT() {
-        return rocketNBT;
+        return rocketNBT.internal;
     }
 
     public float getLifterAngle() {

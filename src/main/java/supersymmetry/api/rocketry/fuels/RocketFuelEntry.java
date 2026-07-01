@@ -62,10 +62,12 @@ public class RocketFuelEntry {
 
     public static RocketFuelEntry getCopyOf(String name) {
         if (name != null) {
-            return RocketFuelEntry.getFuelRegistry().get(name).clone();
-        } else {
-            return null;
+            RocketFuelEntry entry = FUEL_REGISTRY.get(name);
+            if (entry != null) {
+                return entry.clone();
+            }
         }
+        return null;
     }
 
     public static void registerFuel(RocketFuelEntry rfe) {

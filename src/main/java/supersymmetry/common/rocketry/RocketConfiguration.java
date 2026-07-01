@@ -55,6 +55,11 @@ public class RocketConfiguration {
         public int getDimension() {
             return this.dimension;
         }
+
+        public boolean isDefault() {
+            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
+                    this.missionType == MissionType.Manned && this.destinationType == DestinationType.Landing;
+        }
     }
 
     private final List<MissionConfiguration> missions = new ArrayList<>();
@@ -62,8 +67,10 @@ public class RocketConfiguration {
     public RocketConfiguration(NBTTagCompound tag) {
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
-            if (!missionTag.isEmpty() && missionTag.getInteger("landing_y") != 0) {
-                missions.add(new MissionConfiguration(missionTag));
+            if (!missionTag.isEmpty()) {
+                MissionConfiguration config = new MissionConfiguration(missionTag);
+                if (i == 0 || !config.isDefault())
+                    missions.add(new MissionConfiguration(missionTag));
             }
         }
     }

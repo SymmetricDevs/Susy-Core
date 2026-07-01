@@ -18,7 +18,7 @@ import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
-import supersymmetry.common.world.SuSyDimensions;
+import supersymmetry.common.world.WorldProviderPlanet;
 
 public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint implements IAFSImprovable {
 
@@ -221,8 +221,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         // Thrust to weight ratio
         double gravity = 9.81;
         double escapeVelocity = 11186;
-        if (Planetoid.PLANETOIDS.containsValue(rocket.world.provider.getDimension())) {
-            gravity = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity * 9.81;
+        if (rocket.world.provider instanceof WorldProviderPlanet planet) {
+            gravity = planet.getPlanet().gravity * 9.81;
             escapeVelocity = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension())
                     .getEscapeVelocity();
         }
