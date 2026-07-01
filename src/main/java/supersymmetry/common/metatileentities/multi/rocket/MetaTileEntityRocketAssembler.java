@@ -6,10 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import gregtech.common.blocks.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -50,6 +48,7 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
@@ -243,7 +242,10 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (erector == null) {
             return false;
         }
-        return erector.getAssemblyProgress() == (float) this.componentIndex / this.componentList.size();
+        if (this.componentList.isEmpty()) {
+            return erector.getNextAssemblyProgress() == 0;
+        }
+        return erector.getNextAssemblyProgress() == (float) this.componentIndex / this.componentList.size();
     }
 
     public void displayAssemblerProgress() {
@@ -253,8 +255,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         if (erector != null && !this.componentList.isEmpty()) {
             erector.setAssemblyProgress((float) this.componentIndex / this.componentList.size(),
                     (float) (this.componentIndex + 1) / this.componentList.size(),
-                    this.getWorld().getWorldTime(),
-                    this.getWorld().getWorldTime() + this.getRecipeLogic().getMaxProgress());
+                    this.getWorld().getTotalWorldTime(),
+                    this.getWorld().getTotalWorldTime() + this.getRecipeLogic().getMaxProgress());
         }
     }
 
@@ -752,19 +754,19 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .where(
                         'C',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
-                                        .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
+                                        .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
+                                                .setMaxGlobalLimited(2))
+                                        .or(
+                                                abilities(MultiblockAbility.IMPORT_ITEMS)
+                                                        .setPreviewCount(1)
+                                                        .setMinGlobalLimited(1)
                                                         .setMaxGlobalLimited(2))
-                                                .or(
-                                                        abilities(MultiblockAbility.IMPORT_ITEMS)
-                                                                .setPreviewCount(1)
-                                                                .setMinGlobalLimited(1)
-                                                                .setMaxGlobalLimited(2))
-                                                .or(
-                                                        abilities(MultiblockAbility.INPUT_ENERGY)
-                                                                .setMinGlobalLimited(8)
-                                                                .setMaxGlobalLimited(8)
-                                                                .setPreviewCount(8)))
+                                        .or(
+                                                abilities(MultiblockAbility.INPUT_ENERGY)
+                                                        .setMinGlobalLimited(8)
+                                                        .setMaxGlobalLimited(8)
+                                                        .setPreviewCount(8)))
                 .where('R', SuSyPredicates.rails())
                 .where(
                         'P',

@@ -60,8 +60,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     @Override
     protected @Nullable Recipe findRecipe(
-            long maxVoltage, IItemHandlerModifiable inputs,
-            IMultipleTankHandler fluidInputs) {
+                                          long maxVoltage, IItemHandlerModifiable inputs,
+                                          IMultipleTankHandler fluidInputs) {
         MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         EntityTransporterErector erector = assembler.findTransporterErector();
         if (erector == null) return null;
@@ -81,8 +81,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     // The lists are null
     @Override
-    protected void outputRecipeOutputs() {
-    }
+    protected void outputRecipeOutputs() {}
 
     // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch amperage draws
     @Override
@@ -104,13 +103,13 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     @Override
     public void updateWorkable() {
-        super.update();
+        super.updateWorkable();
         World world = getMetaTileEntity().getWorld();
         if (world != null && !world.isRemote) {
             if (workingEnabled && progressTime == 0) {
                 // check the assembler to see if it can finish
                 MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-                if (assembler.componentIndex == assembler.componentList.size()) {
+                if (assembler.isAssemblyWorking && assembler.componentIndex == assembler.componentList.size()) {
                     if (assembler.hasSuitableErector()) {
                         assembler.finishAssembly();
                     }
@@ -150,9 +149,9 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     // mostly taken from the ball mill logic
     @Override
     protected boolean setupAndConsumeRecipeInputs(
-            @NotNull Recipe recipe,
-            @NotNull IItemHandlerModifiable importInventory,
-            @NotNull IMultipleTankHandler importFluids) {
+                                                  @NotNull Recipe recipe,
+                                                  @NotNull IItemHandlerModifiable importInventory,
+                                                  @NotNull IMultipleTankHandler importFluids) {
         if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
             return false;
         }
