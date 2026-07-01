@@ -49,7 +49,7 @@ public class TransporterErectorModel extends StockModel<EntityTransporterErector
         RenderState rocketState = state.clone();
         super.postRender(stock, state, partialTicks);
 
-        float renderTime = partialTicks + Minecraft.getMinecraft().world.getWorldTime();
+        float renderTime = partialTicks + Minecraft.getMinecraft().world.getTotalWorldTime();
         float progress = stock.getVisualAssemblyProgress(renderTime);
         ModelComponent component = rocket != null ? rocket.getComponent() : null;
         if (progress <= 0f || component == null) {

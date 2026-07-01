@@ -88,6 +88,10 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         return assemblyProgress;
     }
 
+    public float getNextAssemblyProgress() {
+        return nextAssemblyProgress;
+    }
+
     // Set the assembly progress to a specific value, and the assembler for tracking progress more closely
     public void setAssemblyProgress(float assemblyProgress, float nextAssemblyProgress, float start, float end) {
         this.assemblyProgress = Math.clamp(assemblyProgress, 0f, 1f);
