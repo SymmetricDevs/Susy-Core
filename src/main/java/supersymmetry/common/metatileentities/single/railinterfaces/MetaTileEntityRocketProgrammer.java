@@ -66,7 +66,7 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
     @Override
     public void updateStock() {
         super.updateStock();
-        if (this.getOffsetTimer() % 10 == 0 && this.getConfig() != null) {
+        if (this.getOffsetTimer() % 4 == 0 && this.getConfig() != null) {
             EntityTransporterErector rocket = (EntityTransporterErector) this.stock;
             if (rocket != null) {
                 RocketConfiguration config = new RocketConfiguration(this.getConfig());

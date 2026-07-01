@@ -149,16 +149,17 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        if (!this.getEntityData().hasKey("maxVolume")) {
+        if (!this.getEntityData().hasKey("rocket")) {
             // Testing only
             this.cargo = new CargoItemStackHandler(10000, 10000);
             this.maxFuelVolume = 1;
         } else {
+            NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
-                    .getCopyOf(this.getEntityData().getCompoundTag("rocket").getString("name"));
+                    .getCopyOf(rocketNBT.getString("name"));
             this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(),
                     Integer.MAX_VALUE);
-            blueprint.readFromNBT(this.getEntityData().getCompoundTag("rocket"));
+            blueprint.readFromNBT(rocketNBT);
             BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
 
             if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
@@ -166,7 +167,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 this.trollTargetPos = assemblerPosition;
                 this.launchResult = LaunchResult.CRASHES;
             } else {
-                long augmentation = this.getEntityData().getLong("AFSimprovement");
+                long augmentation = rocketNBT.getLong("AFSimprovement");
                 this.launchResult = blueprint.calculateSuccess(this, augmentation);
             }
 
