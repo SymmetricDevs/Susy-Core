@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import gregtech.common.blocks.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -48,10 +50,6 @@ import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockBoilerCasing;
-import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.blocks.BlockTurbineCasing;
-import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
@@ -749,13 +747,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .where(
                         'F',
                         states(
-                                SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
-                                        BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION)))
+                                MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                        .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
                 .where(
                         'C',
-                        states(
-                                SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
-                                        BlockRocketAssemblerCasing.RocketAssemblerCasingType.FOUNDATION))
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                        .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
                                                 .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
                                                         .setMaxGlobalLimited(2))
                                                 .or(
