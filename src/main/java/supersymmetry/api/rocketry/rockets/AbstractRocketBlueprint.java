@@ -127,8 +127,8 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
 
     public double getCargoVolume() {
         return this.getComponents("spacecraft").stream()
-                .map(component -> ((ComponentSpacecraft) component).volume)
-                .reduce(0.0, Double::sum);
+                .mapToDouble(component -> ((ComponentSpacecraft) component).volume)
+                .sum();
     }
 
     public void setName(String name) {

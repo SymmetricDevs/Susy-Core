@@ -3,8 +3,6 @@ package supersymmetry.common.entities;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -48,9 +46,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     private int maxFuelVolume;
 
     // Troll mode - rocket curves back towards launch pad
-    private LaunchResult launchResult = LaunchResult.LAUNCHES;
-    @Nullable
-    private BlockPos trollTargetPos = null;
+    protected static final DataParameter<Integer> LAUNCH_RESULT = EntityDataManager.createKey(EntityRocket.class,
+            DataSerializers.VARINT);
+    protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager.createKey(EntityRocket.class,
+            DataSerializers.BLOCK_POS);
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -81,6 +80,8 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(FUEL, "");
+        this.dataManager.register(LAUNCH_RESULT, LaunchResult.LAUNCHES.ordinal());
+        this.dataManager.register(CRASH_POSITION, BlockPos.ORIGIN);
     }
 
     public void launchRocket() {
@@ -88,25 +89,21 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(rocketNBT.getString("name"));
-            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(),
-                    Integer.MAX_VALUE);
             blueprint.readFromNBT(rocketNBT);
             BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
             if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
                     this.getPosition().distanceSq(assemblerPosition) < 100) {
-                this.trollTargetPos = assemblerPosition;
-                this.launchResult = LaunchResult.CRASHES;
+                this.setCrashPosition(assemblerPosition);
+                this.setLaunchResult(LaunchResult.CRASHES);
             } else {
                 long augmentation = rocketNBT.getLong("AFSimprovement");
-                this.launchResult = blueprint.calculateSuccess(this, augmentation);
+                this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
             }
         } else {
-            this.launchResult = LaunchResult.DOES_NOT_LAUNCH;
+            this.setLaunchResult(LaunchResult.EXPLODES);
         }
 
-        if (this.launchResult != LaunchResult.DOES_NOT_LAUNCH) {
-            super.launchRocket();
-        }
+        super.launchRocket();
         if (world.isRemote) {
             setupRocketSound();
             soundRocket.startPlaying();
@@ -121,7 +118,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     @Override
     protected float getExplosionStrength() {
-        return 24;
+        return 50; // Needs to cover the player
     }
 
     @Override
@@ -137,15 +134,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
-        if (compound.hasKey("LaunchResult")) {
-            this.launchResult = LaunchResult.valueOf(compound.getString("LaunchResult"));
-        }
-        if (compound.hasKey("TrollTargetX")) {
-            this.trollTargetPos = new BlockPos(
-                    compound.getInteger("TrollTargetX"),
-                    compound.getInteger("TrollTargetY"),
-                    compound.getInteger("TrollTargetZ"));
-        }
     }
 
     @Override
@@ -158,12 +146,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
-        compound.setString("LaunchResult", this.launchResult.name());
-        if (this.trollTargetPos != null) {
-            compound.setInteger("TrollTargetX", this.trollTargetPos.getX());
-            compound.setInteger("TrollTargetY", this.trollTargetPos.getY());
-            compound.setInteger("TrollTargetZ", this.trollTargetPos.getZ());
-        }
     }
 
     @Override
@@ -177,6 +159,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(rocketNBT.getString("name"));
+            blueprint.readFromNBT(rocketNBT);
             this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(),
                     Integer.MAX_VALUE);
             this.maxFuelVolume = (int) blueprint.getFuelVolume();
@@ -264,24 +247,24 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
 
-            if (this.launchResult == LaunchResult.CRASHES && this.posY > 256) {
-                this.trollTargetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
+            if (this.getLaunchResult() == LaunchResult.CRASHES && this.posY > 256) {
+                BlockPos targetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
                         ((Math.random() * 2) - 1) * 1000);
                 // Clear out Y
-                this.trollTargetPos = this.trollTargetPos.down(this.trollTargetPos.getY());
+                this.setCrashPosition(targetPos.down(targetPos.getY()));
             }
 
-            if (this.launchResult == LaunchResult.EXPLODES &&
-                    this.rand.nextInt(Math.max(1, 400 - (int) this.posY)) < 1) {
+            if (this.getLaunchResult() == LaunchResult.EXPLODES &&
+                    this.posY > 400) {
                 this.explode();
             }
 
             // Troll mode: curve the rocket back towards the launch pad
-            if (this.launchResult == LaunchResult.CRASHES && this.trollTargetPos != null) {
+            if (this.getLaunchResult() == LaunchResult.CRASHES && this.getCrashPosition() != null) {
                 // Calculate direction to target
-                double dx = this.trollTargetPos.getX() + 0.5 - this.posX;
-                double dy = this.trollTargetPos.getY() - this.posY;
-                double dz = this.trollTargetPos.getZ() + 0.5 - this.posZ;
+                double dx = this.getCrashPosition().getX() + 0.5 - this.posX;
+                double dy = this.getCrashPosition().getY() - this.posY;
+                double dz = this.getCrashPosition().getZ() + 0.5 - this.posZ;
                 double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
 
                 // Calculate target yaw and pitch
@@ -348,6 +331,15 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                 if (!entity.isRidingSameEntity(this))
                     entity.attackEntityFrom(DamageSource.FLY_INTO_WALL, (float) this.motionY * 10.f);
             }
+
+            if (this.posY > 1000 && this.getLaunchResult() == LaunchResult.LAUNCHES) {
+                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                    this.setDead();
+                } else {
+                    act();
+                    this.setActed(true);
+                }
+            }
         }
         /*
          * if(age % 2 == 0 && this.isCountDownStarted()) {
@@ -366,10 +358,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     @Override
     public double getCargoMass() {
         return cargo.mass();
-    }
-
-    public int getFuelNeeded() {
-        return 1000;
     }
 
     @Override
@@ -429,11 +417,19 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     }
 
     public void setLaunchResult(LaunchResult result) {
-        this.launchResult = result;
+        this.dataManager.set(LAUNCH_RESULT, result.ordinal());
     }
 
     public LaunchResult getLaunchResult() {
-        return this.launchResult;
+        return LaunchResult.values()[this.dataManager.get(LAUNCH_RESULT)];
+    }
+
+    public BlockPos getCrashPosition() {
+        return this.dataManager.get(CRASH_POSITION);
+    }
+
+    public void setCrashPosition(BlockPos pos) {
+        this.dataManager.set(CRASH_POSITION, pos);
     }
 
     public void setFuel(RocketFuelEntry fuelEntry) {
