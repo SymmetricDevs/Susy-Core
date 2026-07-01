@@ -1,5 +1,7 @@
 package supersymmetry.common.entities;
 
+import java.util.Arrays;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -138,20 +140,6 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     protected abstract float getExplosionStrength();
 
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-
-        if (this.posY > 1000 && this.isLaunched()) {
-            if (this.hasActed() && this.getPassengers().isEmpty()) {
-                this.setDead();
-            } else {
-                act();
-                this.setActed(true);
-            }
-        }
-    }
-
     protected void act() {
         NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
         for (String key : instruments.getKeySet()) {
@@ -175,7 +163,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     @Override
     public Iterable<ItemStack> getArmorInventoryList() {
-        return null;
+        return Arrays.asList();
     }
 
     @Override

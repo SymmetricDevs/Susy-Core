@@ -1710,6 +1710,7 @@ susy.launch_pad.empty=No rocket detected
 susy.launch_pad.loading=Loading rocket...
 susy.launch_pad.loaded=Rocket ready for launch
 susy.launch_pad.launching=Launching rocket...
+susy.launch_pad.gui.fuel_progress=Fuel: %s mB/%s mB
 
 #BMRF blocks
 tile.bmrf_blocks.bmrf1.name=BMRF-1
