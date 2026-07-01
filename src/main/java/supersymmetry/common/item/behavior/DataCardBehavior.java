@@ -50,14 +50,6 @@ public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
                 subItems.add(configured);
             }
         }
-        if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
-                SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT != null) {
-            ItemStack configured = itemStack.copy();
-            NBTTagCompound tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
-            tag.setString("rocketType", "soyuz");
-            configured.setTagCompound(tag);
-            subItems.add(configured);
-        }
     }
 
     @Override
