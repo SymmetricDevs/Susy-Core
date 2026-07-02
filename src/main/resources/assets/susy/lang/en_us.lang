@@ -1035,6 +1035,16 @@ susy.machine.component_scanner.pos=Error found at %s
 
 susy.machine.building_cleanroom.name=Spacecraft Component Cleanroom
 
+# Solar panels
+susy.machine.solar_panel.lv.name=Monocrystalline Silicon Solar Panel
+susy.machine.solar_panel.mv.name=Multi-Junction Solar Panel
+susy.machine.solar_panel.tooltip.info=May the Sun be with you.
+susy.machine.solar_panel.tooltip.description1=Generates power during daylight hours, rising/falling gradually during dawn and dusk.
+susy.machine.solar_panel.tooltip.description2=Production reduced by 50%% when raining and for every solar panel in the surrounding 8 blocks.
+susy.machine.solar_panel.tooltip.description3=Ensure the block above the panel base is clear!
+susy.machine.solar_panel.voltage_produced=§aPeak Production: §f%,d EU/t (%s§f)
+tile.solar_panel.default.name=Solar Panel Display Block
+
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
 recipemap.latex_collector.name=Arboreal Collector
