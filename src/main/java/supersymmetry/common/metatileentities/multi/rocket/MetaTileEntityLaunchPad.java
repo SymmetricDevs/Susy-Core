@@ -117,18 +117,30 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
         FactoryBlockPattern p = FactoryBlockPattern.start();
         // 11 erector approach aisles (original 6 + 5 new)
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
         // Main platform (front half)
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
@@ -142,7 +154,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         // Transition
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Back frame separator
-        aisleWithSpace(p, fff23, allC, dad23, dad23, dad23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23, fff23);
+        aisleWithSpace(p, fff23, allC, dad23, dad23, dad23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23,
+                fff23);
         // Controller
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         return p.where(' ', any())
@@ -297,7 +310,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 break;
             case EMPTY:
-                if (this.getOffsetTimer() % 20 == 0) {
+                if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
                     if (this.selectedErector != null && selectedErector.isRocketLoaded()) {
                         this.setLaunchPadState(LaunchPadState.LOADING);
@@ -361,6 +374,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     private boolean loadCargo() {
         GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
+        if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
+            return true;
+        }
         RocketFuelEntry fuelEntry = selectedRocket.getFuel();
 
         if (fuelEntry == null) {
