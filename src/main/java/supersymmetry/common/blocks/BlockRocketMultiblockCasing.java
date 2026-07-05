@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -16,6 +17,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
+
+import java.util.Properties;
 
 public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultiblockCasing.CasingType> {
 
@@ -44,13 +47,20 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     @Override
     @SideOnly(Side.CLIENT)
     public @NotNull BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT_MIPPED;
+        return BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return this.getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) ||
+                super.shouldSideBeRendered(state, blockAccess, pos, side);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return super.isOpaqueCube(state);
+        return !getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT);
     }
 
     @Override
