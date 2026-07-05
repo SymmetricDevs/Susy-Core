@@ -14,10 +14,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,6 +40,7 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.modules.ModuleManager;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -53,6 +56,7 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
+import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
@@ -240,12 +244,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        if (this.canPlayerDismount()) {
-            for (Entity rider : this.getRecursivePassengers()) {
-                rider.dismountRidingEntity();
-            }
-        }
 
         if (!world.isRemote) {
             if (!this.onGround && this.motionY < 0.0D && this.posY < 256) {
@@ -493,10 +491,14 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     @Override
     public ModularPanel buildUI(EntityGuiData data, PanelSyncManager syncManager, UISettings settings) {
         return ModularPanel.defaultPanel("lander")
-                .child(new Flow(GuiAxis.X)
+                .child(new Flow(GuiAxis.X).posRel(0, 0.2f).childPadding(10)
                         .child(new ItemSlot().slot(new ModularSlot(cargo, 0).singletonSlotGroup()))
-                        .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
-                                .align(Alignment.CenterRight).height(18)))
+                        .child(new Flow(GuiAxis.Y).childPadding(10)
+                                .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
+                                        .align(Alignment.CenterRight).height(18))
+                                .child(IKey.lang("susy.lander.volume", () -> new Object[] { getCargoVolumeString() })
+                                        .asWidget()
+                                        .align(Alignment.CenterRight).height(18))))
                 .bindPlayerInventory();
     }
 
@@ -508,6 +510,17 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         }
         player.startRiding(this);
         return false;
+    }
+
+    @Override // The override is about leashing the rocket, which makes it alright to completely ignore
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d hitVec, EnumHand hand) {
+        if (player.isRidingSameEntity(this) || hitVec.length() > 7) return EnumActionResult.PASS;
+        if (!this.world.isRemote) {
+            processInitialInteract(player, hand);
+        } else {
+            GregTechAPI.networkHandler.sendToServer(new CPacketRocketInteract(this, hand, hitVec));
+        }
+        return EnumActionResult.SUCCESS;
     }
 
     @Override
@@ -531,5 +544,9 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
             }
         }
         return mass + (double) cargo.mass() / 1000;
+    }
+
+    public String getCargoVolumeString() {
+        return cargo.getCurrentVolume() + "/" + cargo.getMaxVolume();
     }
 }
