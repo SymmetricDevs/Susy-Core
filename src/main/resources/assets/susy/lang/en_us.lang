@@ -1752,3 +1752,6 @@ susy.moon=Moon
 susy.gui.rocket_programmer.manned=Manned Mission
 susy.gui.rocket_programmer.unmanned_cargo=Unmanned Cargo Mission
 susy.gui.rocket_programmer.unmanned_collection=Unmanned Collection Mission
+
+susy.lander.volume=Used volume: %s
+susy.lander.mass=Cargo weight: %s kg
