@@ -10,7 +10,7 @@
       }
     },
     "variant=ceiling_grid_filter_unit" : {
-      "model" : "minecraft:cube_bottom_top",
+      "model" : "susy:no_cull_tinted_cube_column",
       "textures" : {
         "bottom": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_bottom",
         "top": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_top",
