@@ -205,8 +205,6 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
         super.receiveCustomData(dataId, buf);
         if (dataId == SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG) {
             this.canHandleFullConfig = buf.readBoolean();
-        } else {
-            super.receiveCustomData(dataId, buf);
         }
     }
 

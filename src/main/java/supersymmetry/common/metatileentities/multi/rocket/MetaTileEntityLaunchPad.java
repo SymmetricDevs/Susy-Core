@@ -78,8 +78,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     // Animation helpers
     private double supportAngle = Math.PI / 4;
-    private int reinitializationTimer = 0;
-    private boolean needsReinitialization = false;
 
     @SideOnly(Side.CLIENT)
     private BlockPos lightPos;
@@ -201,7 +199,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        setTrainAABB();
+        setAABBs();
 
         this.hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
         World world = getWorld();
@@ -211,13 +209,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         if (world != null) {
             disableBlockRendering(true);
         }
-        if (this.needsReinitialization) {
-            this.setLaunchPadState(LaunchPadState.INITIALIZING);
-        } else {
-            findRocket();
-            if (this.selectedRocket != null) {
-                this.setLaunchPadState(LaunchPadState.LOADED);
-            }
+
+        findRocket();
+        if (this.selectedRocket != null) {
+            this.setLaunchPadState(LaunchPadState.LOADED);
         }
 
         this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
@@ -226,17 +221,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     @Override
-    public void onPlacement() {
-        super.onPlacement();
-        this.needsReinitialization = true;
-    }
-
-    @Override
     public void invalidateStructure() {
         super.invalidateStructure();
         disableBlockRendering(false);
         this.trainAABB = null;
-        this.needsReinitialization = true;
+        this.state = LaunchPadState.INITIALIZING;
         this.inputInventory = new GTItemStackHandler(this, 0);
         this.inputFluidInventory = new FluidTankList(true);
     }
@@ -246,7 +235,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         return Textures.SOLID_STEEL_CASING;
     }
 
-    public void setTrainAABB() {
+    public void setAABBs() {
         // Had to make it overshoot a little :(
         BlockPos offsetBottomLeft = new BlockPos(6, 5, 9);
         BlockPos offsetTopRight = new BlockPos(-6, 20, 17);
@@ -291,7 +280,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public AxisAlignedBB getRocketAABB() {
         Vec3d launchPosition = getLaunchPosition();
-        return new AxisAlignedBB(launchPosition, launchPosition).expand(2, 2, 2);
+        return new AxisAlignedBB(launchPosition, launchPosition).expand(2, 8, 2);
     }
 
     @Override
@@ -301,14 +290,27 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected void updateFormedValid() {
+        if (this.isFirstTick()) {
+            this.setLaunchPadState(LaunchPadState.INITIALIZING);
+        }
         switch (this.state) {
             case INITIALIZING:
-                reinitializationTimer++;
-                if (reinitializationTimer >= 20) {
-                    this.needsReinitialization = false;
-                    this.setLaunchPadState(LaunchPadState.EMPTY);
+                // Run mini versions of the later logic just to run through everything
+                updateSelectedErector();
+                findRocket();
+                if (selectedRocket != null) {
+                    if (selectedRocket.isCountdownStarted()) {
+                        this.setLaunchPadState(LaunchPadState.LAUNCHING);
+                    } else {
+                        this.setLaunchPadState(LaunchPadState.LOADED);
+                    }
+                    break;
                 }
-                break;
+                if (this.selectedErector != null && selectedErector.isRocketLoaded()) {
+                    this.setLaunchPadState(LaunchPadState.LOADING);
+                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
+                }
+                this.setLaunchPadState(LaunchPadState.EMPTY);
             case EMPTY:
                 if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
@@ -359,7 +361,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     }
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
-                if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountDownStarted()) {
+                if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {
                     this.selectedRocket.startCountdown(200);
                 }
                 if (this.selectedRocket.posY > this.getLaunchPosition().y + 40) {
@@ -554,11 +556,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        if (this.state == LaunchPadState.INITIALIZING) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("initialize", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
-        }
         if (this.state == LaunchPadState.LOADING) {
             event.getController().setAnimation(new AnimationBuilder()
                     .addAnimation("protract", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
@@ -600,7 +597,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     public enum LaunchPadState {
-        INITIALIZING, // The launch pad is going through its initial animation of the supports coming out of the ground.
+        INITIALIZING, // The launch pad is literally just checking for existing entities.
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting process.
         LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket

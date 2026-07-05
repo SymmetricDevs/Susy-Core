@@ -3,16 +3,22 @@ package supersymmetry.common.entities;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 
 import cam72cam.immersiverailroading.entity.Freight;
 import cam72cam.immersiverailroading.util.Speed;
 import cam72cam.mod.entity.Entity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
+import cam72cam.mod.item.ClickResult;
+import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
@@ -168,5 +174,22 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     public double getWeight() {
         // Rocket mass scales with how much of it has been assembled.
         return super.getWeight() - 311500 * (1 - this.assemblyProgress);
+    }
+
+    @Override
+    public ClickResult onClick(Player playerIn, Player.Hand hand) {
+        if (this.assemblyProgress == 0 && playerIn.isCreative() &&
+                playerIn.getHeldItem(hand).is(
+                        new ItemStack(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm()))) {
+            TagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
+            if (tag != null) {
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                bp.readFromNBT(tag.internal);
+                this.rocketNBT.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
+                this.rocketNBT.internal.setTag("rocket", bp.writeToNBT());
+                this.setRocketLoaded(true);
+            }
+        }
+        return super.onClick(playerIn, hand);
     }
 }

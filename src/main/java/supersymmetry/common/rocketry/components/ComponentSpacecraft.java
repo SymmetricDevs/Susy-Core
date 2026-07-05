@@ -111,7 +111,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
-            spacecraft.instruments.put(key, compound.getInteger(key));
+            spacecraft.instruments.put(key, instrumentsList.getInteger(key));
         }
 
         NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);

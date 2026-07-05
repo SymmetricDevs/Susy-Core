@@ -3,12 +3,14 @@ package supersymmetry.common.entities;
 import java.util.List;
 import java.util.Random;
 
+import gregtech.modules.ModuleManager;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
@@ -35,6 +38,8 @@ import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
 public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender, AFSRendered {
 
@@ -85,7 +90,17 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     }
 
     public void launchRocket() {
-        if (this.getEntityData().hasKey("rocket")) {
+        if (this.getFuel() == null) {
+            setLaunchTime(-1);
+            setCountdownStarted(false);
+            return;
+        }
+        if (world.isRemote) {
+            setupRocketSound();
+            soundRocket.startPlaying();
+        }
+        super.launchRocket();
+        if (this.getEntityData().hasKey("rocket") && !this.world.isRemote) {
             NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
             AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
                     .getCopyOf(rocketNBT.getString("name"));
@@ -103,11 +118,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
             this.setLaunchResult(LaunchResult.EXPLODES);
         }
 
-        super.launchRocket();
-        if (world.isRemote) {
-            setupRocketSound();
-            soundRocket.startPlaying();
-        }
     }
 
     @Override
@@ -140,7 +150,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setBoolean("Launched", this.isLaunched());
-        compound.setBoolean("CountdownStarted", this.isCountDownStarted());
+        compound.setBoolean("CountdownStarted", this.isCountdownStarted());
         compound.setInteger("Age", this.getAge());
         compound.setBoolean("Acted", this.hasActed());
         compound.setInteger("LaunchTime", this.getLaunchTime());
@@ -236,7 +246,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         int age = this.getAge();
         int launchTime = this.getLaunchTime();
 
-        if (this.isCountDownStarted() && !launched && age >= launchTime) {
+        if (this.isCountdownStarted() && !launched && age >= launchTime) {
             this.launchRocket();
         }
 
@@ -357,7 +367,25 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
 
     @Override
     public double getCargoMass() {
-        return cargo.mass();
+        double mass = 0;
+        for (Entity passenger : getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                mass += 70;
+                for (ItemStack stack : player.inventory.mainInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.armorInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.offHandInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
+                    mass += (double) BaublesModule.getBaubleMass(player) / 1000;
+                }
+            }
+        }
+        return mass + (double) cargo.mass() / 1000;
     }
 
     @Override

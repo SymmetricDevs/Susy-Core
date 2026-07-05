@@ -13,6 +13,8 @@ import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
+import java.util.stream.Stream;
+
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
                                        implements WeightedBlock<BlockSpacecraftInstrument.Type> {
 
@@ -80,6 +82,10 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
 
         public void act(int count, EntityAbstractRocket rocket) {
             if (instrument != null) instrument.act(count, rocket);
+        }
+
+        public static Type getInstrument(String name) {
+            return Stream.of(values()).filter(type -> type.name.equals(name)).findFirst().orElse(null);
         }
     }
 }

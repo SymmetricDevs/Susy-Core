@@ -17,6 +17,7 @@ public class InstrumentLander implements Instrument {
         int i = 0;
         for (Entity passenger : rocket.getPassengers()) {
             i++;
+            if (EventHandlers.isEntityTravelling(passenger)) continue;
             if (i > count) break;
             EntityLander dropPod = new EntityLander(rocket.world, passenger.posX, passenger.posY, passenger.posZ);
             if (i == 0) {

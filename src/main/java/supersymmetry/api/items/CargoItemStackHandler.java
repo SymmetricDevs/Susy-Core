@@ -130,7 +130,6 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (!loading) return stack;
         if (!SuSyUtility.isAllowedItemForSpace(stack)) return stack;
         int mass = getMassPerItem(stack);
         List<ItemStack> bucket = getBucketForItem(stack);
@@ -175,7 +174,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - maxAddition);
     }
 
-    public int getMassPerItem(ItemStack item) {
+    // Returned in grams
+    public static int getMassPerItem(ItemStack item) {
         // GTCEu mass info
         ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(item);
         if (info != null) {
@@ -219,10 +219,6 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     @Override
     public int getSlotLimit(int slot) {
         return 64;
-    }
-
-    public void stopLoading() {
-        this.loading = false;
     }
 
     public boolean isFull() {
