@@ -512,7 +512,7 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 4, 1,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
