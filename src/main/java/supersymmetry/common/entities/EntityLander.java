@@ -8,26 +8,37 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.EntityGuiData;
+import com.cleanroommc.modularui.factory.GuiFactories;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+
 import gregtech.api.GTValues;
+import gregtech.modules.ModuleManager;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -36,22 +47,24 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
-public class EntityLander extends EntityAbstractRocket implements IAnimatable, IInventory, IInteractionObject {
+public class EntityLander extends EntityAbstractRocket implements IAnimatable, IInventory, IGuiHolder<EntityGuiData> {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
             .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> AGE = EntityDataManager
-            .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
+    public static final double MAX_LAUNCH_MASS = 10000;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
@@ -203,9 +216,9 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @Override
     protected void entityInit() {
+        super.entityInit();
         this.dataManager.register(HAS_LANDED, false);
         this.dataManager.register(TIME_SINCE_LANDING, 0);
-        this.dataManager.register(AGE, 0);
     }
 
     @Override
@@ -284,8 +297,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
             }
         }
 
-        this.dataManager.set(AGE, this.dataManager.get(AGE) + 1);
-
         if (world.isRemote && this.soundDropPod != null) {
             if (!this.hasLanded() || this.isLaunched()) {
                 soundDropPod.startPlaying();
@@ -298,12 +309,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     @Override
     public RocketFuelEntry getFuel() {
         return null;
-    }
-
-    @Override
-    public double getCargoMass() {
-        // Not worrying about this
-        return 0;
     }
 
     @Override
@@ -477,21 +482,54 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         this.cargo.clear();
     }
 
-    @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerChest(playerInventory, this, playerIn);
-    }
-
-    @Override
-    public String getGuiID() {
-        return "supersymmetry:lander";
-    }
-
     public CargoItemStackHandler getInventory() {
         return this.cargo;
     }
 
     public void setInventory(CargoItemStackHandler cargoItemStackHandler) {
         this.cargo = cargoItemStackHandler;
+    }
+
+    @Override
+    public ModularPanel buildUI(EntityGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        return ModularPanel.defaultPanel("lander")
+                .child(new Flow(GuiAxis.X)
+                        .child(new ItemSlot().slot(new ModularSlot(cargo, 0).singletonSlotGroup()))
+                        .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
+                                .align(Alignment.CenterRight).height(18)))
+                .bindPlayerInventory();
+    }
+
+    @Override
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        if (!player.world.isRemote && player.isSneaking()) {
+            GuiFactories.entity().open(player, this);
+            return true;
+        }
+        player.startRiding(this);
+        return false;
+    }
+
+    @Override
+    public double getCargoMass() {
+        double mass = 0;
+        for (Entity passenger : getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                mass += 70;
+                for (ItemStack stack : player.inventory.mainInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.armorInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.offHandInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
+                    mass += (double) BaublesModule.getBaubleMass(player) / 1000;
+                }
+            }
+        }
+        return mass + (double) cargo.mass() / 1000;
     }
 }

@@ -1409,7 +1409,7 @@ susy.gui.rocket_programmer.mission_type=Mission type
 susy.gui.rocket_programmer.planetoid=Destination
 susy.gui.rocket_programmer.destination_type=Destination type
 susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
-susy.rocket_programmer.circuit_slot=Place Rocket Programmer Here
+susy.rocket_programmer.circuit_slot=Place Config Tool here
 
 
 susy.gui.page=Page %s / %s
@@ -1692,7 +1692,7 @@ susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
 susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
-
+entity.Lander.name=Moon Lander
 
 susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
 susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock

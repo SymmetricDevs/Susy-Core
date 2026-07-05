@@ -1,5 +1,7 @@
 package supersymmetry.common.entities;
 
+import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
+
 import java.util.Arrays;
 
 import net.minecraft.entity.Entity;
@@ -59,7 +61,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.dataManager.register(LAUNCHED, false);
         this.dataManager.register(COUNTDOWN_STARTED, false);
         this.dataManager.register(AGE, 0);
-        this.dataManager.register(LAUNCH_TIME, 0);
+        this.dataManager.register(LAUNCH_TIME, -1);
         this.dataManager.register(FLIGHT_TIME, 0);
         this.dataManager.register(START_POS, 0.F);
         this.dataManager.register(ACTED, false);
@@ -73,7 +75,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.dataManager.set(LAUNCHED, launched);
     }
 
-    public boolean isCountDownStarted() {
+    public boolean isCountdownStarted() {
         return this.dataManager.get(COUNTDOWN_STARTED);
     }
 
@@ -141,9 +143,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     protected abstract float getExplosionStrength();
 
     protected void act() {
-        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
+        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instruments.getKeySet()) {
-            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
+            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
             int count = instruments.getInteger(key);
             instrument.act(count, this);
         }

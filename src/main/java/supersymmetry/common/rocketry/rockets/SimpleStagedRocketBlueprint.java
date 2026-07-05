@@ -85,6 +85,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         tag.setLong("AFSimprovement", this.AFSimprovement);
         tag.setDouble("maxVolume", this.getFuelVolume());
         tag.setDouble("maxCargoVolume", this.getCargoVolume());
+        NBTTagCompound instrumentList = new NBTTagCompound();
+        this.getInstruments().forEach(instrumentList::setInteger);
+        tag.setTag("instruments", instrumentList);
 
         return tag;
     }

@@ -3,6 +3,7 @@ package supersymmetry.integration.baubles;
 import java.util.Collections;
 import java.util.List;
 
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,6 +22,7 @@ import gregtech.common.items.MetaItems;
 import gregtech.integration.IntegrationSubmodule;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ArmorBaubleBehavior;
 import supersymmetry.modules.SuSyModules;
@@ -60,5 +62,14 @@ public class BaublesModule extends IntegrationSubmodule {
             return BaublesApi.getBaublesHandler(player).getStackInSlot(5);
         }
         return ItemStack.EMPTY;
+    }
+
+    public static int getBaubleMass(EntityPlayer entity) {
+        int mass = 0;
+        IBaublesItemHandler handler = BaublesApi.getBaublesHandler(entity);
+        for (int i = 0; i < handler.getSlots(); i++)  {
+            mass += CargoItemStackHandler.getMassPerItem(handler.getStackInSlot(i));
+        }
+        return mass;
     }
 }

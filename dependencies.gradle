@@ -93,6 +93,7 @@ dependencies {
     //ICBM
     //temporary dep, will replace once we have our own missiles
     implementation rfg.deobf("curse.maven:icbm-244451:6496624")
+    implementation rfg.deobf("curse.maven:chibi-460609:8225778")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')

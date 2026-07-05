@@ -34,7 +34,7 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     protected static final String PARTS_KEY = "parts";
-    protected static final String INSTRUMENTS_KEY = "instruments";
+    public static final String INSTRUMENTS_KEY = "instruments";
     private static final Set<AbstractComponent<?>> registry = new HashSet<>();
     private static boolean registryLock = false;
     private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();

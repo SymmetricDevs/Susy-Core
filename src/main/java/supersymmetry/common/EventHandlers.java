@@ -108,22 +108,21 @@ public class EventHandlers {
         if (world.isRemote || !(world instanceof WorldServer server)) {
             return;
         }
-        // this can be done earlier, saves some tps
-        if (!world.getGameRules().getBoolean("doInvasions")) {
-            return;
-        }
         if (!travellingPassengers.isEmpty()) {
             handleEntityTransfer();
         }
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-
         // Process lander spawn queue for all dimensions
         processLanderSpawnQueue(server);
         // Tick atmosphere system for planet dimensions
         if (world.provider instanceof WorldProviderPlanet) {
             AtmosphereWorldData.get(world).getGraph().tick(world);
+        }
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        // this can be done earlier, saves some tps
+        if (!world.getGameRules().getBoolean("doInvasions")) {
+            return;
         }
 
         // to be replaced with a proper setter/getter in grs, we will have invasions in other later dims as well
@@ -301,7 +300,6 @@ public class EventHandlers {
                     cargo.insertItem(0, inventory.getStackInSlot(i), false);
                 }
             }
-            cargo.stopLoading();
 
             // Spawn the lander
             targetWorld.spawnEntity(lander);

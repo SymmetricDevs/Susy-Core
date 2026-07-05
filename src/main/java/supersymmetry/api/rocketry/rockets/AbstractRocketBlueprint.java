@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -130,6 +131,17 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
                 .mapToDouble(component -> ((ComponentSpacecraft) component).volume)
                 .sum();
     }
+
+    public Map<String, Integer> getInstruments() {
+        return this.getComponents("spacecraft").stream()
+                .map(component -> ((ComponentSpacecraft) component).instruments)
+                .reduce(new HashMap<>(), (map, entry) -> {
+                    // computeAll basically
+                    entry.forEach((key, value) -> map.merge(key, value, Integer::sum));
+                    return map;
+                });
+    }
+
 
     public void setName(String name) {
         this.name = name;
