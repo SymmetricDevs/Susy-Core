@@ -28,6 +28,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.client.audio.MovingSoundDrone;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityDronePad;
 
 public class EntityDrone extends EntityLiving implements IAnimatable {
@@ -87,10 +88,19 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
         if (padPos != null) {
-            MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
-            this.padPos = null;
-            if (pad != null) {
-                pad.setDrone(null);
+            if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityDronePad) {
+                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
+                this.padPos = null;
+                if (pad != null) {
+                    pad.setDrone(null);
+                }
+            } else if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
+                MetaTileEntityCargoDronePad pad = (MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world,
+                        padPos);
+                this.padPos = null;
+                if (pad != null) {
+                    pad.setDrone(null);
+                }
             }
         }
     }
@@ -102,9 +112,17 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
             setupDroneSound();
         }
         if (padPos != null) {
-            MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
-            if (pad != null) {
-                pad.setDrone(this);
+            if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityDronePad) {
+                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
+                if (pad != null) {
+                    pad.setDrone(this);
+                }
+            } else if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
+                MetaTileEntityCargoDronePad pad = (MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world,
+                        padPos);
+                if (pad != null) {
+                    pad.setDrone(this);
+                }
             }
         }
     }
@@ -159,6 +177,9 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this.world.newExplosion(this, this.posX, this.posY, this.posZ, 2, true, true);
         this.damageEntity(DamageSource.FLY_INTO_WALL, 100);
         this.isDead = true;
+        if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
+            ((MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world, padPos)).droneExploded();
+        }
     }
 
     public void setDescendingMode() {

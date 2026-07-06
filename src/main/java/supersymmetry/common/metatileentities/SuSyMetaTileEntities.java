@@ -39,6 +39,7 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
@@ -60,6 +61,7 @@ import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLat
 import supersymmetry.common.metatileentities.single.steam.SuSyCoalBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositBasket;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
@@ -273,6 +275,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLockedCrate LOCKED_TITANIUM_CRATE;
     public static MetaTileEntityLockedCrate LOCKED_TUNGSTENSTEEL_CRATE;
 
+    public static MetaTileEntityDroneDepositBasket DRONE_DEPOSIT_BASKET;
+
     // SUSY's large boilers
     public static MetaTileEntitySuSyLargeBoiler LARGE_BRONZE_BOILER;
     public static MetaTileEntitySuSyLargeBoiler LARGE_STEEL_BOILER;
@@ -302,6 +306,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
     public static MetaTileEntityAttritionScrubber ATTRITION_SCRUBBER;
+
+    public static MetaTileEntityCargoDronePad CARGO_DRONE_PAD;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -710,6 +716,9 @@ public class SuSyMetaTileEntities {
         ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111,
                 new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
+        CARGO_DRONE_PAD = registerMetaTileEntity(18112,
+                new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
+
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
                 new MetaTileEntityLockedCrate(susyId("locked_crate.pe"), Materials.Polyethylene, 54));
@@ -727,6 +736,10 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityLockedCrate(susyId("locked_crate.titanium"), Materials.Titanium, 126));
         LOCKED_TUNGSTENSTEEL_CRATE = registerMetaTileEntity(18207,
                 new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
+
+        DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18210,
+                new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), SusyMaterials.AluminiumAlloy7075,
+                        1));
 
         // Boilers
         LARGE_BRONZE_BOILER = registerMetaTileEntity(18300,
