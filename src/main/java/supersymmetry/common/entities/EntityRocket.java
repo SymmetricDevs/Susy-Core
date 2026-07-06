@@ -3,7 +3,6 @@ package supersymmetry.common.entities;
 import java.util.List;
 import java.util.Random;
 
-import gregtech.modules.ModuleManager;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -26,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GregTechAPI;
+import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
@@ -117,7 +117,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         } else {
             this.setLaunchResult(LaunchResult.EXPLODES);
         }
-
     }
 
     @Override
@@ -243,12 +242,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         super.onUpdate();
 
         boolean launched = this.isLaunched();
-        int age = this.getAge();
-        int launchTime = this.getLaunchTime();
-
-        if (this.isCountdownStarted() && !launched && age >= launchTime) {
-            this.launchRocket();
-        }
 
         if (launched) {
             int flightTime = getFlightTime();
@@ -362,7 +355,6 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
          * }
          * }
          */
-        this.setAge(age + 1);
     }
 
     @Override
@@ -426,6 +418,7 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     }
 
     public void updatePassenger(Entity passenger) {
+        super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
             double yawRad = Math.toRadians(this.rotationYaw);
             double pitchRad = Math.toRadians(this.rotationPitch);
@@ -467,5 +460,10 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     @Override
     public RocketFuelEntry getFuel() {
         return RocketFuelEntry.getCopyOf(this.dataManager.get(FUEL));
+    }
+
+    @Override
+    protected boolean canFitPassenger(Entity passenger) {
+        return this.getPassengers().size() < 4;
     }
 }

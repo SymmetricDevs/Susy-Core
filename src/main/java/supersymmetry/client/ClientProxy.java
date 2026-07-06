@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,18 +38,22 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Keyboard;
 
 import dev.tianmi.sussypatches.common.SusConfig;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.toolitem.IGTTool;
@@ -69,9 +74,11 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
+import supersymmetry.common.network.CPacketRocketLaunch;
 import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
@@ -214,7 +221,9 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("DataFlowIssue")
     @SubscribeEvent
     public static void onRenderGameOverlay(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.START) return;
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
         SPacketSpeakerAudio.tickTracked();
         if (titleRenderTimer >= 0) {
             GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
@@ -329,6 +338,24 @@ public class ClientProxy extends CommonProxy {
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
             RenderMaskManager.clearDisabled();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+        final Minecraft minecraft = FMLClientHandler.instance().getClient();
+        final EntityPlayerSP player = minecraft.player;
+
+        // Prevent control when a GUI is open
+        if (Minecraft.getMinecraft().currentScreen != null)
+            return;
+
+        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityLander lander) {
+            if (Minecraft.getMinecraft().inGameHasFocus && player.equals(Minecraft.getMinecraft().player)) {
+                if (!lander.isLaunched() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+                    GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));
+                }
+            }
         }
     }
 }

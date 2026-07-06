@@ -119,4 +119,8 @@ public class RocketConfiguration {
     public MissionConfiguration popFront() {
         return this.missions.remove(0);
     }
+
+    public boolean isEmpty() {
+        return this.missions.isEmpty();
+    }
 }
