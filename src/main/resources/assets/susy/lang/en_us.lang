@@ -1754,4 +1754,9 @@ susy.gui.rocket_programmer.unmanned_cargo=Unmanned Cargo Mission
 susy.gui.rocket_programmer.unmanned_collection=Unmanned Collection Mission
 
 susy.lander.volume=Used volume: %s
-susy.lander.mass=Cargo weight: %s kg
+susy.lander.mass=Cargo mass: %s kg
+
+susy.rocket.msg.launch=Launching in T-%s
+susy.rocket.msg.too_heavy=Too heavy to launch!
+susy.rocket.msg.not_configured=No remaining missions (take out cargo and press SPACE to remove)
+susy.rocket.msg.gravity_too_high=Cannot launch with gravity > 0.4G (take out cargo and press SPACE to remove)

@@ -20,7 +20,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,15 +36,17 @@ import com.cleanroommc.modularui.factory.EntityGuiData;
 import com.cleanroommc.modularui.factory.GuiFactories;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
-import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
+import gregtech.api.util.TeleportHandler;
 import gregtech.modules.ModuleManager;
+import io.netty.buffer.ByteBuf;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -53,14 +58,21 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
+import supersymmetry.common.EventHandlers;
+import supersymmetry.common.entities.teleporters.DropPodTeleporter;
+import supersymmetry.common.event.DimensionRidingSwapData;
+import supersymmetry.common.event.GravityHandler;
 import supersymmetry.common.network.CPacketRocketInteract;
+import supersymmetry.common.rocketry.RocketConfiguration;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
-public class EntityLander extends EntityAbstractRocket implements IAnimatable, IInventory, IGuiHolder<EntityGuiData> {
+public class EntityLander extends EntityAbstractRocket
+                          implements IAnimatable, IInventory, IGuiHolder<EntityGuiData>, IEntityAdditionalSpawnData {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
@@ -80,7 +92,8 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     public EntityLander(World worldIn, double x, double y, double z) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
-        this.setEntityBoundingBox(new AxisAlignedBB(x - 0.5, y, z - 0.5, x + 0.5, y + 2, z + 0.5));
+        this.setEntityBoundingBox(new AxisAlignedBB(x - 2, y, z - 2, x + 2, y + 4, z + 2));
+        setSize(4, 5);
     }
 
     public EntityLander(World worldIn, BlockPos pos) {
@@ -109,7 +122,7 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        if (this.isDead || (goingUp && this.getTimeSinceLanding() > 500)) {
+        if (this.isDead) {
             return;
         }
 
@@ -230,7 +243,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.writeEntityToNBT(compound);
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
-        compound.setTag("cargo", this.cargo.serializeNBT());
     }
 
     @Override
@@ -238,7 +250,77 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.readEntityFromNBT(compound);
         this.setLanded(compound.getBoolean("landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
-        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
+    }
+
+    @Override
+    protected void act() {
+        if (getPassengers().isEmpty()) {
+            return;
+        }
+
+        NBTTagCompound tag = this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
+        RocketConfiguration config = new RocketConfiguration(tag);
+        // Land on next planet
+        RocketConfiguration.MissionConfiguration next = config.popFront();
+        while (!config.isEmpty() && next.missionType != RocketConfiguration.MissionType.Manned) {
+            next = config.popFront();
+        }
+        Entity passenger = this.getPassengers().get(0);
+
+        if (next.missionType != RocketConfiguration.MissionType.Manned) {
+            if (passenger instanceof EntityLivingBase living) {
+                living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
+            }
+            passenger.setDead();
+            return;
+        }
+
+        EntityLander dropPod = new EntityLander(this.world, passenger.posX, passenger.posY, passenger.posZ);
+        dropPod.setInventory(cargo);
+
+        // Pop the next mission from the rocket configuration
+        dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
+
+        TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), this.posX, this.posY, this.posZ);
+
+        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
+    }
+
+    @Override
+    public void launchRocket() {
+        NBTTagCompound tag = this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
+        RocketConfiguration config = new RocketConfiguration(tag);
+        if (config.isEmpty()) {
+            if (cargo.isEmpty()) {
+                this.setDead();
+            } else {
+                sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
+            }
+            return;
+        }
+        double gravMult = GravityHandler.getGravityMultiplier(this.world);
+        if (gravMult > 0.4) {
+            if (cargo.isEmpty()) {
+                this.setDead();
+            } else {
+                sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.gravity_too_high"));
+            }
+            return;
+        }
+        if (getCargoMass() > MAX_LAUNCH_MASS) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.too_heavy"));
+            return;
+        }
+
+        super.launchRocket();
+    }
+
+    public void sendMessageToPassengers(TextComponentTranslation translation) {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(translation, true);
+            }
+        }
     }
 
     @Override
@@ -286,6 +368,14 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
                 this.handleCollidedBlocks(true);
                 this.isDead = this.posY > 300;
             }
+            if (this.posY > 1000) {
+                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                    this.setDead();
+                } else {
+                    act();
+                    this.setActed(true);
+                }
+            }
         } else {
             if (!this.hasLanded()) {
                 this.spawnFlightParticles(false);
@@ -293,13 +383,12 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
             if (this.isLaunched()) {
                 this.spawnFlightParticles(true);
             }
-        }
-
-        if (world.isRemote && this.soundDropPod != null) {
-            if (!this.hasLanded() || this.isLaunched()) {
-                soundDropPod.startPlaying();
-            } else {
-                soundDropPod.stopPlaying();
+            if (soundDropPod != null) {
+                if (!this.hasLanded() || this.isLaunched()) {
+                    soundDropPod.startPlaying();
+                } else {
+                    soundDropPod.stopPlaying();
+                }
             }
         }
     }
@@ -385,6 +474,28 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.onAddedToWorld();
         if (this.world.isRemote) {
             setupDropPodSound();
+        }
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        NBTTagCompound cargoTag = new NBTTagCompound();
+        if (this.cargo != null) {
+            cargoTag = this.cargo.serializeNBT();
+        }
+        ByteBufUtils.writeTag(buffer, cargoTag);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buffer) {
+        try {
+            NBTTagCompound cargoTag = ByteBufUtils.readTag(buffer);
+            if (this.cargo == null) {
+                this.cargo = new CargoItemStackHandler(0, 0);
+            }
+            this.cargo.deserializeNBT(cargoTag);
+        } catch (Exception e) {
+            // cargo will be synced through UI or other means if spawn data fails
         }
     }
 
@@ -490,15 +601,22 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @Override
     public ModularPanel buildUI(EntityGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        SlotGroup cargoInventory = new SlotGroup("cargo", 1, 1000, true);
+        syncManager.registerSlotGroup(cargoInventory);
+
         return ModularPanel.defaultPanel("lander")
-                .child(new Flow(GuiAxis.X).posRel(0, 0.2f).childPadding(10)
-                        .child(new ItemSlot().slot(new ModularSlot(cargo, 0).singletonSlotGroup()))
-                        .child(new Flow(GuiAxis.Y).childPadding(10)
+                .child(new Flow(GuiAxis.X)
+                        .top(18)
+                        .margin(7, 0)
+                        .widthRel(1f)
+                        .coverChildrenHeight()
+                        .child(new ItemSlot().slot(new ModularSlot(cargo, 0).slotGroup(cargoInventory)))
+                        .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
                                 .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
-                                        .align(Alignment.CenterRight).height(18))
+                                        .rightRel(0.3f).height(18))
                                 .child(IKey.lang("susy.lander.volume", () -> new Object[] { getCargoVolumeString() })
                                         .asWidget()
-                                        .align(Alignment.CenterRight).height(18))))
+                                        .rightRel(0.3f).height(18))))
                 .bindPlayerInventory();
     }
 

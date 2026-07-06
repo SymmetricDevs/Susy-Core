@@ -4,8 +4,10 @@ import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENT
 
 import java.util.Arrays;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +16,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
@@ -130,8 +133,10 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     public void launchRocket() {
-        this.setLaunched(true);
-        this.setActed(false);
+        if (!this.world.isRemote) {
+            this.setLaunched(true);
+            this.setActed(false);
+        }
         this.isAirBorne = true;
     }
 
@@ -221,6 +226,29 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         } catch (Exception e) {
             // shrug
         }
+    }
+
+    @Override
+    public void updatePassenger(Entity passenger) {
+        if (!passenger.world.isRemote && isCountdownStarted() && !isLaunched() && passenger instanceof EntityPlayer player) {
+            player.sendStatusMessage(
+                    new TextComponentTranslation("susy.rocket.msg.launch",
+                            (getLaunchTime() - getAge()) / 20),
+                    true);
+        }
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        boolean launched = this.isLaunched();
+        int age = this.getAge();
+        int launchTime = this.getLaunchTime();
+
+        if (this.isCountdownStarted() && !launched && age >= launchTime) {
+            this.launchRocket();
+        }
+        this.setAge(this.getAge() + 1);
     }
 
     public CargoItemStackHandler getInventory() {

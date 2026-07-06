@@ -14,6 +14,14 @@ import supersymmetry.common.rocketry.RocketConfiguration;
 public class InstrumentLander implements Instrument {
 
     public void act(int count, EntityAbstractRocket rocket) {
+        RocketConfiguration config = rocket.getRocketConfiguration();
+        RocketConfiguration.MissionConfiguration next = config.popFront();
+        while (!config.isEmpty() && next.missionType != RocketConfiguration.MissionType.Manned) {
+            next = config.popFront();
+        }
+        if (next.missionType != RocketConfiguration.MissionType.Manned) {
+            return;
+        }
         int i = 0;
         for (Entity passenger : rocket.getPassengers()) {
             i++;
@@ -25,11 +33,9 @@ public class InstrumentLander implements Instrument {
             }
 
             // Pop the next mission from the rocket configuration
-            RocketConfiguration config = rocket.getRocketConfiguration();
-            config.popFront();
             dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
 
-            TeleportHandler.teleport(dropPod, 800, new DropPodTeleporter(), rocket.posX, rocket.posY, rocket.posZ);
+            TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), rocket.posX, rocket.posY, rocket.posZ);
 
             EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
         }

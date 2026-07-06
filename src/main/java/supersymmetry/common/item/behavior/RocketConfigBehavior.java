@@ -45,7 +45,7 @@ import supersymmetry.common.rocketry.RocketConfiguration.MissionType;
 public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemUIFactory {
 
     private int pageNum = 0;
-    public static final int MAX_PAGES = 10;
+    public static final int MAX_PAGES = 2;  // TODO: better instrument handling
 
     @Override
     public ModularPanel buildUI(PlayerInventoryGuiData guiData, PanelSyncManager syncManager, UISettings settings) {

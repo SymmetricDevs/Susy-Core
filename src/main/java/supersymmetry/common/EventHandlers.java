@@ -287,7 +287,7 @@ public class EventHandlers {
 
             // Create the lander entity
             EntityLander lander = new EntityLander(targetWorld, entry.getX(), entry.getY(), entry.getZ());
-            CargoItemStackHandler cargo = new CargoItemStackHandler(Integer.MAX_VALUE, Integer.MAX_VALUE);
+            CargoItemStackHandler cargo = new CargoItemStackHandler(36, Integer.MAX_VALUE);
             lander.setInventory(cargo);
 
             // Load inventory if present
