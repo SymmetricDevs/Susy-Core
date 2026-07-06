@@ -21,6 +21,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.Nullable;
 
+import gregtech.api.damagesources.DamageSources;
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import supersymmetry.api.items.IBreathingArmorLogic;
 import supersymmetry.client.renderer.handler.ITextureRegistrar;
@@ -225,5 +227,29 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
             case CHEST -> models.add(susyId("armor/gas_tank"));
         }
         return models;
+    }
+
+    public int getPunctures(ItemStack stack) {
+        return 0;
+    }
+
+    public void setPunctures(ItemStack stack, int count) {
+    }
+
+    public double getMaxFlowRate(ItemStack stack) {
+        return 0;
+    }
+
+    public static boolean isPunctureDamage(DamageSource source) {
+        if (source.isUnblockable()) return false;
+        if (source.isProjectile()) return true;
+        if (source == DamageSource.FALL) return false;
+        if (source == DamageSource.LAVA) return false;
+        if (source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE) return false;
+        if (source == DamageSource.MAGIC) return false;
+        if (source == DamageSource.WITHER) return false;
+        if (source == DamageSources.getHeatDamage()) return false;
+        if (source == DamageSources.getFrostDamage()) return false;
+        return source instanceof EntityDamageSource;
     }
 }

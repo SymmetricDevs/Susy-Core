@@ -3,6 +3,7 @@ package supersymmetry.common.item.armor;
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,9 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,6 +43,8 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     private final double relativeAbsorption;
 
     private static final double DEFAULT_ABSORPTION = 0;
+    //TODO balancing
+    private static final double LEAK_PER_PUNCTURE = 0.3;
     private AnimationFactory factory;
 
     public SpaceSuit(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name, int tier,
@@ -102,6 +107,34 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     }
 
     @Override
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage,
+                            EntityEquipmentSlot slot) {
+        super.damageArmor(entity, stack, source, damage, slot);
+        if (SLOT == CHEST && isPunctureDamage(source) && getMaxFlowRate(stack) > 0) {
+            setPunctures(stack, getPunctures(stack) + 1);
+        }
+    }
+
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+        if (player.getItemStackFromSlot(HEAD) != stack) return;
+        super.onArmorTick(world, player, stack);
+
+        ItemStack chest = player.getItemStackFromSlot(CHEST);
+        if (!(chest.getItem() instanceof SuSyArmorItem item)) return;
+        if (!(item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank)) return;
+        if (tank.getMaxFlowRate(chest) <= 0) return;
+        if (tank.getOxygen(chest) <= 0) return;
+
+        double maxFlow = tank.getMaxFlowRate(chest);
+        double baseDrain = isInHazardousEnvironment(player) ? 0.05 : 0.0;
+        double leakRate = tank.getPunctures(chest) * LEAK_PER_PUNCTURE;
+        double totalDemand = baseDrain + leakRate;
+        double effectiveDrain = Math.min(maxFlow, totalDemand);
+        tank.changeOxygen(chest, -effectiveDrain);
+    }
+
+    @Override
     public double getDamageAbsorbed(ItemStack stack, EntityPlayer player) {
         this.handleDamage(stack, player);
 
@@ -129,9 +162,20 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
                 if (tank.getOxygen(chest) <= 0) {
                     return 0.5;
-                } else {
-                    tank.changeOxygen(chest, -1.);
                 }
+
+                double maxFlow = tank.getMaxFlowRate(chest);
+                if (maxFlow > 0) {
+                    double p = tank.getPunctures(chest);
+                    double baseDrain = 0.05;
+                    double totalDemand = baseDrain + p * LEAK_PER_PUNCTURE;
+                    double effective = Math.min(maxFlow, totalDemand);
+                    double pressure = totalDemand > 0 ? effective / totalDemand : 1.0;
+                    if (pressure < 0.2) {
+                        return DEFAULT_ABSORPTION;
+                    }
+                }
+
                 switch (piecesCount) {
                     case 0:
                     case 1:
