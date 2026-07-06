@@ -454,7 +454,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                                 .isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) &&
                         !getInputInventory().getStackInSlot(i)
                                 .isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()) &&
-                        !getInputInventory().getStackInSlot(i).isItemEqual(ItemStack.EMPTY)) {
+                        getInputInventory().getStackInSlot(i) != ItemStack.EMPTY) {
                     return i;
                 }
 
