@@ -1,15 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import static gregtech.api.util.GTUtility.getMetaTileEntity;
-import static gregtech.api.util.GTUtility.writeItems;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -133,17 +130,6 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
             this.drone = null;
         }
         this.droneReachedSky = setReachedSky;
-    }
-
-    public boolean hasDrone() {
-        if (getDrone() != null && !getDrone().isDead) {
-            for (EntityDrone entity : this.getWorld().getEntitiesWithinAABB(EntityDrone.class, this.landingAreaBB)) {
-                if (entity == getDrone()) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public void spawnDroneEntityOnPad(boolean descending) {
@@ -271,10 +257,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (currentDroneTier > -1) {
             if (currentDroneTier == 0) {
                 data.setInteger("currentDroneTier", 0);
-                SusyLog.logger.debug("ASDFGH CURRENT DRONE TIER 0");
             } else if (currentDroneTier == 1) {
                 data.setInteger("currentDroneTier", 1);
-                SusyLog.logger.debug("ASDFGH CURRENT DRONE TIER 1");
             }
         }
         return data;
@@ -305,10 +289,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (currentDroneTier == -1 && data.hasKey("currentDroneTier")) {
             if (data.getInteger("currentDroneTier") == basicDroneTier) {
                 currentDroneTier = basicDroneTier;
-                SusyLog.logger.debug("ASDFGH READ DRONE TIER = BASIC");
             } else if (data.getInteger("currentDroneTier") == advancedDroneTier) {
                 currentDroneTier = advancedDroneTier;
-                SusyLog.logger.debug("ASDFGH READ DRONE TIER = ADV");
             }
         }
     }
@@ -357,7 +339,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         timer++;
 
         if (timer == 1) {// probably extremely stupid but idk how to do better
-            //FIXME: make the pad only work in overworld
+            // FIXME: make the pad only work in overworld
             if (targetPos != null) {
                 setTargetBasket(targetPos);
 
@@ -468,8 +450,10 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (getInputInventory().getSlots() > 0) {
             for (int i = 0; i < getInputInventory().getSlots() - 1; i++) {
                 if (!getInputInventory().getStackInSlot(i).isItemEqual(SuSyMetaItems.LOCATION_CARD.getStackForm()) &&
-                        !getInputInventory().getStackInSlot(i).isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) &&
-                        !getInputInventory().getStackInSlot(i).isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()) &&
+                        !getInputInventory().getStackInSlot(i)
+                                .isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) &&
+                        !getInputInventory().getStackInSlot(i)
+                                .isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()) &&
                         !getInputInventory().getStackInSlot(i).isItemEqual(ItemStack.EMPTY)) {
                     return i;
                 }
@@ -538,17 +522,6 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         return Math.toIntExact(flightTime);
     }
 
-    public int getDroneTier(ItemStack stack) {
-        Item item = stack.getItem();
-        if (item == SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm().getItem()) {
-            return 0;
-        } else if (item == SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm().getItem()) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }
-
     public boolean initiateTransfer() {
         if (targetPos != null) {
             setTargetBasket(targetPos);
@@ -563,7 +536,6 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                     getTotalFlightTime(currentDroneTier) > -1) {
                 flightTime = 0;
                 totalFlightTime = getTotalFlightTime(currentDroneTier);
-                SusyLog.logger.debug("LKJHGF DRONE TIER = {}", currentDroneTier);
                 consumeItem(getFirstSlotWithItem());
                 consumeItem(getFirstSlotWithDrone());
                 spawnDroneEntityOnPad(false);
@@ -586,10 +558,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
             ItemStack droneStack = ItemStack.EMPTY;
             if (currentDroneTier == basicDroneTier) {
                 droneStack = SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm();
-                SusyLog.logger.debug("QWERTY DRONESTACK EQUALS BASIC");
             } else if (currentDroneTier == advancedDroneTier) {
                 droneStack = SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm();
-                SusyLog.logger.debug("QWERTY DRONESTACK EQUALS ADV");
             }
             outputInventory.setStackInSlot(getFirstFreeSlot(outputInventory), droneStack);
             currentDroneTier = -1;
@@ -636,12 +606,5 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
             textList.add(new TextComponentTranslation("susy.cargo_drone_pad.progress",
                     Math.round((double) flightTime * 100 / totalFlightTime)));
         }
-        textList.add(new TextComponentTranslation("susy.cargo_drone_pad.tier = " + currentDroneTier));
-        textList.add(new TextComponentTranslation("susy.cargo_drone_pad.flight_time = " + flightTime));
-        textList.add(new TextComponentTranslation("susy.cargo_drone_pad.total_flight_time = " + totalFlightTime));
-    }
-
-    public boolean isWorking() {
-        return this.deposited || this.initiated;
     }
 }
