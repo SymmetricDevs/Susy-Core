@@ -39,7 +39,6 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
