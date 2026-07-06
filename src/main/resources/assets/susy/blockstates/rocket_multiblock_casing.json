@@ -10,12 +10,7 @@
       }
     },
     "variant=ceiling_grid_filter_unit" : {
-      "model" : "susy:no_cull_tinted_cube_column",
-      "textures" : {
-        "bottom": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_bottom",
-        "top": "gregtech:blocks/rocket_multiblock_casing/ceiling_grid_filter_unit_top",
-        "side": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_side"
-      }
+      "model" : "susy:rocket_control/ceiling_filter"
     },
     "variant=vinyl_composite_flooring" : {
       "model" : "minecraft:cube_bottom_top",

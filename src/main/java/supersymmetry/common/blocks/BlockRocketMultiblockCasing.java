@@ -47,7 +47,7 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     @Override
     @SideOnly(Side.CLIENT)
     public @NotNull BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
