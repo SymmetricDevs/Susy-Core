@@ -4,7 +4,6 @@ import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENT
 
 import java.util.Arrays;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -148,6 +147,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     protected abstract float getExplosionStrength();
 
     protected void act() {
+        if (this.world.isRemote) return;
         NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instruments.getKeySet()) {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
@@ -230,7 +230,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     @Override
     public void updatePassenger(Entity passenger) {
-        if (!passenger.world.isRemote && isCountdownStarted() && !isLaunched() && passenger instanceof EntityPlayer player) {
+        if (!passenger.world.isRemote && isCountdownStarted() && !isLaunched() &&
+                passenger instanceof EntityPlayer player) {
             player.sendStatusMessage(
                     new TextComponentTranslation("susy.rocket.msg.launch",
                             (getLaunchTime() - getAge()) / 20),

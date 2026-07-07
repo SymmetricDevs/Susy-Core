@@ -27,7 +27,7 @@ public class InstrumentLander implements Instrument {
             i++;
             if (EventHandlers.isEntityTravelling(passenger)) continue;
             if (i > count) break;
-            EntityLander dropPod = new EntityLander(rocket.world, passenger.posX, passenger.posY, passenger.posZ);
+            EntityLander dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
             if (i == 0) {
                 dropPod.setInventory(rocket.getInventory());
             }
@@ -35,7 +35,8 @@ public class InstrumentLander implements Instrument {
             // Pop the next mission from the rocket configuration
             dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
 
-            TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), rocket.posX, rocket.posY, rocket.posZ);
+            TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), next.landingPos.getX(), 350,
+                    next.landingPos.getZ());
 
             EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
         }

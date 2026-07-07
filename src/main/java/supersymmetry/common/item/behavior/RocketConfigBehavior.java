@@ -249,7 +249,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
 
     private void setLandingCoord(int page, ItemStack stack, EnumFacing.Axis axis, int x) {
         NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("landing_" + axis + page);
+        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         pageTag.setInteger("landing_" + axis, x);
     }
 }
