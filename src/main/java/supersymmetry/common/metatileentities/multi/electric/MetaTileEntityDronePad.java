@@ -117,7 +117,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 pos.y, pos.z, true));
 
         if (drone != null) {
-            setDrone(drone.withPadPos(getPos()));
+            setDrone(drone.withLandingPos(getPos()));
         }
 
         if (getDrone() != null) {

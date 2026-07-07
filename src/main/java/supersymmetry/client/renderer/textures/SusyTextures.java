@@ -192,6 +192,8 @@ public class SusyTextures {
             "storage/crates/code_breacher");
     public static final SimpleOverlayRenderer REDSTONE_CONTROLLER_OVERLAY = new SimpleOverlayRenderer(
             "machines/overlay/overlay_redstone");
+    public static final SimpleOverlayRenderer DRONE_BASKET_OVERLAY = new SimpleOverlayRenderer(
+            "storage/crates/drone_basket");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/masonry_brick");
