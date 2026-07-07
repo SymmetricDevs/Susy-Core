@@ -174,7 +174,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
             return;
         } // only nomex doesnt have it
         NBTTagCompound compound = stack.getTagCompound();
-        compound.setDouble("oxygen", getOxygen(stack) + oxygenChange);
+        compound.setDouble("oxygen", Math.max(0, getOxygen(stack) + oxygenChange));
         stack.setTagCompound(compound);
     }
 
@@ -233,8 +233,7 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
         return 0;
     }
 
-    public void setPunctures(ItemStack stack, int count) {
-    }
+    public void setPunctures(ItemStack stack, int count) {}
 
     public double getMaxFlowRate(ItemStack stack) {
         return 0;

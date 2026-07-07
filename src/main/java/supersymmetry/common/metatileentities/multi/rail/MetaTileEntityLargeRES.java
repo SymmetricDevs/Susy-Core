@@ -90,7 +90,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         trainOutputSlot = new NotifiableItemStackHandler(this, 1, this, true);
         trainInputSlot = new NotifiableItemStackHandler(this, 1, this, false);
         this.recipeMapWorkable = new RailroadEngineeringStationWorkable(this, trainInputSlot, trainOutputSlot);
-        System.out.println("=== CONSTRUCTOR: Workable created ===");
     }
 
     @Override
@@ -547,13 +546,10 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         EnumFacing right = getFrontFacing().rotateY();
         BlockPos aisleBase = getPos().offset(getFrontFacing().getOpposite(), 1);
 
-        System.out.println("Controller: " + getPos() + " facing: " + getFrontFacing());
-        System.out.println("AisleBase: " + aisleBase + " right: " + right);
 
         for (int offset = -12; offset <= 12; offset++) {
             BlockPos candidate = aisleBase.offset(right, offset);
             net.minecraft.block.Block block = getWorld().getBlockState(candidate).getBlock();
-            System.out.println("  offset " + offset + " pos " + candidate + " = " + block.getRegistryName());
             if (block.getRegistryName() != null &&
                     block.getRegistryName().toString().contains("block_rail")) {
                 this.railPositions.add(candidate);
@@ -685,13 +681,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         if (def != null) {
             World irWorld = World.get(getWorld());
             BlockPos railPos = railPositions.isEmpty() ? getRailPos() : railPositions.get(railPositions.size() / 2);
-            System.out.println("Controller pos: " + getPos());
-            System.out.println("Facing: " + getFrontFacing());
-            System.out.println("Rail positions found: " + railPositions.size());
-            for (BlockPos p : railPositions) {
-                System.out.println("  Rail: " + p);
-            }
-            System.out.println("Selected rail pos: " + railPos);
 
             TickPos tp = new TickPos(
                     0, Speed.ZERO,
@@ -852,9 +841,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             super(tileEntity);
             this.trainInput = trainInput;
             this.trainOutput = trainOutput;
-            System.out.println("RailroadEngineeringStationWorkable constructed!");
-            System.out.println("  Train input: " + trainInput);
-            System.out.println("  Train output: " + trainOutput);
         }
 
         public MetaTileEntityLargeRES getMetaTileEntity() {
@@ -878,36 +864,12 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         @Override
         public void update() {
             super.update();
-
-            if (getMetaTileEntity().getOffsetTimer() % 40 == 0) {
-                System.out.println("=== WORKABLE UPDATE [" +
-                        (getMetaTileEntity().getWorld().isRemote ? "CLIENT" : "SERVER") + "] ===");
-                System.out.println("Is active: " + isActive());
-                System.out.println("Is working enabled: " + isWorkingEnabled());
-                System.out.println("Can progress: " + canRecipeProgress);
-                System.out.println("Progress: " + progressTime + "/" + maxProgressTime);
-                System.out.println("Recipe EU/t: " + recipeEUt);
-            }
         }
 
         @Override
         protected Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs, IMultipleTankHandler fluidInputs) {
-            System.out.println("=== FINDING RECIPE ===");
-            System.out.println("Max voltage: " + maxVoltage);
-            System.out.println("Input handler slots: " + inputs.getSlots());
-
-            // Log all items in input slots
-            for (int i = 0; i < inputs.getSlots(); i++) {
-                net.minecraft.item.ItemStack stack = inputs.getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    System.out.println("  Slot " + i + ": " + stack + " x" + stack.getCount());
-                }
-            }
 
             Recipe recipe = super.findRecipe(maxVoltage, inputs, fluidInputs);
-
-            System.out.println("Found recipe: " + recipe);
-            System.out.println("=== RECIPE SEARCH COMPLETE ===");
 
             return recipe;
         }
@@ -976,7 +938,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             this.overclockResults = new int[] { 0, 0 };
             this.getMetaTileEntity().completeSpawnedStock();
 
-            System.out.println("Recipe completed!");
         }
     }
 

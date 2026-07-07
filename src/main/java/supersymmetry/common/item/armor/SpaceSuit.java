@@ -1,14 +1,24 @@
 package supersymmetry.common.item.armor;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +27,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
@@ -26,12 +35,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL20;
 
 import gregtech.api.damagesources.DamageSources;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.items.IGeoMetaArmor;
 import supersymmetry.client.renderer.handler.GeoMetaArmorRenderer;
+import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyArmorItem;
 
@@ -43,8 +54,9 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     private final double relativeAbsorption;
 
     private static final double DEFAULT_ABSORPTION = 0;
-    //TODO balancing
+    // TODO balancing
     private static final double LEAK_PER_PUNCTURE = 0.3;
+    private static final int MAX_VISUAL_PUNCTURES = 15;
     private AnimationFactory factory;
 
     public SpaceSuit(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name, int tier,
@@ -127,11 +139,102 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         if (tank.getOxygen(chest) <= 0) return;
 
         double maxFlow = tank.getMaxFlowRate(chest);
-        double baseDrain = isInHazardousEnvironment(player) ? 0.05 : 0.0;
+        if (!isInHazardousEnvironment(player)) return;
+        double baseDrain = 0.05;
         double leakRate = tank.getPunctures(chest) * LEAK_PER_PUNCTURE;
         double totalDemand = baseDrain + leakRate;
         double effectiveDrain = Math.min(maxFlow, totalDemand);
         tank.changeOxygen(chest, -effectiveDrain);
+    }
+
+    private static float[] getHolePositions(int count) {
+        int max = Math.min(count, MAX_VISUAL_PUNCTURES);
+        float[] pos = new float[max * 2];
+        for (int i = 0; i < max; i++) {
+            Random rng = new Random(i * 0x9e3779b9 ^ 0x12312312);
+            pos[i * 2] = rng.nextFloat();
+            pos[i * 2 + 1] = rng.nextFloat();
+        }
+        return pos;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderHelmetOverlay(ItemStack stack, EntityPlayer player,
+                                    ScaledResolution resolution, float partialTicks) {
+        ItemStack chest = player.getItemStackFromSlot(CHEST);
+        int punctures = 0;
+        float[] holePos = null;
+        if (chest.getItem() instanceof SuSyArmorItem item) {
+            if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
+                punctures = tank.getPunctures(chest);
+                if (punctures > 0) holePos = getHolePositions(punctures);
+            }
+        }
+
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR,
+                GlStateManager.DestFactor.ZERO);
+        GlStateManager.disableAlpha();
+
+        int sf = resolution.getScaleFactor();
+        int fbW = resolution.getScaledWidth() * sf;
+        int fbH = resolution.getScaledHeight() * sf;
+
+        int program = ShaderManager.getRawProgram("visor.vert", "visor.frag");
+        if (program > 0) {
+            GL20.glUseProgram(program);
+            GL20.glUniform2f(GL20.glGetUniformLocation(program, "u_resolution"), fbW, fbH);
+            int holeCount = holePos != null ? Math.min(punctures, MAX_VISUAL_PUNCTURES) : 0;
+            GL20.glUniform1i(GL20.glGetUniformLocation(program, "u_holeCount"), holeCount);
+
+            glActiveTexture(GL_TEXTURE0);
+            Minecraft.getMinecraft().getTextureManager()
+                    .bindTexture(new ResourceLocation("susy", "textures/armor/hole_mask.png"));
+            GL20.glUniform1i(GL20.glGetUniformLocation(program, "u_holeMask"), 0);
+
+            glActiveTexture(GL_TEXTURE1);
+            Minecraft.getMinecraft().getTextureManager()
+                    .bindTexture(new ResourceLocation("susy", "textures/armor/hole_tex.png"));
+            GL20.glUniform1i(GL20.glGetUniformLocation(program, "u_holeTex"), 1);
+            glActiveTexture(GL_TEXTURE0);
+
+            for (int i = 0; i < holeCount; i++) {
+                String name = "u_holes[" + i + "]";
+                int loc = GL20.glGetUniformLocation(program, name);
+                if (loc >= 0) {
+                    GL20.glUniform2f(loc, holePos[i * 2], holePos[i * 2 + 1]);
+                }
+            }
+
+            GlStateManager.matrixMode(GL_PROJECTION);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+            GlStateManager.matrixMode(GL_MODELVIEW);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+
+            Tessellator tess = Tessellator.getInstance();
+            BufferBuilder buf = tess.getBuffer();
+            buf.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+            buf.pos(-1, 1, 0).tex(0, 0).endVertex();
+            buf.pos(-1, -1, 0).tex(0, 1).endVertex();
+            buf.pos(1, -1, 0).tex(1, 1).endVertex();
+            buf.pos(1, 1, 0).tex(1, 0).endVertex();
+            tess.draw();
+
+            GlStateManager.matrixMode(GL_PROJECTION);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL_MODELVIEW);
+            GlStateManager.popMatrix();
+
+            GL20.glUseProgram(0);
+        }
+
+        glPopAttrib();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package supersymmetry.common.item.armor;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
-
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
