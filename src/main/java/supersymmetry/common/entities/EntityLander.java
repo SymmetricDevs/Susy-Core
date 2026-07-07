@@ -273,13 +273,14 @@ public class EntityLander extends EntityAbstractRocket
             return;
         }
 
-        EntityLander dropPod = new EntityLander(this.world, passenger.posX, passenger.posY, passenger.posZ);
+        EntityLander dropPod = new EntityLander(this.world, next.landingPos.getX(), 350, next.landingPos.getZ());
         dropPod.setInventory(cargo);
 
         // Pop the next mission from the rocket configuration
         dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
 
-        TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), this.posX, this.posY, this.posZ);
+        TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), next.landingPos.getX(), 350,
+                next.landingPos.getZ());
 
         EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
     }
@@ -362,9 +363,8 @@ public class EntityLander extends EntityAbstractRocket
                     this.motionY *= 1.1D;
                 }
                 this.handleCollidedBlocks(true);
-                this.isDead = this.posY > 300;
             }
-            if (this.posY > 1000) {
+            if (this.posY > 1000 && isLaunched()) {
                 if (this.hasActed() && this.getPassengers().isEmpty()) {
                     this.setDead();
                 } else {

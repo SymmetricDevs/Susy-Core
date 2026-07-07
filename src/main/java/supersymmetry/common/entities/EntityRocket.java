@@ -98,25 +98,26 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
         if (world.isRemote) {
             setupRocketSound();
             soundRocket.startPlaying();
+        } else {
+            if (this.getEntityData().hasKey("rocket")) {
+                NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
+                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
+                        .getCopyOf(rocketNBT.getString("name"));
+                blueprint.readFromNBT(rocketNBT);
+                BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
+                if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
+                        this.getPosition().distanceSq(assemblerPosition) < 100) {
+                    this.setCrashPosition(assemblerPosition);
+                    this.setLaunchResult(LaunchResult.CRASHES);
+                } else {
+                    long augmentation = rocketNBT.getLong("AFSimprovement");
+                    this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
+                }
+            } else {
+                this.setLaunchResult(LaunchResult.EXPLODES);
+            }
         }
         super.launchRocket();
-        if (this.getEntityData().hasKey("rocket") && !this.world.isRemote) {
-            NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-            AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
-                    .getCopyOf(rocketNBT.getString("name"));
-            blueprint.readFromNBT(rocketNBT);
-            BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
-            if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
-                    this.getPosition().distanceSq(assemblerPosition) < 100) {
-                this.setCrashPosition(assemblerPosition);
-                this.setLaunchResult(LaunchResult.CRASHES);
-            } else {
-                long augmentation = rocketNBT.getLong("AFSimprovement");
-                this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
-            }
-        } else {
-            this.setLaunchResult(LaunchResult.EXPLODES);
-        }
     }
 
     @Override

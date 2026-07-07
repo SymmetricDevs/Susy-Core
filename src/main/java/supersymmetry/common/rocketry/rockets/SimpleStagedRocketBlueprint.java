@@ -230,7 +230,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             escapeVelocity = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension())
                     .getEscapeVelocity();
         }
-        double weight = this.getMass() * gravity;
+        double weight = (this.getMass() + rocket.getCargoMass()) * gravity;
         double thrust = this.getThrust(rocket.getFuel(), gravity, "engine");
         double thrustToWeightRatio = thrust / weight;
 
@@ -253,7 +253,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         // Number of engines, radius mismatch
         success *= Math.pow(0.995, this.getComponentCount("engine"));
-        success *= (1 - (0.5 * Math.exp(this.getTotalRadiusMismatch() / 10)));
+        double radialInstability = this.getTotalRadiusMismatch();
+        success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
 
         // Small engines shouldn't have that much throughput
         double smallThrust = this.getThrust(rocket.getFuel(), gravity, "engine_small");
@@ -277,7 +278,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         } else {
             double engineActivity = this.getThrust(rocket.getFuel(), gravity, "engine") *
                     this.getComponentCount("tank");
-            double chanceExplosion = 1 - Math.exp(-engineActivity / 100000);
+            double chanceExplosion = 1 - Math.exp(-engineActivity / 10000000);
             return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
                     SuccessCalculation.LaunchResult.CRASHES;
         }
