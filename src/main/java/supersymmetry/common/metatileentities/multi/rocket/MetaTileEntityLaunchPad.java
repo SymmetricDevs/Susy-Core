@@ -298,7 +298,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 // Run mini versions of the later logic just to run through everything
                 updateSelectedErector();
                 findRocket();
-                if (selectedRocket != null) {
+                if (checkRocket()) {
                     if (selectedRocket.isCountdownStarted()) {
                         this.setLaunchPadState(LaunchPadState.LAUNCHING);
                     } else {
@@ -306,7 +306,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     }
                     break;
                 }
-                if (this.selectedErector != null && selectedErector.isRocketLoaded()) {
+                if (!checkErector() && selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.LOADING);
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                 }
@@ -314,7 +314,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             case EMPTY:
                 if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
-                    if (this.selectedErector != null && selectedErector.isRocketLoaded()) {
+                    if (!checkErector() && selectedErector.isRocketLoaded()) {
                         this.setLaunchPadState(LaunchPadState.LOADING);
                         this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                     }
@@ -322,8 +322,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     break;
                 }
             case LOADING:
-                if (this.selectedErector == null ||
-                        !this.selectedErector.isRocketLoaded()) {
+                if (!checkErector() || !this.selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
                     break;
                 }
@@ -337,9 +336,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     break;
                 }
             case LOADED:
-                if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                if (!checkRocket()) {
                     findRocket();
-                    if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                    if (!checkRocket()) {
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
@@ -350,12 +349,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
             case LAUNCHING:
                 updateSelectedErector();
-                if (this.selectedErector != null) {
+                if (checkErector()) {
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
                 }
-                if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                if (!checkRocket()) {
                     findRocket();
-                    if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                    if (!checkRocket()) {
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
@@ -430,7 +429,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     private void updateSelectedErector() {
-        if (this.selectedErector == null) {
+        if (!checkErector()) {
             List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, this.trainAABB);
 
             if (!trains.isEmpty()) {
@@ -663,5 +662,13 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             }
         }
         return super.onRightClick(playerIn, hand, facing, hitResult);
+    }
+
+    public boolean checkErector() {
+        return this.selectedErector != null && !this.selectedErector.isDead();
+    }
+
+    public boolean checkRocket() {
+        return this.selectedRocket != null && !this.selectedRocket.isDead;
     }
 }
