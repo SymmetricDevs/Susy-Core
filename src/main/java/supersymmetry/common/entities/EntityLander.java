@@ -16,7 +16,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -87,13 +86,12 @@ public class EntityLander extends EntityAbstractRocket
 
     public EntityLander(World worldIn) {
         super(worldIn);
+        setSize(3, 5);
     }
 
     public EntityLander(World worldIn, double x, double y, double z) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
-        this.setEntityBoundingBox(new AxisAlignedBB(x - 2, y, z - 2, x + 2, y + 4, z + 2));
-        setSize(4, 5);
     }
 
     public EntityLander(World worldIn, BlockPos pos) {
@@ -287,23 +285,21 @@ public class EntityLander extends EntityAbstractRocket
     }
 
     @Override
-    public void launchRocket() {
+    public void startCountdown(int length) {
         NBTTagCompound tag = this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
         RocketConfiguration config = new RocketConfiguration(tag);
         if (config.isEmpty()) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
                 this.setDead();
-            } else {
-                sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             }
             return;
         }
         double gravMult = GravityHandler.getGravityMultiplier(this.world);
         if (gravMult > 0.4) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.gravity_too_high"));
             if (cargo.isEmpty()) {
                 this.setDead();
-            } else {
-                sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.gravity_too_high"));
             }
             return;
         }
@@ -312,7 +308,7 @@ public class EntityLander extends EntityAbstractRocket
             return;
         }
 
-        super.launchRocket();
+        super.startCountdown(length);
     }
 
     public void sendMessageToPassengers(TextComponentTranslation translation) {
