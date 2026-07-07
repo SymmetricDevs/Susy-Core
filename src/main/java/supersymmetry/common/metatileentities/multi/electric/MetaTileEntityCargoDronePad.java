@@ -147,6 +147,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
 
         if (getDrone() != null) {
             getDrone().setRotationFromFacing(this.getFrontFacing());
+            getDrone().setCargoPad(this);
             if (descending) {
                 getDrone().setDescendingMode();
                 getDrone().setPadAltitude(this.getPos().getY());
@@ -195,6 +196,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
 
         if (getDrone() != null) {
             getDrone().setRotationFromFacing(EnumFacing.NORTH);
+            getDrone().setCargoPad(this);
             if (descending) {
                 getDrone().setDescendingMode();
                 getDrone().setPadAltitude(basketPos.getY());
@@ -344,7 +346,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 setTargetBasket(targetPos);
 
             }
-            if (getFirstSlotWithValidCard() > -1) {
+            if (getFirstSlotWithValidCard() > -1 && !deposited && !initiated) {
                 setTargetPos(getFirstSlotWithValidCard());
 
             }
@@ -395,11 +397,13 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 if (item.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) ||
                         item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm())) {
                     NBTTagCompound tag = getInputInventory().getStackInSlot(i).getTagCompound();
-                    if ((tag.getLong("Charge") == basicDroneCharge &&
-                            item.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm())) ||
-                            (tag.getLong("Charge") == advancedDroneCharge &&
-                                    item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()))) {
-                        return i;
+                    if (tag != null && tag.hasKey("Charge")) {
+                        if ((tag.getLong("Charge") == basicDroneCharge &&
+                                item.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm())) ||
+                                (tag.getLong("Charge") == advancedDroneCharge &&
+                                        item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()))) {
+                            return i;
+                        }
                     }
                 }
 

@@ -46,6 +46,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
+    private MetaTileEntityCargoDronePad cargoPad = null;
     @SideOnly(Side.CLIENT)
     private MovingSoundDrone soundDrone;
     private BlockPos padPos;
@@ -177,8 +178,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this.world.newExplosion(this, this.posX, this.posY, this.posZ, 2, true, true);
         this.damageEntity(DamageSource.FLY_INTO_WALL, 100);
         this.isDead = true;
-        if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
-            ((MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world, padPos)).droneExploded();
+        if (cargoPad != null) {
+            cargoPad.droneExploded();
         }
     }
 
@@ -188,6 +189,10 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
 
     public void setPadAltitude(int y) {
         this.dataManager.set(PAD_ALTITUDE, y);
+    }
+
+    public void setCargoPad(MetaTileEntityCargoDronePad pad) {
+        this.cargoPad = pad;
     }
 
     @Override
