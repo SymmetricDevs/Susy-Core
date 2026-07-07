@@ -72,7 +72,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     private int dist = 0;
 
     public MetaTileEntityCargoDronePad(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.CARGO_DRONE_PAD); //dummy recipemap, do not use
+        super(metaTileEntityId, SuSyRecipeMaps.CARGO_DRONE_PAD); // dummy recipemap, do not use
     }
 
     protected static IBlockState getCasingState() {
@@ -329,14 +329,12 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         return false;
     }
 
-
     @Override
     public void update() {
         super.update();
         if (flightTime > -1) {
             flightTime++;
         }
-
 
         if (getOffsetTimer() % 10 == 0 && getWorld().provider.getDimension() == 0) {
             if (targetPos != null) {
@@ -609,9 +607,9 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                     Math.round((double) flightTime * 100 / totalFlightTime)));
         }
     }
+
     @Override
     public boolean isActive() {
         return deposited || initiated;
     }
-
 }
