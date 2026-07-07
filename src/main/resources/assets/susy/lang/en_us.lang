@@ -7,9 +7,9 @@ tile.wire_coil.tooltip_evaporation=§8Evaporation Pool
 tile.wire_coil.tooltip_energy_evaporating=  §cHeat Generation: §f%,d kJ/t
 
 tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
-tile.sintering_brick.sintering_block_brick_bloom_deco.name=Brick Sintering Block Blooming
+tile.sintering_brick.sintering_block_brick_bloom_deco.name=Active Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
-tile.sintering_brick.sintering_block_magnetoplated_bloom_deco.name=Magnetoplated Sintering Block Blooming
+tile.sintering_brick.sintering_block_magnetoplated_bloom_deco.name=Active Magnetoplated Sintering Block
 
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
