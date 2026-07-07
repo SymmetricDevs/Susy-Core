@@ -314,7 +314,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             case EMPTY:
                 if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
-                    if (!checkErector() && selectedErector.isRocketLoaded()) {
+                    if (checkErector() && selectedErector.isRocketLoaded()) {
                         this.setLaunchPadState(LaunchPadState.LOADING);
                         this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                     }
