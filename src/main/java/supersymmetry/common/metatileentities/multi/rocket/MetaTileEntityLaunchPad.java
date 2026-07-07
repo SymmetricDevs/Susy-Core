@@ -306,7 +306,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     }
                     break;
                 }
-                if (!checkErector() && selectedErector.isRocketLoaded()) {
+                if (checkErector() && selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.LOADING);
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                 }
