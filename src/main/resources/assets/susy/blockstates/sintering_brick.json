@@ -27,14 +27,28 @@
         "top_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_magnetic_bloom"
       }
     },
-    "variant=sintering_block_brick_bloom_deco" : {
+    "active=false,variant=sintering_block_brick_bloom_deco" : {
       "model" : "gregtech:cube_2_layer_all",
       "textures" : {
         "bot_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks",
         "top_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_bloom"
       }
     },
-    "variant=sintering_block_magnetoplated_bloom_deco" : {
+    "active=false,variant=sintering_block_magnetoplated_bloom_deco" : {
+      "model" : "gregtech:cube_2_layer_all",
+      "textures" : {
+        "bot_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_magnetic",
+        "top_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_magnetic_bloom"
+      }
+    },
+    "active=true,variant=sintering_block_brick_bloom_deco" : {
+      "model" : "gregtech:cube_2_layer_all",
+      "textures" : {
+        "bot_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks",
+        "top_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_bloom"
+      }
+    },
+    "active=true,variant=sintering_block_magnetoplated_bloom_deco" : {
       "model" : "gregtech:cube_2_layer_all",
       "textures" : {
         "bot_all" : "gregtech:blocks/casings/sintering_bricks/sintering_bricks_magnetic",
