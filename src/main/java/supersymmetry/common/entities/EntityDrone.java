@@ -49,7 +49,7 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     private MetaTileEntityCargoDronePad cargoPad = null;
     @SideOnly(Side.CLIENT)
     private MovingSoundDrone soundDrone;
-    private BlockPos padPos;
+    private BlockPos landingPos;
 
     public EntityDrone(World worldIn) {
         super(worldIn);
@@ -71,8 +71,8 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this(worldIn, pos.getX() + 0.5F, pos.getZ() + 0.5F, pos.getZ() + 0.5F);
     }
 
-    public EntityDrone withPadPos(BlockPos pos) {
-        this.padPos = pos;
+    public EntityDrone withLandingPos(BlockPos pos) {
+        this.landingPos = pos;
         return this;
     }
 
@@ -88,17 +88,17 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
     @Override
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
-        if (padPos != null) {
-            if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityDronePad) {
-                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
-                this.padPos = null;
+        if (landingPos != null) {
+            if (GTUtility.getMetaTileEntity(world, landingPos) instanceof MetaTileEntityDronePad) {
+                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, landingPos);
+                this.landingPos = null;
                 if (pad != null) {
                     pad.setDrone(null);
                 }
-            } else if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
+            } else if (GTUtility.getMetaTileEntity(world, landingPos) instanceof MetaTileEntityCargoDronePad) {
                 MetaTileEntityCargoDronePad pad = (MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world,
-                        padPos);
-                this.padPos = null;
+                        landingPos);
+                this.landingPos = null;
                 if (pad != null) {
                     pad.setDrone(null);
                 }
@@ -112,15 +112,15 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         if (this.world.isRemote) {
             setupDroneSound();
         }
-        if (padPos != null) {
-            if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityDronePad) {
-                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, padPos);
+        if (landingPos != null) {
+            if (GTUtility.getMetaTileEntity(world, landingPos) instanceof MetaTileEntityDronePad) {
+                MetaTileEntityDronePad pad = (MetaTileEntityDronePad) GTUtility.getMetaTileEntity(world, landingPos);
                 if (pad != null) {
                     pad.setDrone(this);
                 }
-            } else if (GTUtility.getMetaTileEntity(world, padPos) instanceof MetaTileEntityCargoDronePad) {
+            } else if (GTUtility.getMetaTileEntity(world, landingPos) instanceof MetaTileEntityCargoDronePad) {
                 MetaTileEntityCargoDronePad pad = (MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(world,
-                        padPos);
+                        landingPos);
                 if (pad != null) {
                     pad.setDrone(this);
                 }
@@ -272,7 +272,10 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         compound.setInteger("PadAltitude", this.dataManager.get(PAD_ALTITUDE));
         compound.setBoolean("DescendingMode", this.dataManager.get(DESCENDING_MODE));
         compound.setBoolean("HasLanded", this.dataManager.get(HAS_LANDED));
-        compound.setLong("PadPos", padPos.toLong());
+        compound.setLong("LandingPos", landingPos.toLong());
+        if (cargoPad != null) {
+            compound.setLong("CargoPadPos", cargoPad.getPos().toLong());
+        }
     }
 
     @Override
@@ -282,7 +285,11 @@ public class EntityDrone extends EntityLiving implements IAnimatable {
         this.dataManager.set(PAD_ALTITUDE, compound.getInteger("PadAltitude"));
         this.dataManager.set(DESCENDING_MODE, compound.getBoolean("DescendingMode"));
         this.dataManager.set(HAS_LANDED, compound.getBoolean("HasLanded"));
-        this.padPos = BlockPos.fromLong(compound.getLong("PadPos"));
+        this.landingPos = BlockPos.fromLong(compound.getLong("LandingPos"));
+        if (compound.hasKey("CargoPadPos")) {
+            cargoPad = (MetaTileEntityCargoDronePad) GTUtility.getMetaTileEntity(this.getEntityWorld(),
+                    BlockPos.fromLong(compound.getLong("CargoPadPos")));
+        }
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {

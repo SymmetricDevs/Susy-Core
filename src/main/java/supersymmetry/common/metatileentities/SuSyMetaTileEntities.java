@@ -737,7 +737,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
 
         DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18210,
-                new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), Materials.Magnalium,
+                new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), Materials.Polyethylene,
                         1));
 
         // Boilers

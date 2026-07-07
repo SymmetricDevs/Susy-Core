@@ -72,7 +72,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     private int dist = 0;
 
     public MetaTileEntityCargoDronePad(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.DRONE_PAD);
+        super(metaTileEntityId, SuSyRecipeMaps.CARGO_DRONE_PAD); //dummy recipemap, do not use
     }
 
     protected static IBlockState getCasingState() {
@@ -142,7 +142,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 pos.y, pos.z, true));
 
         if (drone != null) {
-            setDrone(drone.withPadPos(getPos()));
+            setDrone(drone.withLandingPos(getPos()));
         }
 
         if (getDrone() != null) {
@@ -191,7 +191,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 pos.y, pos.z, true));
 
         if (drone != null) {
-            setDrone(drone.withPadPos(basketPos));
+            setDrone(drone.withLandingPos(basketPos));
         }
 
         if (getDrone() != null) {
@@ -273,22 +273,22 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (data.hasKey(TAG_X) && data.hasKey(TAG_Y) && data.hasKey(TAG_Z) && targetPos == null) {
             targetPos = new BlockPos(data.getInteger(TAG_X), data.getInteger(TAG_Y), data.getInteger(TAG_Z));
         }
-        if (data.hasKey("flightTime") && flightTime == -1) {
+        if (data.hasKey("flightTime")) {
             flightTime = data.getInteger("flightTime");
         }
-        if (data.hasKey("totalFlightTime") && totalFlightTime == -1) {
+        if (data.hasKey("totalFlightTime")) {
             totalFlightTime = data.getInteger("totalFlightTime");
         }
-        if (data.hasKey("initiated") && !initiated) {
+        if (data.hasKey("initiated")) {
             initiated = data.getBoolean("initiated");
         }
-        if (data.hasKey("deposited") && !deposited) {
+        if (data.hasKey("deposited")) {
             deposited = data.getBoolean("deposited");
         }
         if (currentItem == null) {
             currentItem = new ItemStack(data);
         }
-        if (currentDroneTier == -1 && data.hasKey("currentDroneTier")) {
+        if (data.hasKey("currentDroneTier")) {
             if (data.getInteger("currentDroneTier") == basicDroneTier) {
                 currentDroneTier = basicDroneTier;
             } else if (data.getInteger("currentDroneTier") == advancedDroneTier) {
@@ -329,7 +329,6 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         return false;
     }
 
-    private int timer = 0;
 
     @Override
     public void update() {
@@ -337,11 +336,9 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (flightTime > -1) {
             flightTime++;
         }
-        timer = timer % 10;
-        timer++;
 
-        if (timer == 1) {// probably extremely stupid but idk how to do better
-            // FIXME: make the pad only work in overworld
+
+        if (getOffsetTimer() % 10 == 0 && getWorld().provider.getDimension() == 0) {
             if (targetPos != null) {
                 setTargetBasket(targetPos);
 
@@ -573,6 +570,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     }
 
     public void reset() {
+        setDroneDead(false);
         flightTime = -1;
         totalFlightTime = -1;
         currentItem = null;
@@ -611,4 +609,9 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                     Math.round((double) flightTime * 100 / totalFlightTime)));
         }
     }
+    @Override
+    public boolean isActive() {
+        return deposited || initiated;
+    }
+
 }
