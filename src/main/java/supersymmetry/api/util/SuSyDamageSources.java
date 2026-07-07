@@ -10,7 +10,7 @@ public class SuSyDamageSources {
     private static final DamageSource CRUSHER = new DamageSource("crusher");
 
     public static final DamageSource PRESSURE = new DamageSource("pressure");
-    public static final DamageSource DEPRESSURIZATION = new DamageSource("depressurization");
+    public static final DamageSource DEPRESSURIZATION = new DamageSource("depressurization").setDamageBypassesArmor();
     public static final DamageSource IMPACT = new DamageSource("impact");
     public static final DamageSource VAPORIZATION = new DamageSource("vaporization").setFireDamage();
     public static final DamageSource ALPHA_RADIATION = new DamageSource("alpha_radiation");
