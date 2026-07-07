@@ -546,7 +546,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         EnumFacing right = getFrontFacing().rotateY();
         BlockPos aisleBase = getPos().offset(getFrontFacing().getOpposite(), 1);
 
-
         for (int offset = -12; offset <= 12; offset++) {
             BlockPos candidate = aisleBase.offset(right, offset);
             net.minecraft.block.Block block = getWorld().getBlockState(candidate).getBlock();
@@ -868,7 +867,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
         @Override
         protected Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs, IMultipleTankHandler fluidInputs) {
-
             Recipe recipe = super.findRecipe(maxVoltage, inputs, fluidInputs);
 
             return recipe;
@@ -937,7 +935,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             this.parallelRecipesPerformed = 0;
             this.overclockResults = new int[] { 0, 0 };
             this.getMetaTileEntity().completeSpawnedStock();
-
         }
     }
 

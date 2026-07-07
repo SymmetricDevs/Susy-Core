@@ -3,7 +3,6 @@ package supersymmetry.common.item.armor;
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
-
 import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.ABSORB_ALL;
 import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
