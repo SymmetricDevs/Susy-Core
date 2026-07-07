@@ -77,7 +77,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
     /** True only once the rocket is fully assembled (a partially-built rocket is not "loaded"). */
     public boolean isRocketLoaded() {
-        return assemblyProgress >= 1f;
+        return assemblyProgress >= 1f || isDead();
     }
 
     public void setRocketLoaded(boolean rocketLoaded) {
