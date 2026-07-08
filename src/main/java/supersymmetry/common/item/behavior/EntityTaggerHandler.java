@@ -143,6 +143,9 @@ public class EntityTaggerHandler {
 
         if (player.world.isRemote) return; // SERVER ONLY
 
+        boolean enabled = player.getEntityWorld().getGameRules().getBoolean("factionTagger");
+        if (!enabled) return; //config too annoying to deal with, made this a gamerule instead
+
         // Only run every 5 ticks to not cook the server
         if (player.ticksExisted % 5 != 0) return;
 
