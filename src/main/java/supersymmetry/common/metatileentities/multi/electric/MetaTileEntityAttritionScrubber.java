@@ -27,6 +27,7 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockGrinderCasing;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -42,7 +43,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
     }
 
     private static IBlockState getAbrasionResistantCasingState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ABRASION_RESISTANT_CASING);
+        return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING);
     }
 
     private static IBlockState getAluminiumGearboxState() {
@@ -82,7 +83,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
     }
 
     protected static IBlockState getCasingState() {
-         return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING);
+        return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING);
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
