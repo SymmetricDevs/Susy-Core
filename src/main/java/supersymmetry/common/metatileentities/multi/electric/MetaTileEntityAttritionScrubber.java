@@ -41,8 +41,8 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
         return new MetaTileEntityAttritionScrubber(this.metaTileEntityId);
     }
 
-    private static IBlockState getHydrostaticCasingState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.HYDROSTATIC_CASING);
+    private static IBlockState getAbrasionResistantCasingState() {
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ABRASION_RESISTANT_CASING);
     }
 
     private static IBlockState getAluminiumGearboxState() {
@@ -56,13 +56,13 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
                 .aisle("CCCCCCCCC", "WBBB#BBBS", "C#A#C#A#C", "IBABCBABO", "C#A#C#A#C", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " F F F F ")
                 .aisle(" CCC CCC ", " CXCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " F F F F ")
-                .where('C', states(getHydrostaticCasingState()).or(autoAbilities(
+                .where('C', states(getAbrasionResistantCasingState()).or(autoAbilities(
                         true, true, false,
                         false, false, false, false)))
-                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).or(states(getHydrostaticCasingState())))
-                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(states(getHydrostaticCasingState())))
-                .where('W', abilities(MultiblockAbility.IMPORT_FLUIDS).or(states(getHydrostaticCasingState())))
-                .where('S', abilities(MultiblockAbility.EXPORT_FLUIDS).or(states(getHydrostaticCasingState())))
+                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).or(states(getAbrasionResistantCasingState())))
+                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(states(getAbrasionResistantCasingState())))
+                .where('W', abilities(MultiblockAbility.IMPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
+                .where('S', abilities(MultiblockAbility.EXPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
                 .where('G', states(getAluminiumGearboxState()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)))
                 .where('A', frames(Materials.Aluminium))
@@ -78,11 +78,11 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart multiblockPart) {
-        return SusyTextures.HYDROSTATIC_CASING;
+        return SusyTextures.ABRASION_RESISTANT_CASING;
     }
 
     protected static IBlockState getCasingState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.HYDROSTATIC_CASING);
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ABRASION_RESISTANT_CASING);
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
