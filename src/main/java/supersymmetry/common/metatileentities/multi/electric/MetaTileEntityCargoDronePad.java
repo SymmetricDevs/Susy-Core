@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -100,7 +101,9 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 .where(' ', any())
                 .where('S', selfPredicate())
                 .where('C', states(getCasingState()).setMinGlobalLimited(6)
-                        .or(autoAbilities(false, false, true, true, false, false, false)))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1))
+                        .setMinGlobalLimited(2))
                 .where('P', states(getPadState()))
                 .build();
     }
@@ -339,7 +342,6 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (getOffsetTimer() % 10 == 0 && getWorld().provider.getDimension() == 0) {
             if (targetPos != null) {
                 setTargetBasket(targetPos);
-
             }
             if (getFirstSlotWithValidCard() > -1 && !deposited && !initiated) {
                 setTargetPos(getFirstSlotWithValidCard());
