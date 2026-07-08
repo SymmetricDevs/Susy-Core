@@ -190,6 +190,16 @@ public class SuSyBlocks {
         for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            IBlockState state = block.getState(SusyStoneVariantBlock.StoneType.INDUSTRIAL_CONCRETE);
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
     }
 
     @SuppressWarnings("unchecked")
