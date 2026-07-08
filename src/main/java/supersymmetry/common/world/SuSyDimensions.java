@@ -64,9 +64,7 @@ public class SuSyDimensions {
         RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
                 .setAngularSize(4.0f)
                 .setOrbitalPeriod(lunarDayTicks)
-                .setOrbitalInclination(5.14f)
-                .setTidallyLocked(true)
-                .setSunReference(SUN);
+                .setOrbitalInclination(5.14f);
 
         Cubemap earthCubemap = new Cubemap(
                 new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
@@ -89,7 +87,6 @@ public class SuSyDimensions {
             moonSky.sunAngularRadius = 0.00935f;
             moonSky.sunColor = new float[] { 1.0f, 0.95f, 0.8f };
             moonSky.diskIntensity = 20.0f;
-            moonSky.coronaScale = 6.0f;
             moonSky.limbDarkening = 0.85f;
 
             // Sun handled separately by renderSunShader().

@@ -100,9 +100,7 @@ public class ReEntryDimension {
         RenderableCelestialObject moon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
                 .setAngularSize(4.0f)
                 .setOrbitalPeriod(708_734L)
-                .setOrbitalInclination(5.14f)
-                .setTidallyLocked(true)
-                .setSunReference(sun);
+                .setOrbitalInclination(5.14f);
 
         Cubemap earthCubemap = new Cubemap(
                 new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
@@ -114,8 +112,7 @@ public class ReEntryDimension {
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             renderer = new ReEntryRenderer()
                     .setSunObject(sun)
-                    .setEarthObject(earth, earthCubemap, leoTicks)
-                    .setCelestialObjects(moon);
+                    .setEarthObject(earth, earthCubemap, leoTicks);
         }
 
         ReEntryDimension dim = new ReEntryDimension(dimId, "earth_reentry")

@@ -32,7 +32,7 @@ void main() {
             color = mix(color, vec3(1.0), mask * edge);
         }
     }
-
+    //not a big fan of how this looks, if anyone smarter knows how to make this better, please do
     for (int i = 0; i < 16; i++) {
         if (i >= u_holeCount) break;
         vec2 holeUV = u_holes[i];

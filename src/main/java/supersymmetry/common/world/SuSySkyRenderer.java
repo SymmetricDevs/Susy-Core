@@ -2,8 +2,6 @@ package supersymmetry.common.world;
 
 import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
-import java.nio.FloatBuffer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,11 +9,9 @@ import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
 import supersymmetry.api.space.CelestialObjects;
-import supersymmetry.api.space.QuadSphere;
 import supersymmetry.api.space.RenderableCelestialObject;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.atmosphere.AtmosphereRenderer;
@@ -32,20 +28,11 @@ public class SuSySkyRenderer extends IRenderHandler {
 
     private final PlanetSurfaceRenderer planetSurfaceRenderer = new PlanetSurfaceRenderer();
     private final AtmosphereRenderer atmosphereRenderer = new AtmosphereRenderer();
-    private final QuadSphere mesh = new QuadSphere(64);
-    private int quadVbo = -1;
 
     public float sunAngularRadius = 0.00935f;
     public float[] sunColor = { 1.0f, 0.95f, 0.8f };
     public float diskIntensity = 20.0f;
-    public float coronaScale = 6.0f;
     public float limbDarkening = 0.85f;
-
-    private final FloatBuffer matBuf = BufferUtils.createFloatBuffer(16);
-    private float[] capturedView = new float[16];
-    private float[] capturedProj = new float[16];
-    private float[] currentSunDir = { 0f, 1f, 0f };
-    private float gameTime = 0f;
 
     public SuSySkyRenderer setCelestialObjects(RenderableCelestialObject... objs) {
         this.objects = (objs != null) ? objs : new RenderableCelestialObject[0];
@@ -83,13 +70,13 @@ public class SuSySkyRenderer extends IRenderHandler {
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
         ShaderManager.ensureInitialised();
 
-        gameTime += partialTicks / 20f;
         long worldTime = world.getWorldTime();
+        float time = worldTime / 20f;
 
-        currentSunDir = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
+        float[] sunDir = (sunObject != null) ? sunObject.getWorldDirection(worldTime) : new float[] { 0f, 1f, 0f };
 
-        capturedView = getMatrix(GL11.GL_MODELVIEW_MATRIX);
-        capturedProj = getMatrix(GL11.GL_PROJECTION_MATRIX);
+        float[] viewMat = ShaderUtils.getMatrix(GL11.GL_MODELVIEW_MATRIX);
+        float[] projMat = ShaderUtils.getMatrix(GL11.GL_PROJECTION_MATRIX);
 
         if (skyColorData != null) {
             renderSkyBackground(world.getCelestialAngle(partialTicks));
@@ -111,12 +98,7 @@ public class SuSySkyRenderer extends IRenderHandler {
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         if (sunObject != null && ShaderManager.shadersAllowed()) {
-            renderSunShader();
-        } else if (sunObject != null) {
-            GlStateManager.pushMatrix();
-            GL11.glScalef(100f, 100f, 100f);
-            sunObject.renderAtPosition(worldTime, mesh);
-            GlStateManager.popMatrix();
+            renderSunShader(sunDir, viewMat, projMat, time);
         }
 
         GlStateManager.pushMatrix();
@@ -137,13 +119,11 @@ public class SuSySkyRenderer extends IRenderHandler {
                 if (hasAtmosphere) planetSurfaceRenderer.sunAngularRadius = 0.0f;
 
                 planetSurfaceRenderer.render(
-                        capturedView, capturedProj, currentSunDir,
+                        viewMat, projMat, sunDir,
                         new float[] { dir[0] * 100f, dir[1] * 100f, dir[2] * 100f },
                         scale, rot, faces);
 
                 if (hasAtmosphere) planetSurfaceRenderer.sunAngularRadius = savedSunR;
-            } else {
-                obj.renderAtPosition(worldTime, mesh);
             }
         }
 
@@ -156,7 +136,7 @@ public class SuSySkyRenderer extends IRenderHandler {
             float[] dir = obj.getWorldDirection(worldTime);
             float scale = 100f * (float) Math.tan(Math.toRadians(obj.getAngularSizeDeg() / 2.0));
             atmosphereRenderer.render(
-                    capturedView, capturedProj, currentSunDir,
+                    viewMat, projMat, sunDir,
                     dir[1] * 100f,
                     scale);
         }
@@ -172,12 +152,10 @@ public class SuSySkyRenderer extends IRenderHandler {
     }
 
     private static float[] buildCubemapRotation(float[] dir) {
-        // Normalise
         float len = (float) Math.sqrt(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
-        if (len < 1e-6f) return identity();
+        if (len < 1e-6f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
         float dx = dir[0] / len, dy = dir[1] / len, dz = dir[2] / len;
 
-        // World-up candidate; fall back to -Z when dir is nearly vertical
         float ux = 0f, uy = 1f, uz = 0f;
         if (Math.abs(dy) > 0.99f) {
             ux = 0f;
@@ -185,26 +163,24 @@ public class SuSySkyRenderer extends IRenderHandler {
             uz = -1f;
         }
 
-        // right = dir × up
         float rx = dy * uz - dz * uy;
         float ry = dz * ux - dx * uz;
         float rz = dx * uy - dy * ux;
         float rlen = (float) Math.sqrt(rx * rx + ry * ry + rz * rz);
-        if (rlen < 1e-6f) return identity();
+        if (rlen < 1e-6f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
         rx /= rlen;
         ry /= rlen;
         rz /= rlen;
 
-        // Recomputed orthonormal up = right × dir
         float upx = ry * dz - rz * dy;
         float upy = rz * dx - rx * dz;
         float upz = rx * dy - ry * dx;
 
         return new float[] {
-                -rx, -ry, -rz, 0f,   // col 0: cubemap +X (negated = fix mirror)
-                upx, upy, upz, 0f,   // col 1: cubemap +Y
-                dx, dy, dz, 0f,   // col 2: cubemap +Z (toward object)
-                0f, 0f, 0f, 1f    // col 3
+                -rx, -ry, -rz, 0f,
+                upx, upy, upz, 0f,
+                dx, dy, dz, 0f,
+                0f, 0f, 0f, 1f
         };
     }
 
@@ -247,7 +223,7 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.color(1f, 1f, 1f, 1f);
     }
 
-    private void renderSunShader() {
+    private void renderSunShader(float[] sunDir, float[] viewMat, float[] projMat, float time) {
         if (!ShaderManager.shadersAllowed()) return;
 
         int progId = ShaderManager.getRawProgram("sun.vert", "sun.frag");
@@ -266,53 +242,20 @@ public class SuSySkyRenderer extends IRenderHandler {
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
         GL20.glUseProgram(progId);
-        ShaderUtils.setUniform3f(progId, "u_sunDir", currentSunDir[0], currentSunDir[1], currentSunDir[2]);
+        ShaderUtils.setUniform3f(progId, "u_sunDir", sunDir[0], sunDir[1], sunDir[2]);
         ShaderUtils.setUniform1f(progId, "u_angularRadius", sunAngularRadius);
         ShaderUtils.setUniform3f(progId, "u_sunColor", sunColor[0], sunColor[1], sunColor[2]);
         ShaderUtils.setUniform1f(progId, "u_diskIntensity", diskIntensity);
-        ShaderUtils.setUniform1f(progId, "u_coronaScale", coronaScale);
-        ShaderUtils.setUniform1f(progId, "u_time", gameTime);
+        ShaderUtils.setUniform1f(progId, "u_time", time);
         ShaderUtils.setUniform1f(progId, "u_limbDarkening", limbDarkening);
-        ShaderUtils.setUniformMat4(progId, "u_invView", invertMat4(capturedView));
-        ShaderUtils.setUniformMat4(progId, "u_invProjection", invertMat4(capturedProj));
+        ShaderUtils.setUniformMat4(progId, "u_invView", invertMat4(viewMat));
+        ShaderUtils.setUniformMat4(progId, "u_invProjection", invertMat4(projMat));
 
-        float[] sunScreenPos = ShaderUtils.projectDirToNDC(currentSunDir, capturedView, capturedProj);
+        float[] sunScreenPos = ShaderUtils.projectDirToNDC(sunDir, viewMat, projMat);
         ShaderUtils.setUniform2f(progId, "u_sunScreenPos", sunScreenPos[0], sunScreenPos[1]);
 
-        drawFullScreenQuad();
-
+        ShaderUtils.drawFullScreenQuad();
         GL20.glUseProgram(0);
         GL11.glPopAttrib();
-    }
-
-    private void drawFullScreenQuad() {
-        if (quadVbo == -1) {
-            FloatBuffer verts = BufferUtils.createFloatBuffer(8);
-            verts.put(new float[] { -1f, -1f, 1f, -1f, -1f, 1f, 1f, 1f }).flip();
-            quadVbo = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, quadVbo);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verts, GL15.GL_STATIC_DRAW);
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-        }
-
-        GL30.glBindVertexArray(0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, quadVbo);
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 8, 0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-        GL20.glDisableVertexAttribArray(0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-    }
-
-    private float[] getMatrix(int glEnum) {
-        matBuf.clear();
-        GL11.glGetFloat(glEnum, matBuf);
-        float[] m = new float[16];
-        matBuf.get(m);
-        return m;
-    }
-
-    private static float[] identity() {
-        return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
     }
 }

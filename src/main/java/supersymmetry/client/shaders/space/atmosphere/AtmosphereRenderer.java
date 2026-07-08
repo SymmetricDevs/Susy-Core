@@ -2,11 +2,8 @@ package supersymmetry.client.shaders.space.atmosphere;
 
 import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
-import java.nio.FloatBuffer;
-
 import net.minecraft.client.Minecraft;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
 import supersymmetry.api.SusyLog;
@@ -32,14 +29,11 @@ public class AtmosphereRenderer {
     private static final int LUT_SIZE_W = 256; // width - more precision for cosZenith
     private static final int MS_LUT_SIZE = 32; // multiple scattering LUT (square)
 
-    private int quadVbo = -1;
     private int lutFbo = -1;
     private int lutTex = -1;
     private int msLutTex = -1; // multiple scattering LUT
     private boolean lutDirty = true;
     private boolean loggedOnce = false;
-
-    private final FloatBuffer fb16 = BufferUtils.createFloatBuffer(16);
 
     public void markDirty() {
         lutDirty = true;
@@ -110,14 +104,14 @@ public class AtmosphereRenderer {
         ShaderUtils.set3f(prog, "u_planetPos", new float[] { 0f, planetY, 0f });
         ShaderUtils.set3f(prog, "u_sunDir", sunDir);
         ShaderUtils.set1f(prog, "u_renderUnitRadius", scale);
-        setMat4(prog, "u_invProjection", invertMat4(capturedProj));
-        setMat4(prog, "u_invView", invertMat4(capturedView));
+        ShaderUtils.setMat4(prog, "u_invProjection", invertMat4(capturedProj));
+        ShaderUtils.setMat4(prog, "u_invView", invertMat4(capturedView));
         ShaderUtils.set1i(prog, "u_transmittanceLut", 8);
         ShaderUtils.set2f(prog, "u_lutSize", LUT_SIZE_W, LUT_SIZE);
         ShaderUtils.set1i(prog, "u_multipleScatteringLut", 9);
         ShaderUtils.set2f(prog, "u_msLutSize", MS_LUT_SIZE, MS_LUT_SIZE);
 
-        drawQuad();
+        ShaderUtils.drawFullScreenQuad();
 
         GL20.glUseProgram(0);
         GL13.glActiveTexture(GL13.GL_TEXTURE8);
@@ -172,7 +166,7 @@ public class AtmosphereRenderer {
         ShaderUtils.set1f(prog, "u_ozoneAltitude", ozoneAltitude);
         ShaderUtils.set1f(prog, "u_ozoneExtent", ozoneExtent);
 
-        drawQuad();
+        ShaderUtils.drawFullScreenQuad();
 
         GL20.glUseProgram(prevProg);
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, prevFbo);
@@ -233,13 +227,6 @@ public class AtmosphereRenderer {
     private void ensureGLResources() {
         if (lutTex != -1) return;
 
-        FloatBuffer v = BufferUtils.createFloatBuffer(8);
-        v.put(new float[] { -1, -1, 1, -1, -1, 1, 1, 1 }).flip();
-        quadVbo = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, quadVbo);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, v, GL15.GL_STATIC_DRAW);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
         lutTex = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lutTex);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGB16F,
@@ -268,25 +255,7 @@ public class AtmosphereRenderer {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
-        SusyLog.logger.info("[Atmos] GL resources created: quadVbo={} lutTex={} lutFbo={} msLutTex={}",
-                quadVbo, lutTex, lutFbo, msLutTex);
-    }
-
-    private void drawQuad() {
-        GL30.glBindVertexArray(0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, quadVbo);
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 8, 0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-        GL20.glDisableVertexAttribArray(0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-    }
-
-    private void setMat4(int p, String n, float[] m) {
-        int l = GL20.glGetUniformLocation(p, n);
-        if (l < 0) return;
-        fb16.clear();
-        fb16.put(m).flip();
-        GL20.glUniformMatrix4(l, false, fb16);
+        SusyLog.logger.info("[Atmos] GL resources created: lutTex={} lutFbo={} msLutTex={}",
+                lutTex, lutFbo, msLutTex);
     }
 }

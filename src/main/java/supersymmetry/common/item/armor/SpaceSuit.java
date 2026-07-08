@@ -47,15 +47,28 @@ import supersymmetry.common.item.SuSyArmorItem;
 
 public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
+    private static final double DEFAULT_ABSORPTION = 0;
+    // TODO balancing
+    private static final double LEAK_PER_PUNCTURE = 0.3;
+    private static final int MAX_VISUAL_PUNCTURES = 15;
+
+    private static float[] getHolePositions(int count) {
+        int max = Math.min(count, MAX_VISUAL_PUNCTURES);
+        float[] pos = new float[max * 2];
+        for (int i = 0; i < max; i++) {
+            // TODO replace with dumber rng
+            Random rng = new Random(i * 0x9e3779b9 ^ 0x12312312);
+            pos[i * 2] = rng.nextFloat();
+            pos[i * 2 + 1] = rng.nextFloat();
+        }
+        return pos;
+    }
+
     private final double hoursOfLife;
     private final String name;
     private final int tier;
     private final double relativeAbsorption;
 
-    private static final double DEFAULT_ABSORPTION = 0;
-    // TODO balancing
-    private static final double LEAK_PER_PUNCTURE = 0.3;
-    private static final int MAX_VISUAL_PUNCTURES = 15;
     private AnimationFactory factory;
 
     public SpaceSuit(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name, int tier,
@@ -130,7 +143,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
         if (player.getItemStackFromSlot(HEAD) != stack) return;
         super.onArmorTick(world, player, stack);
-
+        if (!isInHazardousEnvironment(player)) return;
         ItemStack chest = player.getItemStackFromSlot(CHEST);
         if (!(chest.getItem() instanceof SuSyArmorItem item)) return;
         if (!(item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank)) return;
@@ -138,23 +151,11 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         if (tank.getOxygen(chest) <= 0) return;
 
         double maxFlow = tank.getMaxFlowRate(chest);
-        if (!isInHazardousEnvironment(player)) return;
         double baseDrain = 0.05;
         double leakRate = tank.getPunctures(chest) * LEAK_PER_PUNCTURE;
         double totalDemand = baseDrain + leakRate;
         double effectiveDrain = Math.min(maxFlow, totalDemand);
         tank.changeOxygen(chest, -effectiveDrain);
-    }
-
-    private static float[] getHolePositions(int count) {
-        int max = Math.min(count, MAX_VISUAL_PUNCTURES);
-        float[] pos = new float[max * 2];
-        for (int i = 0; i < max; i++) {
-            Random rng = new Random(i * 0x9e3779b9 ^ 0x12312312);
-            pos[i * 2] = rng.nextFloat();
-            pos[i * 2 + 1] = rng.nextFloat();
-        }
-        return pos;
     }
 
     @SideOnly(Side.CLIENT)
@@ -202,7 +203,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             glActiveTexture(GL_TEXTURE0);
 
             for (int i = 0; i < holeCount; i++) {
-                String name = "u_holes[" + i + "]";
+                String name = String.format("u_holes[%d]", i);
                 int loc = GL20.glGetUniformLocation(program, name);
                 if (loc >= 0) {
                     GL20.glUniform2f(loc, holePos[i * 2], holePos[i * 2 + 1]);
@@ -231,6 +232,8 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             GlStateManager.popMatrix();
 
             GL20.glUseProgram(0);
+        } else {
+            // 🙏
         }
 
         glPopAttrib();
@@ -290,35 +293,6 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         return DEFAULT_ABSORPTION;
     }
 
-    private double getDamage(ItemStack stack) {
-        if (stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
-        }
-        if (!stack.getTagCompound().hasKey("damage")) {
-            stack.getTagCompound().setDouble("damage", 0);
-        }
-        return stack.getTagCompound().getDouble("damage");
-    }
-
-    private void changeDamage(ItemStack stack, double damageChange) {
-        NBTTagCompound compound = stack.getTagCompound();
-        compound.setDouble("damage", getDamage(stack) + damageChange);
-        stack.setTagCompound(compound);
-    }
-
-    private void handleDamage(ItemStack stack, EntityPlayer player) {
-        if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
-            return; // No damage
-        }
-        double amount = (1. / (60. * 60. * hoursOfLife));
-        changeDamage(stack, amount); // It's actually ticked every overall second, not just every tick.
-        if (getDamage(stack) >= 1) {
-            player.renderBrokenItemStack(stack);
-            stack.shrink(1);
-            player.setItemStackToSlot(HEAD, ItemStack.EMPTY);
-        }
-    }
-
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
         if (SLOT == CHEST && getMaxOxygen(itemStack) != -1) {
@@ -359,19 +333,6 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         return prop;
     }
 
-    protected float getAbsorption(ItemStack itemStack) {
-        return getAbsorption(getEquipmentSlot(itemStack));
-    }
-
-    protected float getAbsorption(EntityEquipmentSlot slot) {
-        return switch (slot) {
-            case HEAD, FEET -> 0.15F;
-            case CHEST -> 0.4F;
-            case LEGS -> 0.3F;
-            default -> 0.0F;
-        };
-    }
-
     public void addInformation(ItemStack stack, List<String> strings) {
         if (hoursOfLife > 0) {
             double lifetime = 60 * 60 * hoursOfLife;
@@ -389,5 +350,47 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     @Override
     public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
         return (int) Math.round(20.0F * this.getAbsorption(armor) * relativeAbsorption);
+    }
+
+    protected float getAbsorption(ItemStack itemStack) {
+        return getAbsorption(getEquipmentSlot(itemStack));
+    }
+
+    protected float getAbsorption(EntityEquipmentSlot slot) {
+        return switch (slot) {
+            case HEAD, FEET -> 0.15F;
+            case CHEST -> 0.4F;
+            case LEGS -> 0.3F;
+            default -> 0.0F;
+        };
+    }
+
+    private double getDamage(ItemStack stack) {
+        if (stack.getTagCompound() == null) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        if (!stack.getTagCompound().hasKey("damage")) {
+            stack.getTagCompound().setDouble("damage", 0);
+        }
+        return stack.getTagCompound().getDouble("damage");
+    }
+
+    private void changeDamage(ItemStack stack, double damageChange) {
+        NBTTagCompound compound = stack.getTagCompound();
+        compound.setDouble("damage", getDamage(stack) + damageChange);
+        stack.setTagCompound(compound);
+    }
+
+    private void handleDamage(ItemStack stack, EntityPlayer player) {
+        if (hoursOfLife == 0 || player.dimension == DimensionBreathabilityHandler.BENEATH_ID) {
+            return; // No damage
+        }
+        double amount = (1. / (60. * 60. * hoursOfLife));
+        changeDamage(stack, amount); // It's actually ticked every overall second, not just every tick.
+        if (getDamage(stack) >= 1) {
+            player.renderBrokenItemStack(stack);
+            stack.shrink(1);
+            player.setItemStackToSlot(HEAD, ItemStack.EMPTY);
+        }
     }
 }
