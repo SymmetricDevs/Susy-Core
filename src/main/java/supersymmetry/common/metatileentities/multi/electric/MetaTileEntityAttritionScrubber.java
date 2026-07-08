@@ -82,7 +82,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
     }
 
     protected static IBlockState getCasingState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ABRASION_RESISTANT_CASING);
+         return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING);
     }
 
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
