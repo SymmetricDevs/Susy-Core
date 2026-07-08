@@ -1,5 +1,6 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,14 +22,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
+
+    private static final Field PROGRESS_TIME_FIELD;
+
+    static {
+        try {
+            PROGRESS_TIME_FIELD = AbstractRecipeLogic.class.getDeclaredField("progressTime");
+            PROGRESS_TIME_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("Could not find progressTime field in AbstractRecipeLogic", e);
+        }
+    }
 
     public MetaTileEntityDefoliator(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -87,22 +105,40 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                 for (int dz = -radius; dz <= radius; dz++) {
                     BlockPos target = center.add(dx, dy, dz);
                     if (!world.isValid(target)) continue;
+                    if (target.equals(center)) continue;
 
                     IBlockState state = world.getBlockState(target);
-                    //skips air for better performance
-                    if (state.getBlock() == Blocks.AIR){
-                        continue;
+
+                    if (state.getBlock() != Blocks.AIR) {
+                        ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+                        if (blockName != null) {
+                            String metaKey = blockName + ":" + state.getBlock().getMetaFromState(state);
+                            IBlockState replacement = metaReplacements.get(metaKey);
+                            if (replacement == null) replacement = replacements.get(blockName);
+                            if (replacement != null) {
+                                world.setBlockState(target, replacement, 2);
+                            }
+                        }
                     }
-                    ResourceLocation blockName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-                    if (blockName == null) continue;
 
-                    String metaKey = blockName + ":" + state.getBlock().getMetaFromState(state);
-                    IBlockState replacement = metaReplacements.get(metaKey);
+                    //WIP, can't really test this at this time, check in again after a few hours
 
-                    if (replacement == null) replacement = replacements.get(blockName);
+                    TileEntity te = world.getTileEntity(target);
+                    if (!(te instanceof IGregTechTileEntity)) continue;
 
-                    if (replacement != null) {
-                        world.setBlockState(target, replacement, 2);
+                    MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
+                    if (mte == null) continue;
+
+                    if (mte.getClass() != SuSyMetaTileEntities.GREENHOUSE.getClass()) continue;
+
+                    AbstractRecipeLogic logic = mte.getCapability(
+                            GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
+                    if (logic == null || logic.getProgress() <= 0) continue;
+
+                    try {
+                        PROGRESS_TIME_FIELD.setInt(logic, 1);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("Could not reset progressTime on Greenhouse", e);
                     }
                 }
             }
@@ -139,7 +175,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             return metaReplacements;
         }
 
-        //appease gtfo, without this we don't get resource location
+        // appease gtfo, without this we don't get resource location
         public static void init() {
             replacements = null;
             metaReplacements = null;
@@ -153,7 +189,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
         private static void buildReplacements() {
             // spotless:off
 
-            //no metadata
+            // no metadata
             IBlockState AIR         = stateOf("minecraft", "air",  0);
             IBlockState WATER       = stateOf("minecraft", "water", 0);
             IBlockState COARSE_DIRT = stateOf("minecraft", "dirt",  1);
@@ -217,7 +253,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
             replacements = map;
 
-            //metadata
+            // metadata
             Map<String, IBlockState> metaMap = new HashMap<>();
 
             metaMap.put("biomesoplenty:coral:0",  WATER);
