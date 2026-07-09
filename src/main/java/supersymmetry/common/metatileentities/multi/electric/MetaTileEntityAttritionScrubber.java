@@ -92,9 +92,9 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
         tooltip.add(I18n.format("susy.machine.parallel_pure", 32));
     }
 
-    private static class AttritionScrubberlLogic extends MultiblockRecipeLogic {
+    private static class AttritionScrubberLogic extends MultiblockRecipeLogic {
 
-        public AttritionScrubberlLogic(RecipeMapMultiblockController tileEntity) {
+        public AttritionScrubberLogic(RecipeMapMultiblockController tileEntity) {
             super(tileEntity);
             this.setParallelLimit(PARALLEL_LIMIT);
         }
