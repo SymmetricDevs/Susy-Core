@@ -184,8 +184,9 @@ public class SuSyBlocks {
             for (IBlockState state : block.getBlockState().getValidStates())
                 BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
         }
+
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
-            BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
+            BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F, Controls all forms of Concrete and Asphalt speed boosts. 
         }
         for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
