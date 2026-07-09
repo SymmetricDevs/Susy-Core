@@ -54,13 +54,14 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     @SuppressWarnings("deprecation")
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         return this.getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) ||
+                this.getState(state).equals(CasingType.VINYL_CEILING_TILE) ||
                 super.shouldSideBeRendered(state, blockAccess, pos, side);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return !getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT);
+        return !(getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) || getState(state).equals(CasingType.VINYL_CEILING_TILE));
     }
 
     @Override

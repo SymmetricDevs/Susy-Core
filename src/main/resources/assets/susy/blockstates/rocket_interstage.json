@@ -1,39 +1,60 @@
 {
+  "forge_marker" : 1,
+  "defaults": {
+    "model" : "minecraft:cube_bottom_top",
+    "textures" : {
+      "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+      "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+      "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
+    }
+  },
   "variants" : {
     "facing=north,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     },
     "facing=south,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     },
     "facing=west,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     },
     "facing=east,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     },
     "facing=up,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     },
     "facing=down,variant=al_7075" : {
-      "model": "minecraft:cube_all",
+      "model" : "minecraft:cube_bottom_top",
       "textures" : {
-        "all" : "gregtech:blocks/rocket_interstage/al_7075"
+        "bottom" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "top" : "gregtech:blocks/rocket_interstage/al_7075_top_bottom",
+        "side" : "gregtech:blocks/rocket_interstage/al_7075_side"
       }
     }
   }
