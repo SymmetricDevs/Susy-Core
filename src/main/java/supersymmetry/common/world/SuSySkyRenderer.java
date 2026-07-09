@@ -17,14 +17,11 @@ import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.atmosphere.AtmosphereRenderer;
 import supersymmetry.client.shaders.space.planet.PlanetSurfaceRenderer;
 import supersymmetry.client.shaders.util.ShaderUtils;
-import supersymmetry.common.world.sky.SkyColorData;
 
 public class SuSySkyRenderer extends IRenderHandler {
 
     private RenderableCelestialObject[] objects = new RenderableCelestialObject[0];
     private RenderableCelestialObject sunObject = null;
-
-    private SkyColorData skyColorData = null;
 
     private final PlanetSurfaceRenderer planetSurfaceRenderer = new PlanetSurfaceRenderer();
     private final AtmosphereRenderer atmosphereRenderer = new AtmosphereRenderer();
@@ -42,15 +39,6 @@ public class SuSySkyRenderer extends IRenderHandler {
     public SuSySkyRenderer setSunObject(RenderableCelestialObject sun) {
         this.sunObject = sun;
         return this;
-    }
-
-    public SuSySkyRenderer setSkyColorData(SkyColorData colorData) {
-        this.skyColorData = colorData;
-        return this;
-    }
-
-    public SkyColorData getSkyColorData() {
-        return skyColorData;
     }
 
     public RenderableCelestialObject getSunObject() {
@@ -78,9 +66,7 @@ public class SuSySkyRenderer extends IRenderHandler {
         float[] viewMat = ShaderUtils.getMatrix(GL11.GL_MODELVIEW_MATRIX);
         float[] projMat = ShaderUtils.getMatrix(GL11.GL_PROJECTION_MATRIX);
 
-        if (skyColorData != null) {
-            renderSkyBackground(world.getCelestialAngle(partialTicks));
-        }
+        renderSkyBackground();
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.disableFog();
@@ -188,12 +174,10 @@ public class SuSySkyRenderer extends IRenderHandler {
         return obj.getCelestialObject() == CelestialObjects.EARTH;
     }
 
-    private void renderSkyBackground(float celestialAngle) {
-        net.minecraft.util.math.Vec3d skyColor = skyColorData.getSkyColor(celestialAngle);
-
+    private void renderSkyBackground() {
         GlStateManager.disableTexture2D();
         GlStateManager.disableBlend();
-        GlStateManager.color((float) skyColor.x, (float) skyColor.y, (float) skyColor.z, 1.0f);
+        GlStateManager.color(0.0f, 0.0f, 0.0f, 1.0f);
 
         net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
         net.minecraft.client.renderer.BufferBuilder buf = tess.getBuffer();

@@ -9,20 +9,6 @@ import org.lwjgl.opengl.*;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.util.ShaderUtils;
 
-/**
- * Renders a planet/moon surface cubemap with a physically correct terminator.
- * Used for bodies WITHOUT an atmosphere (moon, rocky planets).
- * Bodies WITH an atmosphere use the atmosphere shader which handles
- * terminator darkening internally.
- *
- * Usage in SuSySpaceRenderer:
- * private final PlanetSurfaceRenderer moonSurface = new PlanetSurfaceRenderer();
- *
- * // In render(), before atmosphere pass:
- * moonSurface.render(capturedView, capturedProj, sunDir,
- * planetPos, planetRadius, rotationMatrix,
- * faceTexIds); // int[6] of GL texture IDs
- */
 public class PlanetSurfaceRenderer {
 
     public float sunAngularRadius = 0.00935f; // radians, Earth's sun

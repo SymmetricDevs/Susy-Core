@@ -1,5 +1,6 @@
 package supersymmetry.common.world;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -12,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import supersymmetry.api.space.RenderableCelestialObject;
-import supersymmetry.common.world.sky.SkyColorData;
 
 public class WorldProviderPlanet extends WorldProvider {
 
@@ -78,41 +78,16 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @NotNull Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet != null && planet.hasCustomSky()) {
-            SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
-            if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
-                float celestialAngle = world.getCelestialAngle(partialTicks);
-                return skyRenderer.getSkyColorData().getSkyColor(celestialAngle);
-            }
-        }
         return new Vec3d(0.0D, 0.0D, 0.0D);
     }
 
     @Override
     public @NotNull Vec3d getFogColor(float celestialAngle, float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet != null && planet.hasCustomSky()) {
-            SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
-            if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
-                SkyColorData colorData = skyRenderer.getSkyColorData();
-                if (colorData.useFogColor()) {
-                    return colorData.getFogColor();
-                }
-            }
-        }
         return new Vec3d(0.0D, 0.0D, 0.0D);
     }
 
     @Override
     public @Nullable float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet != null && planet.hasCustomSky()) {
-            SuSySkyRenderer skyRenderer = planet.getSuSySkyRenderer();
-            if (skyRenderer != null && skyRenderer.getSkyColorData() != null) {
-                return skyRenderer.getSkyColorData().getSunriseSunsetColors(celestialAngle);
-            }
-        }
         return null;
     }
 
@@ -176,21 +151,34 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     @Override
+    protected void generateLightBrightnessTable() {
+        float ambientLight = 0.0f;
+        for (int i = 0; i <= 15; i++) {
+            float vanilla = 1.0F - i / 15.0F;
+            this.lightBrightnessTable[i] = Math.max(1.0F - vanilla * vanilla * vanilla * vanilla, ambientLight);
+        }
+    }
+
+    @Override
     public float getSunBrightnessFactor(float partialTicks) {
-        if (isEclipse(partialTicks)) return 0.0f;
-        return super.getSunBrightnessFactor(partialTicks);
+        return getSunBrightness(partialTicks);
     }
 
     @Override
     public float getSunBrightness(float partialTicks) {
         if (isEclipse(partialTicks)) return 0.0f;
-        return super.getSunBrightness(partialTicks);
+        // celestialAngle is linear: 0=dawn, 0.25=noon, 0.5=dusk, 0.75=midnight
+        // sin(angle*2π) -> 0 at dawn/dusk, 1 at noon, -1 at midnight
+        float celestialAngle = world.getCelestialAngle(partialTicks);
+        float solarAltitude = MathHelper.sin(celestialAngle * ((float) Math.PI * 2F));
+        // No atmosphere = no twilight; sun above horizon = full light, below = total dark
+        return MathHelper.clamp(solarAltitude, 0.0F, 1.0F);
     }
 
     @Override
     public float getStarBrightness(float partialTicks) {
         if (isEclipse(partialTicks)) return 1.0f;
-        return super.getStarBrightness(partialTicks);
+        return 1.0F - getSunBrightness(partialTicks);
     }
 
     @Override

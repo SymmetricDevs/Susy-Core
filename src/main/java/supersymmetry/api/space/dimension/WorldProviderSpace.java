@@ -1,5 +1,6 @@
 package supersymmetry.api.space.dimension;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -8,6 +9,8 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.space.CelestialOrbitRegistry;
 import supersymmetry.common.world.ChunkGeneratorVoid;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
@@ -22,27 +25,26 @@ public class WorldProviderSpace extends WorldProvider {
         this.config = SuSyDimensions.SPACE.get(dimId);
 
         if (this.config == null) {
-            throw new IllegalStateException("No SpaceDimension registered for id " + dimId + ". SPACE map has: " +
-                    SuSyDimensions.SPACE.keySet());
+            throw new IllegalStateException(
+                    "No SpaceDimension registered for id " + dimId + ". SPACE map has: " +
+                            SuSyDimensions.SPACE.keySet());
         }
 
-        SusyLog.logger.info("[Space] WorldProviderSpace.init() dimId=" + dimId + " name=" + config.name + " renderer=" +
-                config.renderer);
+        SusyLog.logger.info(
+                "[Space] WorldProviderSpace.init() dimId=" + dimId + " name=" + config.name + " renderer=" +
+                        config.renderer);
 
         this.biomeProvider = new BiomeProviderSingle(SuSyBiomes.VOID);
         this.hasSkyLight = true;
 
-        // Inject ambient light floor into the brightness table Minecraft uses
         generateLightBrightnessTable();
     }
 
-    /** Override the light table to give a minimum ambient level in space. */
     @Override
     protected void generateLightBrightnessTable() {
-        float ambientLight = (config != null) ? config.ambientLight : 0.05f;
         for (int i = 0; i <= 15; i++) {
             float vanilla = 1.0F - i / 15.0F;
-            this.lightBrightnessTable[i] = Math.max((1.0F - vanilla * vanilla * vanilla * vanilla), ambientLight);
+            this.lightBrightnessTable[i] = 1.0F - vanilla * vanilla * vanilla * vanilla;
         }
     }
 
@@ -106,10 +108,29 @@ public class WorldProviderSpace extends WorldProvider {
         return false;
     }
 
-    /** Suppress vanilla sunrise/sunset horizon glow. */
     @Override
     public float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
-        return null; // null = no sunrise/sunset color
+        return null;
+    }
+
+    @Override
+    public float getSunBrightness(float partialTicks) {
+        long worldTime = world.getWorldTime();
+        Vec3d earthPos = CelestialOrbitRegistry.get(CelestialObjects.EARTH)
+                .computeAbsolutePosition(CelestialObjects.EARTH, worldTime + partialTicks);
+        Vec3d sunDir = earthPos.normalize().scale(-1);
+        float orbitalPhase = world.getCelestialAngle(partialTicks);
+        float playerAngle = orbitalPhase * ((float) Math.PI * 2F);
+
+        Vec3d playerDir = new Vec3d(MathHelper.cos(playerAngle), MathHelper.sin(playerAngle), 0);
+
+        float dot = (float) playerDir.dotProduct(sunDir);
+        return MathHelper.clamp(dot, 0.0F, 1.0F);
+    }
+
+    @Override
+    public float getStarBrightness(float partialTicks) {
+        return 1.0F - getSunBrightness(partialTicks);
     }
 
     public float getGravity() {
