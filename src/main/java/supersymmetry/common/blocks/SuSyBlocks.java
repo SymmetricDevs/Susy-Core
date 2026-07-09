@@ -196,7 +196,7 @@ public class SuSyBlocks {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
         for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
-            if (RANDOM_CONCRETE.getState(state) == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL) {
+            if (isDottedPanel(state)) {
                 continue;
             }
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
@@ -204,6 +204,14 @@ public class SuSyBlocks {
         for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
+    }
+
+    private static boolean isDottedPanel(IBlockState state) {
+        BlockRandomConcrete.BlockRandomConcreteType type = RANDOM_CONCRETE.getState(state);
+        return type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_BORDER ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_COMB ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_GRID;
     }
 
     @SuppressWarnings("unchecked")
