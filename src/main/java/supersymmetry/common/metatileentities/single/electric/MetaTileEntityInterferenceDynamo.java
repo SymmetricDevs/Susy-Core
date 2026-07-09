@@ -26,7 +26,6 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
-    private long drainPerCycle = GTValues.V[getTier() + 1];
     private static final Field PROGRESS_TIME_FIELD;
 
     public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, int tier) {

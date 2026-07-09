@@ -296,6 +296,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityToxicSpewer[] TOXIC_SPEWER = new MetaTileEntityToxicSpewer[8];
     public static MetaTileEntityHydrocarbonSaturator[] HYDROCARBON_SATURATOR = new MetaTileEntityHydrocarbonSaturator[8];
     public static MetaTileEntityDustAgitator[] DUST_AGITATOR = new MetaTileEntityDustAgitator[8];
+    public static MetaTileEntityFederationDropBeacon[] FED_BEACON = new MetaTileEntityFederationDropBeacon[8];
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -754,6 +755,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityHydrocarbonSaturator(susyId("hydrocarbon_saturator.lv"), 1));
         DUST_AGITATOR[0] = registerMetaTileEntity(18640,
                 new MetaTileEntityDustAgitator(susyId("dust_agitator.lv"), 1));
+        FED_BEACON[0] = registerMetaTileEntity(18650,
+                new MetaTileEntityFederationDropBeacon(susyId("fed_beacon.lv"), 1));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
