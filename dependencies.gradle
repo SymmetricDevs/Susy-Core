@@ -19,6 +19,20 @@
  *
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
+
+// # Added for Ladylib Setup, why didn't they just handle this like every other mod did?
+// you're asking too many questions, -1000 palantir credits
+repositories {
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+configurations {
+    contained
+    contained.transitive = false
+}
+
 dependencies {
     // # Fix crashes on macOS with Narrator
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
@@ -90,9 +104,18 @@ dependencies {
 
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
 
+    //DO NOT PUSH THIS SHIT TO GIT
+    //implementation rfg.deobf("curse.maven:techguns-244201:2958103")
+
+    // # Ladylib Setup (Using rfg.deobf instead of deobfCompile for RetroFuturaGradle)
+    compileOnly rfg.deobf('com.github.Ladysnake:Ladylib:2.3.0')
+    contained 'com.github.Ladysnake:Ladylib:2.3.0'
+    // Gaspunk
+    compileOnly rfg.deobf("curse.maven:gaspunk-286505:3048663")
+
     //ICBM
     //temporary dep, will replace once we have our own missiles
-    implementation rfg.deobf("curse.maven:icbm-244451:6496624")
+    compileOnly rfg.deobf("curse.maven:icbm-244451:6496624")
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:the-beneath-254629:3425551')
 //    runtimeOnlyNonPublishable rfg.deobf('curse.maven:realistic-terrain-generation-unofficial-648514:4404814')
