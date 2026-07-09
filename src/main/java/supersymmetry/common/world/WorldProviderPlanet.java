@@ -12,8 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import supersymmetry.api.space.RenderableCelestialObject;
-
 public class WorldProviderPlanet extends WorldProvider {
 
     private long TICKS_PER_DAY = 24000L;
@@ -118,36 +116,24 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     public boolean isEclipse(float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet == null || !planet.hasCustomSky()) return false;
-
-        SuSySkyRenderer renderer = planet.getSuSySkyRenderer();
-        if (renderer == null) return false;
-
-        RenderableCelestialObject sun = renderer.getSunObject();
-        RenderableCelestialObject primaryBody = renderer.getPrimaryBody(); // Earth on the Moon
-
-        if (sun == null || primaryBody == null) return false;
+        if (world == null) return false;
 
         long worldTime = world.getWorldTime();
 
-        float[] sunDir = sun.getWorldDirection(worldTime);
-        float eclipseThresholdY = 0.035f;
+        float celestialAngle = calculateCelestialAngle(worldTime, partialTicks);
 
-        if (Math.abs(sunDir[1]) > eclipseThresholdY) {
-            return false; // Not in eclipse season
-        }
+        float solarAltitude = MathHelper.sin(celestialAngle * ((float) Math.PI * 2F));
 
-        float celestialAngle = realCelestialAngle(worldTime, partialTicks);
+        if (Math.abs(solarAltitude) > 0.035f) return false;
+
         float angleFromZenith = Math.abs(celestialAngle - 0.25f);
         if (angleFromZenith > 0.5f) angleFromZenith = 1.0f - angleFromZenith;
 
         float angleInDegrees = angleFromZenith * 360.0f;
 
-        // Half the angular diameter == angular radius
-        float bodyAngularRadius = primaryBody.getAngularSizeDeg() / 2.0f;
+        float earthAngularRadius = 0.95f;
 
-        return angleInDegrees < bodyAngularRadius;
+        return angleInDegrees < earthAngularRadius;
     }
 
     @Override
