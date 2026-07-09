@@ -1,0 +1,8 @@
+{
+  "parent": "susy:block/no_cull_tinted_cube_column",
+  "textures" : {
+    "bottom": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_bottom",
+    "top": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_top",
+    "side": "gregtech:blocks/rocket_multiblock_casing/vinyl_ceiling_tile_side"
+  }
+}
