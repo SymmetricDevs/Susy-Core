@@ -195,6 +195,9 @@ public class SuSyBlocks {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
         for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
+            if (RANDOM_CONCRETE.getState(state) == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL) {
+                continue;
+            }
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
         for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
