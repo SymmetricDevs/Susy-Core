@@ -1,27 +1,30 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import gregtech.api.items.metaitem.stats.ISubItemHandler;
-import gregtech.api.util.GTUtility;
+import java.util.List;
+import java.util.function.Consumer;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import gregtech.api.items.metaitem.stats.ISubItemHandler;
+import gregtech.api.util.GTUtility;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.rocketry.SusyRocketComponents;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
 
     private final Consumer<List<String>> lines;
     private final List<String> keys;
-public BlueprintBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
+
+    public BlueprintBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
         this.lines = lines;
         this.keys = keys;
     }

@@ -17,7 +17,6 @@ import gregtech.api.items.metaitem.stats.ISubItemHandler;
 import gregtech.api.util.GTUtility;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.rocketry.SusyRocketComponents;
 
 public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
 
