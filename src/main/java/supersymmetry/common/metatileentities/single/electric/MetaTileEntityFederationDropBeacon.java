@@ -25,15 +25,15 @@ import supersymmetry.common.entities.EntityDropPod;
 
 public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
 
-    private static final int INTEL_SAMPLES_REQUIRED = 2;
+    private static final int INTEL_SAMPLES_REQUIRED = 10; //do not overdo this
     private static final double OUTLIER_THRESHOLD = 64.0;
     private static final int PODS_MIN = 2;
     private static final int PODS_MAX = 4;
     private static final int POD_SPAWN_HEIGHT = 300;
     private static final int POD_SPREAD_RADIUS = 4;
 
-    //private UUID targetPlayerUUID = null;
-    private UUID targetPlayerUUID = UUID.fromString("31c4910d-9b69-4725-8969-9ed53ac8a7dc");
+    private UUID targetPlayerUUID = null;
+    //private UUID targetPlayerUUID = UUID.fromString("31c4910d-9b69-4725-8969-9ed53ac8a7dc");
 
     private final List<Vec3d> positionSamples = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
         onChargeCycleComplete(getWorld());
 
         if (this.launched){
-            this.doExplosion(1);
+            this.doExplosion(0);
         }
     }
 
@@ -128,7 +128,6 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
                 if (!positionSamples.isEmpty()) {
                     Vec3d strikeTarget = computeStrikeTarget();
                     launchStrike(world, strikeTarget);
-                    //System.out.println(strikeTarget.x + " " + strikeTarget.y + " " + strikeTarget.z);
                     launched = true;
                 }
             }
@@ -177,33 +176,28 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
         for (int i = 0; i < podCount; i++) {
             double angle = GTValues.RNG.nextDouble() * 2 * Math.PI;
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
-            double spawnX = target.x + Math.cos(angle) * radius;
-            double spawnZ = target.z + Math.sin(angle) * radius;
-            double spawnY = target.y + POD_SPAWN_HEIGHT;
+            double spawnX = Math.floor(target.x + Math.cos(angle) * radius) + 0.5;
+            double spawnZ = Math.floor(target.z + Math.sin(angle) * radius) + 0.5;
+            double spawnY = POD_SPAWN_HEIGHT + GTValues.RNG.nextInt(10); //apparently this is better than math rand, not gonna question it
 
             EntityDropPod pod = new EntityDropPod(world, spawnX, spawnY, spawnZ);
             pod.canExplode(false);
             pod.setCommandsOnLanding(new ArrayList<>(landingCommands));
             world.spawnEntity(pod);
-            System.out.println(landingCommands);
         }
     }
 
     private List<String> buildLandingCommands() {
         List<String> commands = new ArrayList<>();
-        // The actual command strings are injected by siege.groovy.
-        // We call into the Groovy layer to retrieve them so that
-        // all siege configuration lives in one place.
         try {
             Object result = org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(
-                    this, "getFedStrikeCommands", new Object[] {});
+                    MetaTileEntityFederationDropBeacon.class, "getFedStrikeCommands", new Object[] {});
             if (result instanceof List) {
                 for (Object cmd : (List<?>) result) {
                     if (cmd instanceof String) commands.add((String) cmd);
                 }
             }
         } catch (Throwable t) {
-            System.out.println("[DropBeacon] getFedStrikeCommands failed: " + t);
             t.printStackTrace();
         }
         return commands;
