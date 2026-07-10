@@ -184,12 +184,34 @@ public class SuSyBlocks {
             for (IBlockState state : block.getBlockState().getValidStates())
                 BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
         }
+
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
         for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            IBlockState state = block.getState(SusyStoneVariantBlock.StoneType.INDUSTRIAL_CONCRETE);
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
+            if (isDottedPanel(state)) {
+                continue;
+            }
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+    }
+
+    private static boolean isDottedPanel(IBlockState state) {
+        BlockRandomConcrete.BlockRandomConcreteType type = RANDOM_CONCRETE.getState(state);
+        return type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_BORDER ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_COMB ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_GRID;
     }
 
     @SuppressWarnings("unchecked")
