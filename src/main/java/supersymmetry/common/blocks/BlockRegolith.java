@@ -39,7 +39,8 @@ public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegoli
     public enum BlockRegolithType implements IStringSerializable, IStateHarvestLevel {
 
         HIGHLAND("highland", 1),
-        LOWLAND("lowland", 1);
+        LOWLAND("lowland", 1),
+        KREEP("kreep", 1);
 
         private final String name;
         private final int harvestLevel;
