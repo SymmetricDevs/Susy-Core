@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static gregtech.api.GTValues.LV;
+import static gregtech.api.GTValues.VA;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -23,7 +28,6 @@ import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -37,6 +41,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     private AxisAlignedBB landingAreaBB;
     protected IItemHandlerModifiable outputInventory;
+    protected IEnergyContainer energyContainer;
 
     public MetaTileEntityLandingPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -56,15 +61,16 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     protected void initializeAbilities() {
         this.outputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.EXPORT_ITEMS));
+        this.energyContainer = new EnergyContainerList(this.getAbilities(MultiblockAbility.INPUT_ENERGY));
     }
 
     @Override
     protected void updateFormedValid() {
         EntityLander lander = getLander();
-        if (lander != null && !lander.isEmpty()) {
+        if (lander != null && !lander.isEmpty() && energyContainer.changeEnergy(-VA[LV]) == -VA[LV]) {
             GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
-            if (this.isBlockRedstonePowered()) {
-                lander.setLaunched(true);
+            if (this.isBlockRedstonePowered() && !lander.isCountdownStarted()) {
+                lander.startCountdown(20);
             }
         }
     }
@@ -79,15 +85,6 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;
-    }
-
-    public TraceabilityPredicate getAbilityPredicate() {
-        TraceabilityPredicate predicate = super.autoAbilities(true, false);
-        predicate.or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)
-                .setPreviewCount(1));
-        predicate.or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1));
-        predicate.or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1));
-        return predicate;
     }
 
     @Override
@@ -119,7 +116,9 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
                 .where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
-                .where('C', states(getCasingState()).setMinGlobalLimited(6).or(getAbilityPredicate()))
+                .where('C',
+                        states(getCasingState()).setMinGlobalLimited(6)
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.INPUT_ENERGY)))
                 .where('P', states(getPadState()))
                 .build();
     }

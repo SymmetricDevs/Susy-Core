@@ -65,10 +65,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         this.cargo.clear();
 
         for (int i = 0; i < nbt.getInteger("cargoSize"); i++) {
-            NBTTagCompound itemTag = nbt.getCompoundTag("item" + i);
-            List<ItemStack> itemType = new ArrayList<>(itemTag.getInteger("size"));
-            for (int j = 0; j < itemTag.getInteger("size"); j++) {
-                itemType.add(new ItemStack(itemTag.getCompoundTag("item" + j)));
+            NBTTagCompound itemNbt = nbt.getCompoundTag("entry" + i);
+            int size = itemNbt.getInteger("size");
+            List<ItemStack> itemType = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                itemType.add(new ItemStack(itemNbt.getCompoundTag("item" + j)));
             }
             cargo.add(itemType);
         }
@@ -84,12 +85,19 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return this.cargo.isEmpty();
     }
 
+    public void takeFromExposedStack(@NotNull ItemStack stack) {
+        ItemStack actual = cargo.iterator().next().getLast();
+        if (actual.getCount() - stack.getCount() > 0) {
+            extractItem(0, actual.getCount() - stack.getCount(), false);
+        }
+    }
+
     public static class CargoHashStrategy implements Hash.Strategy<List<ItemStack>> {
 
         @Override
         public int hashCode(List<ItemStack> o) {
             if (o.isEmpty()) {
-                throw new IllegalArgumentException("Cannot hash empty list");
+                return 0;
             }
             return STACK_STRATEGY.hashCode(o.get(0));
         }
@@ -188,7 +196,6 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (loading) return ItemStack.EMPTY;
         if (cargo.isEmpty()) return ItemStack.EMPTY;
         // Get just any item
         List<ItemStack> bucket = cargo.iterator().next();
@@ -202,7 +209,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                 currentVolume--;
                 bucket.removeLast();
                 if (bucket.isEmpty()) {
-                    cargo.remove(bucket);
+                    cargo.removeIf(List::isEmpty); // it does not like mutating hash codes
                 }
             } else {
                 last.setCount(last.getCount() - actuallyRemoved);
@@ -213,7 +220,12 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     public ItemStack getExposedStack() {
         if (cargo.isEmpty()) return ItemStack.EMPTY;
-        return cargo.iterator().next().getLast();
+        // Apparently the ItemStack is modified in place
+        List<ItemStack> bucket = cargo.iterator().next();
+        if (bucket.isEmpty()) {
+            return null;
+        }
+        return bucket.getLast().copy();
     }
 
     @Override
