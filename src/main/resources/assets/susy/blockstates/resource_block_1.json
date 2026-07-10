@@ -26,6 +26,12 @@
       "textures" : {
         "all" : "gregtech:blocks/resource/lignite"
       }
+    },
+    "variant=kreep" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/resource/kreep"
+      }
     }
   }
 }
