@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +60,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
@@ -600,13 +603,63 @@ public class EntityLander extends EntityAbstractRocket
         SlotGroup cargoInventory = new SlotGroup("cargo", 1, 1000, true);
         syncManager.registerSlotGroup(cargoInventory);
 
+        ItemStackHandler insertScratch = new ItemStackHandler(1);
+
+        ModularSlot insertSlot = new ModularSlot(insertScratch, 0)
+                .filter(SuSyUtility::isAllowedItemForSpace)          // reuse cargo's own gate
+                .changeListener((newItem, onlyAmount, client, init) -> {
+                    if (init || newItem.isEmpty()) return;
+                    ItemStack remainder = cargo.insertItem(0, newItem, false);
+                    insertScratch.setStackInSlot(0, remainder);       // leftover stays visible
+                });
+
+        IItemHandler extractView = new IItemHandler() {
+
+            public int getSlots() {
+                return 1;
+            }
+
+            public ItemStack getStackInSlot(int s) {
+                return cargo.getExposedStack();
+            }
+
+            public ItemStack insertItem(int s, ItemStack st, boolean sim) {
+                return st;
+            }
+
+            public ItemStack extractItem(int s, int amt, boolean sim) {
+                return cargo.extractItem(0, amt, sim);
+            }
+
+            public int getSlotLimit(int s) {
+                return 64;
+            }
+        };
+
+        ModularSlot extractSlot = new ModularSlot(extractView, 0) {
+
+            @Override
+            public void putStack(@NotNull ItemStack stack) {
+                cargo.takeFromExposedStack(stack);
+            }
+        }.accessibility(false, true);
+
+        syncManager.addCloseListener(player -> {
+            ItemStack leftover = insertScratch.getStackInSlot(0);
+            if (!leftover.isEmpty()) {
+                player.inventory.placeItemBackInInventory(player.world, leftover); // returns fit, drops overflow
+                insertScratch.setStackInSlot(0, ItemStack.EMPTY);
+            }
+        });
+
         return ModularPanel.defaultPanel("lander")
                 .child(new Flow(GuiAxis.X)
                         .top(18)
                         .margin(7, 0)
                         .widthRel(1f)
                         .coverChildrenHeight()
-                        .child(new ItemSlot().slot(new ModularSlot(cargo, 0).slotGroup(cargoInventory)))
+                        .child(new ItemSlot().slot(insertSlot.singletonSlotGroup()))
+                        .child(new ItemSlot().slot(extractSlot.slotGroup(cargoInventory)))
                         .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
                                 .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
                                         .rightRel(0.3f).height(18))
