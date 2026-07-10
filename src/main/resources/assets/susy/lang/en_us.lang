@@ -122,6 +122,7 @@ tile.resource_block.coal.name=Coal Deposit
 tile.resource_block_1.native_copper.name=Native Copper Deposit
 tile.resource_block_1.anthracite.name=Anthracite Deposit
 tile.resource_block_1.lignite.name=Lignite Deposit
+tile.resource_block_1.kreep.name=KREEP Rich Rock
 
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
@@ -1534,6 +1535,7 @@ tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bri
 
 tile.regolith.highland.name=Anorthositic Regolith
 tile.regolith.lowland.name=Basaltic Regolith
+tile.regolith.kreep.name=KREEP Rich Regolith
 
 # ToolBehaviors
 item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
