@@ -24,7 +24,8 @@ public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockTyp
 
         NATIVE_COPPER("native_copper", 1),
         ANTHRACITE("anthracite", 0),
-        LIGNITE("lignite", 0);
+        LIGNITE("lignite", 0),
+        KREEP("kreep", 1);
 
         private final String name;
         private final int harvestLevel;
