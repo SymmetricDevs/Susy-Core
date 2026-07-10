@@ -18,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantBlock;
 
-import java.util.Properties;
-
 public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultiblockCasing.CasingType> {
 
     public BlockRocketMultiblockCasing() {
@@ -61,7 +59,8 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return !(getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) || getState(state).equals(CasingType.VINYL_CEILING_TILE));
+        return !(getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) ||
+                getState(state).equals(CasingType.VINYL_CEILING_TILE));
     }
 
     @Override

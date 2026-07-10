@@ -1,5 +1,7 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.stream.Stream;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,8 +14,6 @@ import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
-
-import java.util.stream.Stream;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
                                        implements WeightedBlock<BlockSpacecraftInstrument.Type> {

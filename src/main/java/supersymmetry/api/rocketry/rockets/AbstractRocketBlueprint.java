@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -141,7 +140,6 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
                     return map;
                 });
     }
-
 
     public void setName(String name) {
         this.name = name;
