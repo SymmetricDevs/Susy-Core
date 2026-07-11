@@ -284,7 +284,7 @@ public class SuSyMetaTileEntities {
     // SUSY's large hammer
     public static MetaTileEntitySuSyLargeHammer LARGE_STEAM_HAMMER;
 
-    //SUSY's large ore washer
+    // SUSY's large ore washer
     public static MetaTileEntitySuSyLogWasher LOG_WASHER;
 
     // SUSY's small boilers
