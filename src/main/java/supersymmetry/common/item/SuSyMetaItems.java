@@ -1,8 +1,7 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
-import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.advancedDroneCharge;
-import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.basicDroneCharge;
+import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,12 +17,9 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.ElectricStats;
-import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
-import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
-import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -56,6 +52,7 @@ public class SuSyMetaItems {
     public static MetaValueItem BASIC_CARGO_DRONE;
     public static MetaValueItem ADVANCED_CARGO_DRONE;
     public static MetaValueItem LOCATION_CARD;
+    public static MetaValueItem ELITE_CARGO_DRONE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -177,6 +174,9 @@ public class SuSyMetaItems {
 
         LOCATION_CARD = metaItem.addItem(20, "location_card").setMaxStackSize(1)
                 .addComponents(new LocationCardBehavior());
+
+        ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
+                .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
     }
 
     private static void addExtraBehaviours() {

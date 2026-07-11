@@ -1223,9 +1223,11 @@ metaitem.code_breacher.name=Code Breacher
 metaitem.shape.mold.target.name=Sputtering Target Mold
 metaitem.location_card.name=Location Card
 metaitem.cargo_drone.basic.name=Basic Cargo Drone
-metaitem.cargo_drone.basic.tooltip=Max range: §6500 blocks§7, speed: §b2.5 blocks/second§b
+metaitem.cargo_drone.basic.tooltip=Max range: §61000 blocks§7, speed: §b2.5 blocks/second§b
 metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
-metaitem.cargo_drone.advanced.tooltip=Max range: §61000 blocks§7, speed: §b7.5 blocks/second§b
+metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
+metaitem.cargo_drone.elite.name=Elite Cargo Drone
+metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
@@ -1502,6 +1504,7 @@ susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
 
 
 susy.machine.drone_deposit_basket.name=Drone Deposit Basket
+susy.machine.advanced_drone_deposit_basket.name=Advanced Drone Deposit Basket
 
 # Boilers
 susy.machine.large_boiler.bronze.name=Large Bronze Boiler

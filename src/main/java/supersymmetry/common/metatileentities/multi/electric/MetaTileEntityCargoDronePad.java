@@ -56,13 +56,17 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     MetaTileEntity targetBasket = null;
     BlockPos targetPos = null;
     public static final int basicDroneTier = 0;
-    public static final int basicDroneRange = 500;
+    public static final int basicDroneRange = 1000;
     public static final double basicDroneSpeed = 0.125; // blocks per tick
     public static final int basicDroneCharge = 51200;
     public static final int advancedDroneTier = 1;
-    public static final int advancedDroneRange = 1000;
+    public static final int advancedDroneRange = 2000;
     public static final double advancedDroneSpeed = 0.375;
     public static final int advancedDroneCharge = 204800;
+    public static final int eliteDroneTier = 2;
+    public static final int eliteDroneRange = 10000;
+    public static final double eliteDroneSpeed = 1.25;
+    public static final int eliteDroneFuel = 1000;
     private int flightTime = -1;
     int totalFlightTime = -1;
     private ItemStack currentItem = null;
@@ -102,8 +106,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 .where('S', selfPredicate())
                 .where('C', states(getCasingState()).setMinGlobalLimited(6)
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1))
-                        .setMinGlobalLimited(2))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
                 .where('P', states(getPadState()))
                 .build();
     }
@@ -296,6 +299,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 currentDroneTier = basicDroneTier;
             } else if (data.getInteger("currentDroneTier") == advancedDroneTier) {
                 currentDroneTier = advancedDroneTier;
+            } else if (data.getInteger("currentDroneTier") == eliteDroneTier) {
+                currentDroneTier = eliteDroneTier;
             }
         }
     }
@@ -347,13 +352,14 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 setTargetPos(getFirstSlotWithValidCard());
 
             }
-            if (getFirstSlotWithItem() > -1 && getFirstSlotWithDrone() > -1 && !deposited && !initiated) {
+            if (getFirstSlotWithItem() > -1 && getFirstSlotWithDrone() > -1 && !deposited && !initiated &&
+                    recipeMapWorkable.isWorkingEnabled()) {
                 initiated = initiateTransfer();
             }
         }
 
         if (initiated) {
-            if (totalFlightTime - flightTime == 240) {
+            if (totalFlightTime - flightTime == 175) {
                 spawnDroneEntityOnBasket(targetPos, true);
             }
             if (totalFlightTime - flightTime <= 0 || flightTime > droneTimeout) {
@@ -372,7 +378,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         }
 
         if (deposited) {
-            if (totalFlightTime - flightTime == 240) {
+            if (totalFlightTime - flightTime == 175) {
                 spawnDroneEntityOnPad(true);
             }
             if (totalFlightTime - flightTime <= 0 || flightTime > droneTimeout) {
@@ -392,13 +398,20 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
             for (int i = 0; i < getInputInventory().getSlots() - 1; i++) {
                 ItemStack item = getInputInventory().getStackInSlot(i);
                 if (item.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) ||
-                        item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm())) {
+                        item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()) ||
+                        item.isItemEqual(SuSyMetaItems.ELITE_CARGO_DRONE.getStackForm())) {
                     NBTTagCompound tag = getInputInventory().getStackInSlot(i).getTagCompound();
                     if (tag != null && tag.hasKey("Charge")) {
                         if ((tag.getLong("Charge") == basicDroneCharge &&
                                 item.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm())) ||
                                 (tag.getLong("Charge") == advancedDroneCharge &&
                                         item.isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()))) {
+                            return i;
+                        }
+                    }
+                    if (item.getSubCompound("Fluid") != null) {
+                        NBTTagCompound subTag = item.getSubCompound("Fluid");
+                        if (subTag.getInteger("Amount") >= eliteDroneFuel) {
                             return i;
                         }
                     }
@@ -455,6 +468,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                                 .isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm()) &&
                         !getInputInventory().getStackInSlot(i)
                                 .isItemEqual(SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm()) &&
+                        !getInputInventory().getStackInSlot(i)
+                                .isItemEqual(SuSyMetaItems.ELITE_CARGO_DRONE.getStackForm()) &&
                         getInputInventory().getStackInSlot(i) != ItemStack.EMPTY) {
                     return i;
                 }
@@ -494,7 +509,12 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     }
 
     public boolean hasSpaceInBasket(MetaTileEntity basket) {
-        return basket.getItemInventory().getStackInSlot(0) == ItemStack.EMPTY;
+        for (int i = 0; i < basket.getItemInventory().getSlots(); i++) {
+            if (basket.getItemInventory().getStackInSlot(i) == ItemStack.EMPTY) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getFlightDistance(BlockPos pos) {
@@ -509,13 +529,19 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         dist = getFlightDistance(targetPos);
         if (droneTier == basicDroneTier) {
             if (dist <= basicDroneRange) {
-                flightTime = 480 + Math.round(dist / basicDroneSpeed);
+                flightTime = 350 + Math.round(dist / basicDroneSpeed);
             } else {
                 return -1;
             }
         } else if (droneTier == advancedDroneTier) {
             if (dist <= advancedDroneRange) {
-                flightTime = 480 + Math.round(dist / advancedDroneSpeed);
+                flightTime = 350 + Math.round(dist / advancedDroneSpeed);
+            } else {
+                return -1;
+            }
+        } else if (droneTier == eliteDroneTier) {
+            if (dist <= eliteDroneRange) {
+                flightTime = 350 + Math.round(dist / eliteDroneSpeed);
             } else {
                 return -1;
             }
@@ -532,6 +558,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 currentDroneTier = advancedDroneTier;
             } else if (droneStack.isItemEqual(SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm())) {
                 currentDroneTier = basicDroneTier;
+            } else if (droneStack.isItemEqual(SuSyMetaItems.ELITE_CARGO_DRONE.getStackForm())) {
+                currentDroneTier = eliteDroneTier;
             }
             if (targetBasket != null && hasSpaceInBasket(targetBasket) &&
                     getTotalFlightTime(currentDroneTier) > -1) {
@@ -561,6 +589,8 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
                 droneStack = SuSyMetaItems.BASIC_CARGO_DRONE.getStackForm();
             } else if (currentDroneTier == advancedDroneTier) {
                 droneStack = SuSyMetaItems.ADVANCED_CARGO_DRONE.getStackForm();
+            } else if (currentDroneTier == eliteDroneTier) {
+                droneStack = SuSyMetaItems.ELITE_CARGO_DRONE.getStackForm();
             }
             outputInventory.setStackInSlot(getFirstFreeSlot(outputInventory), droneStack);
             currentDroneTier = -1;
