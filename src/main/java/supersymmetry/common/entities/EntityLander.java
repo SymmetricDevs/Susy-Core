@@ -45,7 +45,6 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
-import gregtech.api.util.TeleportHandler;
 import gregtech.modules.ModuleManager;
 import io.netty.buffer.ByteBuf;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -281,11 +280,9 @@ public class EntityLander extends EntityAbstractRocket
 
         // Pop the next mission from the rocket configuration
         dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
-
-        TeleportHandler.teleport(dropPod, next.dimension, new DropPodTeleporter(), next.landingPos.getX(), 350,
-                next.landingPos.getZ());
-
-        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(dropPod, passenger));
+        // Cannot use TeleportHandler here because it doesn't get the new entity
+        Entity teleported = dropPod.changeDimension(next.dimension, new DropPodTeleporter());
+        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
     }
 
     @Override
