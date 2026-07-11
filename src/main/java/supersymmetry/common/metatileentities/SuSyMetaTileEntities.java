@@ -50,6 +50,7 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimi
 import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
+import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLogWasher;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
 import supersymmetry.common.metatileentities.single.electric.*;
@@ -282,6 +283,9 @@ public class SuSyMetaTileEntities {
 
     // SUSY's large hammer
     public static MetaTileEntitySuSyLargeHammer LARGE_STEAM_HAMMER;
+
+    //SUSY's large ore washer
+    public static MetaTileEntitySuSyLogWasher LOG_WASHER;
 
     // SUSY's small boilers
     public static SuSyCoalBoiler STEAM_BOILER_COAL_BRONZE;
@@ -757,6 +761,8 @@ public class SuSyMetaTileEntities {
         // Large Steam Machines
         LARGE_STEAM_HAMMER = registerMetaTileEntity(18320,
                 new MetaTileEntitySuSyLargeHammer(susyId("large_steam_hammer")));
+        LOG_WASHER = registerMetaTileEntity(18321, new MetaTileEntitySuSyLogWasher(
+                susyId("log_washer")));
 
         // Fuel Cells
         FUEL_CELL[0] = registerMetaTileEntity(18400,
