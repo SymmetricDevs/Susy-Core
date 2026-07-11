@@ -67,8 +67,10 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     @Override
     protected void updateFormedValid() {
         EntityLander lander = getLander();
-        if (lander != null && !lander.isEmpty() && energyContainer.changeEnergy(-VA[LV]) == -VA[LV]) {
-            GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
+        if (lander != null && energyContainer.changeEnergy(-VA[LV]) == -VA[LV]) {
+            if (!lander.isEmpty()) {
+                GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
+            }
             if (this.isBlockRedstonePowered() && !lander.isCountdownStarted()) {
                 lander.startCountdown(20);
             }
@@ -118,7 +120,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
                 .where('S', selfPredicate())
                 .where('C',
                         states(getCasingState()).setMinGlobalLimited(6)
-                                .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.INPUT_ENERGY)))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.INPUT_ENERGY))
+                                .or(autoAbilities()))
                 .where('P', states(getPadState()))
                 .build();
     }
@@ -170,7 +173,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
 
         // Only accept the Y layer directly on top of the landing pad
         BlockPos corner1 = padCenter.offset(left, 7).offset(facing, 6).offset(EnumFacing.UP, 1);
-        BlockPos corner2 = padCenter.offset(right, 7).offset(facing.getOpposite(), 6).offset(EnumFacing.UP, 2);
+        BlockPos corner2 = padCenter.offset(right, 7).offset(facing.getOpposite(), 6).offset(EnumFacing.UP, 4);
 
         // Create the bounding box
         this.landingAreaBB = new AxisAlignedBB(corner1, corner2);

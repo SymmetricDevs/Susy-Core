@@ -111,7 +111,12 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
                     this.setLaunchResult(LaunchResult.CRASHES);
                 } else {
                     long augmentation = rocketNBT.getLong("AFSimprovement");
-                    this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
+                    if (this.getPassengers().stream()
+                            .noneMatch((entity -> entity instanceof EntityPlayer player && player.isCreative()))) {
+                        this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
+                    } else {
+                        this.setLaunchResult(LaunchResult.LAUNCHES);
+                    }
                 }
             } else {
                 this.setLaunchResult(LaunchResult.EXPLODES);

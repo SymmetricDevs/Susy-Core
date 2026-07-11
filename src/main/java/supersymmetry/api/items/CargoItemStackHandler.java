@@ -86,6 +86,9 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     public void takeFromExposedStack(@NotNull ItemStack stack) {
+        if (cargo.isEmpty()) {
+            return;
+        }
         ItemStack actual = cargo.iterator().next().getLast();
         if (actual.getCount() - stack.getCount() > 0) {
             extractItem(0, actual.getCount() - stack.getCount(), false);
