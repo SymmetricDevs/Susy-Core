@@ -92,6 +92,48 @@
           "side": "gregtech:blocks/susy_stones/regolith/lowland4"
         }
       }
+    ],
+    "variant=kreep": [
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/kreep2"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/kreep3"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/kreep4"}
+      },
+      { "model": "minecraft:cube_all",
+        "weight": 1000,
+        "textures": {"all" :  "gregtech:blocks/susy_stones/regolith/kreep5"}
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 10,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/kreep3",
+          "top": "gregtech:blocks/susy_stones/regolith/kreep_crater",
+          "side": "gregtech:blocks/susy_stones/regolith/kreep3"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/kreep5",
+          "top": "gregtech:blocks/susy_stones/regolith/kreep_amogus",
+          "side": "gregtech:blocks/susy_stones/regolith/kreep5"
+        }
+      },
+      { "model": "minecraft:cube_bottom_top",
+        "weight": 0.001,
+        "textures": {
+          "bottom": "gregtech:blocks/susy_stones/regolith/kreep5",
+          "top": "gregtech:blocks/susy_stones/regolith/kreep_soviet",
+          "side": "gregtech:blocks/susy_stones/regolith/kreep5"
+        }
+      }
     ]
   }
 }

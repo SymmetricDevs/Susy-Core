@@ -66,5 +66,12 @@ public class SuSySecondDegreeMaterials {
                 .flags(NO_SMASHING, DISABLE_DECOMPOSITION)
                 .components(Anorthite, 4, Albite, 2)
                 .build();
+
+        Kreep = new Material.Builder(27208, SuSyUtility.susyId("kreep"))
+                .dust()
+                .colorAverage().iconSet(ROUGH)
+                .flags(NO_SMASHING, DISABLE_DECOMPOSITION)
+                .components(Potassium, 1, RareEarth, 1, Phosphorus, 1)
+                .build();
     }
 }
