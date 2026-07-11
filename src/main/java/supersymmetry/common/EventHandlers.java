@@ -142,31 +142,68 @@ public class EventHandlers {
         mobHordeWorldData.markDirty();
     }
 
+    // Ticks to wait after moving the player into the destination dimension before
+    // re-mounting them. transferPlayerToDimension triggers a client respawn that tears
+    // down and rebuilds the client world (and player entity) twice; mounting before that
+    // settles binds the passenger to a transient client player that is immediately
+    // discarded, leaving the player frozen with a phantom "unmount" prompt.
+    private static final int MOUNT_DELAY = 10;
+
     private static @NotNull void handleEntityTransfer() {
         List<DimensionRidingSwapData> toRemove = new ArrayList<>();
         for (DimensionRidingSwapData data : travellingPassengers) {
+
             Entity mount = data.mount;
             Entity passenger = data.passenger;
-            if (mount.dimension != passenger.dimension && passenger.getServer() != null &&
-                    mount.world.getTotalWorldTime() - data.time > 2) {
-                WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
+            if (passenger.getServer() == null) {
+                continue;
+            }
+            long now = mount.world.getTotalWorldTime();
+            SusyLog.logger.info(now);
 
-                passenger.setLocationAndAngles(mount.getPosition().getX(),
-                        mount.getPosition().getY(),
-                        mount.getPosition().getZ(),
-                        mount.rotationYaw,
-                        mount.rotationPitch);
-                passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
-                        mount.dimension,
-                        new GTTeleporter(newWorld, mount.getPosition().getX(), mount.getPosition().getY(),
-                                mount.getPosition().getZ()));
+            for (Entity entity : mount.world.loadedEntityList) {
+                SusyLog.logger.info(entity + " " + entity.getRidingEntity() + " " + entity.isDead);
+            }
+
+            if (!data.transferred) {
+                // Phase 1: move the player into the mount's dimension once the mount has
+                // settled there (>2 ticks). Deliberately do NOT mount on this tick.
+                if (mount.dimension != passenger.dimension && now - data.time > 2) {
+                    WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
+                    passenger.dismountRidingEntity();
+                    passenger.setLocationAndAngles(mount.getPosition().getX(),
+                            mount.getPosition().getY(),
+                            mount.getPosition().getZ(),
+                            mount.rotationYaw,
+                            mount.rotationPitch);
+                    passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
+                            mount.dimension,
+                            new GTTeleporter(newWorld, mount.getPosition().getX(), mount.getPosition().getY(),
+                                    mount.getPosition().getZ()));
+                    Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
+                    if (realMount != null) {
+                        realMount.forceSpawn = true;
+                    }
+                    data.transferred = true;
+                    data.transferTime = now;
+                }
+            } else if (now - data.transferTime > MOUNT_DELAY) {
+                // Phase 2: the client has rebuilt its world around the now-stable player
+                // entity (which retains the original entity id). Mount, and re-send the
+                // passenger packet explicitly in case the client missed the tracker's
+                // update mid-reload. If the mount isn't registered in the destination
+                // world yet, keep retrying until the hard timeout below.
+                WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
                 Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
                 if (realMount != null) {
                     passenger.startRiding(realMount);
+                    toRemove.add(data);
                 }
-                toRemove.add(data);
             }
 
+            if (now - data.time > 200) {
+                toRemove.add(data);
+            }
         }
         for (DimensionRidingSwapData data : toRemove) {
             travellingPassengers.remove(data);
