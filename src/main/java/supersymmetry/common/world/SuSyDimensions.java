@@ -43,8 +43,6 @@ public class SuSyDimensions {
         SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
         spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
-        long lunarDayTicks = 708_734L;
-
         new PlanetoidHandler(CelestialObjects.MOON).setBiomeList(
                 new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 80)
                         .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
@@ -57,9 +55,6 @@ public class SuSyDimensions {
                 .setCustomSkyRenderer(CelestialObjects.RENDERER)
                 .setGravity(0.166f)
                 .setBiomeSize(7)
-                .setTicksPerDay(lunarDayTicks)
-                .setDayLength(29.53f)
-                .setTimeOffset(0.0f)
                 .load();
 
         new SpaceDimension(802, "low_earth_orbit")

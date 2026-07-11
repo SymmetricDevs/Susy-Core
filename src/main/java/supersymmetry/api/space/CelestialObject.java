@@ -3,8 +3,12 @@ package supersymmetry.api.space;
 import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.util.math.Vec3d;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -72,6 +76,10 @@ public class CelestialObject {
         this.radius = radius;
     }
 
+    public double getRadiusAU() {
+        return radius * Orbit.EARTH_RADIUS_AU;
+    }
+
     @Nullable
     public CelestialObject getParentBody() {
         return parentBody;
@@ -109,5 +117,41 @@ public class CelestialObject {
             return this.getParentBody().getStarSystem();
         }
         return null;
+    }
+
+    public static Star findPrimaryStar(CelestialObject body) {
+        return Stream.iterate(body, Objects::nonNull, CelestialObject::getParentBody)
+                .filter(Star.class::isInstance)
+                .map(Star.class::cast)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static Vec3d surfacePointToLocalUp(double posX, double posZ, double planetRadius) {
+        double scale = 400000.0 * planetRadius;
+        double phi = posX * Math.PI / scale;
+        double lat = posZ * Math.PI / scale;
+        double theta = Math.PI / 2.0 - lat;
+
+        return new Vec3d(
+                Math.sin(theta) * Math.cos(phi),
+                Math.sin(theta) * Math.sin(phi),
+                Math.cos(theta));
+    }
+
+    public static double computeSolarAltitude(Planetoid ground, Vec3d localUp, double worldTime) {
+        Star sun = findPrimaryStar(ground);
+        if (sun == null) return Double.NaN;
+        Vec3d sunPos = Orbit.computeAbsolutePosition(sun, worldTime);
+        Vec3d groundPos = Orbit.computeAbsolutePosition(ground, worldTime);
+        Vec3d relativeEcl = sunPos.subtract(groundPos);
+        double distAU = relativeEcl.length();
+        if (distAU < 1e-15) return Double.NaN;
+        return relativeEcl.dotProduct(localUp) / distAU;
+    }
+
+    public static boolean isSunAboveHorizon(Planetoid ground, Vec3d localUp, double worldTime) {
+        double alt = computeSolarAltitude(ground, localUp, worldTime);
+        return !Double.isNaN(alt) && alt > 0;
     }
 }

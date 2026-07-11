@@ -6,50 +6,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 
 import supersymmetry.api.space.Planetoid;
-import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
 public class PlanetoidHandler {
 
-    // Defining variables
-    private String planetName;
     private int dimID;
-
     private int biomeSize = 5;
-
     private boolean isLoaded;
 
-    public int averageGroundLevel;
     public List<BiomeManager.BiomeEntry> biomeList;
     public IBlockState stone;
     public IBlockState bedrock;
-    public IRenderHandler skyRenderer;
     public double gravity;
     public double dragMultiplier = 0.98;
     public boolean supportsFire;
 
-    // Time
-    private float dayLength = 1.0f; // Default: normal Earth-like day (1.0 = 24000 ticks)
-    private float timeOffset = 0.0f; // Offset in celestial angle (0.0 to 1.0, where 0.5 = 12 hours)
     private IRenderHandler customSkyRenderer = null;
 
-    // Atmosphere
-
-    private long ticksPerDay = 24000L;
-
     public PlanetoidHandler(Planetoid planetoid) {
-        this.planetName = planetoid.getTranslationKey();
         this.dimID = planetoid.getDimension();
-    }
-
-    public boolean isLoaded() {
-        return isLoaded;
     }
 
     public void load() {
@@ -69,56 +51,19 @@ public class PlanetoidHandler {
                     }
                 }
 
-                // Apply sky renderer - try immediately and log result
                 applySkyRenderer();
             }
         }
     }
 
-    // Add this helper method
     private void applySkyRenderer() {
-        net.minecraft.world.World world = DimensionManager.getWorld(this.dimID);
+        World world = DimensionManager.getWorld(this.dimID);
         if (world != null && world.provider != null) {
-            IRenderHandler renderer = getEffectiveSkyRenderer();
+            IRenderHandler renderer = getSkyRenderer();
             if (renderer != null) {
                 world.provider.setSkyRenderer(renderer);
             }
         }
-    }
-
-    public void unload() {
-        if (isLoaded) {
-            isLoaded = false;
-        }
-    }
-
-    public int getDimID() {
-        return dimID;
-    }
-
-    public void setDimID(int dimID) {
-        this.dimID = dimID;
-    }
-
-    public String getPlanetName() {
-        return planetName;
-    }
-
-    public PlanetoidHandler setPlanetName(String planetName) {
-        this.planetName = planetName;
-        return this;
-    }
-
-    public int getAverageGroundLevel() {
-        return averageGroundLevel;
-    }
-
-    public void setAverageGroundLevel(int averageGroundLevel) {
-        this.averageGroundLevel = averageGroundLevel;
-    }
-
-    public List<BiomeManager.BiomeEntry> getBiomeList() {
-        return this.biomeList;
     }
 
     public PlanetoidHandler setBiomeList(List<BiomeManager.BiomeEntry> biomeList) {
@@ -127,13 +72,11 @@ public class PlanetoidHandler {
     }
 
     public PlanetoidHandler setBiomeList(BiomeManager.BiomeEntry... biomeList) {
-        // List.of() does not exist in 1.8
         this.biomeList = Arrays.asList(biomeList);
         return this;
     }
 
     public PlanetoidHandler setBiomeList(SuSyBiomeEntry... biomeList) {
-        // Convert to standard BiomeEntry list
         this.biomeList = Arrays.stream(biomeList)
                 .collect(Collectors.toList());
         return this;
@@ -142,6 +85,10 @@ public class PlanetoidHandler {
     public PlanetoidHandler setBiomeSize(int biomeSize) {
         this.biomeSize = biomeSize;
         return this;
+    }
+
+    public int getBiomeSize() {
+        return this.biomeSize;
     }
 
     public IBlockState getStone() {
@@ -157,94 +104,9 @@ public class PlanetoidHandler {
         return this.bedrock;
     }
 
-    public PlanetoidHandler setBedrock(IBlockState bedrock) {
-        this.bedrock = bedrock;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Planet Name: " + this.getPlanetName() + " Planet DIM ID: " +
-                this.getDimID();
-    }
-
-    public PlanetoidHandler setSkyRenderer(IRenderHandler skyRenderer) {
-        this.skyRenderer = skyRenderer;
-        return this;
-    }
-
     public PlanetoidHandler setGravity(double gravity) {
         this.gravity = gravity;
         return this;
-    }
-
-    public PlanetoidHandler setDragMultiplier(double dragMultiplier) {
-        this.dragMultiplier = dragMultiplier;
-        return this;
-    }
-
-    public PlanetoidHandler setSupportsFire(boolean supportsFire) {
-        this.supportsFire = supportsFire;
-        return this;
-    }
-
-    public int getBiomeSize() {
-        return this.biomeSize;
-    }
-
-    private IBlockState breccia = null;
-    private IBlockState impactMelt = null;
-    private IBlockState impactEjecta = null;
-
-    // Add these methods to Planet class
-    public boolean hasCraterMaterials() {
-        return breccia != null && impactMelt != null && impactEjecta != null;
-    }
-
-    public IBlockState getBreccia() {
-        return breccia != null ? breccia : getStone();
-    }
-
-    public IBlockState getImpactMelt() {
-        return impactMelt != null ? impactMelt : getStone();
-    }
-
-    // Add setter methods for builder pattern (if Planet uses builder)
-    public PlanetoidHandler setBreccia(IBlockState breccia) {
-        this.breccia = breccia;
-        return this;
-    }
-
-    public PlanetoidHandler setImpactMelt(IBlockState impactMelt) {
-        this.impactMelt = impactMelt;
-        return this;
-    }
-
-    public PlanetoidHandler setImpactEjecta(IBlockState impactEjecta) {
-        this.impactEjecta = impactEjecta;
-        return this;
-    }
-
-    public boolean hasCustomSky() {
-        return customSkyRenderer != null;
-    }
-
-    public PlanetoidHandler setDayLength(float dayLength) {
-        this.dayLength = dayLength;
-        return this;
-    }
-
-    public float getDayLength() {
-        return this.dayLength;
-    }
-
-    public PlanetoidHandler setTimeOffset(float timeOffset) {
-        this.timeOffset = timeOffset;
-        return this;
-    }
-
-    public float getTimeOffset() {
-        return this.timeOffset;
     }
 
     public PlanetoidHandler setCustomSkyRenderer(IRenderHandler renderer) {
@@ -252,26 +114,17 @@ public class PlanetoidHandler {
         return this;
     }
 
-    public IRenderHandler getEffectiveSkyRenderer() {
-        if (this.customSkyRenderer != null) {
-            return this.customSkyRenderer;
-        }
-        if (this.skyRenderer != null) {
-            return this.skyRenderer;
-        }
-        return null;
+    public IRenderHandler getSkyRenderer() {
+        return this.customSkyRenderer;
     }
 
-    public PlanetoidHandler setTicksPerDay(long ticks) {
-        this.ticksPerDay = ticks;
-        return this;
+    private IBlockState breccia;
+
+    public boolean hasCraterMaterials() {
+        return breccia != null;
     }
 
-    public long getTicksPerDay() {
-        return this.ticksPerDay;
-    }
-
-    public IBlockState getImpactEjecta() {
-        return SuSyBlocks.REGOLITH.getDefaultState();
+    public IBlockState getBreccia() {
+        return breccia != null ? breccia : getStone();
     }
 }

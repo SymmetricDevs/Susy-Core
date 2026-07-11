@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -45,7 +43,7 @@ public class CelestialRenderer extends IRenderHandler {
         Planetoid ground = Planetoid.PLANETOIDS.inverse().get(dimId);
         if (ground == null) return;
 
-        Star primary = findStar(ground);
+        Star primary = CelestialObject.findPrimaryStar(ground);
         if (primary == null) return;
 
         List<Star> allStars = findAllStars(primary);
@@ -93,7 +91,7 @@ public class CelestialRenderer extends IRenderHandler {
             if (mcDir.dotProduct(lookVec) < -0.1) continue;
             if (isOccludedBySphere(groundCenter, relativeEcl, body, positions, candidates)) continue;
 
-            double bodyRadiusAU = body.getRadius() * Orbit.EARTH_RADIUS_AU;
+            double bodyRadiusAU = body.getRadiusAU();
             double angularSizeDeg = Math.toDegrees(2.0 * Math.atan(bodyRadiusAU / distAU));
 
             List<StarLight> lights = computeLights(allStars, body, bodyPos, positions, localUpEcl);
@@ -219,7 +217,7 @@ public class CelestialRenderer extends IRenderHandler {
                                               List<CelestialObject> allBodies) {
         for (CelestialObject occluder : allBodies) {
             if (occluder == target) continue;
-            double r = occluder.getRadius() * Orbit.EARTH_RADIUS_AU;
+            double r = occluder.getRadiusAU();
             if (r <= 1e-15) continue;
             if (raySphereIntersects(origin, toTarget, positions.get(occluder), r)) return true;
         }
@@ -255,15 +253,7 @@ public class CelestialRenderer extends IRenderHandler {
 
     private Vec3d computeLocalUp(Minecraft mc, Planetoid ground) {
         if (mc.player == null) return new Vec3d(0, 0, 1);
-
-        double scale = 400000.0 * ground.getRadius();
-        double phi = mc.player.posX * Math.PI / scale;
-        double lat = mc.player.posZ * Math.PI / scale;
-        double theta = Math.PI / 2.0 - lat;
-        return new Vec3d(
-                Math.sin(theta) * Math.cos(phi),
-                Math.sin(theta) * Math.sin(phi),
-                Math.cos(theta));
+        return CelestialObject.surfacePointToLocalUp(mc.player.posX, mc.player.posZ, ground.getRadius());
     }
 
     private static Vec3d rotateToLocalFrame(Vec3d v, Vec3d localUp) {
@@ -283,14 +273,6 @@ public class CelestialRenderer extends IRenderHandler {
         return v.scale(cosA)
                 .add(kCrossV.scale(sinA))
                 .add(axis.scale(kDotV * (1.0 - cosA)));
-    }
-
-    private static Star findStar(CelestialObject body) {
-        return Stream.iterate(body, Objects::nonNull, CelestialObject::getParentBody)
-                .filter(Star.class::isInstance)
-                .map(Star.class::cast)
-                .findFirst()
-                .orElse(null);
     }
 
     private static void addDescendants(CelestialObject node, List<CelestialObject> result) {

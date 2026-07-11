@@ -1,9 +1,13 @@
 package supersymmetry.common.world;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
@@ -12,17 +16,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import supersymmetry.api.space.CelestialObject;
+import supersymmetry.api.space.Orbit;
+import supersymmetry.api.space.Planetoid;
+import supersymmetry.api.space.Star;
+
 public class WorldProviderPlanet extends WorldProvider {
-
-    private long TICKS_PER_DAY = 24000L;
-
-    public void setTicksPerDay(long ticksPerDay) {
-        this.TICKS_PER_DAY = ticksPerDay;
-    }
-
-    public long getTicksPerDay() {
-        return this.TICKS_PER_DAY;
-    }
 
     @Override
     public @NotNull DimensionType getDimensionType() {
@@ -37,7 +36,7 @@ public class WorldProviderPlanet extends WorldProvider {
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             PlanetoidHandler planet = SuSyDimensions.PLANETS.get(this.getDimension());
             if (planet != null) {
-                IRenderHandler renderer = planet.getEffectiveSkyRenderer();
+                IRenderHandler renderer = planet.getSkyRenderer();
                 if (renderer != null) {
                     this.setSkyRenderer(renderer);
                 }
@@ -69,13 +68,13 @@ public class WorldProviderPlanet extends WorldProvider {
     public @Nullable IRenderHandler getSkyRenderer() {
         PlanetoidHandler planet = SuSyDimensions.PLANETS.get(getDimension());
         if (planet != null) {
-            return planet.getEffectiveSkyRenderer();
+            return planet.getSkyRenderer();
         }
         return null;
     }
 
     @Override
-    public @NotNull Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks) {
+    public @NotNull Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
         return new Vec3d(0.0D, 0.0D, 0.0D);
     }
 
@@ -91,49 +90,77 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public boolean isDaytime() {
-        if (isEclipse(0.0f)) {
-            return false;
-        }
-        return super.isDaytime();
+        return false;
     }
 
     public PlanetoidHandler getPlanet() {
         return SuSyDimensions.PLANETS.get(getDimension());
     }
 
-    private float realCelestialAngle(long worldTime, float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet != null && planet.getDayLength() > 0) {
-            float dayLengthMultiplier = planet.getDayLength();
-            long adjustedTime = (long) (worldTime / dayLengthMultiplier);
-            int dayPart = (int) (adjustedTime % TICKS_PER_DAY);
-            float angle = ((float) dayPart + partialTicks) / (float) TICKS_PER_DAY;
-            angle = angle - (float) Math.floor(angle);
-            angle = (angle + planet.getTimeOffset()) % 1.0F;
-            return angle;
-        }
-        return world.getCelestialAngle(partialTicks);
+    private Planetoid getGroundPlanet() {
+        return Planetoid.PLANETOIDS.inverse().get(getDimension());
+    }
+
+    public Vec3d getLocalUp(Planetoid ground, double x, double z) {
+        return CelestialObject.surfacePointToLocalUp(x, z, ground.getRadius());
+    }
+
+    public Vec3d getLocalUpForPlayer(Planetoid ground, EntityPlayer player) {
+        return CelestialObject.surfacePointToLocalUp(player.posX, player.posZ, ground.getRadius());
     }
 
     public boolean isEclipse(float partialTicks) {
-        if (world == null) return false;
+        double worldTime = world.getWorldTime() + partialTicks;
+        Planetoid ground = getGroundPlanet();
+        if (ground == null) return false;
 
-        long worldTime = world.getWorldTime();
+        CelestialObject sun = CelestialObject.findPrimaryStar(ground);
+        if (sun == null) return false;
 
-        float celestialAngle = calculateCelestialAngle(worldTime, partialTicks);
+        Vec3d sunPos = Orbit.computeAbsolutePosition(sun, worldTime);
+        Vec3d groundPos = Orbit.computeAbsolutePosition(ground, worldTime);
+        Vec3d toSun = sunPos.subtract(groundPos);
+        double distToSun = toSun.length();
+        if (distToSun < 1e-15) return false;
+        Vec3d toSunDir = toSun.normalize();
+        double angularRadiusSun = sun.getRadiusAU() / distToSun;
 
-        float solarAltitude = MathHelper.sin(celestialAngle * ((float) Math.PI * 2F));
+        for (CelestialObject child : ground.getChildBodies()) {
+            if (isOccluding(child, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
+                return true;
+        }
 
-        if (Math.abs(solarAltitude) > 0.035f) return false;
+        CelestialObject parent = ground.getParentBody();
+        if (parent != null && !(parent instanceof Star)) {
+            if (isOccluding(parent, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
+                return true;
+        }
 
-        float angleFromZenith = Math.abs(celestialAngle - 0.25f);
-        if (angleFromZenith > 0.5f) angleFromZenith = 1.0f - angleFromZenith;
+        return false;
+    }
 
-        float angleInDegrees = angleFromZenith * 360.0f;
+    private boolean isOccluding(
+                                CelestialObject occluder,
+                                Vec3d observerPos,
+                                Vec3d toSunDir,
+                                double distToSun,
+                                double angularRadiusSun,
+                                double worldTime) {
+        Vec3d oPos = Orbit.computeAbsolutePosition(occluder, worldTime);
+        Vec3d toOccluder = oPos.subtract(observerPos);
+        double distToOccluder = toOccluder.length();
+        if (distToOccluder < 1e-15) return false;
 
-        float earthAngularRadius = 0.95f;
+        double projDist = toOccluder.dotProduct(toSunDir);
+        if (projDist <= 0 || projDist >= distToSun) return false;
 
-        return angleInDegrees < earthAngularRadius;
+        Vec3d perp = toOccluder.subtract(toSunDir.scale(projDist));
+        double distPerp = perp.length();
+
+        double angularRadiusOccluder = occluder.getRadiusAU() / distToOccluder;
+        double angularSeparation = distPerp / distToOccluder;
+
+        return angularSeparation < angularRadiusOccluder + angularRadiusSun;
     }
 
     @Override
@@ -152,13 +179,20 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public float getSunBrightness(float partialTicks) {
-        if (isEclipse(partialTicks)) return 0.0f;
-        // celestialAngle is linear: 0=dawn, 0.25=noon, 0.5=dusk, 0.75=midnight
-        // sin(angle*2π) -> 0 at dawn/dusk, 1 at noon, -1 at midnight
-        float celestialAngle = world.getCelestialAngle(partialTicks);
-        float solarAltitude = MathHelper.sin(celestialAngle * ((float) Math.PI * 2F));
-        // No atmosphere = no twilight; sun above horizon = full light, below = total dark
-        return MathHelper.clamp(solarAltitude, 0.0F, 1.0F);
+        if (world.isRemote) {
+            var mc = Minecraft.getMinecraft();
+            if (mc.player != null) {
+                Planetoid ground = getGroundPlanet();
+                if (ground != null) {
+                    Vec3d localUp = getLocalUpForPlayer(ground, mc.player);
+                    double solarAltitude = CelestialObject.computeSolarAltitude(
+                            ground, localUp, world.getWorldTime() + partialTicks);
+                    if (!Double.isNaN(solarAltitude))
+                        return (float) MathHelper.clamp(solarAltitude * 4.0, 0.0, 1.0);
+                }
+            }
+        }
+        return 0.0f;
     }
 
     @Override
@@ -169,57 +203,21 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public float getCurrentMoonPhaseFactor() {
-        if (isEclipse(0.0f)) return 1.0f;
-        return 0.25f; // Normal Moon lighting (no actual moon)
+        return 0.25f;
     }
 
     @Override
     public float getCloudHeight() {
-        return -100.0f; // No clouds on the Moon
+        return -100.0f;
     }
 
     @Override
-    public float calculateCelestialAngle(long worldTime, float partialTicks) {
-        PlanetoidHandler planet = getPlanet();
-        if (planet != null) {
-            if (isEclipse(partialTicks)) {
-                return 0.75f; // Trick Minecraft into treating it as midnight
-            }
-            if (planet.getDayLength() > 0) {
-                float dayLengthMultiplier = planet.getDayLength();
-                long adjustedTime = (long) (worldTime / dayLengthMultiplier);
-                int dayPart = (int) (adjustedTime % TICKS_PER_DAY);
-                float angle = ((float) dayPart + partialTicks) / (float) TICKS_PER_DAY;
-                angle = angle - (float) Math.floor(angle);
-                angle = (angle + planet.getTimeOffset()) % 1.0F;
-                return angle;
-            }
-        }
-        return super.calculateCelestialAngle(worldTime, partialTicks);
-    }
-
-    @Override
-    public boolean canDoRainSnowIce(net.minecraft.world.chunk.Chunk chunk) {
+    public boolean canDoRainSnowIce(Chunk chunk) {
         return false;
     }
 
     @Override
-    public void onWorldUpdateEntities() {
-        super.onWorldUpdateEntities();
-        this.world.getWorldInfo().setRainTime(0);
-        this.world.getWorldInfo().setRaining(false);
-    }
-
-    @Override
-    public void updateWeather() {
-        this.world.getWorldInfo().setRainTime(0);
-        this.world.getWorldInfo().setRaining(false);
-        this.world.getWorldInfo().setThunderTime(0);
-        this.world.getWorldInfo().setThundering(false);
-    }
-
-    @Override
-    public boolean canDoLightning(net.minecraft.world.chunk.Chunk chunk) {
+    public boolean canDoLightning(Chunk chunk) {
         return false;
     }
 }

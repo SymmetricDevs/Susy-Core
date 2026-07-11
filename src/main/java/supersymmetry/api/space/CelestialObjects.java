@@ -56,17 +56,19 @@ public class CelestialObjects {
         // divided by 10k for testing
         CelestialOrbitRegistry.register(EARTH, new Orbit(
                 1.0, 0.0167086, 0.0, 0.0,
-                Math.toRadians(288.1), Math.toRadians(357.5), 0L, 8766000L / 10000));
+                Math.toRadians(288.1), Math.toRadians(357.5), 0L, 8766000L));
 
         CelestialOrbitRegistry.register(MOON, new Orbit(
                 0.00257, 0.0549, Math.toRadians(5.145), Math.toRadians(125.08),
-                Math.toRadians(318.06), Math.toRadians(38.34), 0L, 655720L / 10000));
+                Math.toRadians(318.06), Math.toRadians(38.34), 0L, 655720L));
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             RENDERER = new CelestialRenderer();
             RENDERER.registerRenderer(SUN, new SunGlowRenderer());
-            RENDERER.registerRenderer(EARTH, new CubemapPlanetRenderer(EARTH_CUBEMAP));
-            RENDERER.registerRenderer(MOON, new CubemapPlanetRenderer(MOON_CUBEMAP));
+            RENDERER.registerRenderer(EARTH, new CubemapPlanetRenderer(EARTH_CUBEMAP)
+                    .setRotationPeriod(23934f));
+            RENDERER.registerRenderer(MOON, new CubemapPlanetRenderer(MOON_CUBEMAP)
+                    .setRotationPeriod(655720f));
         }
     }
 }
