@@ -235,7 +235,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
                 passenger instanceof EntityPlayer player) {
             player.sendStatusMessage(
                     new TextComponentTranslation("susy.rocket.msg.launch",
-                            (getLaunchTime() - getAge()) / 20),
+                            (getLaunchTime() - this.world.getTotalWorldTime()) / 20),
                     true);
         }
     }
