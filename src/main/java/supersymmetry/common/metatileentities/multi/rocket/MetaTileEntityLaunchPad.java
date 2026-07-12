@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,6 +36,7 @@ import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -671,5 +673,18 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public boolean checkRocket() {
         return this.selectedRocket != null && !this.selectedRocket.isDead;
+    }
+
+    // stupid annoying issue with part checking on chunk reloads
+    @Override
+    public void checkStructurePattern() {
+        TileEntity te = this.getWorld().getTileEntity(getPos());
+        if (te != this.getHolder()) {
+            if (te instanceof MetaTileEntityHolder holder &&
+                    holder.getMetaTileEntity() instanceof MetaTileEntityLaunchPad launchPad) {
+                launchPad.invalidateStructure();
+            }
+        }
+        super.checkStructurePattern();
     }
 }
