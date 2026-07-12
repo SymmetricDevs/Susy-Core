@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import cam72cam.immersiverailroading.model.StockModel;
+import cam72cam.immersiverailroading.model.FreightModel;
 import cam72cam.immersiverailroading.model.components.ComponentProvider;
 import cam72cam.immersiverailroading.model.components.ModelComponent;
 import cam72cam.mod.render.obj.OBJRender;
@@ -18,7 +18,7 @@ import supersymmetry.integration.immersiverailroading.model.part.TransporterLift
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 import util.Matrix4;
 
-public class TransporterErectorModel extends StockModel<EntityTransporterErector, TransporterErectorDefinition> {
+public class TransporterErectorModel extends FreightModel<EntityTransporterErector, TransporterErectorDefinition> {
 
     // The rocket is rotated about this point (in OBJ model space) by the lifter arm. It is also the
     // end the rocket is assembled from, so the assembly sweep grows away from it along the X axis.
