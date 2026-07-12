@@ -275,6 +275,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLockedCrate LOCKED_TUNGSTENSTEEL_CRATE;
 
     public static MetaTileEntityDroneDepositBasket DRONE_DEPOSIT_BASKET;
+    public static MetaTileEntityDroneDepositBasket ADVANCED_DRONE_DEPOSIT_BASKET;
 
     // SUSY's large boilers
     public static MetaTileEntitySuSyLargeBoiler LARGE_BRONZE_BOILER;
@@ -738,7 +739,10 @@ public class SuSyMetaTileEntities {
 
         DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18210,
                 new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), Materials.Polyethylene,
-                        1));
+                        4));
+        ADVANCED_DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18211,
+                new MetaTileEntityDroneDepositBasket(susyId("advanced_drone_deposit_basket"), Materials.Epoxy,
+                        16));
 
         // Boilers
         LARGE_BRONZE_BOILER = registerMetaTileEntity(18300,
