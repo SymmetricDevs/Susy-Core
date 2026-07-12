@@ -100,6 +100,15 @@ public class SusyGuiTextures {
             .imageSize(18, 36)
             .build();
 
+    public static final UITexture OVERLAY_IN = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/overlay/in_slot_overlay.png")
+            .imageSize(18, 18)
+            .build();
+    public static final UITexture OVERLAY_OUT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/overlay/out_slot_overlay.png")
+            .imageSize(18, 18)
+            .build();
+
     public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png");
     public static final UITexture GREGTECH_LOGO_XMAS = fullImage(GTValues.MODID,
             "textures/gui/icon/gregtech_logo_xmas.png");

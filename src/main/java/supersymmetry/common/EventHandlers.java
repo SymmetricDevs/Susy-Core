@@ -147,7 +147,7 @@ public class EventHandlers {
     // down and rebuilds the client world (and player entity) twice; mounting before that
     // settles binds the passenger to a transient client player that is immediately
     // discarded, leaving the player frozen with a phantom "unmount" prompt.
-    private static final int MOUNT_DELAY = 10;
+    private static final int MOUNT_DELAY = 4;
 
     private static @NotNull void handleEntityTransfer() {
         List<DimensionRidingSwapData> toRemove = new ArrayList<>();
@@ -159,11 +159,6 @@ public class EventHandlers {
                 continue;
             }
             long now = mount.world.getTotalWorldTime();
-            SusyLog.logger.info(now);
-
-            for (Entity entity : mount.world.loadedEntityList) {
-                SusyLog.logger.info(entity + " " + entity.getRidingEntity() + " " + entity.isDead);
-            }
 
             if (!data.transferred) {
                 // Phase 1: move the player into the mount's dimension once the mount has
