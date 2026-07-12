@@ -127,7 +127,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public void startCountdown(int length) {
         this.setCountdownStarted(true);
-        this.setLaunchTime(this.getAge() + length);
+        // it will take six years chillax
+        this.setLaunchTime((int) this.world.getTotalWorldTime() + length);
         this.setStartPos((float) this.posY);
     }
 
@@ -243,10 +244,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     public void onUpdate() {
         super.onUpdate();
         boolean launched = this.isLaunched();
-        int age = this.getAge();
         int launchTime = this.getLaunchTime();
 
-        if (this.isCountdownStarted() && !launched && age >= launchTime) {
+        if (this.isCountdownStarted() && !launched && this.world.getTotalWorldTime() >= launchTime) {
             this.launchRocket();
         }
         this.setAge(this.getAge() + 1);

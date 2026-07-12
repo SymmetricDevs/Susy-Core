@@ -56,19 +56,20 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 import supersymmetry.common.EventHandlers;
-import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.event.GravityHandler;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.RocketConfiguration;
+import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
@@ -254,42 +255,23 @@ public class EntityLander extends EntityAbstractRocket
 
     @Override
     protected void act() {
-        if (getPassengers().isEmpty()) {
-            return;
-        }
-
-        NBTTagCompound tag = this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
-        RocketConfiguration config = new RocketConfiguration(tag);
         // Land on next planet
-        RocketConfiguration.MissionConfiguration next = config.popFront();
-        while (!config.isEmpty() && next.missionType != RocketConfiguration.MissionType.Manned) {
-            next = config.popFront();
+        RocketConfiguration.MissionConfiguration next = InstrumentLander.getMissionConfiguration(this);
+        if (next == null) {
+            SusyLog.logger.error(
+                    "The next mission really should have been defined if the lander launched... welp, you deserve this NPE");
         }
-        Entity passenger = this.getPassengers().get(0);
-
-        if (next.missionType != RocketConfiguration.MissionType.Manned) {
-            if (passenger instanceof EntityLivingBase living) {
-                living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
-            }
-            passenger.setDead();
-            return;
-        }
-
-        EntityLander dropPod = new EntityLander(this.world, next.landingPos.getX(), 350, next.landingPos.getZ());
-        dropPod.setInventory(cargo);
-
-        // Pop the next mission from the rocket configuration
-        dropPod.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
+        Entity passenger = getPassengers().isEmpty() ? null : this.getPassengers().get(0);
         // Cannot use TeleportHandler here because it doesn't get the new entity
-        Entity teleported = dropPod.changeDimension(next.dimension, new DropPodTeleporter());
-        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
+        Entity teleported = InstrumentLander.spawnLander(this, next, true);
+        if (passenger != null) {
+            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
+        }
     }
 
     @Override
     public void startCountdown(int length) {
-        NBTTagCompound tag = this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
-        RocketConfiguration config = new RocketConfiguration(tag);
-        if (config.isEmpty()) {
+        if (InstrumentLander.getMissionConfiguration(this) == null) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
                 this.setDead();
@@ -655,14 +637,15 @@ public class EntityLander extends EntityAbstractRocket
                         .margin(7, 0)
                         .widthRel(1f)
                         .coverChildrenHeight()
-                        .child(new ItemSlot().slot(insertSlot.singletonSlotGroup()))
-                        .child(new ItemSlot().slot(extractSlot.slotGroup(cargoInventory)))
+                        .child(new ItemSlot().slot(insertSlot.singletonSlotGroup()).overlay(SusyGuiTextures.OVERLAY_IN))
+                        .child(new ItemSlot().slot(extractSlot.slotGroup(cargoInventory))
+                                .overlay(SusyGuiTextures.OVERLAY_OUT))
                         .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
                                 .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
-                                        .rightRel(0.3f).height(18))
+                                        .rightRel(0.5f).height(18))
                                 .child(IKey.lang("susy.lander.volume", () -> new Object[] { getCargoVolumeString() })
                                         .asWidget()
-                                        .rightRel(0.3f).height(18))))
+                                        .rightRel(0.5f).height(18))))
                 .bindPlayerInventory();
     }
 
