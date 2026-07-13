@@ -61,5 +61,15 @@ public class SuSyMaterialFlags {
             .requireFlags(GCYMMaterialFlags.NO_ALLOY_BLAST_RECIPES)
             .build();
 
+    public static final MaterialFlag GENERATE_PINS = (new MaterialFlag.Builder("generate_pins"))
+            .requireProps(PropertyKey.DUST)
+            .requireFlags(MaterialFlags.GENERATE_PLATE)
+            .build();
+
+    public static final MaterialFlag GENERATE_SPUTTERING_TARGET = (new MaterialFlag.Builder(
+            "GENERATE_SPUTTERING_TARGET"))
+                    .requireProps(PropertyKey.DUST)
+                    .build();
+
     public SuSyMaterialFlags() {}
 }

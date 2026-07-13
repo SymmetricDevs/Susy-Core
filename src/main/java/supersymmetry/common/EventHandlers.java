@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.GameRules;
@@ -85,8 +86,13 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onWorldLoad(WorldEvent.Load event) {
         GameRules gameRules = event.getWorld().getGameRules();
+
         if (!gameRules.hasRule("doInvasions")) {
             gameRules.addGameRule("doInvasions", "true", GameRules.ValueType.BOOLEAN_VALUE);
+        }
+
+        if (!gameRules.hasRule("factionViolence")) {
+            gameRules.addGameRule("factionViolence", "true", GameRules.ValueType.BOOLEAN_VALUE);
         }
     }
 
@@ -98,8 +104,11 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
         World world = event.world;
-
         if (world.isRemote || !(world instanceof WorldServer server)) {
+            return;
+        }
+        // this can be done earlier, saves some tps
+        if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
         if (!travellingPassengers.isEmpty()) {
@@ -112,16 +121,20 @@ public class EventHandlers {
         // Process lander spawn queue for all dimensions
         processLanderSpawnQueue(server);
 
+        // to be replaced with a proper setter/getter in grs, we will have invasions in other later dims as well
         if (world.provider.getDimension() != 0) {
-            return;
-        }
-        if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
         }
 
         PlayerList list = server.getMinecraftServer().getPlayerList();
         MobHordeWorldData mobHordeWorldData = MobHordeWorldData.get(world);
-        list.getPlayers().forEach(p -> mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p));
+        list.getPlayers().forEach(p -> {
+            try {
+                mobHordeWorldData.getPlayerData(p.getPersistentID()).update(p);
+            } catch (NBTException e) {
+                throw new RuntimeException(e);
+            }
+        });
         mobHordeWorldData.markDirty();
     }
 

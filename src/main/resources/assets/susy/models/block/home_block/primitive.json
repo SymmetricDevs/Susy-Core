@@ -1,9 +1,11 @@
 {
-  "parent": "block/orientable",
+  "parent": "block/cube",
   "textures": {
-    "front": "gregtech:blocks/home_blocks/primitive/primitive_front",
-    "side": "gregtech:blocks/home_blocks/primitive/primitive_left",
+    "north": "gregtech:blocks/home_blocks/primitive/primitive_front",
+    "east": "gregtech:blocks/home_blocks/primitive/primitive_left",
     "south": "gregtech:blocks/home_blocks/primitive/primitive_back",
-    "top": "gregtech:blocks/home_blocks/primitive/primitive_top"
+    "west": "gregtech:blocks/home_blocks/primitive/primitive_right",
+    "up": "gregtech:blocks/home_blocks/primitive/primitive_top",
+    "down": "gregtech:blocks/home_blocks/primitive/primitive_bottom"
   }
 }

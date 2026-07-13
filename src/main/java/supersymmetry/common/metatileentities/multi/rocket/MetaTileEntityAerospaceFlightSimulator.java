@@ -290,7 +290,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         bp.AFSSuccessChance = successProb;
 
         this.rocketBlueprintSlot.setNBT(
-                (_) -> {
+                (t) -> {
                     NBTTagCompound n = bp.writeToNBT();
                     n.setBoolean("buildstat", true);
                     return n;

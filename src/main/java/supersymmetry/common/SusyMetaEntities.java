@@ -11,10 +11,7 @@ import supersymmetry.client.renderer.handler.LanderRenderer;
 import supersymmetry.client.renderer.handler.entity.DroneRenderer;
 import supersymmetry.client.renderer.handler.entity.DropPodRenderer;
 import supersymmetry.client.renderer.handler.entity.RocketRenderer;
-import supersymmetry.common.entities.EntityDrone;
-import supersymmetry.common.entities.EntityDropPod;
-import supersymmetry.common.entities.EntityLander;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.*;
 
 public class SusyMetaEntities {
 
@@ -27,6 +24,8 @@ public class SusyMetaEntities {
                 "Rocket", 3, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "lander"), EntityLander.class,
                 "Lander", 4, Supersymmetry.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "explosion"), EntityExplosion.class,
+                "Explosion", 5, Supersymmetry.instance, 64, 3, false);
     }
 
     @SideOnly(Side.CLIENT)

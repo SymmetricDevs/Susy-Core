@@ -7,7 +7,10 @@ tile.wire_coil.tooltip_evaporation=§8Evaporation Pool
 tile.wire_coil.tooltip_energy_evaporating=  §cHeat Generation: §f%,d kJ/t
 
 tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
+tile.sintering_brick.sintering_block_brick_bloom_deco.name=Active Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
+tile.sintering_brick.sintering_block_magnetoplated_bloom_deco.name=Active Magnetoplated Sintering Block
+
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
 tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
@@ -25,6 +28,8 @@ tile.susy_multiblock_casing.sieve_tray.name=Sieve Tray
 tile.susy_multiblock_casing.coalescence_plate.name=Coalescence Plate
 tile.susy_multiblock_casing.structural_packing.name=Structural Packing
 tile.susy_multiblock_casing.ulv_structural_casing.name=Basic Structural Casing
+tile.susy_multiblock_casing.hydrostatic_casing.name=Hydrostatic Casing
+tile.susy_multiblock_casing.aluminium_gearbox.name=Aluminium Gearbox
 tile.susy_multiblock_casing.drone_pad.name=Drone Pad
 tile.susy_multiblock_casing.heavy_duty_pad.name=Heavy Duty Pad
 tile.susy_multiblock_casing.synthetic_mullite_refractory.name=Synthetic Mullite Refractory Bricks
@@ -97,13 +102,14 @@ tile.deposit_block.hydrothermal.name=Hydrothermal Deposit Block
 tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
 tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
+tile.deposit_block.evaporite.name=Evaporite Deposit Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
-tile.resource_block.non_marine_evaporite.name=Non Marine Evaporite Deposit
-tile.resource_block.halide_evaporite.name=Halide Evaporite Deposit
-tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite Deposit
-tile.resource_block.carbonate_evaporite.name=Carbonate Evaporite Deposit
+tile.resource_block.non_marine_evaporite.name=Non Marine Evaporite
+tile.resource_block.halide_evaporite.name=Halide Evaporite
+tile.resource_block.sulfate_evaporite.name=Sulfate Evaporite
+tile.resource_block.carbonate_evaporite.name=Carbonate Evaporite
 tile.resource_block.monazite_alluvial.name=Alluvial Monazite Deposit
 tile.resource_block.bastnasite_alluvial.name=Alluvial Bastnasite Deposit
 tile.resource_block.euxenite_alluvial.name=Alluvial Euxenite Deposit
@@ -158,6 +164,9 @@ tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
+tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
+
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -203,6 +212,19 @@ tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
+
+tile.lunar_concrete.lunar_concrete_smooth.name=Smooth Lunar Concrete
+tile.lunar_concrete.lunar_concrete_bricks.name=Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_cracked.name=Cracked Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_small.name=Small Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_bricks_square.name=Square Lunar Concrete Bricks
+tile.lunar_concrete.lunar_concrete_chiseled.name=Chiseled Lunar Concrete
+tile.lunar_concrete.lunar_concrete_cobble.name=Lunar Concrete Cobblestone
+tile.lunar_concrete.lunar_concrete_polished.name=Polished Lunar Concrete
+tile.lunar_concrete.lunar_concrete_tiled.name=Lunar Concrete Tiles
+tile.lunar_concrete.lunar_concrete_tiled_small.name=Small Lunar Concrete Tiles
+tile.lunar_concrete.lunar_concrete_windmill_a.name=Lunar Concrete Windmill Tiles A
+tile.lunar_concrete.lunar_concrete_windmill_b.name=Lunar Concrete Windmill Tiles B
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Manganese Iron Arsenic Phosphide
@@ -274,6 +296,8 @@ item.material.oreprefix.thread=%s Thread
 item.material.oreprefix.dustWet=Wet %s Dust
 item.material.oreprefix.electrode=%s Electrode
 item.material.oreprefix.millBall=%s Mill Ball
+item.material.oreprefix.pin=%s Pin
+item.material.oreprefix.target=%s Sputtering Target
 
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
@@ -376,6 +400,8 @@ susy.machine.ball_mill.name=Ball Mill
 susy.machine.ball_mill.tooltip=They see me rolling
 susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
 susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
+susy.machine.attrition_scrubber.name=Attrition Scrubber
+susy.machine.attrition_scrubber.tooltip=Glorified Washing Machine
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
@@ -401,9 +427,9 @@ susy.multiblock.pattern.error.coils_or_bed=§cAll heating coils or evaporation b
 susy.multiblock.strand_casting.thickness=Thickness: %s
 susy.multiblock.strand_casting.width=Width: %s
 susy.multiblock.strand_casting.no_strand=No strand detected
-susy.multiblock.strand_casting.output_detected=Strand found only in the output slot
+susy.multiblock.strand_casting.output_detected=Strand found
 susy.multiblock.strand_casting.ore_prefix=Will output a: %s
-susy.multiblock.strand_casting.no_conversion=Currently not a valid item!
+susy.multiblock.strand_casting.no_conversion=§6This strand is not usable!
 
 susy.multiblock.natural_draft_cooling_tower.obstructed=The cold water basin is not filled!
 susy.multiblock.natural_draft_cooling_tower.obstructed.desc=The cold water basin must be filled with water for the Cooling Tower to operate.
@@ -448,7 +474,8 @@ susy.machine.dumper.tooltip.1=§2Base Dumping Rate:§7 §f %d L every 10 ticks
 susy.machine.froth_flotation_tank.name=Froth Flotation Tank
 susy.machine.multi_stage_flash_distiller.name=Multi Stage Flash Distiller
 susy.machine.high_temperature_distillation_tower.name=High Temperature Distillation Tower
-susy.machine.rotary_kiln.name=Rotary Kiln
+susy.machine.rotary_kiln.name=Rotary Kiln (Old)
+susy.machine.rotary_kiln_v2.name=Rotary Kiln
 susy.machine.low_pressure_cryogenic_distillation_plant.name=Low Pressure Cryogenic Distillation Plant
 susy.machine.high_pressure_cryogenic_distillation_plant.name=High Pressure Cryogenic Distillation Plant
 susy.machine.single_column_cryogenic_distillation_plant.name=Single Column Cryogenic Distillation Plant
@@ -499,6 +526,12 @@ susy.machine.mixer_settler_v2.name=Mixer Settler
 susy.machine.mixer_settler_v2.tooltip=First it mixes, then it settles... - Sun Tzu, The Art of SuSy
 
 susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at once
+
+susy.machine.electric_discharge_machine.name=Electric Discharge Machine (EDM)
+susy.machine.electric_discharge_machine.tooltip=Electronic Dance Machine
+
+susy.machine.cargo_drone_pad.name=Cargo Drone Pad
+susy.machine.cargo_drone_pad.tooltip=MarvNET v0.1
 
 # Properties
 susy.recipe.plasma_requirement=Requires plasma: %s
@@ -752,6 +785,21 @@ susy.machine.cvd.uiv.name=Epic CVD Unit III
 susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
+# ALD
+susy.machine.ald.lv.name=Basic ALD Unit
+susy.machine.ald.mv.name=Advanced ALD Unit
+susy.machine.ald.hv.name=Advanced ALD Unit II
+susy.machine.ald.ev.name=Advanced ALD Unit III
+susy.machine.ald.iv.name=Elite ALD Unit
+susy.machine.ald.luv.name=Elite ALD Unit II
+susy.machine.ald.zpm.name=Elite ALD Unit III
+susy.machine.ald.uv.name=Ultimate ALD Unit
+susy.machine.ald.uhv.name=Epic ALD Unit
+susy.machine.ald.uev.name=Epic ALD Unit II
+susy.machine.ald.uiv.name=Epic ALD Unit III
+susy.machine.ald.uxv.name=Epic ALD Unit IV
+susy.machine.ald.opv.name=Legendary ALD Unit
+
 # Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
@@ -766,6 +814,12 @@ susy.machine.ion_implanter.uev.name=Epic Ion Implanter II
 susy.machine.ion_implanter.uiv.name=Epic Ion Implanter III
 susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
+
+# Screen Printer
+susy.machine.screen_printer.lv.name=Basic Screen Printer
+susy.machine.screen_printer.mv.name=Advanced Screen Printer
+susy.machine.screen_printer.hv.name=Advanced Screen Printer II
+susy.machine.screen_printer.ev.name=Advanced Screen Printer III
 
 # Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
@@ -882,6 +936,12 @@ susy.machine.resistance_furnace.uiv.name=Epic Resistance Furnace III
 susy.machine.resistance_furnace.uxv.name=Epic Resistance Furnace IV
 susy.machine.resistance_furnace.opv.name=Legendary Resistance Furnace
 
+# Greenhouse
+susy.machine.greenhouse.name=Greenhouse
+susy.machine.greenhouse.tooltip.1=Each cell is one additional parallel
+susy.machine.greenhouse.tooltip.2=Max parallels: §c6
+recipemap.greenhouse_plant.name=Greenhouse
+
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
@@ -956,6 +1016,21 @@ susy.machine.sputter_deposition.uiv.name=Epic Sputtering Machine III
 susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
+# Evaporation Deposition Machine
+susy.machine.evaporation_deposition.lv.name=Basic Evaporation Deposition Machine
+susy.machine.evaporation_deposition.mv.name=Advanced Evaporation Deposition Machine
+susy.machine.evaporation_deposition.hv.name=Advanced Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.ev.name=Advanced Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.iv.name=Elite Evaporation Deposition Machine
+susy.machine.evaporation_deposition.luv.name=Elite Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.zpm.name=Elite Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.uv.name=Ultimate Evaporation Deposition Machine
+susy.machine.evaporation_deposition.uhv.name=Epic Evaporation Deposition Machine I
+susy.machine.evaporation_deposition.uev.name=Epic Evaporation Deposition Machine II
+susy.machine.evaporation_deposition.uiv.name=Epic Evaporation Deposition Machine III
+susy.machine.evaporation_deposition.uxv.name=Epic Evaporation Deposition Machine IV
+susy.machine.evaporation_deposition.opv.name=Legendary Evaporation Deposition Machine
+
 susy.machine.component_scanner.name=Spacecraft Component Scanner
 susy.machine.component_scanner.scan_button=Scan Part
 susy.machine.component_scanner.unscanned=Component unscanned.
@@ -986,6 +1061,7 @@ recipemap.polymerization_tank.name=Polymerization Tank
 recipemap.uv_light_box.name=UV Light Box
 recipemap.ion_implantation.name=Ion Implantation
 recipemap.cvd.name=Chemical Vapor Deposition
+recipemap.ald.name=Atomic Layer Deposition
 recipemap.ore_sorter.name=Ore Sorting
 recipemap.cooling_tower.name=Cooling Tower
 recipemap.natural_draft_cooling_tower.name=Natural Draft Cooling Tower
@@ -1045,8 +1121,16 @@ recipemap.induction_furnace.name=Induction Furnace
 recipemap.resistance_furnace.name=Resistance Furnace
 recipemap.eccentric_roll_crusher.name=Eccentric Roll Crushing
 recipemap.ball_mill.name=Ball Milling
+recipemap.atomic_layer_deposition.name=Atomic Layer Deposition
+recipemap.wire_bonding.name=Wire Bonding
+recipemap.screen_printer.name=Screen Printing
+recipemap.plasma_ashing.name=Plasma Asher
+recipemap.resist_processor.name=Photoresist Processor
+recipemap.reactive_ion_etching.name=Reactive Ion Etching
+recipemap.attrition_scrubber.name=Attrition Scrubbing
+recipemap.edm.name=Electric Discharge Machining (EDM)
 
-
+strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
 # Energy Hatches
@@ -1058,6 +1142,13 @@ susy.machine.energy_hatch.output_16a.mv.name=MV 16A Dynamo Hatch
 susy.machine.energy_hatch.output_4a.hv.name=HV 4A Dynamo Hatch
 susy.machine.energy_hatch.output_16a.hv.name=HV 16A Dynamo Hatch
 susy.machine.energy_hatch.output_16a.ev.name=EV 16A Dynamo Hatch
+
+susy.machine.substation_energy_hatch.input_64a.ev.name=EV 64A Substation Energy Hatch
+
+susy.machine.substation_energy_hatch.output_64a.lv.name=LV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.mv.name=MV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.hv.name=HV 64A Substation Dynamo Hatch
+susy.machine.substation_energy_hatch.output_64a.ev.name=EV 64A Substation Dynamo Hatch
 
 # Quadruple & Nonuple Fluid Hatches
 
@@ -1088,6 +1179,12 @@ susy.machine.ordered_dt.tooltip.2=§cNot putting a fluid output in the Nth layer
 # Logistics
 susy.machine.delegator.tooltip.non_recursion=§6Cannot be attached to other Delegators!
 susy.top.delegator.delegating_face=Delegating face:
+supersymmetry.top.no_strand=No strand
+supersymmetry.top.thickness=Thickness:
+supersymmetry.top.width=Width:
+supersymmetry.top.material=Material:
+supersymmetry.top.strand_not_usable=Not a usable strand!
+supersymmetry.top.conversion=Making:
 
 susy.machine.bridge.inv.name=Inventory Bridge
 susy.machine.bridge.inv.tooltip=§bRelays Inventories
@@ -1118,14 +1215,22 @@ metaitem.restrictive_filter.name=Restrictive Item Filter
 metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. /n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
-metaitem.track_segment.tooltip=For use in the §8tunnelbore.
+metaitem.track_segment.tooltip=For use in the §8tunnel bore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.shape.mold.target.name=Sputtering Target Mold
+metaitem.location_card.name=Location Card
+metaitem.cargo_drone.basic.name=Basic Cargo Drone
+metaitem.cargo_drone.basic.tooltip=Max range: §61000 blocks§7, speed: §b2.5 blocks/second§b
+metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
+metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
+metaitem.cargo_drone.elite.name=Elite Cargo Drone
+metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
 
 # Catalysts
-susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
+susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
 susy.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
 susy.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
 susy.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
@@ -1195,6 +1300,17 @@ susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
+susy.cargo_drone_pad.no_basket=§cNot linked§c
+susy.cargo_drone_pad.no_space_in_basket=§6Target basket is not empty§6
+susy.cargo_drone_pad.basket_pos=§bLinked to deposit basket at§b %s
+susy.cargo_drone_pad.distance=§bDistance to target:§b %s blocks
+susy.cargo_drone_pad.initiated=§2Depositing item...§2
+susy.cargo_drone_pad.deposited=§aReturning...§a
+susy.cargo_drone_pad.progress=§b%s%%§b
+
+susy.location_card.tooltip.coords=§bStored coordinates: §b
+susy.location_card.tooltip.no_coords=No coordinates stored. Shift-right-click a Drone Deposit Basket to link
+chat.susy.location_card.encode=§aSuccessfully stored target basket's position§a
 
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
@@ -1271,6 +1387,9 @@ susy.command.horde.start.started=Successfully started %s invasion.
 susy.command.horde.stop.usage=/mobHorde stop
 susy.command.horde.stop.has_active_no_invasion=No active invasion to stop.
 susy.command.horde.stop.stopped=Successfully stopped %s invasion.
+susy.command.horde.kill.usage=/mobHorde kill
+susy.command.horde.kill.has_active_no_invasion=No active invasion to kill.
+susy.command.horde.kill.killed=Successfully killed %s invasion.
 susy.command.horde.status.usage=/mobHorde status <player>
 susy.command.horde.status.has_active_invasion=Player %s has an active %s invasion for %d ticks. It will time out in %s ticks.
 susy.command.horde.status.no_active_invasion=Player %s has no active invasion.
@@ -1383,6 +1502,10 @@ susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
 susy.machine.locked_crate.titanium.name=Titanium Crate
 susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
 
+
+susy.machine.drone_deposit_basket.name=Drone Deposit Basket
+susy.machine.advanced_drone_deposit_basket.name=Advanced Drone Deposit Basket
+
 # Boilers
 susy.machine.large_boiler.bronze.name=Large Bronze Boiler
 susy.machine.large_boiler.steel.name=Large Steel Boiler
@@ -1417,6 +1540,7 @@ susy.machine.steam_boiler_liquid.bronze.name=Small Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.bronze.tooltip=A Boiler running off Liquids
 susy.machine.steam_boiler_liquid.steel.name=High Pressure Steam Liquid Boiler
 susy.machine.steam_boiler_liquid.steel.tooltip=Faster than Small Steam Liquid Boiler
+susy.machine.steam_limited.ulv_only.tooltip=Can only run recipes up to 8 EU/t
 
 #Fake Wool
 tile.fake_wool.whitefakewool.name=White Asbestos Fiber
@@ -1520,3 +1644,28 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+
+##Factions
+#Items
+metaitem.entity_tagger.name=Factions Dev Tool
+metaitem.faction_radio.name=Universal Federation Radio
+#Blocks
+tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
+tile.raid_flare_block.fed_flare.name=Former Federation Raid Flare
+#Comments and text
+chat.susy.radio.no_tag=§7This radio appears broken...
+chat.susy.radio.no_faction=§7This radio is not tuned to any known frequency...
+chat.susy.radio.get_hate=§7The radio intercepts a message! (%s§7)
+ui.susy.settings.peaceful_button.ln1=Change to Peaceful?
+ui.susy.settings.peaceful_button.ln2=Supersymmetry is intended to be played at difficulty Easy or higher.\nIf you do not like mobs attacking your base, use §6/gamerule doInvasions false§f instead.\nOnly change this setting if you know what you're doing, as doing so may break parts of the game.
+#Commands
+susy.command.faction.generic.usage=Usage: /factionHate <get|add|set> | /factionHate add Bandits 5
+susy.command.faction.get=current HATE for %s: %s
+susy.command.faction.add=Added %s HATE to faction: %s
+susy.command.faction.set=Set %s HATE for faction: %s
+susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+chat.susy.location_card.x=X (%s)
+chat.susy.location_card.y=Y (%s)
+chat.susy.location_card.z=Z (%s)
+

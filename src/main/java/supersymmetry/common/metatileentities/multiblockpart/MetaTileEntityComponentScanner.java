@@ -173,10 +173,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     }
                     getInventory()
                             .setNBT(
-                                    _ -> {
-                                        NBTTagCompound t = scanResult.get();
-                                        component.writeToNBT(t);
-                                        return t;
+                                    t -> {
+                                        NBTTagCompound tag = scanResult.get();
+                                        component.writeToNBT(tag);
+                                        return tag;
                                     });
                     errorPos = null;
                     break;

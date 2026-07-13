@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.modules.ModuleManager;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
@@ -23,12 +24,12 @@ public class ElytraFlyingUtils {
     @SuppressWarnings("DataFlowIssue")
     public static boolean isElytraFlying(@NotNull EntityLivingBase entity) {
         ItemStack itemstack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (isFlying(entity, itemstack)) {
+        if (!itemstack.isEmpty() && isFlying(entity, itemstack)) {
             return true;
         }
-        if (ModuleManager.getInstance().isModuleEnabled(SuSyModules.MODULE_BAUBLES)) {
+        if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
             itemstack = BaublesModule.getElytraBauble(entity);
-            return isFlying(entity, itemstack);
+            return !itemstack.isEmpty() && isFlying(entity, itemstack);
         }
         return false;
     }

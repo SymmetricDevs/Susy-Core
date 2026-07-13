@@ -1,6 +1,9 @@
 package supersymmetry.integration.jei;
 
+import static supersymmetry.api.fluids.SusyGeneratedFluidHandler.CAST_MATERIALS;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,10 +18,13 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.integration.jei.category.StrandCategory;
+import supersymmetry.integration.jei.category.StrandInfo;
 import supersymmetry.integration.jei.ingredient.ParticleBeamHelper;
 import supersymmetry.integration.jei.ingredient.ParticleBeamListFactory;
 import supersymmetry.integration.jei.ingredient.ParticleBeamRenderer;
@@ -63,5 +69,20 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_STEEL_BOILER.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
+
+        String strandCastingId = GTValues.MODID + ":strand_casting";
+        registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.ROLLING_MILL.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.CLUSTER_MILL.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.FLYING_SHEAR.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.SLAB_MOLD.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.BILLET_MOLD.getStackForm(), strandCastingId);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.STRAND_COOLER.getStackForm(), strandCastingId);
+    }
+
+    @Override
+    public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
+        registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }

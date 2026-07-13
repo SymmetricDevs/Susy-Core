@@ -1,6 +1,7 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,11 +17,9 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
-import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
-import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -31,15 +30,9 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.DataCardBehavior;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.RocketConfigBehavior;
+import supersymmetry.common.item.behavior.*;
 
 public class SuSyMetaItems {
-
-    // DO NOT CHANGE
-    private static int itemIndex = 1;
 
     private static StandardMetaItem metaItem;
     public static SuSyArmorItem armorItem;
@@ -53,6 +46,13 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+    public static MetaValueItem SHAPE_MOLD_TARGET;
+    public static MetaValueItem ENTITY_TAGGER;
+    public static MetaValueItem FACTION_RADIO;
+    public static MetaValueItem BASIC_CARGO_DRONE;
+    public static MetaValueItem ADVANCED_CARGO_DRONE;
+    public static MetaValueItem LOCATION_CARD;
+    public static MetaValueItem ELITE_CARGO_DRONE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -122,52 +122,61 @@ public class SuSyMetaItems {
     private static void initMetaItem() {
         addExtraBehaviours();
 
-        // initialize metaitems here
-        if (itemIndex != 1) { // but only once
-            return;
-        }
-        CATALYST_BED_SUPPORT_GRID = initOneItem("catalyst_bed_support_grid");
-        CONVEYOR_STEAM = initOneItem("conveyor.steam")
+        // IDs start at 1 for historical reasons. Do not renumber existing items.
+        CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
+        CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam")
                 .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
                         I18n.format("metaitem.conveyor.module.tooltip"),
                         I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))));
-        PUMP_STEAM = initOneItem("pump.steam").addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                I18n.format("metaitem.electric.pump.tooltip"),
-                I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
-        AIR_VENT = initOneItem("air_vent").addComponents(
+        PUMP_STEAM = metaItem.addItem(3, "pump.steam")
+                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
+                        I18n.format("metaitem.electric.pump.tooltip"),
+                        I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
+        AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))));
 
-        TRACK_SEGMENT = initOneItem("track_segment").addComponents(
+        TRACK_SEGMENT = metaItem.addItem(5, "track_segment").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.track_segment.length_info"))));
-        RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
-        EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
+        RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
+        EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
 
-        CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1);
+        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
+        ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
-        DATA_CARD = initOneItem("data_card").setMaxStackSize(1)
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
+
+        DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
-        DATA_CARD_ACTIVE = initOneItem("data_card.active").setMaxStackSize(1).addComponents(new DataCardBehavior(
-                lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
+        DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
+                .addComponents(new DataCardBehavior(
+                        lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
-        DATA_CARD_MASTER_BLUEPRINT = initOneItem("data_card.master_blueprint").setMaxStackSize(1)
+        DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(
                         lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
                         Arrays.asList("rocketType")));
 
-        TUNGSTEN_ELECTRODE = initOneItem("tungsten_electrode");
+        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
 
-        ROCKET_CONFIGURER = initOneItem("rocket_configurer").setMaxStackSize(1)
+        ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        PADDING_CLOTH = initOneItem("padding_cloth");
-    }
+        PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
 
-    // Ensures ID stability when merging
-    private static MetaItem<?>.MetaValueItem initOneItem(String unlocalizedName) {
-        MetaItem<?>.MetaValueItem ret = metaItem.addItem(itemIndex, unlocalizedName);
-        itemIndex++;
-        return ret;
+        SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
+
+        BASIC_CARGO_DRONE = metaItem.addItem(18, "cargo_drone.basic").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(basicDroneCharge, GTValues.MV));
+
+        ADVANCED_CARGO_DRONE = metaItem.addItem(19, "cargo_drone.advanced").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(advancedDroneCharge, GTValues.HV));
+
+        LOCATION_CARD = metaItem.addItem(20, "location_card").setMaxStackSize(1)
+                .addComponents(new LocationCardBehavior());
+
+        ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
+                .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
     }
 
     private static void addExtraBehaviours() {
