@@ -59,6 +59,7 @@ import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
+import supersymmetry.common.world.biome.BiomeLunarKreepTerrane;
 import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
@@ -257,6 +258,12 @@ public class CommonProxy {
         SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+
+        SuSyBiomes.LUNAR_KREEP_TERRANE = new BiomeLunarKreepTerrane(new Biome.BiomeProperties("Lunar KREEP Terrane")
+                .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "kreep");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_KREEP_TERRANE);
+        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
 
         SuSyDimensions.init();
         // ReEntryDimensions.init();
