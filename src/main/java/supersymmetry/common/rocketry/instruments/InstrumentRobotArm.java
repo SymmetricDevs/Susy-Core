@@ -35,13 +35,13 @@ public class InstrumentRobotArm implements Instrument {
 
         // Then, the next mission must have a landing destination type
         MissionConfiguration nextMission = config.popFront();
-        if (!(nextMission.destinationType == DestinationType.Landing)) {
+        if (nextMission.destinationType != DestinationType.Landing) {
             return;
         }
 
         List<ItemStack> dummyInputs = new ArrayList<>();
         dummyInputs.add(Planetoid.PLANETOIDS.inverse().get(mission.dimension).getDisplayItem());
-        Recipe salvagingRecipe = SuSyRecipeMaps.SALVAGING_RECIPES.findRecipe(0, dummyInputs, null, false);
+        Recipe salvagingRecipe = SuSyRecipeMaps.SALVAGING_RECIPES.findRecipe(1, dummyInputs, new ArrayList<>(), false);
         if (salvagingRecipe == null) {
             return;
         }

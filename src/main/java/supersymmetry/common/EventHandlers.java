@@ -111,15 +111,15 @@ public class EventHandlers {
         if (!travellingPassengers.isEmpty()) {
             handleEntityTransfer();
         }
-        // Process lander spawn queue for all dimensions
-        processLanderSpawnQueue(server);
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
         // Tick atmosphere system for planet dimensions
         if (world.provider instanceof WorldProviderPlanet) {
             AtmosphereWorldData.get(world).getGraph().tick(world);
         }
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
+        // Process lander spawn queue for all dimensions
+        processLanderSpawnQueue(server);
         // this can be done earlier, saves some tps
         if (!world.getGameRules().getBoolean("doInvasions")) {
             return;
@@ -318,7 +318,7 @@ public class EventHandlers {
             }
 
             // Create the lander entity
-            EntityLander lander = new EntityLander(targetWorld, entry.getX(), entry.getY(), entry.getZ());
+            EntityLander lander = new EntityLander(targetWorld, entry.getX(), 350, entry.getZ());
             CargoItemStackHandler cargo = new CargoItemStackHandler(36, Integer.MAX_VALUE);
             lander.setInventory(cargo);
 

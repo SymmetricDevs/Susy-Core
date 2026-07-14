@@ -367,6 +367,9 @@ susy.rocketry.tooltip.height=Height: %d
 susy.rocketry.tooltip.area_ratio=Area ratio: %.1f
 susy.rocketry.tooltip.throughput=Throughput: %.1f
 susy.rocketry.tooltip.volume=Volume: %.0f
+susy.rocketry.tooltip.life_supported=§bLife support available
+susy.rocketry.tooltip.life_not_supported=§cLife support unavailable
+
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components inserted

@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.VariantBlock;
 
@@ -83,6 +84,11 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
             return 3; // Some random number IDK
         }
         return super.getLightOpacity(state);
+    }
+
+    @Override
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return FULL_BLOCK_AABB;
     }
 
     public enum SupportType implements IStringSerializable {
