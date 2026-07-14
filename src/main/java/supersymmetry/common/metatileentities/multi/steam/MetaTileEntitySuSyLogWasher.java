@@ -194,11 +194,6 @@ public class MetaTileEntitySuSyLogWasher extends RecipeMapSteamMultiblockControl
         return false;
     }
 
-    @Override
-    public int getItemOutputLimit() {
-        return 1;
-    }
-
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
