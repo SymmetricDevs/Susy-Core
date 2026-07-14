@@ -18,11 +18,11 @@ import supersymmetry.common.network.SpeakerCodec;
 
 public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
-    private static final int MIN_RATE = 32;
+    private static final int MIN_RATE = 128;
     // TODO put this into SusyConfig.java
-    private static final int MAX_RATE = 11025;
+    private static final int MAX_RATE = 22050;
     // TODO put this into SusyConfig.java
-    private static final double MAX_DURATION = 1.5;
+    private static final double MAX_DURATION = 2.0;
     // TODO put this into SusyConfig.java
     private static final double MIN_DURATION = 0.05;
     public static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
@@ -47,7 +47,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
     protected void validateAudio(int rate, byte[] data) {
         if (rate < MIN_RATE || rate > MAX_RATE) {
-            throw new IllegalArgumentException("invalid rate");
+            throw new IllegalArgumentException(String.format("invalid rate, allowed: (%d..%d)", MIN_RATE, MAX_RATE));
         }
         if ((data.length & 1) != 0) {
             throw new IllegalArgumentException(
@@ -74,7 +74,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         }
     }
 
-    protected Object[] playSound(Context ctx, Arguments args, boolean async) {
+    protected synchronized Object[] playSound(Context ctx, Arguments args, boolean async) {
         var data = args.checkByteArray(1);
         var rate = args.checkInteger(0);
         validateAudio(rate, data);
@@ -82,18 +82,11 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         int len = data.length & ~1;
         long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) - 1;
 
-        // dumb spinlock to prevent a race condition caused by 2 oc lua threads making a call at the exact same time
-        // dont even know if thats a possible fail case because oliwier throws the "wouldnt you like to know" line
-        // when asked
-        while (true) {
-            long prev = playbackEnd.get();
-            if (System.currentTimeMillis() < prev) {
-                throw new IllegalStateException("this speaker is already playing!");
-            }
-            if (playbackEnd.compareAndSet(prev, System.currentTimeMillis() + time_till_sound_stops_ms)) {
-                break;
-            }
+        long now = System.currentTimeMillis();
+        if (now < playbackEnd.get()-51) {
+            throw new IllegalStateException("this speaker is already playing!");
         }
+        playbackEnd.set(now + time_till_sound_stops_ms);
 
         var node = ((Environment) this).node();
         if (nodeAddress == null) {
@@ -133,14 +126,11 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         return stopSound(ctx);
     }
 
-    protected Object[] stopSound(Context ctx) {
-        long prev = playbackEnd.get();
-        if (System.currentTimeMillis() >= prev) {
+    protected synchronized Object[] stopSound(Context ctx) {
+        if (System.currentTimeMillis() >= playbackEnd.get()) {
             throw new IllegalStateException("speaker is not playing");
         }
-        if (!playbackEnd.compareAndSet(prev, 0)) {
-            throw new IllegalStateException("speaker playback state changed");
-        }
+        playbackEnd.set(0);
         var node = ((Environment) this).node();
         if (nodeAddress == null) {
             // if node.address is not constant this will blow up
