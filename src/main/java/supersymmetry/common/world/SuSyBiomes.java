@@ -7,15 +7,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.world.biome.BiomeLunarHighlands;
-import supersymmetry.common.world.biome.BiomeLunarMaria;
-import supersymmetry.common.world.biome.BiomeVoid;
-import supersymmetry.common.world.biome.SuSyBiomeEntry;
+import supersymmetry.common.world.biome.*;
 
 public class SuSyBiomes {
 
     public static BiomeLunarHighlands LUNAR_HIGHLANDS;
     public static BiomeLunarMaria LUNAR_MARIA;
+    public static BiomeLunarKreepTerrane LUNAR_KREEP_TERRANE;
     public static BiomeVoid VOID;
 
     private static final Map<Biome, IBlockState> BIOME_CRATER_BLOCKS = new HashMap<>();

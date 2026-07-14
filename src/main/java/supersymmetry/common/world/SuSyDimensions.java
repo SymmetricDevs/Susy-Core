@@ -109,10 +109,12 @@ public class SuSyDimensions {
         }
 
         new PlanetoidHandler(CelestialObjects.MOON).setBiomeList(
-                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 80)
                         .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
-                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 100)
-                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 80)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)),
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_KREEP_TERRANE, 40)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
                 .setSuSySkyRenderer(moonSky)

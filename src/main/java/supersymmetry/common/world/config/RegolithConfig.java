@@ -19,6 +19,11 @@ public class RegolithConfig {
                 SuSyBiomes.LUNAR_MARIA,
                 SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND));
 
+        // Lunar KREEP Terrane
+        SuSyBiomes.setCraterBlock(
+                SuSyBiomes.LUNAR_KREEP_TERRANE,
+                SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP));
+
         // keep adding stuff here :) - Monsieur Martin 2/1/26
     }
 }
