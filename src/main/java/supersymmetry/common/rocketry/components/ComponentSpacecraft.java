@@ -54,6 +54,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.guidanceMultiplier = 0.9;
         this.hasAir = true;
         this.instruments.put("lander", 1);
+        this.instruments.put("arm", 1);
         return true;
     }
 
@@ -62,6 +63,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         List<String> lines = super.getTooltipLines(tag);
         if (tag.hasKey("volume")) {
             lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
+        }
+        if (tag.hasKey("hasAir") && tag.getBoolean("hasAir")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.life_supported"));
+        } else {
+            lines.add(I18n.format("susy.rocketry.tooltip.life_not_supported"));
         }
         // not sure what hasAir means here so no tooltip for that
         return lines;

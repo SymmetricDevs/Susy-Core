@@ -36,7 +36,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case CAMERA -> 40;
             case SOLAR_PANEL -> 100;
             case BATTERY -> 100;
-            case ARM -> 300;
+            case ARM -> 800;
             case LANDER -> 800;
         };
     }
