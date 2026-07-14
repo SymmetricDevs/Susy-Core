@@ -25,6 +25,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.SusyConfig;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.loaders.SuSyMetaTileEntityLoader;
@@ -84,6 +85,11 @@ public class SuSyRecipeLoader {
                     .fluidInputs(Water.getFluid(1))
                     .duration(1000)
                     .EUt(10000)
+                    .buildAndRegister();
+            SuSyRecipeMaps.SALVAGING_RECIPES.recipeBuilder()
+                    .inputs(Planetoid.PLANETOIDS.inverse().get(0).getDisplayItem())
+                    .output(Items.BEEF)
+                    .duration(1000)
                     .buildAndRegister();
         }
     }
