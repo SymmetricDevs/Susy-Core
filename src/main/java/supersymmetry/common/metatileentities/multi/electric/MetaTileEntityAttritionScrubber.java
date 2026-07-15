@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -37,7 +36,7 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
 
     public MetaTileEntityAttritionScrubber(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ATTRITION_SCRUBBER);
-        this.recipeMapWorkable = new AttritionScrubberLogic(this);
+        this.recipeMapWorkable.setParallelLimit(PARALLEL_LIMIT);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -90,13 +89,5 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("susy.machine.parallel_pure", 32));
-    }
-
-    private static class AttritionScrubberLogic extends MultiblockRecipeLogic {
-
-        public AttritionScrubberLogic(RecipeMapMultiblockController tileEntity) {
-            super(tileEntity);
-            this.setParallelLimit(PARALLEL_LIMIT);
-        }
     }
 }
