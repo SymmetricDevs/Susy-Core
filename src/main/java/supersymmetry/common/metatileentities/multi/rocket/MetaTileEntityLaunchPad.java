@@ -50,6 +50,7 @@ import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -61,6 +62,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.mixin.RenderDistanceMTE;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -70,7 +72,7 @@ import supersymmetry.common.entities.EntityRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE {
+public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
@@ -119,7 +121,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         String dad23 = "DDDDDDDD       DDDDDDDD"; // 8C + 7sp + 8C = 23
         String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 reinforced foundation
         String clasp = "     LLLLL   LLLLL     ";
-        String claspOut = "    LLLLLL   LLLLLL    ";
+        String claspOut = "    lLLLLLLLLLLLLLl    ";
 
         FactoryBlockPattern p = FactoryBlockPattern.start();
         // 10 erector approach aisles
@@ -152,16 +154,21 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Main platform (front half)
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+                sp23);
         // Main platform (center — support pillars)
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
                 l23);
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
                 l23);
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
                 l23);
         // Main platform (back half)
-        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+                sp23);
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Transition
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
@@ -182,6 +189,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 .where('R', SuSyPredicates.rails())
                 .where('L',
                         SuSyPredicates.hiddenStates(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('l',
+                        SuSyPredicates.hiddenStates(
+                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .build();
     }
 
@@ -220,10 +230,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
                 repeat, repeat, repeat, repeat, repeat,
                 repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat);
+                repeat, repeat, clasp, repeat, repeat,
+                clasp, repeat, repeat, clasp, repeat,
+                repeat, clasp, repeat, repeat, clasp,
+                repeat, repeat, clasp, repeat, repeat);
     }
 
     public TraceabilityPredicate autoAbilities() {
@@ -580,7 +590,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             BlockPos pos = getPos();
 
             var v1 = pos.offset(left.getOpposite(), 10).offset(up.getOpposite());
-            var v2 = pos.offset(left, 10).offset(up, 32).offset(front.getOpposite(), 17);
+            var v2 = pos.offset(left, 10).offset(up, 35).offset(front.getOpposite(), 17);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
@@ -644,6 +654,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             textList.add(new TextComponentTranslation("susy.launch_pad.gui.fuel_progress", this.fuelingProgress,
                     maxFuelingProgress));
         }
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        return 65536; // 256 blocks rather than 64
     }
 
     public enum LaunchPadState {

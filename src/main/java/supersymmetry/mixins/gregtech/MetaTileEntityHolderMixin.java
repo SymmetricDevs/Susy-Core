@@ -1,6 +1,7 @@
 package supersymmetry.mixins.gregtech;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -17,11 +18,12 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.mixin.RenderDistanceMTE;
 
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
 @Mixin(value = MetaTileEntityHolder.class)
-public abstract class MetaTileEntityHolderMixin {
+public abstract class MetaTileEntityHolderMixin extends TileEntity {
 
     @Shadow(remap = false)
     MetaTileEntity metaTileEntity;
@@ -49,5 +51,13 @@ public abstract class MetaTileEntityHolderMixin {
                 SusyLog.logger.debug("Successfully migrated SuSy MetaTileEntity with ID {}", susyName);
             }
         }
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        if (metaTileEntity instanceof RenderDistanceMTE mte) {
+            return mte.getMaxRenderDistanceSquared();
+        }
+        return 4096; // the default for super
     }
 }
