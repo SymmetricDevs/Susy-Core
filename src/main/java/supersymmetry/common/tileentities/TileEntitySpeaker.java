@@ -18,6 +18,7 @@ import supersymmetry.common.network.SpeakerCodec;
 
 public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
+    // TODO put this into SusyConfig.java
     private static final int MIN_RATE = 128;
     // TODO put this into SusyConfig.java
     private static final int MAX_RATE = 22050;
@@ -25,6 +26,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
     private static final double MAX_DURATION = 2.0;
     // TODO put this into SusyConfig.java
     private static final double MIN_DURATION = 0.05;
+
     public static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
 
     protected final AtomicLong playbackEnd = new AtomicLong();
@@ -83,7 +85,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
         long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) - 1;
 
         long now = System.currentTimeMillis();
-        if (now < playbackEnd.get()-51) {
+        if (now < playbackEnd.get()) {
             throw new IllegalStateException("this speaker is already playing!");
         }
         playbackEnd.set(now + time_till_sound_stops_ms);
@@ -107,9 +109,30 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
             return new Object[] { time_till_sound_stops_ms };
         } else {
             ctx.pause((double) (time_till_sound_stops_ms) / 1000.0);
-            return new Object[] {};
+            return new Object[] { time_till_sound_stops_ms };
         }
     }
+
+    @Callback(direct = true)
+    public Object[] getMinRate(Context ctx, Arguments args) {
+        return new Object[] { MIN_RATE };
+    }
+
+    @Callback(direct = true)
+    public Object[] getMaxRate(Context ctx, Arguments args) {
+        return new Object[] { MAX_RATE };
+    }
+
+    @Callback(direct = true)
+    public Object[] getMinDuration(Context ctx, Arguments args) {
+        return new Object[] { MIN_DURATION };
+    }
+
+    @Callback(direct = true)
+    public Object[] getMaxDuration(Context ctx, Arguments args) {
+        return new Object[] { MAX_DURATION };
+    }
+
 
     @Callback(doc = "playSoundBlocking(rate:int,data:string) -- plays a sound from a MONO16 wave format")
     public Object[] playSoundBlocking(Context ctx, Arguments args) {

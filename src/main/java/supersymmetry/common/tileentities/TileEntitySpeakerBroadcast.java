@@ -25,7 +25,7 @@ public class TileEntitySpeakerBroadcast extends TileEntitySpeaker {
     }
 
     @Override
-    protected Object[] playSound(Context ctx, Arguments args, boolean async) {
+    protected synchronized Object[] playSound(Context ctx, Arguments args, boolean async) {
         var data = args.checkByteArray(1);
         var rate = args.checkInteger(0);
         validateAudio(rate, data);
@@ -34,12 +34,15 @@ public class TileEntitySpeakerBroadcast extends TileEntitySpeaker {
         long time_till_sound_stops_ms = (long) (len / (2.0 * rate) * 1000) - 1;
 
         var peers = findBroadcastPeers();
+        if (peers.isEmpty()) {
+            throw new IllegalStateException("broadcast speaker is not connected to a network");
+        }
 
         long now = System.currentTimeMillis();
         long end = now + time_till_sound_stops_ms;
 
         for (var peer : peers) {
-            if (now < peer.playbackEnd.get()) {
+            if (now < peer.playbackEnd.get() - 50) {
                 throw new IllegalStateException("a broadcast speaker on this network is already playing audio");
             }
         }
@@ -70,13 +73,16 @@ public class TileEntitySpeakerBroadcast extends TileEntitySpeaker {
             return new Object[] { time_till_sound_stops_ms };
         } else {
             ctx.pause((double) time_till_sound_stops_ms / 1000.0);
-            return new Object[] {};
+            return new Object[] { time_till_sound_stops_ms };
         }
     }
 
     @Override
-    protected Object[] stopSound(Context ctx) {
+    protected synchronized Object[] stopSound(Context ctx) {
         var peers = findBroadcastPeers();
+        if (peers.isEmpty()) {
+            throw new IllegalStateException("broadcast speaker is not connected to a network");
+        }
 
         long now = System.currentTimeMillis();
         var anyPlaying = false;

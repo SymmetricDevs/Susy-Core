@@ -23,7 +23,11 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+
 import supersymmetry.common.rocketry.SusyRocketComponents;
+import li.cil.oc.api.FileSystem;
+import li.cil.oc.api.Items;
+import net.minecraft.item.EnumDyeColor;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 
@@ -85,6 +89,11 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+        Items.registerFloppy(
+                "speaker example",
+                EnumDyeColor.GRAY,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
+                true);
     }
 
     @Mod.EventHandler
