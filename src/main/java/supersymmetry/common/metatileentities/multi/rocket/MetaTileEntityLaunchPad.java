@@ -50,6 +50,7 @@ import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.MetaBlocks;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -165,7 +166,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 .where('C', states(getReinforcedFoundationState()))
                 .where('F', frames(Materials.Steel))
                 .where('R', SuSyPredicates.rails())
-                .where('L', SuSyPredicates.hiddenStates(SuSyBlocks.SUPPORT.getDefaultState()))
+                .where('L',
+                        SuSyPredicates.hiddenStates(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
                 .build();
     }
 
@@ -497,6 +499,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
         buf.writeEnumValue(this.state);
         buf.writeInt(this.fuelingProgress);
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
+            disableBlockRendering(isStructureFormed());
+        }
     }
 
     @Override
@@ -532,7 +538,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             BlockPos pos = getPos();
 
             var v1 = pos.offset(left.getOpposite(), 10).offset(up.getOpposite());
-            var v2 = pos.offset(left, 10).offset(up, 31).offset(front.getOpposite(), 17);
+            var v2 = pos.offset(left, 10).offset(up, 32).offset(front.getOpposite(), 17);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
@@ -638,9 +644,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             EnumFacing back = front.getOpposite();
             EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
-            int xOff = back.getXOffset() * 6 + up.getXOffset() * -8;
-            int yOff = back.getYOffset() * 6 + up.getYOffset() * -8;
-            int zOff = back.getZOffset() * 6 + up.getZOffset() * -8;
+            int xOff = back.getXOffset() * 6 + up.getXOffset() * -7;
+            int yOff = back.getYOffset() * 6 + up.getYOffset() * -7;
+            int zOff = back.getZOffset() * 6 + up.getZOffset() * -7;
 
             this.transformation = new Vec3i(xOff, yOff, zOff);
         }

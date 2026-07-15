@@ -221,6 +221,23 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return ItemHandlerHelper.copyStackWithSize(last, actuallyRemoved);
     }
 
+    /**
+     * Overwrites this handler's contents with a snapshot received from the server via
+     * {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}. Client-side only: it collapses
+     * the real multi-bucket cargo down to whatever is visible in the GUI, since the client only needs to
+     * render the exposed stack, not track every distinct item type on board.
+     */
+    public void applyClientSync(ItemStack exposedStack, int currentVolume, int currentWeight) {
+        this.cargo.clear();
+        if (!exposedStack.isEmpty()) {
+            List<ItemStack> bucket = new ArrayList<>(1);
+            bucket.add(exposedStack.copy());
+            this.cargo.add(bucket);
+        }
+        this.currentVolume = currentVolume;
+        this.currentWeight = currentWeight;
+    }
+
     public ItemStack getExposedStack() {
         if (cargo.isEmpty()) return ItemStack.EMPTY;
         // Apparently the ItemStack is modified in place

@@ -550,6 +550,11 @@ susy.machine.cupola_furnace.name=Cupola Furnace
 susy.machine.cupola_furnace.tooltip=Gains one parallel per block layer
 susy.machine.large_steam_hammer.name=Large Steam Hammer
 susy.machine.landing_pad.name=Landing Pad
+susy.machine.landing_pad.signal.0=Toggle insert/extract
+susy.machine.landing_pad.signal.1=Launch lander (or dispose if empty and missionless)
+susy.machine.landing_pad.signal.2=Destroy empty lander
+
+
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
@@ -1766,3 +1771,6 @@ susy.rocket.msg.launch=Launching in T-%s
 susy.rocket.msg.too_heavy=Too heavy to launch!
 susy.rocket.msg.not_configured=No remaining missions (take out cargo and press SPACE to remove)
 susy.rocket.msg.gravity_too_high=Cannot launch with gravity > 0.4G (take out cargo and press SPACE to remove)
+
+susy.landing_pad.extracting=Extracting items from lander...
+susy.landing_pad.inserting=Inserting items into lander...
