@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -35,9 +36,11 @@ import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.factory.EntityGuiData;
 import com.cleanroommc.modularui.factory.GuiFactories;
+import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
@@ -579,6 +582,8 @@ public class EntityLander extends EntityAbstractRocket
 
     @Override
     public ModularPanel buildUI(EntityGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        syncManager.syncValue("cargo", new CargoSyncHandler(this.cargo));
+
         SlotGroup cargoInventory = new SlotGroup("cargo", 1, 1000, true);
         syncManager.registerSlotGroup(cargoInventory);
 
@@ -695,5 +700,61 @@ public class EntityLander extends EntityAbstractRocket
 
     public String getCargoVolumeString() {
         return cargo.getCurrentVolume() + "/" + cargo.getMaxVolume();
+    }
+
+    /**
+     * Pushes {@link CargoItemStackHandler}'s aggregate state (exposed stack, volume, weight) to the client
+     * every tick it changes, regardless of what caused the change (GUI interaction, a landing pad moving
+     * items in/out, etc). The client mirrors the snapshot into its own {@code cargo} instance so that the
+     * existing slot views and mass/volume labels, which all read directly from {@code cargo}, stay correct
+     * without needing to know about the sync packet themselves.
+     */
+    public static class CargoSyncHandler extends SyncHandler {
+
+        private static final int SYNC_CARGO = 0;
+
+        private final CargoItemStackHandler cargo;
+        private ItemStack lastExposedStack = ItemStack.EMPTY;
+        private int lastVolume = -1;
+        private int lastWeight = -1;
+
+        public CargoSyncHandler(CargoItemStackHandler cargo) {
+            this.cargo = cargo;
+        }
+
+        @Override
+        public void detectAndSendChanges(boolean init) {
+            ItemStack exposedStack = cargo.getExposedStack();
+            if (exposedStack == null) exposedStack = ItemStack.EMPTY;
+            int volume = cargo.getCurrentVolume();
+            int weight = cargo.mass();
+            if (init || volume != this.lastVolume || weight != this.lastWeight ||
+                    !ItemStack.areItemStacksEqual(exposedStack, this.lastExposedStack)) {
+                this.lastExposedStack = exposedStack.copy();
+                this.lastVolume = volume;
+                this.lastWeight = weight;
+                ItemStack toSend = exposedStack;
+                syncToClient(SYNC_CARGO, buffer -> {
+                    buffer.writeItemStack(toSend);
+                    buffer.writeVarInt(volume);
+                    buffer.writeVarInt(weight);
+                });
+            }
+        }
+
+        @Override
+        public void readOnClient(int id, PacketBuffer buf) {
+            if (id == SYNC_CARGO) {
+                ItemStack exposedStack = NetworkUtils.readItemStack(buf);
+                int volume = buf.readVarInt();
+                int weight = buf.readVarInt();
+                this.cargo.applyClientSync(exposedStack, volume, weight);
+            }
+        }
+
+        @Override
+        public void readOnServer(int id, PacketBuffer buf) {
+            // cargo is only ever mutated server-side through gameplay actions, never from a client packet
+        }
     }
 }

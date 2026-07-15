@@ -63,6 +63,8 @@ public class SusyGuiTextures {
     public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
     public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
             .fullImage("textures/gui/widget/button_energy_voiding.png");
+    public static final TextureArea BUTTON_INSERT_EXTRACT = TextureArea
+            .fullImage("textures/gui/widget/button_insert_extract.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND = TextureArea
             .fullImage("textures/gui/widget/slider_background_dark.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER = TextureArea
