@@ -590,7 +590,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             BlockPos pos = getPos();
 
             var v1 = pos.offset(left.getOpposite(), 10).offset(up.getOpposite());
-            var v2 = pos.offset(left, 10).offset(up, 35).offset(front.getOpposite(), 17);
+            var v2 = pos.offset(left, 10).offset(up, 38).offset(front.getOpposite(), 17);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
