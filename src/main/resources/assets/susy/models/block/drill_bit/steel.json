@@ -260,7 +260,7 @@
   ],
   "display": {
     "gui": {
-      "rotation": [0, 30, 0],
+      "rotation": [25, 30, 0],
       "translation": [2,-2, 0],
       "scale": [0.8, 0.8, 0.8]
     },

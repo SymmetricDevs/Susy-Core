@@ -1,9 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import static net.minecraft.block.BlockDirectional.FACING;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
