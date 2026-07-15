@@ -16,14 +16,6 @@
     "facing=east,variant=steel" : {
       "model" : "susy:drill_bit/steel",
       "y" : 270
-    },
-    "facing=up,variant=steel" : {
-      "model" : "susy:drill_bit/steel",
-      "x" : 90
-    },
-    "facing=down,variant=steel" : {
-      "model" : "susy:drill_bit/steel",
-      "x" : 270
     }
   }
 }

@@ -24,8 +24,9 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
+public class BlockDrillBit extends VariantHorizontalRotatableBlock<BlockDrillBit.DrillBitType> {
 
     public BlockDrillBit() {
         super(net.minecraft.block.material.Material.IRON);
@@ -34,50 +35,7 @@ public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(DrillBitType.STEEL).withProperty(FACING, EnumFacing.NORTH));
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos,
-                                            @NotNull EnumFacing facing, float hitX, float hitY,
-                                            float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
-    }
-
-    @Nonnull
-    @Override
-    public BlockStateContainer createBlockState() {
-        Class<DrillBitType> enumClass = DrillBitType.class;
-        this.VARIANT = PropertyEnum.create("variant", enumClass);
-        this.VALUES = enumClass.getEnumConstants();
-        return new BlockStateContainer(this, VARIANT, FACING);
-    }
-
-    @Override
-    public int damageDropped(@NotNull IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
-    }
-
-    @Nonnull
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.byIndex(meta);
-        return getDefaultState().withProperty(FACING, enumfacing);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).ordinal();
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target,
-                                  @NotNull World world, @NotNull BlockPos pos,
-                                  @NotNull EntityPlayer player) {
-        return this.getItemVariant(state.getValue(VARIANT), 1);
+        setDefaultState(getState(DrillBitType.STEEL));
     }
 
     @Override

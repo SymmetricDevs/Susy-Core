@@ -59,7 +59,7 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1)
                                 .setMinGlobalLimited(1)
                                 .addTooltip("susy.multiblock.pattern.error.milling.upper")))
-                .where('D', states(getDrillBitStates()))
+                .where('D', states(getDrillBitState()))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
                 .build();
@@ -84,15 +84,8 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
         return MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN);
     }
 
-    protected static IBlockState[] getDrillBitStates() {
-        IBlockState drillBitState = SuSyBlocks.DRILL_BIT.getState(BlockDrillBit.DrillBitType.STEEL);
-
-        return new IBlockState[] {
-                drillBitState.withProperty(FACING, EnumFacing.NORTH),
-                drillBitState.withProperty(FACING, EnumFacing.SOUTH),
-                drillBitState.withProperty(FACING, EnumFacing.WEST),
-                drillBitState.withProperty(FACING, EnumFacing.EAST)
-        };
+    protected static IBlockState getDrillBitState() {
+        return SuSyBlocks.DRILL_BIT.getState(BlockDrillBit.DrillBitType.STEEL);
     }
 
     protected static IBlockState getGlassState() {
