@@ -472,4 +472,29 @@ public class EntityRocket extends EntityAbstractRocket implements IAlwaysRender,
     protected boolean canFitPassenger(Entity passenger) {
         return this.getPassengers().size() < 4;
     }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        super.removePassenger(passenger);
+        if (passenger.isAirBorne) {
+            AxisAlignedBB aabb = new AxisAlignedBB(passenger.getPosition()).grow(7, 1, 7);
+            List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(passenger, aabb);
+            if (!boxes.isEmpty()) {
+                Vec3d newPos = boxes.get(0).getCenter();
+                passenger.setPosition(newPos.x, newPos.y, newPos.z);
+                float f = passenger.width / 2.0F;
+                float f1 = passenger.height;
+                AxisAlignedBB pAABB = new AxisAlignedBB(newPos.x - (double) f, newPos.y, newPos.z - (double) f,
+                        newPos.x + (double) f, newPos.y + (double) f1, newPos.z + (double) f);
+
+                // Raise upwards until the passenger no longer intersects anything in the world
+                while (world.collidesWithAnyBlock(pAABB)) {
+                    newPos = newPos.add(0, 0.5, 0);
+                    pAABB = new AxisAlignedBB(newPos.x - (double) f, newPos.y, newPos.z - (double) f,
+                            newPos.x + (double) f, newPos.y + (double) f1, newPos.z + (double) f);
+                }
+                passenger.setPositionAndUpdate(newPos.x, newPos.y, newPos.z);
+            }
+        }
+    }
 }

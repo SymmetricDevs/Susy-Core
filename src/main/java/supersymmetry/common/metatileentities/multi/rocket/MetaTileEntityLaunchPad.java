@@ -106,18 +106,23 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
-        String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23
-        String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23
+        String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23: launch surface
+        String dcHoleTrack = "DDDDDDDDCC   CCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
+        String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23: self-row
         String sp23 = "                       "; // 23 spaces
-        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23
+        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23: reinforced foundation under track
+        String supp3 = "     CC   CCC   CC     "; // reinforced foundation under three supports
         String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
         String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
-        String l23 = "      L         L      "; // 6sp + L + 9sp + L + 6sp = 23
+        String l23 = "     LL         LL     "; // 6sp + L + 9sp + L + 6sp = 23
+        String cSides = "   CCCC         CCCC   "; // reinforced foundation underneath sides
         String dad23 = "DDDDDDDD       DDDDDDDD"; // 8C + 7sp + 8C = 23
-        String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 R's
+        String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 reinforced foundation
+        String clasp = "     LLLLL   LLLLL     ";
+        String claspOut = "    LLLLLL   LLLLLL    ";
 
         FactoryBlockPattern p = FactoryBlockPattern.start();
-        // 11 erector approach aisles (original 6 + 5 new)
+        // 10 erector approach aisles
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
                 rrr23);
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
@@ -138,25 +143,34 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 rrr23);
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
                 rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+        // 2 extra tracks with the other two diagonal supports
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, ccc23, ccc23,
                 rrr23);
-        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, ccc23, ccc23,
                 rrr23);
+        // First separator
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Main platform (front half)
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Main platform (center — support pillars)
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
-        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcTrack, l23, l23, l23, l23, l23, l23, l23, l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+                l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+                l23);
+        aisleWithSpace(p, l23, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides, cSides, l23,
+                l23);
         // Main platform (back half)
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Transition
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        // Back frame separator
-        aisleWithSpace(p, fff23, allC, dad23, dad23, dad23, allD, fff23, fff23, fff23, fff23, fff23, fff23, fff23,
+        // Back frame
+        aisleWithSpaceShort(p, fff23, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, fff23,
+                fff23,
                 fff23);
+        // One other separator
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, sp23, sp23, sp23);
         // Controller
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         return p.where(' ', any())
@@ -173,6 +187,34 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
                                 String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
+                                String v9, String v10, String v11, String v12, String v13) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat);
+    }
+
+    private void aisleWithSpaceShort(FactoryBlockPattern pattern, String repeat, String repea2,
+                                     String v1, String v2, String v3, String v4, String v5, String v6, String v7,
+                                     String v8,
+                                     String v9, String v10, String v11, String v12, String v13) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repea2, repea2, repea2, repea2, repea2,
+                repea2, repea2, repea2, repea2, repea2);
+    }
+
+    private void aisleWithClasp(FactoryBlockPattern pattern, String repeat, String clasp,
+                                String v1, String v2, String v3, String v4, String v5, String v6, String v7,
+                                String v8,
                                 String v9, String v10, String v11, String v12, String v13) {
         // Repeat 30 times
         pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
@@ -241,8 +283,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public void setAABBs() {
         // Had to make it overshoot a little :(
-        BlockPos offsetBottomLeft = new BlockPos(6, 5, 9);
-        BlockPos offsetTopRight = new BlockPos(-6, 20, 17);
+        BlockPos offsetBottomLeft = new BlockPos(6, 5, 12);
+        BlockPos offsetTopRight = new BlockPos(-6, 20, 18);
 
         switch (this.getFrontFacing()) {
             case EAST:
@@ -265,16 +307,16 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     public Vec3d getLaunchPosition() {
-        Vec3d offset = new Vec3d(0, 1, 6);
+        Vec3d offset = new Vec3d(0.5, 1, 7.5);
         switch (this.getFrontFacing()) {
             case EAST:
-                offset = new Vec3d(-6, 1, 0);
+                offset.rotateYaw((float) (-Math.PI / 2));
                 break;
             case SOUTH:
-                offset = new Vec3d(0, 1, -6);
+                offset.rotateYaw((float) Math.PI);
                 break;
             case WEST:
-                offset = new Vec3d(6, 1, 0);
+                offset.rotateYaw((float) (Math.PI / 2));
                 break;
             default:
                 break;
@@ -644,9 +686,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             EnumFacing back = front.getOpposite();
             EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
 
-            int xOff = back.getXOffset() * 6 + up.getXOffset() * -7;
-            int yOff = back.getYOffset() * 6 + up.getYOffset() * -7;
-            int zOff = back.getZOffset() * 6 + up.getZOffset() * -7;
+            int xOff = back.getXOffset() * 7 + up.getXOffset() * -3;
+            int yOff = back.getYOffset() * 7 + up.getYOffset() * -3;
+            int zOff = back.getZOffset() * 7 + up.getZOffset() * -3;
 
             this.transformation = new Vec3i(xOff, yOff, zOff);
         }
