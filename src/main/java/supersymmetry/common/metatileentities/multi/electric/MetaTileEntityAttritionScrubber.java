@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -24,18 +23,20 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockGrinderCasing;
-import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockController {
 
+    private static final int PARALLEL_LIMIT = 32;
+
     public MetaTileEntityAttritionScrubber(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ATTRITION_SCRUBBER);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
+        this.recipeMapWorkable.setParallelLimit(PARALLEL_LIMIT);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
@@ -46,15 +47,15 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
         return SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING);
     }
 
-    private static IBlockState getAluminiumGearboxState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ALUMINIUM_GEARBOX);
+    private static IBlockState getGearboxState() {
+        return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX);
     }
 
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle(" CCC CCC ", " CCCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " FGF FGF ")
-                .aisle("CCCCCCCCC", "WBBB#BBBS", "C#A#C#A#C", "IBABCBABO", "C#A#C#A#C", " FGF FGF ")
+                .aisle("CCCCCCCCC", "WBBB#BBBS", "C#F#C#F#C", "IBFBCBFBO", "C#F#C#F#C", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " F F F F ")
                 .aisle(" CCC CCC ", " CXCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " F F F F ")
                 .where('C', states(getAbrasionResistantCasingState()).or(autoAbilities(
@@ -64,10 +65,9 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(states(getAbrasionResistantCasingState())))
                 .where('W', abilities(MultiblockAbility.IMPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
                 .where('S', abilities(MultiblockAbility.EXPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
-                .where('G', states(getAluminiumGearboxState()))
+                .where('G', states(getGearboxState()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)))
-                .where('A', frames(Materials.Aluminium))
-                .where('F', frames(Materials.Steel))
+                .where('F', frames(Materials.Iron))
                 .where('X', selfPredicate())
                 .where('#', air())
                 .where(' ', any())
