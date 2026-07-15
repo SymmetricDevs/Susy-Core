@@ -1,6 +1,29 @@
 {
   "forge_marker" : 1,
   "variants" : {
-    "variant=steel": { "model": "susy:drill_bit/steel" }
+    "facing=north,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "y" : 180
+    },
+    "facing=south,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "y" : 0
+    },
+    "facing=west,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "y" : 90
+    },
+    "facing=east,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "y" : 270
+    },
+    "facing=up,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "x" : 90
+    },
+    "facing=down,variant=steel" : {
+      "model" : "susy:drill_bit/steel",
+      "x" : 270
+    }
   }
 }
