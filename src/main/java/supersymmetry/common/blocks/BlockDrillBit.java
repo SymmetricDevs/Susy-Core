@@ -80,46 +80,46 @@ public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
         return this.getItemVariant(state.getValue(VARIANT), 1);
     }
 
-        @Override
-        public boolean canCreatureSpawn (@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
-                @NotNull EntityLiving.SpawnPlacementType type){
-            return false;
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull EntityLiving.SpawnPlacementType type) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    public enum DrillBitType implements IStringSerializable, IStateHarvestLevel {
+
+        STEEL("steel", 3);
+
+        private final String name;
+        private final int harvestLevel;
+
+        DrillBitType(String name, int harvestLevel) {
+            this.name = name;
+            this.harvestLevel = harvestLevel;
         }
 
-        @Override
-        public boolean isOpaqueCube (@NotNull IBlockState state){
-            return false;
+        @Nonnull
+        public String getName() {
+            return this.name;
         }
 
-        @NotNull
-        @Override
-        public BlockRenderLayer getRenderLayer () {
-            return BlockRenderLayer.CUTOUT;
+        public int getHarvestLevel(IBlockState state) {
+            return this.harvestLevel;
         }
 
-        public enum DrillBitType implements IStringSerializable, IStateHarvestLevel {
-
-            STEEL("steel", 3);
-
-            private final String name;
-            private final int harvestLevel;
-
-            DrillBitType(String name, int harvestLevel) {
-                this.name = name;
-                this.harvestLevel = harvestLevel;
-            }
-
-            @Nonnull
-            public String getName() {
-                return this.name;
-            }
-
-            public int getHarvestLevel(IBlockState state) {
-                return this.harvestLevel;
-            }
-
-            public String getHarvestTool(IBlockState state) {
-                return "wrench";
-            }
+        public String getHarvestTool(IBlockState state) {
+            return "wrench";
         }
     }
+}

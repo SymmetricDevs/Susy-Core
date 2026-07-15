@@ -2,7 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static net.minecraft.block.BlockDirectional.FACING;
 
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -86,8 +85,7 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
     }
 
     protected static IBlockState[] getDrillBitStates() {
-        IBlockState drillBitState =
-                SuSyBlocks.DRILL_BIT.getState(BlockDrillBit.DrillBitType.STEEL);
+        IBlockState drillBitState = SuSyBlocks.DRILL_BIT.getState(BlockDrillBit.DrillBitType.STEEL);
 
         return new IBlockState[] {
                 drillBitState.withProperty(FACING, EnumFacing.NORTH),
@@ -96,7 +94,6 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 drillBitState.withProperty(FACING, EnumFacing.EAST)
         };
     }
-
 
     protected static IBlockState getGlassState() {
         return MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
