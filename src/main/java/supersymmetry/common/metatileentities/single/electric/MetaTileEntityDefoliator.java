@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gregtech.api.metatileentity.multiblock.IMaintenance;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -22,13 +23,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -121,24 +120,20 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                         }
                     }
 
-                    //WIP, can't really test this at this time, check in again after a few hours
-
                     TileEntity te = world.getTileEntity(target);
                     if (!(te instanceof IGregTechTileEntity)) continue;
-
                     MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
                     if (mte == null) continue;
 
-                    if (mte.getClass() != SuSyMetaTileEntities.GREENHOUSE.getClass()) continue;
+                    boolean isSuSyGreenhouse = mte.getClass() == SuSyMetaTileEntities.GREENHOUSE.getClass(); //susy one
+                    boolean isGTFOGreenhouse = mte.getClass() == gregtechfoodoption.machines.multiblock.MetaTileEntityGreenhouse.class; //gtfo one
 
-                    AbstractRecipeLogic logic = mte.getCapability(
-                            GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
-                    if (logic == null || logic.getProgress() <= 0) continue;
+                    if (!(isSuSyGreenhouse || isGTFOGreenhouse)) {
+                        continue;
+                    }
 
-                    try {
-                        PROGRESS_TIME_FIELD.setInt(logic, 1);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException("Could not reset progressTime on Greenhouse", e);
+                    if (mte instanceof IMaintenance) { //prob redundant to check
+                        ((IMaintenance) mte).causeMaintenanceProblems();
                     }
                 }
             }
