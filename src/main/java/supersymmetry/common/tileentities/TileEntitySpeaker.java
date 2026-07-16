@@ -11,6 +11,7 @@ import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.SimpleComponent;
+import supersymmetry.SusyConfig;
 import supersymmetry.common.blocks.BlockSpeaker;
 import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SPacketSpeakerStop;
@@ -18,16 +19,9 @@ import supersymmetry.common.network.SpeakerCodec;
 
 public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
-    // TODO put this into SusyConfig.java
-    private static final int MIN_RATE = 128;
-    // TODO put this into SusyConfig.java
-    private static final int MAX_RATE = 22050;
-    // TODO put this into SusyConfig.java
-    private static final double MAX_DURATION = 2.0;
-    // TODO put this into SusyConfig.java
-    private static final double MIN_DURATION = 0.03;
-
-    public static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
+    public static int getMaxAudioSize() {
+        return (int) (SusyConfig.speakerMaxRate * SusyConfig.speakerMaxDuration * 2);
+    }
 
     protected final AtomicLong playbackEnd = new AtomicLong();
     protected String nodeAddress;
@@ -48,31 +42,31 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
     }
 
     protected void validateAudio(int rate, byte[] data) {
-        if (rate < MIN_RATE || rate > MAX_RATE) {
-            throw new IllegalArgumentException(String.format("invalid rate, allowed: (%d..%d)", MIN_RATE, MAX_RATE));
+        if (rate < SusyConfig.speakerMinRate || rate > SusyConfig.speakerMaxRate) {
+            throw new IllegalArgumentException(String.format("invalid rate, allowed: (%d..%d)",
+                    SusyConfig.speakerMinRate, SusyConfig.speakerMaxRate));
         }
         if ((data.length & 1) != 0) {
             throw new IllegalArgumentException(
                     "data length must be even for AL_FORMAT_MONO16 (you need 16 bit chunks of audio, you are probably reading the .wav wrong)");
         }
-        if (data.length > MAX_AUDIO_SIZE) {
+        if (data.length > getMaxAudioSize()) {
             throw new IllegalArgumentException(
                     String.format(
                             "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
-                            MAX_DURATION, MAX_RATE));
+                            SusyConfig.speakerMaxDuration, SusyConfig.speakerMaxRate));
         }
-        // the *2 is here because data is [u8] but the audio playback takes in [u16]
-        int maxSize = (int) (rate * MAX_DURATION * 2);
+        int maxSize = (int) (rate * SusyConfig.speakerMaxDuration * 2);
         if (data.length > maxSize) {
             throw new IllegalArgumentException(
                     String.format(
                             "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
-                            MAX_DURATION, rate));
+                            SusyConfig.speakerMaxDuration, rate));
         }
-        int minSize = Math.max(32, (int) (rate * MIN_DURATION * 2));
+        int minSize = Math.max(32, (int) (rate * SusyConfig.speakerMinDuration * 2));
         if (data.length < minSize) {
             throw new IllegalArgumentException(
-                    String.format("not enough data (min %.0fms of MONO16)", MIN_DURATION * 1000));
+                    String.format("not enough data (min %.0fms of MONO16)", SusyConfig.speakerMinDuration * 1000));
         }
     }
 
@@ -115,24 +109,23 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
 
     @Callback(direct = true)
     public Object[] getMinRate(Context ctx, Arguments args) {
-        return new Object[] { MIN_RATE };
+        return new Object[] { SusyConfig.speakerMinRate };
     }
 
     @Callback(direct = true)
     public Object[] getMaxRate(Context ctx, Arguments args) {
-        return new Object[] { MAX_RATE };
+        return new Object[] { SusyConfig.speakerMaxRate };
     }
 
     @Callback(direct = true)
     public Object[] getMinDuration(Context ctx, Arguments args) {
-        return new Object[] { MIN_DURATION };
+        return new Object[] { SusyConfig.speakerMinDuration };
     }
 
     @Callback(direct = true)
     public Object[] getMaxDuration(Context ctx, Arguments args) {
-        return new Object[] { MAX_DURATION };
+        return new Object[] { SusyConfig.speakerMaxDuration };
     }
-
 
     @Callback(doc = "playSoundBlocking(rate:int,data:string) -- plays a sound from a MONO16 wave format")
     public Object[] playSoundBlocking(Context ctx, Arguments args) {

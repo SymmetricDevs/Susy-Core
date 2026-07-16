@@ -1,5 +1,6 @@
 package supersymmetry;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,6 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import li.cil.oc.api.FileSystem;
+import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
@@ -23,11 +26,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
 import supersymmetry.common.rocketry.SusyRocketComponents;
-import li.cil.oc.api.FileSystem;
-import li.cil.oc.api.Items;
-import net.minecraft.item.EnumDyeColor;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
 

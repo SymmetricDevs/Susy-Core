@@ -105,8 +105,8 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
         radius = buf.readInt();
 
         int len = buf.readInt();
-        if (len > TileEntitySpeaker.MAX_AUDIO_SIZE) {
-            SusyLog.logger.error("oversized audio packet ({} bytes, max {})", len, TileEntitySpeaker.MAX_AUDIO_SIZE);
+        if (len > TileEntitySpeaker.getMaxAudioSize()) {
+            SusyLog.logger.error("oversized audio packet ({} bytes, max {})", len, TileEntitySpeaker.getMaxAudioSize());
             buf.skipBytes(len);
             bytes = new byte[0];
             return;
