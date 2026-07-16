@@ -3,7 +3,8 @@ package supersymmetry.common.metatileentities.single.electric;
 import java.util.List;
 
 import gregtech.api.capability.GregtechTileCapabilities;
-import gregtech.api.capability.impl.AbstractRecipeLogic;
+import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.impl.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -102,9 +103,18 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
                     MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
                     if (mte == null) continue;
 
-                    AbstractRecipeLogic logic = mte.getCapability(
-                            GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
-                    if (logic == null || logic.getProgress() <= 0) continue;
+
+                    AbstractRecipeLogic logic = mte.getCapability(GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
+                    if (
+                            logic == null ||
+                            logic.getProgress() <= 0 ||
+                            !logic.consumesEnergy() || //exclude energy generators, no infinite power for you. Also handles things like radiator, hx, etc...
+                            // exclude steam and primitive
+                            logic instanceof PrimitiveRecipeLogic ||
+                            logic instanceof SteamMultiblockRecipeLogic ||
+                            logic instanceof RecipeLogicSteam ||
+                            logic instanceof BoilerRecipeLogic
+                    ) continue;
 
                     try {
                         PROGRESS_TIME_FIELD.setInt(logic, 1);
