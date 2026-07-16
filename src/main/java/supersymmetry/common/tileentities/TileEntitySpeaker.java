@@ -25,7 +25,7 @@ public class TileEntitySpeaker extends TileEntity implements SimpleComponent {
     // TODO put this into SusyConfig.java
     private static final double MAX_DURATION = 2.0;
     // TODO put this into SusyConfig.java
-    private static final double MIN_DURATION = 0.05;
+    private static final double MIN_DURATION = 0.03;
 
     public static final int MAX_AUDIO_SIZE = (int) (MAX_RATE * MAX_DURATION * 2);
 
