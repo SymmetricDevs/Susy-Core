@@ -246,6 +246,9 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                     map.put(rl, AIR);
             }
 
+            //gregtech
+            map.put(new ResourceLocation("gregtech", "rubber_leaves"), AIR);
+
             replacements = map;
 
             // metadata
