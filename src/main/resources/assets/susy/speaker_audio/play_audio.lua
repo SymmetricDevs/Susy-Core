@@ -46,6 +46,7 @@ if filename:sub(-3) == "wav" then
             end
             rate = d.nSamplesPerSec
             nAvgBytesPerSec = d.nAvgBytesPerSec
+            print("rate:",rate)
             if rate > max_rate then
                 error("audio rate exceeds max rate of " .. tostring(max_rate))
             end
@@ -65,7 +66,6 @@ if filename:sub(-3) == "wav" then
                     end
                     buf = buf .. chunk
                 end
-                -- print("fill_buf got " .. tostring(i) .. " chunks")
                 return true
             end
 
@@ -73,29 +73,21 @@ if filename:sub(-3) == "wav" then
 
             while #buf >= min_bytes do
                 local seg = buf:sub(1, math.min(#buf, max_bytes))
-                buf = buf:sub(#seg + 1)
 
                 local t0 = computer.uptime()
                 local duration_ms, err = speaker.playSoundAsync(rate, seg)
+                buf = buf:sub(#seg + 1)
                 if not duration_ms then
-                    print("broke:", err)
-                    error()
+                    print("error:", err)
                 end
 
-                local keep_going = fill_buf()
+                fill_buf()
                 local elapsed = computer.uptime() - t0 - 0.01
-
-                local wait = math.max(0, (duration_ms / 1000) - elapsed)
-                print(
-                    string.format(
-                        "elapsed %.2f ttns %s sleeping %.2f",
-                        elapsed,
-                        duration_ms and string.format("%.2f", duration_ms) or "nil",
-                        wait
-                    )
-                )
-                if wait > 0 and keep_going then
-                    os.sleep(wait)
+                if not not duration_ms then
+                    local wait = math.max(0, (duration_ms / 1000) - elapsed)
+                    if wait > 0 then
+                        os.sleep(wait)
+                    end
                 end
             end
         end

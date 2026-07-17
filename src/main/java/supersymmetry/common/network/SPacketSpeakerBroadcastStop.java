@@ -30,6 +30,7 @@ public class SPacketSpeakerBroadcastStop implements IPacket, IClientExecutor {
                 SusyLog.logger.error("broadcast stop packet with missing id");
                 continue;
             }
+            SPacketSpeakerAudio.TRACKED.remove(id);
             snd.stop(id);
         }
     }

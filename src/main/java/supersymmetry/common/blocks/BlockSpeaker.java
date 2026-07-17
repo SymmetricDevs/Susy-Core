@@ -53,9 +53,9 @@ public class BlockSpeaker extends VariantBlock<BlockSpeaker.BlockSpeakerType> {
     public TileEntity createTileEntity(World world, IBlockState state) {
         BlockSpeakerType type = this.getState(state);
         if (type == BlockSpeakerType.BROADCAST) {
-            return new TileEntitySpeakerBroadcast(type);
+            return new TileEntitySpeakerBroadcast();
         } else {
-            return new TileEntitySpeaker(type);
+            return new TileEntitySpeaker();
         }
     }
 }

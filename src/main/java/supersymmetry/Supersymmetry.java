@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import li.cil.oc.api.Driver;
 import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
@@ -88,6 +89,9 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+
+        Driver.add(new supersymmetry.integration.opencomputers.DriverSpeaker());
+
         Items.registerFloppy(
                 "speaker example",
                 EnumDyeColor.GRAY,

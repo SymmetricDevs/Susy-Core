@@ -11,7 +11,6 @@ import javax.sound.sampled.AudioFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
@@ -27,13 +26,17 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
     public static class Target {
 
         public String sourceId;
-        public BlockPos pos;
+        public double posX;
+        public double posY;
+        public double posZ;
 
         public Target() {}
 
-        public Target(String sourceId, BlockPos pos) {
+        public Target(String sourceId, double posX, double posY, double posZ) {
             this.sourceId = sourceId;
-            this.pos = pos;
+            this.posX = posX;
+            this.posY = posY;
+            this.posZ = posZ;
         }
     }
 
@@ -55,22 +58,24 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
 
         var format = new AudioFormat(rate, 16, 1, true, false);
 
-        var playerPos = Minecraft.getMinecraft().player.getPosition();
+        var player = Minecraft.getMinecraft().player;
 
-        targets.sort(
-                (a, b) -> {
-                    var da = playerPos.distanceSq(a.pos);
-                    var db = playerPos.distanceSq(b.pos);
-                    return Double.compare(da, db);
-                });
+        targets.sort((a, b) -> {
+            var da = a.posX - player.posX;
+            var db = b.posX - player.posX;
+            var ea = a.posY - player.posY;
+            var eb = b.posY - player.posY;
+            var za = a.posZ - player.posZ;
+            var zb = b.posZ - player.posZ;
+            return Double.compare(da * da + ea * ea + za * za, db * db + eb * eb + zb * zb);
+        });
 
         var chosen = new ArrayList<Target>();
-        // picks 3 speakers, ignoring ones placed close together
         for (var target : targets) {
             boolean grouped = false;
             for (var c : chosen) {
-                if (Math.abs(c.pos.getX() - target.pos.getX()) <= 4 &&
-                        Math.abs(c.pos.getZ() - target.pos.getZ()) <= 4) {
+                if (Math.abs(c.posX - target.posX) <= 4 &&
+                        Math.abs(c.posZ - target.posZ) <= 4) {
                     grouped = true;
                     break;
                 }
@@ -89,6 +94,7 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
             if (snd.playing(sourceId)) {
                 var decoder = SpeakerCodec.get(sourceId);
                 if (decoder != null) decoder.buffers.add(bytes);
+                snd.setPosition(sourceId, (float) target.posX, (float) target.posY, (float) target.posZ);
                 continue;
             }
 
@@ -102,9 +108,9 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
                         new URI("file", null, String.format("/speaker_%s.speaker", sourceId), null).toURL(),
                         String.format("speaker_%s.speaker", sourceId),
                         false,
-                        (float) target.pos.getX() + 0.5f,
-                        (float) target.pos.getY() + 0.5f,
-                        (float) target.pos.getZ() + 0.5f,
+                        (float) target.posX,
+                        (float) target.posY,
+                        (float) target.posZ,
                         SoundSystemConfig.ATTENUATION_LINEAR,
                         radius);
             } catch (URISyntaxException | MalformedURLException e) {
@@ -128,7 +134,9 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
         for (var target : targets) {
             buf.writeInt(target.sourceId.length());
             buf.writeString(target.sourceId);
-            buf.writeBlockPos(target.pos);
+            buf.writeDouble(target.posX);
+            buf.writeDouble(target.posY);
+            buf.writeDouble(target.posZ);
         }
     }
 
@@ -146,7 +154,9 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
         for (int i = 0; i < count; i++) {
             var target = new Target();
             target.sourceId = buf.readString(buf.readInt());
-            target.pos = buf.readBlockPos();
+            target.posX = buf.readDouble();
+            target.posY = buf.readDouble();
+            target.posZ = buf.readDouble();
             targets.add(target);
         }
     }

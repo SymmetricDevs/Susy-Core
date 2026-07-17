@@ -72,6 +72,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
+import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
@@ -213,9 +214,8 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("DataFlowIssue")
     @SubscribeEvent
     public static void onRenderGameOverlay(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.START) {
-            return;
-        }
+        if (event.phase != TickEvent.Phase.START) return;
+        SPacketSpeakerAudio.tickTracked();
         if (titleRenderTimer >= 0) {
             GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
             titleRenderTimer++;

@@ -26,6 +26,7 @@ public class SPacketSpeakerStop implements IPacket, IClientExecutor {
             SusyLog.logger.error("speaker stop packet with missing id");
             return;
         }
+        SPacketSpeakerAudio.TRACKED.remove(id);
         snd.stop(id);
     }
 

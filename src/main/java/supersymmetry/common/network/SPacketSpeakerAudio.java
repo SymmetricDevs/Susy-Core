@@ -3,14 +3,17 @@ package supersymmetry.common.network;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sound.sampled.AudioFormat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
@@ -20,20 +23,42 @@ import supersymmetry.common.tileentities.TileEntitySpeaker;
 
 public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
 
+    static final Map<String, Entity> TRACKED = new ConcurrentHashMap<>();
+
+    public static void tickTracked() {
+        var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
+        if (snd == null) return;
+        TRACKED.entrySet().removeIf(e -> {
+            var entity = e.getValue();
+            if (entity == null || entity.isDead) return true;
+            if (!snd.playing(e.getKey())) return true;
+            snd.setPosition(e.getKey(),
+                    (float) entity.posX, (float) entity.posY, (float) entity.posZ);
+            return false;
+        });
+    }
+
     public String id;
     public int rate;
-    public BlockPos pos;
+    public double posX;
+    public double posY;
+    public double posZ;
     public byte[] bytes;
     public int radius;
+    public UUID entityUuid;
 
     public SPacketSpeakerAudio() {}
 
-    public SPacketSpeakerAudio(String id, int rate, BlockPos pos, byte[] bytes, int radius) {
+    public SPacketSpeakerAudio(String id, int rate, double posX, double posY, double posZ, byte[] bytes, int radius,
+                               UUID entityUuid) {
         this.id = id;
         this.rate = rate;
-        this.pos = pos;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
         this.bytes = bytes;
         this.radius = radius;
+        this.entityUuid = entityUuid;
     }
 
     @Override
@@ -52,9 +77,22 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
             return;
         }
 
+        var tracked = trackEntity(id, entityUuid);
+        float sx, sy, sz;
+        if (tracked != null) {
+            sx = (float) tracked.posX;
+            sy = (float) tracked.posY;
+            sz = (float) tracked.posZ;
+        } else {
+            sx = (float) posX;
+            sy = (float) posY;
+            sz = (float) posZ;
+        }
+
         if (snd.playing(id)) {
             var decoder = SpeakerCodec.get(id);
             if (decoder != null) decoder.buffers.add(bytes);
+            snd.setPosition(id, sx, sy, sz);
             return;
         }
 
@@ -70,9 +108,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
                     new URI("file", null, String.format("/speaker_%s.speaker", id), null).toURL(),
                     String.format("speaker_%s.speaker", id),
                     false,
-                    (float) pos.getX() + 0.5f,
-                    (float) pos.getY() + 0.5f,
-                    (float) pos.getZ() + 0.5f,
+                    sx, sy, sz,
                     SoundSystemConfig.ATTENUATION_LINEAR,
                     radius);
         } catch (URISyntaxException | MalformedURLException e) {
@@ -83,14 +119,34 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
         snd.setVolume(id, 0.7f * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.RECORDS));
     }
 
+    private static Entity trackEntity(String sourceId, UUID uuid) {
+        if (uuid == null) return null;
+        var mc = Minecraft.getMinecraft();
+        if (mc.world == null) return null;
+        for (var e : mc.world.loadedEntityList) {
+            if (e.getUniqueID().equals(uuid)) {
+                TRACKED.put(sourceId, e);
+                return e;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void encode(PacketBuffer buf) {
         buf.writeInt(id.length());
         buf.writeString(id);
 
         buf.writeInt(rate);
-        buf.writeBlockPos(pos);
+        buf.writeDouble(posX);
+        buf.writeDouble(posY);
+        buf.writeDouble(posZ);
         buf.writeInt(radius);
+
+        buf.writeBoolean(entityUuid != null);
+        if (entityUuid != null) {
+            buf.writeUniqueId(entityUuid);
+        }
 
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
@@ -101,8 +157,16 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
         id = buf.readString(buf.readInt());
 
         rate = buf.readInt();
-        pos = buf.readBlockPos();
+        posX = buf.readDouble();
+        posY = buf.readDouble();
+        posZ = buf.readDouble();
         radius = buf.readInt();
+
+        if (buf.readBoolean()) {
+            entityUuid = buf.readUniqueId();
+        } else {
+            entityUuid = null;
+        }
 
         int len = buf.readInt();
         if (len > TileEntitySpeaker.getMaxAudioSize()) {
