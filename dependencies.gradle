@@ -88,6 +88,9 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:cb-multipart-258426:2755790')
     compileOnly rfg.deobf('curse.maven:project-red-core-228702:2745545')
 
+    compileOnly rfg.deobf("curse.maven:multistorage-244864:2710024") // MultiStorage 1.4.14
+    compileOnly rfg.deobf("curse.maven:shetiphiancore-71738:2661618") // ShetiPhianCore 3.5.9
+
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
 
     //ICBM
