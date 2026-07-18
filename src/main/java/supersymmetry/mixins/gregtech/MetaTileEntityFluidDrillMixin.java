@@ -2,8 +2,8 @@ package supersymmetry.mixins.gregtech;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +41,7 @@ public abstract class MetaTileEntityFluidDrillMixin extends MultiblockWithDispla
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 }

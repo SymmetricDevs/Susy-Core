@@ -1,6 +1,6 @@
 package supersymmetry.mixins.bdsandm;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

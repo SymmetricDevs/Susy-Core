@@ -3,8 +3,6 @@ package supersymmetry.api.blocks;
 import static gregtech.api.util.GTUtility.gregtechId;
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
@@ -16,6 +14,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
+import org.jspecify.annotations.Nullable;
 import supersymmetry.common.tileentities.AnimatablePartTileEntity;
 
 public interface IAnimatablePartBlock extends ITileEntityProvider {

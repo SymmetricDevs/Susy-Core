@@ -49,6 +49,7 @@ public class QuarryLogic {
         this.layerProgression = new BlockPos(front.getX() + right.getX(), 0, front.getZ() + right.getZ());
     }
 
+    @SuppressWarnings("deprecation")
     public void doQuarryOperation() {
         if (quarryTileEntity.getWorld().isRemote)
             return;
@@ -66,7 +67,7 @@ public class QuarryLogic {
         }
 
         // Don't break TEs or unbreakable (hardness -1) blocks
-        if (!state.getBlock().hasTileEntity(state) & state.getBlock().blockHardness != -1F) {
+        if (!state.getBlock().hasTileEntity(state) & state.getBlock().getBlockHardness(state, world, currentPos) != -1F) {
             GTTransferUtils.addItemsToItemHandler(quarryTileEntity.getOutputInventory(), false,
                     state.getBlock().getDrops(world, currentPos, state, 0));
             world.destroyBlock(currentPos, false);

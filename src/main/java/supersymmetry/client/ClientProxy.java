@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -107,7 +107,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addMaterialFormulaHandler(@Nonnull ItemTooltipEvent event) {
+    public static void addMaterialFormulaHandler(@NonNull ItemTooltipEvent event) {
         // ensure itemstack is a sheetedframe
         ItemStack itemStack = event.getItemStack();
         if (!(itemStack.getItem() instanceof SheetedFrameItemBlock)) return;
@@ -124,7 +124,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addPipelinerTooltip(@Nonnull ItemTooltipEvent event) {
+    public static void addPipelinerTooltip(@NonNull ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         List<String> tooltips = event.getToolTip();
 
@@ -136,7 +136,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
+    public static void addCatalystTooltipHandler(@NonNull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
         Collection<String> tooltips = new ArrayList<>();

@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
@@ -70,7 +70,7 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
             this.name = name;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

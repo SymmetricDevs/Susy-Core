@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;

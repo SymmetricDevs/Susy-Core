@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -76,7 +76,7 @@ public class MetaTileEntityRotaryKiln extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ROTARY_KILN_OVERLAY;

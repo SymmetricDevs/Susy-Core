@@ -3,8 +3,8 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -99,7 +99,7 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FROTH_FLOTATION_OVERLAY;

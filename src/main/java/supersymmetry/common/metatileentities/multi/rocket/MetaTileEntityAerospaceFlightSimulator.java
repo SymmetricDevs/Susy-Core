@@ -5,7 +5,7 @@ import static supercritical.api.pattern.SCPredicates.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -320,7 +320,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     @Override
-    protected @Nonnull ICubeRenderer getFrontOverlay() {
+    protected @NonNull ICubeRenderer getFrontOverlay() {
         return SusyTextures.ORE_SORTER_OVERLAY;
     }
 

@@ -6,7 +6,7 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenS
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
@@ -128,7 +128,7 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SideOnly(Side.CLIENT)
     protected ICubeRenderer getFrontOverlay() {

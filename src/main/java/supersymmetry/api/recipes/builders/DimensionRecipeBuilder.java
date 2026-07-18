@@ -2,7 +2,7 @@ package supersymmetry.api.recipes.builders;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -34,7 +34,7 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
     }
 
     @Override
-    public boolean applyProperty(@Nonnull String key, Object value) {
+    public boolean applyProperty(@NonNull String key, Object value) {
         if (key.equals(DimensionProperty.KEY)) {
             if (value instanceof Integer) {
                 this.dimension((Integer) value);

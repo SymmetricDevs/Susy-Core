@@ -6,7 +6,7 @@ import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 import java.util.*;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -171,7 +171,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    @Nonnull
+    @NonNull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }

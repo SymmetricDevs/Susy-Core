@@ -13,7 +13,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -516,13 +516,13 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return Textures.SOLID_STEEL_CASING; // TODO: change this to concrete?
     }
 
-    @Nonnull
+    @NonNull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY; // TODO: a custom one?
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 

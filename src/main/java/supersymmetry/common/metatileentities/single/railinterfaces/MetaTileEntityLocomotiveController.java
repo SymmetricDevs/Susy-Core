@@ -2,8 +2,8 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -166,7 +166,6 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     }
 
     @SuppressWarnings("SameParameterValue")
-    @ParametersAreNonnullByDefault
     protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min,
                                            double max) {
         return Flow.column()

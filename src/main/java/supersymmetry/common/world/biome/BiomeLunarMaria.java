@@ -3,7 +3,7 @@ package supersymmetry.common.world.biome;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.entity.EnumCreatureType;
 
@@ -23,7 +23,7 @@ public class BiomeLunarMaria extends PlanetaryBiome {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
         return new LinkedList<>();
     }

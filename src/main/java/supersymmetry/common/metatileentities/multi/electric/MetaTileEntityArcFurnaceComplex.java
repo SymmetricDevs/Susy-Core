@@ -2,8 +2,8 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -129,7 +129,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
         tooltip.add(I18n.format("susy.machine.parallel_pure", 256));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ARC_FURNACE_OVERLAY;

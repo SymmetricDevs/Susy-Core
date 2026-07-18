@@ -5,8 +5,8 @@ import static gregtech.api.util.RelativeDirection.RIGHT;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -58,7 +58,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
@@ -143,7 +143,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .setStyle(new Style().setColor(TextFormatting.YELLOW)));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LARGE_FLUID_PUMP_OVERLAY;

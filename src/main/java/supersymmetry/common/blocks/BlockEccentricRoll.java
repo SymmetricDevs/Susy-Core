@@ -3,7 +3,7 @@ package supersymmetry.common.blocks;
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 import static net.minecraft.block.BlockDirectional.FACING;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
@@ -76,7 +76,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(ACTIVE) ? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
@@ -87,7 +87,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
                 .withProperty(ACTIVE, false);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<RollType> enumClass = RollType.class;
@@ -101,7 +101,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         // (InActive) North... -> 0...=5
@@ -121,7 +121,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(FACING).ordinal() + (state.getValue(ACTIVE) ? 6 : 0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
@@ -170,7 +170,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getName() {
             return this.name;

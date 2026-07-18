@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +36,7 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
     }
 
     @Override
-    public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
+    public boolean canRenderInLayer(@NonNull IBlockState state, @NonNull BlockRenderLayer layer) {
         ElectrodeAssemblyType type = getState(state);
         if (type == ElectrodeAssemblyType.CARBON) {
             if (layer == BlockRenderLayer.SOLID) return true;
@@ -72,7 +72,7 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

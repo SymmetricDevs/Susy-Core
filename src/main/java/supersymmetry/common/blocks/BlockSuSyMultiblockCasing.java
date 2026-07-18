@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -30,8 +30,8 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
@@ -85,7 +85,7 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
             this.name = name;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getName() {
             return this.name;
