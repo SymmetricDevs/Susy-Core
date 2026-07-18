@@ -107,12 +107,12 @@ dependencies {
     implementation(deps.icbm.deobf())
 
     // # Optional dependencies. Uncomment the ones you need
-//    runtimeOnlyNonPublishable(deps.theBeneath.deobf())
-//    runtimeOnlyNonPublishable(deps.realisticTerrainGenerationUnofficial.deobf())
-//    runtimeOnlyNonPublishable(deps.worldEdit.deobf())
-//    runtimeOnlyNonPublishable(deps.worldEditCuiForgeEdition3.deobf())
-//    runtimeOnlyNonPublishable(deps.configAnytime)
-//    runtimeOnlyNonPublishable(deps.flare.deobf())
+//    runtimeOnly(deps.theBeneath.deobf())
+//    runtimeOnly(deps.realisticTerrainGenerationUnofficial.deobf())
+//    runtimeOnly(deps.worldEdit.deobf())
+//    runtimeOnly(deps.worldEditCuiForgeEdition3.deobf())
+//    runtimeOnly(deps.configAnytime)
+//    runtimeOnly(deps.flare.deobf())
 
     // # OptiFine
 //    // Copied from GTCEu, originally used to download latest Vintagium from GitHub
