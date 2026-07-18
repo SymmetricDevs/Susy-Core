@@ -61,10 +61,18 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
                 .where('C', states(getAbrasionResistantCasingState()).or(autoAbilities(
                         true, true, false,
                         false, false, false, false)))
-                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).or(states(getAbrasionResistantCasingState())))
-                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(states(getAbrasionResistantCasingState())))
-                .where('W', abilities(MultiblockAbility.IMPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
-                .where('S', abilities(MultiblockAbility.EXPORT_FLUIDS).or(states(getAbrasionResistantCasingState())))
+                .where('I',
+                        abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
+                                .or(states(getAbrasionResistantCasingState())))
+                .where('O',
+                        abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1)
+                                .or(states(getAbrasionResistantCasingState())))
+                .where('W',
+                        abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(1)
+                                .or(states(getAbrasionResistantCasingState())))
+                .where('S',
+                        abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(1)
+                                .or(states(getAbrasionResistantCasingState())))
                 .where('G', states(getGearboxState()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)))
                 .where('F', frames(Materials.Iron))
