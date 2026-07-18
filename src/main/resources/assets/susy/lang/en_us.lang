@@ -302,6 +302,8 @@ item.material.oreprefix.target=%s Sputtering Target
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
+susy.fluid.type_base.tooltip=§6Basic! Handle with care!
+susy.fluid_pipe.base_proof=§6Can handle Bases
 
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
