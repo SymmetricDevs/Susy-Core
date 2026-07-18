@@ -28,7 +28,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubst
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import supersymmetry.api.SusyLog;
-import supersymmetry.api.fluids.SusyFluidAttributes;
+import supersymmetry.api.fluids.SuSyFluidAttributes;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
@@ -330,7 +330,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityPlasticCan(susyId("drum.pe"), Materials.Polyethylene, 64_000));
 
         var pp = new PropertyFluidFilter(444, true, true, false, false);
-        pp.setCanContain(SusyFluidAttributes.BASE, true);
+        pp.setCanContain(SuSyFluidAttributes.BASE, true);
         PP_CAN = registerMetaTileEntity(14508, new MetaTileEntityPlasticCan(susyId("drum.pp"), pp, 0xdfe39a, 128_000));
 
         PTFE_CAN = registerMetaTileEntity(14509,
@@ -342,7 +342,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
 
         var uhmwpe =  new PropertyFluidFilter(425, true, true, true, false);
-        uhmwpe.setCanContain(SusyFluidAttributes.BASE, true);
+        uhmwpe.setCanContain(SuSyFluidAttributes.BASE, true);
         UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), uhmwpe, 0xc5e3de, 512_000)); // sadly I have to put it
                                                                                             // here
 
