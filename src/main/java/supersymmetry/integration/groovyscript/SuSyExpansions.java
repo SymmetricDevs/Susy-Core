@@ -50,7 +50,12 @@ public class SuSyExpansions {
         boolean hasFluidProperty =  m.hasProperty(PropertyKey.FLUID);
         var property = hasFluidProperty  ? m.getProperty(PropertyKey.FLUID)  : new FluidProperty();
         for (var key: keys) {
-            property.enqueueRegistration(key, new FluidBuilder().temperature(temp));
+            var queued = property.getQueuedBuilder(key);
+            if (queued == null) {
+                property.enqueueRegistration(key, new FluidBuilder().temperature(temp));
+            } else {
+                queued.temperature(temp);
+            }
         }
         if (!hasFluidProperty) m.setProperty(PropertyKey.FLUID, property);
     }
