@@ -51,7 +51,7 @@ public class SuSyExpansions {
     }
 
     public static void setOreByProducts(Material m, Material... byproducts) {
-        if (checkFrozen("set ore pyproducts of a material")) return;
+        if (checkFrozen("set ore byproducts of a material")) return;
         if (!m.hasProperty(PropertyKey.ORE)) {
             GroovyLog.get().error("Material {} does not have an OreProperty!", m);
             return;
