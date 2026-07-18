@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import dev.tianmi.sussypatches.common.SusConfig;
+import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.modules.GregTechModule;
 import gregtech.api.unification.material.Material;
 import gregtech.integration.IntegrationSubmodule;
@@ -34,6 +35,7 @@ public class GrSModule extends IntegrationSubmodule implements GroovyPlugin {
     public void onCompatLoaded(GroovyContainer<?> container) {
         if (SusConfig.API.recipeInfo) {
             ExpansionHelper.mixinClass(Material.class, SuSyExpansions.class);
+            ExpansionHelper.mixinMethod(FluidBuilder.class, SuSyExpansions.class, "basic");
         }
     }
 }

@@ -3,6 +3,7 @@ package supersymmetry.integration.groovyscript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidProperty;
@@ -16,6 +17,10 @@ import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import static gregtech.api.fluids.FluidConstants.ROOM_TEMPERATURE;
 
 public class SuSyExpansions {
+
+    public static FluidBuilder basic(FluidBuilder builder) {
+        return builder.attributes(SuSyFluidAttributes.BASE);
+    }
 
     public static void addMillBall(Material m, int durability) {
         if (checkFrozen("add mill ball property to a material")) return;
