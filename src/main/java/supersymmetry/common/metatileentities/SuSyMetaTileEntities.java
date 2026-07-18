@@ -28,6 +28,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubst
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.fluids.SusyFluidAttributes;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
 import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
@@ -327,8 +328,11 @@ public class SuSyMetaTileEntities {
 
         PE_CAN = registerMetaTileEntity(14507,
                 new MetaTileEntityPlasticCan(susyId("drum.pe"), Materials.Polyethylene, 64_000));
-        PP_CAN = registerMetaTileEntity(14508, new MetaTileEntityPlasticCan(susyId("drum.pp"),
-                new PropertyFluidFilter(444, true, true, false, false), 0xdfe39a, 128_000));
+
+        var pp = new PropertyFluidFilter(444, true, true, false, false);
+        pp.setCanContain(SusyFluidAttributes.BASE, true);
+        PP_CAN = registerMetaTileEntity(14508, new MetaTileEntityPlasticCan(susyId("drum.pp"), pp, 0xdfe39a, 128_000));
+
         PTFE_CAN = registerMetaTileEntity(14509,
                 new MetaTileEntityPlasticCan(susyId("drum.ptfe"), Materials.Polytetrafluoroethylene, 512_000));
 
@@ -337,8 +341,9 @@ public class SuSyMetaTileEntities {
         STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511,
                 new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
 
-        UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"),
-                new PropertyFluidFilter(425, true, true, true, false), 0xc5e3de, 512_000)); // sadly I have to put it
+        var uhmwpe =  new PropertyFluidFilter(425, true, true, true, false);
+        uhmwpe.setCanContain(SusyFluidAttributes.BASE, true);
+        UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), uhmwpe, 0xc5e3de, 512_000)); // sadly I have to put it
                                                                                             // here
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
@@ -527,6 +532,7 @@ public class SuSyMetaTileEntities {
         QUARRY = registerMetaTileEntity(15063, new MetaTileEntityQuarry(susyId("quarry")));
 
         LEAD_DRUM = registerMetaTileEntity(14553, new MetaTileEntityDrum(susyId("drum.lead"), Materials.Lead, 32000));
+
         BRASS_DRUM = registerMetaTileEntity(17010,
                 new MetaTileEntityDrum(susyId("drum.brass"), new PropertyFluidFilter(1280, true, false, true, false),
                         false, Materials.Brass.getMaterialRGB(), 16000));
