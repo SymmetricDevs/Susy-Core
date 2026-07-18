@@ -1,9 +1,11 @@
 package supersymmetry.integration.groovyscript;
 
+import static gregtech.api.fluids.FluidConstants.ROOM_TEMPERATURE;
+
 import com.cleanroommc.groovyscript.api.GroovyLog;
+
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
-import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidProperty;
@@ -13,8 +15,6 @@ import supersymmetry.api.fluids.SuSyFluidAttributes;
 import supersymmetry.api.fluids.SusyFluidStorageKeys;
 import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
-
-import static gregtech.api.fluids.FluidConstants.ROOM_TEMPERATURE;
 
 public class SuSyExpansions {
 
@@ -47,9 +47,9 @@ public class SuSyExpansions {
 
     public static void setupFluidTypes(Material m, int temp, FluidStorageKey... keys) {
         if (checkFrozen("add fluid types to a material")) return;
-        boolean hasFluidProperty =  m.hasProperty(PropertyKey.FLUID);
-        var property = hasFluidProperty  ? m.getProperty(PropertyKey.FLUID)  : new FluidProperty();
-        for (var key: keys) {
+        boolean hasFluidProperty = m.hasProperty(PropertyKey.FLUID);
+        var property = hasFluidProperty ? m.getProperty(PropertyKey.FLUID) : new FluidProperty();
+        for (var key : keys) {
             var queued = property.getQueuedBuilder(key);
             if (queued == null) {
                 property.enqueueRegistration(key, new FluidBuilder().temperature(temp));
@@ -72,10 +72,10 @@ public class SuSyExpansions {
     public static void addFluidPipes(Material m, int maxFluidTemperature, int throughput, boolean gasProof,
                                      boolean acidProof, boolean cryoProof, boolean plasmaProof, boolean baseProof) {
         if (checkFrozen("add fluid pipes to a material")) return;
-        MaterialPropertyExpansion.addFluidPipes(m, maxFluidTemperature, throughput, gasProof, acidProof, cryoProof, plasmaProof);
+        MaterialPropertyExpansion.addFluidPipes(m, maxFluidTemperature, throughput, gasProof, acidProof, cryoProof,
+                plasmaProof);
         m.getProperty(PropertyKey.FLUID_PIPE).setCanContain(SuSyFluidAttributes.BASE, baseProof);
     }
-
 
     protected static boolean checkFrozen(String description) {
         if (!GregTechAPI.materialManager.canModifyMaterials()) {

@@ -341,10 +341,12 @@ public class SuSyMetaTileEntities {
         STEAM_LATEX_COLLECTOR[1] = registerMetaTileEntity(14511,
                 new MetaTileEntitySteamLatexCollector(susyId("latex_collector.steel"), true));
 
-        var uhmwpe =  new PropertyFluidFilter(425, true, true, true, false);
+        var uhmwpe = new PropertyFluidFilter(425, true, true, true, false);
         uhmwpe.setCanContain(SuSyFluidAttributes.BASE, true);
-        UHMWPE_CAN = registerMetaTileEntity(14512, new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), uhmwpe, 0xc5e3de, 512_000)); // sadly I have to put it
-                                                                                            // here
+        UHMWPE_CAN = registerMetaTileEntity(14512,
+                new MetaTileEntityPlasticCan(susyId("drum.uhmwpe"), uhmwpe, 0xc5e3de, 512_000)); // sadly I have to put
+                                                                                                 // it
+        // here
 
         SINTERING_OVEN = registerMetaTileEntity(14521, new MetaTileEntitySinteringOven(susyId("sintering_oven")));
 
