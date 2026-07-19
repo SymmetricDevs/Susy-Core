@@ -26,7 +26,6 @@ if (enableSpotless || true) {
             toggleOffOn()
             removeUnusedImports()
             leadingTabsToSpaces()
-            expandWildcardImports()
             importOrder()
             endWithNewline()
             palantirJavaFormat()
