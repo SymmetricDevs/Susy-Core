@@ -1646,6 +1646,13 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+tile.bmrf_blocks.bmrf10.name=BMRF-10
+tile.bmrf_blocks.bmrf11.name=BMRF-11
+tile.bmrf_blocks.bmrf12.name=BMRF-12
+tile.bmrf_blocks.bmrf13.name=BMRF-13
+tile.bmrf_blocks.bmrf14.name=BMRF-14
+tile.bmrf_blocks.bmrf15.name=BMRF-15
+tile.bmrf_blocks.bmrf16.name=BMRF-16
 
 ##Factions
 #Items
