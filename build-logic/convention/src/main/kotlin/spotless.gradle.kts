@@ -28,7 +28,7 @@ if (enableSpotless || true) {
             leadingTabsToSpaces()
             importOrder()
             endWithNewline()
-            palantirJavaFormat()
+            eclipse()
             formatAnnotations()
         }
     }
