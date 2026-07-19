@@ -62,8 +62,9 @@ public class BallisticsMathHelper {
      * @return the flight time in seconds, or {@code -1} if no ballistic trajectory
      *         exists for the specified launch speed
      */
-    public static double flightTime(double x1, double y1, double z1, double x2, double y2, double z2, double v, double a,
-                      boolean lowPath) {
+    public static double flightTime(double x1, double y1, double z1, double x2, double y2, double z2, double v,
+                                    double a,
+                                    boolean lowPath) {
         if (v < minimumVelocity(x1, y1, z1, x2, y2, z2, a)) return -1;
         double dy = y2 - y1;
         double term = a * dy + v * v;
@@ -85,11 +86,11 @@ public class BallisticsMathHelper {
      * Otherwise, the higher-angle trajectory is used. If the specified launch
      * speed is insufficient to reach the target, this method returns {@code -1}.
      *
-     * @param startPos Launch position
+     * @param startPos  Launch position
      * @param targetPos Target position
-     * @param a       the magnitude of gravitational acceleration in m*s^-2 (must be positive)
-     * @param lowPath {@code true} for the lower-angle trajectory,
-     *                {@code false} for the higher-angle trajectory
+     * @param a         the magnitude of gravitational acceleration in m*s^-2 (must be positive)
+     * @param lowPath   {@code true} for the lower-angle trajectory,
+     *                  {@code false} for the higher-angle trajectory
      * @return the flight time in seconds, or {@code -1} if no ballistic trajectory
      *         exists for the specified launch speed
      */
