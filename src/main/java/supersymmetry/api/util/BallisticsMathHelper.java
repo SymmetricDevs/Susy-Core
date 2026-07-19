@@ -15,7 +15,7 @@ public class BallisticsMathHelper {
      * @param x2 the target X coordinate
      * @param y2 the target Y coordinate
      * @param z2 the target Z coordinate
-     * @return The Euclidean distance in 3D bro
+     * @return The (squared) Euclidean distance in 3D bro
      */
     public static double distanceSquared(double x1, double y1, double z1, double x2, double y2, double z2) {
         return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1);
