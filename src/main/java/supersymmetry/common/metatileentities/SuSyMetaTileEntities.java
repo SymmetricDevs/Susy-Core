@@ -302,6 +302,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
+    public static MetaTileEntityEnergyCoreExtractor ENERGY_CORE_EXTRACTOR;
 
     // Parallel Ore Processing
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
@@ -795,6 +796,9 @@ public class SuSyMetaTileEntities {
         BEAM_IMPORT = registerMetaTileEntity(18500,
                 new MetaTileEntityBeamLineHatch(susyId("beam_import_hatch"), false));
         BEAM_EXPORT = registerMetaTileEntity(18501, new MetaTileEntityBeamLineHatch(susyId("beam_export_hatch"), true));
+
+        ENERGY_CORE_EXTRACTOR = registerMetaTileEntity(18450,
+                new MetaTileEntityEnergyCoreExtractor(susyId("energy_core_extractor"), GTValues.IV));
 
         INDUCTION_FURNACE = registerMetaTileEntity(18502,
                 new MetaTileEntityInductionFurnace(susyId("induction_furnace")));

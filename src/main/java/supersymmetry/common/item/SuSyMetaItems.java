@@ -53,6 +53,7 @@ public class SuSyMetaItems {
     public static MetaValueItem ADVANCED_CARGO_DRONE;
     public static MetaValueItem LOCATION_CARD;
     public static MetaValueItem ELITE_CARGO_DRONE;
+    public static MetaValueItem CONDENSED_ENERGY_CORE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -177,6 +178,11 @@ public class SuSyMetaItems {
 
         ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
                 .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
+
+        // Balance placeholder: tune capacity/tier freely, and see AppliedEnergistics2.cfg's
+        // [powerratios] GTEU setting to control how much EU an AE network actually costs.
+        CONDENSED_ENERGY_CORE = metaItem.addItem(22, "condensed_energy_core").setMaxStackSize(1)
+                .addComponents(ElectricStats.createBattery(GTValues.V[GTValues.UV] * 65536L, GTValues.UV, false));
     }
 
     private static void addExtraBehaviours() {

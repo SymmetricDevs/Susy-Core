@@ -957,6 +957,10 @@ susy.machine.incinerator.tooltip.3=§8Don't worry about where the heavy metals a
 susy.multiblock.incinerator.clogged=§4Clogged! (Is the top blocked?)
 susy.multiblock.incinerator.working=§2Clog-free
 
+susy.machine.energy_core_extractor.name=Energy Core Extractor
+susy.machine.energy_core_extractor.tooltip.1=§6Drains§r condensed energy cores and feeds the power directly into an adjacent AE2 network
+susy.machine.energy_core_extractor.tooltip.2=§cExposes no EU connection§r - the network can only be powered by inserting cores
+
 susy.machine.strand_bus.import.name=Strand Import Bus
 susy.machine.strand_bus.export.name=Strand Export Bus
 susy.machine.turning_zone.name=Turning Zone
@@ -1230,6 +1234,7 @@ metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
 metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
 metaitem.cargo_drone.elite.name=Elite Cargo Drone
 metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
+metaitem.condensed_energy_core.name=Condensed Energy Core
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
