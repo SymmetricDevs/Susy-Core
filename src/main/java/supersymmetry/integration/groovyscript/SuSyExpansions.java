@@ -6,6 +6,8 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.attribute.FluidAttribute;
+import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidProperty;
@@ -27,10 +29,34 @@ public class SuSyExpansions {
         m.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(durability));
     }
 
+    public static void setBasic(Material m, FluidStorageKey key) {
+        setAttribute(m, key, SuSyFluidAttributes.BASE);
+    }
+
+    public static void setAcidic(Material m, FluidStorageKey key) {
+        setAttribute(m, key, FluidAttributes.ACID);
+    }
+
+    public static void setAttribute(Material m, FluidStorageKey key, FluidAttribute attribute) {
+        if (checkFrozen("make a material acidic")) return;
+        if (!m.hasProperty(PropertyKey.FLUID)) {
+            GroovyLog.get().error("Material {} does not have a FluidProperty!", m);
+            return;
+        }
+        var queued = m.getProperty(PropertyKey.FLUID).getQueuedBuilder(key);
+
+        if (queued == null) {
+            GroovyLog.get().error("Material {} does not register a FluidStorageKey {}!", m, key);
+            return;
+        }
+
+        queued.attribute(attribute);
+    }
+
     public static void setBaseProof(Material m, boolean baseProof) {
         if (checkFrozen("set a material as base-proof")) return;
         if (!m.hasProperty(PropertyKey.FLUID_PIPE)) {
-            GroovyLog.get().error("Material {} does not have an FluidPipeProperty!", m);
+            GroovyLog.get().error("Material {} does not have a FluidPipeProperty!", m);
             return;
         }
 
