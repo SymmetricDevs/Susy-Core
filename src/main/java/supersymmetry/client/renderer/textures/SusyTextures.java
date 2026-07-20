@@ -182,6 +182,8 @@ public class SusyTextures {
             "machines/screen_printer");
     public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/edm");
+    public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/log_washer");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(

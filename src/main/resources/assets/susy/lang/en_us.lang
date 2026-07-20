@@ -166,6 +166,8 @@ tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 
+tile.paddle_shaft.iron.name=Paddle Shaft
+
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -498,6 +500,7 @@ susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.cupola_furnace.name=Cupola Furnace
 susy.machine.cupola_furnace.tooltip=Gains one parallel per block layer
 susy.machine.large_steam_hammer.name=Large Steam Hammer
+susy.machine.log_washer.name=Log Washer
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
