@@ -174,6 +174,9 @@ tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 
 tile.paddle_shaft.iron.name=Paddle Shaft
 
+tile.robot_arm.grabber.name=Robotic Arm
+tile.robot_arm_layup.layup.name=Layup Machine Robotic Arm
+
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
