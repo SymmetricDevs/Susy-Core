@@ -86,32 +86,7 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
     @Override
     public void update() {
         super.update();
-        World world = this.getWorld();
-        long time = world.getWorldTime() % 24000;
-        double multiplier = 0;
-        if (hasSkyAccess(world, this.getPos()) && hasSolarPanelDisplay(world, this.getPos()) &&
-                panelIsNotObstructed(world, this.getPos())) {
-            if (time >= 2000 && time < 10000) { //6000 is noon, 18000 is midnight
-                multiplier = 1;
-            } else if (time >= 14000 && time <= 22000) {
-                multiplier = 0;
-            } else if (time >= 10000 && time < 14000) {
-                multiplier = (double) (14000 - time) / 4000.0;
-            } else if (time < 2000) {
-                multiplier = (double) time / 4000.0 + 0.5;
-            } else {
-                multiplier = (double) (time - 22000) / 4000.0;
-            }
-
-            Biome biome = world.getBiome(this.getPos());
-            if (world.isRaining() && (biome.canRain() || biome.getEnableSnow())) {
-                multiplier = multiplier * 0.5;
-            }
-            multiplier *= Math.pow(0.5, getNumberOfNearbyPanels(world, this.getPos()));
-            multiplier = Math.clamp(multiplier, 0, 1);
-        }
-        this.energyContainer.changeEnergy(Math.round(GTValues.V[LV] * multiplier * ((double) getTier() / 2 + 0.5)));
-
+        this.energyContainer.changeEnergy(getCurrentProduction(getTier()));
     }
 
     @Override
@@ -155,5 +130,34 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
         if (world.getBlockState(this.getPos().up(2)) == panelDisplayBlock) {
             world.setBlockState(this.getPos().up(2), getStateById(0));
         }
+    }
+
+    public long getCurrentProduction(int tier) {
+        World world = this.getWorld();
+        long time = world.getWorldTime() % 24000;
+        double multiplier = 0;
+        if (hasSkyAccess(world, this.getPos()) && hasSolarPanelDisplay(world, this.getPos()) &&
+                panelIsNotObstructed(world, this.getPos())) {
+            if (time >= 2000 && time < 10000) { //6000 is noon, 18000 is midnight
+                multiplier = 1;
+            } else if (time >= 14000 && time <= 22000) {
+                multiplier = 0;
+            } else if (time >= 10000 && time < 14000) {
+                multiplier = (double) (14000 - time) / 4000.0;
+            } else if (time < 2000) {
+                multiplier = (double) time / 4000.0 + 0.5;
+            } else {
+                multiplier = (double) (time - 22000) / 4000.0;
+            }
+
+            Biome biome = world.getBiome(this.getPos());
+            if (world.isRaining() && (biome.canRain() || biome.getEnableSnow())) {
+                multiplier = multiplier * 0.5;
+            }
+            multiplier *= Math.pow(0.5, getNumberOfNearbyPanels(world, this.getPos()));
+            multiplier = Math.clamp(multiplier, 0, 1);
+            return Math.round(GTValues.V[LV] * multiplier * ((double) tier / 2 + 0.5));
+        }
+        return 0;
     }
 }

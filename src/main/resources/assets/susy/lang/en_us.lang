@@ -1044,6 +1044,8 @@ susy.machine.solar_panel.tooltip.description2=Production reduced by 50%% when ra
 susy.machine.solar_panel.tooltip.description3=Ensure the block above the panel base is clear!
 susy.machine.solar_panel.voltage_produced=§aPeak Production: §f%,d EU/t (%s§f)
 tile.solar_panel.default.name=Solar Panel Display Block
+susy.top.solar_panel.producing=Producing
+
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
