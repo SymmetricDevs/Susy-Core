@@ -188,6 +188,29 @@ public class SuSyPredicates {
                     .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type)))
                     .toArray(BlockInfo[]::new));
 
+    private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> ROBOT_ARMS = Arrays
+            .stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
+                    facing -> () -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockRobotArm) {
+                            // Check conveyor type
+                            BlockRobotArm.RobotArmType type = ((BlockRobotArm) state.getBlock()).getState(state);
+                            Object currentArm = blockWorldState.getMatchContext().getOrPut("RobotArmType", type);
+                            if (!currentArm.equals(type)) {
+                                blockWorldState
+                                        .setError(new PatternStringError("susy.multiblock.pattern.error.robot_arm"));
+                                return false;
+                            }
+                            // Adds the position of the conveyor (and target facing) to the match context
+                            blockWorldState.getMatchContext().getOrPut("RobotArm", new LinkedList<>())
+                                    .add(Pair.of(blockWorldState.getPos(), facing));
+                            return true;
+                        }
+                        return false;
+                    }, () -> Arrays.stream(BlockRobotArm.RobotArmType.values())
+                            .map(entry -> new BlockInfo(SuSyBlocks.ROBOT_ARM.getState(entry), null))
+                            .toArray(BlockInfo[]::new)).addTooltips("susy.multiblock.pattern.error.robot_arm")));
+
     @NotNull
     public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
@@ -206,6 +229,11 @@ public class SuSyPredicates {
     @NotNull
     public static TraceabilityPredicate conveyorBelts(RelativeDirection facing) {
         return CONVEYOR_BELT.get(facing).get();
+    }
+
+    @NotNull
+    public static TraceabilityPredicate robotArms(RelativeDirection facing) {
+        return ROBOT_ARMS.get(facing).get();
     }
 
     @NotNull

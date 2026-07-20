@@ -89,6 +89,8 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockRobotArm ROBOT_ARM;
+    public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 
