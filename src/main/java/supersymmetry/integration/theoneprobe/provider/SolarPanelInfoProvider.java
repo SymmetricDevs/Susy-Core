@@ -1,17 +1,17 @@
 package supersymmetry.integration.theoneprobe.provider;
 
-import gregtech.api.GTValues;
-import gregtech.api.util.GTUtility;
-import mcjty.theoneprobe.api.*;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import supersymmetry.Supersymmetry;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEvaporationPool;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntitySolarPanel;
 
-import javax.annotation.Nonnull;
+import gregtech.api.GTValues;
+import gregtech.api.util.GTUtility;
+import mcjty.theoneprobe.api.*;
+import supersymmetry.Supersymmetry;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntitySolarPanel;
 
 public class SolarPanelInfoProvider implements IProbeInfoProvider {
 
@@ -26,8 +26,8 @@ public class SolarPanelInfoProvider implements IProbeInfoProvider {
         if (GTUtility.getMetaTileEntity(world, data.getPos()) instanceof MetaTileEntitySolarPanel solarPanel &&
                 solarPanel.getCurrentProduction(solarPanel.getTier()) > 0) {
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.solar_panel.producing*}" + " " +
-                    (TextFormatting.RED + String.valueOf(solarPanel.getCurrentProduction(solarPanel.getTier()))) + TextFormatting.WHITE
-                    + " EU/t (" + (GTValues.VNF[solarPanel.getTier()]) + ")");
+                    (TextFormatting.RED + String.valueOf(solarPanel.getCurrentProduction(solarPanel.getTier()))) +
+                    TextFormatting.WHITE + " EU/t (" + (GTValues.VNF[solarPanel.getTier()]) + ")");
         }
     }
 }

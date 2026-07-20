@@ -1,10 +1,10 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import gregtech.api.GTValues;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import static gregtech.api.GTValues.LV;
+import static net.minecraft.block.Block.getStateById;
+
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,23 +13,24 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import supersymmetry.api.SusyLog;
+
+import gregtech.api.GTValues;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import supersymmetry.common.blocks.BlockSolarPanel;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.util.List;
-
-import static gregtech.api.GTValues.LV;
-import static net.minecraft.block.Block.getStateById;
-
 
 public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
 
     public MetaTileEntitySolarPanel(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
     }
+
     IBlockState panelDisplayBlock = SuSyBlocks.SOLAR_PANEL.getState(BlockSolarPanel.SolarPanelType.DEFAULT);
 
     @Override
@@ -102,7 +103,8 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
         tooltip.add(I18n.format("susy.machine.solar_panel.tooltip.description2"));
         tooltip.add(I18n.format("susy.machine.solar_panel.tooltip.description3"));
         tooltip.add(I18n.format("susy.machine.solar_panel.voltage_produced",
-                new Object[] { (Math.toIntExact(Math.round(GTValues.V[LV] * ((double) getTier() / 2 + 0.5)))), GTValues.VNF[this.getTier()] }));
+                new Object[] { (Math.toIntExact(Math.round(GTValues.V[LV] * ((double) getTier() / 2 + 0.5)))),
+                        GTValues.VNF[this.getTier()] }));
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out",
                 new Object[] { this.energyContainer.getOutputVoltage(), GTValues.VNF[this.getTier()] }));
         tooltip.add(I18n.format("gregtech.universal.tooltip.energy_storage_capacity",
@@ -138,7 +140,7 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
         double multiplier = 0;
         if (hasSkyAccess(world, this.getPos()) && hasSolarPanelDisplay(world, this.getPos()) &&
                 panelIsNotObstructed(world, this.getPos())) {
-            if (time >= 2000 && time < 10000) { //6000 is noon, 18000 is midnight
+            if (time >= 2000 && time < 10000) { // 6000 is noon, 18000 is midnight
                 multiplier = 1;
             } else if (time >= 14000 && time <= 22000) {
                 multiplier = 0;
