@@ -20,8 +20,12 @@
     "RecipeBuilderAccessor",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
+    "TileEntityItemPipeAccessor",
+    "TileEntityItemPipeMixin",
     "ToolBuilderAccessor",
-    "ToolItemsMixin"
+    "ToolItemsMixin",
+    "WorldPipeNetAccessor",
+    "WorldItemPipeNetMixin"
   ],
   "client" : [
     "WorldSceneRendererMixin"

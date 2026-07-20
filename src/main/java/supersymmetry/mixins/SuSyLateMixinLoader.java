@@ -22,6 +22,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "littletiles",
             "celeritas",
             "projectred-core",
+            "dimstack",
             "icbmclassic");
 
     @Override
