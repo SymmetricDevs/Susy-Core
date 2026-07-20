@@ -1,8 +1,5 @@
 package supersymmetry.api.metatileentity.logistics;
 
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IEnergyContainer;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -10,8 +7,13 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IEnergyContainer;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public class DefaultCapabilities {
 

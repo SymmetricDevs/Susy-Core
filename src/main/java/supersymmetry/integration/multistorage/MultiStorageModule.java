@@ -1,22 +1,23 @@
 package supersymmetry.integration.multistorage;
 
-import gregtech.api.modules.GregTechModule;
-import gregtech.integration.IntegrationSubmodule;
+import static supersymmetry.api.util.SuSyUtility.susyId;
+
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import gregtech.api.modules.GregTechModule;
+import gregtech.integration.IntegrationSubmodule;
 import shetiphian.multistorage.common.block.BlockVault;
 import supersymmetry.Supersymmetry;
 import supersymmetry.modules.SuSyModules;
 
-import static supersymmetry.api.util.SuSyUtility.susyId;
-
 @GregTechModule(
-        moduleID = SuSyModules.MODULE_MULTISTORAGE,
-        containerID = Supersymmetry.MODID,
-        modDependencies = "multistorage",
-        name = "SuSy MultiStorage Integration",
-        description = "SuSy MultiStorage Integration Module")
+                moduleID = SuSyModules.MODULE_MULTISTORAGE,
+                containerID = Supersymmetry.MODID,
+                modDependencies = "multistorage",
+                name = "SuSy MultiStorage Integration",
+                description = "SuSy MultiStorage Integration Module")
 public class MultiStorageModule extends IntegrationSubmodule {
 
     @Override
