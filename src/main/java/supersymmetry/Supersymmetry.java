@@ -29,13 +29,13 @@ import supersymmetry.loaders.SuSyIRLoader;
 
 @Mod(name = Supersymmetry.NAME,
      modid = Supersymmetry.MODID,
-     version = Tags.VERSION,
+     version = Tags.MOD_VERSION,
      dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
 public class Supersymmetry {
 
-    public static final String NAME = "Supersymmetry";
-    public static final String MODID = "susy";
+    public static final String NAME = Tags.MOD_NAME;
+    public static final String MODID = Tags.MOD_ID;
 
     @SidedProxy(modId = MODID,
                 clientSide = "supersymmetry.client.ClientProxy",

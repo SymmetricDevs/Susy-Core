@@ -5,7 +5,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.util.ResourceLocation;
 

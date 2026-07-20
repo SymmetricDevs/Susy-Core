@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -119,7 +119,7 @@ public class LanderSpawnQueue extends WorldSavedData {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound tag) {
+    public void readFromNBT(@NonNull NBTTagCompound tag) {
         queuedSpawns.clear();
 
         NBTTagList tagList = tag.getTagList("QueuedSpawns", Constants.NBT.TAG_COMPOUND);
@@ -131,9 +131,9 @@ public class LanderSpawnQueue extends WorldSavedData {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = new NBTTagList();
 
         for (LanderSpawnEntry entry : queuedSpawns) {

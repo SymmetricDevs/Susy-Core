@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -47,7 +47,7 @@ public class BlockRegolith extends VariantBlockFalling<BlockRegolith.BlockRegoli
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getName() {
             return this.name;

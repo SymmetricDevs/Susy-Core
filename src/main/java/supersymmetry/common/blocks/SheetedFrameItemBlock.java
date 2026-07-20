@@ -2,8 +2,8 @@ package supersymmetry.common.blocks;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,9 +34,9 @@ public class SheetedFrameItemBlock extends ItemBlock {
         return frameBlock.getStateFromMeta(getMetadata(stack.getItemDamage()));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+    public String getItemStackDisplayName(@NonNull ItemStack stack) {
         Material material = getBlockState(stack).getValue(frameBlock.variantProperty);
         // String localizedPartialName = net.minecraft.client.resources.I18n.format("tile.sheeted_frame");
         // return String.format(localizedPartialName, material.getLocalizedName());
@@ -44,8 +44,8 @@ public class SheetedFrameItemBlock extends ItemBlock {
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
-                               @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NonNull ItemStack stack, @Nullable World worldIn, @NonNull List<String> tooltip,
+                               @NonNull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (ConfigHolder.misc.debug) {
             tooltip.add(

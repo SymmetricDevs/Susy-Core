@@ -2,7 +2,7 @@ package supersymmetry.api.recipes.builders;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
@@ -38,7 +38,7 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
     }
 
     @Override
-    public boolean applyProperty(@Nonnull String key, Object value) {
+    public boolean applyProperty(@NonNull String key, Object value) {
         if (key.equals(DimensionProperty.KEY)) {
             if (value instanceof Integer) {
                 this.dimension((Integer) value);

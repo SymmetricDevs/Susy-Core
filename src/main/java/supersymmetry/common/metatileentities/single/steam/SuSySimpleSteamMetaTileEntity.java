@@ -3,8 +3,6 @@ package supersymmetry.common.metatileentities.single.steam;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,6 +31,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
+import org.jspecify.annotations.Nullable;
 import supersymmetry.api.capability.impl.RecipeLogicSteamLimited;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;

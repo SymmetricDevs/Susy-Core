@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -90,8 +90,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         return true;
     }
 
-    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
-                               @Nonnull EnumFacing direction) {
+    public boolean isBlockEdge(@NonNull World world, BlockPos.@NonNull MutableBlockPos pos,
+                               @NonNull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) == getSecondaryCasingState();
     }
 

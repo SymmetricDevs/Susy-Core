@@ -3,7 +3,7 @@ package supersymmetry.api.recipes.catalysts;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.item.ItemStack;
 
@@ -15,15 +15,15 @@ public class CatalystInfos {
     private final Map<ItemStack, CatalystInfo> map = new Object2ObjectOpenCustomHashMap<>(
             ItemStackHashStrategy.comparingAllButCount());
 
-    public void put(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
+    public void put(@NonNull ItemStack itemStack, @NonNull CatalystInfo catalystInfo) {
         map.put(itemStack, catalystInfo);
     }
 
-    public CatalystInfo get(@Nonnull ItemStack itemStack) {
+    public CatalystInfo get(@NonNull ItemStack itemStack) {
         return map.get(itemStack);
     }
 
-    @Nonnull
+    @NonNull
     public Stream<Map.Entry<ItemStack, CatalystInfo>> streamEntries() {
         return map.entrySet().stream();
     }

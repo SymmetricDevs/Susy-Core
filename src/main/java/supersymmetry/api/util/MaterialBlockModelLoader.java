@@ -9,8 +9,8 @@ package supersymmetry.api.util;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -47,28 +47,28 @@ public class MaterialBlockModelLoader {
 
     private static final Object2ObjectOpenHashMap<Entry, ModelResourceLocation> ENTRIES = new Object2ObjectOpenHashMap<>();
 
-    @Nonnull
-    public static ModelResourceLocation loadBlockModel(@Nonnull MaterialIconType iconType,
-                                                       @Nonnull MaterialIconSet iconSet) {
+    @NonNull
+    public static ModelResourceLocation loadBlockModel(@NonNull MaterialIconType iconType,
+                                                       @NonNull MaterialIconSet iconSet) {
         return loadBlockModel(iconType, iconSet, null);
     }
 
-    @Nonnull
-    public static ModelResourceLocation loadBlockModel(@Nonnull MaterialIconType iconType,
-                                                       @Nonnull MaterialIconSet iconSet,
+    @NonNull
+    public static ModelResourceLocation loadBlockModel(@NonNull MaterialIconType iconType,
+                                                       @NonNull MaterialIconSet iconSet,
                                                        @Nullable String variant) {
         return ENTRIES.computeIfAbsent(new Entry(iconType, iconSet, variant == null ? "" : variant),
                 entry -> createModelId(entry, "normal"));
     }
 
-    @Nonnull
-    public static ModelResourceLocation loadItemModel(@Nonnull MaterialIconType iconType,
-                                                      @Nonnull MaterialIconSet iconSet) {
+    @NonNull
+    public static ModelResourceLocation loadItemModel(@NonNull MaterialIconType iconType,
+                                                      @NonNull MaterialIconSet iconSet) {
         return ENTRIES.computeIfAbsent(new Entry(iconType, iconSet, null),
                 entry -> createModelId(entry, "inventory"));
     }
 
-    private static ModelResourceLocation createModelId(@Nonnull Entry entry, @Nonnull String variant) {
+    private static ModelResourceLocation createModelId(@NonNull Entry entry, @NonNull String variant) {
         StringBuilder stb = new StringBuilder();
         stb.append("material_").append(entry.iconType.name).append("_").append(entry.iconSet.name);
         if (entry.variant != null && !entry.variant.equals("") && !entry.variant.equals("normal")) {
@@ -111,9 +111,9 @@ public class MaterialBlockModelLoader {
         }
     }
 
-    private static void bakeAndRegister(@Nonnull IRegistry<ModelResourceLocation, IBakedModel> registry,
+    private static void bakeAndRegister(@NonNull IRegistry<ModelResourceLocation, IBakedModel> registry,
                                         @Nullable IModel model,
-                                        @Nonnull ModelResourceLocation modelId,
+                                        @NonNull ModelResourceLocation modelId,
                                         @Nullable Map<ModelResourceLocation, IModel> stateModels) {
         if (model == null) {
             // insert missing model to prevent cluttering logs with useless model loading error messages
@@ -143,8 +143,8 @@ public class MaterialBlockModelLoader {
         @Nullable
         private IModel modelCache;
 
-        private Entry(@Nonnull MaterialIconType iconType,
-                      @Nonnull MaterialIconSet iconSet,
+        private Entry(@NonNull MaterialIconType iconType,
+                      @NonNull MaterialIconSet iconSet,
                       @Nullable String variant) {
             this.iconType = iconType;
             this.iconSet = iconSet;

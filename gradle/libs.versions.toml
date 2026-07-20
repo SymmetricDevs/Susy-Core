@@ -1,0 +1,66 @@
+[versions]
+retrofuturaGradle = "2.0.2"
+jvmDowngrader = "1.3.6"
+ideaExt = "1.4.1"
+spotless = "8.8.0"
+shadow = "9.4.2"
+minotaur = "2.8.10"
+curseforgeGradle = "1.3.32"
+buildconfig = "6.0.10"
+accesstransformers = "5.0.3"
+
+# Test platform
+junit = "5.14.4"
+
+# Referred directly in minecraft.grale.kts
+lwjgl3 = "3.4.1"
+mixin = "0.8.7"
+mixinExtras = "0.5.4"
+
+asmDebug = "5.2"
+asm = "9.9.1"
+guava = "33.6.0-jre"
+gson = "2.14.0"
+mixinbooter = "10.7"
+lwjgl3ify = "1.0.1"
+forgePatchesExtra = "1.0.0"
+
+osxNarratorBlocker = "1.0"
+stripLatestForgeRequirements = "1.0"
+java8UnsupportedShim = "1.0.0"
+launchWrapper = "1.17.4"
+
+[plugins]
+retrofuturaGradle = { id = "com.gtnewhorizons.retrofuturagradle", version.ref = "retrofuturaGradle" }
+jvmDowngrader = { id = "xyz.wagyourtail.jvmdowngrader", version.ref = "jvmDowngrader" }
+ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExt" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+curseforgeGradle = { id = "net.darkhax.curseforgegradle", version.ref = "curseforgeGradle" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+accesstransformers = { id = "net.minecraftforge.accesstransformers", version.ref = "accesstransformers" }
+
+[libraries]
+jvmdowngrader-javaApi = { module = "xyz.wagyourtail.jvmdowngrader:jvmdowngrader-java-api", version.ref = "jvmDowngrader" }
+
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+asmDebug = { module = "org.ow2.asm:asm-debug-all", version.ref = "asmDebug" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
+asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
+asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+asm-analysis = { module = "org.ow2.asm:asm-analysis", version.ref = "asm" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+mixinbooter = { module = "zone.rong:mixinbooter", version.ref = "mixinbooter" }
+lwjgl3ify = { module = "io.github.twilightflower:lwjgl3ify", version.ref = "lwjgl3ify" }
+forgePatchesExtra = { module = "io.github.mctian-mi:forgepatches-extra", version.ref = "forgePatchesExtra" }
+
+osxNarratorBlocker = { module = "com.cleanroommc:osxnarratorblocker", version.ref = "osxNarratorBlocker" }
+stripLatestForgeRequirements = { module = "com.cleanroommc:strip-latest-forge-requirements", version.ref = "stripLatestForgeRequirements" }
+java8UnsupportedShim = { module = "me.eigenraven.java8unsupported:java-8-unsupported-shim", version.ref = "java8UnsupportedShim" }
+launchWrapper = { module = "net.minecraft:launchwrapper", version.ref = "launchWrapper" }

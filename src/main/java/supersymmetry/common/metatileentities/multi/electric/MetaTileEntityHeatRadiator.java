@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -333,8 +333,8 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         tooltip.add(I18n.format("susy.multiblock.heat_radiator.tooltip.2"));
     }
 
-    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
-                               @Nonnull EnumFacing direction) {
+    public boolean isBlockEdge(@NonNull World world, BlockPos.@NonNull MutableBlockPos pos,
+                               @NonNull EnumFacing direction) {
         return world.getBlockState(pos.move(direction)) == getCasingState() ||
                 world.getTileEntity(pos) instanceof MetaTileEntityHolder;
     }
@@ -352,7 +352,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RADIATOR_OVERLAY;

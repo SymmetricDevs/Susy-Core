@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -125,7 +125,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
@@ -139,7 +139,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.ASSEMBLER_OVERLAY;

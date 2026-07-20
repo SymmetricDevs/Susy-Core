@@ -4,7 +4,7 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyo
 
 import java.util.*;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -148,7 +148,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;

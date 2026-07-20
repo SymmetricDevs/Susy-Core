@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -270,7 +270,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         }
 
         @Override
-        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        public void setStackInSlot(int slot, @NonNull ItemStack stack) {
             validateSlotIndex(slot);
             if (!stack.isEmpty()) {
                 stack.setCount(Math.min(stack.getCount(), 1)); // TODO: check this

@@ -2,7 +2,7 @@ package supersymmetry.api.space;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 

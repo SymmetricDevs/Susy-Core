@@ -2,8 +2,8 @@ package supersymmetry.common.blocks;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -80,7 +80,7 @@ public class BlockSheetedFrame extends Block {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this);
     }
@@ -160,11 +160,11 @@ public class BlockSheetedFrame extends Block {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
-    public int damageDropped(@Nonnull IBlockState state) {
+    public int damageDropped(@NonNull IBlockState state) {
         return (this.getMetaFromState(state) & 0b0011) + 4;
     }
 
-    @Nonnull
+    @NonNull
     public IBlockState getStateFromMeta(int meta) {
         if (meta > 15) meta = 0;
 
@@ -189,25 +189,25 @@ public class BlockSheetedFrame extends Block {
         return ModHandler.isMaterialWood(material) ? "axe" : "wrench";
     }
 
-    @Nonnull
-    public SoundType getSoundType(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos,
+    @NonNull
+    public SoundType getSoundType(IBlockState state, @NonNull World world, @NonNull BlockPos pos,
                                   @Nullable Entity entity) {
         Material material = state.getValue(this.variantProperty);
         return ModHandler.isMaterialWood(material) ? SoundType.WOOD : SoundType.METAL;
     }
 
-    public int getHarvestLevel(@Nonnull IBlockState state) {
+    public int getHarvestLevel(@NonNull IBlockState state) {
         return 1;
     }
 
-    @Nonnull
+    @NotNull
     public net.minecraft.block.material.Material getMaterial(IBlockState state) {
         Material material = state.getValue(this.variantProperty);
         return ModHandler.isMaterialWood(material) ? net.minecraft.block.material.Material.WOOD :
                 super.getMaterial(state);
     }
 
-    public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+    public void getSubBlocks(@NonNull CreativeTabs tab, @NonNull NonNullList<ItemStack> list) {
         // bit shift down returned 4 bits from meta to look at axis, only display y-aligned
         blockState.getValidStates().stream()
                 .filter(blockState -> blockState.getValue(variantProperty) != Materials.NULL &&
@@ -238,8 +238,8 @@ public class BlockSheetedFrame extends Block {
         return this.getGtMaterial(this.getMetaFromState(state));
     }
 
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
@@ -286,8 +286,8 @@ public class BlockSheetedFrame extends Block {
      * }
      * }
      * 
-     * public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
-     * EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
+     * public boolean onBlockActivated(@NonNull World worldIn, @NonNull BlockPos pos, @NonNull IBlockState state,
+     * EntityPlayer playerIn, @NonNull EnumHand hand, @NonNull EnumFacing facing, float hitX, float hitY, float hitZ) {
      * ItemStack stackInHand = playerIn.getHeldItem(hand);
      * if (stackInHand.isEmpty()) {
      * return false;
@@ -347,7 +347,7 @@ public class BlockSheetedFrame extends Block {
      * }
      */
 
-    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+    public void onEntityCollision(@NonNull World worldIn, @NonNull BlockPos pos, @NonNull IBlockState state,
                                   Entity entityIn) {
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
@@ -365,13 +365,13 @@ public class BlockSheetedFrame extends Block {
         }
     }
 
-    @Nonnull
-    public EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+    @NonNull
+    public EnumPushReaction getPushReaction(@NonNull IBlockState state) {
         return EnumPushReaction.NORMAL;
     }
 
-    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn,
-                                                 @Nonnull BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(@NonNull IBlockState blockState, @NonNull IBlockAccess worldIn,
+                                                 @NonNull BlockPos pos) {
         AxisAlignedBB boundingBox = switch (this.getMetaFromState(blockState) >>> 2) {
             // x
             case (0) -> new AxisAlignedBB(0.05, 0.0, 0.00, 0.95, 1.0, 1.00);
@@ -383,9 +383,9 @@ public class BlockSheetedFrame extends Block {
         return boundingBox;
     }
 
-    @Nonnull
-    public BlockFaceShape getBlockFaceShape(@Nonnull IBlockAccess worldIn, @Nonnull IBlockState state,
-                                            @Nonnull BlockPos pos, @Nonnull EnumFacing face) {
+    @NonNull
+    public BlockFaceShape getBlockFaceShape(@NonNull IBlockAccess worldIn, @NonNull IBlockState state,
+                                            @NonNull BlockPos pos, @NonNull EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 

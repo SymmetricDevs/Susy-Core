@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -65,7 +65,7 @@ public class MobHordeWorldData extends WorldSavedData
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound tag) {
+    public void readFromNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = tag.getTagList("PlayerData", Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.tagCount(); i++) {
@@ -77,9 +77,9 @@ public class MobHordeWorldData extends WorldSavedData
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tag) {
+    public NBTTagCompound writeToNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = new NBTTagList();
 
         for (Map.Entry<UUID, MobHordePlayerData> entry : this.playerDataMap.entrySet()) {

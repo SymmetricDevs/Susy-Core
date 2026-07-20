@@ -2,7 +2,7 @@ package supersymmetry.common.blocks;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -26,7 +26,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     private static final PropertyEnum<StoneType> PROPERTY = PropertyEnum.create("variant", StoneType.class);
     private final StoneVariant stoneVariant;
 
-    public SusyStoneVariantBlock(@Nonnull StoneVariant stoneVariant) {
+    public SusyStoneVariantBlock(@NonNull StoneVariant stoneVariant) {
         super(Material.ROCK);
         this.stoneVariant = stoneVariant;
         this.setRegistryName(stoneVariant.id);
@@ -39,7 +39,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH_DECORATIONS);
     }
 
-    @Nonnull
+    @NonNull
     protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
         this.VALUES = StoneType.values();
@@ -87,23 +87,23 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final float resistance;
         public final double walkingSpeed;
 
-        StoneVariant(@Nonnull String id) {
+        StoneVariant(@NonNull String id) {
             this(id, id);
         }
 
-        StoneVariant(@Nonnull String id, double walkingSpeed) {
+        StoneVariant(@NonNull String id, double walkingSpeed) {
             this(id, id, 1.5F, 10.0F, walkingSpeed);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
+        StoneVariant(@NonNull String id, @NonNull String translationKey) {
             this(id, translationKey, 1.5F, 10.0F, 0);
         }
 
-        StoneVariant(@Nonnull String id, float hardness, float resistance) {
+        StoneVariant(@NonNull String id, float hardness, float resistance) {
             this(id, id, hardness, resistance, 0);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance,
+        StoneVariant(@NonNull String id, @NonNull String translationKey, float hardness, float resistance,
                      double walkingSpeed) {
             this.id = id;
             this.translationKey = translationKey;
@@ -131,12 +131,12 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         private final String name;
         public final MapColor mapColor;
 
-        StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
+        StoneType(@NonNull String name, @NonNull MapColor mapColor) {
             this.name = name;
             this.mapColor = mapColor;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

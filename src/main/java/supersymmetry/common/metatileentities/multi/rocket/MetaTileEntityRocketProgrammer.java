@@ -4,7 +4,7 @@ import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_K
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -121,7 +121,7 @@ public class MetaTileEntityRocketProgrammer extends MultiblockWithDisplayBase {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.ASSEMBLER_OVERLAY;

@@ -1,6 +1,6 @@
 package supersymmetry.common.network;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.network.NetHandlerPlayServer;

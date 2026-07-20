@@ -1,6 +1,6 @@
 package supersymmetry.api.recipes.catalysts;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 public class CatalystInfo implements Comparable<CatalystInfo> {
 
@@ -62,7 +62,7 @@ public class CatalystInfo implements Comparable<CatalystInfo> {
     }
 
     @Override
-    public int compareTo(@Nonnull CatalystInfo o) {
+    public int compareTo(@NonNull CatalystInfo o) {
         // compare order: Tier, Speed, Yield, Energy
         int result = Integer.compare(this.getTier(), o.getTier());
         if (result != 0) return result;

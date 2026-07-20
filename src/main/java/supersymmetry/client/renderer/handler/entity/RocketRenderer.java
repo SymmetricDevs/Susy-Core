@@ -3,7 +3,7 @@ package supersymmetry.client.renderer.handler.entity;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

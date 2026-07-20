@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -26,7 +26,7 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         setBlockUnbreakable();
     }
 
-    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+    public void onEntityCollision(@NonNull World worldIn, @NonNull BlockPos pos, @NonNull IBlockState state,
                                   Entity entityIn) {
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
@@ -44,8 +44,8 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         }
     }
 
-    @Nonnull
-    public EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+    @NonNull
+    public EnumPushReaction getPushReaction(@NonNull IBlockState state) {
         return EnumPushReaction.NORMAL;
     }
 
