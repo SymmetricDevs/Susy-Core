@@ -7,6 +7,9 @@
   "mixins": [
     "SAMTargetDataMixin",
     "TileRadarStationMixin",
-    "RadarRenderDataMixin"
+    "RadarRenderDataMixin",
+    "BlastGasBase_GetProtectionRatingMixin",
+    "BlastGasBase_DoExplodeMixin",
+    "BlockRadioactive_TryDecayEntitiesMixin"
   ]
 }
