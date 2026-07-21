@@ -1,5 +1,6 @@
 package supersymmetry;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,6 +12,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import li.cil.oc.api.Driver;
+import li.cil.oc.api.FileSystem;
+import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
@@ -85,6 +89,14 @@ public class Supersymmetry {
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
         SuSyCoverBehaviors.init();
+
+        Driver.add(new supersymmetry.integration.opencomputers.DriverSpeaker());
+
+        Items.registerFloppy(
+                "speaker example",
+                EnumDyeColor.GRAY,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
+                true);
     }
 
     @Mod.EventHandler
