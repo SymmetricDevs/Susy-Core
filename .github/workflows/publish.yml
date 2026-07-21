@@ -46,5 +46,4 @@ jobs:
           CURSEFORGE_PROJECT_ID: "846224"
           CHANGELOG_LOCATION: "${{ env.CHANGELOG_LOCATION }}"
           RELEASE_TYPE: "${{ env.RELEASE_TYPE }}"
-          GAME_VERSIONS: "Minecraft 1.12:Minecraft 1.12.2,Java 8,Forge"
         run: ./gradlew curseforge --warning-mode all --build-cache
