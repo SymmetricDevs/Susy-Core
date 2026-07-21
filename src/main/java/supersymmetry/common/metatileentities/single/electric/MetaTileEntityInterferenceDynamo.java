@@ -1,9 +1,9 @@
 package supersymmetry.common.metatileentities.single.electric;
 
 import java.util.List;
+import java.util.Set;
 
 import gregtech.api.capability.GregtechTileCapabilities;
-import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +28,16 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
     private static final Field PROGRESS_TIME_FIELD;
+
+    //make problem cauers immune
+    private static final Set<Class<? extends MetaTileEntity>> WHITELIST = Set.of(
+            MetaTileEntityDustAgitator.class,
+            MetaTileEntityDefoliator.class,
+            MetaTileEntityFederationDropBeacon.class,
+            MetaTileEntityHydrocarbonSaturator.class,
+            MetaTileEntityInterferenceDynamo.class,
+            MetaTileEntityToxicSpewer.class
+    );
 
     public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId, tier);
@@ -103,17 +113,18 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
                     MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
                     if (mte == null) continue;
 
+                    if (WHITELIST.contains(mte.getClass())) continue;
 
                     AbstractRecipeLogic logic = mte.getCapability(GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
                     if (
                             logic == null ||
-                            logic.getProgress() <= 0 ||
-                            !logic.consumesEnergy() || //exclude energy generators, no infinite power for you. Also handles things like radiator, hx, etc...
-                            // exclude steam and primitive
-                            logic instanceof PrimitiveRecipeLogic ||
-                            logic instanceof SteamMultiblockRecipeLogic ||
-                            logic instanceof RecipeLogicSteam ||
-                            logic instanceof BoilerRecipeLogic
+                                    logic.getProgress() <= 0 ||
+                                    !logic.consumesEnergy() || //exclude energy generators, no infinite power for you. Also handles things like radiator, hx, etc...
+                                    // exclude steam and primitive
+                                    logic instanceof PrimitiveRecipeLogic ||
+                                    logic instanceof SteamMultiblockRecipeLogic ||
+                                    logic instanceof RecipeLogicSteam ||
+                                    logic instanceof BoilerRecipeLogic
                     ) continue;
 
                     try {
