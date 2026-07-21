@@ -48,7 +48,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *   immune = maskStrength >= maxPotencyOfGas
  */
 @Mixin(value = CapabilityBreathing.DefaultBreathingHandler.class, remap = false)
-public abstract class CapabilityBreathing_IsImmune_Mixin {
+public abstract class CapabilityBreathing_IsImmuneMixin {
 
     @Shadow
     @Final
