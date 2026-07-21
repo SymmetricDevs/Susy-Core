@@ -1,6 +1,7 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,11 +17,9 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
-import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
-import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -31,10 +30,7 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.DataCardBehavior;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.RocketConfigBehavior;
+import supersymmetry.common.item.behavior.*;
 
 public class SuSyMetaItems {
 
@@ -53,6 +49,10 @@ public class SuSyMetaItems {
     public static MetaValueItem SHAPE_MOLD_TARGET;
     public static MetaValueItem ENTITY_TAGGER;
     public static MetaValueItem FACTION_RADIO;
+    public static MetaValueItem BASIC_CARGO_DRONE;
+    public static MetaValueItem ADVANCED_CARGO_DRONE;
+    public static MetaValueItem LOCATION_CARD;
+    public static MetaValueItem ELITE_CARGO_DRONE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -165,6 +165,18 @@ public class SuSyMetaItems {
         PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
 
         SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
+
+        BASIC_CARGO_DRONE = metaItem.addItem(18, "cargo_drone.basic").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(basicDroneCharge, GTValues.MV));
+
+        ADVANCED_CARGO_DRONE = metaItem.addItem(19, "cargo_drone.advanced").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(advancedDroneCharge, GTValues.HV));
+
+        LOCATION_CARD = metaItem.addItem(20, "location_card").setMaxStackSize(1)
+                .addComponents(new LocationCardBehavior());
+
+        ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
+                .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
     }
 
     private static void addExtraBehaviours() {

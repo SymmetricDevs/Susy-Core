@@ -62,6 +62,48 @@
       "textures" : {
         "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_9"
       }
+    },
+    "variant=bmrf10" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_10"
+      }
+    },
+    "variant=bmrf11" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_11"
+      }
+    },
+    "variant=bmrf12" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_12"
+      }
+    },
+    "variant=bmrf13" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_13"
+      }
+    },
+    "variant=bmrf14" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_14"
+      }
+    },
+    "variant=bmrf15" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_15"
+      }
+    },
+    "variant=bmrf16" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/bmrf_blocks/bmrf_block_16"
+      }
     }
   }
 }

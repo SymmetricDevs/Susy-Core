@@ -266,6 +266,9 @@ susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
 susy.fluid.slurry=%s浆液
 
+susy.fluid.type_base.tooltip=§6碱性物质！轻拿轻放！
+susy.fluid_pipe.base_proof=§6可传输碱性物质
+
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=蒸汽提取机不能熔化物品！
 

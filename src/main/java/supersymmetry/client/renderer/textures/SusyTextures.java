@@ -182,6 +182,8 @@ public class SusyTextures {
             "machines/screen_printer");
     public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/edm");
+    public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/log_washer");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
@@ -192,6 +194,8 @@ public class SusyTextures {
             "storage/crates/code_breacher");
     public static final SimpleOverlayRenderer REDSTONE_CONTROLLER_OVERLAY = new SimpleOverlayRenderer(
             "machines/overlay/overlay_redstone");
+    public static final SimpleOverlayRenderer DRONE_BASKET_OVERLAY = new SimpleOverlayRenderer(
+            "storage/crates/drone_basket");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/masonry_brick");
@@ -215,6 +219,8 @@ public class SusyTextures {
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
     public static final SimpleCubeRenderer AEROSPACE_GASKET = new SimpleCubeRenderer(
             "gregtech:blocks/rocket_multiblock_casing/aerospace_gasket");
+    public static final SimpleCubeRenderer ABRASION_RESISTANT_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/casings/grinder_casing/abrasion_resistant_casing");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 

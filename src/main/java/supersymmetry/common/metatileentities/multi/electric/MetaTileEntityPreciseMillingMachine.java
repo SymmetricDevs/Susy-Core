@@ -1,15 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -18,20 +13,16 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.metatileentities.MetaTileEntities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillBit;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockController {
 
@@ -52,50 +43,23 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 .aisle("BBBBBB", "CWWWWS", "CWWWWC", "CCCCCC")
                 .where('S', selfPredicate())
                 .where('B', states(getBaseCasingState()).setMinGlobalLimited(18)
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY)
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(1)
                                 .setMinGlobalLimited(1).setMaxGlobalLimited(2)
                                 .addTooltip("susy.multiblock.pattern.error.milling.lower"))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
                                 .setExactLimit(1)
                                 .addTooltip("susy.multiblock.pattern.error.milling.lower")))
                 .where('C', states(getUpperCasingState()).setMinGlobalLimited(35)
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS)
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
                                 .setMinGlobalLimited(1)
                                 .addTooltip("susy.multiblock.pattern.error.milling.upper"))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1)
                                 .setMinGlobalLimited(1)
                                 .addTooltip("susy.multiblock.pattern.error.milling.upper")))
                 .where('D', states(getDrillBitState()))
                 .where('G', states(getGearBoxState()))
                 .where('W', states(getGlassState()))
                 .build();
-    }
-
-    @Override
-    public List<MultiblockShapeInfo> getMatchingShapes() {
-        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
-                .where('S', SuSyMetaTileEntities.MILLING, EnumFacing.SOUTH)
-                .where('B', getBaseCasingState())
-                .where('C', getUpperCasingState())
-                .where('D', getDrillBitState())
-                .where('G', getGearBoxState())
-                .where('W', getGlassState())
-                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.HV], EnumFacing.SOUTH)
-                .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.HV], EnumFacing.SOUTH)
-                .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.HV], EnumFacing.SOUTH)
-                .where('G', getGearBoxState())
-                .where('M',
-                        () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                getBaseCasingState(),
-                        EnumFacing.SOUTH);
-        shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("BBBBBB", "CCCCCC", "CGGGGC", "CCCCCC")
-                .aisle("BBBBBB", "C    C", "CDDDDC", "CCCCCC")
-                .aisle("BBBBBB", "C    C", "C    C", "CCCCCC")
-                .aisle("BBBBEM", "OWWWWS", "IWWWWC", "CCCCCC")
-                .build());
-        return shapeInfo;
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -105,7 +69,7 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
                 return Textures.SOLID_STEEL_CASING;
             }
         }
-        // for IO Buses and other unrecognized parts
+
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 

@@ -525,11 +525,11 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 4, 1,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 2, 1, 5,
+    public static final RecipeMap<SimpleRecipeBuilder> RESIST_PROCESSOR = new RecipeMap<>("resist_processing", 1, 1, 5,
             0,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.CENTRIFUGE); // because it spins
@@ -560,6 +560,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> EDM_RECIPES = new RecipeMap<>(
             "edm", 3, 3, 1, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ELECTROLYZER);
+
+    public static final RecipeMap<SimpleRecipeBuilder> CARGO_DRONE_PAD = new RecipeMap<>(
+            "cargo_drone_pad", 1, 1, 0, 0, new SimpleRecipeBuilder(), true);
 
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()

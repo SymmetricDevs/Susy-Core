@@ -7,7 +7,10 @@ tile.wire_coil.tooltip_evaporation=§8Evaporation Pool
 tile.wire_coil.tooltip_energy_evaporating=  §cHeat Generation: §f%,d kJ/t
 
 tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
+tile.sintering_brick.sintering_block_brick_bloom_deco.name=Active Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
+tile.sintering_brick.sintering_block_magnetoplated_bloom_deco.name=Active Magnetoplated Sintering Block
+
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
 tile.separator_rotor.steel.name=Steel Gravity Separator Rotor
@@ -144,7 +147,7 @@ tile.home_block.home_scifi.tooltip=Sci-Fi
 
 tile.conveyor_belt.lv.name=Conveyor Belt
 
-tile.drill_bit.steel.name=Steel Drill Bit Block
+tile.drill_bit.steel.name=Steel Precision Drill Bit Assembly
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
@@ -162,6 +165,8 @@ tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
+
+tile.paddle_shaft.iron.name=Paddle Shaft
 
 
 # Rocks
@@ -299,6 +304,8 @@ item.material.oreprefix.target=%s Sputtering Target
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
+susy.fluid.type_base.tooltip=§6Basic! Handle with care!
+susy.fluid_pipe.base_proof=§6Can handle Bases
 
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
@@ -493,6 +500,7 @@ susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.cupola_furnace.name=Cupola Furnace
 susy.machine.cupola_furnace.tooltip=Gains one parallel per block layer
 susy.machine.large_steam_hammer.name=Large Steam Hammer
+susy.machine.log_washer.name=Log Washer
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
@@ -526,6 +534,9 @@ susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at onc
 
 susy.machine.electric_discharge_machine.name=Electric Discharge Machine (EDM)
 susy.machine.electric_discharge_machine.tooltip=Electronic Dance Machine
+
+susy.machine.cargo_drone_pad.name=Cargo Drone Pad
+susy.machine.cargo_drone_pad.tooltip=MarvNET v0.1
 
 # Properties
 susy.recipe.plasma_requirement=Requires plasma: %s
@@ -1221,15 +1232,22 @@ metaitem.restrictive_filter.name=Restrictive Item Filter
 metaitem.restrictive_filter.tooltip=Allows only §6one stack§7 of any type of item inside. Can replace robot arms. /n§oHere you may come, but no further.§r §7Job 38:11
 metaitem.air_vent.tooltip=Passively collects a Dimension's Air for your Machines when facing Air
 metaitem.track_segment.name=Monorail Track Segment
-metaitem.track_segment.tooltip=For use in the §8tunnelbore.
+metaitem.track_segment.tooltip=For use in the §8tunnel bore.
 metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
-metaitem.shape.mold.target=Sputtering Target Mold
+metaitem.shape.mold.target.name=Sputtering Target Mold
+metaitem.location_card.name=Location Card
+metaitem.cargo_drone.basic.name=Basic Cargo Drone
+metaitem.cargo_drone.basic.tooltip=Max range: §61000 blocks§7, speed: §b2.5 blocks/second§b
+metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
+metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
+metaitem.cargo_drone.elite.name=Elite Cargo Drone
+metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
 
 # Catalysts
-susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/T (%s§f)
+susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
 susy.universal.catalysts.tooltip.non_tiered=§eNon-Tiered Catalyst§
 susy.universal.catalysts.tooltip.yield.tiered=§aYield Boost: §fx%d §aper tier.§f
 susy.universal.catalysts.tooltip.energy.tiered=§aEnergy Usage: §fx%d §aper tier.§f
@@ -1299,6 +1317,17 @@ susy.wrongbiome=Machine can not work in this biome!
 susy.weather_resistance=§2Will not explode from water, lava, fire or rain.
 susy.large_fluid_pump.y_level=Current Controller Y level: Y=%s
 susy.large_fluid_pump.biome=Current bottom Pipe Casing biome: %s
+susy.cargo_drone_pad.no_basket=§cNot linked§c
+susy.cargo_drone_pad.no_space_in_basket=§6Target basket is not empty§6
+susy.cargo_drone_pad.basket_pos=§bLinked to deposit basket at§b %s
+susy.cargo_drone_pad.distance=§bDistance to target:§b %s blocks
+susy.cargo_drone_pad.initiated=§2Depositing item...§2
+susy.cargo_drone_pad.deposited=§aReturning...§a
+susy.cargo_drone_pad.progress=§b%s%%§b
+
+susy.location_card.tooltip.coords=§bStored coordinates: §b
+susy.location_card.tooltip.no_coords=No coordinates stored. Shift-right-click a Drone Deposit Basket to link
+chat.susy.location_card.encode=§aSuccessfully stored target basket's position§a
 
 # Stock Interfaces
 susy.machine.stock_controller.name=Locomotive Controller
@@ -1490,6 +1519,10 @@ susy.machine.locked_crate.stainless_steel.name=Stainless Steel Crate
 susy.machine.locked_crate.titanium.name=Titanium Crate
 susy.machine.locked_crate.tungstensteel.name=Tungstensteel Crate
 
+
+susy.machine.drone_deposit_basket.name=Drone Deposit Basket
+susy.machine.advanced_drone_deposit_basket.name=Advanced Drone Deposit Basket
+
 # Boilers
 susy.machine.large_boiler.bronze.name=Large Bronze Boiler
 susy.machine.large_boiler.steel.name=Large Steel Boiler
@@ -1628,6 +1661,13 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+tile.bmrf_blocks.bmrf10.name=BMRF-10
+tile.bmrf_blocks.bmrf11.name=BMRF-11
+tile.bmrf_blocks.bmrf12.name=BMRF-12
+tile.bmrf_blocks.bmrf13.name=BMRF-13
+tile.bmrf_blocks.bmrf14.name=BMRF-14
+tile.bmrf_blocks.bmrf15.name=BMRF-15
+tile.bmrf_blocks.bmrf16.name=BMRF-16
 
 ##Factions
 #Items
@@ -1648,3 +1688,8 @@ susy.command.faction.get=current HATE for %s: %s
 susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+chat.susy.location_card.x=X (%s)
+chat.susy.location_card.y=Y (%s)
+chat.susy.location_card.z=Z (%s)
+

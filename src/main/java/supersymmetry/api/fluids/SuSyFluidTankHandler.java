@@ -23,8 +23,6 @@ public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
     @Override
     public boolean canFillFluidType(FluidStack fluid) {
         boolean result = super.canFillFluidType(fluid);
-        System.out.println("[SuSyFilteredFluidTank] canFillFluidType() called with: " +
-                (fluid != null ? fluid.getFluid().getName() : "null") + ", result: " + result);
         return result;
     }
 
@@ -57,9 +55,6 @@ public class SuSyFluidTankHandler extends NotifiableFilteredFluidHandler {
                     @Override
                     public boolean canFillFluidType(FluidStack fluidStack) {
                         boolean result = fluidStack != null && SuSyFluidTankHandler.this.canFillFluidType(fluidStack);
-                        System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
-                                (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " +
-                                result);
                         return result;
                     }
 
