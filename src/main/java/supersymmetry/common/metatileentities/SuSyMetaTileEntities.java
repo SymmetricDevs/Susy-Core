@@ -242,6 +242,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
 
     public static MetaTileEntityRTG[] RTG = new MetaTileEntityRTG[8];
+    public static MetaTileEntitySolarPanel[] SOLAR_PANEL = new MetaTileEntitySolarPanel[2];
 
     public static MetaTileEntityStrandBus IMPORT_STRAND;
     public static MetaTileEntityStrandBus EXPORT_STRAND;
@@ -587,6 +588,10 @@ public class SuSyMetaTileEntities {
         // RTGs: 16504-16511
         RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
         RTG[1] = registerMetaTileEntity(16505, new MetaTileEntityRTG(susyId("rtg.mv"), 2));
+
+        // Solar panels: 16512-16520
+        SOLAR_PANEL[0] = registerMetaTileEntity(16512, new MetaTileEntitySolarPanel(susyId("solar_panel.lv"), 1));
+        SOLAR_PANEL[1] = registerMetaTileEntity(16513, new MetaTileEntitySolarPanel(susyId("solar_panel.mv"), 2));
 
         // Strand casting: 16600-16610
         IMPORT_STRAND = registerMetaTileEntity(16600, new MetaTileEntityStrandBus(susyId("strand_bus.import"), false));

@@ -1,0 +1,6 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=default": { "model": "susy:solar_panel/default" }
+  }
+}
