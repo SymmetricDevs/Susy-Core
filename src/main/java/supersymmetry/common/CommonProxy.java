@@ -16,6 +16,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
@@ -56,6 +57,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.potion.PotionDropPodSickness;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
@@ -259,5 +261,10 @@ public class CommonProxy {
 
         CelestialObjects.init();
         SuSyDimensions.init();
+    }
+
+    @SubscribeEvent
+    public static void registerPotions(@NotNull RegistryEvent.Register<Potion> event) {
+        event.getRegistry().register(PotionDropPodSickness.INSTANCE);
     }
 }

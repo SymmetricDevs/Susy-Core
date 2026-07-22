@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.common.potion.PotionDropPodSickness;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
@@ -33,6 +34,12 @@ public class FactionViolence {
 
         String mobFaction = susyTag.getString(TAG_FACTION);
         if (mobFaction.isEmpty()) return;
+
+        // Skip targeting during dismount grace period
+        // technical explanation: mobs sometimes target the drop pod due to explosion damage or smth
+        // tried to fix it before, didn't work. might be a techguns being dumb thing
+        // lore explanation: droppod sickness, droppods can disorient people when they arrive from outer space.
+        if (mob.isPotionActive(PotionDropPodSickness.INSTANCE)) return;
 
         // Clear attack target if dead or invalid
         // not sure if this is needed or not, but techguns will shoot at nothing if it isn't
