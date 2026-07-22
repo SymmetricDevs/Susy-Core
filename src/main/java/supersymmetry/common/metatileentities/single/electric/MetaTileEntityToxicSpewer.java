@@ -2,15 +2,18 @@ package supersymmetry.common.metatileentities.single.electric;
 
 import java.util.List;
 
+import gregtech.api.capability.GregtechCapabilities;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +57,14 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         currentRadius = data.getInteger("harmRadius");
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER && side != null) {
+            return null;
+        }
+        return super.getCapability(capability, side);
     }
 
     @Override
