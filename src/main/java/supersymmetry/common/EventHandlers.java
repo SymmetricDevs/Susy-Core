@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -210,10 +211,12 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!event.player.world.isRemote && event.player.world.getTotalWorldTime() % 20 == 0 &&
+    public static void onEntityTick(TickEvent.WorldTickEvent event) {
+        if (!event.world.isRemote && event.world.getTotalWorldTime() % 20 == 0 &&
                 event.phase == TickEvent.Phase.START) {
-            DimensionBreathabilityHandler.tickPlayer(event.player);
+            for (Entity entity : event.world.getEntities(EntityLivingBase.class, (_) -> true)) {
+                DimensionBreathabilityHandler.tickEntity(entity);
+            }
         }
     }
 

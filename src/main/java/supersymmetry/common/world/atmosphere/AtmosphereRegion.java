@@ -2,6 +2,7 @@ package supersymmetry.common.world.atmosphere;
 
 import java.util.*;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -254,7 +255,11 @@ public class AtmosphereRegion {
      * Remove any breach points that are no longer passable (block placed there).
      */
     public void validateBreaches(World world) {
-        breachPoints.removeIf(world::isBlockFullCube);
+        breachPoints.removeIf(breach -> isValidSeal(world, breach));
+    }
+
+    public static boolean isValidSeal(World world, BlockPos pos) {
+        return world.isBlockFullCube(pos) && world.getBlockState(pos).getMaterial() != Material.SAND;
     }
 
     // ---- Queries ----
