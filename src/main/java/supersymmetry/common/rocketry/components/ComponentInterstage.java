@@ -110,7 +110,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
             previousAirLayer = airLayer;
         }
 
-        double radius = analysis.getRadius(analysis.getLowestLayer(hullBlocks));
+        this.radius = analysis.getRadius(analysis.getLowestLayer(hullBlocks));
 
         NBTTagCompound tag = new NBTTagCompound();
         tag.setDouble("radius", radius);
