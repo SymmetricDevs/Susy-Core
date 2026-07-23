@@ -52,9 +52,9 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -109,7 +109,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     protected @NotNull BlockPattern createStructurePattern() {
         String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
         String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23: launch surface
-        String dcHoleTrack = "DDDDDDDDCC   CCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
+        String dcHoleTrack = "DDDDDDDDCCC CCCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
+        String dcHoleTrackLarge = "DDDDDDDDCC   CCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
         String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23: self-row
         String sp23 = "                       "; // 23 spaces
         String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23: reinforced foundation under track
@@ -160,7 +161,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
                 cSides, l23,
                 l23);
-        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
                 cSides, l23,
                 l23);
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
@@ -294,7 +295,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void setAABBs() {
         // Had to make it overshoot a little :(
         BlockPos offsetBottomLeft = new BlockPos(6, 5, 12);
-        BlockPos offsetTopRight = new BlockPos(-6, 20, 18);
+        BlockPos offsetTopRight = new BlockPos(-6, 20, 14);
 
         switch (this.getFrontFacing()) {
             case EAST:
@@ -616,14 +617,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        if (this.state == LaunchPadState.LOADING) {
+        if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("protract", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
-        }
-        if (this.state == LaunchPadState.LAUNCHING) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("retract", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+                    .playOnce("retract")
+                    .playAndHold("protract"));
             return PlayState.CONTINUE;
         }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
