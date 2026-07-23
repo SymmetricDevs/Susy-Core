@@ -125,7 +125,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
             }
         }
 
-        double radius = analysis.getRadius(blocks);
+        this.radius = analysis.getRadius(blocks);
         int calculatedHeight = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
         if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;

@@ -431,7 +431,7 @@ public class StructAnalysis {
             }
         }
 
-        return max - min;
+        return max - min + 1;
     }
 
     /**

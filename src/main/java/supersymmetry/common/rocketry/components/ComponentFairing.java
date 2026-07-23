@@ -220,7 +220,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 }
             }
         }
-        double radius = analysis.getRadius(blocksConnected);
+        this.radius = analysis.getRadius(blocksConnected);
         int calculatedHeight = (int) (fairingBB.maxY - fairingBB.minY);
         if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;
