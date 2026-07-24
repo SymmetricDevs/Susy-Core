@@ -409,6 +409,8 @@ susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
 susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
 susy.machine.attrition_scrubber.name=Attrition Scrubber
 susy.machine.attrition_scrubber.tooltip=Glorified Washing Machine
+susy.machine.industrial_sifter.name=Industrial Sifter
+susy.machine.industrial_sifter.tooltip=Stay calm and keep sifting
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s

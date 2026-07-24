@@ -312,6 +312,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
     public static MetaTileEntityAttritionScrubber ATTRITION_SCRUBBER;
+    public static MetaTileEntityIndustrialSifter INDUSTRIAL_SIFTER;
 
     public static MetaTileEntityCargoDronePad CARGO_DRONE_PAD;
 
@@ -458,6 +459,8 @@ public class SuSyMetaTileEntities {
                 susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
         ATTRITION_SCRUBBER = registerMetaTileEntity(14744, new MetaTileEntityAttritionScrubber(
                 susyId("attrition_scrubber")));
+        INDUSTRIAL_SIFTER = registerMetaTileEntity(14745, new MetaTileEntityIndustrialSifter(
+                susyId("industrial_sifter")));
 
         GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
