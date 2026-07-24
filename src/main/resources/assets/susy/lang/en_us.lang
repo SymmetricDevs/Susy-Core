@@ -42,6 +42,7 @@ tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
+tile.susy_multiblock_casing.screener_deck=Screener Deck
 
 
 tile.processor_cluster.tier1.name=Processor Cluster
@@ -409,6 +410,8 @@ susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
 susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
 susy.machine.attrition_scrubber.name=Attrition Scrubber
 susy.machine.attrition_scrubber.tooltip=Glorified Washing Machine
+susy.machine.industrial_sifter.name=Industrial Sifter
+susy.machine.industrial_sifter.tooltip=Stay calm and keep sifting
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
