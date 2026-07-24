@@ -5,6 +5,7 @@ import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 
@@ -42,32 +43,34 @@ public final class DimensionBreathabilityHandler {
         dimensionBreathabilityMap.put(CelestialObjects.MOON.getDimension(), new BreathabilityInfo[] { SPACE });
     }
 
-    public static boolean isInHazardousEnvironment(EntityPlayer player) {
+    public static boolean isInHazardousEnvironment(Entity player) {
         return dimensionBreathabilityMap.containsKey(player.dimension);
     }
 
-    public static void tickPlayer(EntityPlayer player) {
-        if (isInHazardousEnvironment(player)) {
-            for (BreathabilityInfo info : dimensionBreathabilityMap.get(player.dimension)) {
+    public static void tickEntity(Entity entity) {
+        if (isInHazardousEnvironment(entity)) {
+            for (BreathabilityInfo info : dimensionBreathabilityMap.get(entity.dimension)) {
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
-                    if (AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
-                            .getOxygenation(player.getPosition()) >= 0.1) {
+                    if (AtmosphereWorldData.get(entity.getEntityWorld()).getGraph()
+                            .getOxygenation(entity.getPosition()) >= 0.1) {
                         return;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
-                    if (player.getBrightness() > 0.05F) {
+                    if (entity.getBrightness() > 0.05F) {
                         return;
                     }
                 }
-                if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
-                    if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
-                        double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
-                        if (damageAbsorbed != ABSORB_ALL)
-                            info.damagePlayer(player, damageAbsorbed);
-                        return;
+                if (entity instanceof EntityPlayer player) {
+                    if (player.getItemStackFromSlot(HEAD).getItem() instanceof SuSyArmorItem item) {
+                        if (item.isValid(player.getItemStackFromSlot(HEAD), player)) {
+                            double damageAbsorbed = item.getDamageAbsorbed(player.getItemStackFromSlot(HEAD), player);
+                            if (damageAbsorbed != ABSORB_ALL)
+                                info.damagePlayer(player, damageAbsorbed);
+                            return;
+                        }
                     }
                 }
-                info.damagePlayer(player, 0);
+                info.damagePlayer(entity, 0);
             }
 
         }
@@ -96,7 +99,7 @@ public final class DimensionBreathabilityHandler {
             player.attackEntityFrom(damageType, (float) defaultDamage);
         }
 
-        public void damagePlayer(EntityPlayer player, double amountAbsorbed) {
+        public void damagePlayer(Entity player, double amountAbsorbed) {
             if (defaultDamage > amountAbsorbed) {
                 player.attackEntityFrom(damageType, (float) defaultDamage - (float) amountAbsorbed);
             }

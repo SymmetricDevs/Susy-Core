@@ -165,7 +165,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     @Override
     public double getDirectFrictionNewtons(List<Vec3i> track) {
         if (this.lifterAngle > 0 || this.liftingMode == LiftingMode.UP) {
-            return 1000000;
+            return 10000000;
         }
         return super.getDirectFrictionNewtons(track);
     }
