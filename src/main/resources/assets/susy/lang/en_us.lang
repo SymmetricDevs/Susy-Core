@@ -42,6 +42,7 @@ tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
+tile.susy_multiblock_casing.screener_deck=Screener Deck
 
 
 tile.processor_cluster.tier1.name=Processor Cluster

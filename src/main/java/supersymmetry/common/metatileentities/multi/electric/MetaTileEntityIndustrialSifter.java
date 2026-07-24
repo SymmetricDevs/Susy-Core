@@ -51,8 +51,8 @@ public class MetaTileEntityIndustrialSifter extends RecipeMapMultiblockControlle
         return MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX);
     }
 
-    protected static IBlockState getSieveState() {
-        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SIEVE_TRAY);
+    protected static IBlockState getMeshState() {
+        return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.SCREENER_DECK);
     }
 
     protected BlockPattern createStructurePattern() {
@@ -72,7 +72,7 @@ public class MetaTileEntityIndustrialSifter extends RecipeMapMultiblockControlle
                         true, true, true, false)))
                 .where('G', states(getGearboxState()))
                 .where('F', frames(Materials.StainlessSteel))
-                .where('$', states(getSieveState()))
+                .where('$', states(getMeshState()))
                 .where('S', selfPredicate())
                 .where(' ', any())
                 .build();
