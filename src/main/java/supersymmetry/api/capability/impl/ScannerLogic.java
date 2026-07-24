@@ -75,7 +75,7 @@ public class ScannerLogic {
     }
 
     public void setActive(boolean active) {
-        if (this.isActive != active) {
+        if (this.isActive != active && workingEnabled) {
             this.isActive = active;
             this.progressTime = 0;
             this.mte.markDirty();

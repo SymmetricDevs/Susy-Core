@@ -185,6 +185,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                     });
                     errorPos = null;
                     break;
+                } else {
+                    errorPos = null;
                 }
             }
         }
@@ -405,20 +407,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                         .setMaxWidthLimit(181)
                         .setClickHandler(this::handleDisplayClick));
 
-        // Power Button
-        IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
-        if (controllable != null) {
-            builder.widget(
-                    new ImageCycleButtonWidget(
-                            173,
-                            183,
-                            18,
-                            18,
-                            GuiTextures.BUTTON_POWER,
-                            controllable::isWorkingEnabled,
-                            controllable::setWorkingEnabled));
-            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
-        }
         // Scan Button
         builder
                 .widget(
