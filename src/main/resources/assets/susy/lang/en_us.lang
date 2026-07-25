@@ -169,6 +169,11 @@ tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 tile.robot_arm.grabber.name=Robotic Arm
 tile.robot_arm_layup.layup.name=Layup Machine Robotic Arm
 
+tile.susy_multiblock_casing.hardened_titanium_casing.name=Hardened Titanium Casing
+tile.vehicle_track.default.name=Heavy-Duty Vehicle Track
+tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
+
+
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -592,6 +597,9 @@ susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at onc
 
 susy.machine.electric_discharge_machine.name=Electric Discharge Machine (EDM)
 susy.machine.electric_discharge_machine.tooltip=Electronic Dance Machine
+
+susy.machine.lunar_bucket_wheel_excavator.name=Lunar Bucket Wheel Excavator
+susy.machine.lunar_bucket_wheel_excavator.tooltip=World-Eater 9000
 
 # Properties
 susy.recipe.plasma_requirement=Requires plasma: %s
@@ -1190,6 +1198,7 @@ recipemap.reactive_ion_etching.name=Reactive Ion Etching
 recipemap.attrition_scrubber.name=Attrition Scrubbing
 recipemap.edm.name=Electric Discharge Machining (EDM)
 recipemap.layup.name=Layup
+recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
