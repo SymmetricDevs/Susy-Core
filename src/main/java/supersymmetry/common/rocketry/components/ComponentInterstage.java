@@ -1,5 +1,7 @@
 package supersymmetry.common.rocketry.components;
 
+import static supersymmetry.common.blocks.SuSyBlocks.INTERSTAGE;
+
 import java.util.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,8 +19,6 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.tileentities.TileEntityCoverable;
-
-import static supersymmetry.common.blocks.SuSyBlocks.INTERSTAGE;
 
 public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
 
@@ -103,34 +103,30 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
             if (previousAirLayer != null &&
                     !previousAirLayer.equals(airLayer.stream()
-                    .map(pos -> new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))
-                    .collect(Collectors.toSet()))
-            ) {
+                            .map(pos -> new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))
+                            .collect(Collectors.toSet()))) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }
             for (BlockPos blockPos : airLayer) {
                 // Check solid neighbors for proper covering
-                for (EnumFacing facing: EnumFacing.HORIZONTALS) {
+                for (EnumFacing facing : EnumFacing.HORIZONTALS) {
                     BlockPos neighbor = blockPos.add(facing.getDirectionVec());
                     if (connectedBlocks.contains(neighbor)) {
-                        if (!analysis.world.getBlockState(neighbor).getBlock().equals(INTERSTAGE))
-                        {
+                        if (!analysis.world.getBlockState(neighbor).getBlock().equals(INTERSTAGE)) {
                             analysis.status = BuildStat.NOT_INTERSTAGE;
                             return analysis.errorPos(neighbor);
                         }
-                        TileEntityCoverable tile = (TileEntityCoverable)
-                                analysis.world.getTileEntity(neighbor);
+                        TileEntityCoverable tile = (TileEntityCoverable) analysis.world.getTileEntity(neighbor);
                         if (tile.getCoverCount() == 0) {
                             analysis.status = BuildStat.WRONG_TILE;
                             return analysis.errorPos(neighbor);
                         }
-                        for (EnumFacing otherFace: tile.getSides()) {
+                        for (EnumFacing otherFace : tile.getSides()) {
                             if (otherFace.getAxis().equals(EnumFacing.Axis.Y) ||
-                                otherFace.getOpposite().equals(facing) ||
-                                connectedBlocks.contains(neighbor.add(
-                                        otherFace.getDirectionVec()
-                                ))) {
+                                    otherFace.getOpposite().equals(facing) ||
+                                    connectedBlocks.contains(neighbor.add(
+                                            otherFace.getDirectionVec()))) {
                                 if (tile.isCovered(otherFace)) {
                                     analysis.status = BuildStat.WRONG_TILE;
                                     return analysis.errorPos(neighbor);
@@ -147,7 +143,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
             int perim = analysis.getPerimeter(airLayer, StructAnalysis.layerVecs).size();
             // excludes awkward structures
-            if ((perim*perim)/(double)airLayer.size() > 16) {
+            if ((perim * perim) / (double) airLayer.size() > 16) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }

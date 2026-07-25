@@ -1,14 +1,15 @@
 package supersymmetry.common.world.biome;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.EnumCreatureType;
+
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.BlockResource1;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.SusyStoneVariantBlock;
-
-import javax.annotation.Nonnull;
-import java.util.LinkedList;
-import java.util.List;
 
 public class BiomeLunarKreepTerrane extends PlanetaryBiome {
 
