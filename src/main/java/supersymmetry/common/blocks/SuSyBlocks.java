@@ -92,6 +92,8 @@ public class SuSyBlocks {
     public static BlockEDMElectrode EDM_ELECTRODE;
     public static BlockRobotArm ROBOT_ARM;
     public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
+    public static BlockVehicleTrack VEHICLE_TRACK;
+    public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
     public static BlockSolarPanel SOLAR_PANEL;
     public static BlockPaddleShaft PADDLE_SHAFT;
 
