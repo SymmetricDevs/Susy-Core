@@ -67,6 +67,37 @@ public class SpaceSuitTank extends SpaceSuit {
         tag.setInteger("punctures", count);
     }
 
+    public int getTapedHoles(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null ? Long.bitCount(tag.getLong("tapedMask")) : 0;
+    }
+
+    public long getTapedMask(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null ? tag.getLong("tapedMask") : 0L;
+    }
+
+    public boolean isTaped(ItemStack stack, int index) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null && (tag.getLong("tapedMask") & (1L << index)) != 0;
+    }
+
+    public void tapeHole(ItemStack stack) {
+        int total = getPunctures(stack);
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            stack.setTagCompound(tag);
+        }
+        long mask = tag.getLong("tapedMask");
+        for (int i = 0; i < total; i++) {
+            if ((mask & (1L << i)) == 0) {
+                tag.setLong("tapedMask", mask | (1L << i));
+                return;
+            }
+        }
+    }
+
     @Override
     public double getMaxFlowRate(ItemStack stack) {
         return maxFlowRate;

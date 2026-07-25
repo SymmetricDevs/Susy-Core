@@ -178,6 +178,7 @@ public class SuSyMetaItems {
         for (int i = 0; i < EnumDyeColor.values().length; i++) {
             MetaItems.SPRAY_CAN_DYES[i].addComponents(new PipeNetPainterBehavior(512, SPRAY_EMPTY.getStackForm(), i));
         }
+        MetaItems.DUCT_TAPE.addComponents(new TapeRepairBehavior());
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

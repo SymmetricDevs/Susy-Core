@@ -52,16 +52,19 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     private static final double LEAK_PER_PUNCTURE = 0.3;
     private static final int MAX_VISUAL_PUNCTURES = 15;
 
-    private static float[] getHolePositions(int count) {
+    private static float[] getHoleData(int count) {
         int max = Math.min(count, MAX_VISUAL_PUNCTURES);
-        float[] pos = new float[max * 2];
+        float[] data = new float[max * 3];
         for (int i = 0; i < max; i++) {
-            // TODO replace with dumber rng
             Random rng = new Random(i * 0x9e3779b9 ^ 0x12312312);
-            pos[i * 2] = rng.nextFloat();
-            pos[i * 2 + 1] = rng.nextFloat();
+            data[i * 3] = rng.nextFloat();
+            data[i * 3 + 1] = rng.nextFloat();
         }
-        return pos;
+        for (int i = 0; i < max; i++) {
+            Random rng = new Random(i * 0x12312312L);
+            data[i * 3 + 2] = rng.nextFloat() * (float) (Math.PI * 2);
+        }
+        return data;
     }
 
     private final double hoursOfLife;
@@ -152,7 +155,8 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
         double maxFlow = tank.getMaxFlowRate(chest);
         double baseDrain = 0.05;
-        double leakRate = tank.getPunctures(chest) * LEAK_PER_PUNCTURE;
+        int effectivePunctures = Math.max(0, tank.getPunctures(chest) - tank.getTapedHoles(chest));
+        double leakRate = effectivePunctures * LEAK_PER_PUNCTURE;
         double totalDemand = baseDrain + leakRate;
         double effectiveDrain = Math.min(maxFlow, totalDemand);
         tank.changeOxygen(chest, -effectiveDrain);
@@ -164,11 +168,17 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
                                     ScaledResolution resolution, float partialTicks) {
         ItemStack chest = player.getItemStackFromSlot(CHEST);
         int punctures = 0;
-        float[] holePos = null;
+        int tapedHoles = 0;
+        float[] holeData = null;
+        BreathingApparatus tank = null;
         if (chest.getItem() instanceof SuSyArmorItem item) {
-            if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus tank) {
-                punctures = tank.getPunctures(chest);
-                if (punctures > 0) holePos = getHolePositions(punctures);
+            if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus t) {
+                tank = t;
+                punctures = t.getPunctures(chest);
+                tapedHoles = t.getTapedHoles(chest);
+                if (punctures > 0) {
+                    holeData = getHoleData(punctures);
+                }
             }
         }
 
@@ -184,11 +194,68 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         int fbW = resolution.getScaledWidth() * sf;
         int fbH = resolution.getScaledHeight() * sf;
 
+        if (holeData != null && tapedHoles > 0) {
+            int totalPositions = Math.min(punctures, MAX_VISUAL_PUNCTURES);
+
+            GlStateManager.matrixMode(GL_PROJECTION);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+            GlStateManager.matrixMode(GL_MODELVIEW);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+
+            GlStateManager.disableTexture2D();
+            GlStateManager.color(1, 0, 0, 1);
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+            Tessellator tess = Tessellator.getInstance();
+            BufferBuilder buf = tess.getBuffer();
+            buf.begin(GL_QUADS, DefaultVertexFormats.POSITION);
+
+            for (int i = 0; i < totalPositions; i++) {
+                if (!tank.isTaped(chest, i)) continue;
+                float u = holeData[i * 3];
+                float v = holeData[i * 3 + 1];
+                float px = u * fbW;
+                float py = v * fbH;
+
+                float h = fbH * 0.075f;
+                float hw = h * 0.8f;
+                float hh = h * 1.6f;
+
+                Random rng = new Random(i * 0x12312312L);
+                float a = (float) (rng.nextFloat() * Math.PI * 2);
+                float cos = (float) Math.cos(a);
+                float sin = (float) Math.sin(a);
+
+                float[] xs = { -hw, hw, hw, -hw };
+                float[] ys = { -hh, -hh, hh, hh };
+                for (int j = 0; j < 4; j++) {
+                    float rx = xs[j] * cos - ys[j] * sin;
+                    float ry = xs[j] * sin + ys[j] * cos;
+                    buf.pos((px + rx) * 2 / fbW - 1, (py + ry) * 2 / fbH - 1, 0).endVertex();
+                }
+            }
+            tess.draw();
+
+            GlStateManager.color(1, 1, 1, 1);
+            GlStateManager.enableTexture2D();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR,
+                    GlStateManager.DestFactor.ZERO);
+
+            GlStateManager.matrixMode(GL_PROJECTION);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL_MODELVIEW);
+            GlStateManager.popMatrix();
+        }
+
         int program = ShaderManager.getRawProgram("visor.vert", "visor.frag");
         if (program > 0) {
             GL20.glUseProgram(program);
             GL20.glUniform2f(GL20.glGetUniformLocation(program, "u_resolution"), fbW, fbH);
-            int holeCount = holePos != null ? Math.min(punctures, MAX_VISUAL_PUNCTURES) : 0;
+            int holeCount = holeData != null ? Math.min(punctures, MAX_VISUAL_PUNCTURES) : 0;
             GL20.glUniform1i(GL20.glGetUniformLocation(program, "u_holeCount"), holeCount);
 
             glActiveTexture(GL_TEXTURE0);
@@ -203,10 +270,9 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             glActiveTexture(GL_TEXTURE0);
 
             for (int i = 0; i < holeCount; i++) {
-                String name = String.format("u_holes[%d]", i);
-                int loc = GL20.glGetUniformLocation(program, name);
+                int loc = GL20.glGetUniformLocation(program, String.format("u_holes[%d]", i));
                 if (loc >= 0) {
-                    GL20.glUniform2f(loc, holePos[i * 2], holePos[i * 2 + 1]);
+                    GL20.glUniform3f(loc, holeData[i * 3], holeData[i * 3 + 1], holeData[i * 3 + 2]);
                 }
             }
 
@@ -235,6 +301,15 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         } else {
             // 🙏
         }
+
+        GlStateManager.disableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.enableFog();
 
         glPopAttrib();
     }
@@ -271,7 +346,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
                 double maxFlow = tank.getMaxFlowRate(chest);
                 if (maxFlow > 0) {
-                    double p = tank.getPunctures(chest);
+                    double p = Math.max(0, tank.getPunctures(chest) - tank.getTapedHoles(chest));
                     double baseDrain = 0.05;
                     double totalDemand = baseDrain + p * LEAK_PER_PUNCTURE;
                     double effective = Math.min(maxFlow, totalDemand);

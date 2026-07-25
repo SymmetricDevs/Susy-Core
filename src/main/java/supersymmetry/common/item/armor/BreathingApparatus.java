@@ -235,6 +235,20 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
 
     public void setPunctures(ItemStack stack, int count) {}
 
+    public int getTapedHoles(ItemStack stack) {
+        return 0;
+    }
+
+    public long getTapedMask(ItemStack stack) {
+        return 0L;
+    }
+
+    public boolean isTaped(ItemStack stack, int index) {
+        return false;
+    }
+
+    public void tapeHole(ItemStack stack) {}
+
     public double getMaxFlowRate(ItemStack stack) {
         return 0;
     }
