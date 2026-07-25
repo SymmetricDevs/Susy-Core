@@ -68,7 +68,8 @@ public class StructAnalysis {
         TOO_MUCH_GUIDANCE("too_much_guidance"),
         WRONG_CHAMBER_TYPE("wrong_chamber_type"),
         MATCH_WRONG("match_wrong"),
-        NOZZLE_TOO_SHORT("nozzle_too_short");
+        NOZZLE_TOO_SHORT("nozzle_too_short"),
+        NOT_INTERSTAGE("not_interstage");
 
         String code;
 
@@ -431,7 +432,7 @@ public class StructAnalysis {
             }
         }
 
-        return max - min;
+        return max - min + 1;
     }
 
     /**

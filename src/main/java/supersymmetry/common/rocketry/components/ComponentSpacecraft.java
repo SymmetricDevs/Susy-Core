@@ -230,14 +230,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
         }
-        double radius = analysis.getRadius(blocksConnected);
+        this.radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
         tag.setString("type", type);
         tag.setString("name", name);
         tag.setDouble("radius", radius);
-        this.radius = radius;
         double mass = blocksConnected.stream()
                 .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
                 .sum();
