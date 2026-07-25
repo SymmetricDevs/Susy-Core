@@ -1,16 +1,22 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import gregtech.api.GTValues;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.util.RelativeDirection;
-import gregtech.common.ConfigHolder;
-import gregtech.common.metatileentities.MetaTileEntities;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyorBelts;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.robotArms;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -18,26 +24,21 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
+import gregtech.common.metatileentities.MetaTileEntities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockRobotArm;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyorBelts;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.robotArms;
 
 public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
 
@@ -167,7 +168,4 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
             }
         }
     }
-
-
-
 }

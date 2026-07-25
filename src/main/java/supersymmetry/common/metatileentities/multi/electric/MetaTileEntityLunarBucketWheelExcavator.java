@@ -1,23 +1,13 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.util.RelativeDirection;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockBoilerCasing;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.BlockMultiblockCasing;
-import gregtech.common.blocks.BlockTurbineCasing;
-import gregtech.common.blocks.MetaBlocks;
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -28,8 +18,25 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.util.RelativeDirection;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -43,14 +50,6 @@ import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.*;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenGearTooth;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenStates;
 
 public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblockController implements IAnimatableMTE {
 
@@ -115,12 +114,42 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(120);
 
         return FactoryBlockPattern.start()
-                .aisle("          TTTTTTTT           ", "                             ", "         HHHHHHHH            ", "         HHHHHHHH            ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
-                .aisle("          TTTTTTTT           ", "             AA              ", "        HHHHHHHHHH           ", "        HHHHHHHHHH       A   ", "               AA       AEA  ", "              AAA     AACA   ", "           CAAAAA    AC      ", "           C   AA  AAC       ", "           C   AAAAC         ", "            C AACCC          ", "             CAC             ")
-                .aisle("           AAAAAA            ", "            AAAA             ", "        HEEEEEEEEH           ", "        HHHHHHEEEAAAAAAAAA   ", "              EAEA    EEPEP  ", "OPPPPPPPPPPPPPPAEA   EPP     ", "AC             AEA EEP       ", "  CCCCCCCCCC   AEEEPP        ", "               PPPP          ", "                             ", "                             ")
-                .aisle("           AAAAAA            ", "            AAAA         B   ", "        HEEEEEEEEH     BBBBB ", "        HHHHHHEEEH     BBBBB ", "              EAEA    BBBBBBB", "OPPPPPPPPPPPPPPAEA   E BBBBB ", "AC             AEA EEP BBBBB ", "  CCCCCCCCCC   AEEEPP    B   ", "               PPPP          ", "                             ", "                             ")
-                .aisle("          TTTTTTTT           ", "             AA              ", "        HHHHHHHHHH           ", "        HHHHHHHHHH       C   ", "               AA       CEC  ", "              ASA      CCC   ", "           CAAAMA    CCC     ", "           C   AA  CCC       ", "           C   AACCC         ", "            C AACCC          ", "             CAC             ")
-                .aisle("          TTTTTTTT           ", "                             ", "         HHHHHHHH            ", "         HHHHHHHH            ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ", "                             ")
+                .aisle("          TTTTTTTT           ", "                             ",
+                        "         HHHHHHHH            ", "         HHHHHHHH            ",
+                        "                             ", "                             ",
+                        "                             ", "                             ",
+                        "                             ", "                             ",
+                        "                             ")
+                .aisle("          TTTTTTTT           ", "             AA              ",
+                        "        HHHHHHHHHH           ", "        HHHHHHHHHH       A   ",
+                        "               AA       AEA  ", "              AAA     AACA   ",
+                        "           CAAAAA    AC      ", "           C   AA  AAC       ",
+                        "           C   AAAAC         ", "            C AACCC          ",
+                        "             CAC             ")
+                .aisle("           AAAAAA            ", "            AAAA             ",
+                        "        HEEEEEEEEH           ", "        HHHHHHEEEAAAAAAAAA   ",
+                        "              EAEA    EEPEP  ", "OPPPPPPPPPPPPPPAEA   EPP     ",
+                        "AC             AEA EEP       ", "  CCCCCCCCCC   AEEEPP        ",
+                        "               PPPP          ", "                             ",
+                        "                             ")
+                .aisle("           AAAAAA            ", "            AAAA         B   ",
+                        "        HEEEEEEEEH     BBBBB ", "        HHHHHHEEEH     BBBBB ",
+                        "              EAEA    BBBBBBB", "OPPPPPPPPPPPPPPAEA   E BBBBB ",
+                        "AC             AEA EEP BBBBB ", "  CCCCCCCCCC   AEEEPP    B   ",
+                        "               PPPP          ", "                             ",
+                        "                             ")
+                .aisle("          TTTTTTTT           ", "             AA              ",
+                        "        HHHHHHHHHH           ", "        HHHHHHHHHH       C   ",
+                        "               AA       CEC  ", "              ASA      CCC   ",
+                        "           CAAAMA    CCC     ", "           C   AA  CCC       ",
+                        "           C   AACCC         ", "            C AACCC          ",
+                        "             CAC             ")
+                .aisle("          TTTTTTTT           ", "                             ",
+                        "         HHHHHHHH            ", "         HHHHHHHH            ",
+                        "                             ", "                             ",
+                        "                             ", "                             ",
+                        "                             ", "                             ",
+                        "                             ")
                 .where('T', trackOrientation().or(trackOrientation2()))
                 .where('A', casingPredicate)
                 .where('B', hiddenStates(getWheelCasingState()))
@@ -221,7 +250,8 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
             BlockPos pos = getPos();
 
             var v1 = pos.offset(left.getOpposite(), 3).offset(up.getOpposite(), 3);
-            var v2 = pos.offset(left, 7).offset(up, 4).offset(front.getOpposite(), 4);//I have no idea what these numbers do
+            var v2 = pos.offset(left, 7).offset(up, 4).offset(front.getOpposite(), 4);// I have no idea what these
+                                                                                      // numbers do
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;

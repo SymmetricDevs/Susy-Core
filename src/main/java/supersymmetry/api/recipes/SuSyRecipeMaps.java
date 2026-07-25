@@ -569,7 +569,7 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> LUNAR_BUCKET_WHEEL_EXCAVATOR = new RecipeMap<>(
             "lunar_bwe", 1, 3, 0, 0, new SimpleRecipeBuilder(), false)
-            .setSound(GTSoundEvents.DRILL_TOOL);
+                    .setSound(GTSoundEvents.DRILL_TOOL);
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
