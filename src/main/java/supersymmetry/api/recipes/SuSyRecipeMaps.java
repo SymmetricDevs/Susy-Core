@@ -4,6 +4,7 @@ import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.item.ItemStack;
 
@@ -178,8 +179,8 @@ public class SuSyRecipeMaps {
                     .setSlotOverlay(true, false, GuiTextures.MOLECULAR_OVERLAY_1)
                     .setSound(GTSoundEvents.ELECTROLYZER);
 
-    public static final RecipeMap<SimpleRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2,
-            new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> COKING_RECIPES = new RecipeMap<>("coking_tower", 1, 1, 3, 2,
+            new DimensionRecipeBuilder(), false)
                     .setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>(
@@ -226,8 +227,8 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> NATURAL_DRAFT_COOLING_TOWER = new RecipeMap<>(
-            "natural_draft_cooling_tower", 1, 0, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> NATURAL_DRAFT_COOLING_TOWER = new RecipeMap<>(
+            "natural_draft_cooling_tower", 1, 0, 1, 1, new DimensionRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.COOLING);
 
@@ -319,8 +320,8 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
                     .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CLARIFIER = new RecipeMap<>("clarifier", 2, 2, 2, 2,
-            new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> CLARIFIER = new RecipeMap<>("clarifier", 2, 2, 2, 2,
+            new DimensionRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
                     .setSound(GTSoundEvents.CENTRIFUGE);
 
@@ -329,8 +330,9 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.COOLING);
 
-    public static final RecipeMap<SimpleRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 2, 4, 2,
-            new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> FROTH_FLOTATION = new RecipeMap<>("froth_flotation", 3, 2, 4,
+            2,
+            new DimensionRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_MIXER, ProgressWidget.MoveType.CIRCULAR)
                     .setSound(GTSoundEvents.BATH);
 
@@ -694,5 +696,15 @@ public class SuSyRecipeMaps {
             }
             atBuilder.buildAndRegister();
         });
+
+        Consumer<DimensionRecipeBuilder> requireAtmosphere = recipeBuilder -> {
+            if (recipeBuilder.getAtmosphereProperty() == null) {
+                recipeBuilder.requireAtmosphere();
+            }
+        };
+        SuSyRecipeMaps.CLARIFIER.onRecipeBuild(requireAtmosphere);
+        SuSyRecipeMaps.FROTH_FLOTATION.onRecipeBuild(requireAtmosphere);
+        SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER.onRecipeBuild(requireAtmosphere);
+        SuSyRecipeMaps.COKING_RECIPES.onRecipeBuild(requireAtmosphere);
     }
 }

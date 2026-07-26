@@ -14,6 +14,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.jetbrains.annotations.NotNull;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -29,6 +31,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 /**
  * This class is used to render a non-consumable input fluid according to given pattern.
@@ -53,14 +56,7 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     public FluidRenderRecipeMapMultiBlock(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
                                           boolean perfectOC) {
         super(metaTileEntityId, recipeMap);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, perfectOC) {
-
-            @Override
-            protected void setupRecipe(Recipe recipe) {
-                super.setupRecipe(recipe);
-                updateRenderInfo(recipe);
-            }
-        };
+        this.recipeMapWorkable = new FluidRenderMultiblockLogic(perfectOC);
     }
 
     @Override
@@ -119,5 +115,24 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
         };
         Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline,
                 EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
+    }
+
+    protected class FluidRenderMultiblockLogic extends MultiblockRecipeLogic {
+
+        public FluidRenderMultiblockLogic(boolean perfectOC) {
+            super(FluidRenderRecipeMapMultiBlock.this, perfectOC);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity())
+                    && super.checkRecipe(recipe);
+        }
+
+        @Override
+        protected void setupRecipe(Recipe recipe) {
+            super.setupRecipe(recipe);
+            updateRenderInfo(recipe);
+        }
     }
 }

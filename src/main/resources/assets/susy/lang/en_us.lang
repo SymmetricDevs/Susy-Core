@@ -1485,6 +1485,8 @@ susy.recipe.biomes=Biomes: %s
 susy.recipe.biomes_blocked=Blocked Biomes: %s
 susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
+susy.recipe.atmosphere=Only functions in an atmosphere
+susy.recipe.vacuum=Only functions in a vacuum
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop/status>
@@ -1846,3 +1848,5 @@ susy.rocket.msg.gravity_too_high=Cannot launch with gravity > 0.4G (take out car
 
 susy.landing_pad.extracting=Extracting items from lander...
 susy.landing_pad.inserting=Inserting items into lander...
+
+susy.general.requires_atmosphere=§6Only works on breathable planets

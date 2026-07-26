@@ -108,7 +108,7 @@ public class AtmosphereRevalidator {
                 continue;
             }
 
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
+            for (BlockPos nb : AtmosphereUtils.neighbors(pos)) {
                 if (!job.reached.contains(nb) && !world.isBlockFullCube(nb) && job.region.contains(nb)) {
                     job.reached.add(nb);
                     job.frontier.add(nb);
