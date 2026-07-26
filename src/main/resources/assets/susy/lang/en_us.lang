@@ -1787,6 +1787,16 @@ susy.launch_pad.loaded=Rocket ready for launch
 susy.launch_pad.launching=Launching rocket...
 susy.launch_pad.gui.fuel_progress=Fuel: %s mB/%s mB
 
+susy.machine.lunar_launch_complex.name=Lunar Launch Complex
+susy.machine.lunar_launch_complex.signal.0=Start assembly
+susy.machine.lunar_launch_complex.signal.1=Stop and discard assembly
+susy.machine.lunar_launch_complex.signal.2=Launch the assembled rocket
+susy.machine.lunar_launch_complex.blueprint_slot.name=Insert a rocket blueprint
+susy.lunar_launch_complex.idle=Awaiting a blueprint
+susy.lunar_launch_complex.assembling=Assembling rocket...
+susy.lunar_launch_complex.loaded=Rocket ready for launch
+susy.lunar_launch_complex.launching=Launching rocket...
+
 #BMRF blocks
 tile.bmrf_blocks.bmrf1.name=BMRF-1
 tile.bmrf_blocks.bmrf2.name=BMRF-2

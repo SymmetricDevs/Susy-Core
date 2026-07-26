@@ -19,5 +19,8 @@ public class SuSyValues {
     public static final ModelResourceLocation modelRocket = new ModelResourceLocation(
             new ResourceLocation(Supersymmetry.MODID, "soyuz"), "inventory");
 
+    public static final ModelResourceLocation modelICBM = new ModelResourceLocation(
+            new ResourceLocation(Supersymmetry.MODID, "icbm"), "inventory");
+
     public static TraceabilityPredicate rocketHullBlocks = blocks();
 }

@@ -68,7 +68,7 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntitySoyuzBasic;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 
@@ -76,7 +76,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
-    private EntityRocket selectedRocket;
+    private EntitySoyuzBasic selectedRocket;
     private LaunchPadState state = LaunchPadState.EMPTY;
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
@@ -461,6 +461,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             FluidStack tryToDrain = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
             FluidStack drained = inputFluidInventory.drain(tryToDrain, false);
             // Intentional integer division moment
+            if (drained == null) {
+                unitsDrained = 0;
+                break;
+            }
             unitsDrained = Math.min(drained.amount / comp.getSecond(), unitsDrained);
         }
         setFuelingProgress(this.fuelingProgress + (unitsDrained * totalMBPerUnit));
@@ -511,7 +515,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     private void findRocket() {
-        List<EntityRocket> rockets = getWorld().getEntitiesWithinAABB(EntityRocket.class, getRocketAABB());
+        List<EntitySoyuzBasic> rockets = getWorld().getEntitiesWithinAABB(EntitySoyuzBasic.class, getRocketAABB());
         if (!rockets.isEmpty()) {
             this.selectedRocket = rockets.get(0);
         }
@@ -519,7 +523,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = this.getLaunchPosition();
-        this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
+        this.selectedRocket = new EntitySoyuzBasic(this.getWorld(), position,
+                this.getFrontFacing().getHorizontalAngle());
         if (tag != null) {
             // Copy in all tags
             for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {
@@ -539,7 +544,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setString("state", this.state.name());
-        data.setInteger("fuelProgress", this.fuelingProgress);
+        data.setInteger("fuelingProgress", this.fuelingProgress);
         return super.writeToNBT(data);
     }
 

@@ -200,10 +200,15 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void bakeModel(ModelBakeEvent event) {
         IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        bakeEntityModel(registry, "models/entity/soyuz.obj", SuSyValues.modelRocket);
+        bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
+    }
+
+    private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
+                                        ModelResourceLocation target) {
         try {
-            IModel model = OBJLoader.INSTANCE
-                    .loadModel(new ResourceLocation(Supersymmetry.MODID, "models/entity/soyuz.obj"));
-            registry.putObject(SuSyValues.modelRocket,
+            IModel model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Supersymmetry.MODID, path));
+            registry.putObject(target,
                     model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter()));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -214,6 +219,7 @@ public class ClientProxy extends CommonProxy {
     public static void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }

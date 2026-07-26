@@ -322,6 +322,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLayupMachine LAYUP_MACHINE;
 
     public static MetaTileEntityLunarBucketWheelExcavator LUNAR_BUCKET_WHEEL_EXCAVATOR;
+    public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -826,6 +827,8 @@ public class SuSyMetaTileEntities {
 
         LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,
                 new MetaTileEntityLunarBucketWheelExcavator(susyId("lunar_bucket_wheel_excavator")));
+        LUNAR_LAUNCH_COMPLEX = registerMetaTileEntity(18523,
+                new MetaTileEntityLunarLaunchComplex(susyId("lunar_launch_complex")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
