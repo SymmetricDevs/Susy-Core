@@ -1,5 +1,6 @@
 package supersymmetry.common;
 
+import static net.minecraftforge.common.BiomeDictionary.*;
 import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
 import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
@@ -251,19 +252,19 @@ public class CommonProxy {
                 .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
-        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_HIGHLANDS, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+        addTypes(SuSyBiomes.LUNAR_HIGHLANDS, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled()
                 .setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
-        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+        addTypes(SuSyBiomes.LUNAR_MARIA, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_KREEP_TERRANE = new BiomeLunarKreepTerrane(new Biome.BiomeProperties("Lunar KREEP Terrane")
                 .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "kreep");
         evt.getRegistry().register(SuSyBiomes.LUNAR_KREEP_TERRANE);
-        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+        addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyDimensions.init();
         // ReEntryDimensions.init();

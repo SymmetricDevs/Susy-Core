@@ -12,6 +12,7 @@ import gregtech.api.recipes.RecipeMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
+import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder> {
@@ -64,6 +65,16 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
         return this;
     }
 
+    public DimensionRecipeBuilder requireAtmosphere() {
+        this.applyProperty(AtmosphereProperty.getInstance(), true);
+        return this;
+    }
+
+    public DimensionRecipeBuilder requireVacuum() {
+        this.applyProperty(AtmosphereProperty.getInstance(), false);
+        return this;
+    }
+
     @Override
     public DimensionRecipeBuilder duration(int duration) {
         return super.duration(Math.max(duration, this.minimumDuration));
@@ -86,5 +97,11 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
                 .appendSuper(super.toString())
                 .append(DimensionProperty.getInstance().getKey(), getDimensionIDs().toString())
                 .toString();
+    }
+
+    public Boolean getAtmosphereProperty() {
+        return this.recipePropertyStorage == null ? null :
+                this.recipePropertyStorage.getRecipePropertyValue(AtmosphereProperty.getInstance(),
+                        null);
     }
 }

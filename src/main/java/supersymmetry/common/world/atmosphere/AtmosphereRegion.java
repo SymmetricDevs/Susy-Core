@@ -174,7 +174,7 @@ public class AtmosphereRegion {
 
             octree.insert(pos);
 
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
+            for (BlockPos nb : AtmosphereUtils.neighbors(pos)) {
                 if (!visited.contains(nb) && !world.isBlockFullCube(nb)) {
                     visited.add(nb);
                     frontier.add(nb);

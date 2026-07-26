@@ -116,7 +116,7 @@ public class AtmosphereRegionGraph {
      * so the position is still solid in the world.
      */
     public void onBlockBreak(World world, BlockPos pos) {
-        BlockPos[] neighbors = BlockPosUtil.neighbors(pos);
+        BlockPos[] neighbors = AtmosphereUtils.neighbors(pos);
         AtmosphereRegion expandingRegion = null;
 
         for (AtmosphereRegion region : new ArrayList<>(regions)) {
@@ -254,7 +254,7 @@ public class AtmosphereRegionGraph {
                 while (breachIt.hasNext()) {
                     BlockPos bp = breachIt.next();
                     boolean adjacentToNew = false;
-                    for (BlockPos nb : BlockPosUtil.neighbors(bp)) {
+                    for (BlockPos nb : AtmosphereUtils.neighbors(bp)) {
                         if (disconnected.contains(nb)) {
                             adjacentToNew = true;
                             break;
@@ -265,7 +265,7 @@ public class AtmosphereRegionGraph {
                     }
                     // Remove from original if no longer adjacent to any of its remaining positions
                     boolean adjacentToOriginal = false;
-                    for (BlockPos nb : BlockPosUtil.neighbors(bp)) {
+                    for (BlockPos nb : AtmosphereUtils.neighbors(bp)) {
                         if (region.contains(nb)) {
                             adjacentToOriginal = true;
                             break;
@@ -436,7 +436,7 @@ public class AtmosphereRegionGraph {
 
             BlockPos pos = queue.poll();
 
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
+            for (BlockPos nb : AtmosphereUtils.neighbors(pos)) {
                 if (visited.contains(nb)) continue;
                 if (!nb.equals(treatedAsPassable) && world.isBlockFullCube(nb)) continue;
                 if (world.canSeeSky(nb)) return true;
