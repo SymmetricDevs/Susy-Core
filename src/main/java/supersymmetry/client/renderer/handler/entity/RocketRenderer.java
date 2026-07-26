@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -22,15 +23,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import supersymmetry.SuSyValues;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityBlueprintRocket;
+import supersymmetry.common.entities.EntitySoyuzBasic;
 
 @SideOnly(Side.CLIENT)
-public class RocketRenderer<T extends EntityRocket> extends Render<T> {
+public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
 
     private ModelManager manager = null;
+    private final ModelResourceLocation modelLocation;
 
     public RocketRenderer(RenderManager renderManager) {
+        this(renderManager, SuSyValues.modelRocket);
+    }
+
+    public RocketRenderer(RenderManager renderManager, ModelResourceLocation modelLocation) {
         super(renderManager);
+        this.modelLocation = modelLocation;
     }
 
     @Override
@@ -75,7 +83,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
 
-        model = this.manager.getModel(SuSyValues.modelRocket); // Get the model
+        model = this.manager.getModel(this.modelLocation); // Get the model
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See
                                                               // Test#stitchTexture(TextureStitchEvent.Pre) for more
                                                               // information.
