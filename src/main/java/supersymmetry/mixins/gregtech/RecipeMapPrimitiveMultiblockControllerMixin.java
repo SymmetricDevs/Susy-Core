@@ -14,10 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 
-@Mixin(RecipeMapPrimitiveMultiblockController.class)
+@Mixin(value = RecipeMapPrimitiveMultiblockController.class, remap = false)
 public abstract class RecipeMapPrimitiveMultiblockControllerMixin extends MultiblockWithDisplayBase {
 
     public RecipeMapPrimitiveMultiblockControllerMixin(ResourceLocation metaTileEntityId) {

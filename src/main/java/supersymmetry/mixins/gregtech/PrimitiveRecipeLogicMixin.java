@@ -10,7 +10,7 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import supersymmetry.common.util.RecipeCheckUtils;
 
-@Mixin(PrimitiveRecipeLogic.class)
+@Mixin(value = PrimitiveRecipeLogic.class, remap = false)
 public abstract class PrimitiveRecipeLogicMixin extends AbstractRecipeLogic {
 
     public PrimitiveRecipeLogicMixin(RecipeMapPrimitiveMultiblockController tileEntity, RecipeMap<?> recipeMap) {
