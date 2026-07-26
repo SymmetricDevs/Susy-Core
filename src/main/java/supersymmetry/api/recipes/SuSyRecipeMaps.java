@@ -2,12 +2,13 @@ package supersymmetry.api.recipes;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.*;
 
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
 import gregtech.api.GTValues;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
@@ -512,8 +513,9 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>("resistance_furnace",
-            6, 2, 1, 1, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<ResistanceFurnaceRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>(
+            "resistance_furnace",
+            6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
@@ -565,21 +567,6 @@ public class SuSyRecipeMaps {
             "cargo_drone_pad", 1, 1, 0, 0, new SimpleRecipeBuilder(), true);
 
     static {
-        GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
-                .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *
-                        Math.max(1, (recipeBuilder.getDuration() - 800) / 400) *
-                        Math.max(1, (recipeBuilder.getBlastFurnaceTemp() - 1800) / 1800)))
-                .inputs(recipeBuilder.getInputs().toArray(new GTRecipeInput[0]))
-                .fluidInputs(recipeBuilder.getFluidInputs())
-                .outputs(recipeBuilder.getOutputs())
-                .chancedOutputs(recipeBuilder.getChancedOutputs())
-                .fluidOutputs(recipeBuilder.getFluidOutputs())
-                .chancedFluidOutputs(recipeBuilder.getChancedFluidOutputs())
-                .cleanroom(recipeBuilder.getCleanroom())
-                .duration(recipeBuilder.getDuration() / 4)
-                .EUt(recipeBuilder.getEUt())
-                .buildAndRegister());
-
         SuSyRecipeMaps.ADVANCED_ARC_FURNACE.onRecipeBuild(recipeBuilder -> {
             for (var fluidInput : recipeBuilder.getFluidInputs()) {
                 if (fluidInput.getInputFluidStack().getFluid() == SusyMaterials.RefractoryGunningMixture.getFluid()) {
@@ -684,6 +671,20 @@ public class SuSyRecipeMaps {
                 atBuilder.clearChancedOutput();
             }
             atBuilder.buildAndRegister();
+        });
+
+        SuSyRecipeMaps.RESISTANCE_FURNACE.onRecipeBuild(recipeBuilder -> {
+            recipeBuilder.invalidateBuildAction();
+            int temperature = recipeBuilder.getTemperature();
+
+            if (temperature != 0) {
+                if (temperature <= 1473) {
+                    recipeBuilder.copy().notConsumable(spring, Nichrome).buildAndRegister();
+                    recipeBuilder.copy().notConsumable(spring, Cupronickel)
+                            .duration((int) (recipeBuilder.getDuration() * 1.25)).buildAndRegister();
+                }
+                recipeBuilder.notConsumable(spring, Kanthal).duration((int) (recipeBuilder.getDuration() * 0.75));
+            }
         });
     }
 }

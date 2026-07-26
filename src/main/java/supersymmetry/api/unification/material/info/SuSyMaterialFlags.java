@@ -79,5 +79,17 @@ public class SuSyMaterialFlags {
             .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
             .build();
 
+    public static final MaterialFlag INERT_MELT = (new MaterialFlag.Builder("inert_melt"))
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
+            .build();
+
+    public static final MaterialFlag ARGON_MELT = (new MaterialFlag.Builder("argon_melt"))
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
+            .build();
+
+    public static final MaterialFlag VACUUM_MELT = (new MaterialFlag.Builder("vacuum_melt"))
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
+            .build();
+
     public SuSyMaterialFlags() {}
 }

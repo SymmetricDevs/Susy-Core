@@ -4,26 +4,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.capability.impl.CommonFluidFilters;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.client.utils.TooltipHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -31,8 +15,25 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.capability.impl.CommonFluidFilters;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.*;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.unification.material.Materials;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.TooltipHelper;
+import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.common.blocks.BlockCrucible;
@@ -161,8 +162,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                         "susy.multiblock.cooling.dangerous_heat"));
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "susy.multiblock.cooling.explosion_risk"));
-            }
-            else if (waterAmount[0] == 0) {
+            } else if (waterAmount[0] == 0) {
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
                         "gregtech.multiblock.large_boiler.no_water"));
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
@@ -187,9 +187,9 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS)))
                 .where('C', states(SuSyBlocks.INDUCTION_COIL_ASSEMBLY
-                                .getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
+                        .getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
                 .where('U', states(SuSyBlocks.CRUCIBLE
-                                .getState(BlockCrucible.CrucibleType.SILICON_CARBIDE)))
+                        .getState(BlockCrucible.CrucibleType.SILICON_CARBIDE)))
                 .where(' ', any())
                 .where('#', air())
                 .build();
@@ -197,8 +197,8 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
 
     @Override
     public void addInformation(
-            ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
-            boolean advanced) {
+                               ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(TooltipHelper.BLINKING_RED + I18n.format("susy.machine.induction_furnace.explosion_tooltip"));
     }
@@ -227,11 +227,9 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
             int[] waterAmount = getWaterAmount();
             if (waterAmount[1] == 0) return 0;
             return (1.0 * waterAmount[0]) / waterAmount[1];
-        }
-        else if (index == 1) {
+        } else if (index == 1) {
             return (1.0 * heat / (double) MELTING_HEAT);
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -243,8 +241,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
 
         } else if (index == 1) {
             return SusyGuiTextures.PROGRESS_BAR_HEAT;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -265,9 +262,9 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         } else if (index == 1) {
 
             ITextComponent heatInfo = TextComponentUtil.translationWithColor(
-                        TextFormatting.RED,
-                        "%s",
-                        heat);
+                    TextFormatting.RED,
+                    "%s",
+                    heat);
 
             hoverList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
@@ -307,4 +304,3 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         return new int[] { filled, capacity };
     }
 }
-
