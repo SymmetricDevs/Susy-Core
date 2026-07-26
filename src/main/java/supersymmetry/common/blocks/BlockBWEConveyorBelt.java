@@ -15,16 +15,16 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockRobotArm extends VariantHorizontalRotatableBlock<BlockRobotArm.RobotArmType> {
+public class BlockBWEConveyorBelt extends VariantHorizontalRotatableBlock<BlockBWEConveyorBelt.BWEConveyorType> {
 
-    public BlockRobotArm() {
+    public BlockBWEConveyorBelt() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("robot_arm");
+        setTranslationKey("bwe_conveyor_belt");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(RobotArmType.GRABBER));
+        setDefaultState(getState(BWEConveyorType.DEFAULT));
     }
 
     @Override
@@ -33,41 +33,33 @@ public class BlockRobotArm extends VariantHorizontalRotatableBlock<BlockRobotArm
         return false;
     }
 
-    @Override
-    public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return false;
-    }
-
     @NotNull
     @Override
     public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.SOLID;
     }
 
-    public enum RobotArmType implements IStringSerializable, IStateHarvestLevel {
+    public enum BWEConveyorType implements IStringSerializable, IStateHarvestLevel {
 
-        GRABBER("grabber", 1);
+        DEFAULT("default", 2);
 
         private final String name;
         private final int harvestLevel;
 
-        RobotArmType(String name, int harvestLevel) {
+        BWEConveyorType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
 
         @Nonnull
-        @Override
         public String getName() {
             return this.name;
         }
 
-        @Override
         public int getHarvestLevel(IBlockState state) {
             return this.harvestLevel;
         }
 
-        @Override
         public String getHarvestTool(IBlockState state) {
             return "wrench";
         }
