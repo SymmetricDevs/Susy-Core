@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.category.RecipeCategories;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;
@@ -79,6 +80,13 @@ public class SuSyRecipeLoader {
                     .duration(800)
                     .EUt(2)
                     .buildAndRegister();
+
+            SimpleRecipeBuilder b = SuSyRecipeMaps.ORE_SORTER_RECIPES.recipeBuilder()
+                    .input(ingot, Materials.Iron);
+            for (int i = 0; i < 20; i++) {
+                b.output(ingot, Materials.Iron);
+            }
+            b.EUt(10).duration(10).buildAndRegister();
         }
     }
 

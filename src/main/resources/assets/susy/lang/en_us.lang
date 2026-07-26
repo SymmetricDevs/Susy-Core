@@ -1,4 +1,7 @@
 # Blocks
+tile.speaker.single.name=Speaker
+tile.speaker.broadcast.name=Broadcast Speaker
+
 tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Manganese Iron Arsenic Phosphide Cooling Coil
 tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
@@ -147,7 +150,7 @@ tile.home_block.home_scifi.tooltip=Sci-Fi
 
 tile.conveyor_belt.lv.name=Conveyor Belt
 
-tile.drill_bit.steel.name=Steel Drill Bit Block
+tile.drill_bit.steel.name=Steel Precision Drill Bit Assembly
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
@@ -165,6 +168,8 @@ tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
+
+tile.paddle_shaft.iron.name=Paddle Shaft
 
 
 tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
@@ -304,6 +309,8 @@ item.material.oreprefix.target=%s Sputtering Target
 susy.fluid.supercritical=Supercritical %s
 susy.fluid.impure_slurry=Impure %s Slurry
 susy.fluid.slurry=%s Slurry
+susy.fluid.type_base.tooltip=§6Basic! Handle with care!
+susy.fluid_pipe.base_proof=§6Can handle Bases
 
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot melt items!
@@ -499,6 +506,7 @@ susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.cupola_furnace.name=Cupola Furnace
 susy.machine.cupola_furnace.tooltip=Gains one parallel per block layer
 susy.machine.large_steam_hammer.name=Large Steam Hammer
+susy.machine.log_washer.name=Log Washer
 susy.machine.landing_pad.name=Landing Pad
 susy.machine.scrap_recycler.name=Scrap Recycler
 
@@ -1047,6 +1055,18 @@ susy.machine.component_scanner.scanning=Scanning...
 susy.machine.component_scanner.pos=Error found at %s
 
 susy.machine.building_cleanroom.name=Spacecraft Component Cleanroom
+
+# Solar panels
+susy.machine.solar_panel.lv.name=Monocrystalline Silicon Solar Panel
+susy.machine.solar_panel.mv.name=Multi-Junction Solar Panel
+susy.machine.solar_panel.tooltip.info=May the Sun be with you.
+susy.machine.solar_panel.tooltip.description1=Generates power during daylight hours, rising/falling gradually during dawn and dusk.
+susy.machine.solar_panel.tooltip.description2=Production reduced by 50%% when raining and for every solar panel in the surrounding 8 blocks.
+susy.machine.solar_panel.tooltip.description3=Ensure the block above the panel base is clear!
+susy.machine.solar_panel.voltage_produced=§aPeak Production: §f%,d EU/t (%s§f)
+tile.solar_panel.default.name=Solar Panel Display Block
+susy.top.solar_panel.producing=Producing
+
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -1651,6 +1671,13 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+tile.bmrf_blocks.bmrf10.name=BMRF-10
+tile.bmrf_blocks.bmrf11.name=BMRF-11
+tile.bmrf_blocks.bmrf12.name=BMRF-12
+tile.bmrf_blocks.bmrf13.name=BMRF-13
+tile.bmrf_blocks.bmrf14.name=BMRF-14
+tile.bmrf_blocks.bmrf15.name=BMRF-15
+tile.bmrf_blocks.bmrf16.name=BMRF-16
 
 ##Factions
 #Items
