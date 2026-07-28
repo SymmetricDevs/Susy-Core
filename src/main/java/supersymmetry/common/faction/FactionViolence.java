@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
@@ -19,7 +20,7 @@ public class FactionViolence {
 
     // violence
     // checks every mob every tick, probably not the best way to do this
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH) //required HIGH, techguns will shit pant otherwise
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return; // server only
         if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
@@ -35,20 +36,42 @@ public class FactionViolence {
         String mobFaction = susyTag.getString(TAG_FACTION);
         if (mobFaction.isEmpty()) return;
 
+        if (!(mob instanceof net.minecraft.entity.monster.IMob)) return; //skips logic for animals that belong to factions, speeds this logic long
+
         // Skip targeting during dismount grace period
         // technical explanation: mobs sometimes target the drop pod due to explosion damage or smth
         // tried to fix it before, didn't work. might be a techguns being dumb thing
         // lore explanation: droppod sickness, droppods can disorient people when they arrive from outer space.
         if (mob.isPotionActive(PotionDropPodSickness.INSTANCE)) return;
 
-        // Clear attack target if dead or invalid
-        // not sure if this is needed or not, but techguns will shoot at nothing if it isn't
-        // they just built different like that
+        // praying this won't tick too hard
+        EntityLivingBase currentTarget = mob.getAttackTarget();
+        if (currentTarget != null) {
+            String targetFaction = getFaction(currentTarget);
+            if (!targetFaction.isEmpty() && mobFaction.equals(targetFaction)) {
+                mob.setAttackTarget(null);
+                // Also clear revenge target to prevent HurtByTarget from re-setting it
+                if (mob.getRevengeTarget() == currentTarget) {
+                    mob.setRevengeTarget(null);
+                }
+            } else if (currentTarget.isDead || !currentTarget.isEntityAlive()) {
+                mob.setAttackTarget(null);
+            }
+        }
+
+        // Also check revenge target independently - HurtByTarget may set it without setting attackTarget
+        // techguns moment
+        EntityLivingBase revengeTarget = mob.getRevengeTarget();
+        if (revengeTarget != null) {
+            String revengeFaction = getFaction(revengeTarget);
+            if (!revengeFaction.isEmpty() && mobFaction.equals(revengeFaction)) {
+                mob.setRevengeTarget(null);
+            }
+        }
+
         if (mob.getAttackTarget() != null &&
-                (mob.getAttackTarget().isDead ||
-                        !mob.getAttackTarget().isEntityAlive() ||
-                        !(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob) &&
-                                !(mob.getAttackTarget() instanceof net.minecraft.entity.player.EntityPlayer))) {
+                (!(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob) &&
+                        !(mob.getAttackTarget() instanceof net.minecraft.entity.player.EntityPlayer))) {
             mob.setAttackTarget(null);
         }
 
@@ -64,16 +87,7 @@ public class FactionViolence {
             if (target == mob) continue;
             if (!mob.canEntityBeSeen(target)) continue;
 
-            NBTTagCompound targetTag = target.getEntityData();
-            String targetFaction = "";
-
-            if (targetTag.hasKey(TAG_ROOT)) {
-                NBTTagCompound targetSusy = targetTag.getCompoundTag(TAG_ROOT);
-                if (targetSusy.hasKey(TAG_FACTION)) {
-                    targetFaction = targetSusy.getString(TAG_FACTION);
-                }
-            }
-
+            String targetFaction = getFaction(target);
             boolean isUnaligned = targetFaction.isEmpty();
             boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
             boolean shouldAttack = false;
@@ -82,8 +96,8 @@ public class FactionViolence {
                 // Fix the mobs not attacking the player
                 if (target instanceof net.minecraft.entity.monster.IMob ||
                         (target instanceof net.minecraft.entity.player.EntityPlayer &&
-                                !((net.minecraft.entity.player.EntityPlayer) target).isCreative()) &&
-                                !((net.minecraft.entity.player.EntityPlayer) target).isSpectator()) {
+                                !((net.minecraft.entity.player.EntityPlayer) target).isCreative() &&
+                                !((net.minecraft.entity.player.EntityPlayer) target).isSpectator())) {
                     shouldAttack = true;
                 }
             } else if (isOpposingFaction) {
@@ -102,5 +116,13 @@ public class FactionViolence {
         if (bestTarget != null) {
             mob.setAttackTarget(bestTarget);
         }
+    }
+
+    private static String getFaction(EntityLivingBase entity) {
+        NBTTagCompound tag = entity.getEntityData();
+        if (!tag.hasKey(TAG_ROOT)) return "";
+        NBTTagCompound susyTag = tag.getCompoundTag(TAG_ROOT);
+        if (!susyTag.hasKey(TAG_FACTION)) return "";
+        return susyTag.getString(TAG_FACTION);
     }
 }
