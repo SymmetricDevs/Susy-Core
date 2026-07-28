@@ -213,10 +213,10 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                     continue;
                 Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
                 if (mat == null) {
-                    currentMass += (fluid.amount * 98 * 4) / 1000;
+                    currentMass += (fluid.amount * 98 * 4) / 144;
                     continue;
                 }
-                currentMass += (int) (mat.getMass() * fluid.amount / (GTValues.M / 36));
+                currentMass += (int) (mat.getMass() * fluid.amount / 144);
             }
         }
         return currentMass;
