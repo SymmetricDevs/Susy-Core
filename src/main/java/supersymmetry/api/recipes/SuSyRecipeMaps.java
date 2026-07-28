@@ -219,7 +219,8 @@ public class SuSyRecipeMaps {
             "evaporation_deposition", 4, 1, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMapOreSorter<>("ore_sorter", 2, 20, 1, 1,
+    public static final RecipeMap<SimpleRecipeBuilder> ORE_SORTER_RECIPES = new RecipeMapOreSorter<>("ore_sorter", 2,
+            20, 1, 1,
             new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRACT, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MACERATOR);
