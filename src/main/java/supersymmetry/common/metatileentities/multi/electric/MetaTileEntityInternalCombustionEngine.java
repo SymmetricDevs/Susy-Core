@@ -97,7 +97,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                 .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC",
                         "C  F F F         ", "   HHHHH         ")
                 .aisle("CPPPPPPPC  F   F ", "R CCCCCCC CCCCCCC", "R CXXXXXXGAAAAAAD", "R CBBBBBC CCCCCCC",
-                        "C aIPPPIa        ", "   HHHHH         ")
+                        "C  IPPPI         ", "   HHHHH         ")
                 .aisle("CFFFFFFFFFFFFFFF ", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC", "R CCCCCCC CCCCCCC",
                         "C  F F F         ", "   HHHHH         ")
                 .aisle("C CCCCCCC  F   F ", "C   FSF    F   F ", "C   FMF    F   F ", "C                ",
