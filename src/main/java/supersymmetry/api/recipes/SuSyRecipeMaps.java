@@ -25,7 +25,6 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -665,7 +664,6 @@ public class SuSyRecipeMaps {
                 // Add first two outputs, get the third output meta
                 List<ItemStack> outputs = recipeBuilder.getAllItemOutputs();
                 int meta = outputs.get(2).getMetadata();
-                SusyLog.logger.info("Meta: " + meta);
                 if (MaterialRegistryManager.getInstance().getMaterial("granite_tailing_slurry") != null) {
                     switch (meta) {
                         case 4039: // Granite
