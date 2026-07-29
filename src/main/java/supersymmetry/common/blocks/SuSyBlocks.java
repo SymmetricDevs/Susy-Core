@@ -70,6 +70,7 @@ public class SuSyBlocks {
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
+    public static BlockSpeaker SPEAKER;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
     public static BlockProcessorCluster PROCESSOR_CLUSTER;
@@ -92,6 +93,8 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockSolarPanel SOLAR_PANEL;
+    public static BlockPaddleShaft PADDLE_SHAFT;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 

@@ -82,11 +82,15 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:creativecore-257814:4722163")
     compileOnly rfg.deobf("curse.maven:littletiles-257818:5180387")
 
+    implementation rfg.deobf('curse.maven:opencomputers-223008:6608365')
     // ProjectRed
     compileOnly 'codechicken:ChickenASM:1.12-1.0.2.9' transitive false
     compileOnly rfg.deobf('curse.maven:mrtjpcore-229002:2735197')
     compileOnly rfg.deobf('curse.maven:cb-multipart-258426:2755790')
     compileOnly rfg.deobf('curse.maven:project-red-core-228702:2745545')
+
+    compileOnly rfg.deobf("curse.maven:multistorage-244864:2710024") // MultiStorage 1.4.14
+    compileOnly rfg.deobf("curse.maven:shetiphiancore-71738:2661618") // ShetiPhianCore 3.5.9
 
     runtimeOnly rfg.deobf("curse.maven:serverutil-282484:2503313")
 

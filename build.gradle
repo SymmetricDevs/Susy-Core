@@ -1207,6 +1207,8 @@ if (cfApiKey.isPresent() || deploymentDebug.toBoolean()) {
             mainFile.addModLoader 'Forge'
             mainFile.addJavaVersion "Java 8"
             mainFile.addGameVersion minecraftVersion
+            mainFile.addEnvironment "Server"
+            mainFile.addEnvironment "Client"
 
             if (curseForgeRelations.size() != 0) {
                 String[] deps = curseForgeRelations.split(';')

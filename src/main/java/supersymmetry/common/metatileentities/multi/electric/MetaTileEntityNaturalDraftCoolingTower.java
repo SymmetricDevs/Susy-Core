@@ -169,7 +169,7 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
                         "               ", "               ", "               ", "               ", "               ",
                         "               ")
                 .where('S', selfPredicate())
-                .where('O', states(getCasingState()).or(autoAbilities(true, true, false, false, false, true, false)))
+                .where('O', states(getCasingState()).or(autoAbilities(true, true, true, false, false, true, false)))
                 .where('I',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
