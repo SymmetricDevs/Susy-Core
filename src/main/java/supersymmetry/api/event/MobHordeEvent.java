@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,6 +16,7 @@ import net.minecraft.world.WorldServer;
 
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
+import net.minecraft.world.chunk.Chunk;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
@@ -216,23 +218,27 @@ public class MobHordeEvent {
     }
 
     private BlockPos findSpawnPos(EntityPlayer player) {
-        for (int i = 0; i < 12; i++) {
-            double angle = Math.random() * 2 * Math.PI;
-            int radius = 16 + (int) (20 * Math.random());
+        double angle = Math.random() * 2 * Math.PI;
+        int radius = 16 + (int) (20 * Math.random());
 
-            double x = (int) (player.posX + radius * Math.cos(angle)) + 0.5;
-            double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
+        int x = (int) (player.posX + radius * Math.cos(angle));
+        int z = (int) (player.posZ + radius * Math.sin(angle));
 
-            BlockPos topPos = player.world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-            if (topPos.getY() < player.posY - 2 || topPos.getY() > player.posY + 8) continue;
+        Chunk chunk = player.world.getChunk(new BlockPos(x, 0, z));
+        int localX = x & 15;
+        int localZ = z & 15;
+        int groundY = chunk.heightMap[localZ << 4 | localX]; // Y of highest opaque block + 1
 
-            EntityLiving test = entitySupplier.apply(player);
-            test.setPosition(x, topPos.getY() + 0.01, z);
-            if (!test.getCanSpawnHere() || !test.isNotColliding()) continue;
+        BlockPos spawnPos = new BlockPos(x, groundY, z); // already the air block above ground
 
-            return topPos;
-        }
-        return null;
+        if (!player.world.canSeeSky(spawnPos)) return null;
+
+        EntityLiving test = entitySupplier.apply(player);
+        test.setPosition(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+
+        if (!test.isNotColliding()) return null;
+
+        return spawnPos;
     }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
