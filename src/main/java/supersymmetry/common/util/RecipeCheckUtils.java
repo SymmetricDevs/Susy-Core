@@ -3,10 +3,17 @@ package supersymmetry.common.util;
 import static supersymmetry.common.world.atmosphere.AtmosphereUtils.isPosOxygenated;
 
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.util.RelativeDirection;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.properties.AtmosphereProperty;
+import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 public class RecipeCheckUtils {
@@ -28,12 +35,23 @@ public class RecipeCheckUtils {
         return isAtmospherePresent == needsAtmosphere;
     }
 
-
     public static boolean checkDimension(Recipe recipe, MetaTileEntity controller) {
         IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
         if (dimensionIDs.isEmpty() || dimensionIDs.contains(controller.getWorld().provider.getDimension())) {
             return true;
         }
         return false;
+    }
+
+    public static boolean checkBiomeRequirement(@NotNull Recipe recipe, MetaTileEntity controller) {
+        if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
+        return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
+                .checkBiome(controller.getWorld().getBiome(controller.getPos()));
+    }
+
+    public static boolean checkBiomeRequirement(@NotNull Recipe recipe, World world, BlockPos pos) {
+        if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
+        return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
+                .checkBiome(world.getBiome(pos));
     }
 }

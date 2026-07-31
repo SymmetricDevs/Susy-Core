@@ -380,7 +380,8 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        return RecipeCheckUtils.checkDimension(recipe, this) && super.checkRecipe(recipe, consumeIfSuccess);
+        return RecipeCheckUtils.checkDimension(recipe, this) && RecipeCheckUtils.checkBiomeRequirement(recipe, this)
+                && super.checkRecipe(recipe, consumeIfSuccess);
     }
 
     @Override
