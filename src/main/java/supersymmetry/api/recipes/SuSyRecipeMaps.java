@@ -382,8 +382,8 @@ public class SuSyRecipeMaps {
                     .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL)
                     .setSound(GTSoundEvents.BATH);
 
-    public static final RecipeMap<BiomeRecipeBuilder> PUMPING_RECIPES = new RecipeMap<>("large_fluid_pump", 1, 0, 0, 1,
-            new BiomeRecipeBuilder(), false)
+    public static final RecipeMap<DimensionRecipeBuilder> PUMPING_RECIPES = new RecipeMap<>("large_fluid_pump", 1, 0, 0, 1,
+            new DimensionRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.MINER);
 
