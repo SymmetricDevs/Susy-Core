@@ -189,7 +189,7 @@ tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.anorthosite.name=Anorthosite
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
-tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+tile.susy_stone_smooth.military_concrete.name=Military Concrete
 
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
@@ -204,7 +204,7 @@ tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
-tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+tile.susy_stone_cobble.military_concrete.name=Military Concrete Cobblestone
 
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
@@ -219,7 +219,7 @@ tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
-tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
+tile.susy_stone_bricks.military_concrete.name=Military Concrete Bricks
 
 tile.lunar_concrete.lunar_concrete_smooth.name=Smooth Lunar Concrete
 tile.lunar_concrete.lunar_concrete_bricks.name=Lunar Concrete Bricks
@@ -264,6 +264,7 @@ susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
 susy.material.anorthosite=Anorthosite
 susy.material.kreep_basalt=KREEP Basalt
+susy.material.leucobasalt=Leucobasalt
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite

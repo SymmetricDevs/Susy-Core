@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -249,7 +248,7 @@ public class CommonProxy {
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Biome> evt) {
         SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands")
-                .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+                .setRainDisabled().setBaseHeight(2f).setHeightVariation(0.4f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
         addTypes(SuSyBiomes.LUNAR_HIGHLANDS, Type.DEAD, Type.VOID, Type.NETHER);
@@ -261,7 +260,7 @@ public class CommonProxy {
         addTypes(SuSyBiomes.LUNAR_MARIA, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_KREEP_TERRANE = new BiomeLunarKreepTerrane(new Biome.BiomeProperties("Lunar KREEP Terrane")
-                .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+                .setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
         SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "kreep");
         evt.getRegistry().register(SuSyBiomes.LUNAR_KREEP_TERRANE);
         addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);

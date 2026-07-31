@@ -173,7 +173,7 @@ tile.susy_stone_smooth.soapstone.name=Steatyt
 tile.susy_stone_smooth.kimberlite.name=Kimberlit
 tile.susy_stone_smooth.anorthosite.name=Anortozyt
 tile.susy_stone_smooth.industrial_concrete.name=Beton przemysłowy
-tile.susy_stone_smooth.minitary_concrete.name=Beton wojskowy
+tile.susy_stone_smooth.military_concrete.name=Beton wojskowy
 
 tile.susy_stone_cobble.gabbro.name=Gabbro Brukowiec
 tile.susy_stone_cobble.gneiss.name=Gnejsowy bruk
@@ -188,7 +188,7 @@ tile.susy_stone_cobble.soapstone.name=Kamień steatytowy
 tile.susy_stone_cobble.kimberlite.name=Kostka brukowa Kimberlit
 tile.susy_stone_cobble.anorthosite.name=Anortozytowy bruk
 tile.susy_stone_cobble.industrial_concrete.name=Przemysłowy betonowy bruk
-tile.susy_stone_cobble.minitary_concrete.name=Wojskowy betonowy bruk
+tile.susy_stone_cobble.military_concrete.name=Wojskowy betonowy bruk
 
 tile.susy_stone_bricks.gabbro.name=Cegły Gabbro
 tile.susy_stone_bricks.gneiss.name=Cegły gnejsowe
@@ -203,7 +203,7 @@ tile.susy_stone_bricks.soapstone.name=Cegły ze steatytu
 tile.susy_stone_bricks.kimberlite.name=Cegły Kimberlitowe
 tile.susy_stone_bricks.anorthosite.name=Cegły anortozytowe
 tile.susy_stone_bricks.industrial_concrete.name=Przemysłowe cegły betonowe
-tile.susy_stone_bricks.minitary_concrete.name=Wojskowe cegły betonowe
+tile.susy_stone_bricks.military_concrete.name=Wojskowe cegły betonowe
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Fosforek manganu i żelaza arsenu

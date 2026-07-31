@@ -173,7 +173,7 @@ tile.susy_stone_smooth.soapstone.name=Pierre à savon
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.anorthosite.name=Anorthosite
 tile.susy_stone_smooth.industrial_concrete.name=Béton industriel
-tile.susy_stone_smooth.minitary_concrete.name=Béton militaire
+tile.susy_stone_smooth.military_concrete.name=Béton militaire
 
 tile.susy_stone_cobble.gabbro.name=Pavé de Gabbro
 tile.susy_stone_cobble.gneiss.name=Pavé de gneiss
@@ -188,7 +188,7 @@ tile.susy_stone_cobble.soapstone.name=Pavé en stéatite
 tile.susy_stone_cobble.kimberlite.name=Pavé de kimberlite
 tile.susy_stone_cobble.anorthosite.name=Pavé d'Anorthosite
 tile.susy_stone_cobble.industrial_concrete.name=Pavé de béton industriel
-tile.susy_stone_cobble.minitary_concrete.name=Pavé de béton militaire
+tile.susy_stone_cobble.military_concrete.name=Pavé de béton militaire
 
 tile.susy_stone_bricks.gabbro.name=Briques de gabbro
 tile.susy_stone_bricks.gneiss.name=Briques de gneiss
@@ -203,7 +203,7 @@ tile.susy_stone_bricks.soapstone.name=Briques en stéatite
 tile.susy_stone_bricks.kimberlite.name=Briques de kimberlite
 tile.susy_stone_bricks.anorthosite.name=Briques anorthosite
 tile.susy_stone_bricks.industrial_concrete.name=Briques de béton industrielles
-tile.susy_stone_bricks.minitary_concrete.name=Briques de béton militaires
+tile.susy_stone_bricks.military_concrete.name=Briques de béton militaires
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=Phosphure d'arsenic de fer et de manganèse

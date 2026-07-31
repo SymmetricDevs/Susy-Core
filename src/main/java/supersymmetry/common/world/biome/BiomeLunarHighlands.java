@@ -13,10 +13,7 @@ import supersymmetry.common.blocks.SusyStoneVariantBlock;
 public class BiomeLunarHighlands extends PlanetaryBiome {
 
     public BiomeLunarHighlands(BiomeProperties properties) {
-        super(new BiomeProperties("lunar highlands")
-                .setTemperature(0.0f) // fuck you
-                .setRainfall(0.0f)
-                .setRainDisabled());
+        super(properties);
         this.topBlock = SuSyBlocks.REGOLITH.getDefaultState();
         this.fillerBlock = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                 .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE);
