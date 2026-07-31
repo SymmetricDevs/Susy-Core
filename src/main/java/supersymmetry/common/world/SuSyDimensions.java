@@ -116,7 +116,7 @@ public class SuSyDimensions {
                 new SuSyBiomeEntry(SuSyBiomes.LUNAR_KREEP_TERRANE, 40)
                         .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
-                        .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
+                        .getState(SusyStoneVariantBlock.StoneType.LEUCOBASALT))
                 .setSuSySkyRenderer(moonSky)
                 .setGravity(0.166f)
                 .setBiomeSize(7)

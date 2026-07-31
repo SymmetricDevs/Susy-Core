@@ -63,6 +63,7 @@ import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
@@ -72,6 +73,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
+import supersymmetry.common.rocketry.SusyRocketComponents;
 
 /**
  * The rocket assembler and launch pad rolled into one. Lunar gravity is weak enough that the rocket does not need the
@@ -95,7 +97,9 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 if (x.hasTagCompound()) {
                     NBTTagCompound tag = x.getTagCompound();
                     AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-                    return bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint();
+                    return bp != null && bp.readFromNBT(tag) &&
+                            bp.getName().equals(SusyRocketComponents.ROCKET_LUNAR_BLUEPRINT_DEFAULT.getName()) &&
+                            bp.isFullBlueprint();
                 }
                 return false;
             });
@@ -448,6 +452,10 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
+        if (this.getWorld().provider.getDimension() != CelestialObjects.MOON.getDimension()) {
+            invalidateStructure();
+            return;
+        }
         this.rocketAABB = getRocketAABB();
         if (findRocket()) {
             setComplexState(LaunchComplexState.LOADED);
@@ -476,7 +484,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 .aisle("CCCCCCCCC")
                 .aisle("CCCCSCCCC")
                 .where('S', selfPredicate())
-                .where('C', states(getFoundationState())
+                .where('C', states(getFoundationState()).setMinGlobalLimited(70)
                         .or(autoAbilities())
                         .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS)

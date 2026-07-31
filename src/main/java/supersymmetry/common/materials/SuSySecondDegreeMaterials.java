@@ -73,5 +73,12 @@ public class SuSySecondDegreeMaterials {
                 .flags(NO_SMASHING, DISABLE_DECOMPOSITION)
                 .components(Basalt, 8, Potassium, 1, RareEarth, 1, Phosphorus, 1)
                 .build();
+
+        Leucobasalt = new Material.Builder(27208, SuSyUtility.susyId("kreep_basalt"))
+                .dust()
+                .colorAverage().iconSet(ROUGH)
+                .flags(NO_SMASHING, DISABLE_DECOMPOSITION)
+                .components(Leucobasalt, 1, Anorthosite, 1)
+                .build();
     }
 }

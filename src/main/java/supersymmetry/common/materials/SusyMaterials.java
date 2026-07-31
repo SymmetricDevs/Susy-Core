@@ -28,6 +28,7 @@ public class SusyMaterials {
     public static Material Slate;
     public static Material Kimberlite;
     public static Material Anorthosite;
+    public static Material Leucobasalt;
     public static Material KreepBasalt;
     public static Material Latex;
     public static Material Mud;
