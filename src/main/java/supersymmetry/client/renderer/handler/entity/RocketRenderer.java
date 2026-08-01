@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import supersymmetry.SuSyValues;
 import supersymmetry.common.entities.EntityBlueprintRocket;
-import supersymmetry.common.entities.EntitySoyuzBasic;
 
 @SideOnly(Side.CLIENT)
 public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {

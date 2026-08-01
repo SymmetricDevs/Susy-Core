@@ -7,8 +7,6 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.entity.EnumCreatureType;
 
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;

@@ -380,7 +380,6 @@ public class SuSyPredicates {
                 .toArray(BlockInfo[]::new));
     }
 
-
     private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> HELIOSTATS = Arrays
             .stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
                     facing -> () -> new TraceabilityPredicate(blockWorldState -> {
@@ -407,6 +406,4 @@ public class SuSyPredicates {
     public static TraceabilityPredicate heliostats(RelativeDirection facing) {
         return HELIOSTATS.get(facing).get();
     }
-
-
 }

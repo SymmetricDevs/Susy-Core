@@ -2,7 +2,6 @@ package supersymmetry.mixins.gregtech;
 
 import java.util.List;
 
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
+import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.metatileentity.multiblock.RecipeMapPrimitiveMultiblockController;
 
 @Mixin(value = RecipeMapPrimitiveMultiblockController.class, remap = false)
@@ -22,7 +22,6 @@ public abstract class RecipeMapPrimitiveMultiblockControllerMixin extends Multib
     public RecipeMapPrimitiveMultiblockControllerMixin(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override

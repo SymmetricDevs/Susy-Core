@@ -125,8 +125,7 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity())
-                    && super.checkRecipe(recipe);
+            return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity()) && super.checkRecipe(recipe);
         }
 
         @Override

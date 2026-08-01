@@ -1,13 +1,11 @@
 package supersymmetry.common.entities;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockWall;
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,12 +14,7 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,29 +25,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import cam72cam.mod.entity.boundingbox.BoundingBox;
-import gregtech.api.GregTechAPI;
-import gregtech.modules.ModuleManager;
-import supersymmetry.Supersymmetry;
-import supersymmetry.api.items.CargoItemStackHandler;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.audio.MovingSoundRocket;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
-import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
-import supersymmetry.common.advancement.SusyCriteriaTriggers;
-import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
-import supersymmetry.integration.baubles.BaublesModule;
-import supersymmetry.modules.SuSyModules;
 
 public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRender, AFSRendered {
 
     /**
      * Horizontal (x, z) offsets of the four boosters plus the core engine.
      */
-    private static final double[][] SOYUZ_ENGINE_OFFSETS = {{0, 0}, {3, 0}, {0, 3}, {-3, 0}, {0, -3}};
+    private static final double[][] SOYUZ_ENGINE_OFFSETS = { { 0, 0 }, { 3, 0 }, { 0, 3 }, { -3, 0 }, { 0, -3 } };
 
     @SideOnly(Side.CLIENT)
     private MovingSoundRocket soundRocket;
@@ -106,7 +89,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         return 44;
     }
 
-
     public EntitySoyuzBasic(World worldIn, BlockPos pos, float rotationYaw) {
         this(worldIn, (float) pos.getX() + 0.5F, pos.getY(), (float) pos.getZ() + 0.5F, rotationYaw);
     }
@@ -114,7 +96,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     public EntitySoyuzBasic(World worldIn, Vec3d pos, float rotationYaw) {
         this(worldIn, pos.x, pos.y, pos.z, rotationYaw);
     }
-
 
     public void launchRocket() {
         if (this.getFuel() == null) {
@@ -205,7 +186,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     protected double[][] getEngineOffsets() {
         return SOYUZ_ENGINE_OFFSETS;
     }
-
 
     @SideOnly(Side.CLIENT)
     public void setupRocketSound() {
