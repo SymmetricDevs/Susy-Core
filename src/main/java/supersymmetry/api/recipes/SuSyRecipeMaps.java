@@ -570,6 +570,13 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> LUNAR_BUCKET_WHEEL_EXCAVATOR = new RecipeMap<>(
             "lunar_bwe", 1, 3, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.DRILL_TOOL);
+
+    public static final RecipeMap<SimpleRecipeBuilder> SOLAR_FURNACE_RECIPES = new RecipeMap<>(
+            "solar_furnace", 3, 3, 2, 2, new SimpleRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.FURNACE);
+
+
     static {
         GCYMRecipeMaps.ALLOY_BLAST_RECIPES.onRecipeBuild(recipeBuilder -> ADVANCED_ARC_FURNACE.recipeBuilder()
                 .fluidInputs(SusyMaterials.RefractoryGunningMixture.getFluid(50 *

@@ -7,6 +7,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -310,6 +311,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLayupMachine LAYUP_MACHINE;
 
     public static MetaTileEntityLunarBucketWheelExcavator LUNAR_BUCKET_WHEEL_EXCAVATOR;
+    public static MetaTileEntitySolarFurnace SOLAR_FURNACE;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -791,6 +793,9 @@ public class SuSyMetaTileEntities {
 
         LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,
                 new MetaTileEntityLunarBucketWheelExcavator(susyId("lunar_bucket_wheel_excavator")));
+
+        SOLAR_FURNACE = registerMetaTileEntity(18523,
+                new MetaTileEntitySolarFurnace(susyId("solar_furnace")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

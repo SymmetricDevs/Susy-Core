@@ -193,7 +193,6 @@ public class SuSyPredicates {
                     facing -> () -> new TraceabilityPredicate(blockWorldState -> {
                         IBlockState state = blockWorldState.getBlockState();
                         if (state.getBlock() instanceof BlockRobotArm) {
-                            // Check conveyor type
                             BlockRobotArm.RobotArmType type = ((BlockRobotArm) state.getBlock()).getState(state);
                             Object currentArm = blockWorldState.getMatchContext().getOrPut("RobotArmType", type);
                             if (!currentArm.equals(type)) {
@@ -380,4 +379,34 @@ public class SuSyPredicates {
                 .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type)))
                 .toArray(BlockInfo[]::new));
     }
+
+
+    private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> HELIOSTATS = Arrays
+            .stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
+                    facing -> () -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockHeliostat) {
+                            BlockHeliostat.HeliostatType type = ((BlockHeliostat) state.getBlock()).getState(state);
+                            Object currentHeliostat = blockWorldState.getMatchContext().getOrPut("HeliostatType", type);
+                            if (!currentHeliostat.equals(type)) {
+                                blockWorldState
+                                        .setError(new PatternStringError("susy.multiblock.pattern.error.heliostat"));
+                                return false;
+                            }
+                            // Adds the position of the heliostat (and target facing) to the match context
+                            blockWorldState.getMatchContext().getOrPut("Heliostat", new LinkedList<>())
+                                    .add(Pair.of(blockWorldState.getPos(), facing));
+                            return true;
+                        }
+                        return false;
+                    }, () -> Arrays.stream(BlockHeliostat.HeliostatType.values())
+                            .map(entry -> new BlockInfo(SuSyBlocks.HELIOSTAT.getState(entry), null))
+                            .toArray(BlockInfo[]::new)).addTooltips("susy.multiblock.pattern.error.heliostat")));
+
+    @NotNull
+    public static TraceabilityPredicate heliostats(RelativeDirection facing) {
+        return HELIOSTATS.get(facing).get();
+    }
+
+
 }
