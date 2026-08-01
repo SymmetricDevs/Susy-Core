@@ -16,8 +16,8 @@ import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.metaitem.stats.ISubItemHandler;
 import gregtech.api.util.GTUtility;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.rocketry.SusyRocketComponents;
 
 public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
 
@@ -38,12 +38,13 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
     @Override
     public void getSubItems(ItemStack itemStack, CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
         subItems.add(itemStack.copy());
-        if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue &&
-                SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT != null) {
-            ItemStack configured = itemStack.copy();
-            NBTTagCompound tag = SusyRocketComponents.ROCKET_SOYUZ_BLUEPRINT_DEFAULT.writeToNBT();
-            configured.setTagCompound(tag);
-            subItems.add(configured);
+        if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue) {
+            for (AbstractRocketBlueprint blueprint : AbstractRocketBlueprint.getBlueprintsRegistry().values()) {
+                ItemStack configured = itemStack.copy();
+                NBTTagCompound tag = blueprint.writeToNBT();
+                configured.setTagCompound(tag);
+                subItems.add(configured);
+            }
         }
     }
 
