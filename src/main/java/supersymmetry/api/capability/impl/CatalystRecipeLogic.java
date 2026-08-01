@@ -61,7 +61,6 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
 
             // keep catalyst tier at NO_TIER unless info is found
             if (this.catalystInfo != null) {
-                SusyLog.logger.info("3r390r9");
                 this.requiredCatalystTier = property.getTier();
             }
         }

@@ -51,6 +51,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.util.Grid3D;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 /**
  * The quarry multiblock is a regular {@link RecipeMapMultiblockController}, with an additional mode
@@ -379,10 +380,8 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        for (int dimension : recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST))
-            if (dimension == this.getWorld().provider.getDimension())
-                return super.checkRecipe(recipe, consumeIfSuccess);
-        return false;
+        return RecipeCheckUtils.checkDimension(recipe, this) && RecipeCheckUtils.checkBiomeRequirement(recipe, this)
+                && super.checkRecipe(recipe, consumeIfSuccess);
     }
 
     @Override

@@ -52,6 +52,7 @@ import gregtech.common.blocks.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
+import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
@@ -67,7 +68,8 @@ import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
-                                           implements IProgressBarMultiblock, IRedstoneControllable {
+                                           implements IProgressBarMultiblock, IRedstoneControllable,
+                                           IRocketAssemblyController {
 
     public DataStorageLoader blueprintSlot = new DataStorageLoader(
             this,
@@ -174,6 +176,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.recipeMapWorkable.invalidate(); // this can break some things
     }
 
+    @Override
     public void finishAssembly() {
         this.blueprintSlot.setLocked(false);
         this.isAssemblyWorking = false;
@@ -219,6 +222,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.blueprintSlot.setLocked(true);
     }
 
+    @Override
     public AbstractComponent<?> getCurrentCraftTarget() {
         if (isAssemblyWorking && componentList.size() >= componentIndex + 1) {
             return this.componentList.get(this.componentIndex);
@@ -230,9 +234,40 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     // meant to be called after a recipe is done
+    @Override
     public void nextComponent() {
         if (!isAssemblyWorking) return;
         this.componentIndex++;
+    }
+
+    @Override
+    public boolean isAssemblyWorking() {
+        return this.isAssemblyWorking;
+    }
+
+    @Override
+    public int getComponentIndex() {
+        return this.componentIndex;
+    }
+
+    @Override
+    public int getComponentCount() {
+        return this.componentList.size();
+    }
+
+    @Override
+    public boolean isAssemblySiteAvailable() {
+        return findTransporterErector() != null;
+    }
+
+    @Override
+    public boolean isAssemblySiteReady() {
+        return hasSuitableErector();
+    }
+
+    @Override
+    public void onComponentSetup() {
+        displayAssemblerProgress();
     }
 
     public boolean hasSuitableErector() {

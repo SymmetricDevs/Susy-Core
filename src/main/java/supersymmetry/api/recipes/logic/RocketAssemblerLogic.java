@@ -17,22 +17,25 @@ import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
+import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
-import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     private List<Integer> electrodeSlotCache = new ArrayList<>();
     public boolean hasEnoughElectrodes = true;
 
-    public RocketAssemblerLogic(MetaTileEntityRocketAssembler assembler) {
+    private final IRocketAssemblyController assembler;
+
+    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
         super(assembler);
+        this.assembler = assembler;
     }
 
     public void setInputsValid() {
@@ -40,15 +43,14 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     }
 
     public Recipe getRecipe(long maxVoltage) {
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        if (!assembler.isAssemblyWorking) return null;
+        if (!assembler.isAssemblyWorking()) return null;
 
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
                 .flatMap(x -> x.expandRecipe().stream())
                 .collect(Collectors.toList());
-        Recipe recipe = assembler.recipeMap
+        Recipe recipe = getRecipeMap()
                 .recipeBuilder()
                 .inputIngredients(collapse(flatExpandedInput))
                 .EUt(VA[LuV]) // Almost 1 LuV amp
@@ -62,9 +64,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected @Nullable Recipe findRecipe(
                                           long maxVoltage, IItemHandlerModifiable inputs,
                                           IMultipleTankHandler fluidInputs) {
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        EntityTransporterErector erector = assembler.findTransporterErector();
-        if (erector == null) return null;
+        if (!assembler.isAssemblySiteAvailable()) return null;
         return getRecipe(maxVoltage);
     }
 
@@ -73,7 +73,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     @Override
     protected void completeRecipe() {
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
-            MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();
         }
         super.completeRecipe();
@@ -108,9 +107,9 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         if (world != null && !world.isRemote) {
             if (workingEnabled && progressTime == 0) {
                 // check the assembler to see if it can finish
-                MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-                if (assembler.isAssemblyWorking && assembler.componentIndex == assembler.componentList.size()) {
-                    if (assembler.hasSuitableErector()) {
+                if (assembler.isAssemblyWorking() &&
+                        assembler.getComponentIndex() == assembler.getComponentCount()) {
+                    if (assembler.isAssemblySiteReady()) {
                         assembler.finishAssembly();
                     }
                 }
@@ -121,7 +120,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     // mostly taken from the ball mill logic
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return false;
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
@@ -143,7 +141,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             return false;
         }
 
-        return assembler.hasSuitableErector() && super.checkRecipe(recipe);
+        return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
     }
 
     // mostly taken from the ball mill logic
@@ -155,7 +153,6 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
             return false;
         }
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return false;
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
@@ -181,8 +178,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected void setupRecipe(Recipe recipe) {
         super.setupRecipe(recipe);
 
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        assembler.displayAssemblerProgress();
+        assembler.onComponentSetup();
     }
 
     // maybe this is a little too much

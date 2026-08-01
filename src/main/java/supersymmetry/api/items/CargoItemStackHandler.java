@@ -6,13 +6,19 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
@@ -189,12 +195,31 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     public static int getMassPerItem(ItemStack item) {
         // GTCEu mass info
         ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(item);
+        int currentMass = 0;
         if (info != null) {
-            return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount)
+            currentMass += (int) (info.getMaterials().stream()
+                    .mapToLong((stack) -> stack.material.getMass() * stack.amount)
                     .sum() /
                     (GTValues.M / 36));
+        } else {
+            currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
         }
-        return 98 * 36 * 4; // default mass times 36 times another fudge factor
+        IFluidHandlerItem fluidHandlerItem = item
+                .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (fluidHandlerItem != null) {
+            for (IFluidTankProperties t : fluidHandlerItem.getTankProperties()) {
+                FluidStack fluid = t.getContents();
+                if (fluid == null || fluid.amount == 0)
+                    continue;
+                Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
+                if (mat == null) {
+                    currentMass += (fluid.amount * 98 * 4) / 144;
+                    continue;
+                }
+                currentMass += (int) (mat.getMass() * fluid.amount / 144);
+            }
+        }
+        return currentMass;
     }
 
     @Override

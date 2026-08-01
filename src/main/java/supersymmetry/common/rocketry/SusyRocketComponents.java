@@ -17,6 +17,7 @@ public class SusyRocketComponents {
 
     public static SimpleStagedRocketBlueprint ROCKET_SOYUZ_BLUEPRINT_DEFAULT;
     public static SimpleStagedRocketBlueprint ROCKET_V1_BLUEPRINT_DEFAULT;
+    public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
         AbstractComponent.registerComponent(new ComponentFairing());
@@ -114,8 +115,44 @@ public class SusyRocketComponents {
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .build();
 
-        AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
+        ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar")
+                .stage(
+                        new RocketStage.Builder("block_A")
+                                .type("engine")
+                                .limit(4)
+                                .type("engine_small")
+                                .limit(4)
+                                .type("tank")
+                                .limit(2)
+                                .build())
+                .stage(
+                        new RocketStage.Builder("block_F")
+                                .type("engine")
+                                .limit(4)
+                                .type("engine_small")
+                                .limit(4)
+                                .type("tank")
+                                .limit(2)
+                                .type("interstage")
+                                .limit(1)
+                                .build())
+                .stage(
+                        new RocketStage.Builder("payload")
+                                .type("spacecraft")
+                                .limit(1)
+                                .type("fairing")
+                                .limit(2)
+                                .type("engine_small")
+                                .limit(3)
+                                .type("tank")
+                                .limit(1)
+                                .build())
+                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
+                .build();
+
+        //AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
+        AbstractRocketBlueprint.registerBlueprint(ROCKET_LUNAR_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.setRegistryLock(true);
     }
 }

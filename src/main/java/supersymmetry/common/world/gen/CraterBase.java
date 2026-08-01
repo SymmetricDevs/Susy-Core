@@ -19,6 +19,7 @@ public abstract class CraterBase extends MapGenBase {
 
     public static final Block CRATER_DEPOSIT = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER)
             .getBlock();
+    public static final IBlockState WATER_ICE_DEPOSIT = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.ICE_CAP);
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
     protected final IBlockState stone;
@@ -72,7 +73,7 @@ public abstract class CraterBase extends MapGenBase {
 
         int chunkStartX = chunkX * 16;
         int chunkStartZ = chunkZ * 16;
-
+        boolean generateIce = craterRand.nextInt(3) == 0;
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int worldX = chunkStartX + x;
@@ -88,7 +89,8 @@ public abstract class CraterBase extends MapGenBase {
                 IBlockState biomeEjecta = getBiomeEjecta(x, z);
 
                 if (distance <= radius) {
-                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, craterRand, biomeEjecta);
+                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, craterRand, biomeEjecta,
+                            generateIce);
                 } else if (distance < radius * 2) {
                     applyEjectaBlanket(primer, x, z, surfaceY, distance, radius, biomeEjecta);
                 }
@@ -108,7 +110,7 @@ public abstract class CraterBase extends MapGenBase {
 
     protected void excavateCrater(ChunkPrimer primer, int x, int z, int surfaceY,
                                   double distance, int radius, int depth,
-                                  Random rand, IBlockState biomeEjecta) {
+                                  Random rand, IBlockState biomeEjecta, boolean generateIce) {
         double normalizedDist = distance / radius;
         int craterDepth = Math.max(1, computeFloorDepth(depth, normalizedDist));
         int floorY = Math.max(3, surfaceY - craterDepth);
@@ -116,9 +118,7 @@ public abstract class CraterBase extends MapGenBase {
         for (int y = surfaceY; y > floorY; y--) {
             primer.setBlockState(x, y, z, AIR);
         }
-
         primer.setBlockState(x, floorY, z, biomeEjecta);
-
         IBlockState subsurfaceMaterial;
         int subsurfaceDepth;
 
@@ -144,6 +144,12 @@ public abstract class CraterBase extends MapGenBase {
                 if (rand.nextDouble() < 0.6) {
                     primer.setBlockState(x, y, z, stone);
                 }
+            }
+        }
+
+        if (generateIce && craterDepth > 14) {
+            for (int y = floorY; y > floorY - 3; y--) {
+                primer.setBlockState(x, y, z, WATER_ICE_DEPOSIT);
             }
         }
     }

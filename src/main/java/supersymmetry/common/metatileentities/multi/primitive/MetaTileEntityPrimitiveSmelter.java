@@ -1,6 +1,9 @@
 package supersymmetry.common.metatileentities.multi.primitive;
 
+import gregtech.api.capability.impl.PrimitiveRecipeLogic;
+import gregtech.api.recipes.Recipe;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -8,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,9 +42,13 @@ import gregtech.client.renderer.cclop.ColourOperation;
 import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
+import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.util.RecipeCheckUtils;
+
+import java.util.List;
 
 public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblockController {
 
@@ -49,6 +57,13 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
 
     public MetaTileEntityPrimitiveSmelter(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
+
+        this.recipeMapWorkable = new PrimitiveRecipeLogic(this, SuSyRecipeMaps.PRIMITIVE_SMELTER) {
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                return super.checkRecipe(recipe) && RecipeCheckUtils.checkAtmosphere(this.metaTileEntity, true);
+            }
+        };
     }
 
     @Override

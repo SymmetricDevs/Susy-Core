@@ -188,8 +188,9 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.anorthosite.name=Anorthosite
+tile.susy_stone_smooth.leucobasalt.name=Leucobasalt
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
-tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+tile.susy_stone_smooth.military_concrete.name=Military Concrete
 
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
@@ -203,8 +204,9 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
+tile.susy_stone_cobble.leucobasalt.name=Leucobasalt Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
-tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+tile.susy_stone_cobble.military_concrete.name=Military Concrete Cobblestone
 
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
@@ -218,8 +220,10 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
+tile.susy_stone_bricks.leucobasalt.name=Leucobasalt Bricks
+
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
-tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
+tile.susy_stone_bricks.military_concrete.name=Military Concrete Bricks
 
 tile.lunar_concrete.lunar_concrete_smooth.name=Smooth Lunar Concrete
 tile.lunar_concrete.lunar_concrete_bricks.name=Lunar Concrete Bricks
@@ -263,7 +267,8 @@ susy.material.limestone=Limestone
 susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
 susy.material.anorthosite=Anorthosite
-susy.material.kreep=KREEP
+susy.material.kreep_basalt=KREEP Basalt
+susy.material.leucobasalt=Leucobasalt
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite
@@ -1449,6 +1454,8 @@ susy.recipe.biomes=Biomes: %s
 susy.recipe.biomes_blocked=Blocked Biomes: %s
 susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
+susy.recipe.atmosphere=Only functions in an atmosphere
+susy.recipe.vacuum=Only functions in a vacuum
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop/status>
@@ -1736,6 +1743,16 @@ susy.launch_pad.loaded=Rocket ready for launch
 susy.launch_pad.launching=Launching rocket...
 susy.launch_pad.gui.fuel_progress=Fuel: %s mB/%s mB
 
+susy.machine.lunar_launch_complex.name=Lunar Launch Complex
+susy.machine.lunar_launch_complex.signal.0=Start assembly
+susy.machine.lunar_launch_complex.signal.1=Stop and discard assembly
+susy.machine.lunar_launch_complex.signal.2=Launch the assembled rocket
+susy.machine.lunar_launch_complex.blueprint_slot.name=Insert a rocket blueprint
+susy.lunar_launch_complex.idle=Awaiting a blueprint
+susy.lunar_launch_complex.assembling=Assembling rocket...
+susy.lunar_launch_complex.loaded=Rocket ready for launch
+susy.lunar_launch_complex.launching=Launching rocket...
+
 #BMRF blocks
 tile.bmrf_blocks.bmrf1.name=BMRF-1
 tile.bmrf_blocks.bmrf2.name=BMRF-2
@@ -1787,3 +1804,5 @@ susy.rocket.msg.gravity_too_high=Cannot launch with gravity > 0.4G (take out car
 
 susy.landing_pad.extracting=Extracting items from lander...
 susy.landing_pad.inserting=Inserting items into lander...
+
+susy.general.requires_atmosphere=§6Only works on breathable planets

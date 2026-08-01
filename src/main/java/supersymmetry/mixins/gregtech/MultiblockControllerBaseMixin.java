@@ -32,5 +32,6 @@ public abstract class MultiblockControllerBaseMixin extends MetaTileEntity {
         if (ConfigHolder.machines.doTerrainExplosion && getIsWeatherOrTerrainResistant()) {
             tooltip.add(I18n.format("gregtech.universal.tooltip.terrain_resist"));
         }
+
     }
 }
