@@ -196,6 +196,7 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.anorthosite.name=Anorthosite
+tile.susy_stone_smooth.leucobasalt.name=Leucobasalt
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
 tile.susy_stone_smooth.military_concrete.name=Military Concrete
 
@@ -211,6 +212,7 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
+tile.susy_stone_cobble.leucobasalt.name=Leucobasalt Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
 tile.susy_stone_cobble.military_concrete.name=Military Concrete Cobblestone
 
@@ -226,6 +228,8 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
+tile.susy_stone_bricks.leucobasalt.name=Leucobasalt Bricks
+
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
 tile.susy_stone_bricks.military_concrete.name=Military Concrete Bricks
 

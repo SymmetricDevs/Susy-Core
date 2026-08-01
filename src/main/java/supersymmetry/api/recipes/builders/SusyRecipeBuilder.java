@@ -16,28 +16,30 @@ import gregtech.api.recipes.RecipeMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
-public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder> {
+/*
+ * Contains a variety of helper methods for adding additional properties.
+ */
+public class SusyRecipeBuilder extends RecipeBuilder<SusyRecipeBuilder> {
 
     private int minimumDuration = 0;
 
-    public DimensionRecipeBuilder() {}
+    public SusyRecipeBuilder() {}
 
-    public DimensionRecipeBuilder(Recipe recipe, RecipeMap<DimensionRecipeBuilder> recipeMap) {
+    public SusyRecipeBuilder(Recipe recipe, RecipeMap<SusyRecipeBuilder> recipeMap) {
         super(recipe, recipeMap);
     }
 
-    public DimensionRecipeBuilder(RecipeBuilder<DimensionRecipeBuilder> recipeBuilder) {
+    public SusyRecipeBuilder(RecipeBuilder<SusyRecipeBuilder> recipeBuilder) {
         super(recipeBuilder);
     }
 
     @Override
-    public DimensionRecipeBuilder copy() {
-        return new DimensionRecipeBuilder(this);
+    public SusyRecipeBuilder copy() {
+        return new SusyRecipeBuilder(this);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
         return super.applyProperty(key, value);
     }
 
-    public DimensionRecipeBuilder dimension(int dimensionID) {
+    public SusyRecipeBuilder dimension(int dimensionID) {
         IntList dimensionIDs = getDimensionIDs();
         if (dimensionIDs == IntLists.EMPTY_LIST) {
             dimensionIDs = new IntArrayList();
@@ -82,22 +84,22 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
         return this;
     }
 
-    public DimensionRecipeBuilder requireAtmosphere() {
+    public SusyRecipeBuilder requireAtmosphere() {
         this.applyProperty(AtmosphereProperty.getInstance(), true);
         return this;
     }
 
-    public DimensionRecipeBuilder requireVacuum() {
+    public SusyRecipeBuilder requireVacuum() {
         this.applyProperty(AtmosphereProperty.getInstance(), false);
         return this;
     }
 
     @Override
-    public DimensionRecipeBuilder duration(int duration) {
+    public SusyRecipeBuilder duration(int duration) {
         return super.duration(Math.max(duration, this.minimumDuration));
     }
 
-    public DimensionRecipeBuilder minimumDuration(int minimumDuration) {
+    public SusyRecipeBuilder minimumDuration(int minimumDuration) {
         this.minimumDuration = minimumDuration;
         return this;
     }
@@ -123,11 +125,11 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
                         null);
     }
 
-    public DimensionRecipeBuilder biomes(String... biomes) {
+    public SusyRecipeBuilder biomes(String... biomes) {
         return biomes(false, biomes);
     }
 
-    private DimensionRecipeBuilder biomes(boolean toBlacklist, String... biomeRLs) {
+    private SusyRecipeBuilder biomes(boolean toBlacklist, String... biomeRLs) {
         List<Biome> biomes = new ArrayList<>();
         for (String biomeRL : biomeRLs) {
             Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(biomeRL));
@@ -140,7 +142,7 @@ public class DimensionRecipeBuilder extends RecipeBuilder<DimensionRecipeBuilder
         return biomesInternal(toBlacklist, biomes);
     }
 
-    private DimensionRecipeBuilder biomesInternal(boolean toBlacklist, List<Biome> biomes) {
+    private SusyRecipeBuilder biomesInternal(boolean toBlacklist, List<Biome> biomes) {
         BiomeProperty.BiomePropertyList biomePropertyList = getBiomePropertyList();
         if (biomePropertyList == BiomeProperty.BiomePropertyList.EMPTY_LIST) {
             biomePropertyList = new BiomeProperty.BiomePropertyList();

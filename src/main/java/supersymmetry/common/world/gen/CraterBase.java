@@ -73,7 +73,7 @@ public abstract class CraterBase extends MapGenBase {
 
         int chunkStartX = chunkX * 16;
         int chunkStartZ = chunkZ * 16;
-
+        boolean generateIce = craterRand.nextInt(3) == 0;
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int worldX = chunkStartX + x;
@@ -90,7 +90,7 @@ public abstract class CraterBase extends MapGenBase {
 
                 if (distance <= radius) {
                     excavateCrater(primer, x, z, surfaceY, distance, radius, depth, craterRand, biomeEjecta,
-                            craterRand.nextInt(3) == 0);
+                            generateIce);
                 } else if (distance < radius * 2) {
                     applyEjectaBlanket(primer, x, z, surfaceY, distance, radius, biomeEjecta);
                 }
@@ -114,17 +114,11 @@ public abstract class CraterBase extends MapGenBase {
         double normalizedDist = distance / radius;
         int craterDepth = Math.max(1, computeFloorDepth(depth, normalizedDist));
         int floorY = Math.max(3, surfaceY - craterDepth);
-        float iceY = floorY + Math.max(0, generateIce ? (float) (craterDepth - 15) / 5 : 0);
+
         for (int y = surfaceY; y > floorY; y--) {
-            if (y < iceY) {
-                primer.setBlockState(x, y, z, WATER_ICE_DEPOSIT);
-            } else {
-                primer.setBlockState(x, y, z, AIR);
-            }
+            primer.setBlockState(x, y, z, AIR);
         }
-
         primer.setBlockState(x, floorY, z, biomeEjecta);
-
         IBlockState subsurfaceMaterial;
         int subsurfaceDepth;
 
@@ -150,6 +144,12 @@ public abstract class CraterBase extends MapGenBase {
                 if (rand.nextDouble() < 0.6) {
                     primer.setBlockState(x, y, z, stone);
                 }
+            }
+        }
+
+        if (generateIce && craterDepth > 14) {
+            for (int y = floorY; y > floorY - 3; y--) {
+                primer.setBlockState(x, y, z, WATER_ICE_DEPOSIT);
             }
         }
     }
