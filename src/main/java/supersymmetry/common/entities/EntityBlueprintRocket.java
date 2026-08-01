@@ -1,7 +1,7 @@
 package supersymmetry.common.entities;
 
-import gregtech.api.GregTechAPI;
-import gregtech.modules.ModuleManager;
+import java.util.List;
+
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -22,6 +22,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import gregtech.api.GregTechAPI;
+import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
@@ -34,9 +37,8 @@ import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
-import java.util.List;
-
 public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
+
     protected static final float jerk = 0.0001F;
 
     protected static final DataParameter<String> FUEL = EntityDataManager.createKey(EntityBlueprintRocket.class,
@@ -44,11 +46,12 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
     private int maxFuelVolume;
 
     // Troll mode - rocket curves back towards launch pad
-    protected static final DataParameter<Integer> LAUNCH_RESULT = EntityDataManager.createKey(EntityBlueprintRocket.class,
+    protected static final DataParameter<Integer> LAUNCH_RESULT = EntityDataManager.createKey(
+            EntityBlueprintRocket.class,
             DataSerializers.VARINT);
-    protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager.createKey(EntityBlueprintRocket.class,
+    protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager.createKey(
+            EntityBlueprintRocket.class,
             DataSerializers.BLOCK_POS);
-
 
     public EntityBlueprintRocket(World worldIn) {
         super(worldIn);
@@ -65,7 +68,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
         this.setEntityBoundingBox(new AxisAlignedBB(x - radius, y + 0.1, z - radius,
                 x + radius, y + getRocketHeight(), z + radius));
     }
-
 
     @Override
     protected void entityInit() {
@@ -111,7 +113,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
      * Horizontal (x, z) offsets of each engine bell, for exhaust particles.
      */
     protected abstract double[][] getEngineOffsets();
-
 
     @Override
     public boolean canBeCollidedWith() {
@@ -344,10 +345,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
         super.launchRocket();
     }
 
-
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
-    }
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {}
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {

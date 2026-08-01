@@ -2,16 +2,15 @@ package supersymmetry.common.util;
 
 import static supersymmetry.common.world.atmosphere.AtmosphereUtils.isPosOxygenated;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.util.RelativeDirection;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.recipes.Recipe;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;

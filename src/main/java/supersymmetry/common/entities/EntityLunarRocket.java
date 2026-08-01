@@ -30,6 +30,7 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
     protected float getRocketWidth() {
         return 3F;
     }
+
     @Override
     protected float getRocketHeight() {
         return 35F;
@@ -64,8 +65,6 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
     protected double[][] getEngineOffsets() {
         return ENGINE_OFFSETS;
     }
-
-
 
     @Override
     protected float getExplosionStrength() {

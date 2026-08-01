@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import gregtech.api.recipes.Recipe;
