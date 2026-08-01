@@ -15,7 +15,6 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.util.GTUtility;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.builders.logic.SuSyOverclockingLogic;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
@@ -63,7 +62,6 @@ public class ContinuousMultiblockRecipeLogic extends MultiblockRecipeLogic {
 
             // keep catalyst tier at NO_TIER unless info is found
             if (this.catalystInfo != null) {
-                SusyLog.logger.info("3r390r9");
                 this.requiredCatalystTier = property.getTier();
             }
         }

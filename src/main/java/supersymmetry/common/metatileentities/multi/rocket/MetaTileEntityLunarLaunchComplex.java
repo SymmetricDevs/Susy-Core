@@ -505,7 +505,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return Textures.SOLID_STEEL_CASING;
+        return Textures.STABLE_TITANIUM_CASING;
     }
 
     @Nonnull

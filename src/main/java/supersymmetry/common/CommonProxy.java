@@ -249,19 +249,19 @@ public class CommonProxy {
     public static void register(RegistryEvent.Register<Biome> evt) {
         SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands")
                 .setRainDisabled().setBaseHeight(2f).setHeightVariation(0.4f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "lunar_highlands");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
         addTypes(SuSyBiomes.LUNAR_HIGHLANDS, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled()
                 .setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "lunar_maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
         addTypes(SuSyBiomes.LUNAR_MARIA, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_KREEP_TERRANE = new BiomeLunarKreepTerrane(new Biome.BiomeProperties("Lunar KREEP Terrane")
                 .setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "kreep");
+        SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "lunar_kreep_terrane");
         evt.getRegistry().register(SuSyBiomes.LUNAR_KREEP_TERRANE);
         addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);
 
