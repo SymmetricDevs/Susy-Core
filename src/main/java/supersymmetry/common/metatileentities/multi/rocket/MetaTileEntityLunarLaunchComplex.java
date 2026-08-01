@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,6 +28,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
 
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
@@ -48,10 +50,14 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.BlockTurbineCasing;
+import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.gui.SusyGuiTextures;
@@ -66,7 +72,7 @@ import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
+import supersymmetry.common.blocks.BlockLunarConcrete;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityLunarRocket;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -473,18 +479,30 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     protected @NotNull BlockPattern createStructurePattern() {
         // Placeholder geometry: a flat 9x9 pad with the controller centred on the front edge, sized only to host the
         // abilities. Replace with the real complex, and retune ROCKET_OFFSET_BACK/UP to match.
+        String edgee = "EEEEEEEEE";
+        String floor = "ECCCCCCCE";
+        String floh1 = "ECCC CCCE";
+        String floh2 = "ECC   CCE";
+        String side1 = "E       E";
+        String cran1 = "   TGT   ";
+        String cran2 = "   TFT   ";
+        String cran3 = "    F    ";
+        String airrr = "         ";
+        String selfp = "EEEESEEEE";
         return FactoryBlockPattern.start()
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCCCCCC")
-                .aisle("CCCCSCCCC")
+                .aisle(airrr, airrr, cran1, cran2, cran2, cran2, cran2, cran2, cran2, cran1, airrr, airrr)
+                .aisle(edgee, edgee, cran1, cran2, cran2, cran2, cran2, cran2, cran2, airrr, cran1, airrr)
+                .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, cran1)
+                .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, cran1, cran3, cran3, cran3, cran2)
+                .aisle(floh1, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
+                .aisle(floh2, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
+                .aisle(floh1, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
+                .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
+                .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
+                .aisle(selfp, edgee, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
                 .where('S', selfPredicate())
-                .where('C', states(getFoundationState()).setMinGlobalLimited(70)
+                .where('C', states(getFoundationState()))
+                .where('E', states(getFoundationState()).setMinGlobalLimited(30)
                         .or(autoAbilities())
                         .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS)
@@ -495,12 +513,17 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                                 .setPreviewCount(1)
                                 .setMinGlobalLimited(1)
                                 .setMaxGlobalLimited(4)))
+                .where('T', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE)))
+                .where('G',
+                        states(MetaBlocks.TURBINE_CASING
+                                .getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_GEARBOX)))
+                .where('F', frames(Materials.Titanium))
                 .build();
     }
 
     public IBlockState getFoundationState() {
-        return SuSyBlocks.ROCKET_ASSEMBLER_CASING
-                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.REINFORCED_FOUNDATION);
+        return SuSyBlocks.LUNAR_CONCRETE
+                .getState(BlockLunarConcrete.LunarConcreteType.LUNAR_CONCRETE_SMOOTH);
     }
 
     @Override
@@ -745,6 +768,16 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         return new ClickButtonWidget(x, y, width, height, "", clickData -> this.abortAssembly())
                 .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
                 .setTooltipText("susy.machine.rocket_assembler.gui.stop");
+    }
+
+    @Override
+    public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                      CuboidRayTraceResult hitResult) {
+        if (playerIn.isCreative() && this.getCurrentBlueprint() != null) {
+            finishAssembly();
+            return true;
+        }
+        return false;
     }
 
     public enum LaunchComplexState {
