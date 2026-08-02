@@ -1,6 +1,6 @@
 #version 330 core
 
-in  vec3 v_rayDir;
+in vec3 v_rayDir;
 out vec4 FragColor;
 
 uniform sampler2D u_face0; // +X
@@ -13,19 +13,22 @@ uniform sampler2D u_face5; // -Z
 uniform vec3  u_planetPos;       // render units
 uniform float u_planetRadius;    // render units
 uniform vec3  u_sunDir;          // normalised toward sun
+uniform vec3  u_sunColor;        // sun color
 uniform float u_sunAngularRadius; // angular radius of sun (radians, ~0.00935 for Earth)
-uniform mat4  u_invView;
-uniform mat4  u_invProjection;
+uniform mat4 u_invView;
+uniform mat4 u_invProjection;
 
 // Orbital rotation matrix applied to cubemap lookup
 // (accounts for planet's current rotation angle)
-uniform mat4  u_planetRotation;
+uniform mat4 u_planetRotation;
 
 vec2 raySphere(vec3 ro, vec3 rd, vec3 c, float r) {
-    vec3 f=ro-c; float b=dot(rd,f);
-    float d=b*b-dot(f,f)+r*r;
-    if(d<0.0) return vec2(1e20,-1e20);
-    float s=sqrt(d); return vec2(-b-s,-b+s);
+    vec3 f = ro - c;
+    float b = dot(rd, f);
+    float d = b * b - dot(f, f) + r * r;
+    if (d < 0.0) return vec2(1e20, -1e20);
+    float s = sqrt(d);
+    return vec2(-b - s, -b + s);
 }
 
 // Convert a direction to a cubemap face UV
@@ -36,13 +39,13 @@ int dirToFaceUV(vec3 d, out vec2 uv) {
     vec2 raw;
     if (ad.x >= ad.y && ad.x >= ad.z) {
         face = d.x > 0.0 ? 0 : 1;
-        raw  = d.x > 0.0 ? vec2(-d.z, -d.y) / ad.x : vec2(d.z, -d.y) / ad.x;
+        raw = d.x > 0.0 ? vec2(-d.z, -d.y) / ad.x : vec2(d.z, -d.y) / ad.x;
     } else if (ad.y >= ad.x && ad.y >= ad.z) {
         face = d.y > 0.0 ? 2 : 3;
-        raw  = d.y > 0.0 ? vec2(d.x, d.z) / ad.y : vec2(d.x, -d.z) / ad.y;
+        raw = d.y > 0.0 ? vec2(d.x, d.z) / ad.y : vec2(d.x, -d.z) / ad.y;
     } else {
         face = d.z > 0.0 ? 4 : 5;
-        raw  = d.z > 0.0 ? vec2(d.x, -d.y) / ad.z : vec2(-d.x, -d.y) / ad.z;
+        raw = d.z > 0.0 ? vec2(d.x, -d.y) / ad.z : vec2(-d.x, -d.y) / ad.z;
     }
     uv = raw * 0.5 + 0.5;
     return face;
@@ -53,12 +56,12 @@ vec4 sampleCubemap(vec3 dir) {
     vec3 d = normalize((u_planetRotation * vec4(dir, 0.0)).xyz);
     vec2 uv;
     int face = dirToFaceUV(d, uv);
-    if      (face == 0) return texture(u_face0, uv);
+    if (face == 0) return texture(u_face0, uv);
     else if (face == 1) return texture(u_face1, uv);
     else if (face == 2) return texture(u_face2, uv);
     else if (face == 3) return texture(u_face3, uv);
     else if (face == 4) return texture(u_face4, uv);
-    else                return texture(u_face5, uv);
+    else return texture(u_face5, uv);
 }
 
 void main() {
@@ -68,7 +71,7 @@ void main() {
     if (hit.x > hit.y || hit.y < 0.0) discard;
 
     float t = hit.x > 0.0 ? hit.x : hit.y;
-    vec3  hitPos = rd * t;
+    vec3 hitPos = rd * t;
 
     // Surface normal in world space
     vec3 normal = normalize(hitPos - u_planetPos);
@@ -77,10 +80,10 @@ void main() {
 
     float cosTheta = dot(normal, u_sunDir);
 
-    float light = smoothstep(-u_sunAngularRadius, u_sunAngularRadius, cosTheta);
+    float light = smoothstep(-0.08, 0.08, cosTheta);
 
     float ambient = 0.02;
-    float illumination = ambient + (1.0 - ambient) * light;
+    vec3 illumination = ambient + (1.0 - ambient) * light * u_sunColor;
 
     vec3 color = surfaceColor.rgb * illumination;
     FragColor = vec4(color, surfaceColor.a);

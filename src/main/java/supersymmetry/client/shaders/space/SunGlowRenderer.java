@@ -3,12 +3,14 @@ package supersymmetry.client.shaders.space;
 import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.Vec3d;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import supersymmetry.api.space.BodyRenderData;
 import supersymmetry.api.space.BodyRenderer;
+import supersymmetry.api.space.Star;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.util.ShaderUtils;
 
@@ -29,6 +31,11 @@ public class SunGlowRenderer implements BodyRenderer {
         float[] viewMat = data.viewMatrix;
         float[] projMat = data.projectionMatrix;
         if (viewMat == null || projMat == null) return;
+
+        Vec3d starColor = null;
+        if (data.source instanceof Star) starColor = ((Star) data.source).getColor();
+        float[] sunColor = starColor == null ? this.sunColor
+                : new float[] { (float) starColor.x, (float) starColor.y, (float) starColor.z };
 
         float[] sunDir = new float[] {
                 (float) data.direction.x,

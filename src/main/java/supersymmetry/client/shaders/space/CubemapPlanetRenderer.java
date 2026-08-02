@@ -49,6 +49,7 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         float[] rot = buildCubemapRotation(dx, dy, dz, cubemap.getRotationAxis(), spinAngle);
 
         float[] sunDir;
+        float[] sunColor;
         if (!data.lights.isEmpty()) {
             StarLight light = data.lights.get(0);
             sunDir = new float[] {
@@ -56,14 +57,20 @@ public class CubemapPlanetRenderer implements BodyRenderer {
                     (float) light.direction.y,
                     (float) light.direction.z
             };
+            sunColor = new float[] {
+                    (float) light.color.x,
+                    (float) light.color.y,
+                    (float) light.color.z
+            };
         } else {
             sunDir = new float[] { 0f, 1f, 0f };
+            sunColor = new float[] { 1f, 1f, 1f };
         }
 
         int[] faces = new int[6];
         for (int i = 0; i < 6; i++) faces[i] = cubemap.getFaceTexId(i);
 
-        planetSurface.render(viewMat, projMat, sunDir, planetPos, scale, rot, faces);
+        planetSurface.render(viewMat, projMat, sunDir, sunColor, planetPos, scale, rot, faces);
     }
 
     private void ensureLoaded() {

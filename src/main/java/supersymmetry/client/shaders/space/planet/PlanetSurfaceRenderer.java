@@ -14,7 +14,7 @@ public class PlanetSurfaceRenderer {
     public float sunAngularRadius = 0.00935f; // radians, Earth's sun
 
     public void render(float[] capturedView, float[] capturedProj,
-                       float[] sunDir,
+                       float[] sunDir, float[] sunColor,
                        float[] planetPos,  // render units xyz
                        float planetRadius, // render units
                        float[] rotationMatrix, // column-major float[16]
@@ -53,6 +53,7 @@ public class PlanetSurfaceRenderer {
         ShaderUtils.set3f(prog, "u_planetPos", planetPos);
         ShaderUtils.set1f(prog, "u_planetRadius", planetRadius);
         ShaderUtils.set3f(prog, "u_sunDir", sunDir);
+        ShaderUtils.set3f(prog, "u_sunColor", sunColor);
         ShaderUtils.set1f(prog, "u_sunAngularRadius", sunAngularRadius);
         ShaderUtils.setMat4(prog, "u_invView", invertMat4(capturedView));
         ShaderUtils.setMat4(prog, "u_invProjection", invertMat4(capturedProj));
