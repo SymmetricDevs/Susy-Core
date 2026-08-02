@@ -61,7 +61,6 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.util.RecipeCheckUtils;
-import supersymmetry.common.world.atmosphere.AtmosphereUtils;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
@@ -657,8 +656,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            return super.checkRecipe(recipe) && RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity)
-                    && recipe.hasProperty(EvaporationEnergyProperty.getInstance());
+            return super.checkRecipe(recipe) && RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity) &&
+                    recipe.hasProperty(EvaporationEnergyProperty.getInstance());
         }
 
         @Override

@@ -93,6 +93,8 @@ public class SuSyBlocks {
     public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
     public static BlockVehicleTrack VEHICLE_TRACK;
     public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
+    public static BlockSolarFurnaceMirror SOLAR_FURNACE_MIRROR;
+    public static BlockHeliostat HELIOSTAT;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 

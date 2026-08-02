@@ -1,12 +1,8 @@
 package supersymmetry.common.world.atmosphere;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.recipes.Recipe;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
-import supersymmetry.api.recipes.properties.AtmosphereProperty;
 
 public class AtmosphereUtils {
 

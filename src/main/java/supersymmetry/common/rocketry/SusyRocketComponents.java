@@ -150,7 +150,7 @@ public class SusyRocketComponents {
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
                 .build();
 
-        //AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
+        // AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_LUNAR_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.setRegistryLock(true);
