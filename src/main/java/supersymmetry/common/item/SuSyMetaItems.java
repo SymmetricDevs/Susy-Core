@@ -53,6 +53,7 @@ public class SuSyMetaItems {
     public static MetaValueItem ADVANCED_CARGO_DRONE;
     public static MetaValueItem LOCATION_CARD;
     public static MetaValueItem ELITE_CARGO_DRONE;
+    public static MetaValueItem CLAY_GRAPHITE_CRUCIBLE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -177,6 +178,8 @@ public class SuSyMetaItems {
 
         ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
                 .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
+
+        CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(22, "clay_graphite_crucible");
     }
 
     private static void addExtraBehaviours() {

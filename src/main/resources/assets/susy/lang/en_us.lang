@@ -1255,6 +1255,7 @@ metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
 metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
 metaitem.cargo_drone.elite.name=Elite Cargo Drone
 metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
+metaitem.clay_graphite_crucible.name=Clay-Graphite Crucible
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)

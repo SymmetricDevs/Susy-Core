@@ -222,11 +222,13 @@ public class SuSyMaterialRecipeHandler {
     }
 
     public static void processInductionMelt(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        int temp = material.getFluid().getTemperature();
+
         SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
                 .circuitMeta(1)
                 .input(ingot, material)
                 .fluidOutputs(material.getFluid(144))
-                .duration(material.getFluid().getTemperature() / 32)
+                .duration(Math.round((float) temp / 32))
                 .EUt(30)
                 .buildAndRegister();
 
@@ -234,7 +236,7 @@ public class SuSyMaterialRecipeHandler {
                 .circuitMeta(1)
                 .input(dust, material)
                 .fluidOutputs(material.getFluid(144))
-                .duration(material.getFluid().getTemperature() / 32)
+                .duration(Math.round((float) temp / 32))
                 .EUt(30)
                 .buildAndRegister();
     }
@@ -247,6 +249,7 @@ public class SuSyMaterialRecipeHandler {
         } else {
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
                     .input(ingot, material)
+                    .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))
                     .temperature(temp)
                     .duration(Math.round((float) temp / 8))
@@ -255,6 +258,7 @@ public class SuSyMaterialRecipeHandler {
 
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
                     .input(dust, material)
+                    .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))
                     .temperature(temp)
                     .duration(Math.round((float) temp / 8))
