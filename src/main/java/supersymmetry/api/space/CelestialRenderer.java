@@ -48,7 +48,7 @@ public class CelestialRenderer extends IRenderHandler {
 
         List<Star> allStars = findAllStars(primary);
 
-        double worldTime = (world.getWorldTime() + partialTicks) * 1000f;
+        double worldTime = (world.getWorldTime() + partialTicks);
 
         List<CelestialObject> candidates = collectBodies(ground, primary, allStars);
         if (candidates.isEmpty()) return;

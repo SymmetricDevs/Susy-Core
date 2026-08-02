@@ -44,7 +44,7 @@ public class CelestialObjects {
 
         EARTH = new Planetoid("earth", 1., 0., 0., 0., 0., SUN, PlanetType.TERRESTRIAL)
                 .setDimension(0);
-        EARTH.setRadius(10f);
+
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
                 .setDimension(800);
         MOON.setRadius(0.2724);
@@ -55,7 +55,7 @@ public class CelestialObjects {
                 new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
         MOON_CUBEMAP = new Cubemap(
                 new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
-        // divided by 10k for testing
+
         CelestialOrbitRegistry.register(EARTH, new Orbit(
                 1.0, 0.0167086, 0.0, 0.0,
                 Math.toRadians(288.1), Math.toRadians(357.5), 0L, 8766000L));
