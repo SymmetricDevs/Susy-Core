@@ -183,12 +183,11 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         }
 
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR,
-                GlStateManager.DestFactor.ZERO);
-        GlStateManager.disableAlpha();
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(false);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        glDisable(GL_ALPHA_TEST);
 
         int sf = resolution.getScaleFactor();
         int fbW = resolution.getScaledWidth() * sf;
@@ -204,15 +203,16 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             GlStateManager.pushMatrix();
             GlStateManager.loadIdentity();
 
-            GlStateManager.disableTexture2D();
-            GlStateManager.color(1, 0, 0, 1);
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_TEXTURE_2D);
+            glColor4f(1, 1, 1, 1);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            Minecraft.getMinecraft().getTextureManager()
+                    .bindTexture(new ResourceLocation("susy", "textures/armor/tape2.png"));
 
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buf = tess.getBuffer();
-            buf.begin(GL_QUADS, DefaultVertexFormats.POSITION);
+            buf.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
             for (int i = 0; i < totalPositions; i++) {
                 if (!tank.isTaped(chest, i)) continue;
@@ -222,8 +222,8 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
                 float py = v * fbH;
 
                 float h = fbH * 0.075f;
-                float hw = h * 0.8f;
-                float hh = h * 1.6f;
+                float hw = h * 1.6f;
+                float hh = h * 0.8f;
 
                 Random rng = new Random(i * 0x12312312L);
                 float a = (float) (rng.nextFloat() * Math.PI * 2);
@@ -232,18 +232,18 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
                 float[] xs = { -hw, hw, hw, -hw };
                 float[] ys = { -hh, -hh, hh, hh };
+                float[] texU = { 0, 1, 1, 0 };
+                float[] texV = { 0, 0, 1, 1 };
                 for (int j = 0; j < 4; j++) {
                     float rx = xs[j] * cos - ys[j] * sin;
                     float ry = xs[j] * sin + ys[j] * cos;
-                    buf.pos((px + rx) * 2 / fbW - 1, (py + ry) * 2 / fbH - 1, 0).endVertex();
+                    buf.pos((px + rx) * 2 / fbW - 1, (py + ry) * 2 / fbH - 1, 0)
+                            .tex(texU[j], texV[j]).endVertex();
                 }
             }
             tess.draw();
 
-            GlStateManager.color(1, 1, 1, 1);
-            GlStateManager.enableTexture2D();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR,
-                    GlStateManager.DestFactor.ZERO);
+            glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
             GlStateManager.matrixMode(GL_PROJECTION);
             GlStateManager.popMatrix();
@@ -301,15 +301,6 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         } else {
             // 🙏
         }
-
-        GlStateManager.disableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.enableDepth();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableAlpha();
-        GlStateManager.enableLighting();
-        GlStateManager.enableFog();
 
         glPopAttrib();
     }

@@ -34,8 +34,8 @@ public class SunGlowRenderer implements BodyRenderer {
 
         Vec3d starColor = null;
         if (data.source instanceof Star) starColor = ((Star) data.source).getColor();
-        float[] sunColor = starColor == null ? this.sunColor
-                : new float[] { (float) starColor.x, (float) starColor.y, (float) starColor.z };
+        float[] sunColor = starColor == null ? this.sunColor :
+                new float[] { (float) starColor.x, (float) starColor.y, (float) starColor.z };
 
         float[] sunDir = new float[] {
                 (float) data.direction.x,
