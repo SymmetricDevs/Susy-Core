@@ -101,12 +101,19 @@ public class WorldProviderPlanet extends WorldProvider {
         return Planetoid.PLANETOIDS.inverse().get(getDimension());
     }
 
-    public Vec3d getLocalUp(Planetoid ground, double x, double z) {
-        return CelestialObject.surfacePointToLocalUp(x, z, ground.getRadius());
+    public Vec3d getLocalUp(Planetoid ground, double x, double z, double worldTime) {
+        return tidalUp(ground, x, z, worldTime);
     }
 
-    public Vec3d getLocalUpForPlayer(Planetoid ground, EntityPlayer player) {
-        return CelestialObject.surfacePointToLocalUp(player.posX, player.posZ, ground.getRadius());
+    public Vec3d getLocalUpForPlayer(Planetoid ground, EntityPlayer player, double worldTime) {
+        return tidalUp(ground, player.posX, player.posZ, worldTime);
+    }
+
+    private Vec3d tidalUp(Planetoid ground, double x, double z, double worldTime) {
+        Vec3d up = CelestialObject.surfacePointToLocalUp(x, z, ground.getRadius());
+        Vec3d axis = ground.getRotationAxisEcl();
+        if (axis == null) return up;
+        return Orbit.rotateAboutAxis(up, axis, ground.getRotationAngle(worldTime));
     }
 
     public boolean isEclipse(float partialTicks) {
@@ -184,9 +191,10 @@ public class WorldProviderPlanet extends WorldProvider {
             if (mc.player != null) {
                 Planetoid ground = getGroundPlanet();
                 if (ground != null) {
-                    Vec3d localUp = getLocalUpForPlayer(ground, mc.player);
+                    double worldTime = world.getWorldTime() + partialTicks;
+                    Vec3d localUp = getLocalUpForPlayer(ground, mc.player, worldTime);
                     double solarAltitude = CelestialObject.computeSolarAltitude(
-                            ground, localUp, world.getWorldTime() + partialTicks);
+                            ground, localUp, worldTime);
                     if (!Double.isNaN(solarAltitude))
                         return (float) MathHelper.clamp(solarAltitude * 4.0, 0.0, 1.0);
                 }

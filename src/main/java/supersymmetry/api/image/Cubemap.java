@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -19,6 +20,7 @@ public class Cubemap {
     private final ResourceLocation[] faces; // PX, NX, PY, NY, PZ, NZ
     private final ResourceLocation cross;
     protected boolean loaded = false;
+    private Vec3d rotationAxis;
 
     public Cubemap(ResourceLocation px, ResourceLocation nx,
                    ResourceLocation py, ResourceLocation ny,
@@ -46,6 +48,15 @@ public class Cubemap {
 
     public int getFaceTexId(int face) {
         return faceTexIds[face];
+    }
+
+    public Vec3d getRotationAxis() {
+        return rotationAxis;
+    }
+
+    public Cubemap setRotationAxis(Vec3d rotationAxis) {
+        this.rotationAxis = rotationAxis;
+        return this;
     }
 
     public boolean isLoaded() {

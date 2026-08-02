@@ -74,4 +74,21 @@ public class Orbit {
         }
         return E;
     }
+
+    public Vec3d computeOrbitalNormal() {
+        double cosO = Math.cos(longitudeOfAscendingNodeRad);
+        double sinO = Math.sin(longitudeOfAscendingNodeRad);
+        double cosI = Math.cos(inclinationRad);
+        double sinI = Math.sin(inclinationRad);
+        return new Vec3d(sinO * sinI, -cosO * sinI, cosI);
+    }
+
+    public static Vec3d rotateAboutAxis(Vec3d v, Vec3d axis, double angle) {
+        Vec3d k = axis.normalize();
+        double c = Math.cos(angle);
+        double s = Math.sin(angle);
+        return v.scale(c)
+                .add(k.crossProduct(v).scale(s))
+                .add(k.scale(k.dotProduct(v) * (1.0 - c)));
+    }
 }

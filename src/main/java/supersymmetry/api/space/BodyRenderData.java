@@ -7,6 +7,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class BodyRenderData {
 
+    public final double worldTime;
     public final CelestialObject source;
     public final Vec3d direction;
     public final double distanceAU;
@@ -18,10 +19,11 @@ public class BodyRenderData {
     public final float[] viewMatrix;
     public final float[] projectionMatrix;
 
-    public BodyRenderData(CelestialObject source, Vec3d direction, double distanceAU,
+    public BodyRenderData(double worldTime, CelestialObject source, Vec3d direction, double distanceAU,
                           double angularSizeDeg, double bodyRadiusAU,
                           boolean isStar, boolean isGroundBody, List<StarLight> lights,
                           float[] viewMatrix, float[] projectionMatrix) {
+        this.worldTime = worldTime;
         this.source = source;
         this.direction = direction;
         this.distanceAU = distanceAU;
@@ -34,10 +36,10 @@ public class BodyRenderData {
         this.projectionMatrix = projectionMatrix;
     }
 
-    public BodyRenderData(CelestialObject source, Vec3d direction, double distanceAU,
+    public BodyRenderData(double worldTime, CelestialObject source, Vec3d direction, double distanceAU,
                           double angularSizeDeg, double bodyRadiusAU,
                           boolean isStar, boolean isGroundBody) {
-        this(source, direction, distanceAU, angularSizeDeg, bodyRadiusAU, isStar, isGroundBody,
+        this(worldTime, source, direction, distanceAU, angularSizeDeg, bodyRadiusAU, isStar, isGroundBody,
                 Collections.emptyList(), null, null);
     }
 }

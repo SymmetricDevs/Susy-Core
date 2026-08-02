@@ -1,6 +1,7 @@
 package supersymmetry.api.space;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -43,6 +44,7 @@ public class CelestialObjects {
 
         EARTH = new Planetoid("earth", 1., 0., 0., 0., 0., SUN, PlanetType.TERRESTRIAL)
                 .setDimension(0);
+        EARTH.setRadius(10f);
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
                 .setDimension(800);
         MOON.setRadius(0.2724);
@@ -62,13 +64,16 @@ public class CelestialObjects {
                 0.00257, 0.0549, Math.toRadians(5.145), Math.toRadians(125.08),
                 Math.toRadians(318.06), Math.toRadians(38.34), 0L, 655720L));
 
+        MOON.setRotationAxisEcl(CelestialOrbitRegistry.get(MOON).computeOrbitalNormal())
+                .setRotationPeriodTicks(655720L);
+        EARTH.setRotationAxisEcl(new Vec3d(0, 0, 1))
+                .setRotationPeriodTicks(23934L);
+
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             RENDERER = new CelestialRenderer();
             RENDERER.registerRenderer(SUN, new SunGlowRenderer());
-            RENDERER.registerRenderer(EARTH, new CubemapPlanetRenderer(EARTH_CUBEMAP)
-                    .setRotationPeriod(23934f));
-            RENDERER.registerRenderer(MOON, new CubemapPlanetRenderer(MOON_CUBEMAP)
-                    .setRotationPeriod(655720f));
+            RENDERER.registerRenderer(EARTH, new CubemapPlanetRenderer(EARTH_CUBEMAP));
+            RENDERER.registerRenderer(MOON, new CubemapPlanetRenderer(MOON_CUBEMAP));
         }
     }
 }

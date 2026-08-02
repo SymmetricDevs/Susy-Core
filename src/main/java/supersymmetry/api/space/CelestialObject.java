@@ -26,6 +26,9 @@ public class CelestialObject {
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
 
+    private Vec3d rotationAxisEcl;
+    private double rotationPeriodTicks;
+
     private List<CelestialObject> childBodies = new ObjectArrayList<>();
 
     public CelestialObject(String translationKey, double posT, double posX, double posY, double posZ, double mass,
@@ -137,6 +140,30 @@ public class CelestialObject {
                 Math.sin(theta) * Math.cos(phi),
                 Math.sin(theta) * Math.sin(phi),
                 Math.cos(theta));
+    }
+
+    public Vec3d getRotationAxisEcl() {
+        return rotationAxisEcl;
+    }
+
+    public CelestialObject setRotationAxisEcl(Vec3d rotationAxisEcl) {
+        this.rotationAxisEcl = rotationAxisEcl;
+        return this;
+    }
+
+    public double getRotationPeriodTicks() {
+        return rotationPeriodTicks;
+    }
+
+    public CelestialObject setRotationPeriodTicks(double rotationPeriodTicks) {
+        this.rotationPeriodTicks = rotationPeriodTicks;
+        return this;
+    }
+
+    public double getRotationAngle(double worldTime) {
+        if (rotationPeriodTicks <= 0) return 0;
+        double phase = worldTime % rotationPeriodTicks;
+        return phase / rotationPeriodTicks * Math.PI * 2.0;
     }
 
     public static double computeSolarAltitude(Planetoid ground, Vec3d localUp, double worldTime) {

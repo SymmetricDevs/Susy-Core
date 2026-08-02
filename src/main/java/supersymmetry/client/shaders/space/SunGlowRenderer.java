@@ -37,7 +37,7 @@ public class SunGlowRenderer implements BodyRenderer {
         };
 
         Minecraft mc = Minecraft.getMinecraft();
-        float time = mc.world != null ? mc.world.getWorldTime() / 20f : 0f;
+        float time = (float) (data.worldTime / 20f);
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);

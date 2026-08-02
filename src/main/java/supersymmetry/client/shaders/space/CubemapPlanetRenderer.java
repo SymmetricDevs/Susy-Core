@@ -1,6 +1,5 @@
 package supersymmetry.client.shaders.space;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 
 import supersymmetry.api.image.Cubemap;
@@ -15,15 +14,9 @@ public class CubemapPlanetRenderer implements BodyRenderer {
     private final Cubemap cubemap;
     private final PlanetSurfaceRenderer planetSurface = new PlanetSurfaceRenderer();
     private boolean loadAttempted = false;
-    private float rotationPeriodTicks = 0f;
 
     public CubemapPlanetRenderer(Cubemap cubemap) {
         this.cubemap = cubemap;
-    }
-
-    public CubemapPlanetRenderer setRotationPeriod(float ticks) {
-        this.rotationPeriodTicks = ticks;
-        return this;
     }
 
     @Override
@@ -52,13 +45,8 @@ public class CubemapPlanetRenderer implements BodyRenderer {
 
         float[] planetPos = new float[] { dx * 100f, dy * 100f, dz * 100f };
 
-        long worldTime = 0;
-        if (Minecraft.getMinecraft().world != null) {
-            worldTime = Minecraft.getMinecraft().world.getWorldTime();
-        }
-        float spinAngle = rotationPeriodTicks > 0f ?
-                (float) (worldTime % (long) rotationPeriodTicks) / rotationPeriodTicks * (float) Math.PI * 2f : 0f;
-        float[] rot = buildCubemapRotation(dx, dy, dz, spinAngle);
+        float spinAngle = (float) data.source.getRotationAngle(data.worldTime);
+        float[] rot = buildCubemapRotation(dx, dy, dz, cubemap.getRotationAxis(), spinAngle);
 
         float[] sunDir;
         if (!data.lights.isEmpty()) {
@@ -86,7 +74,7 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         } catch (Exception e) {}
     }
 
-    private static float[] buildCubemapRotation(float dx, float dy, float dz, float spinAngle) {
+    private static float[] buildCubemapRotation(float dx, float dy, float dz, Vec3d spinAxis, float spinAngle) {
         float len = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (len < 1e-6f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
         dx /= len;
@@ -113,33 +101,48 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         float upy = rz * dx - rx * dz;
         float upz = rx * dy - ry * dx;
 
-        if (spinAngle != 0f) {
-            float cosA = (float) Math.cos(spinAngle);
-            float sinA = (float) Math.sin(spinAngle);
-
-            float nrx = rx * cosA + (dy * rz - dz * ry) * sinA + dx * (dx * rx + dy * ry + dz * rz) * (1f - cosA);
-            float nry = ry * cosA + (dz * rx - dx * rz) * sinA + dy * (dx * rx + dy * ry + dz * rz) * (1f - cosA);
-            float nrz = rz * cosA + (dx * ry - dy * rx) * sinA + dz * (dx * rx + dy * ry + dz * rz) * (1f - cosA);
-
-            float nupx = upx * cosA + (dy * upz - dz * upy) * sinA +
-                    dx * (dx * upx + dy * upy + dz * upz) * (1f - cosA);
-            float nupy = upy * cosA + (dz * upx - dx * upz) * sinA +
-                    dy * (dx * upx + dy * upy + dz * upz) * (1f - cosA);
-            float nupz = upz * cosA + (dx * upy - dy * upx) * sinA +
-                    dz * (dx * upx + dy * upy + dz * upz) * (1f - cosA);
-
-            rx = nrx;
-            ry = nry;
-            rz = nrz;
-            upx = nupx;
-            upy = nupy;
-            upz = nupz;
+        float sx = upx;
+        float sy = upy;
+        float sz = upz;
+        if (spinAxis != null) {
+            float slen = (float) spinAxis.length();
+            if (slen > 1e-6f) {
+                sx = (float) (spinAxis.x / slen);
+                sy = (float) (spinAxis.y / slen);
+                sz = (float) (spinAxis.z / slen);
+            }
         }
 
+        float cosA = (float) Math.cos(spinAngle);
+        float sinA = (float) Math.sin(spinAngle);
+        float t = 1f - cosA;
+
+        float r0x = cosA + sx * sx * t;
+        float r0y = sy * sx * t - sz * sinA;
+        float r0z = sz * sx * t + sy * sinA;
+        float r1x = sx * sy * t + sz * sinA;
+        float r1y = cosA + sy * sy * t;
+        float r1z = sz * sy * t - sx * sinA;
+        float r2x = sx * sz * t - sy * sinA;
+        float r2y = sy * sz * t + sx * sinA;
+        float r2z = cosA + sz * sz * t;
+
+        float m0x = r0x * -rx + r0y * upx + r0z * dx;
+        float m0y = r0x * -ry + r0y * upy + r0z * dy;
+        float m0z = r0x * -rz + r0y * upz + r0z * dz;
+
+        float m1x = r1x * -rx + r1y * upx + r1z * dx;
+        float m1y = r1x * -ry + r1y * upy + r1z * dy;
+        float m1z = r1x * -rz + r1y * upz + r1z * dz;
+
+        float m2x = r2x * -rx + r2y * upx + r2z * dx;
+        float m2y = r2x * -ry + r2y * upy + r2z * dy;
+        float m2z = r2x * -rz + r2y * upz + r2z * dz;
+
         return new float[] {
-                -rx, -ry, -rz, 0f,
-                upx, upy, upz, 0f,
-                dx, dy, dz, 0f,
+                m0x, m0y, m0z, 0f,
+                m1x, m1y, m1z, 0f,
+                m2x, m2y, m2z, 0f,
                 0f, 0f, 0f, 1f
         };
     }
