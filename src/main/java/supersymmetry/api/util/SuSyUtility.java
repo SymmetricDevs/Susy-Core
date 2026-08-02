@@ -7,8 +7,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import gregtech.api.block.machines.MachineItemBlock;
+import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.util.GTUtility;
+import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
@@ -131,6 +136,20 @@ public class SuSyUtility {
         if (bannedSpaceItems == null) {
             loadBannedSpaceItems();
         }
-        return !bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
+        if (bannedSpaceItems.contains(item.getItem().getRegistryName().toString())) {
+            return false;
+        }
+        if (item.getItem() instanceof MetaItem) {
+            return true;
+        }
+        if (item.getItem() instanceof MachineItemBlock mteBlock) {
+            if (GTUtility.getMetaTileEntity(item) instanceof MetaTileEntityCrate) {
+                NBTTagCompound tag = item.getTagCompound();
+                if (tag.hasKey("Inventory")) {
+                    return false;
+                }
+            }
+        }
+        return item.getTagCompound() == null || item.getTagCompound().isEmpty();
     }
 }

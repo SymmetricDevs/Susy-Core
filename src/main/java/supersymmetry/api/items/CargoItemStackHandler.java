@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -24,6 +25,8 @@ import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import supersymmetry.api.util.SuSyUtility;
+
+import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
 
 public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
 
@@ -204,23 +207,31 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         } else {
             currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
         }
+        NBTTagCompound tag = item.getTagCompound();
         IFluidHandlerItem fluidHandlerItem = item
                 .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         if (fluidHandlerItem != null) {
             for (IFluidTankProperties t : fluidHandlerItem.getTankProperties()) {
                 FluidStack fluid = t.getContents();
-                if (fluid == null || fluid.amount == 0)
-                    continue;
-                Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
-                if (mat == null) {
-                    currentMass += (fluid.amount * 98 * 4) / 144;
-                    continue;
-                }
-                currentMass += (int) (mat.getMass() * fluid.amount / 144);
+                currentMass += getFluidMass(fluid);
             }
+        } else if (tag != null && tag.hasKey(FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND)) {
+            FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
+            currentMass += getFluidMass(fluid);
         }
         return currentMass;
     }
+
+    private static int getFluidMass(FluidStack fluid) {
+        if (fluid == null || fluid.amount == 0)
+            return 0;
+        Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
+        if (mat == null) {
+            return (fluid.amount * 98 * 4) / 144;
+        }
+        return (int) (mat.getMass() * fluid.amount / 144);
+    }
+
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
