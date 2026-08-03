@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -83,7 +83,7 @@ public class MetaTileEntityHighPressureCryogenicDistillationPlant extends MetaTi
         return Textures.FROST_PROOF_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HPCDT_OVERLAY;

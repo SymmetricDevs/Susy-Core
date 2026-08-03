@@ -2,7 +2,7 @@ package supersymmetry.api.blocks;
 
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_HORIZONTAL_BEHAVIOR;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -34,7 +34,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         CustomBlockRotations.registerCustomRotation(this, BLOCK_HORIZONTAL_BEHAVIOR);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
@@ -53,7 +53,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return getDefaultState().withProperty(VARIANT, variant).withProperty(FACING, facing);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantHorizontalRotatableBlock.class);
@@ -67,7 +67,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return state.getValue(VARIANT).ordinal() * 4;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 4;
@@ -84,7 +84,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return state.getValue(VARIANT).ordinal() * 4 + state.getValue(FACING).getHorizontalIndex();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {

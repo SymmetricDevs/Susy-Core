@@ -3,7 +3,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.*;
@@ -78,7 +78,7 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         return Textures.PRIMITIVE_BRICKS;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_BLAST_FURNACE_OVERLAY;

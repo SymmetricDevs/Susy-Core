@@ -1,6 +1,6 @@
 package supersymmetry.integration.theoneprobe.provider;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,8 +20,8 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
     }
 
     @Override
-    public void addProbeInfo(@Nonnull ProbeMode mode, @Nonnull IProbeInfo probeInfo, @Nonnull EntityPlayer player,
-                             @Nonnull World world, @Nonnull IBlockState blockState, @Nonnull IProbeHitData data) {
+    public void addProbeInfo(@NonNull ProbeMode mode, @NonNull IProbeInfo probeInfo, @NonNull EntityPlayer player,
+                             @NonNull World world, @NonNull IBlockState blockState, @NonNull IProbeHitData data) {
         if (GTUtility.getMetaTileEntity(world, data.getPos()) instanceof MetaTileEntityEvaporationPool evapPool) {
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool_heated_preface*}" + " " +
                     (evapPool.isHeating() ?

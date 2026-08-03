@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,7 +32,7 @@ public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
         this.recipeMaps = recipeMaps;
     }
 
-    @Nonnull
+    @NonNull
     public static RecipeMapGroup<SimpleRecipeBuilder> create(@NotNull String unlocalizedName,
                                                              @NotNull RecipeMap<?>... recipeMaps) {
         int maxInputs = 0, maxOutputs = 0, maxFluidInputs = 0, maxFluidOutputs = 0;
@@ -58,7 +58,7 @@ public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
         return recipe.get();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<GTRecipeCategory, List<Recipe>> getRecipesByCategory() {
         Map<GTRecipeCategory, List<Recipe>> res = new Object2ObjectOpenHashMap<>();

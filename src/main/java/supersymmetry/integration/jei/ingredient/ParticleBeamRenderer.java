@@ -3,7 +3,7 @@ package supersymmetry.integration.jei.ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

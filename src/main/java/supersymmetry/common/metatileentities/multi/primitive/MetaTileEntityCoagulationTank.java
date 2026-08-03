@@ -3,8 +3,8 @@ package supersymmetry.common.metatileentities.multi.primitive;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -197,7 +197,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         super.initializeAbilities();
     }
 
-    @Nonnull
+    @NonNull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }

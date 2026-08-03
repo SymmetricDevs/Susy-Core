@@ -3,7 +3,7 @@ package supersymmetry.api.recipes.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 
@@ -13,22 +13,22 @@ public class PseudoMultiPropertyValues {
 
     public final String blockGroupName;
 
-    public PseudoMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull IBlockState... validBlockStates) {
+    public PseudoMultiPropertyValues(@NonNull String blockGroupName, @NonNull IBlockState... validBlockStates) {
         this.validBlockStates = new ArrayList<>(Arrays.asList(validBlockStates));
         this.blockGroupName = blockGroupName;
     }
 
-    public PseudoMultiPropertyValues(@Nonnull String blockGroupName, @Nonnull ArrayList<IBlockState> validBlocks) {
+    public PseudoMultiPropertyValues(@NonNull String blockGroupName, @NonNull ArrayList<IBlockState> validBlocks) {
         this.validBlockStates = validBlocks;
         this.blockGroupName = blockGroupName;
     }
 
-    @Nonnull
+    @NonNull
     public ArrayList<IBlockState> getValidBlockStates() {
         return validBlockStates;
     }
 
-    @Nonnull
+    @NonNull
     public String getBlockGroupName() {
         return blockGroupName;
     }

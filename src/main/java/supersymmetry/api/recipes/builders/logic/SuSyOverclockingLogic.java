@@ -2,7 +2,7 @@ package supersymmetry.api.recipes.builders.logic;
 
 import static gregtech.api.recipes.logic.OverclockingLogic.*;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 
@@ -10,7 +10,7 @@ public final class SuSyOverclockingLogic {
 
     private SuSyOverclockingLogic() {}
 
-    @Nonnull
+    @NonNull
     public static double[] continuousOverclockingLogic(double recipeEUt, long maxVoltage, double recipeDuration,
                                                        int numberOfOCs, double durationDivisor,
                                                        double voltageMultiplier) {
@@ -32,9 +32,9 @@ public final class SuSyOverclockingLogic {
         return new double[] { resultVoltage, resultDuration };
     }
 
-    @Nonnull
+    @NonNull
     public static int[] catalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
-                                                  int maxOverclocks, @Nonnull CatalystInfo catalystInfo,
+                                                  int maxOverclocks, @NonNull CatalystInfo catalystInfo,
                                                   int recipeRequiredCatalystTier, double durationDivisor,
                                                   double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;
@@ -63,9 +63,9 @@ public final class SuSyOverclockingLogic {
                 voltageMultiplier);
     }
 
-    @Nonnull
+    @NonNull
     public static double[] continuousCatalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
-                                                               int maxOverclocks, @Nonnull CatalystInfo catalystInfo,
+                                                               int maxOverclocks, @NonNull CatalystInfo catalystInfo,
                                                                int recipeRequiredCatalystTier, double durationDivisor,
                                                                double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;

@@ -2,8 +2,8 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -72,7 +72,7 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ARC_FURNACE_OVERLAY;

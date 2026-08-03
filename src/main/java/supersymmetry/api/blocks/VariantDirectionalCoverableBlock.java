@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -44,7 +44,7 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
 
     public Predicate<ItemStack> validCover;
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalCoverableBlock.class);

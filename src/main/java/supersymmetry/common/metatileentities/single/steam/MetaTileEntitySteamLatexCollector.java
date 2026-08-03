@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.single.steam;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;

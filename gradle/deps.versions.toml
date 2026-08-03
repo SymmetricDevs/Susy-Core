@@ -1,0 +1,101 @@
+[versions]
+annotations = "26.1.0"
+jspecify = "1.0.0"
+
+hei = "4.32.0"
+theOneProbe = "1.12-1.4.28"
+
+osxNarratorBlocker = "1.0"
+codechickenlib = "3.2.3.358"
+gregtech = "2.8.10-beta"
+gregicalityMultiblocks = "1.2.11"
+craftTweaker2 = "1.12-4.1.20.700"
+ae2Uel = "v0.56.7"
+ctm = "2915363"
+supercritical = "7864560"
+gregtechFoodOption = "7449314"
+groovyScript = "1.4.3"
+modularUi = "3.1.6"
+geckoLib = "4020277"
+sussyPatches = "1.10.0"
+universalModCore = "4975229"
+trackApi = "2825260"
+immersiveRailroading = "4970105"
+recurrentComplex = "5615733"
+ivToolkit = "2443253"
+fluidloggedApi = "3.1.1"
+pyrotech = "5351359"
+athenaeum = "4633750"
+dropt = "5405050"
+biomesOPlenty = "2842510"
+ynetXnetFork = "5243319"
+refinedTools = "6743085"
+mcjtyLibRefilmed = "5643297"
+travelersBackpack = "3150850"
+bubblesABaublesFork = "5719448"
+barrelsDrumsStorageMore = "2708193"
+creativeCore = "4722163"
+littleTiles = "5180387"
+chickenAsm = "1.12-1.0.2.9"
+mrtjpCore = "2735197"
+cbMultipart = "2755790"
+projectRedCore = "2745545"
+serverUtil = "2503313"
+icbm = "6496624"
+theBeneath = "3425551"
+realisticTerrainGenerationUnofficial = "4404814"
+worldEdit = "2941712"
+worldEditCuiForgeEdition3 = "3191629"
+configAnytime = "3.0"
+flare = "6598523"
+
+[libraries]
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+
+hei = { module = "mezz:jei", version.ref = "hei" }
+theOneProbe = { module = "maven.modrinth:the-one-probe", version.ref = "theOneProbe" }
+
+osxNarratorBlocker = { module = "com.cleanroommc:osxnarratorblocker", version.ref = "osxNarratorBlocker" }
+codechickenlib = { module = "codechicken:codechickenlib", version.ref = "codechickenlib" }
+gregtech = { module = "gregtech:gregtech", version.ref = "gregtech" }
+gregicalityMultiblocks = { module = "gregicality:GregicalityMultiblocks", version.ref = "gregicalityMultiblocks" }
+craftTweaker2 = { module = "CraftTweaker2:CraftTweaker2-MC1120-Main", version.ref = "craftTweaker2" }
+ae2Uel = { module = "appeng:ae2-uel", version.ref = "ae2Uel" }
+ctm = { module = "curse.maven:ctm-267602", version.ref = "ctm" }
+supercritical = { module = "curse.maven:supercritical-1185871", version.ref = "supercritical" }
+gregtechFoodOption = { module = "curse.maven:gregtech-food-option-477021", version.ref = "gregtechFoodOption" }
+groovyScript = { module = "com.cleanroommc:groovyscript", version.ref = "groovyScript" }
+modularUi = { module = "com.cleanroommc:modularui", version.ref = "modularUi" }
+geckoLib = { module = "curse.maven:geckolib-388172", version.ref = "geckoLib" }
+sussyPatches = { module = "maven.modrinth:sussypatches", version.ref = "sussyPatches" }
+universalModCore = { module = "curse.maven:universal-mod-core-371784", version.ref = "universalModCore" }
+trackApi = { module = "curse.maven:track-api-282613", version.ref = "trackApi" }
+immersiveRailroading = { module = "curse.maven:immersive-railroading-277736", version.ref = "immersiveRailroading" }
+recurrentComplex = { module = "curse.maven:recurrent-complex-223150", version.ref = "recurrentComplex" }
+ivToolkit = { module = "curse.maven:ivtoolkit-224535", version.ref = "ivToolkit" }
+fluidloggedApi = { module = "maven.modrinth:fluidlogged-api", version.ref = "fluidloggedApi" }
+pyrotech = { module = "curse.maven:pyrotech-306676", version.ref = "pyrotech" }
+athenaeum = { module = "curse.maven:athenaeum-284350", version.ref = "athenaeum" }
+dropt = { module = "curse.maven:dropt-284973", version.ref = "dropt" }
+biomesOPlenty = { module = "curse.maven:biomes-o-plenty-220318", version.ref = "biomesOPlenty" }
+ynetXnetFork = { module = "curse.maven:ynet-an-xnet-fork-999559", version.ref = "ynetXnetFork" }
+refinedTools = { module = "curse.maven:refinedtools-1085014", version.ref = "refinedTools" }
+mcjtyLibRefilmed = { module = "curse.maven:mcjtylib-refilmed-1086841", version.ref = "mcjtyLibRefilmed" }
+travelersBackpack = { module = "curse.maven:travelers-backpack-321117", version.ref = "travelersBackpack" }
+bubblesABaublesFork = { module = "curse.maven:bubbles-a-baubles-fork-995393", version.ref = "bubblesABaublesFork" }
+barrelsDrumsStorageMore = { module = "curse.maven:barrels-drums-storage-more-319404", version.ref = "barrelsDrumsStorageMore" }
+creativeCore = { module = "curse.maven:creativecore-257814", version.ref = "creativeCore" }
+littleTiles = { module = "curse.maven:littletiles-257818", version.ref = "littleTiles" }
+chickenAsm = { module = "codechicken:ChickenASM", version.ref = "chickenAsm" }
+mrtjpCore = { module = "curse.maven:mrtjpcore-229002", version.ref = "mrtjpCore" }
+cbMultipart = { module = "curse.maven:cb-multipart-258426", version.ref = "cbMultipart" }
+projectRedCore = { module = "curse.maven:project-red-core-228702", version.ref = "projectRedCore" }
+serverUtil = { module = "curse.maven:serverutil-282484", version.ref = "serverUtil" }
+icbm = { module = "curse.maven:icbm-244451", version.ref = "icbm" }
+theBeneath = { module = "curse.maven:the-beneath-254629", version.ref = "theBeneath" }
+realisticTerrainGenerationUnofficial = { module = "curse.maven:realistic-terrain-generation-unofficial-648514", version.ref = "realisticTerrainGenerationUnofficial" }
+worldEdit = { module = "curse.maven:worldedit-225608", version.ref = "worldEdit" }
+worldEditCuiForgeEdition3 = { module = "curse.maven:worldeditcui-forge-edition-3-380401", version.ref = "worldEditCuiForgeEdition3" }
+configAnytime = { module = "com.cleanroommc:configanytime", version.ref = "configAnytime" }
+flare = { module = "curse.maven:flare-692142", version.ref = "flare" }

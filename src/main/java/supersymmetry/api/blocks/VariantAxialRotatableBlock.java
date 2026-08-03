@@ -1,6 +1,6 @@
 package supersymmetry.api.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -45,7 +45,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         CustomBlockRotations.registerCustomRotation(this, BLOCK_AXIAL_BEHAVIOR);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
@@ -60,7 +60,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return new ItemStack(this, amount, variant.ordinal() * 3);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantAxialRotatableBlock.class);
@@ -74,7 +74,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 3;
@@ -97,7 +97,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3 + (state.getValue(AXIS).ordinal() + 1) % 3;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {

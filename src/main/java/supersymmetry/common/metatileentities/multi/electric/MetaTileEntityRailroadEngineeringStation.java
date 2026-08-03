@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -197,7 +197,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RAILROAD_ENGINEERING_STATION_OVERLAY;

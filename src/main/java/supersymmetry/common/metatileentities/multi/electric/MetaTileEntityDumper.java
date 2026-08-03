@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -140,7 +140,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.DUMPER_OVERLAY;

@@ -3,7 +3,7 @@ package supersymmetry.api.recipes.catalysts;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +14,7 @@ public class CatalystGroup {
     private final String name;
     private final CatalystInfos catalystInfos = new CatalystInfos();
 
-    public CatalystGroup(@Nonnull String registry_name) {
+    public CatalystGroup(@NonNull String registry_name) {
         this.name = registry_name;
         catalystGroups.add(this);
     }
@@ -23,7 +23,7 @@ public class CatalystGroup {
         return this.catalystInfos;
     }
 
-    public void add(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
+    public void add(@NonNull ItemStack itemStack, @NonNull CatalystInfo catalystInfo) {
         if (itemStack == ItemStack.EMPTY) return;
         this.catalystInfos.put(itemStack, catalystInfo);
     }
@@ -43,7 +43,7 @@ public class CatalystGroup {
         return getName().equals(that.getName());
     }
 
-    @Nonnull
+    @NonNull
     public String getName() {
         return name;
     }

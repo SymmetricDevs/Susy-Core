@@ -4,7 +4,7 @@ import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_C
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 

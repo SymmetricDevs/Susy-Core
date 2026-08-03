@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -58,7 +58,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;

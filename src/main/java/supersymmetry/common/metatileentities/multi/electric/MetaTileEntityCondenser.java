@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -50,7 +50,7 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
         return Textures.FROST_PROOF_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CONDENSER_OVERLAY;

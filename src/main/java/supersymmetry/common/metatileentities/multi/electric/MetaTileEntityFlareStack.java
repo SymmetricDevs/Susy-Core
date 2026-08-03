@@ -4,7 +4,7 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -221,7 +221,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FLARE_STACK_OVERLAY;

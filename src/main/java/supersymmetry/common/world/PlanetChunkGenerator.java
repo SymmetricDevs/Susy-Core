@@ -3,7 +3,7 @@ package supersymmetry.common.world;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;

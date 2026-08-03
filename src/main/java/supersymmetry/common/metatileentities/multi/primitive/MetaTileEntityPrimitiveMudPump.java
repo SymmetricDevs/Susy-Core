@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -146,7 +146,7 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
         return Textures.STEAM_CASING_BRONZE;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;

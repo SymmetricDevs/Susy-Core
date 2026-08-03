@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -48,7 +48,7 @@ public class BlockResource extends VariantBlock<BlockResource.ResourceBlockType>
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

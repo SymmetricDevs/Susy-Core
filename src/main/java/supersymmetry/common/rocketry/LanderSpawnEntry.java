@@ -2,7 +2,7 @@ package supersymmetry.common.rocketry;
 
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

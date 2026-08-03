@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,7 +15,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import supersymmetry.api.SusyLog;
 
 /// This is so horrible ngl...
-@ParametersAreNonnullByDefault
 public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
 
     private final World world;
@@ -100,8 +97,8 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
             if (nextPipeFacings.isEmpty()) return true;
             if (nextPipeFacings.size() == 1) {
 
-                var next = nextPipes.get(0);
-                var into = nextPipeFacings.get(0);
+                var next = nextPipes.getFirst();
+                var into = nextPipeFacings.getFirst();
 
                 {
                     this.root.option.operate(into, currentPipe, next, reverse);

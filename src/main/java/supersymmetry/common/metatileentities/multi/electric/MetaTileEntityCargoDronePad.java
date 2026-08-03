@@ -4,7 +4,7 @@ import static gregtech.api.util.GTUtility.getMetaTileEntity;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -318,7 +318,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 

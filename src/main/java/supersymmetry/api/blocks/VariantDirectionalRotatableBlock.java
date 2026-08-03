@@ -2,7 +2,7 @@ package supersymmetry.api.blocks;
 
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -34,7 +34,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
@@ -53,7 +53,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return new ItemStack(this, amount, variant.ordinal() * 6);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalRotatableBlock.class);
@@ -67,7 +67,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return state.getValue(VARIANT).ordinal() * 6;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 6;
@@ -85,7 +85,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).getIndex() + 1) % 6;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {

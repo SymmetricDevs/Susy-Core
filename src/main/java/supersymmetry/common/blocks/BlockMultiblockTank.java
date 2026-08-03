@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ public class BlockMultiblockTank extends VariantActiveBlock<BlockMultiblockTank.
         setDefaultState(getState(MultiblockTankType.CLARIFIER));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
@@ -52,7 +52,7 @@ public class BlockMultiblockTank extends VariantActiveBlock<BlockMultiblockTank.
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

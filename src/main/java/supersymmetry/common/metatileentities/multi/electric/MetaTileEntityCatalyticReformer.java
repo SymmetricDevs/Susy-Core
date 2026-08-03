@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -56,7 +56,7 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CATALYTIC_REFORMER_OVERLAY;

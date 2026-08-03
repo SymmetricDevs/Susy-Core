@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -64,7 +64,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
         return SusyTextures.ULV_STRUCTURAL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.SINTERING_OVERLAY;

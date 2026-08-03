@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -53,7 +53,7 @@ public class MetaTileEntityFermentationVat extends RecipeMapMultiblockController
         return Textures.VOLTAGE_CASINGS[0];
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;

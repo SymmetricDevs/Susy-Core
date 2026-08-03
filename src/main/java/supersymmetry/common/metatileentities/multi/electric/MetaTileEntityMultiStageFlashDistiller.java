@@ -2,8 +2,8 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -95,7 +95,7 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @Nonnull
+    @NonNull
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }

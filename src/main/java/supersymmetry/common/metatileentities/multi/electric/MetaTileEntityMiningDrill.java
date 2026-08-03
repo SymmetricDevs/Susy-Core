@@ -2,8 +2,8 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -170,18 +170,18 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.MINING_DRILL_OVERLAY;
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     protected TraceabilityPredicate depositPredicate() {
         return new TraceabilityPredicate(blockWorldState -> {
             this.targetBlock = blockWorldState.getPos();

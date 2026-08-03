@@ -3,8 +3,8 @@ package supersymmetry.mixins.bdsandm;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,8 +34,8 @@ public class ItemCrateClientMixin extends ItemBlock {
      */
     @Overwrite(remap = true)
     @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
-                               @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NonNull ItemStack stack, @Nullable World worldIn, @NonNull List<String> tooltip,
+                               @NonNull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         ICrate crate = stack.getCapability(BdsmCapabilies.CRATE_CAP, null);
 
