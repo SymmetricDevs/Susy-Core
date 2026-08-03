@@ -69,6 +69,7 @@ public class SuSyBlocks {
     public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
+    public static BlocksS2BMRF S2BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockSpeaker SPEAKER;
 
