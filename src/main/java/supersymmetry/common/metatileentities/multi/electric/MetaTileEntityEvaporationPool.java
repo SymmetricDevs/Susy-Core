@@ -13,8 +13,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
@@ -33,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
@@ -64,8 +63,7 @@ import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController {
 
-    /// The max/min size of the evaporation pool in blocks.
-    /// Measured by the outermost side length.
+    /// The max/min size of the evaporation pool in blocks. Measured by the outermost side length.
     private static final int MAX_DIAMETER = 32;
     private static final int MIN_DIAMETER = 7;
 
@@ -74,8 +72,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private int rDist = 0;
     private int bDist = 0;
 
-    /// The base temperature of the coils in the structure
-    /// Does not need to be serialized since it's set during [#formStructure(PatternMatchContext)]
+    /// The base temperature of the coils in the structure Does not need to be serialized since it's set during
+    /// [#formStructure(PatternMatchContext)]
     int coilTemp = 0;
     int coilHeat = 0; /// = coilTemp * coilCount
 
@@ -84,15 +82,17 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     private static final ScheduledExecutorService SCHEDULED_EXECUTOR = new ScheduledThreadPoolExecutor(
             Math.min(Math.max(Runtime.getRuntime().availableProcessors() / 4, 4), 8), // TODO: how many is enough?
             r -> new Thread(r, "Evaporation Pool Exposure Counter Thread-" + THREAD_CNTR.incrementAndGet()));
-    private static final int TASK_DELAY = 1000; /// 1000 milliseconds' delay between each check
+    private static final int TASK_DELAY = 1000;
+    /// 1000 milliseconds' delay between each check
 
-    @Nullable
-    private ScheduledFuture<?> counterTask; /// Stored here to cancel the task when the structure is invalidated
-    private int exposedBlocks = 0; /// Does not need to be serialized since it's updated (hopefully) once every second
+    @Nullable private ScheduledFuture<?> counterTask;
+    /// Stored here to cancel the task when the structure is invalidated
+    private int exposedBlocks = 0;
+    /// Does not need to be serialized since it's updated (hopefully) once every second
     private static final int JT_PER_BLOCK = 50; // TODO: dynamic heat absorption based on day time?
 
-    private final int[] recipeSpeedStats = new int[TRACKED_TICKS]; /// The same duration (1s) as
-                                                                   /// [MetaTileEntity#timeStatistics]
+    private final int[] recipeSpeedStats = new int[TRACKED_TICKS];
+    /// The same duration (1s) as [MetaTileEntity#timeStatistics]
     private int statsIndex = 0;
 
     public MetaTileEntityEvaporationPool(ResourceLocation metaTileEntityId) {
@@ -209,6 +209,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return slice.gen(lDist, rDist);
     }
 
+    // spotless:off
     /// 'S' = controller
     /// 'C' = concrete
     /// 'B' = evaporation bed
@@ -219,11 +220,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     /// 'T' = item output bus
     /// '#' = air
     /// ' ' = any
-    @NotNull
-    @Override
+    // spotless:on
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        /// Return the default structure, even if there is no valid size found
-        /// This means auto-build will still work, and prevents terminal crashes.
+        /// Return the default structure, even if there is no valid size found This means auto-build will still work,
+        /// and prevents terminal crashes.
         if (getWorld() != null) updateStructureDimensions();
 
         /// Makes auto-build work
@@ -349,6 +350,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     /// Overriding this to make sure that coils are emissive only when the multiblock is powered.
+    /// 
     /// @see MultiblockWithDisplayBase#update()
     @Override
     public boolean isActive() {
@@ -356,6 +358,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     }
 
     /// For TOP integration
+    /// 
     /// @see EvaporationPoolInfoProvider
     public int getExposedBlocks() {
         return this.exposedBlocks;
@@ -382,8 +385,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW(); /// right as if you were looking at it, not controller's left
 
-        /// Randomly select a position to emit the particle.
-        /// Sadly I can't call [Random#nextInt(int, int)] here... (it doesn't exist in java 8)
+        /// Randomly select a position to emit the particle. Sadly I can't call [Random#nextInt(int, int)] here... (it
+        /// doesn't exist in java 8)
         int i = GTValues.RNG.nextInt(rDist + lDist - 1) - lDist + 1;
         int j = GTValues.RNG.nextInt(bDist) + 2;
 
@@ -517,8 +520,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return Textures.SOLID_STEEL_CASING; // TODO: change this to concrete?
     }
 
-    @NonNull
-    protected ICubeRenderer getFrontOverlay() {
+    @NonNull protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY; // TODO: a custom one?
     }
 
@@ -542,6 +544,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
         return false;
     }
 
+    // spotless:off
     /// The core code for structure pattern generation.
     ///
     /// Let's use an evaporation pool with a diameter of 12 here as an example,
@@ -577,10 +580,11 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     ///
     /// @see #updateStructureDimensions()
     /// @see #createStructurePattern()
+    // spotless:on
     protected enum Slice {
 
-        /// B = bottom layer, T = top layer, P = preview only
-        /// Yeah I'm def abusing the ternary operator here
+        // B = bottom layer, T = top layer, P = preview only
+        // Yeah I'm def abusing the ternary operator here
         B_ALL((i, l, r) -> 'C'),
         B_SELF((i, l, r) -> i == l + 1 ? 'S' : 'C'),
         B_START((i, l, r) -> i < 2 || i > l + r ? 'C' : i % 4 == 1 ? 'B' : 'H'),
@@ -641,9 +645,8 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
     public class EvapRecipeLogic extends MultiblockRecipeLogic {
 
         private int recipeJt;
-        /// Buffers the heat that doesn't meet the minimum requirement for 1 step of the recipe progress
-        /// So, it's just a matter of time for the recipe to complete no matter how insufficient the heat/power supply
-        /// is.
+        /// Buffers the heat that doesn't meet the minimum requirement for 1 step of the recipe progress So, it's just a
+        /// matter of time for the recipe to complete no matter how insufficient the heat/power supply is.
         private int heatBuffer = 0;
         /// Whether the evaporation pool is heated by coils
         private boolean isHeating = false;
@@ -711,8 +714,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             }
         }
 
-        /// Workaround for backwards compat
-        /// Random fallback number IDK
+        /// Workaround for backwards compat Random fallback number IDK
         @Deprecated
         protected int getRecipeJt() {
             return recipeJt != 0 ? recipeJt : 500;
@@ -757,8 +759,7 @@ public class MetaTileEntityEvaporationPool extends RecipeMapMultiblockController
             this.isHalted = buf.readBoolean();
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public NBTTagCompound serializeNBT() {
             NBTTagCompound compound = super.serializeNBT();
             if (this.progressTime > 0) {

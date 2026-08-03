@@ -26,9 +26,9 @@ if (enableSpotless || true) {
             toggleOffOn()
             removeUnusedImports()
             leadingTabsToSpaces()
-            importOrder()
+            importOrderFile(rootProject.file("spotless.importorder"))
             endWithNewline()
-            eclipse()
+            eclipse().configFile(rootProject.file("spotless.eclipseformat.xml"))
             formatAnnotations()
         }
     }
