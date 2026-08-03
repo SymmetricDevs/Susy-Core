@@ -37,8 +37,9 @@ public class SusyMetaEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityDropPod.class, DropPodRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityLander.class, LanderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDrone.class, DroneRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySoyuzBasic.class, RocketRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySoyuzBasic.class,
+                manager -> new RocketRenderer<>(manager, SuSyValues.modelRocket));
         RenderingRegistry.registerEntityRenderingHandler(EntityLunarRocket.class,
-                manager -> new RocketRenderer<>(manager, SuSyValues.modelICBM));
+                manager -> new RocketRenderer<>(manager, SuSyValues.modelLunarRocket));
     }
 }

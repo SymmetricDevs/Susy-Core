@@ -125,14 +125,6 @@
           "top": "gregtech:blocks/susy_stones/regolith/kreep_amogus",
           "side": "gregtech:blocks/susy_stones/regolith/kreep5"
         }
-      },
-      { "model": "minecraft:cube_bottom_top",
-        "weight": 0.001,
-        "textures": {
-          "bottom": "gregtech:blocks/susy_stones/regolith/kreep5",
-          "top": "gregtech:blocks/susy_stones/regolith/kreep_soviet",
-          "side": "gregtech:blocks/susy_stones/regolith/kreep5"
-        }
       }
     ]
   }

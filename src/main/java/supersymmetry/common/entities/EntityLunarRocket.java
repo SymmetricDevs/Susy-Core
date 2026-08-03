@@ -33,7 +33,7 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
 
     @Override
     protected float getRocketHeight() {
-        return 35F;
+        return 20.5F;
     }
 
     @Override
@@ -48,17 +48,17 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
 
     @Override
     protected double getBoardingWindowMin() {
-        return 28;
+        return 15.5;
     }
 
     @Override
     protected double getBoardingWindowMax() {
-        return 33.5;
+        return 20.5;
     }
 
     @Override
     public double getMountedYOffset() {
-        return 29D;
+        return 17.8D;
     }
 
     @Override

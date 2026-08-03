@@ -1,5 +1,6 @@
 package supersymmetry.api.util;
 
+import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.blocks;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.api.util.Welzl.computeMinimalRadius;
 
@@ -23,10 +24,10 @@ import net.minecraft.world.World;
 
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.common.blocks.BlockLamp;
-import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 
 public class StructAnalysis {
@@ -155,6 +156,8 @@ public class StructAnalysis {
 
     public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
 
+    public static TraceabilityPredicate rocketHullBlocks = blocks();
+
     public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
                               boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
@@ -168,8 +171,8 @@ public class StructAnalysis {
             pos = uncheckedBlocks.remove();
             if (actualBlocks.contains(pos)) {
                 BlockWorldState bws = new BlockWorldState(); // this is awful but I guess it works?
-                bws.update(world, pos, pmc, null, null, SuSyValues.rocketHullBlocks);
-                if (testStrength && !SuSyValues.rocketHullBlocks.test(bws)) {
+                bws.update(world, pos, pmc, null, null, rocketHullBlocks);
+                if (testStrength && !rocketHullBlocks.test(bws)) {
                     status = BuildStat.HULL_WEAK;
                     return null;
                 }

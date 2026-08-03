@@ -199,6 +199,7 @@ public class ClientProxy extends CommonProxy {
         IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
         bakeEntityModel(registry, "models/entity/soyuz.obj", SuSyValues.modelRocket);
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
+        bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
@@ -217,6 +218,7 @@ public class ClientProxy extends CommonProxy {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
