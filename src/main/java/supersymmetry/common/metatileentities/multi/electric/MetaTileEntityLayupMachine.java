@@ -31,17 +31,18 @@ public class MetaTileEntityLayupMachine extends RecipeMapMultiblockController {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(" G ", " S ", " S ", " G ")
-                .aisle("HHH", "sss", "   ", " A ")
-                .aisle("HHH", "sss", "   ", "   ")
-                .aisle("HCH", "sss", "   ", "   ")
+                .aisle(" SGS ", "  S  ", "  A  ")
+                .aisle("sssss", "     ", "     ")
+                .aisle("sssss", "     ", "     ")
+                .aisle("sssss", "     ", "     ")
+                .aisle(" HCH ", " HHH ", " HHH ")
                 .where('s', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN)))
                 .where('S', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .where('H', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
                         .or(autoAbilities()))
                 .where('A', SuSyPredicates.orientation(this,
                         SuSyBlocks.ROBOT_ARM_LAYUP.getState(BlockRobotArmLayup.LayupRobotArmType.LAYUP),
-                        RelativeDirection.FRONT, VariantHorizontalRotatableBlock.FACING))
+                        RelativeDirection.BACK, VariantHorizontalRotatableBlock.FACING))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', selfPredicate())
