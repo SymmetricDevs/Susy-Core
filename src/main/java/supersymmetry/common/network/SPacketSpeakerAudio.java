@@ -17,6 +17,7 @@ import net.minecraft.util.SoundCategory;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
+import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.tileentities.TileEntitySpeaker;
@@ -26,7 +27,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
     static final Map<String, Entity> TRACKED = new ConcurrentHashMap<>();
 
     public static void tickTracked() {
-        var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
+        SoundSystem snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
         if (snd == null)
             return;
         TRACKED.entrySet().removeIf(e -> {
@@ -68,7 +69,7 @@ public class SPacketSpeakerAudio implements IPacket, IClientExecutor {
         // TODO highpass maybe?
         // also could make it also work with susy planets, so that there is no sound in
         // space
-        var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
+        SoundSystem snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
         if (snd == null)
             return;
         if (id == null || id.isEmpty()) {
