@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"variant=support": { "model": "susy:support/support"}
+	}
+}

@@ -259,7 +259,7 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
         // 3
         boolean isVerticalFluid = itemsSlotsDown >= fluidSlotsCount && itemsSlotsLeft < 3;
         int fluidGridHeight = ((fluidSlotsCount / 3 == 0) ? 1 : fluidSlotsCount / 3); // fit into at most 3 wide by x
-                                                                                      // tall
+        // tall
 
         int fullGridHeight = itemsSlotsDown + (isVerticalFluid ? 0 : fluidGridHeight);
         if (fullGridHeight >= 3) yOffset += 4;

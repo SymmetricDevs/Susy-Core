@@ -51,6 +51,12 @@
         "all" : "gregtech:blocks/deposit/ice_cap"
       }
     },
+    "variant=lunar_crater" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/deposit/lunar_crater"
+      }
+    },
     "variant=evaporite" : {
       "model" : "minecraft:cube_all",
       "textures" : {

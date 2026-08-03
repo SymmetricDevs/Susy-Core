@@ -7,6 +7,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -48,13 +49,16 @@ import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagu
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCupolaFurnace;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveMudPump;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
+import supersymmetry.common.metatileentities.multi.rail.MetaTileEntityLargeRES;
 import supersymmetry.common.metatileentities.multi.rocket.*;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeBoiler;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
+import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLogWasher;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
 import supersymmetry.common.metatileentities.single.electric.*;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
+import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityRocketProgrammer;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockItemExchanger;
 import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLatexCollector;
@@ -241,6 +245,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
 
     public static MetaTileEntityRTG[] RTG = new MetaTileEntityRTG[8];
+    public static MetaTileEntitySolarPanel[] SOLAR_PANEL = new MetaTileEntitySolarPanel[2];
 
     public static MetaTileEntityStrandBus IMPORT_STRAND;
     public static MetaTileEntityStrandBus EXPORT_STRAND;
@@ -285,6 +290,9 @@ public class SuSyMetaTileEntities {
     // SUSY's large hammer
     public static MetaTileEntitySuSyLargeHammer LARGE_STEAM_HAMMER;
 
+    // SUSY's large ore washer
+    public static MetaTileEntitySuSyLogWasher LOG_WASHER;
+
     // SUSY's small boilers
     public static SuSyCoalBoiler STEAM_BOILER_COAL_BRONZE;
     public static SuSyCoalBoiler STEAM_BOILER_COAL_STEEL;
@@ -307,8 +315,16 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
     public static MetaTileEntityBallMill BALL_MILL;
     public static MetaTileEntityAttritionScrubber ATTRITION_SCRUBBER;
+    public static MetaTileEntityIndustrialSifter INDUSTRIAL_SIFTER;
 
     public static MetaTileEntityCargoDronePad CARGO_DRONE_PAD;
+
+    public static MetaTileEntityLargeRES LARGE_RES;
+    public static MetaTileEntityLayupMachine LAYUP_MACHINE;
+
+    public static MetaTileEntityLunarBucketWheelExcavator LUNAR_BUCKET_WHEEL_EXCAVATOR;
+    public static MetaTileEntitySolarFurnace SOLAR_FURNACE;
+    public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -453,6 +469,8 @@ public class SuSyMetaTileEntities {
                 susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
         ATTRITION_SCRUBBER = registerMetaTileEntity(14744, new MetaTileEntityAttritionScrubber(
                 susyId("attrition_scrubber")));
+        INDUSTRIAL_SIFTER = registerMetaTileEntity(14745, new MetaTileEntityIndustrialSifter(
+                susyId("industrial_sifter")));
 
         GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
@@ -584,6 +602,10 @@ public class SuSyMetaTileEntities {
         RTG[0] = registerMetaTileEntity(16504, new MetaTileEntityRTG(susyId("rtg.lv"), 1));
         RTG[1] = registerMetaTileEntity(16505, new MetaTileEntityRTG(susyId("rtg.mv"), 2));
 
+        // Solar panels: 16512-16520
+        SOLAR_PANEL[0] = registerMetaTileEntity(16512, new MetaTileEntitySolarPanel(susyId("solar_panel.lv"), 1));
+        SOLAR_PANEL[1] = registerMetaTileEntity(16513, new MetaTileEntitySolarPanel(susyId("solar_panel.mv"), 2));
+
         // Strand casting: 16600-16610
         IMPORT_STRAND = registerMetaTileEntity(16600, new MetaTileEntityStrandBus(susyId("strand_bus.import"), false));
         EXPORT_STRAND = registerMetaTileEntity(16601, new MetaTileEntityStrandBus(susyId("strand_bus.export"), true));
@@ -708,9 +730,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
         SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
-        ROCKET_ASSEMBLER = registerMetaTileEntity(18057, new MetaTileEntityRocketAssembler(susyId("rocket_assembler")));
-        ROCKET_PROGRAMMER = registerMetaTileEntity(18058,
-                new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
+        // Free: 18057-8
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
                 new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
@@ -769,6 +789,8 @@ public class SuSyMetaTileEntities {
         // Large Steam Machines
         LARGE_STEAM_HAMMER = registerMetaTileEntity(18320,
                 new MetaTileEntitySuSyLargeHammer(susyId("large_steam_hammer")));
+        LOG_WASHER = registerMetaTileEntity(18321, new MetaTileEntitySuSyLogWasher(
+                susyId("log_washer")));
 
         // Fuel Cells
         FUEL_CELL[0] = registerMetaTileEntity(18400,
@@ -801,6 +823,18 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+        LARGE_RES = registerMetaTileEntity(18520,
+                new MetaTileEntityLargeRES(new ResourceLocation("railroad_engineering_station")));
+        LAYUP_MACHINE = registerMetaTileEntity(18521, new MetaTileEntityLayupMachine(susyId("layup_machine")));
+
+        LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,
+                new MetaTileEntityLunarBucketWheelExcavator(susyId("lunar_bucket_wheel_excavator")));
+
+        LUNAR_LAUNCH_COMPLEX = registerMetaTileEntity(18523,
+                new MetaTileEntityLunarLaunchComplex(susyId("lunar_launch_complex")));
+
+        SOLAR_FURNACE = registerMetaTileEntity(18524,
+                new MetaTileEntitySolarFurnace(susyId("solar_furnace")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

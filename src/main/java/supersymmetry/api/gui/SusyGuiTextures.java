@@ -63,6 +63,8 @@ public class SusyGuiTextures {
     public static final TextureArea ARROW = TextureArea.fullImage("textures/gui/widget/icon_indicator_arrow.png");
     public static final TextureArea BUTTON_ENERGY_VOIDING = TextureArea
             .fullImage("textures/gui/widget/button_energy_voiding.png");
+    public static final TextureArea BUTTON_INSERT_EXTRACT = TextureArea
+            .fullImage("textures/gui/widget/button_insert_extract.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND = TextureArea
             .fullImage("textures/gui/widget/slider_background_dark.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_SLIDER = TextureArea
@@ -72,11 +74,16 @@ public class SusyGuiTextures {
     public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_RIGHT = TextureArea
             .fullImage("textures/gui/widget/button_right_dark.png");
     public static final TextureArea BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW = TextureArea
-            .fullImage("textures/gui/widget/circle_green.png");
+            .fullImage("textures/gui/widget/short_all_dial.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_STOP = TextureArea
             .fullImage("textures/gui/widget/hazard.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea
             .fullImage("textures/gui/widget/suspicious_button.png");
+
+    public static final TextureArea PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT = TextureArea
+            .fullImage("textures/gui/progress_bar/rocket_assembler_component.png");
+    public static final TextureArea PROGRESS_BAR_ROCKET_ASSEMBLER_OVERALL = TextureArea
+            .fullImage("textures/gui/progress_bar/rocket_assembler_overall.png");
 
     public static final TextureArea GREEN_CIRCLE = TextureArea.fullImage("textures/gui/widget/green.png");
     public static final TextureArea RED_CIRCLE = TextureArea.fullImage("textures/gui/widget/red.png");
@@ -93,6 +100,15 @@ public class SusyGuiTextures {
     public static final UITexture BUTTON_POWER = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/widget/button_power_2.png")
             .imageSize(18, 36)
+            .build();
+
+    public static final UITexture OVERLAY_IN = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/overlay/in_slot_overlay.png")
+            .imageSize(18, 18)
+            .build();
+    public static final UITexture OVERLAY_OUT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/overlay/out_slot_overlay.png")
+            .imageSize(18, 18)
             .build();
 
     public static final UITexture GREGTECH_LOGO = fullImage(GTValues.MODID, "textures/gui/icon/gregtech_logo.png");
@@ -125,6 +141,14 @@ public class SusyGuiTextures {
             .imageSize(18, 18)
             .adaptable(1)
             .name("standard_slot")
+            .canApplyTheme()
+            .build();
+
+    public static final UITexture FLUID_SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/fluid_slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .name("standard_fluid_slot")
             .canApplyTheme()
             .build();
 

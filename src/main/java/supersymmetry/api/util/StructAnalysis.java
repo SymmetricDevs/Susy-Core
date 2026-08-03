@@ -1,14 +1,19 @@
 package supersymmetry.api.util;
 
+import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.blocks;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.api.util.Welzl.computeMinimalRadius;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -19,7 +24,10 @@ import net.minecraft.world.World;
 
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
-import supersymmetry.SuSyValues;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
+import gregtech.common.blocks.BlockLamp;
 import supersymmetry.api.SusyLog;
 
 public class StructAnalysis {
@@ -58,7 +66,11 @@ public class StructAnalysis {
         CONN_WRONG_DIR("conn_wrong_dir"),
         WRONG_TILE("wrong_tile"),
         NO_GUIDANCE("no_guidance"),
-        TOO_MUCH_GUIDANCE("too_much_guidance");
+        TOO_MUCH_GUIDANCE("too_much_guidance"),
+        WRONG_CHAMBER_TYPE("wrong_chamber_type"),
+        MATCH_WRONG("match_wrong"),
+        NOZZLE_TOO_SHORT("nozzle_too_short"),
+        NOT_INTERSTAGE("not_interstage");
 
         String code;
 
@@ -96,6 +108,11 @@ public class StructAnalysis {
     };
     private static final AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7, 0, -3.0E7, 3.0E7, 255, 3.0E7);
 
+    public boolean isEffectiveAir(BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp;
+    }
+
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
         AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX), Math.round(faaBB.minY),
                 Math.round(faaBB.minZ), Math.round(faaBB.maxX),
@@ -105,8 +122,9 @@ public class StructAnalysis {
             for (int y = (int) aaBB.minY; y < aaBB.maxY; y++) {
                 for (int z = (int) aaBB.minZ; z < aaBB.maxZ; z++) {
                     BlockPos bp = new BlockPos(x, y, z);
-                    if (!world.isAirBlock(bp)) {
-                        if (checkAir && world.getBlockState(bp).getCollisionBoundingBox(world, bp) == null) {
+                    if (!isEffectiveAir(bp)) {
+                        IBlockState state = world.getBlockState(bp);
+                        if (checkAir && state.getCollisionBoundingBox(world, bp) == null) {
                             status = BuildStat.INVALID_AIRLIKE;
                             return null;
                         }
@@ -130,13 +148,15 @@ public class StructAnalysis {
             BlockPos bp = uncheckedBlocks.remove();
             blocksCollected.add(bp);
             uncheckedBlocks.addAll(getBlockNeighbors(bp, aaBB).stream()
-                    .filter(p -> !world.isAirBlock(p) && !blocksCollected.contains(p) && !uncheckedBlocks.contains(p))
+                    .filter(p -> !isEffectiveAir(p) && !blocksCollected.contains(p) && !uncheckedBlocks.contains(p))
                     .collect(Collectors.toSet()));
         }
         return blocksCollected;
     }
 
     public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
+
+    public static TraceabilityPredicate rocketHullBlocks = blocks();
 
     public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
                               boolean testStrength) {
@@ -151,8 +171,8 @@ public class StructAnalysis {
             pos = uncheckedBlocks.remove();
             if (actualBlocks.contains(pos)) {
                 BlockWorldState bws = new BlockWorldState(); // this is awful but I guess it works?
-                bws.update(world, pos, pmc, null, null, SuSyValues.rocketHullBlocks);
-                if (testStrength && !SuSyValues.rocketHullBlocks.test(bws)) {
+                bws.update(world, pos, pmc, null, null, rocketHullBlocks);
+                if (testStrength && !rocketHullBlocks.test(bws)) {
                     status = BuildStat.HULL_WEAK;
                     return null;
                 }
@@ -205,6 +225,7 @@ public class StructAnalysis {
 
     /**
      * Checks if a block is within an axis aligned bounding box
+     * This must be used, since just testing new Vec3d(bp) doesn't work
      * 
      * @param bb the bounding box
      * @param bp the block position
@@ -239,7 +260,7 @@ public class StructAnalysis {
      * @return
      */
     public List<HashSet<BlockPos>> getPartitions(AxisAlignedBB sect) {
-        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(sect, bp));
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) this::isEffectiveAir).or(bp -> !blockCont(sect, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks
 
@@ -268,15 +289,76 @@ public class StructAnalysis {
         return partitions;
     }
 
+    /**
+     *
+     * @param sect
+     * @return
+     */
+    public List<HashSet<BlockPos>> getPartitionsBy(AxisAlignedBB sect, Predicate<BlockPos> pred) {
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(pred).collect(Collectors.toSet());
+
+        List<HashSet<BlockPos>> partitions = new ArrayList<>();
+        Set<BlockPos> consumed = new HashSet<>();
+        for (BlockPos block : blocks) {
+            if (consumed.contains(block)) {
+                continue;
+            }
+            consumed.add(block);
+            ArrayDeque<BlockPos> remaining = new ArrayDeque<>();
+            HashSet<BlockPos> bPart = new HashSet<>();
+            remaining.add(block);
+            while (!remaining.isEmpty()) {
+                BlockPos bp = remaining.pop();
+                bPart.add(bp);
+                Stream<BlockPos> stream = getBlockNeighbors(bp, sect, orthVecs).stream()
+                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(pred));
+                remaining.addAll(getBlockNeighbors(bp, sect, orthVecs).stream()
+                        .filter(((Predicate<BlockPos>) bPart::contains).negate().and(pred))
+                        .collect(Collectors.toList()));
+                stream.forEach(consumed::add);
+            }
+            partitions.add(bPart);
+        }
+        return partitions;
+    }
+
     public Set<BlockPos> getLayerAir(AxisAlignedBB section, int y) {
         AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
                 section.maxZ + 1);
-        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) world::isAirBlock).or(bp -> !blockCont(section, bp));
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) this::isEffectiveAir)
+                .or(bp -> !blockCont(section, bp));
         Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
         // the one-argument getBlocks doesn't care about air blocks (again)
 
         List<HashSet<BlockPos>> partitions = getPartitions(sect);
-        // This looks cursed, but the idea is to ensure that
+        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
+        if (partitions.size() != 2) {
+            status = BuildStat.NOZZLE_MALFORMED;
+            return null;
+        } else {
+            List<Boolean> res = partitions.stream()
+                    .map(set -> getPerimeter(set, layerVecs).stream().allMatch(p -> blockCont(sect, p)))
+                    .collect(Collectors.toList());
+            for (int i = 0; i < 2; i++) {
+                if (res.get(i)) {
+                    return partitions.get(i);
+                }
+            }
+        }
+        status = BuildStat.ERROR;
+        return null;
+    }
+
+    public Set<BlockPos> getLayerOccupied(AxisAlignedBB section, int y, Collection<Block> types) {
+        AxisAlignedBB sect = new AxisAlignedBB(section.minX - 1, y, section.minZ - 1, section.maxX + 1, y + 1,
+                section.maxZ + 1);
+        Predicate<BlockPos> isNotObstacle = ((Predicate<BlockPos>) bp -> types
+                .contains(this.world.getBlockState(bp).getBlock())).or(bp -> !blockCont(section, bp));
+        Set<BlockPos> blocks = getBlocks(sect).stream().filter(isNotObstacle).collect(Collectors.toSet());
+        // the one-argument getBlocks doesn't care about air blocks (again)
+
+        List<HashSet<BlockPos>> partitions = getPartitionsBy(sect, isNotObstacle);
+        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
             return null;
@@ -353,7 +435,7 @@ public class StructAnalysis {
             }
         }
 
-        return max - min;
+        return max - min + 1;
     }
 
     /**
@@ -411,6 +493,14 @@ public class StructAnalysis {
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
         return bp.stream()
                 .filter(p -> world.getBlockState(p).getBlock().equals(block));
+    }
+
+    public Stream<BlockPos> getOfMaterial(Collection<BlockPos> bp, Material mat) {
+        return bp.stream()
+                .filter(p -> Objects.nonNull(OreDictUnifier.getMaterial(
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))))
+                .filter(p -> OreDictUnifier.getMaterial(
+                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock()))).material.equals(mat));
     }
 
     public int getCoordOfAxis(BlockPos bp) {

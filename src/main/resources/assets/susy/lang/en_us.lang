@@ -1,4 +1,7 @@
 # Blocks
+tile.speaker.single.name=Speaker
+tile.speaker.broadcast.name=Broadcast Speaker
+
 tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Manganese Iron Arsenic Phosphide Cooling Coil
 tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
@@ -39,6 +42,7 @@ tile.rocket_assembler_casing.rails.name=Rocket Assembler Rails
 tile.rocket_assembler_casing.structural_frame.name=Rocket Assembler Structural Frame
 tile.susy_multiblock_casing.euv_safe_casing.name=Extreme-Ultraviolet-Safe Lithographer Casing
 tile.susy_multiblock_casing.tabular_alumina_refractory.name=Tabular Alumina Refractory Lining
+tile.susy_multiblock_casing.screener_deck.name=Screener Deck
 
 
 tile.processor_cluster.tier1.name=Processor Cluster
@@ -94,6 +98,7 @@ tile.rocket_nozzle.plug.name=Rocket Nozzle Plug
 tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
 tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
 tile.guidance_system.soyuz.name=Soyuz 7K Guidance System
+tile.rocket_engine_gas_generator.open_cycle.name=Open Cycle Gas Generator
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
@@ -103,6 +108,7 @@ tile.deposit_block.alluvial.name=Alluvial Deposit Block
 tile.deposit_block.magmatic_hydrothermal.name=Magmatic Hydrothermal Deposit Block
 tile.deposit_block.ice_cap.name=Ice Cap Deposit Block
 tile.deposit_block.evaporite.name=Evaporite Deposit Block
+tile.deposit_block.crater_deposit.name=Crater Deposit Block
 
 tile.resource_block.bauxite.name=Bauxite Ore
 tile.resource_block.caliche.name=Caliche
@@ -123,6 +129,7 @@ tile.resource_block.coal.name=Coal Deposit
 tile.resource_block_1.native_copper.name=Native Copper Deposit
 tile.resource_block_1.anthracite.name=Anthracite Deposit
 tile.resource_block_1.lignite.name=Lignite Deposit
+tile.resource_block_1.kreep.name=KREEP Rich Rock
 
 
 tile.multiblock_tank.clarifier.name=Clarifier Vat
@@ -147,7 +154,7 @@ tile.home_block.home_scifi.tooltip=Sci-Fi
 
 tile.conveyor_belt.lv.name=Conveyor Belt
 
-tile.drill_bit.steel.name=Steel Drill Bit Block
+tile.drill_bit.steel.name=Steel Precision Drill Bit Assembly
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
@@ -166,6 +173,16 @@ tile.active_casing.basic_intake_casing.name=Basic Intake Casing
 
 tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 
+tile.paddle_shaft.iron.name=Paddle Shaft
+
+tile.robot_arm.grabber.name=Robotic Arm
+tile.robot_arm_layup.layup.name=Layup Machine Robotic Arm
+
+tile.susy_multiblock_casing.hardened_titanium_casing.name=Hardened Titanium Casing
+tile.vehicle_track.default.name=Heavy-Duty Vehicle Track
+tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
+
+
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -180,8 +197,9 @@ tile.susy_stone_smooth.slate.name=Slate
 tile.susy_stone_smooth.soapstone.name=Soapstone
 tile.susy_stone_smooth.kimberlite.name=Kimberlite
 tile.susy_stone_smooth.anorthosite.name=Anorthosite
+tile.susy_stone_smooth.leucobasalt.name=Leucobasalt
 tile.susy_stone_smooth.industrial_concrete.name=Industrial Concrete
-tile.susy_stone_smooth.minitary_concrete.name=Military Concrete
+tile.susy_stone_smooth.military_concrete.name=Military Concrete
 
 tile.susy_stone_cobble.gabbro.name=Gabbro Cobblestone
 tile.susy_stone_cobble.gneiss.name=Gneiss Cobblestone
@@ -195,8 +213,9 @@ tile.susy_stone_cobble.slate.name=Slate Cobblestone
 tile.susy_stone_cobble.soapstone.name=Soapstone Cobblestone
 tile.susy_stone_cobble.kimberlite.name=Kimberlite Cobblestone
 tile.susy_stone_cobble.anorthosite.name=Anorthosite Cobblestone
+tile.susy_stone_cobble.leucobasalt.name=Leucobasalt Cobblestone
 tile.susy_stone_cobble.industrial_concrete.name=Industrial Concrete Cobblestone
-tile.susy_stone_cobble.minitary_concrete.name=Military Concrete Cobblestone
+tile.susy_stone_cobble.military_concrete.name=Military Concrete Cobblestone
 
 tile.susy_stone_bricks.gabbro.name=Gabbro Bricks
 tile.susy_stone_bricks.gneiss.name=Gneiss Bricks
@@ -210,8 +229,10 @@ tile.susy_stone_bricks.slate.name=Slate Bricks
 tile.susy_stone_bricks.soapstone.name=Soapstone Bricks
 tile.susy_stone_bricks.kimberlite.name=Kimberlite Bricks
 tile.susy_stone_bricks.anorthosite.name=Anorthosite Bricks
+tile.susy_stone_bricks.leucobasalt.name=Leucobasalt Bricks
+
 tile.susy_stone_bricks.industrial_concrete.name=Industrial Concrete Bricks
-tile.susy_stone_bricks.minitary_concrete.name=Military Concrete Bricks
+tile.susy_stone_bricks.military_concrete.name=Military Concrete Bricks
 
 tile.lunar_concrete.lunar_concrete_smooth.name=Smooth Lunar Concrete
 tile.lunar_concrete.lunar_concrete_bricks.name=Lunar Concrete Bricks
@@ -243,6 +264,7 @@ susy.material.advanced_coolant=Advanced Coolant
 susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
+susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -254,6 +276,8 @@ susy.material.limestone=Limestone
 susy.material.gneiss=Gneiss
 susy.material.kimberlite=Kimberlite
 susy.material.anorthosite=Anorthosite
+susy.material.kreep_basalt=KREEP Basalt
+susy.material.leucobasalt=Leucobasalt
 susy.material.muscovite=Muscovite
 susy.material.dolomite=Dolomite
 susy.material.augite=Augite
@@ -269,8 +293,8 @@ susy.material.lizardite=Lizardite
 
 # Fluorinate Ketones
 
-susy.material.perfluoro_2_methyl_3_pentanone=Perfluoro(2-methyl-3-pentanone)
-susy.material.warm_perfluoro_2_methyl_3_pentanone=Warm Perfluoro(2-methyl-3-pentanone)
+susy.material.fc_75=FC-75
+susy.material.warm_fc_75=Warm FC-75
 
 # Ore Prefixes (%s is the localised material name)
 item.material.oreprefix.oreGabbro=Gabbro %s Ore
@@ -311,39 +335,91 @@ susy.machine.steam_extractor_cannot_melt_items.warning=Steam Extractors cannot m
 # Machines/Multiblocks
 susy.machine.aerospace_flight_simulator.name=Aerospace Flight Simulator
 susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
-susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Fuel selector
-susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Gravity
-susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %s
+susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Select fuel:
+susy.machine.aerospace_flight_simulator.gui.gravity_selector_label=Set simulation gravity:
+susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %.1f
+susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
+susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%%: %s
+susy.machine.aerospace_flight_simulator.gui.cargo_capacity=Cargo capacity: %s kg
+susy.machine.aerospace_flight_simulator.gui.radial_instability=Radial mismatch: %s blocks
+susy.machine.aerospace_flight_simulator.gui.thrust=Thrust: %s N
+susy.machine.aerospace_flight_simulator.gui.oblateness=Oblateness: %s
+susy.machine.aerospace_flight_simulator.gui.improvement=%s FLOPPAs applied
+
 susy.machine.aerospace_flight_simulator.gui.rocket_name=Rocket: %s
 susy.machine.aerospace_flight_simulator.gui.stages=Stages:
+susy.machine.aerospace_flight_simulator.gui.start_button=Begin simulation
+susy.machine.aerospace_flight_simulator.gui.start_button=Stop simulation
+susy.machine.aerospace_flight_simulator.gui.reset_fuel=Clear fuel
 
-susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s googs/s
+susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s floppa/t
 # googs/s is a very technical term
-susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s eu/t
-susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mb/s
+susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
+susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
+susy.machine.aerospace_flight_simulator.gui.no_coolant_warning=Insufficient FC-75 coolant flow
 
 susy.machine.blueprint_assembler.name=Blueprint Assembler
-susy.machine.blueprint_assembler.stagename=Stage: %s
+susy.machine.blueprint_assembler.stagename=Stage %s: %s
 susy.machine.blueprint_assembler.build_button_label=Build
 susy.machine.blueprint_assembler.blueprint_request=Insert Blueprint:
+
+susy.machine.blueprint_assembler.build_error.invalid_card=Invalid card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.validation_failure=Validation failed for %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.invalid_amount=Invalid amount of components in %1$s, %2$s row
+susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s, %2$s
+susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
+susy.machine.blueprint_assembler.build_error.success=Compilation successful!
+susy.machine.blueprint_assembler.build_error.success.extract=You may now extract the blueprint
+susy.machine.blueprint_assembler.build_button=Build
+susy.machine.blueprint_assembler.compiling=Compiling: %s%%
+susy.machine.blueprint_assembler.no_energy_build=Insufficient energy (MV minimum required)
+susy.machine.blueprint_assembler.no_coolant_build=Insufficient FC-75 coolant flow
 
 
 susy.rocketry.components.engine.name=Engine(s)
 susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Tank(s)
+susy.rocketry.components.spacecraft.name=Spacecraft
+susy.rocketry.components.fairing.name=Fairing
+susy.rocketry.components.interstage.name=Interstage
+
+# Component tooltips
+susy.rocketry.tooltip.mass=Mass: %.1f kg
+susy.rocketry.tooltip.radius=Radius: %.1f
+susy.rocketry.tooltip.height=Height: %d
+susy.rocketry.tooltip.area_ratio=Area ratio: %.1f
+susy.rocketry.tooltip.throughput=Throughput: %.1f
+susy.rocketry.tooltip.volume=Volume: %.0f
+susy.rocketry.tooltip.life_supported=§bLife support available
+susy.rocketry.tooltip.life_not_supported=§cLife support unavailable
+
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components
-susy.rocketry.component.validation_codes.invalid_amount=Invalid amount of components inserted
+susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components inserted
 susy.rocketry.components.validation_codes.invalid_card=Malformed component card
 susy.rocketry.components.validation_codes.incompatible_card=Incompatible card
 susy.rocketry.components.validation_codes.unknown=Something broke
 susy.rocketry.components.validation_codes.success=Blueprint assembled successfully
 
+susy.rocketry.stages.payload.name=Payload
 susy.rocketry.stages.block_F.name=Block F
 susy.rocketry.stages.block_A.name=Block A
 susy.rocketry.stages.boosters.name=Boosters
 
+tile.spacecraft_instrument.sensors.name=Spacecraft Sensors
+tile.spacecraft_instrument.collector.name=Spacecraft Collector
+tile.spacecraft_instrument.camera.name=Spacecraft Camera
+tile.spacecraft_instrument.solar_panel.name=Spacecraft Solar Panel Array
+tile.spacecraft_instrument.battery.name=Spacecraft Battery
+tile.spacecraft_instrument.arm.name=Spacecraft Arm
+tile.spacecraft_instrument.lander.name=Spacecraft Lander
+
+tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
+metaitem.padding_cloth.name=Padding Cloth
+
 susy.rocketry.soyuz.name=Soyuz FG
+susy.rocketry.lunar.name=Lunar-sized Rocket
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
@@ -404,6 +480,8 @@ susy.multiblock.ball_mill.tooltip.mill_balls=Requires %s mill balls to function.
 susy.multiblock.ball_mill.error.missing_mill_balls=Not enough mill balls were found for the recipe!
 susy.machine.attrition_scrubber.name=Attrition Scrubber
 susy.machine.attrition_scrubber.tooltip=Glorified Washing Machine
+susy.machine.industrial_sifter.name=Industrial Sifter
+susy.machine.industrial_sifter.tooltip=Stay calm and keep sifting
 
 susy.machine.redstone_controller.not_connected=No machine to control found!
 susy.machine.redstone_controller.signal_desc=Transmitting signal: %s
@@ -498,20 +576,28 @@ susy.machine.primitive_smelter.name=Primitive Smelter
 susy.machine.cupola_furnace.name=Cupola Furnace
 susy.machine.cupola_furnace.tooltip=Gains one parallel per block layer
 susy.machine.large_steam_hammer.name=Large Steam Hammer
+susy.machine.log_washer.name=Log Washer
 susy.machine.landing_pad.name=Landing Pad
+susy.machine.landing_pad.signal.0=Toggle insert/extract
+susy.machine.landing_pad.signal.1=Launch lander (or dispose if empty and missionless)
+susy.machine.landing_pad.signal.2=Destroy empty lander
+
+
 susy.machine.scrap_recycler.name=Scrap Recycler
 
 susy.machine.rocket_assembler.name=Rocket Assembler
-susy.machine.rocket_assembler.signal.start_assembly=Start assembly
-susy.machine.rocket_assembler.signal.stop_assembly=Stop and discard assembly
-susy.machine.rocket_assembler.blueprint_slot.name=insert a rocket blueprint
+susy.machine.rocket_assembler.signal.0=Start assembly
+susy.machine.rocket_assembler.signal.1=Stop and discard assembly
+susy.machine.rocket_assembler.blueprint_slot.name=Insert a rocket blueprint
 susy.machine.rocket_assembler.gui.required_items=Required Items:
 susy.machine.rocket_assembler.gui.stop=Stop and reset assembly
-susy.machine.rocket_assembler.gui.start=start the assembly process
+susy.machine.rocket_assembler.gui.start=Start the assembly process
 susy.machine.rocket_assembler.blueprint_stop.name=Blueprint Slot
-
+susy.machine.rocket_assembler.gui.overall_progress=Component no. %d/%d (%s%%)
+susy.machine.rocket_assembler.error.no_erector=No Transporter Erector found on the rails!
+susy.machine.rocket_assembler.warning.no_electrodes=Not enough tungsten electrodes in the input buses!
 susy.machine.rocket_programmer.name=Rocket Programmer
-susy.machine.rocket_programmer.gui.not_enough_budget=The rocket cannot perform every programmed mission.
+susy.rocket_programmer.not_enough_budget=The rocket cannot perform every programmed mission.
 susy.machine.metallurgical_converter.name=Metallurgical Converter
 susy.machine.injection_molder.name=Injection Molder
 
@@ -532,6 +618,9 @@ susy.machine.parallel_pure=Can parallel to output up to §b%d§r§7 items at onc
 susy.machine.electric_discharge_machine.name=Electric Discharge Machine (EDM)
 susy.machine.electric_discharge_machine.tooltip=Electronic Dance Machine
 
+susy.machine.lunar_bucket_wheel_excavator.name=Lunar Bucket Wheel Excavator
+susy.machine.lunar_bucket_wheel_excavator.tooltip=World-Eater 9000
+
 susy.machine.cargo_drone_pad.name=Cargo Drone Pad
 susy.machine.cargo_drone_pad.tooltip=MarvNET v0.1
 
@@ -550,6 +639,7 @@ susy.machine.distiller.bronze.tooltip=Extracting most relevant Parts of Fluids
 susy.machine.distiller.steel.tooltip=Extracting most relevant Parts of Fluids
 
 # Latex Collector
+susy.machine.latex_collector=Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
 susy.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
 susy.machine.latex_collector.bronze.name=Steam Latex Collector
@@ -560,6 +650,7 @@ susy.machine.latex_collector.hv.name=Advanced Latex Collector II
 susy.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
+susy.machine.vulcanizing_press=Vulcanizing Press
 susy.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
 susy.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
 susy.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
@@ -572,6 +663,7 @@ susy.machine.mixer.bronze.name=Steam Mixer
 susy.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
+susy.machine.roaster=Roaster
 susy.machine.roaster.bronze.name=Steam Roaster
 susy.machine.roaster.steel.name=High Pressure Steam Roaster
 susy.machine.roaster.lv.name=Basic Roaster
@@ -589,6 +681,7 @@ susy.machine.roaster.uxv.name=Epic Roaster IV
 susy.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
+susy.machine.vacuum_chamber=Vacuum Chamber
 susy.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
 susy.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
 susy.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
@@ -606,6 +699,7 @@ susy.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
 susy.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
 # CSTR
+susy.machine.continuous_stirred_tank_reactor=Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
@@ -621,6 +715,7 @@ susy.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Ta
 susy.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
 
 # Fixed Bed Reactor
+susy.machine.fixed_bed_reactor=Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
@@ -636,6 +731,7 @@ susy.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
 susy.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
 
 # Trickle Bed Reactor
+susy.machine.trickle_bed_reactor=Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
@@ -651,6 +747,7 @@ susy.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
 susy.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
 # Bubble Column Reactor
+susy.machine.bubble_column_reactor=Bubble Column Reactor
 susy.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
 susy.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
 susy.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
@@ -668,6 +765,7 @@ susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 # Batch Reactor
 susy.machine.batch_reactor.bronze.name=Steam Batch Reactor
 susy.machine.batch_reactor.steel.name=High Pressure Steam Batch Reactor
+susy.machine.batch_reactor=Batch Reactor
 susy.machine.batch_reactor.lv.name=Basic Batch Reactor
 susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
 susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
@@ -683,6 +781,7 @@ susy.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
 susy.machine.batch_reactor.opv.name=Legendary Batch Reactor
 
 # Crystallizer
+susy.machine.crystallizer=Crystallizer
 susy.machine.crystallizer.lv.name=Basic Crystallizer
 susy.machine.crystallizer.mv.name=Advanced Crystallizer
 susy.machine.crystallizer.hv.name=Advanced Crystallizer II
@@ -698,6 +797,7 @@ susy.machine.crystallizer.uxv.name=Epic Crystallizer IV
 susy.machine.crystallizer.opv.name=Legendary Crystallizer
 
 # Dryer
+susy.machine.dryer=Dryer
 susy.machine.dryer.lv.name=Basic Dryer
 susy.machine.dryer.mv.name=Advanced Dryer
 susy.machine.dryer.hv.name=Advanced Dryer II
@@ -713,6 +813,7 @@ susy.machine.dryer.uxv.name=Epic Dryer IV
 susy.machine.dryer.opv.name=Legendary Dryer
 
 # Ion Exchange Column
+susy.machine.ion_exchange_column=Ion Exchange Column
 susy.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
 susy.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
 susy.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
@@ -728,6 +829,7 @@ susy.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
 susy.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
 
 # Zone Refiner
+susy.machine.zone_refiner=Zone Refiner
 susy.machine.zone_refiner.lv.name=Basic Zone Refiner
 susy.machine.zone_refiner.mv.name=Advanced Zone Refiner
 susy.machine.zone_refiner.hv.name=Advanced Zone Refiner II
@@ -743,6 +845,7 @@ susy.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
 susy.machine.zone_refiner.opv.name=Legendary Zone Refiner
 
 # Tube Furnace
+susy.machine.tube_furnace=Tube Furnace
 susy.machine.tube_furnace.lv.name=Basic Tube Furnace
 susy.machine.tube_furnace.mv.name=Advanced Tube Furnace
 susy.machine.tube_furnace.hv.name=Advanced Tube Furnace II
@@ -758,6 +861,7 @@ susy.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
 susy.machine.tube_furnace.opv.name=Legendary Tube Furnace
 
 # UV Light Box
+susy.machine.uv_light_box=UV Light Box
 susy.machine.uv_light_box.lv.name=Basic UV Light Box
 susy.machine.uv_light_box.mv.name=Advanced UV Light Box
 susy.machine.uv_light_box.hv.name=Advanced UV Light Box II
@@ -773,6 +877,7 @@ susy.machine.uv_light_box.uxv.name=Epic UV Light Box IV
 susy.machine.uv_light_box.opv.name=Legendary UV Light Box
 
 # CVD
+susy.machine.cvd=CVD Unit
 susy.machine.cvd.lv.name=Basic CVD Unit
 susy.machine.cvd.mv.name=Advanced CVD Unit
 susy.machine.cvd.hv.name=Advanced CVD Unit II
@@ -788,6 +893,7 @@ susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
 # ALD
+susy.machine.ald=ALD Unit
 susy.machine.ald.lv.name=Basic ALD Unit
 susy.machine.ald.mv.name=Advanced ALD Unit
 susy.machine.ald.hv.name=Advanced ALD Unit II
@@ -803,6 +909,7 @@ susy.machine.ald.uxv.name=Epic ALD Unit IV
 susy.machine.ald.opv.name=Legendary ALD Unit
 
 # Ion Implanter
+susy.machine.ion_implanter=Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
 susy.machine.ion_implanter.hv.name=Advanced Ion Implanter II
@@ -818,12 +925,14 @@ susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
 # Screen Printer
+susy.machine.screen_printer=Screen Printer
 susy.machine.screen_printer.lv.name=Basic Screen Printer
 susy.machine.screen_printer.mv.name=Advanced Screen Printer
 susy.machine.screen_printer.hv.name=Advanced Screen Printer II
 susy.machine.screen_printer.ev.name=Advanced Screen Printer III
 
 # Fluid Compressor
+susy.machine.fluid_compressor=Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
 susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
 susy.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
@@ -839,6 +948,7 @@ susy.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
 susy.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
 
 # Fluid Decompressor
+susy.machine.fluid_decompressor=Fluid Decompressor
 susy.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
 susy.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
 susy.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
@@ -854,6 +964,7 @@ susy.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
 susy.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
 
 # Weapons Factory
+susy.machine.weapons_factory=Weapons Factory
 susy.machine.weapons_factory.lv.name=Basic Weapons Factory
 susy.machine.weapons_factory.mv.name=Advanced Weapons Factory
 susy.machine.weapons_factory.hv.name=Advanced Weapons Factory II
@@ -872,6 +983,7 @@ susy.machine.weapons_factory.opv.name=Legendary Weapons Factory
 susy.machine.phase_separator.name=Phase Separator
 
 # RTG
+susy.machine.rtg=RTG
 susy.machine.rtg.lv.name=Basic RTG
 susy.machine.rtg.mv.name=Advanced RTG
 susy.machine.rtg.tooltip.info=Power for your pacemaker.
@@ -879,6 +991,7 @@ susy.machine.rtg.tooltip.description=Generates a small but steady amount of elec
 susy.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
+susy.machine.electrostatic_separator=Electrostatic Separator
 susy.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 susy.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
 susy.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
@@ -894,6 +1007,7 @@ susy.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
 susy.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
 # Textile Spinner
+susy.machine.textile_spinner=Textile Spinner
 susy.machine.textile_spinner.lv.name=Basic Textile Spinner
 susy.machine.textile_spinner.mv.name=Advanced Textile Spinner
 susy.machine.textile_spinner.hv.name=Advanced Textile Spinner II
@@ -909,6 +1023,7 @@ susy.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 susy.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
 # Polishing Machine
+susy.machine.polishing_machine=Polishing Machine
 susy.machine.polishing_machine.lv.name=Basic Polishing Machine
 susy.machine.polishing_machine.mv.name=Advanced Polishing Machine
 susy.machine.polishing_machine.hv.name=Advanced Polishing Machine II
@@ -924,6 +1039,7 @@ susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 # Resistance Furnace
+susy.machine.resistance_furnace=Resistance Furnace
 susy.machine.resistance_furnace.lv.name=Basic Resistance Furnace
 susy.machine.resistance_furnace.mv.name=Advanced Resistance Furnace
 susy.machine.resistance_furnace.hv.name=Advanced Resistance Furnace II
@@ -947,6 +1063,7 @@ recipemap.greenhouse_plant.name=Greenhouse
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
+susy.machine.incinerator=Incinerator
 susy.machine.incinerator.lv.name=Basic Incinerator
 susy.machine.incinerator.mv.name=Advanced Incinerator
 susy.machine.incinerator.hv.name=Advanced Incinerator II
@@ -991,6 +1108,7 @@ susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
 
+susy.machine.combustion_generator=Combustion Generator
 susy.machine.combustion_generator.lv.name=Basic Combustion Generator
 susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
 susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
@@ -1004,6 +1122,7 @@ susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: 
 susy.multiblock.rotation_generator.fuel_needed=Consuming %s (Max %s) per %s ticks
 
 # Sputtering Machine
+susy.machine.sputter_deposition=Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
 susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
 susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
@@ -1019,6 +1138,7 @@ susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
 # Evaporation Deposition Machine
+susy.machine.evaporation_deposition=Evaporation Deposition Machine
 susy.machine.evaporation_deposition.lv.name=Basic Evaporation Deposition Machine
 susy.machine.evaporation_deposition.mv.name=Advanced Evaporation Deposition Machine
 susy.machine.evaporation_deposition.hv.name=Advanced Evaporation Deposition Machine II
@@ -1042,6 +1162,18 @@ susy.machine.component_scanner.scanning=Scanning...
 susy.machine.component_scanner.pos=Error found at %s
 
 susy.machine.building_cleanroom.name=Spacecraft Component Cleanroom
+
+# Solar panels
+susy.machine.solar_panel.lv.name=Monocrystalline Silicon Solar Panel
+susy.machine.solar_panel.mv.name=Multi-Junction Solar Panel
+susy.machine.solar_panel.tooltip.info=May the Sun be with you.
+susy.machine.solar_panel.tooltip.description1=Generates power during daylight hours, rising/falling gradually during dawn and dusk.
+susy.machine.solar_panel.tooltip.description2=Production reduced by 50%% when raining and for every solar panel in the surrounding 8 blocks.
+susy.machine.solar_panel.tooltip.description3=Ensure the block above the panel base is clear!
+susy.machine.solar_panel.voltage_produced=§aPeak Production: §f%,d EU/t (%s§f)
+tile.solar_panel.default.name=Solar Panel Display Block
+susy.top.solar_panel.producing=Producing
+
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation
@@ -1131,6 +1263,8 @@ recipemap.resist_processor.name=Photoresist Processor
 recipemap.reactive_ion_etching.name=Reactive Ion Etching
 recipemap.attrition_scrubber.name=Attrition Scrubbing
 recipemap.edm.name=Electric Discharge Machining (EDM)
+recipemap.layup=Layup
+recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1222,6 +1356,8 @@ metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.air_disperser.name=Air Disperser
+metaitem.air_disperser.tooltip=Disperses Oxygen to Breathe (uses 100mB/s while filling)
 metaitem.shape.mold.target.name=Sputtering Target Mold
 metaitem.location_card.name=Location Card
 metaitem.cargo_drone.basic.name=Basic Cargo Drone
@@ -1230,6 +1366,17 @@ metaitem.cargo_drone.advanced.name=Advanced Cargo Drone
 metaitem.cargo_drone.advanced.tooltip=Max range: §62000 blocks§7, speed: §b7.5 blocks/second§b
 metaitem.cargo_drone.elite.name=Elite Cargo Drone
 metaitem.cargo_drone.elite.tooltip=Max range: §610000 blocks§7, speed: §b25 blocks/second§b. Powered by §9Hydrogen§7.
+metaitem.oxygen_sensor.name=Oxygen Sensor
+metaitem.oxygen_sensor.tooltip.1=Detects nearby oxygen levels. Beeps when insufficient oxygen is detected.
+metaitem.oxygen_sensor.tooltip.charge=§aCharge: §f%,d / %,d EU
+metaitem.oxygen_sensor.oxygen_level.none=Oxygen Level: §4None
+metaitem.oxygen_sensor.oxygen_level.very_low=Oxygen Level: §cVery Low
+metaitem.oxygen_sensor.oxygen_level.low=Oxygen Level: §6Low
+metaitem.oxygen_sensor.oxygen_level.medium=Oxygen Level: §eModerate
+metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
+metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
+metaitem.shape.mold.target.name=Sputtering Target Mold
+metaitem.rocket_configurer.name=Rocket Configuration Tool
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
@@ -1296,6 +1443,14 @@ metaitem.data_card.tooltip.1=Insert into a Component Scanner to store the part r
 metaitem.data_card.active.name=Loaded Structure Card
 metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
+metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
+metaitem.data_card.master_blueprint.tag.lunar=§6Lunar-sized Rocket
+metaitem.data_card.active.tag.engine=§6Engine
+metaitem.data_card.active.tag.engine_small=§6Vernier Engine
+metaitem.data_card.active.tag.fairing=§6Fairing
+metaitem.data_card.active.tag.spacecraft=§6Spacecraft
+metaitem.data_card.active.tag.tank=§6Tank
+metaitem.data_card.active.tag.interstage=§6Interstage
 
 # Machine Translations
 susy.wrongbiome=Machine can not work in this biome!
@@ -1362,6 +1517,8 @@ susy.gui.rocket_programmer.mission_type=Mission type
 susy.gui.rocket_programmer.planetoid=Destination
 susy.gui.rocket_programmer.destination_type=Destination type
 susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+susy.rocket_programmer.circuit_slot=Place Config Tool here
+
 
 susy.gui.page=Page %s / %s
 
@@ -1369,6 +1526,8 @@ susy.gui.temperature_celsius=Temperature: %s / %s°C
 
 susy.gui.toggle_energy_voiding.enabled=Voiding energy when full
 susy.gui.toggle_energy_voiding.disabled=Not voiding energy
+susy.gui.toggle_short_view.enabled=Multiplying data card
+susy.gui.toggle_short_view.disabled=Showing all data cards
 
 # Extra recipe info
 susy.recipe.dimensions=Dimensions: %s
@@ -1376,6 +1535,8 @@ susy.recipe.biomes=Biomes: %s
 susy.recipe.biomes_blocked=Blocked Biomes: %s
 susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
+susy.recipe.atmosphere=Only functions in an atmosphere
+susy.recipe.vacuum=Only functions in a vacuum
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop/status>
@@ -1423,6 +1584,7 @@ death.attack.spaghettification=%s was spaghettified
 death.attack.age=%s died of old age
 death.attack.chronoerasure=%s never existed
 death.attack.crusher=%s was ground into a pulp
+death.attack.reentry=%s burned up in reentry
 
 metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
@@ -1482,10 +1644,17 @@ tile.custom_sheets.decorativecopperbricks.name=Space Grade Decorative Copper Bri
 
 tile.regolith.highland.name=Anorthositic Regolith
 tile.regolith.lowland.name=Basaltic Regolith
+tile.regolith.kreep.name=KREEP Rich Regolith
 
 # ToolBehaviors
 item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
 item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
+
+# JEI Info
+susy.tooltip.specific_impulse=Specific Impulse: %s
+susy.tooltip.mass=Mass (as rocket part): %s kg
+susy.tooltip.guidance_multiplier=Base Success Chance: %sx
+rocket_fuel.name=Rocket Fuel
 
 # Titles
 supersymmetry.title.1=§3SUPERSYMMETRY
@@ -1616,7 +1785,7 @@ susy.msg.rocket_component.no_nozzle=Nozzle blocks are missing.
 susy.msg.rocket_component.nozzle_invalid=The nozzle shape is incorrect.
 susy.msg.rocket_component.unknown_error=An unknown error occurred.
 susy.msg.rocket_component.wrong_num_c_chambers=There are too many or not enough combustion chambers.
-susy.msg.rocket_component.wrong_num_pumps=There are extraneous unused turbopumps.
+susy.msg.rocket_component.wrong_num_pumps=A combustion chamber has the wrong number of turbopumps.
 susy.msg.rocket_component.weird_pump=For some reason, a pump is facing upwards. Why?
 susy.msg.rocket_component.weird_fairing=Something about this fairing is weird.
 susy.msg.rocket_component.chamber_wrong_place=A combustion chamber is inside the rocket nozzle. That's strange...
@@ -1632,9 +1801,44 @@ susy.msg.rocket_component.too_short=The component is too short!
 susy.msg.rocket_component.conn_unaligned=The fairing connectors are not in planar alignment.
 susy.msg.rocket_component.conn_wrong_dir=A fairing connector is facing a block.
 susy.msg.rocket_component.wrong_tile=A tile was used incorrectly.
-susy.msg.rocket_component.interstage_not_cylindrical=The interstage looks weird.
+susy.msg.rocket_component.interstage_not_cylindrical=The interstage should be cylindrical.
+susy.msg.rocket_component.not_interstage=An block was used that is not an interstage.
+susy.msg.rocket_component.wrong_chamber_type=A different chamber should be used.
+susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
+susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
+entity.Lander.name=Moon Lander
+entity.Lunar Rocket.name=Lunar-sized Rocket
+
+susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+susy.machine.large_railroad_engineering_station.tooltip=Used to build and service trains
+
+metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engineering Station
+metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
+large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.layup_machine.name=Layup Machine
+susy.machine.layup_machine.tooltip=Slathering It on
+
+susy.machine.launch_pad.name=Launch Pad
+susy.launch_pad.empty=No rocket detected
+susy.launch_pad.loading=Loading rocket...
+susy.launch_pad.loaded=Rocket ready for launch
+susy.launch_pad.launching=Launching rocket...
+susy.launch_pad.gui.fuel_progress=Fuel: %s mB/%s mB
+susy.launch_pad.gui.configurer_slot=Optional: insert a Rocket Configurer to program the mission
+
+susy.machine.lunar_launch_complex.name=Lunar Launch Complex
+susy.machine.lunar_launch_complex.signal.0=Start assembly
+susy.machine.lunar_launch_complex.signal.1=Stop and discard assembly
+susy.machine.lunar_launch_complex.signal.2=Launch the assembled rocket
+susy.machine.lunar_launch_complex.blueprint_slot.name=Insert a rocket blueprint
+susy.lunar_launch_complex.idle=Awaiting a blueprint
+susy.lunar_launch_complex.assembling=Assembling rocket...
+susy.lunar_launch_complex.loaded=Rocket ready for launch
+susy.lunar_launch_complex.launching=Launching rocket...
 
 #BMRF blocks
 tile.bmrf_blocks.bmrf1.name=BMRF-1
@@ -1646,6 +1850,31 @@ tile.bmrf_blocks.bmrf6.name=BMRF-6
 tile.bmrf_blocks.bmrf7.name=BMRF-7
 tile.bmrf_blocks.bmrf8.name=BMRF-8
 tile.bmrf_blocks.bmrf9.name=BMRF-9
+tile.bmrf_blocks.bmrf10.name=BMRF-10
+tile.bmrf_blocks.bmrf11.name=BMRF-11
+tile.bmrf_blocks.bmrf12.name=BMRF-12
+tile.bmrf_blocks.bmrf13.name=BMRF-13
+tile.bmrf_blocks.bmrf14.name=BMRF-14
+tile.bmrf_blocks.bmrf15.name=BMRF-15
+tile.bmrf_blocks.bmrf16.name=BMRF-16
+
+#S2BMRF blocks
+tile.s2bmrf_blocks.s2bmrf1.name=BMRF-17
+tile.s2bmrf_blocks.s2bmrf2.name=BMRF-18
+tile.s2bmrf_blocks.s2bmrf3.name=BMRF-19
+tile.s2bmrf_blocks.s2bmrf4.name=BMRF-20
+tile.s2bmrf_blocks.s2bmrf5.name=BMRF-21
+tile.s2bmrf_blocks.s2bmrf6.name=BMRF-22
+tile.s2bmrf_blocks.s2bmrf7.name=BMRF-23
+tile.s2bmrf_blocks.s2bmrf8.name=BMRF-24
+tile.s2bmrf_blocks.s2bmrf9.name=BMRF-25
+tile.s2bmrf_blocks.s2bmrf10.name=BMRF-26
+tile.s2bmrf_blocks.s2bmrf11.name=BMRF-27
+tile.s2bmrf_blocks.s2bmrf12.name=BMRF-28
+tile.s2bmrf_blocks.s2bmrf13.name=BMRF-29
+tile.s2bmrf_blocks.s2bmrf14.name=BMRF-30
+tile.s2bmrf_blocks.s2bmrf15.name=BMRF-31
+tile.s2bmrf_blocks.s2bmrf16.name=BMRF-32
 
 ##Factions
 #Items
@@ -1671,3 +1900,34 @@ chat.susy.location_card.x=X (%s)
 chat.susy.location_card.y=Y (%s)
 chat.susy.location_card.z=Z (%s)
 
+susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
+susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+susy.machine.large_railroad_engineering_station.tip=Used to build and service trains
+
+metatileentity.susy.large_railroad_engineering_station.name=Large Railroad Engineering Station
+metatileentity.susy.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
+metatileentity.susy.large_railroad_engineering_station.tooltip=Used to build and service trains
+large_railroad_engineering_station.name=Large Railroad Engineering Station
+
+# Advancements
+gregtech.advancement.extreme_voltage.rocket_launch.name=Hopefully It Doesn't Crash :)
+gregtech.advancement.extreme_voltage.rocket_launch.desc=Get in a launching rocket.
+
+susy.earth=Earth
+susy.moon=Moon
+susy.gui.rocket_programmer.manned=Manned Mission
+susy.gui.rocket_programmer.unmanned_cargo=Unmanned Cargo Mission
+susy.gui.rocket_programmer.unmanned_collection=Unmanned Collection Mission
+
+susy.lander.volume=Used volume: %s
+susy.lander.mass=Cargo mass: %s kg
+
+susy.rocket.msg.launch=Launching in T-%s
+susy.rocket.msg.too_heavy=Too heavy to launch!
+susy.rocket.msg.not_configured=No remaining missions (take out cargo and press SPACE to remove)
+susy.rocket.msg.gravity_too_high=Cannot launch with gravity > 0.4G (take out cargo and press SPACE to remove)
+
+susy.landing_pad.extracting=Extracting items from lander...
+susy.landing_pad.inserting=Inserting items into lander...
+
+susy.general.requires_atmosphere=§6Only works on breathable planets

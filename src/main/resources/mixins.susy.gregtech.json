@@ -6,6 +6,7 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "AnonToolDefinitionAccessor",
+    "BlockMachineMixin",
     "BlockPipeAccessor",
     "MetaTileEntityCrateAccessor",
     "MetaTileEntityDrumAccessor",
@@ -17,7 +18,9 @@
     "MultiblockControllerBaseMixin",
     "OreDictUnifierAccessor",
     "OreDictUnifierMixin",
+    "PrimitiveRecipeLogicMixin",
     "RecipeBuilderAccessor",
+    "RecipeMapPrimitiveMultiblockControllerMixin",
     "RecipeMapsMixin",
     "RecyclingRecipesMixin",
     "ToolBuilderAccessor",

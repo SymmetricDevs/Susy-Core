@@ -11,7 +11,10 @@ import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +23,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import gregtech.api.util.ItemStackHashStrategy;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.util.StructAnalysis;
@@ -29,13 +34,12 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     protected static final String PARTS_KEY = "parts";
-    protected static final String INSTRUMENTS_KEY = "instruments";
+    public static final String INSTRUMENTS_KEY = "instruments";
     private static final Set<AbstractComponent<?>> registry = new HashSet<>();
     private static boolean registryLock = false;
     private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();
 
     protected String name;
-    // ex name="laval_engine", type="engine" so that you can do some silly things with engine types
     protected String type;
     protected BuildStat status = BuildStat.ERROR;
     protected double mass;
@@ -78,8 +82,6 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    // probably fine because if you manage to put in an AbstractComponent<?> and it doesnt
-    // extend from AbstractComponent<?> you deserved to get a crash
     public static void registerComponent(AbstractComponent<?> component) {
         if (!getRegistryLock()) {
             nameToComponentRegistry.put(
@@ -105,39 +107,35 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         return new HashSet<>(registry);
     }
 
-    // sort of works
     public void writeBlocksToNBT(Set<BlockPos> blocks, World world) {
-        Map<String, Integer> counts = new HashMap<String, Integer>();
-        for (BlockPos blockpos : blocks) {
-            IBlockState state = world.getBlockState(blockpos);
-            Block block = state.getBlock();
+        Map<ItemStack, Integer> blockCounts = new Object2IntOpenCustomHashMap<>(
+                ItemStackHashStrategy.comparingAllButCount());
+        Map<ItemStack, Integer> coverCounts = new Object2IntOpenCustomHashMap<>(
+                ItemStackHashStrategy.comparingAllButCount());
 
+        for (BlockPos pos : blocks) {
+            IBlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
             int meta = block.damageDropped(state);
-            TileEntity te = world.getTileEntity(blockpos);
-            if (te != null) {
-                if (te instanceof TileEntityCoverable) {
-                    TileEntityCoverable teCoverable = (TileEntityCoverable) te;
-                    if (teCoverable != null &&
-                            teCoverable.getCoverItem().getItem().getRegistryName() != Items.AIR.getRegistryName()) {
-                        String key = teCoverable.getCoverItem().getItem().getRegistryName().toString() + "#" +
-                                teCoverable.getCoverItem().getMetadata() + "#cover"; // i am sorry for this
-                        counts.put(key, counts.getOrDefault(key, 0) + teCoverable.getCoverCount());
-                    }
+
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof TileEntityCoverable teCoverable) {
+                ItemStack coverStack = teCoverable.getCoverItem();
+                if (coverStack.getItem().getRegistryName() != Items.AIR.getRegistryName()) {
+                    ItemStack key = new ItemStack(coverStack.getItem(), 1, coverStack.getMetadata());
+                    coverCounts.merge(key, teCoverable.getCoverCount(), Integer::sum);
                 }
             }
-            String key = block.getRegistryName().toString() + "#" + meta + "#block";
-            counts.put(key, counts.getOrDefault(key, 0) + 1);
+
+            ItemStack key = new ItemStack(Item.getItemFromBlock(block), 1, meta);
+            blockCounts.merge(key, 1, Integer::sum);
         }
 
-        for (Map.Entry<String, Integer> e : counts.entrySet()) {
-            String[] p = e.getKey().split("#", 3);
-            // NBTTagCompound c = new NBTTagCompound();
-            // c.setString("registryName", p[0]);
-            // c.setInteger("meta", Integer.parseInt(p[1]));
-            // c.setString("type", p[2]);
-            // c.setInteger("count", e.getValue());
-            MaterialCost mat = new MaterialCost(p[0], p[2], Integer.parseInt(p[1]), e.getValue());
-            this.materials.add(mat);
+        for (Map.Entry<ItemStack, Integer> e : blockCounts.entrySet()) {
+            materials.add(new MaterialCost(e.getKey(), MaterialCost.SourceType.ITEM, e.getValue()));
+        }
+        for (Map.Entry<ItemStack, Integer> e : coverCounts.entrySet()) {
+            materials.add(new MaterialCost(e.getKey(), MaterialCost.SourceType.COVER, e.getValue()));
         }
     }
 
@@ -217,7 +215,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         this.detectionPredicate = predicate;
     }
 
-    public abstract Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb);
+    public abstract Optional<NBTTagCompound> analyzePattern(
+                                                            StructAnalysis analysis, AxisAlignedBB aabb);
 
     public void collectInfo(StructAnalysis analysis, Set<BlockPos> connected, NBTTagCompound tag) {
         // These are sometimes done separately.
@@ -246,6 +245,22 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             list.appendTag(material.toNBT());
         }
         tag.setTag("materials", list);
+    }
+
+    // used for subitem generation, false => no subitem
+    public boolean configureDefaults() {
+        return false;
+    }
+
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = new ArrayList<>();
+        if (tag.hasKey("mass")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.mass", String.format("%.0f", tag.getDouble("mass"))));
+        }
+        if (tag.hasKey("radius")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.radius", String.format("%.1f", tag.getDouble("radius"))));
+        }
+        return lines;
     }
 
     public abstract Optional<T> readFromNBT(NBTTagCompound compound);

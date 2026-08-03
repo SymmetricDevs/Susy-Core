@@ -5,14 +5,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
 import supersymmetry.api.sound.SusySounds;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntitySoyuzBasic;
 
 public class MovingSoundRocket extends MovingSound {
 
-    private final EntityRocket rocket;
+    private final EntitySoyuzBasic rocket;
     private float distance = 0.0F;
 
-    public MovingSoundRocket(EntityRocket rocket) {
+    public MovingSoundRocket(EntitySoyuzBasic rocket) {
         super(SusySounds.ROCKET_LAUNCH, SoundCategory.NEUTRAL);
         this.attenuationType = AttenuationType.NONE;
         this.rocket = rocket;

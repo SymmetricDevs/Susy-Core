@@ -1,8 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import java.util.function.Supplier;
-
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -16,9 +13,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Materials;
-import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -64,21 +59,6 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
 
     public IBlockState getElectrodeCasingState() {
         return SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON);
-    }
-
-    protected TraceabilityPredicate orientation(IBlockState state, RelativeDirection direction,
-                                                IProperty<EnumFacing> facingProperty) {
-        EnumFacing facing = this.getRelativeFacing(direction);
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(state.withProperty(facingProperty, facing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
-                getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, facing));
-            }
-            return true;
-        }, supplier);
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {

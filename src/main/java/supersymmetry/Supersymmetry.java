@@ -14,8 +14,10 @@ import gregtech.GTInternalTags;
 import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
+import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
+import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.command.*;
@@ -26,6 +28,7 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.loaders.SuSyIRLoader;
+import supersymmetry.network.SuSyNetwork;
 
 @Mod(name = Supersymmetry.NAME,
      modid = Supersymmetry.MODID,
@@ -63,6 +66,7 @@ public class Supersymmetry {
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
 
+        SuSyNetwork.init();
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
@@ -73,6 +77,7 @@ public class Supersymmetry {
         SuSyCapabilities.init();
 
         SusyMetaEntities.init();
+        SusyCriteriaTriggers.init();
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             OBJLoader.INSTANCE.addDomain(MODID);
@@ -84,6 +89,9 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
+        if (event.getSide().isClient()) {
+            ShaderManager.initShaders();
+        }
         SuSyCoverBehaviors.init();
     }
 
@@ -98,9 +106,14 @@ public class Supersymmetry {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
         CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
+        CommandMultiblock multiblockCommand = new CommandMultiblock();
+        CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
+
         event.registerServerCommand(hordeCommand);
         event.registerServerCommand(jeidump);
         event.registerServerCommand(untranslatedKeys);
+        event.registerServerCommand(multiblockCommand);
+        event.registerServerCommand(tpDimSpace);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());

@@ -1,16 +1,27 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboPump.HPPType>
-                            implements WeightedBlock {
+                            implements WeightedBlock<BlockTurboPump.HPPType> {
 
     public BlockTurboPump() {
         super(Material.IRON);
@@ -61,11 +72,15 @@ public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboP
     }
 
     @Override
-    public double getMass(IBlockState state) {
-        HPPType type = getState(state);
-        double multiplier = switch (type) {
-            case BASIC -> 150.0;
+    public double getMass(HPPType type) {
+        return switch (type) {
+            case BASIC -> 1100;
         };
-        return 1000 + 100 * multiplier;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

@@ -10,10 +10,7 @@ import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
-import supersymmetry.integration.theoneprobe.provider.DelegatorInfoProvider;
-import supersymmetry.integration.theoneprobe.provider.EvaporationPoolInfoProvider;
-import supersymmetry.integration.theoneprobe.provider.LittleTilesStorageInfoProvider;
-import supersymmetry.integration.theoneprobe.provider.StrandShaperInfoProvider;
+import supersymmetry.integration.theoneprobe.provider.*;
 import supersymmetry.modules.SuSyModules;
 
 @GregTechModule(
@@ -31,6 +28,7 @@ public class TheOneProbeModule extends IntegrationSubmodule {
         oneProbe.registerProvider(new EvaporationPoolInfoProvider());
         oneProbe.registerProvider(new DelegatorInfoProvider());
         oneProbe.registerProvider(new StrandShaperInfoProvider());
+        oneProbe.registerProvider(new SolarPanelInfoProvider());
         if (Loader.isModLoaded(SuSyValues.MODID_LITTLE_TILES)) {
             oneProbe.registerProvider(new LittleTilesStorageInfoProvider());
         }

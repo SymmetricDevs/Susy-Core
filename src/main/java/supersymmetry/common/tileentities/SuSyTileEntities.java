@@ -15,6 +15,8 @@ public class SuSyTileEntities {
         GameRegistry.registerTileEntity(AnimatablePartTileEntity.class, susyId("animatable_part"));
         GameRegistry.registerTileEntity(TileEntityCoverable.class, susyId("coverable"));
         GameRegistry.registerTileEntity(TileEntityFlare.class, susyId("flare"));
+        GameRegistry.registerTileEntity(TileEntitySpeaker.class, susyId("speaker"));
+        GameRegistry.registerTileEntity(TileEntitySpeakerBroadcast.class, susyId("speaker_broadcast"));
     }
 
     @SideOnly(Side.CLIENT)

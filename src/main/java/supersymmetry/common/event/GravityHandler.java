@@ -9,6 +9,7 @@ import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.world.World;
 
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.WorldProviderPlanet;
@@ -80,5 +81,12 @@ public class GravityHandler {
     public static boolean isOtherEntity(Entity entity) {
         return entity instanceof EntityBoat || entity instanceof EntityMinecart ||
                 entity instanceof EntityFallingBlock || entity instanceof EntityTNTPrimed;
+    }
+
+    public static double getGravityMultiplier(World world) {
+        if (world.provider instanceof WorldProviderPlanet) {
+            return SuSyDimensions.PLANETS.get(world.provider.getDimension()).gravity;
+        }
+        return 1;
     }
 }

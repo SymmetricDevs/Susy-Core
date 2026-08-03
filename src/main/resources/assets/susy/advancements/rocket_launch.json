@@ -1,0 +1,23 @@
+{
+  "display": {
+    "description": {
+      "translate": "gregtech.advancement.extreme_voltage.rocket_launch.desc"
+    },
+    "title": {
+      "translate": "gregtech.advancement.extreme_voltage.rocket_launch.name"
+    },
+    "icon": {
+      "item": "susy:rocket_turbopump",
+      "data": 0
+    },
+    "frame": "challenge"
+  },
+  "criteria": {
+    "location": {
+      "trigger": "susy:rocket_launch",
+      "conditions": {
+      }
+    }
+  },
+  "parent": "gregtech:extreme_voltage/47_nichrome_coil"
+}

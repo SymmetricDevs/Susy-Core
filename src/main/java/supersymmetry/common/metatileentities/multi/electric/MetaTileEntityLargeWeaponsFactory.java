@@ -42,8 +42,8 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .aisle("FBF", "FFF")
                 .aisle("CBC", " A ")
                 .aisle("CBC", " A ")
-                .aisle("CBC", "EAE")
-                .aisle("CBC", "EAE")
+                .aisle("CBC", "CAC")
+                .aisle("CBC", "CAC")
                 .aisle("CBC", " A ")
                 .aisle("CBC", " A ")
                 .aisle("DDD", "DSD")
@@ -52,11 +52,9 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
                 .where('B',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C', frames(Materials.Steel)
-                        .or(autoAbilities(false, true, false, false, false, false, false).setExactLimit(1)))
+                        .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('D', casingPredicate
                         .or(autoAbilities(false, false, true, false, true, false, false)))
-                .where('E', casingPredicate
-                        .or(autoAbilities(true, false, false, false, false, false, false)))
                 .where('F', casingPredicate
                         .or(autoAbilities(false, false, false, true, false, false, false)))
                 .where(' ', any())

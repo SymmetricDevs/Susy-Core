@@ -1,18 +1,27 @@
 package supersymmetry.api.items;
 
+import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
@@ -56,6 +65,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
+        if (nbt == null || nbt.tagMap.size() == 0) return;
         this.maxVolume = nbt.getInteger("maxVolume");
         this.maxWeight = nbt.getInteger("maxWeight");
         this.currentVolume = nbt.getInteger("currentVolume");
@@ -64,10 +74,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         this.cargo.clear();
 
         for (int i = 0; i < nbt.getInteger("cargoSize"); i++) {
-            NBTTagCompound itemTag = nbt.getCompoundTag("item" + i);
-            List<ItemStack> itemType = new ArrayList<>(itemTag.getInteger("size"));
-            for (int j = 0; j < itemTag.getInteger("size"); j++) {
-                itemType.add(new ItemStack(itemTag.getCompoundTag("item" + j)));
+            NBTTagCompound itemNbt = nbt.getCompoundTag("entry" + i);
+            int size = itemNbt.getInteger("size");
+            List<ItemStack> itemType = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                itemType.add(new ItemStack(itemNbt.getCompoundTag("item" + j)));
             }
             cargo.add(itemType);
         }
@@ -83,12 +94,22 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return this.cargo.isEmpty();
     }
 
+    public void takeFromExposedStack(@NotNull ItemStack stack) {
+        if (cargo.isEmpty()) {
+            return;
+        }
+        ItemStack actual = cargo.iterator().next().getLast();
+        if (actual.getCount() - stack.getCount() > 0) {
+            extractItem(0, actual.getCount() - stack.getCount(), false);
+        }
+    }
+
     public static class CargoHashStrategy implements Hash.Strategy<List<ItemStack>> {
 
         @Override
         public int hashCode(List<ItemStack> o) {
             if (o.isEmpty()) {
-                throw new IllegalArgumentException("Cannot hash empty list");
+                return 0;
             }
             return STACK_STRATEGY.hashCode(o.get(0));
         }
@@ -129,7 +150,6 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (!loading) return stack;
         if (!SuSyUtility.isAllowedItemForSpace(stack)) return stack;
         int mass = getMassPerItem(stack);
         List<ItemStack> bucket = getBucketForItem(stack);
@@ -174,20 +194,46 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - maxAddition);
     }
 
-    public int getMassPerItem(ItemStack item) {
+    // Returned in grams
+    public static int getMassPerItem(ItemStack item) {
         // GTCEu mass info
         ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(item);
+        int currentMass = 0;
         if (info != null) {
-            return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount)
+            currentMass += (int) (info.getMaterials().stream()
+                    .mapToLong((stack) -> stack.material.getMass() * stack.amount)
                     .sum() /
                     (GTValues.M / 36));
+        } else {
+            currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
         }
-        return 98 * 36 * 4; // default mass times 36 times another fudge factor
+        NBTTagCompound tag = item.getTagCompound();
+        IFluidHandlerItem fluidHandlerItem = item
+                .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (fluidHandlerItem != null) {
+            for (IFluidTankProperties t : fluidHandlerItem.getTankProperties()) {
+                FluidStack fluid = t.getContents();
+                currentMass += getFluidMass(fluid);
+            }
+        } else if (tag != null && tag.hasKey(FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND)) {
+            FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
+            currentMass += getFluidMass(fluid);
+        }
+        return currentMass;
+    }
+
+    private static int getFluidMass(FluidStack fluid) {
+        if (fluid == null || fluid.amount == 0)
+            return 0;
+        Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
+        if (mat == null) {
+            return (fluid.amount * 98 * 4) / 144;
+        }
+        return (int) (mat.getMass() * fluid.amount / 144);
     }
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (loading) return ItemStack.EMPTY;
         if (cargo.isEmpty()) return ItemStack.EMPTY;
         // Get just any item
         List<ItemStack> bucket = cargo.iterator().next();
@@ -201,7 +247,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                 currentVolume--;
                 bucket.removeLast();
                 if (bucket.isEmpty()) {
-                    cargo.remove(bucket);
+                    cargo.removeIf(List::isEmpty); // it does not like mutating hash codes
                 }
             } else {
                 last.setCount(last.getCount() - actuallyRemoved);
@@ -210,18 +256,36 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return ItemHandlerHelper.copyStackWithSize(last, actuallyRemoved);
     }
 
+    /**
+     * Overwrites this handler's contents with a snapshot received from the server via
+     * {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}. Client-side only: it collapses
+     * the real multi-bucket cargo down to whatever is visible in the GUI, since the client only needs to
+     * render the exposed stack, not track every distinct item type on board.
+     */
+    public void applyClientSync(ItemStack exposedStack, int currentVolume, int currentWeight) {
+        this.cargo.clear();
+        if (!exposedStack.isEmpty()) {
+            List<ItemStack> bucket = new ArrayList<>(1);
+            bucket.add(exposedStack.copy());
+            this.cargo.add(bucket);
+        }
+        this.currentVolume = currentVolume;
+        this.currentWeight = currentWeight;
+    }
+
     public ItemStack getExposedStack() {
         if (cargo.isEmpty()) return ItemStack.EMPTY;
-        return cargo.iterator().next().getLast();
+        // Apparently the ItemStack is modified in place
+        List<ItemStack> bucket = cargo.iterator().next();
+        if (bucket.isEmpty()) {
+            return null;
+        }
+        return bucket.getLast().copy();
     }
 
     @Override
     public int getSlotLimit(int slot) {
         return 64;
-    }
-
-    public void stopLoading() {
-        this.loading = false;
     }
 
     public boolean isFull() {
@@ -230,6 +294,14 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     public int mass() {
         return currentWeight;
+    }
+
+    public int getCurrentVolume() {
+        return currentVolume;
+    }
+
+    public int getMaxVolume() {
+        return maxVolume;
     }
 
     public boolean massTooHigh() {

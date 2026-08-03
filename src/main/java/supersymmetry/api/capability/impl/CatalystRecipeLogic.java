@@ -16,7 +16,6 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.builders.logic.SuSyOverclockingLogic;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.recipes.properties.CatalystProperty;
@@ -61,7 +60,6 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
 
             // keep catalyst tier at NO_TIER unless info is found
             if (this.catalystInfo != null) {
-                SusyLog.logger.info("3r390r9");
                 this.requiredCatalystTier = property.getTier();
             }
         }

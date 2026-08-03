@@ -33,7 +33,9 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
 
     public MetaTileEntityCokingTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.COKING_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true) {
+
+        };
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {

@@ -1,18 +1,16 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,6 +18,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,11 +28,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import cam72cam.mod.entity.ModdedEntity;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -47,9 +54,11 @@ import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.MetaBlocks;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -57,25 +66,34 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.mixin.RenderDistanceMTE;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntitySoyuzBasic;
 import supersymmetry.common.entities.EntityTransporterErector;
+import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
-public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE {
+public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
-    private EntityRocket selectedRocket;
+    private EntitySoyuzBasic selectedRocket;
     private LaunchPadState state = LaunchPadState.EMPTY;
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
+    /**
+     * Optional. A rocket programmer along the track normally stamps the mission list onto the erector, but the
+     * configurer can also be dropped in here to program whatever rocket is standing on the pad.
+     */
+    protected final RocketConfigurerHandler configurerSlot = new RocketConfigurerHandler(this);
+    private boolean configWithinBudget = true;
 
     // Animation helpers
     private double supportAngle = Math.PI / 4;
-    private int reinitializationTimer = 0;
-    private boolean needsReinitialization = false;
 
     @SideOnly(Side.CLIENT)
     private BlockPos lightPos;
@@ -100,51 +118,134 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     CCC     ", "     CCC     ", "     CCC     ", "     CCC     ",
-                        "     CCC     ", "     CCC     ", "     CCC     ", "     RRR     ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
-                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", " L         L ", " L         L ", " L         L ", " L         L ",
-                        " L         L ", " L         L ", " L         L ", " L         L ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDCCCCCCCDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .aisle("DDDDDDDDDDDDD", "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ",
-                        "     FFF     ", "     FFF     ", "     FFF     ", "     FFF     ")
-                .aisle("DDDDDDSDDDDDD", "             ", "             ", "             ", "             ",
-                        "             ", "             ", "             ", "             ")
-                .where(' ', any())
+        String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
+        String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23: launch surface
+        String dcHoleTrack = "DDDDDDDDCCC CCCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
+        String dcHoleTrackLarge = "DDDDDDDDCC   CCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
+        String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23: self-row
+        String sp23 = "                       "; // 23 spaces
+        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23: reinforced foundation under track
+        String supp3 = "     CC   CCC   CC     "; // reinforced foundation under three supports
+        String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
+        String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
+        String l23 = "     LL         LL     "; // 6sp + L + 9sp + L + 6sp = 23
+        String cSides = "   CCCC         CCCC   "; // reinforced foundation underneath sides
+        String dad23 = "DDDDDDDD       DDDDDDDD"; // 8C + 7sp + 8C = 23
+        String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 reinforced foundation
+        String clasp = "     LLLLL   LLLLL     ";
+        String claspOut = "    lLLLLLLLLLLLLLl    ";
+
+        FactoryBlockPattern p = FactoryBlockPattern.start();
+        // 10 erector approach aisles
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23, ccc23,
+                rrr23);
+        // 2 extra tracks with the other two diagonal supports
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, ccc23, ccc23,
+                rrr23);
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, ccc23, ccc23,
+                rrr23);
+        // First separator
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Main platform (front half)
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+                sp23);
+        // Main platform (center — support pillars)
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
+                l23);
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
+                l23);
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+                cSides, l23,
+                l23);
+        // Main platform (back half)
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+                sp23);
+        aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Transition
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        // Back frame
+        aisleWithSpaceShort(p, fff23, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, fff23,
+                fff23,
+                fff23);
+        // One other separator
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, sp23, sp23, sp23);
+        // Controller
+        aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
+        return p.where(' ', any())
                 .where('A', air())
                 .where('S', selfPredicate())
                 .where('D', states(getFoundationState()).or(autoAbilities()))
                 .where('C', states(getReinforcedFoundationState()))
                 .where('F', frames(Materials.Steel))
                 .where('R', SuSyPredicates.rails())
-                .where('L', SuSyPredicates.hiddenStates(Blocks.AIR.getDefaultState(),
-                        SuSyBlocks.SUPPORT.getDefaultState()))
+                .where('L',
+                        SuSyPredicates.hiddenStates(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
+                .where('l',
+                        SuSyPredicates.hiddenStates(
+                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .build();
+    }
+
+    private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
+                                String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
+                                String v9, String v10, String v11, String v12, String v13) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat);
+    }
+
+    private void aisleWithSpaceShort(FactoryBlockPattern pattern, String repeat, String repea2,
+                                     String v1, String v2, String v3, String v4, String v5, String v6, String v7,
+                                     String v8,
+                                     String v9, String v10, String v11, String v12, String v13) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repea2, repea2, repea2, repea2, repea2,
+                repea2, repea2, repea2, repea2, repea2);
+    }
+
+    private void aisleWithClasp(FactoryBlockPattern pattern, String repeat, String clasp,
+                                String v1, String v2, String v3, String v4, String v5, String v6, String v7,
+                                String v8,
+                                String v9, String v10, String v11, String v12, String v13) {
+        // Repeat 30 times
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, clasp, repeat, repeat,
+                clasp, repeat, repeat, clasp, repeat,
+                repeat, clasp, repeat, repeat, clasp,
+                repeat, repeat, clasp, repeat, repeat);
     }
 
     public TraceabilityPredicate autoAbilities() {
@@ -166,7 +267,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        setTrainAABB();
+        setAABBs();
 
         this.hiddenBlocks = context.getOrDefault("Hidden", new ArrayList<>());
         World world = getWorld();
@@ -175,15 +276,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         // so actually no need to check !world.isRemote
         if (world != null) {
             disableBlockRendering(true);
-            this.fillHiddenBlocksWith(SuSyBlocks.SUPPORT.getDefaultState());
         }
-        if (this.needsReinitialization) {
-            this.setLaunchPadState(LaunchPadState.INITIALIZING);
-        } else {
-            findRocket();
-            if (this.selectedRocket != null) {
-                this.setLaunchPadState(LaunchPadState.LOADED);
-            }
+
+        findRocket();
+        if (this.selectedRocket != null) {
+            this.setLaunchPadState(LaunchPadState.LOADED);
         }
 
         this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
@@ -192,17 +289,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     @Override
-    public void onPlacement() {
-        super.onPlacement();
-        this.needsReinitialization = true;
-    }
-
-    @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        this.fillHiddenBlocksWith(Blocks.AIR.getDefaultState());
+        disableBlockRendering(false);
         this.trainAABB = null;
-        this.needsReinitialization = true;
+        this.state = LaunchPadState.INITIALIZING;
         this.inputInventory = new GTItemStackHandler(this, 0);
         this.inputFluidInventory = new FluidTankList(true);
     }
@@ -212,10 +303,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         return Textures.SOLID_STEEL_CASING;
     }
 
-    public void setTrainAABB() {
+    public void setAABBs() {
         // Had to make it overshoot a little :(
-        BlockPos offsetBottomLeft = new BlockPos(6, 5, 9);
-        BlockPos offsetTopRight = new BlockPos(-6, 20, 17);
+        BlockPos offsetBottomLeft = new BlockPos(6, 5, 12);
+        BlockPos offsetTopRight = new BlockPos(-6, 20, 14);
 
         switch (this.getFrontFacing()) {
             case EAST:
@@ -238,16 +329,16 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     public Vec3d getLaunchPosition() {
-        Vec3d offset = new Vec3d(0, 1, 6);
+        Vec3d offset = new Vec3d(0.5, 1, 7.5);
         switch (this.getFrontFacing()) {
             case EAST:
-                offset = new Vec3d(-6, 1, 0);
+                offset.rotateYaw((float) (-Math.PI / 2));
                 break;
             case SOUTH:
-                offset = new Vec3d(0, 1, -6);
+                offset.rotateYaw((float) Math.PI);
                 break;
             case WEST:
-                offset = new Vec3d(6, 1, 0);
+                offset.rotateYaw((float) (Math.PI / 2));
                 break;
             default:
                 break;
@@ -257,7 +348,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public AxisAlignedBB getRocketAABB() {
         Vec3d launchPosition = getLaunchPosition();
-        return new AxisAlignedBB(launchPosition, launchPosition).expand(2, 2, 2);
+        return new AxisAlignedBB(launchPosition, launchPosition).expand(2, 8, 2);
     }
 
     @Override
@@ -267,18 +358,32 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected void updateFormedValid() {
+        if (this.isFirstTick()) {
+            this.setLaunchPadState(LaunchPadState.INITIALIZING);
+        }
         switch (this.state) {
             case INITIALIZING:
-                reinitializationTimer++;
-                if (reinitializationTimer >= 20) {
-                    this.needsReinitialization = false;
-                    this.setLaunchPadState(LaunchPadState.EMPTY);
+                // Run mini versions of the later logic just to run through everything
+                updateSelectedErector();
+                findRocket();
+                if (checkRocket()) {
+                    if (selectedRocket.isCountdownStarted() &&
+                            selectedRocket.getLaunchTime() <= this.getWorld().getTotalWorldTime()) {
+                        this.setLaunchPadState(LaunchPadState.LAUNCHING);
+                    } else {
+                        this.setLaunchPadState(LaunchPadState.LOADED);
+                    }
+                    break;
                 }
-                break;
+                if (checkErector() && selectedErector.isRocketLoaded()) {
+                    this.setLaunchPadState(LaunchPadState.LOADING);
+                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
+                }
+                this.setLaunchPadState(LaunchPadState.EMPTY);
             case EMPTY:
-                if (this.getOffsetTimer() % 20 == 0) {
+                if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
-                    if (this.selectedErector != null) {
+                    if (checkErector() && selectedErector.isRocketLoaded()) {
                         this.setLaunchPadState(LaunchPadState.LOADING);
                         this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                     }
@@ -286,44 +391,48 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     break;
                 }
             case LOADING:
-                if (this.selectedErector == null || this.selectedErector.isDead()) {
+                if (!checkErector() || !this.selectedErector.isRocketLoaded()) {
                     this.setLaunchPadState(LaunchPadState.EMPTY);
                     break;
                 }
                 this.supportAngle = this.selectedErector.getLifterAngle();
                 if (this.selectedErector.getLifterAngle() >= Math.PI / 2) {
                     this.selectedErector.setRocketLoaded(false);
-                    spawnRocket();
+                    spawnRocket(this.selectedErector.getRocketNBT());
+                    setFuelingProgress(0);
                     this.setLaunchPadState(LaunchPadState.LOADED);
                 } else {
                     break;
                 }
             case LOADED:
-                if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                if (!checkRocket()) {
                     findRocket();
-                    if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                    if (!checkRocket()) {
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
                 }
-                loadCargo();
-                if (this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
+                if (this.getOffsetTimer() % 4 == 0) {
+                    setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
+                }
+                if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
             case LAUNCHING:
-                if (this.selectedErector != null) {
+                updateSelectedErector();
+                if (checkErector()) {
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
                 }
-                if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                if (!checkRocket()) {
                     findRocket();
-                    if (this.selectedRocket == null || this.selectedRocket.isDead) {
+                    if (!checkRocket()) {
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
-                if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountDownStarted()) {
+                if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {
                     this.selectedRocket.startCountdown(200);
                 }
                 if (this.selectedRocket.posY > this.getLaunchPosition().y + 40) {
@@ -334,29 +443,62 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     // In liters per second
-    private static final int MAX_FUELING_SPEED = 100;
+    private static final int MAX_FUELING_SPEED = 8000;
 
-    private void loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.inputInventory, selectedRocket.cargo);
-
+    private boolean loadCargo() {
+        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
+        if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
+            return true;
+        }
         RocketFuelEntry fuelEntry = selectedRocket.getFuel();
+
+        if (fuelEntry == null) {
+            List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()
+                    .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid())
+                    .distinct()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
+            if (possibleEntry.isEmpty()) {
+                return false;
+            }
+            fuelEntry = possibleEntry.get();
+            selectedRocket.setFuel(fuelEntry);
+        }
         var composition = fuelEntry.getComposition();
-        int unitsDrained = MAX_FUELING_SPEED;
+        // Round up for the composition
+        int totalMBPerUnit = composition.stream().mapToInt(Tuple::getSecond).sum();
+        int maxFuelingProgress = selectedRocket.getFuelVolume() + totalMBPerUnit - 1;
+        int unitsDrained = Math.min(maxFuelingProgress - this.fuelingProgress, MAX_FUELING_SPEED / totalMBPerUnit);
         for (var comp : composition) {
-            FluidStack drained = inputFluidInventory.drain(comp.getFirst().getFluid(MAX_FUELING_SPEED), false);
-            int amount = drained == null ? 0 : drained.amount;
+            FluidStack tryToDrain = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
+            FluidStack drained = inputFluidInventory.drain(tryToDrain, false);
             // Intentional integer division moment
-            unitsDrained = Math.min(amount, unitsDrained / comp.getSecond());
+            if (drained == null) {
+                unitsDrained = 0;
+                break;
+            }
+            unitsDrained = Math.min(drained.amount / comp.getSecond(), unitsDrained);
         }
+        setFuelingProgress(this.fuelingProgress + (unitsDrained * totalMBPerUnit));
         for (var comp : composition) {
-            FluidStack drained = inputFluidInventory.drain(comp.getFirst()
-                    .getFluid(comp.getSecond() * unitsDrained), true);
+            inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
+
+        return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
     private void setFuelingProgress(int fuelingProgress) {
         this.fuelingProgress = fuelingProgress;
         writeCustomData(SuSyDataCodes.UPDATE_FUEL_PROGRESS, (buf) -> buf.writeInt(fuelingProgress));
+    }
+
+    private void setConfigWithinBudget(boolean withinBudget) {
+        if (this.configWithinBudget != withinBudget) {
+            this.configWithinBudget = withinBudget;
+            writeCustomData(SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG, (buf) -> buf.writeBoolean(withinBudget));
+        }
     }
 
     @Override
@@ -370,7 +512,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     private void updateSelectedErector() {
-        if (this.selectedErector == null) {
+        if (!checkErector()) {
             List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, this.trainAABB);
 
             if (!trains.isEmpty()) {
@@ -394,21 +536,21 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     private void findRocket() {
-        List<EntityRocket> rockets = getWorld().getEntitiesWithinAABB(EntityRocket.class, getRocketAABB());
+        List<EntitySoyuzBasic> rockets = getWorld().getEntitiesWithinAABB(EntitySoyuzBasic.class, getRocketAABB());
         if (!rockets.isEmpty()) {
             this.selectedRocket = rockets.get(0);
         }
     }
 
-    public void spawnRocket() {
+    public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = this.getLaunchPosition();
-        this.selectedRocket = new EntityRocket(this.getWorld(), position, this.getFrontFacing().getHorizontalAngle());
-        if (this.selectedErector.getRocketNBT() != null) {
+        this.selectedRocket = new EntitySoyuzBasic(this.getWorld(), position,
+                this.getFrontFacing().getHorizontalAngle());
+        if (tag != null) {
             // Copy in all tags
-            for (Map.Entry<String, NBTBase> tag : selectedErector.getRocketNBT().tagMap.entrySet()) {
-                this.selectedRocket.getEntityData().setTag(tag.getKey(), tag.getValue());
+            for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {
+                this.selectedRocket.getEntityData().setTag(info.getKey(), info.getValue());
             }
-            this.selectedRocket.initializeCargo();
         }
         this.getWorld().spawnEntity(this.selectedRocket);
     }
@@ -418,13 +560,21 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.readFromNBT(data);
         this.state = LaunchPadState.valueOf(data.getString("state"));
         this.fuelingProgress = data.getInteger("fuelingProgress");
+        this.configurerSlot.deserializeNBT(data.getCompoundTag("configurer"));
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setString("state", this.state.name());
-        data.setInteger("fuelProgress", this.fuelingProgress);
+        data.setInteger("fuelingProgress", this.fuelingProgress);
+        data.setTag("configurer", this.configurerSlot.serializeNBT());
         return super.writeToNBT(data);
+    }
+
+    @Override
+    public void clearMachineInventory(NonNullList<ItemStack> itemBuffer) {
+        super.clearMachineInventory(itemBuffer);
+        clearInventory(itemBuffer, this.configurerSlot);
     }
 
     @Override
@@ -436,6 +586,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
         buf.writeEnumValue(this.state);
         buf.writeInt(this.fuelingProgress);
+        buf.writeBoolean(this.configWithinBudget);
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
+            disableBlockRendering(isStructureFormed());
+        }
     }
 
     @Override
@@ -443,6 +598,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.receiveInitialSyncData(buf);
         this.state = buf.readEnumValue(LaunchPadState.class);
         this.fuelingProgress = buf.readInt();
+        this.configWithinBudget = buf.readBoolean();
     }
 
     @Override
@@ -455,6 +611,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.state = buf.readEnumValue(LaunchPadState.class);
         } else if (dataId == SuSyDataCodes.UPDATE_FUEL_PROGRESS) {
             this.fuelingProgress = buf.readInt();
+        } else if (dataId == SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG) {
+            this.configWithinBudget = buf.readBoolean();
         } else {
             super.receiveCustomData(dataId, buf);
         }
@@ -471,7 +629,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             BlockPos pos = getPos();
 
             var v1 = pos.offset(left.getOpposite(), 10).offset(up.getOpposite());
-            var v2 = pos.offset(left, 10).offset(up, 31).offset(front.getOpposite(), 17);
+            var v2 = pos.offset(left, 10).offset(up, 38).offset(front.getOpposite(), 17);
             this.renderBounding = new AxisAlignedBB(v1, v2);
         }
         return renderBounding;
@@ -481,15 +639,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Nullable
     public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
-    }
-
-    protected void fillHiddenBlocksWith(IBlockState state) {
-        if (this.hiddenBlocks == null) {
-            return;
-        }
-        for (BlockPos pos : this.hiddenBlocks) {
-            getWorld().setBlockState(pos, state);
-        }
     }
 
     @Override
@@ -506,19 +655,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        if (this.state == LaunchPadState.INITIALIZING) {
+        if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("initialize", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
-        }
-        if (this.state == LaunchPadState.LOADING) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("protract", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
-        }
-        if (this.state == LaunchPadState.LAUNCHING) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("retract", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+                    .playOnce("retract")
+                    .playAndHold("protract"));
             return PlayState.CONTINUE;
         }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
@@ -532,18 +673,128 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         return this.factory;
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
+        if (isStructureFormed()) {
+            IAnimatableMTE.super.renderMetaTileEntity(x, y, z, partialTicks);
+        }
+    }
+
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         textList.add(new TextComponentTranslation("susy.launch_pad." + this.state.name().toLowerCase()));
+        if (this.state == LaunchPadState.LOADED && this.selectedRocket != null) {
+            int maxFuelingProgress = this.selectedRocket.getFuelVolume();
+            textList.add(new TextComponentTranslation("susy.launch_pad.gui.fuel_progress", this.fuelingProgress,
+                    maxFuelingProgress));
+        }
+        if (!this.configWithinBudget) {
+            textList.add(new TextComponentTranslation("susy.rocket_programmer.not_enough_budget"));
+        }
+    }
+
+    @Override
+    protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
+        return super.createUITemplate(entityPlayer)
+                .widget(new SlotWidget(this.configurerSlot, 0, 173, 79)
+                        .setBackgroundTexture(GuiTextures.SLOT_DARK)
+                        .setTooltipText("susy.launch_pad.gui.configurer_slot"));
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        return 65536; // 256 blocks rather than 64
     }
 
     public enum LaunchPadState {
-        INITIALIZING, // The launch pad is going through its initial animation of the supports coming out of the ground.
+        INITIALIZING, // The launch pad is literally just checking for existing entities.
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting process.
         LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket
-                // supports and remotely launch the rocket.
+        // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
+    }
+
+    @Override
+    public @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.LAUNCH_PAD_OVERLAY;
+    }
+
+    @Override
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
+                this.isStructureFormed(), this.isStructureFormed());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockPos getLightPos() {
+        if (this.lightPos == null) {
+            this.lightPos = getPos().offset(EnumFacing.UP, 6);
+        }
+        return lightPos;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public Vec3i getTransformation() {
+        if (this.transformation == null) {
+            EnumFacing front = getFrontFacing();
+            EnumFacing upwards = getUpwardsFacing();
+            boolean flipped = isFlipped();
+            EnumFacing back = front.getOpposite();
+            EnumFacing up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+
+            int xOff = back.getXOffset() * 7 + up.getXOffset() * -3;
+            int yOff = back.getYOffset() * 7 + up.getYOffset() * -3;
+            int zOff = back.getZOffset() * 7 + up.getZOffset() * -3;
+
+            this.transformation = new Vec3i(xOff, yOff, zOff);
+        }
+        return transformation;
+    }
+
+    @Override
+    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                CuboidRayTraceResult hitResult) {
+        if (this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
+                playerIn.getHeldItem(hand).isItemEqual(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm())) {
+            NBTTagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
+            if (tag != null) {
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                bp.readFromNBT(tag);
+                NBTTagCompound rocketTag = new NBTTagCompound();
+                rocketTag.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
+                rocketTag.setTag("rocket", bp.writeToNBT());
+                spawnRocket(rocketTag);
+                setFuelingProgress(0);
+                setLaunchPadState(LaunchPadState.LOADED);
+            }
+        }
+        return super.onRightClick(playerIn, hand, facing, hitResult);
+    }
+
+    public boolean checkErector() {
+        return this.selectedErector != null && !this.selectedErector.isDead();
+    }
+
+    public boolean checkRocket() {
+        return this.selectedRocket != null && !this.selectedRocket.isDead;
+    }
+
+    // stupid annoying issue with part checking on chunk reloads
+    @Override
+    public void checkStructurePattern() {
+        TileEntity te = this.getWorld().getTileEntity(getPos());
+        if (te != this.getHolder()) {
+            if (te instanceof MetaTileEntityHolder holder &&
+                    holder.getMetaTileEntity() instanceof MetaTileEntityLaunchPad launchPad) {
+                launchPad.invalidateStructure();
+            }
+        }
+        super.checkStructurePattern();
     }
 }

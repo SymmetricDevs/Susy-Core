@@ -44,6 +44,7 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
 
@@ -190,8 +191,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                             ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
                             ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
             BlockPos tempPos = getMetaTileEntity().getPos().offset(leftSide, 4).offset(backSide);
-            return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
-                    .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
+            return RecipeCheckUtils.checkBiomeRequirement(recipe, getMetaTileEntity().getWorld(), tempPos);
         }
 
         @Override

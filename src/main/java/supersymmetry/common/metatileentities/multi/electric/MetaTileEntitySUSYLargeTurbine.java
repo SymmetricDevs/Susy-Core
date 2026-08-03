@@ -72,8 +72,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
-        TraceabilityPredicate casingPredicate = states(this.casingState).setMinGlobalLimited(52)
-                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
+        TraceabilityPredicate casingPredicate = states(this.casingState).setMinGlobalLimited(52);
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)
                 .setMinGlobalLimited(1);
 

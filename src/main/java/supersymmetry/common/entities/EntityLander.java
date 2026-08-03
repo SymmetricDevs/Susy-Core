@@ -8,26 +8,48 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.EntityGuiData;
+import com.cleanroommc.modularui.factory.GuiFactories;
+import com.cleanroommc.modularui.network.NetworkUtils;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandler;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
+
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.modules.ModuleManager;
+import io.netty.buffer.ByteBuf;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -36,34 +58,46 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.Supersymmetry;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
+import supersymmetry.common.EventHandlers;
+import supersymmetry.common.event.DimensionRidingSwapData;
+import supersymmetry.common.event.GravityHandler;
+import supersymmetry.common.network.CPacketRocketInteract;
+import supersymmetry.common.rocketry.RocketConfiguration;
+import supersymmetry.common.rocketry.instruments.InstrumentLander;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
-public class EntityLander extends EntityAbstractRocket implements IAnimatable, IInventory, IInteractionObject {
+public class EntityLander extends EntityAbstractRocket
+                          implements IAnimatable, IInventory, IGuiHolder<EntityGuiData>, IEntityAdditionalSpawnData {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
             .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> AGE = EntityDataManager
-            .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
 
     private AnimationFactory factory = new AnimationFactory(this);
+    public static final double MAX_LAUNCH_MASS = 10000;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
     public EntityLander(World worldIn) {
         super(worldIn);
+        setSize(3, 5);
     }
 
     public EntityLander(World worldIn, double x, double y, double z) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
-        this.setEntityBoundingBox(new AxisAlignedBB(x - 0.5, y, z - 0.5, x + 0.5, y + 2, z + 0.5));
     }
 
     public EntityLander(World worldIn, BlockPos pos) {
@@ -92,7 +126,7 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @SideOnly(Side.CLIENT)
     protected void spawnFlightParticles(boolean goingUp) {
-        if (this.isDead || (goingUp && this.getTimeSinceLanding() > 500)) {
+        if (this.isDead) {
             return;
         }
 
@@ -203,9 +237,9 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
 
     @Override
     protected void entityInit() {
+        super.entityInit();
         this.dataManager.register(HAS_LANDED, false);
         this.dataManager.register(TIME_SINCE_LANDING, 0);
-        this.dataManager.register(AGE, 0);
     }
 
     @Override
@@ -213,7 +247,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.writeEntityToNBT(compound);
         compound.setBoolean("landed", this.hasLanded());
         compound.setInteger("time_since_landing", this.getTimeSinceLanding());
-        compound.setTag("cargo", this.cargo.serializeNBT());
     }
 
     @Override
@@ -221,18 +254,60 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.readEntityFromNBT(compound);
         this.setLanded(compound.getBoolean("landed"));
         this.setTimeSinceLanding(compound.getInteger("time_since_landing"));
-        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
+    }
+
+    @Override
+    protected void act() {
+        // Land on next planet
+        RocketConfiguration.MissionConfiguration next = InstrumentLander.getMissionConfiguration(this);
+        if (next == null) {
+            SusyLog.logger.error(
+                    "The next mission really should have been defined if the lander launched... welp, you deserve this NPE");
+        }
+        Entity passenger = getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+        // Cannot use TeleportHandler here because it doesn't get the new entity
+        Entity teleported = InstrumentLander.spawnLander(this, next, true);
+        if (passenger != null) {
+            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
+        }
+    }
+
+    @Override
+    public void startCountdown(int length) {
+        if (InstrumentLander.getMissionConfiguration(this) == null) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
+            if (cargo.isEmpty()) {
+                this.setDead();
+            }
+            return;
+        }
+        double gravMult = GravityHandler.getGravityMultiplier(this.world);
+        if (gravMult > 0.4) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.gravity_too_high"));
+            if (cargo.isEmpty()) {
+                this.setDead();
+            }
+            return;
+        }
+        if (getCargoMass() > MAX_LAUNCH_MASS) {
+            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.too_heavy"));
+            return;
+        }
+
+        super.startCountdown(length);
+    }
+
+    public void sendMessageToPassengers(TextComponentTranslation translation) {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(translation, true);
+            }
+        }
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        if (this.canPlayerDismount()) {
-            for (Entity rider : this.getRecursivePassengers()) {
-                rider.dismountRidingEntity();
-            }
-        }
 
         if (!world.isRemote) {
             if (!this.onGround && this.motionY < 0.0D && this.posY < 256) {
@@ -273,7 +348,14 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
                     this.motionY *= 1.1D;
                 }
                 this.handleCollidedBlocks(true);
-                this.isDead = this.posY > 300;
+            }
+            if (this.posY > 1000 && isLaunched()) {
+                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                    this.setDead();
+                } else {
+                    act();
+                    this.setActed(true);
+                }
             }
         } else {
             if (!this.hasLanded()) {
@@ -282,15 +364,12 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
             if (this.isLaunched()) {
                 this.spawnFlightParticles(true);
             }
-        }
-
-        this.dataManager.set(AGE, this.dataManager.get(AGE) + 1);
-
-        if (world.isRemote && this.soundDropPod != null) {
-            if (!this.hasLanded() || this.isLaunched()) {
-                soundDropPod.startPlaying();
-            } else {
-                soundDropPod.stopPlaying();
+            if (soundDropPod != null) {
+                if (!this.hasLanded() || this.isLaunched()) {
+                    soundDropPod.startPlaying();
+                } else {
+                    soundDropPod.stopPlaying();
+                }
             }
         }
     }
@@ -298,12 +377,6 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
     @Override
     public RocketFuelEntry getFuel() {
         return null;
-    }
-
-    @Override
-    public double getCargoMass() {
-        // Not worrying about this
-        return 0;
     }
 
     @Override
@@ -382,6 +455,28 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         super.onAddedToWorld();
         if (this.world.isRemote) {
             setupDropPodSound();
+        }
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        NBTTagCompound cargoTag = new NBTTagCompound();
+        if (this.cargo != null) {
+            cargoTag = this.cargo.serializeNBT();
+        }
+        ByteBufUtils.writeTag(buffer, cargoTag);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buffer) {
+        try {
+            NBTTagCompound cargoTag = ByteBufUtils.readTag(buffer);
+            if (this.cargo == null) {
+                this.cargo = new CargoItemStackHandler(0, 0);
+            }
+            this.cargo.deserializeNBT(cargoTag);
+        } catch (Exception e) {
+            // cargo will be synced through UI or other means if spawn data fails
         }
     }
 
@@ -477,21 +572,189 @@ public class EntityLander extends EntityAbstractRocket implements IAnimatable, I
         this.cargo.clear();
     }
 
-    @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerChest(playerInventory, this, playerIn);
-    }
-
-    @Override
-    public String getGuiID() {
-        return "supersymmetry:lander";
-    }
-
     public CargoItemStackHandler getInventory() {
         return this.cargo;
     }
 
     public void setInventory(CargoItemStackHandler cargoItemStackHandler) {
         this.cargo = cargoItemStackHandler;
+    }
+
+    @Override
+    public ModularPanel buildUI(EntityGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        syncManager.syncValue("cargo", new CargoSyncHandler(this.cargo));
+
+        SlotGroup cargoInventory = new SlotGroup("cargo", 1, 1000, true);
+        syncManager.registerSlotGroup(cargoInventory);
+
+        ItemStackHandler insertScratch = new ItemStackHandler(1);
+
+        ModularSlot insertSlot = new ModularSlot(insertScratch, 0)
+                .filter(SuSyUtility::isAllowedItemForSpace)          // reuse cargo's own gate
+                .changeListener((newItem, onlyAmount, client, init) -> {
+                    if (init || newItem.isEmpty()) return;
+                    ItemStack remainder = cargo.insertItem(0, newItem, false);
+                    insertScratch.setStackInSlot(0, remainder);       // leftover stays visible
+                });
+
+        IItemHandler extractView = new IItemHandler() {
+
+            public int getSlots() {
+                return 1;
+            }
+
+            public ItemStack getStackInSlot(int s) {
+                return cargo.getExposedStack();
+            }
+
+            public ItemStack insertItem(int s, ItemStack st, boolean sim) {
+                return st;
+            }
+
+            public ItemStack extractItem(int s, int amt, boolean sim) {
+                return cargo.extractItem(0, amt, sim);
+            }
+
+            public int getSlotLimit(int s) {
+                return 64;
+            }
+        };
+
+        ModularSlot extractSlot = new ModularSlot(extractView, 0) {
+
+            @Override
+            public void putStack(@NotNull ItemStack stack) {
+                cargo.takeFromExposedStack(stack);
+            }
+        }.accessibility(false, true);
+
+        syncManager.addCloseListener(player -> {
+            ItemStack leftover = insertScratch.getStackInSlot(0);
+            if (!leftover.isEmpty()) {
+                player.inventory.placeItemBackInInventory(player.world, leftover); // returns fit, drops overflow
+                insertScratch.setStackInSlot(0, ItemStack.EMPTY);
+            }
+        });
+
+        return ModularPanel.defaultPanel("lander")
+                .child(new Flow(GuiAxis.X)
+                        .top(18)
+                        .margin(7, 0)
+                        .widthRel(1f)
+                        .coverChildrenHeight()
+                        .child(new ItemSlot().slot(insertSlot.singletonSlotGroup()).overlay(SusyGuiTextures.OVERLAY_IN))
+                        .child(new ItemSlot().slot(extractSlot.slotGroup(cargoInventory))
+                                .overlay(SusyGuiTextures.OVERLAY_OUT))
+                        .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
+                                .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
+                                        .rightRel(0.5f).height(18))
+                                .child(IKey.lang("susy.lander.volume", () -> new Object[] { getCargoVolumeString() })
+                                        .asWidget()
+                                        .rightRel(0.5f).height(18))))
+                .bindPlayerInventory();
+    }
+
+    @Override
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        if (!player.world.isRemote && player.isSneaking()) {
+            GuiFactories.entity().open(player, this);
+            return true;
+        }
+        player.startRiding(this);
+        return false;
+    }
+
+    @Override // The override is about leashing the rocket, which makes it alright to completely ignore
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d hitVec, EnumHand hand) {
+        if (player.isRidingSameEntity(this) || hitVec.length() > 7) return EnumActionResult.PASS;
+        if (!this.world.isRemote) {
+            processInitialInteract(player, hand);
+        } else {
+            GregTechAPI.networkHandler.sendToServer(new CPacketRocketInteract(this, hand, hitVec));
+        }
+        return EnumActionResult.SUCCESS;
+    }
+
+    @Override
+    public double getCargoMass() {
+        double mass = 0;
+        for (Entity passenger : getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                mass += 70;
+                for (ItemStack stack : player.inventory.mainInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.armorInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                for (ItemStack stack : player.inventory.offHandInventory) {
+                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                }
+                if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
+                    mass += (double) BaublesModule.getBaubleMass(player) / 1000;
+                }
+            }
+        }
+        return mass + (double) cargo.mass() / 1000;
+    }
+
+    public String getCargoVolumeString() {
+        return cargo.getCurrentVolume() + "/" + cargo.getMaxVolume();
+    }
+
+    /**
+     * Pushes {@link CargoItemStackHandler}'s aggregate state (exposed stack, volume, weight) to the client
+     * every tick it changes, regardless of what caused the change (GUI interaction, a landing pad moving
+     * items in/out, etc). The client mirrors the snapshot into its own {@code cargo} instance so that the
+     * existing slot views and mass/volume labels, which all read directly from {@code cargo}, stay correct
+     * without needing to know about the sync packet themselves.
+     */
+    public static class CargoSyncHandler extends SyncHandler {
+
+        private static final int SYNC_CARGO = 0;
+
+        private final CargoItemStackHandler cargo;
+        private ItemStack lastExposedStack = ItemStack.EMPTY;
+        private int lastVolume = -1;
+        private int lastWeight = -1;
+
+        public CargoSyncHandler(CargoItemStackHandler cargo) {
+            this.cargo = cargo;
+        }
+
+        @Override
+        public void detectAndSendChanges(boolean init) {
+            ItemStack exposedStack = cargo.getExposedStack();
+            if (exposedStack == null) exposedStack = ItemStack.EMPTY;
+            int volume = cargo.getCurrentVolume();
+            int weight = cargo.mass();
+            if (init || volume != this.lastVolume || weight != this.lastWeight ||
+                    !ItemStack.areItemStacksEqual(exposedStack, this.lastExposedStack)) {
+                this.lastExposedStack = exposedStack.copy();
+                this.lastVolume = volume;
+                this.lastWeight = weight;
+                ItemStack toSend = exposedStack;
+                syncToClient(SYNC_CARGO, buffer -> {
+                    buffer.writeItemStack(toSend);
+                    buffer.writeVarInt(volume);
+                    buffer.writeVarInt(weight);
+                });
+            }
+        }
+
+        @Override
+        public void readOnClient(int id, PacketBuffer buf) {
+            if (id == SYNC_CARGO) {
+                ItemStack exposedStack = NetworkUtils.readItemStack(buf);
+                int volume = buf.readVarInt();
+                int weight = buf.readVarInt();
+                this.cargo.applyClientSync(exposedStack, volume, weight);
+            }
+        }
+
+        @Override
+        public void readOnServer(int id, PacketBuffer buf) {
+            // cargo is only ever mutated server-side through gameplay actions, never from a client packet
+        }
     }
 }

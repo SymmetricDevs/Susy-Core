@@ -23,12 +23,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
@@ -42,6 +44,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeMapMultiblock {
 
@@ -62,6 +65,14 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
 
     public MetaTileEntityNaturalDraftCoolingTower(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this) {
+
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity()) &&
+                        super.checkRecipe(recipe);
+            }
+        };
     }
 
     @Override
