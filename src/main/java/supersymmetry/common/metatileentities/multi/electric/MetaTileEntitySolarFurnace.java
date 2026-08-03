@@ -3,12 +3,12 @@ package supersymmetry.common.metatileentities.multi.electric;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.heliostats;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -165,8 +165,7 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
         return Textures.FROST_PROOF_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HEAT_EXCHANGER_OVERLAY;
     }

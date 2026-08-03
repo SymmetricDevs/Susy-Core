@@ -3,8 +3,6 @@ package supersymmetry.common.command;
 import java.util.Collections;
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -14,6 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * /tpdim <dimId> [x] [y] [z]

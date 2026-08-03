@@ -2,8 +2,6 @@ package supersymmetry.common.blocks;
 
 import java.util.Random;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -87,8 +87,7 @@ public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarCon
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

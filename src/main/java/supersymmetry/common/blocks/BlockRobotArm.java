@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
@@ -55,8 +54,7 @@ public class BlockRobotArm extends VariantHorizontalRotatableBlock<BlockRobotArm
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

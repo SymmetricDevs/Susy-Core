@@ -6,8 +6,6 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenS
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -169,8 +168,7 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SideOnly(Side.CLIENT)
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.MINING_DRILL_OVERLAY;

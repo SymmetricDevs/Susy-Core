@@ -3,8 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +26,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
@@ -566,8 +565,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         return Textures.STABLE_TITANIUM_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LAUNCH_PAD_OVERLAY;
     }

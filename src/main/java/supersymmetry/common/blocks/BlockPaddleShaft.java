@@ -2,8 +2,6 @@ package supersymmetry.common.blocks;
 
 import static net.minecraft.block.BlockDirectional.FACING;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -21,6 +19,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -37,8 +36,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         setDefaultState(getState(ShaftType.IRON).withProperty(FACING, EnumFacing.NORTH));
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
                                             @NotNull EntityLivingBase placer) {
@@ -46,8 +44,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
                 EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<ShaftType> enumClass = ShaftType.class;
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -60,8 +57,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
         return getDefaultState().withProperty(FACING, enumfacing);
@@ -72,8 +68,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         return state.getValue(FACING).ordinal();
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
@@ -107,8 +102,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

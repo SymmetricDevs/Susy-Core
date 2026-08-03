@@ -1,8 +1,7 @@
 package supersymmetry.api.space.dimension;
 
-import org.jspecify.annotations.Nullable;
-
 import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.api.space.RenderableCelestialObject;
 

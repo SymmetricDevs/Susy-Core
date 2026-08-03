@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;

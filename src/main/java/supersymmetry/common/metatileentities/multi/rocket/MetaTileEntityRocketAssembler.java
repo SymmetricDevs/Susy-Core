@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,6 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import cam72cam.mod.entity.ModdedEntity;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
@@ -347,8 +346,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         return false;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.AFS_OVERLAY;
     }
