@@ -2,8 +2,6 @@ package supersymmetry.api.blocks;
 
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_HORIZONTAL_BEHAVIOR;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -19,6 +17,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 import gregtech.common.items.tool.rotation.CustomBlockRotations;
@@ -34,8 +33,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         CustomBlockRotations.registerCustomRotation(this, BLOCK_HORIZONTAL_BEHAVIOR);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
@@ -53,8 +51,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return getDefaultState().withProperty(VARIANT, variant).withProperty(FACING, facing);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantHorizontalRotatableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -67,16 +64,13 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return state.getValue(VARIANT).ordinal() * 4;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 4;
         int j = meta % 4;
 
         EnumFacing enumfacing = EnumFacing.byHorizontalIndex(j);
-        return getDefaultState()
-                .withProperty(FACING, enumfacing)
-                .withProperty(VARIANT, VALUES[i % VALUES.length]);
+        return getDefaultState().withProperty(FACING, enumfacing).withProperty(VARIANT, VALUES[i % VALUES.length]);
     }
 
     @Override
@@ -84,8 +78,7 @@ public class VariantHorizontalRotatableBlock<T extends Enum<T> & IStringSerializ
         return state.getValue(VARIANT).ordinal() * 4 + state.getValue(FACING).getHorizontalIndex();
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);

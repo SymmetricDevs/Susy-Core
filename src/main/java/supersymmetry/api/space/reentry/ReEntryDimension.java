@@ -82,48 +82,36 @@ public class ReEntryDimension {
     /**
      * Convenience builder that wires up the standard Earth re-entry scene.
      *
-     * @param dimId       dimension id to register
-     * @param targetDimId surface dimension the player transfers into
+     * @param dimId
+     *                    dimension id to register
+     * @param targetDimId
+     *                    surface dimension the player transfers into
      */
     public static ReEntryDimension createEarthReEntry(int dimId, int targetDimId) {
         long leoTicks = 110_400L;
 
-        Cubemap sunCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
+        Cubemap sunCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
         RenderableCelestialObject sun = new RenderableCelestialObject(CelestialObjects.SUN, sunCubemap)
-                .setAngularSize(20.0f)
-                .setOrbitalPeriod(leoTicks)
-                .setOrbitalInclination(23.5f);
+                .setAngularSize(20.0f).setOrbitalPeriod(leoTicks).setOrbitalInclination(23.5f);
 
-        Cubemap moonCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
+        Cubemap moonCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
         RenderableCelestialObject moon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
-                .setAngularSize(4.0f)
-                .setOrbitalPeriod(708_734L)
-                .setOrbitalInclination(5.14f)
-                .setTidallyLocked(true)
+                .setAngularSize(4.0f).setOrbitalPeriod(708_734L).setOrbitalInclination(5.14f).setTidallyLocked(true)
                 .setSunReference(sun);
 
-        Cubemap earthCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
+        Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
         RenderableCelestialObject earth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
-                .setAngularSize(180.0f)          // rendered size is overridden per-frame by the renderer
-                .setFixedDirection(0, -1, 0);    // directly below
+                .setAngularSize(180.0f) // rendered size is overridden per-frame by the renderer
+                .setFixedDirection(0, -1, 0); // directly below
 
         ReEntryRenderer renderer = null;
         if (FMLLaunchHandler.side() == Side.CLIENT) {
-            renderer = new ReEntryRenderer()
-                    .setSunObject(sun)
-                    .setEarthObject(earth, earthCubemap, leoTicks)
+            renderer = new ReEntryRenderer().setSunObject(sun).setEarthObject(earth, earthCubemap, leoTicks)
                     .setCelestialObjects(moon);
         }
 
-        ReEntryDimension dim = new ReEntryDimension(dimId, "earth_reentry")
-                .setOrbitalPeriod(leoTicks)
-                .setTransferAltitude(5000f)
-                .setTargetDimension(targetDimId)
-                .setGravity(0.0f)
-                .setAmbientLight(0.02f)
+        ReEntryDimension dim = new ReEntryDimension(dimId, "earth_reentry").setOrbitalPeriod(leoTicks)
+                .setTransferAltitude(5000f).setTargetDimension(targetDimId).setGravity(0.0f).setAmbientLight(0.02f)
                 .setRenderer(renderer);
 
         dim.renderableEarth = earth;

@@ -3,8 +3,8 @@ package supersymmetry.common.world.gen;
 import net.minecraft.block.state.IBlockState;
 
 /**
- * A simple (small) impact crater with a bowl-shaped profile.
- * Diameter is typically below 80 blocks.
+ * A simple (small) impact crater with a bowl-shaped profile. Diameter is
+ * typically below 80 blocks.
  */
 public class SimpleCrater extends CraterBase {
 

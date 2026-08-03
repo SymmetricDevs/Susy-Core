@@ -16,9 +16,9 @@ public enum TraverseOptions implements ITraverseOption {
 
     CONNECTING(FIND_TO_CONNECT, CONNECTOR),
     DISCONNECTING(FIND_CONNECTED, DISCONNECTOR),
-    BLOCKING(FIND_CONNECTED, BLOCKER),
-    UNBLOCKING(FIND_CONNECTED, UNBLOCKER),
-    ;
+    BLOCKING(FIND_CONNECTED,
+            BLOCKER),
+    UNBLOCKING(FIND_CONNECTED, UNBLOCKER),;
 
     public static final Int2ObjectArrayMap<ITraverseOption> COLORING = new Int2ObjectArrayMap<>(
             1 + EnumDyeColor.values().length);
@@ -89,9 +89,10 @@ public enum TraverseOptions implements ITraverseOption {
             List<EnumFacing> ret = new ArrayList<>(1);
 
             for (EnumFacing facing : EnumFacing.values()) {
-                if (facing == from) continue;
+                if (facing == from)
+                    continue;
                 TileEntity other = pipe.getNeighbor(facing);
-                if (other instanceof IPipeTile<?, ?>otherPipe && pipe.getClass().isAssignableFrom(other.getClass()) &&
+                if (other instanceof IPipeTile<?, ?> otherPipe && pipe.getClass().isAssignableFrom(other.getClass()) &&
                         otherPipe.getConnections() == 0) {
                     if (ret.isEmpty()) {
                         /// Adding the first candidate
@@ -107,15 +108,15 @@ public enum TraverseOptions implements ITraverseOption {
             return ret;
         };
 
-        /// Returns the other facing this pipe is connected to, for DISCONNECTING operation type
-        /// Returns null if:
+        /// Returns the other facing this pipe is connected to, for DISCONNECTING operation type Returns null if:
         /// 1) The pipe is not connected to any other side
         /// 2) The pipe is connected to more than 1 side among other sides
         static final PathFinder FIND_CONNECTED = (from, pipe) -> {
             List<EnumFacing> ret = new ArrayList<>(1);
 
             for (EnumFacing facing : EnumFacing.values()) {
-                if (facing == from) continue;
+                if (facing == from)
+                    continue;
                 if (pipe.isConnected(facing)) {
                     if (ret.isEmpty()) {
                         /// Adding the first candidate
@@ -135,7 +136,8 @@ public enum TraverseOptions implements ITraverseOption {
         static final PathFinder FIND_ALL_CONNECTED = (from, pipe) -> {
             List<EnumFacing> ret = new ArrayList<>(5);
             for (EnumFacing facing : EnumFacing.values()) {
-                if (facing == from) continue;
+                if (facing == from)
+                    continue;
                 if (pipe.isConnected(facing)) {
                     ret.add(facing);
                 }

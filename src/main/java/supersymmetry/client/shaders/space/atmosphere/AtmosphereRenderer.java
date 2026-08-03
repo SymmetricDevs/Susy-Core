@@ -45,10 +45,10 @@ public class AtmosphereRenderer {
         lutDirty = true;
     }
 
-    public void render(float[] capturedView, float[] capturedProj,
-                       float[] sunDir, float planetY, float scale) {
+    public void render(float[] capturedView, float[] capturedProj, float[] sunDir, float planetY, float scale) {
         if (!ShaderManager.shadersAllowed()) {
-            if (!loggedOnce) SusyLog.logger.warn("[Atmos] shadersAllowed=false, skipping");
+            if (!loggedOnce)
+                SusyLog.logger.warn("[Atmos] shadersAllowed=false, skipping");
             loggedOnce = true;
             return;
         }
@@ -60,13 +60,12 @@ public class AtmosphereRenderer {
             bakeMultipleScatteringLut();
         }
 
-        int prog = ShaderManager.getRawProgram("atmosphere_orbital.vert",
-                "atmosphere_orbital.frag");
+        int prog = ShaderManager.getRawProgram("atmosphere_orbital.vert", "atmosphere_orbital.frag");
         if (!loggedOnce) {
-            SusyLog.logger.info("[Atmos] progId={} lutTex={} lutFbo={} sunDir=({},{},{})",
-                    prog, lutTex, lutFbo, sunDir[0], sunDir[1], sunDir[2]);
-            SusyLog.logger.info("[Atmos] planetY={} scale={} bottomRadius={} topRadius={}",
-                    planetY, scale, bottomRadius, topRadius);
+            SusyLog.logger.info("[Atmos] progId={} lutTex={} lutFbo={} sunDir=({},{},{})", prog, lutTex, lutFbo,
+                    sunDir[0], sunDir[1], sunDir[2]);
+            SusyLog.logger.info("[Atmos] planetY={} scale={} bottomRadius={} topRadius={}", planetY, scale,
+                    bottomRadius, topRadius);
             loggedOnce = true;
         }
         if (prog <= 0) {
@@ -80,9 +79,7 @@ public class AtmosphereRenderer {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -129,8 +126,7 @@ public class AtmosphereRenderer {
     }
 
     private void bakeLut() {
-        int prog = ShaderManager.getRawProgram("transmittance_lut.vert",
-                "transmittance_lut.frag");
+        int prog = ShaderManager.getRawProgram("transmittance_lut.vert", "transmittance_lut.frag");
         SusyLog.logger.info("[Atmos] bakeLut progId={}", prog);
         if (prog <= 0) {
             SusyLog.logger.error("[Atmos] transmittance_lut shader failed to compile");
@@ -183,7 +179,8 @@ public class AtmosphereRenderer {
     }
 
     private void bakeMultipleScatteringLut() {
-        // Uses GL 4.3 compute shader - dispatched as MS_LUT_SIZE x MS_LUT_SIZE workgroups
+        // Uses GL 4.3 compute shader - dispatched as MS_LUT_SIZE x MS_LUT_SIZE
+        // workgroups
         // Each workgroup (8x8 threads) computes one texel via parallel reduction
         int prog = ShaderManager.getRawComputeProgram("multiple_scattering_lut.comp");
         if (prog <= 0) {
@@ -231,7 +228,8 @@ public class AtmosphereRenderer {
     }
 
     private void ensureGLResources() {
-        if (lutTex != -1) return;
+        if (lutTex != -1)
+            return;
 
         FloatBuffer v = BufferUtils.createFloatBuffer(8);
         v.put(new float[] { -1, -1, 1, -1, -1, 1, 1, 1 }).flip();
@@ -242,8 +240,7 @@ public class AtmosphereRenderer {
 
         lutTex = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lutTex);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGB16F,
-                LUT_SIZE_W, LUT_SIZE, 0, GL11.GL_RGB, GL11.GL_FLOAT,
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGB16F, LUT_SIZE_W, LUT_SIZE, 0, GL11.GL_RGB, GL11.GL_FLOAT,
                 (java.nio.ByteBuffer) null);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
@@ -259,17 +256,16 @@ public class AtmosphereRenderer {
         // Multiple scattering LUT texture (no FBO needed - uses image binding)
         msLutTex = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, msLutTex);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F,
-                MS_LUT_SIZE, MS_LUT_SIZE, 0, GL11.GL_RGBA, GL11.GL_FLOAT,
-                (java.nio.ByteBuffer) null);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, MS_LUT_SIZE, MS_LUT_SIZE, 0, GL11.GL_RGBA,
+                GL11.GL_FLOAT, (java.nio.ByteBuffer) null);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
-        SusyLog.logger.info("[Atmos] GL resources created: quadVbo={} lutTex={} lutFbo={} msLutTex={}",
-                quadVbo, lutTex, lutFbo, msLutTex);
+        SusyLog.logger.info("[Atmos] GL resources created: quadVbo={} lutTex={} lutFbo={} msLutTex={}", quadVbo, lutTex,
+                lutFbo, msLutTex);
     }
 
     private void drawQuad() {
@@ -284,7 +280,8 @@ public class AtmosphereRenderer {
 
     private void setMat4(int p, String n, float[] m) {
         int l = GL20.glGetUniformLocation(p, n);
-        if (l < 0) return;
+        if (l < 0)
+            return;
         fb16.clear();
         fb16.put(m).flip();
         GL20.glUniformMatrix4(l, false, fb16);

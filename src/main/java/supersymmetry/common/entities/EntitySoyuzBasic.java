@@ -49,7 +49,8 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         super(worldIn, x, y, z, rotationYaw);
     }
 
-    // Hull dimensions. Subclasses that reuse this rocket's behaviour with a smaller model override these; they are
+    // Hull dimensions. Subclasses that reuse this rocket's behaviour with a smaller
+    // model override these; they are
     // called from the constructor, so implementations must return constants.
 
     protected float getRocketWidth() {
@@ -61,7 +62,8 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     }
 
     /**
-     * Half-width of the collision box. Wider than the hull so that it covers the strap-on boosters.
+     * Half-width of the collision box. Wider than the hull so that it covers the
+     * strap-on boosters.
      */
     protected double getCollisionRadius() {
         return 5;
@@ -75,14 +77,16 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     }
 
     /**
-     * Lowest point on the hull, in blocks above the base, where a player can climb aboard.
+     * Lowest point on the hull, in blocks above the base, where a player can climb
+     * aboard.
      */
     protected double getBoardingWindowMin() {
         return 37;
     }
 
     /**
-     * Highest point on the hull, in blocks above the base, where a player can climb aboard.
+     * Highest point on the hull, in blocks above the base, where a player can climb
+     * aboard.
      */
     protected double getBoardingWindowMax() {
         return 44;
@@ -108,8 +112,7 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         } else {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
-                        .getCopyOf(rocketNBT.getString("name"));
+                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
                 blueprint.readFromNBT(rocketNBT);
                 BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
                 if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
@@ -135,7 +138,8 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     @Override
     public void setDead() {
         super.setDead();
-        if (world.isRemote && soundRocket != null) soundRocket.stopPlaying();
+        if (world.isRemote && soundRocket != null)
+            soundRocket.stopPlaying();
     }
 
     @Override
@@ -213,8 +217,8 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
             // Raise upwards until the passenger no longer intersects anything in the world
             while (world.collidesWithAnyBlock(pAABB)) {
                 newPos = newPos.add(0, 0.5, 0);
-                pAABB = new AxisAlignedBB(newPos.x - (double) f, newPos.y, newPos.z - (double) f,
-                        newPos.x + (double) f, newPos.y + (double) f1, newPos.z + (double) f);
+                pAABB = new AxisAlignedBB(newPos.x - (double) f, newPos.y, newPos.z - (double) f, newPos.x + (double) f,
+                        newPos.y + (double) f1, newPos.z + (double) f);
             }
             passenger.setPositionAndUpdate(newPos.x, newPos.y, newPos.z);
         }

@@ -144,15 +144,18 @@ public class WorldProviderPlanet extends WorldProvider {
 
     public boolean isEclipse(float partialTicks) {
         PlanetoidHandler planet = getPlanet();
-        if (planet == null || !planet.hasCustomSky()) return false;
+        if (planet == null || !planet.hasCustomSky())
+            return false;
 
         SuSySkyRenderer renderer = planet.getSuSySkyRenderer();
-        if (renderer == null) return false;
+        if (renderer == null)
+            return false;
 
         RenderableCelestialObject sun = renderer.getSunObject();
         RenderableCelestialObject primaryBody = renderer.getPrimaryBody(); // Earth on the Moon
 
-        if (sun == null || primaryBody == null) return false;
+        if (sun == null || primaryBody == null)
+            return false;
 
         long worldTime = world.getWorldTime();
 
@@ -165,7 +168,8 @@ public class WorldProviderPlanet extends WorldProvider {
 
         float celestialAngle = realCelestialAngle(worldTime, partialTicks);
         float angleFromZenith = Math.abs(celestialAngle - 0.25f);
-        if (angleFromZenith > 0.5f) angleFromZenith = 1.0f - angleFromZenith;
+        if (angleFromZenith > 0.5f)
+            angleFromZenith = 1.0f - angleFromZenith;
 
         float angleInDegrees = angleFromZenith * 360.0f;
 
@@ -177,25 +181,29 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public float getSunBrightnessFactor(float partialTicks) {
-        if (isEclipse(partialTicks)) return 0.0f;
+        if (isEclipse(partialTicks))
+            return 0.0f;
         return super.getSunBrightnessFactor(partialTicks);
     }
 
     @Override
     public float getSunBrightness(float partialTicks) {
-        if (isEclipse(partialTicks)) return 0.0f;
+        if (isEclipse(partialTicks))
+            return 0.0f;
         return super.getSunBrightness(partialTicks);
     }
 
     @Override
     public float getStarBrightness(float partialTicks) {
-        if (isEclipse(partialTicks)) return 1.0f;
+        if (isEclipse(partialTicks))
+            return 1.0f;
         return super.getStarBrightness(partialTicks);
     }
 
     @Override
     public float getCurrentMoonPhaseFactor() {
-        if (isEclipse(0.0f)) return 1.0f;
+        if (isEclipse(0.0f))
+            return 1.0f;
         return 0.25f; // Normal Moon lighting (no actual moon)
     }
 

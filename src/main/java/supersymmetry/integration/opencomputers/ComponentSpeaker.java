@@ -32,9 +32,7 @@ public class ComponentSpeaker extends AbstractManagedEnvironment {
     public ComponentSpeaker(EnvironmentHost host, String componentName, int radius) {
         this.host = host;
         this.radius = radius;
-        setNode(Network.newNode(this, Visibility.Network)
-                .withComponent(componentName)
-                .create());
+        setNode(Network.newNode(this, Visibility.Network).withComponent(componentName).create());
     }
 
     protected BlockPos getBlockPos() {
@@ -103,10 +101,7 @@ public class ComponentSpeaker extends AbstractManagedEnvironment {
 
         GregTechAPI.networkHandler.sendToAllAround(
                 new SPacketSpeakerAudio(node.address(), rate, x, y, z, data, this.radius, entityUuid),
-                new TargetPoint(
-                        host.world().provider.getDimension(),
-                        x, y, z,
-                        this.radius));
+                new TargetPoint(host.world().provider.getDimension(), x, y, z, this.radius));
 
         if (async) {
             ctx.pause(0.05);
@@ -128,12 +123,9 @@ public class ComponentSpeaker extends AbstractManagedEnvironment {
         }
         playbackEnd.set(0);
 
-        GregTechAPI.networkHandler.sendToAllAround(
-                new SPacketSpeakerStop(node.address()),
-                new TargetPoint(
-                        host.world().provider.getDimension(),
-                        host.xPosition(), host.yPosition(), host.zPosition(),
-                        this.radius));
+        GregTechAPI.networkHandler.sendToAllAround(new SPacketSpeakerStop(node.address()),
+                new TargetPoint(host.world().provider.getDimension(), host.xPosition(), host.yPosition(),
+                        host.zPosition(), this.radius));
         ctx.pause(0.05);
         return new Object[] {};
     }

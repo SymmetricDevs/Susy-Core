@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -19,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -63,17 +62,11 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("A  A", "BBBB", "A  A")
-                .aisle("BBBB", "C##A", "BBBB")
-                .aisle("A  A", "BSBB", "A  A")
-                .where('S', selfPredicate())
-                .where('A', frames(Materials.Steel))
+        return FactoryBlockPattern.start().aisle("A  A", "BBBB", "A  A").aisle("BBBB", "C##A", "BBBB")
+                .aisle("A  A", "BSBB", "A  A").where('S', selfPredicate()).where('A', frames(Materials.Steel))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('C', abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('C', abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)).where(' ', any())
+                .where('#', air()).build();
     }
 
     @Override
@@ -94,9 +87,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
             ITextComponent componentRate = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.getBaseVoidingRate() + " L/10t");
 
-            textList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "susy.machine.dumper.rate",
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.dumper.rate",
                     componentRate));
         }
     }
@@ -140,8 +131,7 @@ public class MetaTileEntityDumper extends VoidingMultiblockBase {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.DUMPER_OVERLAY;
     }

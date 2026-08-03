@@ -4,9 +4,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
- * The rocket built and launched by the lunar launch complex. Lunar escape velocity is low enough that the vehicle can
- * be much smaller than the Soyuz, so this shares all of that rocket's behaviour (blueprint, cargo, fuel, flight and
- * success calculation) and only shrinks the hull to fit the ICBM model.
+ * The rocket built and launched by the lunar launch complex. Lunar escape
+ * velocity is low enough that the vehicle can be much smaller than the Soyuz,
+ * so this shares all of that rocket's behaviour (blueprint, cargo, fuel, flight
+ * and success calculation) and only shrinks the hull to fit the ICBM model.
  */
 public class EntityLunarRocket extends EntityBlueprintRocket {
 

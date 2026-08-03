@@ -33,8 +33,7 @@ public class BlockVehicleTrack extends VariantHorizontalRotatableBlock<BlockVehi
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }

@@ -16,7 +16,8 @@ import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
-                                       implements WeightedBlock<BlockSpacecraftInstrument.Type> {
+                                       implements
+                                       WeightedBlock<BlockSpacecraftInstrument.Type> {
 
     public BlockSpacecraftInstrument() {
         super(Material.IRON);
@@ -46,10 +47,15 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         SENSOR_ARRAY("sensors", 4),
         COLLECTOR("collector", 4),
         CAMERA("camera", 4),
-        SOLAR_PANEL("solar_panel", 4),
-        BATTERY("battery", 4),
+        SOLAR_PANEL("solar_panel",
+                4),
+        BATTERY("battery",
+                4),
         ARM("arm", 4, new InstrumentRobotArm()),
-        LANDER("lander", 4, new InstrumentLander()); // will have variable purposes
+        LANDER("lander", 4, new InstrumentLander()); // will
+                                                     // have
+                                                     // variable
+                                                     // purposes
 
         public String name;
         public int h;
@@ -81,7 +87,8 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         }
 
         public void act(int count, EntityAbstractRocket rocket) {
-            if (instrument != null) instrument.act(count, rocket);
+            if (instrument != null)
+                instrument.act(count, rocket);
         }
 
         public static Type getInstrument(String name) {

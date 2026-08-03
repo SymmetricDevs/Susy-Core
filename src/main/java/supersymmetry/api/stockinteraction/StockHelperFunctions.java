@@ -30,27 +30,17 @@ public class StockHelperFunctions {
     public static List<EntityRollingStock> getStocksInArea(World world, AxisAlignedBB box,
                                                            Predicate<EntityRollingStock> filter) {
         // get entities in box and stockFilter for only wanted ones
-        return world.getEntitiesWithinAABB(ModdedEntity.class, box)
-                .stream()
-                .map(ModdedEntity::getSelf)
-                .filter(EntityRollingStock.class::isInstance)
-                .map(EntityRollingStock.class::cast)
-                .filter(filter)
+        return world.getEntitiesWithinAABB(ModdedEntity.class, box).stream().map(ModdedEntity::getSelf)
+                .filter(EntityRollingStock.class::isInstance).map(EntityRollingStock.class::cast).filter(filter)
                 .collect(Collectors.toList());
     }
 
-    @Nullable
-    public static EntityRollingStock getStockFrom(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter,
+    @Nullable public static EntityRollingStock getStockFrom(World world, AxisAlignedBB box, Predicate<EntityRollingStock> filter,
                                                   BlockPos pos) {
         // get entities in box and stockFilter for only wanted ones
-        return world.getEntitiesWithinAABB(ModdedEntity.class, box)
-                .stream()
-                .map(ModdedEntity::getSelf)
-                .filter(EntityRollingStock.class::isInstance)
-                .map(EntityRollingStock.class::cast)
-                .filter(filter)
-                .min(Comparator.comparing(entity -> pos.distanceSq(entity.getBlockPosition().internal())))
-                .orElse(null);
+        return world.getEntitiesWithinAABB(ModdedEntity.class, box).stream().map(ModdedEntity::getSelf)
+                .filter(EntityRollingStock.class::isInstance).map(EntityRollingStock.class::cast).filter(filter)
+                .min(Comparator.comparing(entity -> pos.distanceSq(entity.getBlockPosition().internal()))).orElse(null);
     }
 
     public static AxisAlignedBB getBox(Vec3i pos, EnumFacing facing, double width, double depth) {
@@ -58,7 +48,8 @@ public class StockHelperFunctions {
     }
 
     public static AxisAlignedBB getBox(Vector3f pos, EnumFacing facing, double width, double depth) {
-        // get base position and facing directions, as well as both non facing directions
+        // get base position and facing directions, as well as both non facing
+        // directions
         Vector3f one = new Vector3f(1, 1, 1);
         Vector3f facingDir = fromVec3i(facing.getDirectionVec());
         Vector3f nonFacingDirs = Vector3f.sub(one, facingDir, null);
@@ -97,8 +88,7 @@ public class StockHelperFunctions {
         return new Vector3f(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    @Nullable
-    public static String getDefinitionNameFromStack(net.minecraft.item.ItemStack stack) {
+    @Nullable public static String getDefinitionNameFromStack(net.minecraft.item.ItemStack stack) {
         var data = new ItemRollingStock.Data(new ItemStack(stack));
         if (data.def != null) {
             return data.def.name();

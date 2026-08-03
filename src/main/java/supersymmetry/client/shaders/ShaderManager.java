@@ -33,15 +33,13 @@ import codechicken.lib.render.shader.ShaderProgram;
  *
  * Pipeline overview:
  *
- * Bloom (Unreal-style):
- * 1. scene → emissive mask (EMISSIVE_MASK_F: discards non-bright pixels)
- * 2. mask → horiz blur (S_BLUR_F: separable Gaussian, horizontal pass)
- * 3. horiz → vert blur (S_BLUR_F: separable Gaussian, vertical pass)
- * 4. blurred + scene → composite (COMPOSITE_F: additive blend)
+ * Bloom (Unreal-style): 1. scene → emissive mask (EMISSIVE_MASK_F: discards
+ * non-bright pixels) 2. mask → horiz blur (S_BLUR_F: separable Gaussian,
+ * horizontal pass) 3. horiz → vert blur (S_BLUR_F: separable Gaussian, vertical
+ * pass) 4. blurred + scene → composite (COMPOSITE_F: additive blend)
  *
- * Emissive mesh:
- * Rendered with EMISSIVE_V + EMISSIVE_F before the bloom pass so the
- * unlit, alpha-preserved colour feeds into the bloom threshold.
+ * Emissive mesh: Rendered with EMISSIVE_V + EMISSIVE_F before the bloom pass so
+ * the unlit, alpha-preserved colour feeds into the bloom threshold.
  */
 @SideOnly(Side.CLIENT)
 public class ShaderManager {
@@ -120,7 +118,8 @@ public class ShaderManager {
         PROGRAM_CACHE.clear();
         // Delete existing raw GL programs before clearing cache
         for (int progId : RAW_PROGRAM_CACHE.values()) {
-            if (progId > 0) GL20.glDeleteProgram(progId);
+            if (progId > 0)
+                GL20.glDeleteProgram(progId);
         }
         RAW_PROGRAM_CACHE.clear();
         rawTestProgram = -1;
@@ -134,9 +133,9 @@ public class ShaderManager {
     }
 
     /**
-     * Call this once per frame before using any shader.
-     * Safe to call every frame – only compiles shaders on the first call.
-     * This defers GL work until the context and assets are definitely ready.
+     * Call this once per frame before using any shader. Safe to call every frame –
+     * only compiles shaders on the first call. This defers GL work until the
+     * context and assets are definitely ready.
      */
     public static void ensureInitialised() {
         if (!initialised && shadersAllowed()) {
@@ -148,7 +147,9 @@ public class ShaderManager {
 
     private static boolean initialised = false;
 
-    /** Returns true when an OptiFine shader pack is active (shaders would conflict). */
+    /**
+     * Returns true when an OptiFine shader pack is active (shaders would conflict).
+     */
     public static boolean isOptiFineShaderPackLoaded() {
         return isShaderPackLoaded != null && isShaderPackLoaded.getAsBoolean();
     }
@@ -159,19 +160,21 @@ public class ShaderManager {
 
     /**
      * Renders a full-screen quad into {@code fbo} using {@code frag} as the
-     * fragment shader. The uniform {@code u_resolution} is always set;
-     * additional uniforms can be supplied via {@code uniformCache}.
+     * fragment shader. The uniform {@code u_resolution} is always set; additional
+     * uniforms can be supplied via {@code uniformCache}.
      *
-     * @param fbo          target framebuffer (returned unchanged on error)
-     * @param frag         fragment shader to use
-     * @param uniformCache additional uniform setter, may be null
+     * @param fbo
+     *                     target framebuffer (returned unchanged on error)
+     * @param frag
+     *                     fragment shader to use
+     * @param uniformCache
+     *                     additional uniform setter, may be null
      * @return the same {@code fbo} for chaining
      */
-    public static Framebuffer renderFullImageInFBO(
-                                                   Framebuffer fbo,
-                                                   ShaderObject frag,
+    public static Framebuffer renderFullImageInFBO(Framebuffer fbo, ShaderObject frag,
                                                    Consumer<ShaderProgram.UniformCache> uniformCache) {
-        if (fbo == null || frag == null || !shadersAllowed()) return fbo;
+        if (fbo == null || frag == null || !shadersAllowed())
+            return fbo;
 
         fbo.bindFramebuffer(true);
 
@@ -184,7 +187,8 @@ public class ShaderManager {
 
         program.useShader(cache -> {
             cache.glUniform2F("u_resolution", fbo.framebufferWidth, fbo.framebufferHeight);
-            if (uniformCache != null) uniformCache.accept(cache);
+            if (uniformCache != null)
+                uniformCache.accept(cache);
         });
 
         // Draw the full-screen quad (NDC)
@@ -202,15 +206,16 @@ public class ShaderManager {
     }
 
     /**
-     * Returns (creating if necessary) a {@link ShaderProgram} that pairs the
-     * given vertex and fragment shaders. Used by space renderers that need
-     * their own vert shader rather than the shared IMAGE_V quad shader.
+     * Returns (creating if necessary) a {@link ShaderProgram} that pairs the given
+     * vertex and fragment shaders. Used by space renderers that need their own vert
+     * shader rather than the shared IMAGE_V quad shader.
      *
      * Keyed by object identity so that if initShaders() replaces a ShaderObject
      * with a fresh instance the old (now dead) program is not reused.
      */
     public static ShaderProgram getOrCreateProgram(ShaderObject vert, ShaderObject frag) {
-        if (vert == null || frag == null) return null;
+        if (vert == null || frag == null)
+            return null;
         // Identity hash is fine here: initShaders() clears PROGRAM_CACHE so stale
         // entries from old ShaderObject instances never survive a reload.
         long key = ((long) System.identityHashCode(vert) << 32) | (System.identityHashCode(frag) & 0xFFFFFFFFL);
@@ -229,8 +234,8 @@ public class ShaderManager {
 
     /**
      * Compiles and links a raw GL program from shader source files in assets.
-     * Completely bypasses CCL – reads the .vert/.frag files directly and
-     * compiles them via GL20. Cached by filename pair.
+     * Completely bypasses CCL – reads the .vert/.frag files directly and compiles
+     * them via GL20. Cached by filename pair.
      */
     public static int getRawProgram(String vertFile, String fragFile) {
         String key = vertFile + "|" + fragFile;
@@ -238,14 +243,13 @@ public class ShaderManager {
             return RAW_PROGRAM_CACHE.get(key);
         }
         try {
-            String vertSrc = readShader(getStream(
-                    String.format("/assets/%s/shaders/%s", MODID, vertFile)));
-            String fragSrc = readShader(getStream(
-                    String.format("/assets/%s/shaders/%s", MODID, fragFile)));
+            String vertSrc = readShader(getStream(String.format("/assets/%s/shaders/%s", MODID, vertFile)));
+            String fragSrc = readShader(getStream(String.format("/assets/%s/shaders/%s", MODID, fragFile)));
 
             int vId = compileRaw(GL20.GL_VERTEX_SHADER, vertFile, vertSrc);
             int fId = compileRaw(GL20.GL_FRAGMENT_SHADER, fragFile, fragSrc);
-            if (vId <= 0 || fId <= 0) return -1;
+            if (vId <= 0 || fId <= 0)
+                return -1;
 
             int p = GL20.glCreateProgram();
             GL20.glAttachShader(p, vId);
@@ -255,7 +259,8 @@ public class ShaderManager {
             GL20.glDeleteShader(fId);
 
             String log = GL20.glGetProgramInfoLog(p, 512).trim();
-            if (!log.isEmpty()) LOGGER.warn("getRawProgram [{}+{}] link log: {}", vertFile, fragFile, log);
+            if (!log.isEmpty())
+                LOGGER.warn("getRawProgram [{}+{}] link log: {}", vertFile, fragFile, log);
             if (GL20.glGetProgrami(p, GL20.GL_LINK_STATUS) == 0) {
                 LOGGER.error("getRawProgram: link failed [{} + {}]", vertFile, fragFile);
                 GL20.glDeleteProgram(p);
@@ -277,11 +282,11 @@ public class ShaderManager {
             return RAW_PROGRAM_CACHE.get(key);
         }
         try {
-            String src = readShader(getStream(
-                    String.format("/assets/%s/shaders/%s", MODID, compFile)));
+            String src = readShader(getStream(String.format("/assets/%s/shaders/%s", MODID, compFile)));
 
             int shader = compileRaw(GL43.GL_COMPUTE_SHADER, compFile, src);
-            if (shader <= 0) return -1;
+            if (shader <= 0)
+                return -1;
 
             int p = GL20.glCreateProgram();
             GL20.glAttachShader(p, shader);
@@ -289,7 +294,8 @@ public class ShaderManager {
             GL20.glDeleteShader(shader);
 
             String log = GL20.glGetProgramInfoLog(p, 512).trim();
-            if (!log.isEmpty()) LOGGER.warn("getRawComputeProgram [{}] link log: {}", compFile, log);
+            if (!log.isEmpty())
+                LOGGER.warn("getRawComputeProgram [{}] link log: {}", compFile, log);
             if (GL20.glGetProgrami(p, GL20.GL_LINK_STATUS) == 0) {
                 LOGGER.error("getRawComputeProgram: link failed [{}]", compFile);
                 GL20.glDeleteProgram(p);
@@ -310,7 +316,8 @@ public class ShaderManager {
         GL20.glShaderSource(id, src);
         GL20.glCompileShader(id);
         String log = GL20.glGetShaderInfoLog(id, 512).trim();
-        if (!log.isEmpty()) LOGGER.warn("compileRaw [{}] log: {}", name, log);
+        if (!log.isEmpty())
+            LOGGER.warn("compileRaw [{}] log: {}", name, log);
         if (GL20.glGetShaderi(id, GL20.GL_COMPILE_STATUS) == 0) {
             LOGGER.error("compileRaw: failed to compile [{}]", name);
             GL20.glDeleteShader(id);
@@ -321,24 +328,24 @@ public class ShaderManager {
 
     /**
      * Returns a raw GL program ID for the minimal test.vert + test.frag shaders,
-     * compiled and linked entirely via GL20 with no CCL involvement.
-     * Returns -1 if compilation or linking failed.
+     * compiled and linked entirely via GL20 with no CCL involvement. Returns -1 if
+     * compilation or linking failed.
      */
     public static int getRawTestProgram() {
-        if (rawTestProgram != -1) return rawTestProgram;
+        if (rawTestProgram != -1)
+            return rawTestProgram;
         try {
-            String vertSrc = "#version 330 core\n" +
-                    "layout(location = 0) in vec2 aPos;\n" +
+            String vertSrc = "#version 330 core\n" + "layout(location = 0) in vec2 aPos;\n" +
                     "void main() { gl_Position = vec4(aPos, 0.9999, 1.0); }\n";
-            String fragSrc = "#version 330 core\n" +
-                    "out vec4 FragColor;\n" +
+            String fragSrc = "#version 330 core\n" + "out vec4 FragColor;\n" +
                     "void main() { FragColor = vec4(1.0, 0.0, 0.0, 1.0); }\n";
 
             int v = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
             GL20.glShaderSource(v, vertSrc);
             GL20.glCompileShader(v);
             String vLog = GL20.glGetShaderInfoLog(v, 512);
-            if (!vLog.trim().isEmpty()) LOGGER.warn("[RawTest] vert log: {}", vLog);
+            if (!vLog.trim().isEmpty())
+                LOGGER.warn("[RawTest] vert log: {}", vLog);
             if (GL20.glGetShaderi(v, GL20.GL_COMPILE_STATUS) == 0) {
                 LOGGER.error("[RawTest] vert compile failed");
                 return -1;
@@ -348,7 +355,8 @@ public class ShaderManager {
             GL20.glShaderSource(f, fragSrc);
             GL20.glCompileShader(f);
             String fLog = GL20.glGetShaderInfoLog(f, 512);
-            if (!fLog.trim().isEmpty()) LOGGER.warn("[RawTest] frag log: {}", fLog);
+            if (!fLog.trim().isEmpty())
+                LOGGER.warn("[RawTest] frag log: {}", fLog);
             if (GL20.glGetShaderi(f, GL20.GL_COMPILE_STATUS) == 0) {
                 LOGGER.error("[RawTest] frag compile failed");
                 return -1;
@@ -359,7 +367,8 @@ public class ShaderManager {
             GL20.glAttachShader(p, f);
             GL20.glLinkProgram(p);
             String pLog = GL20.glGetProgramInfoLog(p, 512);
-            if (!pLog.trim().isEmpty()) LOGGER.warn("[RawTest] link log: {}", pLog);
+            if (!pLog.trim().isEmpty())
+                LOGGER.warn("[RawTest] link log: {}", pLog);
             if (GL20.glGetProgrami(p, GL20.GL_LINK_STATUS) == 0) {
                 LOGGER.error("[RawTest] link failed");
                 return -1;
@@ -377,7 +386,8 @@ public class ShaderManager {
     }
 
     private static ShaderObject init(ShaderObject old, ShaderObject.ShaderType type, String file) {
-        if (old != null) old.disposeObject();
+        if (old != null)
+            old.disposeObject();
         try {
             String path = String.format("/assets/%s/shaders/%s", MODID, file);
             return new ShaderObject(type, readShader(getStream(path))).compileShader();

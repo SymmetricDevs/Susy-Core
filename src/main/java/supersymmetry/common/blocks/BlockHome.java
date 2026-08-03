@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.client.utils.BloomEffectUtil;
 import gregtech.common.ConfigHolder;
@@ -50,10 +49,11 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
 
     @Override
     public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
-                                    @NotNull EntityPlayer playerIn,
-                                    @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY,
+                                    @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY,
                                     float hitZ) {
-        if (worldIn.isRemote) return true;
+        if (worldIn.isRemote)
+            return true;
         if ((worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL)) {
             net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);
             playerIn.bedLocation = pos;
@@ -71,8 +71,7 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
         return ConfigHolder.client.machinesEmissiveTextures;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -87,7 +86,8 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
 
         HOME_PRIMITIVE("home_primitive"),
         HOME_GT_BRUTALIST("home_gt_brutalist"),
-        HOME_RENEWAL_BRUTALIST("home_renewal_brutalist"),
+        HOME_RENEWAL_BRUTALIST(
+                "home_renewal_brutalist"),
         HOME_SCIFI("home_scifi");
 
         public final String name;
@@ -96,8 +96,7 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
             this.name = name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

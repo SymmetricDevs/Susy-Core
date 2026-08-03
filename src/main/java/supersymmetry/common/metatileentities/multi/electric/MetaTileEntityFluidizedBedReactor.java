@@ -2,14 +2,14 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -40,15 +40,11 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("F F", "XXX", "XXX", "XXX", "XXX")
-                .aisle("   ", "XPX", "XPX", "XPX", "XPX")
-                .aisle("F F", "XSX", "XXX", "XXX", "XXX")
-                .where('S', this.selfPredicate())
-                .where('F', frames(Materials.Steel))
-                .where('P', states(this.getPipeCasingState()))
-                .where('X', states(this.getCasingState()).setMinGlobalLimited(17)
-                        .or(this.autoAbilities(true, true, true, true, true, true, false)))
+        return FactoryBlockPattern.start().aisle("F F", "XXX", "XXX", "XXX", "XXX")
+                .aisle("   ", "XPX", "XPX", "XPX", "XPX").aisle("F F", "XSX", "XXX", "XXX", "XXX")
+                .where('S', this.selfPredicate()).where('F', frames(Materials.Steel))
+                .where('P', states(this.getPipeCasingState())).where('X', states(this.getCasingState())
+                        .setMinGlobalLimited(17).or(this.autoAbilities(true, true, true, true, true, true, false)))
                 .build();
     }
 
@@ -69,8 +65,7 @@ public class MetaTileEntityFluidizedBedReactor extends RecipeMapMultiblockContro
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FLUIDIZED_BED_OVERLAY;
     }

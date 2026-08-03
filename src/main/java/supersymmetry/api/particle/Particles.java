@@ -5,9 +5,9 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.api.SusyLog;
 
@@ -206,16 +206,19 @@ public class Particles {
     }
 
     /**
-     * @param particle The particle you want the antiparticle of, must be a composite particle, fundamental
-     *                 antiparticles must be generated manually
-     * @param name     The name of the antiparticle you want, another method is available that will generate it
-     *                 automatically
-     * @param location Texture location
+     * @param particle
+     *                 The particle you want the antiparticle of, must be a composite
+     *                 particle, fundamental antiparticles must be generated manually
+     * @param name
+     *                 The name of the antiparticle you want, another method is available
+     *                 that will generate it automatically
+     * @param location
+     *                 Texture location
      * @return The desired antiparticle
      */
-    @Nullable
-    public static Particle makeAntiParticle(Particle particle, String name, ResourceLocation location) {
-        if (particle.isFundamental()) return null;
+    @Nullable public static Particle makeAntiParticle(Particle particle, String name, ResourceLocation location) {
+        if (particle.isFundamental())
+            return null;
         Particle antiParticle = new Particle(name, particle.getMass(), -particle.getCharge(), particle.getSpin(),
                 particle.getWidth(), particle.isColoured(), particle.isWeakInt(), location);
         for (Map.Entry<Particle, Integer> component : particle.getComponents().entrySet()) {
@@ -225,13 +228,14 @@ public class Particles {
     }
 
     /**
-     * @param particle The particle you want the antiparticle of, must be a composite particle, fundamental
-     *                 antiparticles must be generated manually
-     * @param location Texture location
+     * @param particle
+     *                 The particle you want the antiparticle of, must be a composite
+     *                 particle, fundamental antiparticles must be generated manually
+     * @param location
+     *                 Texture location
      * @return The desired antiparticle
      */
-    @Nullable
-    public static Particle makeAntiParticle(Particle particle, ResourceLocation location) {
+    @Nullable public static Particle makeAntiParticle(Particle particle, ResourceLocation location) {
         return makeAntiParticle(particle, "anti" + particle.getName(), location);
     }
 }

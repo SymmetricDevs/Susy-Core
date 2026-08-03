@@ -47,12 +47,10 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     private int maxFuelVolume;
 
     // Troll mode - rocket curves back towards launch pad
-    protected static final DataParameter<Integer> LAUNCH_RESULT = EntityDataManager.createKey(
-            EntityBlueprintRocket.class,
-            DataSerializers.VARINT);
-    protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager.createKey(
-            EntityBlueprintRocket.class,
-            DataSerializers.BLOCK_POS);
+    protected static final DataParameter<Integer> LAUNCH_RESULT = EntityDataManager
+            .createKey(EntityBlueprintRocket.class, DataSerializers.VARINT);
+    protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager
+            .createKey(EntityBlueprintRocket.class, DataSerializers.BLOCK_POS);
 
     public EntityBlueprintRocket(World worldIn) {
         super(worldIn);
@@ -66,8 +64,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         this(worldIn);
         this.setLocationAndAngles(x, y, z, rotationYaw, 0);
         double radius = getCollisionRadius();
-        this.setEntityBoundingBox(new AxisAlignedBB(x - radius, y + 0.1, z - radius,
-                x + radius, y + getRocketHeight(), z + radius));
+        this.setEntityBoundingBox(
+                new AxisAlignedBB(x - radius, y + 0.1, z - radius, x + radius, y + getRocketHeight(), z + radius));
     }
 
     @Override
@@ -87,11 +85,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             this.maxFuelVolume = 1;
         } else {
             NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-            AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
-                    .getCopyOf(rocketNBT.getString("name"));
+            AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
             blueprint.readFromNBT(rocketNBT);
-            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(),
-                    Integer.MAX_VALUE);
+            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(), Integer.MAX_VALUE);
             this.maxFuelVolume = (int) blueprint.getFuelVolume();
         }
     }
@@ -135,7 +131,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     protected abstract float getRocketHeight();
 
     /**
-     * Half-width of the collision box. Wider than the hull so that it covers the strap-on boosters.
+     * Half-width of the collision box. Wider than the hull so that it covers the
+     * strap-on boosters.
      */
     protected abstract double getCollisionRadius();
 
@@ -145,16 +142,19 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     protected abstract double getModelRadius();
 
     /**
-     * Lowest point on the hull, in blocks above the base, where a player can climb aboard.
+     * Lowest point on the hull, in blocks above the base, where a player can climb
+     * aboard.
      */
     protected abstract double getBoardingWindowMin();
 
     /**
-     * Highest point on the hull, in blocks above the base, where a player can climb aboard.
+     * Highest point on the hull, in blocks above the base, where a player can climb
+     * aboard.
      */
     protected abstract double getBoardingWindowMax();
 
-    @Override // The override is about leashing the rocket, which makes it alright to completely ignore
+    @Override // The override is about leashing the rocket, which makes it alright to
+              // completely ignore
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d hitVec, EnumHand hand) {
         if (player.isRidingSameEntity(this) || hitVec.y < getBoardingWindowMin() || hitVec.y > getBoardingWindowMax())
             return EnumActionResult.PASS;
@@ -197,8 +197,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                 this.setCrashPosition(targetPos.down(targetPos.getY()));
             }
 
-            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.EXPLODES &&
-                    this.posY > 400) {
+            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.EXPLODES && this.posY > 400) {
                 this.explode();
             }
 
@@ -216,12 +215,16 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
 
                 // Gradually adjust yaw and pitch (semi-realistic curve)
                 float yawDiff = targetYaw - this.rotationYaw;
-                while (yawDiff > 180.0F) yawDiff -= 360.0F;
-                while (yawDiff < -180.0F) yawDiff += 360.0F;
+                while (yawDiff > 180.0F)
+                    yawDiff -= 360.0F;
+                while (yawDiff < -180.0F)
+                    yawDiff += 360.0F;
 
                 float pitchDiff = targetPitch - this.rotationPitch;
-                while (pitchDiff > 180.0F) pitchDiff -= 360.0F;
-                while (pitchDiff < -180.0F) pitchDiff += 360.0F;
+                while (pitchDiff > 180.0F)
+                    pitchDiff -= 360.0F;
+                while (pitchDiff < -180.0F)
+                    pitchDiff += 360.0F;
 
                 // Curve rate increases with flight time (rocket becomes more unstable)
                 float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
@@ -237,12 +240,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                 this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
                 this.motionY = Math.cos(pitchRad) * speed;
 
-                this.setPositionAndRotation(
-                        this.posX + this.motionX,
-                        this.posY + this.motionY,
-                        this.posZ + this.motionZ,
-                        this.rotationYaw,
-                        this.rotationPitch);
+                this.setPositionAndRotation(this.posX + this.motionX, this.posY + this.motionY,
+                        this.posZ + this.motionZ, this.rotationYaw, this.rotationPitch);
             } else {
                 // Normal flight
                 this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
@@ -329,8 +328,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint
-                        .getCopyOf(rocketNBT.getString("name"));
+                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
                 blueprint.readFromNBT(rocketNBT);
                 long augmentation = rocketNBT.getLong("AFSimprovement");
                 if (this.getPassengers().stream()

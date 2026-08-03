@@ -4,9 +4,6 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -14,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -48,40 +47,35 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
     }
 
     @Override
-    @NotNull
-    public DistillationTowerLogicHandler createHandler() {
+    @NotNull public DistillationTowerLogicHandler createHandler() {
         return new ExtendedDTLogicHandler(this, 3, i -> 3);
     }
 
     @Override
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle(" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  ")
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP).aisle(" CSC  ", "CCCCCC", "CCCCCC", "CCCCCC", " CCC  ")
                 .aisle(" CGC  ", "C#F#CC", "IFFF#P", "C#F#CC", " CCC  ")
                 .aisle(" CCC  ", "C#F#CC", "CFFFCC", "C#F#CC", " CCC  ")
                 .aisle(" XXX  ", "X#F#D ", "XFFFD ", "X#F#D ", " XXX  ").setRepeatable(1, 12)
-                .aisle(" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  ")
-                .where('S', selfPredicate())
-                .where('G', states(getGlassState()))
-                .where('P', states(getPipeCasingState()))
+                .aisle(" DDD  ", "DDDDD ", "DDDDD ", "DDDDD ", " DDD  ").where('S', selfPredicate())
+                .where('G', states(getGlassState())).where('P', states(getPipeCasingState()))
                 .where('F', frames(Materials.Steel))
                 .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)
                                 .setPreviewCount(1))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(2).setPreviewCount(1))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
-                .where('I', states(getCasingState())
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
+                .where('I',
+                        states(getCasingState()).or(
+                                abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1).setPreviewCount(1)))
                 .where('D', states(getCasingState()))
-                .where('X', states(getCasingState())
-                        .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
-                                .toArray(MetaTileEntity[]::new))
-                                        .setMaxLayerLimited(1).setPreviewCount(1))
-                        .or(autoAbilities(true, false)))
-                .where('#', air())
-                .build();
+                .where('X',
+                        states(getCasingState())
+                                .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS)
+                                        .stream().filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                                        .toArray(MetaTileEntity[]::new)).setMaxLayerLimited(1).setPreviewCount(1))
+                                .or(autoAbilities(true, false)))
+                .where('#', air()).build();
     }
 
     protected static IBlockState getGlassState() {
@@ -108,8 +102,7 @@ public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrdered
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.VDT_OVERLAY;
     }

@@ -15,8 +15,8 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.RecipeMap;
 
 /**
- * This class is used to do something client side at each block in a given pattern, this accounts for the direction of
- * the multi.
+ * This class is used to do something client side at each block in a given
+ * pattern, this accounts for the direction of the multi.
  *
  * @author h3tR / RMI
  */
@@ -32,7 +32,8 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.STRUCTURE_FORMED && this.isStructureFormed()) {
-            // Only generate the cachedFluidPattern on the client as it isn't used anywhere on the server
+            // Only generate the cachedFluidPattern on the client as it isn't used anywhere
+            // on the server
             this.cachedPattern = generateCachedPattern(getPattern(), getPatternOffset(), this.frontFacing,
                     this.isFlipped());
         }
@@ -51,20 +52,29 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
     }
 
     /**
-     * @param pattern       The pattern it should cache positions for, this is similar to
-     *                      {@link gregtech.api.pattern.FactoryBlockPattern} aisles but the layers are horizontal rather
-     *                      than vertical.<br>
-     *                      It will count a space as empty and anything else as valid (rows don't require trailing
-     *                      spaces, they can be cut off or left empty for empty rows). <br>
+     * @param pattern
+     *                      The pattern it should cache positions for, this is similar to
+     *                      {@link gregtech.api.pattern.FactoryBlockPattern} aisles but the
+     *                      layers are horizontal rather than vertical.<br>
+     *                      It will count a space as empty and anything else as valid (rows
+     *                      don't require trailing spaces, they can be cut off or left empty
+     *                      for empty rows). <br>
      *                      Example: see usage in
-     *                      {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} or
+     *                      {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier}
+     *                      or
      *                      {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityGravitySeparator}
-     * @param patternOffset The offset the pattern is generated in.
-     * @param facing        which direction the pattern should be generated in (Only Horizontal directions are allowed)
-     * @param isFlipped     Works the same as
+     * @param patternOffset
+     *                      The offset the pattern is generated in.
+     * @param facing
+     *                      which direction the pattern should be generated in (Only
+     *                      Horizontal directions are allowed)
+     * @param isFlipped
+     *                      Works the same as
      *                      {@link gregtech.api.metatileentity.multiblock.MultiblockControllerBase#isFlipped()}
-     * @return An array of positions that correspond with the pattern at given offset and direction/facing
-     * @throws IllegalArgumentException when Vertical facing directions are used
+     * @return An array of positions that correspond with the pattern at given
+     *         offset and direction/facing
+     * @throws IllegalArgumentException
+     *                                  when Vertical facing directions are used
      */
 
     @SideOnly(Side.CLIENT)
@@ -79,7 +89,8 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
         for (int y = 0; y < pattern.length; y++) {
             for (int z = 0; z < pattern[y].length; z++) {
                 for (int x = 0; x < pattern[y][z].length(); x++) {
-                    if (pattern[y][z].charAt(x) == ' ') continue;
+                    if (pattern[y][z].charAt(x) == ' ')
+                        continue;
 
                     int patternXOffset = x + patternOffset.getX();
                     int patternZOffset = z + patternOffset.getZ();
@@ -87,10 +98,10 @@ public abstract class CachedPatternRecipeMapMultiblock extends RecipeMapMultiblo
                     if (isFlipped ^ (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH))
                         patternXOffset = -patternXOffset;
 
-                    cachedPattern.add(new Vec3i(
-                            patternZOffset * facing.getXOffset() + patternXOffset * facing.getZOffset(),
-                            patternOffset.getY() + y,
-                            patternXOffset * facing.getXOffset() + patternZOffset * facing.getZOffset()));
+                    cachedPattern
+                            .add(new Vec3i(patternZOffset * facing.getXOffset() + patternXOffset * facing.getZOffset(),
+                                    patternOffset.getY() + y,
+                                    patternXOffset * facing.getXOffset() + patternZOffset * facing.getZOffset()));
                 }
             }
         }

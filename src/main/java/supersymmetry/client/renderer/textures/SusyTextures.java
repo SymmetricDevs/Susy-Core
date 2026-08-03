@@ -185,8 +185,7 @@ public class SusyTextures {
             "machines/multiblocks/attrition_scrubber");
     public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/screen_printer");
-    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
-            "machines/multiblocks/edm");
+    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
 

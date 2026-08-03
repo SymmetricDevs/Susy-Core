@@ -65,10 +65,13 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     public <T> T getCapability(Capability<T> capability, EnumFacing side) {
         CapabilityFamily family = CapabilityFamily.from(capability);
         EnumSet<CapabilityFamily> active = activeCapabilities.get();
-        if (family != null && active != null && active.contains(family)) return getWrappedCapability(capability, side);
+        if (family != null && active != null && active.contains(family))
+            return getWrappedCapability(capability, side);
         T delegatedCapability = getDelegatedCapability(capability, side);
-        if (delegatedCapability == null) return getDefaultCapability(capability, side);
-        if (family != null) return getWrappedCapability(capability, side);
+        if (delegatedCapability == null)
+            return getDefaultCapability(capability, side);
+        if (family != null)
+            return getWrappedCapability(capability, side);
         return delegatedCapability;
     }
 
@@ -88,9 +91,12 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
     @SuppressWarnings("unchecked")
     private <T> T createWrapper(Capability<T> capability, EnumFacing side) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return (T) new LockedItemHandler(side);
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) return (T) new LockedFluidHandler(side);
-        if (capability == CapabilityEnergy.ENERGY) return (T) new LockedEnergyStorage(side);
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return (T) new LockedItemHandler(side);
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) new LockedFluidHandler(side);
+        if (capability == CapabilityEnergy.ENERGY)
+            return (T) new LockedEnergyStorage(side);
         return (T) new LockedEnergyContainer(side);
     }
 
@@ -100,13 +106,15 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
             active = EnumSet.noneOf(CapabilityFamily.class);
             activeCapabilities.set(active);
         }
-        if (!active.add(family)) return fallback;
+        if (!active.add(family))
+            return fallback;
         try {
             R target = resolveTarget(family.capability(), side);
             return target == null ? fallback : call.apply(target);
         } finally {
             active.remove(family);
-            if (active.isEmpty()) activeCapabilities.remove();
+            if (active.isEmpty())
+                activeCapabilities.remove();
         }
     }
 
@@ -123,12 +131,15 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
         FE,
         GTEU;
 
-        @Nullable
-        static CapabilityFamily from(Capability<?> capability) {
-            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return ITEM;
-            if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) return FLUID;
-            if (capability == CapabilityEnergy.ENERGY) return FE;
-            if (capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER) return GTEU;
+        @Nullable static CapabilityFamily from(Capability<?> capability) {
+            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                return ITEM;
+            if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                return FLUID;
+            if (capability == CapabilityEnergy.ENERGY)
+                return FE;
+            if (capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+                return GTEU;
             return null;
         }
 
@@ -156,29 +167,20 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
         }
 
         @Override
-        @NotNull
-        public ItemStack getStackInSlot(int slot) {
-            return locked(
-                    side, CapabilityFamily.ITEM, ItemStack.EMPTY, (IItemHandler target) -> target.getStackInSlot(slot));
+        @NotNull public ItemStack getStackInSlot(int slot) {
+            return locked(side, CapabilityFamily.ITEM, ItemStack.EMPTY,
+                    (IItemHandler target) -> target.getStackInSlot(slot));
         }
 
         @Override
-        @NotNull
-        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return locked(
-                    side,
-                    CapabilityFamily.ITEM,
-                    stack,
+        @NotNull public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            return locked(side, CapabilityFamily.ITEM, stack,
                     (IItemHandler target) -> target.insertItem(slot, stack, simulate));
         }
 
         @Override
-        @NotNull
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return locked(
-                    side,
-                    CapabilityFamily.ITEM,
-                    ItemStack.EMPTY,
+        @NotNull public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return locked(side, CapabilityFamily.ITEM, ItemStack.EMPTY,
                     (IItemHandler target) -> target.extractItem(slot, amount, simulate));
         }
 
@@ -189,11 +191,7 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return locked(
-                    side,
-                    CapabilityFamily.ITEM,
-                    false,
-                    (IItemHandler target) -> target.isItemValid(slot, stack));
+            return locked(side, CapabilityFamily.ITEM, false, (IItemHandler target) -> target.isItemValid(slot, stack));
         }
     }
 
@@ -206,29 +204,25 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
         }
 
         @Override
-        @NotNull
-        public IFluidTankProperties[] getTankProperties() {
+        @NotNull public IFluidTankProperties[] getTankProperties() {
             return locked(side, CapabilityFamily.FLUID, new IFluidTankProperties[0], IFluidHandler::getTankProperties);
         }
 
         @Override
         public int fill(@NotNull FluidStack resource, boolean doFill) {
-            return locked(
-                    side, CapabilityFamily.FLUID, 0, (IFluidHandler target) -> target.fill(resource, doFill));
+            return locked(side, CapabilityFamily.FLUID, 0, (IFluidHandler target) -> target.fill(resource, doFill));
         }
 
         @Override
-        @Nullable
-        public FluidStack drain(FluidStack resource, boolean doDrain) {
-            return locked(
-                    side, CapabilityFamily.FLUID, null, (IFluidHandler target) -> target.drain(resource, doDrain));
+        @Nullable public FluidStack drain(FluidStack resource, boolean doDrain) {
+            return locked(side, CapabilityFamily.FLUID, null,
+                    (IFluidHandler target) -> target.drain(resource, doDrain));
         }
 
         @Override
-        @Nullable
-        public FluidStack drain(int maxDrain, boolean doDrain) {
-            return locked(
-                    side, CapabilityFamily.FLUID, null, (IFluidHandler target) -> target.drain(maxDrain, doDrain));
+        @Nullable public FluidStack drain(int maxDrain, boolean doDrain) {
+            return locked(side, CapabilityFamily.FLUID, null,
+                    (IFluidHandler target) -> target.drain(maxDrain, doDrain));
         }
     }
 
@@ -242,19 +236,13 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
-            return locked(
-                    side,
-                    CapabilityFamily.FE,
-                    0,
+            return locked(side, CapabilityFamily.FE, 0,
                     (IEnergyStorage target) -> target.receiveEnergy(maxReceive, simulate));
         }
 
         @Override
         public int extractEnergy(int maxExtract, boolean simulate) {
-            return locked(
-                    side,
-                    CapabilityFamily.FE,
-                    0,
+            return locked(side, CapabilityFamily.FE, 0,
                     (IEnergyStorage target) -> target.extractEnergy(maxExtract, simulate));
         }
 
@@ -289,41 +277,34 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
 
         @Override
         public long acceptEnergyFromNetwork(EnumFacing facing, long voltage, long amperage) {
-            return locked(
-                    side,
-                    CapabilityFamily.GTEU,
-                    0L,
+            return locked(side, CapabilityFamily.GTEU, 0L,
                     (IEnergyContainer target) -> target.acceptEnergyFromNetwork(facing, voltage, amperage));
         }
 
         @Override
         public boolean inputsEnergy(EnumFacing facing) {
-            return locked(
-                    side, CapabilityFamily.GTEU, false, (IEnergyContainer target) -> target.inputsEnergy(facing));
+            return locked(side, CapabilityFamily.GTEU, false, (IEnergyContainer target) -> target.inputsEnergy(facing));
         }
 
         @Override
         public boolean outputsEnergy(EnumFacing facing) {
-            return locked(
-                    side, CapabilityFamily.GTEU, false, (IEnergyContainer target) -> target.outputsEnergy(facing));
+            return locked(side, CapabilityFamily.GTEU, false,
+                    (IEnergyContainer target) -> target.outputsEnergy(facing));
         }
 
         @Override
         public long changeEnergy(long amount) {
-            return locked(
-                    side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.changeEnergy(amount));
+            return locked(side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.changeEnergy(amount));
         }
 
         @Override
         public long addEnergy(long amount) {
-            return locked(
-                    side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.addEnergy(amount));
+            return locked(side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.addEnergy(amount));
         }
 
         @Override
         public long removeEnergy(long amount) {
-            return locked(
-                    side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.removeEnergy(amount));
+            return locked(side, CapabilityFamily.GTEU, 0L, (IEnergyContainer target) -> target.removeEnergy(amount));
         }
 
         @Override
@@ -383,9 +364,11 @@ public abstract class MetaTileEntityDelegator extends MetaTileEntity implements 
     }
 
     protected <T> T getDelegatedCapability(Capability<T> capability, EnumFacing side) {
-        if (capability == null || !capFilter.test(capability) || side == null) return null;
+        if (capability == null || !capFilter.test(capability) || side == null)
+            return null;
         EnumFacing delegatingFacing = getDelegatingFacing(side);
-        if (delegatingFacing == null) return null;
+        if (delegatingFacing == null)
+            return null;
         TileEntity te = getWorld().getTileEntity(getPos().offset(delegatingFacing));
         if (te == null ||
                 (te instanceof MetaTileEntityHolder holder && holder.getMetaTileEntity() instanceof IDelegator))

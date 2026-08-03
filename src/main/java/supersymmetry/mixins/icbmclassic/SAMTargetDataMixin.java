@@ -29,36 +29,24 @@ public abstract class SAMTargetDataMixin {
     @Shadow
     protected abstract AxisAlignedBB targetArea();
 
-    @Inject(
-            method = "getValidTargets",
-            at = @At("HEAD"),
-            cancellable = true,
-            remap = false)
+    @Inject(method = "getValidTargets", at = @At("HEAD"), cancellable = true, remap = false)
     private void supersymmetry$getValidTargets(CallbackInfoReturnable<List<Entity>> cir) {
         World world = host.world;
 
         List<Entity> targets = new ArrayList<>();
 
-        List<EntityMissile> missiles = world.getEntitiesWithinAABB(
-                EntityMissile.class,
-                targetArea());
+        List<EntityMissile> missiles = world.getEntitiesWithinAABB(EntityMissile.class, targetArea());
 
         targets.addAll(missiles);
 
-        List<EntityDropPod> pods = world.getEntitiesWithinAABB(
-                EntityDropPod.class,
-                targetArea());
+        List<EntityDropPod> pods = world.getEntitiesWithinAABB(EntityDropPod.class, targetArea());
 
         targets.addAll(pods);
 
         cir.setReturnValue(targets);
     }
 
-    @Inject(
-            method = "isValid(Lnet/minecraft/entity/Entity;)Z",
-            at = @At("HEAD"),
-            cancellable = true,
-            remap = false)
+    @Inject(method = "isValid(Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true, remap = false)
     private void supersymmetry$isValid(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof EntityDropPod) {
             cir.setReturnValue(entity.isEntityAlive());

@@ -33,8 +33,7 @@ import supersymmetry.integration.jei.ingredient.ParticleType;
 import supersymmetry.modules.SuSyModules;
 
 @JEIPlugin
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_JEI,
+@GregTechModule(moduleID = SuSyModules.MODULE_JEI,
                 containerID = Supersymmetry.MODID,
                 modDependencies = Mods.Names.JUST_ENOUGH_ITEMS,
                 name = "SuSy JEI Integration",

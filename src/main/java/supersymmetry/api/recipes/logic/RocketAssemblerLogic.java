@@ -43,35 +43,35 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     }
 
     public Recipe getRecipe(long maxVoltage) {
-        if (!assembler.isAssemblyWorking()) return null;
+        if (!assembler.isAssemblyWorking())
+            return null;
 
         if (assembler.getComponentCount() == assembler.getComponentIndex()) {
             return null;
         }
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return null;
+        if (targetComponent == null)
+            return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(x -> x.expandRecipe().stream())
-                .collect(Collectors.toList());
-        Recipe recipe = getRecipeMap()
-                .recipeBuilder()
-                .inputIngredients(collapse(flatExpandedInput))
-                .EUt(VA[LuV]) // Almost 1 LuV amp
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
-                .build()
-                .getResult();
+                .flatMap(x -> x.expandRecipe().stream()).collect(Collectors.toList());
+        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV]) // Almost
+                                                                                                                  // 1
+                                                                                                                  // LuV
+                                                                                                                  // amp
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20)).build().getResult();
         return recipe;
     }
 
     @Override
-    protected @Nullable Recipe findRecipe(
-                                          long maxVoltage, IItemHandlerModifiable inputs,
+    protected @Nullable Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs,
                                           IMultipleTankHandler fluidInputs) {
-        if (!assembler.isAssemblySiteAvailable()) return null;
+        if (!assembler.isAssemblySiteAvailable())
+            return null;
         return getRecipe(maxVoltage);
     }
 
-    // mental illness n6: this runs when a recipe with nothing in it (findrecipe returns null) is
+    // mental illness n6: this runs when a recipe with nothing in it (findrecipe
+    // returns null) is
     // "complete" too!
     @Override
     protected void completeRecipe() {
@@ -85,7 +85,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     @Override
     protected void outputRecipeOutputs() {}
 
-    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch amperage draws
+    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch
+    // amperage draws
     @Override
     protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
         return getEnergyStored() >= ((long) recipeEUt << 1);
@@ -110,8 +111,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         if (world != null && !world.isRemote) {
             if (workingEnabled && progressTime == 0) {
                 // check the assembler to see if it can finish
-                if (assembler.isAssemblyWorking() &&
-                        assembler.getComponentIndex() == assembler.getComponentCount()) {
+                if (assembler.isAssemblyWorking() && assembler.getComponentIndex() == assembler.getComponentCount()) {
                     if (assembler.isAssemblySiteReady()) {
                         assembler.finishAssembly();
                     }
@@ -124,7 +124,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return false;
+        if (targetComponent == null)
+            return false;
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
         electrodeSlotCache.clear();
         int totalUses = 0;
@@ -149,18 +150,19 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     // mostly taken from the ball mill logic
     @Override
-    protected boolean setupAndConsumeRecipeInputs(
-                                                  @NotNull Recipe recipe,
+    protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                   @NotNull IItemHandlerModifiable importInventory,
                                                   @NotNull IMultipleTankHandler importFluids) {
         if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
             return false;
         }
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return false;
+        if (targetComponent == null)
+            return false;
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
         for (int slot : electrodeSlotCache) {
-            if (requiredDamage <= 0) break;
+            if (requiredDamage <= 0)
+                break;
             ItemStack stack = importInventory.getStackInSlot(slot);
             if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack))
                 continue;
@@ -186,8 +188,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     // maybe this is a little too much
     private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AbstractComponent<?> component) {
-        return (int) ((double) recipe.getInputs().size() *
-                (component.getAssemblyDuration() + component.getRadius()));
+        return (int) ((double) recipe.getInputs().size() * (component.getAssemblyDuration() + component.getRadius()));
     }
 
     private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
@@ -201,11 +202,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                 }
             }
         }
-        return counts.entrySet().stream()
-                .map(
-                        x -> {
-                            return new GTRecipeItemInput(x.getKey(), x.getValue());
-                        })
-                .collect(Collectors.toList());
+        return counts.entrySet().stream().map(x -> {
+            return new GTRecipeItemInput(x.getKey(), x.getValue());
+        }).collect(Collectors.toList());
     }
 }

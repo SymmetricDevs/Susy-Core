@@ -2,8 +2,6 @@ package supersymmetry.api.blocks;
 
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -19,6 +17,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 import gregtech.common.items.tool.rotation.CustomBlockRotations;
@@ -34,8 +33,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
@@ -53,8 +51,7 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return new ItemStack(this, amount, variant.ordinal() * 6);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalRotatableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -67,17 +64,14 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return state.getValue(VARIANT).ordinal() * 6;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 6;
         // Makes meta = 0 -> EAST(ord = 5)
         int j = (meta + 5) % 6;
 
         EnumFacing enumfacing = EnumFacing.byIndex(j);
-        return getDefaultState()
-                .withProperty(FACING, enumfacing)
-                .withProperty(VARIANT, VALUES[i % VALUES.length]);
+        return getDefaultState().withProperty(FACING, enumfacing).withProperty(VARIANT, VALUES[i % VALUES.length]);
     }
 
     @Override
@@ -85,19 +79,21 @@ public class VariantDirectionalRotatableBlock<T extends Enum<T> & IStringSeriali
         return state.getValue(VARIANT).ordinal() * 6 + (state.getValue(FACING).getIndex() + 1) % 6;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return getItemVariant(state.getValue(VARIANT), 1);
     }
 
-    // protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R> thisClass, Class<R> declaringClass) {
+    // protected static <T, R> Class<T> getActualTypeParameter(Class<? extends R>
+    // thisClass, Class<R> declaringClass) {
     // Type type = thisClass.getGenericSuperclass();
     //
-    // while(!(type instanceof ParameterizedType) || ((ParameterizedType)type).getRawType() != declaringClass) {
+    // while(!(type instanceof ParameterizedType) ||
+    // ((ParameterizedType)type).getRawType() != declaringClass) {
     // if (type instanceof ParameterizedType) {
-    // type = ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
+    // type =
+    // ((Class)((ParameterizedType)type).getRawType()).getGenericSuperclass();
     // } else {
     // type = ((Class)type).getGenericSuperclass();
     // }

@@ -32,16 +32,8 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     public int volume;
 
     public ComponentLiquidFuelTank() {
-        super(
-                "fluid_tank",
-                "tank",
-                candidate -> candidate.getSecond().stream()
-                        .anyMatch(
-                                pos -> candidate
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.TANK_SHELL)));
+        super("fluid_tank", "tank", candidate -> candidate.getSecond().stream().anyMatch(
+                pos -> candidate.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.TANK_SHELL)));
     }
 
     @Override
@@ -73,8 +65,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         }
 
         ComponentLiquidFuelTank tank = new ComponentLiquidFuelTank();
-        compound
-                .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(tag -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
 
         tank.volume = compound.getInteger("volume");

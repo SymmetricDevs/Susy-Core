@@ -84,9 +84,11 @@ public final class DimensionBreathabilityHandler {
 
     public static boolean isInDepressurizationHazard(EntityPlayer player) {
         List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(player.dimension);
-        if (infos == null) return false;
+        if (infos == null)
+            return false;
         for (BreathabilityInfo info : infos) {
-            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) return true;
+            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION)
+                return true;
         }
         return false;
     }

@@ -21,7 +21,8 @@ public class SPacketSpeakerStop implements IPacket, IClientExecutor {
     @Override
     public void executeClient(NetHandlerPlayClient handler) {
         var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
-        if (snd == null) return;
+        if (snd == null)
+            return;
         if (id == null || id.isEmpty()) {
             SusyLog.logger.error("speaker stop packet with missing id");
             return;

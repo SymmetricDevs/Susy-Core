@@ -48,29 +48,29 @@ public class PipeNetPainterBehavior extends AbstractUsableBehaviour {
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(@NotNull EntityPlayer player,
-                                           @NotNull World world,
-                                           @NotNull BlockPos pos,
-                                           @NotNull EnumFacing side,
-                                           float hitX, float hitY, float hitZ,
+    public EnumActionResult onItemUseFirst(@NotNull EntityPlayer player, @NotNull World world, @NotNull BlockPos pos,
+                                           @NotNull EnumFacing side, float hitX, float hitY, float hitZ,
                                            @NotNull EnumHand hand) {
         if (KeyBind.TOOL_AOE_CHANGE.isKeyDown(player)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof IPipeTile<?, ?>pipe) {
+            if (te instanceof IPipeTile<?, ?> pipe) {
 
                 var block = pipe.getPipeBlock();
                 ItemStack toolStack = player.getHeldItem(hand);
 
                 CuboidRayTraceResult rayTraceResult = block.getServerCollisionRayTrace(player, pos, world);
 
-                if (rayTraceResult == null) return EnumActionResult.FAIL;
+                if (rayTraceResult == null)
+                    return EnumActionResult.FAIL;
 
                 EnumFacing gridSide = CoverRayTracer.traceCoverSide(rayTraceResult);
 
-                if (gridSide == null) return EnumActionResult.FAIL;
+                if (gridSide == null)
+                    return EnumActionResult.FAIL;
 
                 int maxWalks = getUsesLeft(toolStack);
-                if (maxWalks <= 0) return EnumActionResult.FAIL;
+                if (maxWalks <= 0)
+                    return EnumActionResult.FAIL;
 
                 int walkedBlocks = PipeOperationWalker.collectPipeNet(world, pos, pipe, gridSide,
                         TraverseOptions.COLORING.get(color), maxWalks);

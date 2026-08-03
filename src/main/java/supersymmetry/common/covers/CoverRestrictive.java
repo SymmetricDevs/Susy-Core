@@ -63,8 +63,8 @@ public class CoverRestrictive extends CoverBase {
 
     @Override
     public void renderCover(@NotNull CCRenderState renderState, @NotNull Matrix4 translation,
-                            @NotNull IVertexOperation[] pipeline,
-                            @NotNull Cuboid6 plateBox, @NotNull BlockRenderLayer renderLayer) {
+                            @NotNull IVertexOperation[] pipeline, @NotNull Cuboid6 plateBox,
+                            @NotNull BlockRenderLayer renderLayer) {
         SusyTextures.RESTRICTIVE_FILTER_FILTER_OVERLAY.renderSided(getAttachedSide(), plateBox, renderState, pipeline,
                 translation);
     }
@@ -88,13 +88,14 @@ public class CoverRestrictive extends CoverBase {
             }
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            // Check if the current slot already has the item (by checking if it stacks). If not:
+            // Check if the current slot already has the item (by checking if it stacks). If
+            // not:
             // Check if it happens to be somewhere else. This is cached in a multimap.
             // If it is, we reject the stack, but otherwise, we let it through.
-            // (The whole point is to prevent more than one slot from automatically filling up.)
+            // (The whole point is to prevent more than one slot from automatically filling
+            // up.)
 
             if (!getStackInSlot(slot).isEmpty() && ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(slot))) {
                 return super.insertItem(slot, stack, simulate);
@@ -111,7 +112,8 @@ public class CoverRestrictive extends CoverBase {
                     }
                     // Well, I guess it was already removed, then.
                 }
-                // If it's not already in the set of what goes where, we search if it happens to be anywhere already,
+                // If it's not already in the set of what goes where, we search if it happens to
+                // be anywhere already,
                 // for some reason.
                 for (int i = 0; i < getSlots(); i++) {
                     if (ItemHandlerHelper.canItemStacksStack(stack, getStackInSlot(i))) {

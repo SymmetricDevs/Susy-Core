@@ -51,8 +51,7 @@ public class InstrumentRobotArm implements Instrument {
         List<ItemStack> outputs = salvagingRecipe.getResultItemOutputs(0, 0, SuSyRecipeMaps.SALVAGING_RECIPES);
         // Turn into non-null list
         NonNullList<ItemStack> nonNullList = NonNullList.from(ItemStack.EMPTY, outputs.toArray(new ItemStack[0]));
-        LanderSpawnEntry entry = new LanderSpawnEntry(
-                nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
+        LanderSpawnEntry entry = new LanderSpawnEntry(nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
                 new ItemStackHandler(nonNullList).serializeNBT());
         LanderSpawnQueue.get(server.getWorld(nextMission.dimension)).addEntry(entry);
     }

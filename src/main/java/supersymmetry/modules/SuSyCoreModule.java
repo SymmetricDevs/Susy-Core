@@ -10,8 +10,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.network.*;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_CORE,
+@GregTechModule(moduleID = SuSyModules.MODULE_CORE,
                 containerID = Supersymmetry.MODID,
                 name = "SuSy Core",
                 description = "Core module of SuSy Core, so this should be called SuSy Core Core ngl.",

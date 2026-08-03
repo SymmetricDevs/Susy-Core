@@ -48,15 +48,8 @@ import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeMapMultiblock {
 
-    private static final String[][] VAPOR_PATTERN = { {
-            "  VVV",
-            " VVVVV",
-            "VVVVVVV",
-            "VVVVVVV",
-            "VVVVVVV",
-            " VVVVV",
-            "  VVV"
-    } };
+    private static final String[][] VAPOR_PATTERN = {
+            { "  VVV", " VVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", " VVVVV", "  VVV" } };
 
     private static final Vec3i PATTERN_OFFSET = new Vec3i(-8, 14, 4);
 
@@ -69,8 +62,7 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
 
             @Override
             public boolean checkRecipe(@NotNull Recipe recipe) {
-                return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity()) &&
-                        super.checkRecipe(recipe);
+                return RecipeCheckUtils.checkAtmosphere(recipe, this.getMetaTileEntity()) && super.checkRecipe(recipe);
             }
         };
     }
@@ -115,8 +107,7 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
         return super.isStructureObstructed() || !waterFilled;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("     CCCCC     ", "     CCCCC     ", "     CCCCC     ", "               ", "               ",
@@ -184,19 +175,16 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
                 .where('I',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                                .or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('C',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('W', fluid(FluidRegistry.WATER))
-                .where('F', frames(Materials.Steel))
+                .where('W', fluid(FluidRegistry.WATER)).where('F', frames(Materials.Steel))
                 .where('A',
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
-                .where('P', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('P', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE))).where(' ', any())
+                .where('#', air()).build();
     }
 
     @Override
@@ -223,8 +211,7 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.NATURAL_DRAFT_COOLING_TOWER_OVERLAY;
     }
@@ -255,9 +242,7 @@ public class MetaTileEntityNaturalDraftCoolingTower extends CachedPatternRecipeM
 
             BlockPos pos = this.getPos().add(offset);
 
-            this.getWorld().spawnParticle(EnumParticleTypes.CLOUD,
-                    pos.getX() + rand.nextDouble(),
-                    pos.getY() + .5F,
+            this.getWorld().spawnParticle(EnumParticleTypes.CLOUD, pos.getX() + rand.nextDouble(), pos.getY() + .5F,
                     pos.getZ() + rand.nextDouble(), .1F, .3F, .1F);
         }
     }

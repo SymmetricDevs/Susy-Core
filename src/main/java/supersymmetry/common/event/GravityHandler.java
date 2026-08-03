@@ -27,13 +27,17 @@ public class GravityHandler {
     private static WeakHashMap<Entity, Double> entityMap = new WeakHashMap<>();
 
     public static void applyGravity(Entity entity) {
-        if (entity.hasNoGravity()) return;
-        // Because working gravity on elytra-flying players can cause..... severe problems at lower gravity, it is my
+        if (entity.hasNoGravity())
+            return;
+        // Because working gravity on elytra-flying players can cause..... severe
+        // problems at lower gravity, it is my
         // utter delight to announce to you elytra are now magic!
-        // This totally isn't because Mojang decided for some godforsaken @#@#@#% reason to make ALL WAYS TO SET ELYTRA
+        // This totally isn't because Mojang decided for some godforsaken @#@#@#% reason
+        // to make ALL WAYS TO SET ELYTRA
         // FLIGHT _protected_
         // With no set methods
-        // So I cannot, without much more effort than it's worth, set elytra flight. Therefore, they're magic.
+        // So I cannot, without much more effort than it's worth, set elytra flight.
+        // Therefore, they're magic.
         if ((!(entity instanceof EntityPlayer) && !(entity instanceof EntityFlying)) ||
                 (!(entity instanceof EntityFlying) && !(((EntityPlayer) entity).capabilities.isFlying ||
                         ((EntityLivingBase) entity).isElytraFlying()))) {
@@ -60,12 +64,15 @@ public class GravityHandler {
                 else if (entity instanceof EntityLivingBase && entity.isInWater() || entity.isInLava()) {
                     entity.motionY -= (gravMult * FLUID_LIVING_OFFSET - FLUID_LIVING_OFFSET);
                 } else if (entity instanceof EntityLivingBase) {
-                    // Normally gravity works for living entities by accelerating motionY by 0.08, and then applying
+                    // Normally gravity works for living entities by accelerating motionY by 0.08,
+                    // and then applying
                     // "drag"
                     // in the form of multiplying the resulting value by 0.98.
-                    // This code we have here runs *before* all of that, and I'm not about to make a second mixin to
+                    // This code we have here runs *before* all of that, and I'm not about to make a
+                    // second mixin to
                     // change that.
-                    // Let's say we've figured out that the *next* motionY should be X after the vanilla code runs.
+                    // Let's say we've figured out that the *next* motionY should be X after the
+                    // vanilla code runs.
                     // X = (motionY - 0.08) * 0.98
                     // motionY = X / 0.98 + 0.08
 

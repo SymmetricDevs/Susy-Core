@@ -122,7 +122,8 @@ public class ComponentSpeakerBroadcast extends ComponentSpeaker {
     private List<ComponentSpeakerBroadcast> findBroadcastPeers() {
         var peers = new ArrayList<ComponentSpeakerBroadcast>();
         var network = node().network();
-        if (network == null) return peers;
+        if (network == null)
+            return peers;
         for (var node : network.nodes()) {
             if (node.host() instanceof ComponentSpeakerBroadcast broadcast) {
                 peers.add(broadcast);

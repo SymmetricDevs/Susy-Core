@@ -112,7 +112,8 @@ public class CommonProxy {
     /**
      * Recursively deletes a directory and all its contents.
      *
-     * @param directory the directory to delete
+     * @param directory
+     *                  the directory to delete
      * @return true if the directory was successfully deleted, false otherwise
      */
     private boolean deleteDirectory(File directory) {
@@ -136,7 +137,8 @@ public class CommonProxy {
     }
 
     public void postLoad() {
-        // Remove the ULV energy hatches from multiblock preview, they are a trap for new players
+        // Remove the ULV energy hatches from multiblock preview, they are a trap for
+        // new players
         MultiblockAbility.REGISTRY.get(MultiblockAbility.INPUT_ENERGY).remove(0);
         MultiblockAbility.REGISTRY.get(MultiblockAbility.OUTPUT_ENERGY).remove(0);
     }
@@ -144,7 +146,8 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
-        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
+        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
+            registry.register(block);
 
         for (Block b : susyBlocks) {
             registry.register(b);
@@ -163,9 +166,7 @@ public class CommonProxy {
             registry.register(createItemBlock(block, VariantItemBlock::new));
         susyBlocks.stream().distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
         registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
-        SHEETED_FRAMES.values()
-                .stream().distinct()
-                .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
+        SHEETED_FRAMES.values().stream().distinct().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
     }
 
@@ -219,8 +220,10 @@ public class CommonProxy {
         }
     }
 
-    // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
-    // with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
+    // Since this function checks if the key is in the translation key, you can
+    // sometimes add tooltips to multiple items
+    // with a single call of the function. Useful for hitting both basic and high
+    // pressure steam machines, for example.
     private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
         if (event.getItemStack().getTranslationKey().contains(key)) {
             event.getToolTip().add(index, toolTip);

@@ -28,19 +28,21 @@ public class RenderGlobalMixin {
     private Minecraft mc;
 
     /**
-     * Vanilla {@code renderEntities} only ever visits an entity if the single 16^3 chunk section its
-     * position is anchored in is currently in {@code renderInfos} (i.e. that section is being drawn).
-     * For entities much larger than a section -- the rocket and the transporter/erector -- the anchor
-     * section frequently leaves the frustum while the bulk of the model is still on screen, so the
-     * entity is skipped entirely and {@code RenderManager#shouldRender} is never called. Wrapping
-     * {@code shouldRender} therefore cannot keep them visible.
+     * Vanilla {@code renderEntities} only ever visits an entity if the single 16^3
+     * chunk section its position is anchored in is currently in {@code renderInfos}
+     * (i.e. that section is being drawn). For entities much larger than a section
+     * -- the rocket and the transporter/erector -- the anchor section frequently
+     * leaves the frustum while the bulk of the model is still on screen, so the
+     * entity is skipped entirely and {@code RenderManager#shouldRender} is never
+     * called. Wrapping {@code shouldRender} therefore cannot keep them visible.
      * <p>
-     * Instead we add our own pass over every loaded entity and force-render the ones tagged
-     * {@link IAlwaysRender}, bypassing the per-section gating. We inject right after
-     * {@code setRenderPosition}, so the render manager's interpolated position is already set and we
-     * can hand off to {@code renderEntityStatic} exactly as the vanilla loop does. This is also the
-     * reason we avoid {@code LocalCapture}: that is what made the previous version fail to apply under
-     * OptiFine, which rewrites this method's locals.
+     * Instead we add our own pass over every loaded entity and force-render the
+     * ones tagged {@link IAlwaysRender}, bypassing the per-section gating. We
+     * inject right after {@code setRenderPosition}, so the render manager's
+     * interpolated position is already set and we can hand off to
+     * {@code renderEntityStatic} exactly as the vanilla loop does. This is also the
+     * reason we avoid {@code LocalCapture}: that is what made the previous version
+     * fail to apply under OptiFine, which rewrites this method's locals.
      */
     @Inject(method = "renderEntities",
             at = @At(value = "INVOKE",
@@ -51,12 +53,12 @@ public class RenderGlobalMixin {
         int pass = MinecraftForgeClient.getRenderPass();
 
         // Interpolated camera position, matching the d0/d1/d2 the vanilla loop derives.
-        double camX = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) *
-                partialTicks;
-        double camY = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) *
-                partialTicks;
-        double camZ = renderViewEntity.lastTickPosZ + (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) *
-                partialTicks;
+        double camX = renderViewEntity.lastTickPosX +
+                (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
+        double camY = renderViewEntity.lastTickPosY +
+                (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;
+        double camZ = renderViewEntity.lastTickPosZ +
+                (renderViewEntity.posZ - renderViewEntity.lastTickPosZ) * partialTicks;
 
         boolean sleeping = this.mc.getRenderViewEntity() instanceof EntityLivingBase &&
                 ((EntityLivingBase) this.mc.getRenderViewEntity()).isPlayerSleeping();
@@ -73,14 +75,18 @@ public class RenderGlobalMixin {
 
     private void forceRenderEntity(Entity entity, ICamera camera, float partialTicks, double camX, double camY,
                                    double camZ, int pass, boolean sleeping) {
-        if (!entity.shouldRenderInPass(pass)) return;
+        if (!entity.shouldRenderInPass(pass))
+            return;
         entity.ignoreFrustumCheck = true;
 
         if ((entity != this.mc.getRenderViewEntity())) {
             this.renderManager.renderEntityStatic(entity, partialTicks, false);
-            // IR draws StockModel#postRender (the rocket's clip-plane sweep) only through the
-            // multipass codepath, which vanilla runs in a separate, equally section-gated loop. The
-            // static render above brings back the base; this brings back the rocket part with it.
+            // IR draws StockModel#postRender (the rocket's clip-plane sweep) only through
+            // the
+            // multipass codepath, which vanilla runs in a separate, equally section-gated
+            // loop. The
+            // static render above brings back the base; this brings back the rocket part
+            // with it.
             if (this.renderManager.isRenderMultipass(entity)) {
                 this.renderManager.renderMultipass(entity, partialTicks);
             }

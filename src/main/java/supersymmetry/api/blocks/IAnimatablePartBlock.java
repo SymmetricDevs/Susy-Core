@@ -13,8 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
-
 import org.jspecify.annotations.Nullable;
+
 import supersymmetry.common.tileentities.AnimatablePartTileEntity;
 
 public interface IAnimatablePartBlock extends ITileEntityProvider {
@@ -41,8 +41,7 @@ public interface IAnimatablePartBlock extends ITileEntityProvider {
         return susyId("animations/" + getGeoName() + ".animation.json");
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     default TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
         return new AnimatablePartTileEntity();
     }

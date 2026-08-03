@@ -15,8 +15,6 @@ public class AtmosphereUtils {
     }
 
     public static boolean isPosOxygenated(BlockPos pos, World world) {
-        return AtmosphereWorldData.get(world)
-                .getGraph()
-                .getOxygenation(pos) >= 0.1;
+        return AtmosphereWorldData.get(world).getGraph().getOxygenation(pos) >= 0.1;
     }
 }

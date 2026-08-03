@@ -45,7 +45,7 @@ import supersymmetry.common.rocketry.RocketConfiguration.MissionType;
 public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemUIFactory {
 
     private int pageNum = 0;
-    public static final int MAX_PAGES = 2;  // TODO: better instrument handling
+    public static final int MAX_PAGES = 2; // TODO: better instrument handling
 
     @Override
     public ModularPanel buildUI(PlayerInventoryGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
@@ -64,21 +64,16 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         // Set up the sync values
         syncManager.syncValue("page_num", new IntSyncValue(() -> pageNum, v -> pageNum = v));
 
-        EnumSyncValue missionType = new EnumSyncValue<>(
-                RocketConfiguration.MissionType.class,
-                () -> getMissionType(pageNum, stack),
-                v -> setMissionType(pageNum, stack, v));
+        EnumSyncValue missionType = new EnumSyncValue<>(RocketConfiguration.MissionType.class,
+                () -> getMissionType(pageNum, stack), v -> setMissionType(pageNum, stack, v));
         syncManager.syncValue("mission_type", missionType);
 
-        IntSyncValue dimension = new IntSyncValue(
-                () -> getDimension(pageNum, stack),
+        IntSyncValue dimension = new IntSyncValue(() -> getDimension(pageNum, stack),
                 v -> setDimension(pageNum, stack, v));
         syncManager.syncValue("dimension", dimension);
 
-        EnumSyncValue destinationType = new EnumSyncValue<>(
-                RocketConfiguration.DestinationType.class,
-                () -> getDestinationType(pageNum, stack),
-                v -> setDestinationType(pageNum, stack, v));
+        EnumSyncValue destinationType = new EnumSyncValue<>(RocketConfiguration.DestinationType.class,
+                () -> getDestinationType(pageNum, stack), v -> setDestinationType(pageNum, stack, v));
         syncManager.syncValue("destination_type", destinationType);
 
         panel.child(new Row().childPadding(3).top(10).horizontalCenter().coverChildren()
@@ -94,8 +89,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         Flow overallFlow = new Flow(GuiAxis.Y);
 
         Flow rowFlow = new Column().coverChildren().padding(10, 10, 30, 10)
-                .crossAxisAlignment(Alignment.CrossAxis.START)
-                .childPadding(5);
+                .crossAxisAlignment(Alignment.CrossAxis.START).childPadding(5);
         panel.child(rowFlow);
 
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.mission_type").asWidget());
@@ -103,22 +97,19 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                 .child(new ToggleButton().value(select(missionType, RocketConfiguration.MissionType.Manned))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.manned"))))
 
-                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo))
-                        .tooltip(
-                                (tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
-                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection))
-                        .tooltip((tooltip -> tooltip
-                                .addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCargo)).tooltip(
+                        (tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_cargo")))))
+                .child(new ToggleButton().value(select(missionType, MissionType.UnmannedCollection)).tooltip(
+                        (tooltip -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.unmanned_collection"))))));
 
         /*
          * syncManager.syncValue("config", i, new InteractionSyncHandler()
-         * .setOnMousePressed(b -> {
-         * ItemStack item = IntCircuitIngredient.getIntegratedCircuit(finalI);
+         * .setOnMousePressed(b -> { ItemStack item =
+         * IntCircuitIngredient.getIntegratedCircuit(finalI);
          * item.setCount(guiData.getUsedItemStack().getCount());
-         * circuitPreview.setItem(item);
-         * if (Interactable.hasShiftDown()) panel.animateClose();
-         * guiData.getPlayer().setHeldItem(guiData.getHand(), item);
-         * }));
+         * circuitPreview.setItem(item); if (Interactable.hasShiftDown())
+         * panel.animateClose(); guiData.getPlayer().setHeldItem(guiData.getHand(),
+         * item); }));
          */
 
         Flow planetoidsFlow = new Row().coverChildren();
@@ -126,38 +117,31 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         // TODO: research item
         Planetoid[] planetoids = { CelestialObjects.EARTH, CelestialObjects.MOON };
         for (Planetoid planetoid : planetoids) {
-            planetoidsFlow.child(new ToggleButton()
-                    .size(18)
-                    .overlay(new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
-                    .overlay(true,
-                            new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
-                    .value(select(dimension, planetoid.getDimension()))
-                    .tooltip((tooltip) -> tooltip.addLine(I18n.format(planetoid.getTranslationKey()))));
+            planetoidsFlow.child(
+                    new ToggleButton().size(18).overlay(new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
+                            .overlay(true, new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
+                            .value(select(dimension, planetoid.getDimension()))
+                            .tooltip((tooltip) -> tooltip.addLine(I18n.format(planetoid.getTranslationKey()))));
         }
         rowFlow.child(planetoidsFlow);
         // Select destination type
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.destination_type").asWidget());
         Flow destinationTypeFlow = new Row().coverChildren()
-                .child(new ToggleButton()
-                        .size(18)
+                .child(new ToggleButton().size(18)
                         .value(select(destinationType, RocketConfiguration.DestinationType.Landing))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.landing"))))
-                .child(new ToggleButton()
-                        .size(18)
+                .child(new ToggleButton().size(18)
                         .value(select(destinationType, RocketConfiguration.DestinationType.Orbit))
                         .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.orbit"))));
         rowFlow.child(destinationTypeFlow);
 
         // Register landing coordinates with text fields
-        rowFlow.child(IKey.lang("susy.gui.rocket_programmer.landing_coordinates").asWidget()
-                .setEnabledIf(
-                        (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal()));
-        Flow landingFlow = new Row().coverChildren()
-                .setEnabledIf(
-                        (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal());
+        rowFlow.child(IKey.lang("susy.gui.rocket_programmer.landing_coordinates").asWidget().setEnabledIf(
+                (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal()));
+        Flow landingFlow = new Row().coverChildren().setEnabledIf(
+                (w) -> destinationType.getIntValue() == RocketConfiguration.DestinationType.Landing.ordinal());
         for (EnumFacing.Axis axis : EnumFacing.Axis.values()) {
-            IntSyncValue coord = new IntSyncValue(
-                    () -> getLandingCoord(pageNum, stack, axis),
+            IntSyncValue coord = new IntSyncValue(() -> getLandingCoord(pageNum, stack, axis),
                     v -> setLandingCoord(pageNum, stack, axis, v));
             landingFlow.child(new TextFieldWidget().height(16).setNumbers().value(coord));
         }

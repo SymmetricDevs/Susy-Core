@@ -15,7 +15,8 @@ import supersymmetry.api.util.RenderMaskManager;
 @Mixin(BlockModelRenderer.class)
 public abstract class BlockModelRendererMixin {
 
-    @ModifyExpressionValue(method = { "renderModelFlat", "renderModelSmooth" },
+    @ModifyExpressionValue(method = { "renderModelFlat",
+            "renderModelSmooth" },
                            at = @At(value = "INVOKE",
                                     target = "Lnet/minecraft/block/state/IBlockState;shouldSideBeRendered(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z"))
     public boolean ignoreBlocked(boolean original, @Local(argsOnly = true) BlockPos pos, @Local EnumFacing facing) {

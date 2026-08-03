@@ -38,8 +38,7 @@ public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliost
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

@@ -86,8 +86,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
     /**
-     * Optional. A rocket programmer along the track normally stamps the mission list onto the erector, but the
-     * configurer can also be dropped in here to program whatever rocket is standing on the pad.
+     * Optional. A rocket programmer along the track normally stamps the mission
+     * list onto the erector, but the configurer can also be dropped in here to
+     * program whatever rocket is standing on the pad.
      */
     protected final RocketConfigurerHandler configurerSlot = new RocketConfigurerHandler(this);
     private boolean configWithinBudget = true;
@@ -102,8 +103,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
-    @Nullable
-    private Collection<BlockPos> hiddenBlocks;
+    @Nullable private Collection<BlockPos> hiddenBlocks;
     private AxisAlignedBB renderBounding;
     private int fuelingProgress;
 
@@ -170,14 +170,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 sp23);
         // Main platform (center — support pillars)
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
-                cSides, l23,
-                l23);
+                cSides, l23, l23);
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
-                cSides, l23,
-                l23);
+                cSides, l23, l23);
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
-                cSides, l23,
-                l23);
+                cSides, l23, l23);
         // Main platform (back half)
         aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
                 sp23);
@@ -186,18 +183,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Back frame
         aisleWithSpaceShort(p, fff23, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, fff23,
-                fff23,
-                fff23);
+                fff23, fff23);
         // One other separator
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, supp3, supp3, supp3, supp3, supp3, sp23, sp23, sp23);
         // Controller
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, ctrlRow, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        return p.where(' ', any())
-                .where('A', air())
-                .where('S', selfPredicate())
+        return p.where(' ', any()).where('A', air()).where('S', selfPredicate())
                 .where('D', states(getFoundationState()).or(autoAbilities()))
-                .where('C', states(getReinforcedFoundationState()))
-                .where('F', frames(Materials.Steel))
+                .where('C', states(getReinforcedFoundationState())).where('F', frames(Materials.Steel))
                 .where('R', SuSyPredicates.rails())
                 .where('L',
                         SuSyPredicates.hiddenStates(MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel)))
@@ -207,50 +200,37 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 .build();
     }
 
-    private void aisleWithSpace(FactoryBlockPattern pattern, String repeat,
-                                String v1, String v2, String v3, String v4, String v5, String v6, String v7, String v8,
-                                String v9, String v10, String v11, String v12, String v13) {
+    private void aisleWithSpace(FactoryBlockPattern pattern, String repeat, String v1, String v2, String v3, String v4,
+                                String v5, String v6, String v7, String v8, String v9, String v10, String v11,
+                                String v12, String v13) {
         // Repeat 30 times
-        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat);
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat);
     }
 
-    private void aisleWithSpaceShort(FactoryBlockPattern pattern, String repeat, String repea2,
-                                     String v1, String v2, String v3, String v4, String v5, String v6, String v7,
-                                     String v8,
-                                     String v9, String v10, String v11, String v12, String v13) {
+    private void aisleWithSpaceShort(FactoryBlockPattern pattern, String repeat, String repea2, String v1, String v2,
+                                     String v3, String v4, String v5, String v6, String v7, String v8, String v9,
+                                     String v10, String v11,
+                                     String v12, String v13) {
         // Repeat 30 times
-        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repea2, repea2, repea2, repea2, repea2,
-                repea2, repea2, repea2, repea2, repea2);
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repea2, repea2, repea2, repea2, repea2, repea2, repea2, repea2, repea2, repea2);
     }
 
-    private void aisleWithClasp(FactoryBlockPattern pattern, String repeat, String clasp,
-                                String v1, String v2, String v3, String v4, String v5, String v6, String v7,
-                                String v8,
-                                String v9, String v10, String v11, String v12, String v13) {
+    private void aisleWithClasp(FactoryBlockPattern pattern, String repeat, String clasp, String v1, String v2,
+                                String v3, String v4, String v5, String v6, String v7, String v8, String v9, String v10,
+                                String v11,
+                                String v12, String v13) {
         // Repeat 30 times
-        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, repeat, repeat, repeat,
-                repeat, repeat, clasp, repeat, repeat,
-                clasp, repeat, repeat, clasp, repeat,
-                repeat, clasp, repeat, repeat, clasp,
-                repeat, repeat, clasp, repeat, repeat);
+        pattern.aisle(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, repeat, repeat, repeat, repeat, repeat,
+                repeat, repeat, repeat, repeat, repeat, repeat, repeat, clasp, repeat, repeat, clasp, repeat, repeat,
+                clasp, repeat, repeat, clasp, repeat, repeat, clasp, repeat, repeat, clasp, repeat, repeat);
     }
 
     public TraceabilityPredicate autoAbilities() {
-        return autoAbilities(true, true)
-                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
+        return autoAbilities(true, true).or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                 .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(4));
     }
 
@@ -284,8 +264,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
 
         this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
-        this.inputFluidInventory = new FluidTankList(false,
-                getAbilities(MultiblockAbility.IMPORT_FLUIDS));
+        this.inputFluidInventory = new FluidTankList(false, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
     }
 
     @Override
@@ -454,10 +433,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
         if (fuelEntry == null) {
             List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()
-                    .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid())
-                    .distinct()
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                    .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid()).distinct()
+                    .filter(Objects::nonNull).collect(Collectors.toList());
 
             Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
             if (possibleEntry.isEmpty()) {
@@ -636,8 +613,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     }
 
     @Override
-    @Nullable
-    public Collection<BlockPos> getHiddenBlocks() {
+    @Nullable public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
     }
 
@@ -657,9 +633,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
         if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
                 event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .playOnce("retract")
-                    .playAndHold("protract"));
+            event.getController().setAnimation(new AnimationBuilder().playOnce("retract").playAndHold("protract"));
             return PlayState.CONTINUE;
         }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
@@ -697,10 +671,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @Override
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
-        return super.createUITemplate(entityPlayer)
-                .widget(new SlotWidget(this.configurerSlot, 0, 173, 79)
-                        .setBackgroundTexture(GuiTextures.SLOT_DARK)
-                        .setTooltipText("susy.launch_pad.gui.configurer_slot"));
+        return super.createUITemplate(entityPlayer).widget(new SlotWidget(this.configurerSlot, 0, 173, 79)
+                .setBackgroundTexture(GuiTextures.SLOT_DARK).setTooltipText("susy.launch_pad.gui.configurer_slot"));
     }
 
     @Override
@@ -710,9 +682,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public enum LaunchPadState {
         INITIALIZING, // The launch pad is literally just checking for existing entities.
-        EMPTY, // No rocket transporter has been selected, nor is there any rocket in the launch pad.
-        LOADING, // A rocket transporter has been selected, causing it to begin the erecting process.
-        LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter through physical rocket
+        EMPTY, // No rocket transporter has been selected, nor is there any rocket in the
+               // launch pad.
+        LOADING, // A rocket transporter has been selected, causing it to begin the erecting
+                 // process.
+        LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter
+                // through physical rocket
         // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
     }

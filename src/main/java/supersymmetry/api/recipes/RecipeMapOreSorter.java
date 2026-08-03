@@ -14,7 +14,8 @@ public class RecipeMapOreSorter<T extends RecipeBuilder<T>> extends RecipeMap<T>
         super(oreSorter, i, i1, i2, i3, simpleRecipeBuilder, b);
     }
 
-    // Move progress bar 20 pixels left, and decrease item inventory spacing by 5 pixels on either side
+    // Move progress bar 20 pixels left, and decrease item inventory spacing by 5
+    // pixels on either side
     @Override
     public ModularUI.Builder createJeiUITemplate(IItemHandlerModifiable importItems, IItemHandlerModifiable exportItems,
                                                  FluidTankList importFluids, FluidTankList exportFluids, int yOffset) {
@@ -22,7 +23,8 @@ public class RecipeMapOreSorter<T extends RecipeBuilder<T>> extends RecipeMap<T>
         builder.widget(new RecipeProgressWidget(200, 58, 23 + yOffset, 20, 20, progressBarTexture, moveType, this));
         addInventorySlotGroup(builder, importItems, importFluids, false, yOffset);
         addInventorySlotGroup(builder, exportItems, exportFluids, true, yOffset);
-        if (this.specialTexture != null && this.specialTexturePosition != null) addSpecialTexture(builder);
+        if (this.specialTexture != null && this.specialTexturePosition != null)
+            addSpecialTexture(builder);
         return builder;
     }
 
@@ -44,18 +46,22 @@ public class RecipeMapOreSorter<T extends RecipeBuilder<T>> extends RecipeMap<T>
         int startInputsX = isOutputs ? 81 : 55 - itemSlotsToLeft * 18;
         int startInputsY = 33 - (int) (itemSlotsToDown / 2.0 * 18) + yOffset;
         boolean wasGroup = itemHandler.getSlots() + fluidHandler.getTanks() == 12;
-        if (wasGroup) startInputsY -= 9;
-        else if (itemHandler.getSlots() >= 6 && fluidHandler.getTanks() >= 2 && !isOutputs) startInputsY -= 9;
+        if (wasGroup)
+            startInputsY -= 9;
+        else if (itemHandler.getSlots() >= 6 && fluidHandler.getTanks() >= 2 && !isOutputs)
+            startInputsY -= 9;
         for (int i = 0; i < itemSlotsToDown; i++) {
             for (int j = 0; j < itemSlotsToLeft; j++) {
                 int slotIndex = i * itemSlotsToLeft + j;
-                if (slotIndex >= itemInputsCount) break;
+                if (slotIndex >= itemInputsCount)
+                    break;
                 int x = startInputsX + 18 * j;
                 int y = startInputsY + 18 * i;
                 addSlot(builder, x, y, slotIndex, itemHandler, fluidHandler, invertFluids, isOutputs);
             }
         }
-        if (wasGroup) startInputsY += 2;
+        if (wasGroup)
+            startInputsY += 2;
         if (fluidInputsCount > 0 || invertFluids) {
             if (itemSlotsToDown >= fluidInputsCount && itemSlotsToLeft < 3) {
                 int startSpecX = isOutputs ? startInputsX + itemSlotsToLeft * 18 : startInputsX - 18;

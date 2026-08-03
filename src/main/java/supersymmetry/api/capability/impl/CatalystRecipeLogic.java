@@ -37,7 +37,8 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
 
         if (recipe.hasProperty(CatalystProperty.getInstance())) {
             CatalystPropertyValue property = recipe.getProperty(CatalystProperty.getInstance(), null);
-            if (property == null) return;
+            if (property == null)
+                return;
 
             // If it is a non-tiered catalyst, no bonuses need to be calculated
             // We can safely skip the inventory scanning
@@ -111,23 +112,12 @@ public class CatalystRecipeLogic extends RecipeLogicEnergy {
     protected int[] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
                                          long maxVoltage, int duration, int amountOC) {
         if (requiredCatalystTier != CatalystInfo.NO_TIER && catalystInfo != null) {
-            return SuSyOverclockingLogic.catalystOverclockingLogic(
-                    recipeEUt,
-                    maxVoltage,
-                    duration,
-                    amountOC,
-                    catalystInfo,
-                    requiredCatalystTier,
-                    getOverclockingDurationDivisor(),
+            return SuSyOverclockingLogic.catalystOverclockingLogic(recipeEUt, maxVoltage, duration, amountOC,
+                    catalystInfo, requiredCatalystTier, getOverclockingDurationDivisor(),
                     getOverclockingVoltageMultiplier());
         } else {
-            return OverclockingLogic.standardOverclockingLogic(
-                    recipeEUt,
-                    maxVoltage,
-                    duration,
-                    amountOC,
-                    this.getOverclockingDurationDivisor(),
-                    this.getOverclockingVoltageMultiplier());
+            return OverclockingLogic.standardOverclockingLogic(recipeEUt, maxVoltage, duration, amountOC,
+                    this.getOverclockingDurationDivisor(), this.getOverclockingVoltageMultiplier());
         }
     }
 

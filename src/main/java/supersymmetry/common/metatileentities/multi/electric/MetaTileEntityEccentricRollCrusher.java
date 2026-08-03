@@ -46,21 +46,21 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockController {
 
     /**
-     * Identifier used for input hatch base textures
-     * -1 for None, 0~15 for normal metal sheets and 16~31 for large ones.
-     * This is getting on server-side and sync to client side later.
+     * Identifier used for input hatch base textures -1 for None, 0~15 for normal
+     * metal sheets and 16~31 for large ones. This is getting on server-side and
+     * sync to client side later.
      */
     protected byte metalSheetIdentifier = -1;
 
     /**
-     * List of animatable blocks
-     * Much like {@link #variantActiveBlocks} in vanilla CEu
+     * List of animatable blocks Much like {@link #variantActiveBlocks} in vanilla
+     * CEu
      */
     protected List<BlockPos> ercRolls;
 
     /**
-     * The axis direction of the eccentric roll (rotates CCW)
-     * Only gets updated on the server-side
+     * The axis direction of the eccentric roll (rotates CCW) Only gets updated on
+     * the server-side
      * 
      * @see #updateRollOrientation()
      */
@@ -107,33 +107,24 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        if (getWorld() != null) updateRollOrientation();
+        if (getWorld() != null)
+            updateRollOrientation();
 
         TraceabilityPredicate casings = states(getCasingState()).setMinGlobalLimited(22);
         TraceabilityPredicate metalSheets = metalSheets();
 
-        return FactoryBlockPattern.start()
-                .aisle("  CCDC  ", "  CCGC  ", "  CCMX  ", "    MMX ", "     MMX")
+        return FactoryBlockPattern.start().aisle("  CCDC  ", "  CCGC  ", "  CCMX  ", "    MMX ", "     MMX")
                 .aisle("JJJJ#CD ", "JHJ#R#C ", "  J##M  ", "   J##M ", "     ##N")
                 .aisle("  BJ#CD ", " BJ#R#C ", " PJ##M  ", " P J##M ", "     ##N")
                 .aisle("JJJJ#CD ", "JHJ#R#C ", "  J##M  ", "   J##M ", "     ##N")
-                .aisle("  CCDC  ", "  CSGC  ", "  CCMX  ", "    MMX ", "     MMX")
-                .where(' ', any())
-                .where('#', air())
+                .aisle("  CCDC  ", "  CSGC  ", "  CCMX  ", "    MMX ", "     MMX").where(' ', any()).where('#', air())
                 .where('B', states(getPipeCasingState()))
-                .where('C', casings.or(autoAbilities(true, true,
-                        false, false, true, true, false)))
-                .where('D', casings.or(abilities(MultiblockAbility.EXPORT_ITEMS)))
-                .where('G', states(getGearBoxState()))
-                .where('H', states(getHydraulicGearboxState()))
-                .where('J', states(getJawCasingState()))
-                .where('R', eccentricRolls(rollOrientation))
-                .where('P', states(getPistonState()))
-                .where('X', frames(Materials.Steel))
-                .where('S', selfPredicate())
-                .where('M', metalSheets)
-                .where('N', metalSheets.or(abilities(MultiblockAbility.IMPORT_ITEMS)))
-                .build();
+                .where('C', casings.or(autoAbilities(true, true, false, false, true, true, false)))
+                .where('D', casings.or(abilities(MultiblockAbility.EXPORT_ITEMS))).where('G', states(getGearBoxState()))
+                .where('H', states(getHydraulicGearboxState())).where('J', states(getJawCasingState()))
+                .where('R', eccentricRolls(rollOrientation)).where('P', states(getPistonState()))
+                .where('X', frames(Materials.Steel)).where('S', selfPredicate()).where('M', metalSheets)
+                .where('N', metalSheets.or(abilities(MultiblockAbility.IMPORT_ITEMS))).build();
     }
 
     @Override
@@ -146,14 +137,9 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
                 .aisle("  BJ CO ", " BJ R C ", " PJ  M  ", " P J  M ", "       I")
                 .aisle("JJJJ CC ", "JHJ R C ", "  J  M  ", "   J  M ", "       M")
                 .aisle("  CECK  ", "  CSGC  ", "  CCMX  ", "    MMX ", "     MMX")
-                .where(' ', Blocks.AIR.getDefaultState())
-                .where('B', getPipeCasingState())
-                .where('C', getCasingState())
-                .where('G', getGearBoxState())
-                .where('H', getHydraulicGearboxState())
-                .where('J', getJawCasingState())
-                .where('R', SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
-                        .withProperty(FACING, EnumFacing.SOUTH))
+                .where(' ', Blocks.AIR.getDefaultState()).where('B', getPipeCasingState()).where('C', getCasingState())
+                .where('G', getGearBoxState()).where('H', getHydraulicGearboxState()).where('J', getJawCasingState())
+                .where('R', SuSyBlocks.ECCENTRIC_ROLL.getDefaultState().withProperty(FACING, EnumFacing.SOUTH))
                 .where('P', getPistonState())
                 .where('X', MetaBlocks.FRAMES.get(Materials.Steel).getBlock(Materials.Steel))
                 .where('S', SuSyMetaTileEntities.ECCENTRIC_ROLL_CRUSHER, EnumFacing.SOUTH)
@@ -197,15 +183,15 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     protected void formStructure(PatternMatchContext context) {
         this.metalSheetIdentifier = context.get("MetalSheet");
 
-        /// This has to be called before [MultiblockWithDisplayBase#formStructure(PatternMatchContext)] calls
-        /// where [#replaceVariantBlocksActive(boolean)] is called
+        /// This has to be called before [MultiblockWithDisplayBase#formStructure(PatternMatchContext)] calls where
+        /// [#replaceVariantBlocksActive(boolean)] is called
+        ///
         /// @see [#setAnimatablesActive(boolean)]
         this.ercRolls = context.getOrDefault("ERC_Rolls", new LinkedList<>());
         super.formStructure(context);
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            writeCustomData(GregtechDataCodes.UPDATE_COLOR,
-                    buf -> buf.writeByte(metalSheetIdentifier));
+            writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeByte(metalSheetIdentifier));
         }
     }
 
@@ -216,10 +202,9 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
         this.rollOrientation = EnumFacing.DOWN;
         World world = getWorld();
         if (world != null && !world.isRemote) {
-            /// [GregtechDataCodes#UPDATE_COLOR] is only used for [MetaTileEntityFusionReactor]
-            /// at the moment, so this should be fine.
-            writeCustomData(GregtechDataCodes.UPDATE_COLOR,
-                    buf -> buf.writeByte(metalSheetIdentifier));
+            /// [GregtechDataCodes#UPDATE_COLOR] is only used for [MetaTileEntityFusionReactor] at the moment, so this
+            /// should be fine.
+            writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeByte(metalSheetIdentifier));
         }
     }
 
@@ -232,7 +217,8 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     /**
      * Set animatable blocks active or inactive
      *
-     * @param isActive whether the multi is active
+     * @param isActive
+     *                 whether the multi is active
      */
     protected void setAnimatablesActive(boolean isActive) {
         if (ercRolls != null && !ercRolls.isEmpty()) {
@@ -250,7 +236,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     @Override
     @SideOnly(Side.CLIENT)
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (metalSheetIdentifier >= 0 && part instanceof IMultiblockAbilityPart<?>abilityPart &&
+        if (metalSheetIdentifier >= 0 && part instanceof IMultiblockAbilityPart<?> abilityPart &&
                 abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
             return SusyTextures.METAL_SHEETS[metalSheetIdentifier];
         }

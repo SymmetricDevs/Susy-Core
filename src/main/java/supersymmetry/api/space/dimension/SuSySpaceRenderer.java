@@ -98,8 +98,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         if (sunObject != null && ShaderManager.shadersAllowed()) {
             renderSunShader(worldTime);
@@ -117,9 +116,12 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GlStateManager.pushMatrix();
         GL11.glScalef(100.0f, 100.0f, 100.0f);
         for (RenderableCelestialObject obj : objects) {
-            if (obj.getCelestialObject() == CelestialObjects.EARTH) continue;
-            if (obj.getCelestialObject() == CelestialObjects.SUN) continue;
-            if (obj == sunObject) continue;
+            if (obj.getCelestialObject() == CelestialObjects.EARTH)
+                continue;
+            if (obj.getCelestialObject() == CelestialObjects.SUN)
+                continue;
+            if (obj == sunObject)
+                continue;
 
             if (obj.getCelestialObject() == CelestialObjects.MOON && ShaderManager.shadersAllowed()) {
                 // Moon uses PlanetSurfaceRenderer with terminator
@@ -133,12 +135,12 @@ public class SuSySpaceRenderer extends IRenderHandler {
 
                     int[] moonFaces = new int[6];
 
-                    for (int i = 0; i < 6; i++) moonFaces[i] = obj.getCubemap().getFaceTexId(i);
+                    for (int i = 0; i < 6; i++)
+                        moonFaces[i] = obj.getCubemap().getFaceTexId(i);
                     float[] sd = currentSunDir;
-                    planetSurfaceRenderer.render(
-                            capturedView, capturedProj, sd,
-                            new float[] { moonDir[0] * 100f, moonDir[1] * 100f, moonDir[2] * 100f },
-                            moonScale, moonRot, moonFaces);
+                    planetSurfaceRenderer.render(capturedView, capturedProj, sd,
+                            new float[] { moonDir[0] * 100f, moonDir[1] * 100f, moonDir[2] * 100f }, moonScale, moonRot,
+                            moonFaces);
                 }
             } else {
                 obj.renderAtPosition(worldTime, mesh);
@@ -164,7 +166,8 @@ public class SuSySpaceRenderer extends IRenderHandler {
     }
 
     private void renderSunShader(long worldTime) {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         float[] sd = currentSunDir;
 
@@ -172,7 +175,8 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
         int progId = ShaderManager.getRawProgram("sun.vert", "sun.frag");
-        if (progId <= 0) return;
+        if (progId <= 0)
+            return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -180,9 +184,7 @@ public class SuSySpaceRenderer extends IRenderHandler {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
@@ -214,23 +216,19 @@ public class SuSySpaceRenderer extends IRenderHandler {
             }
         }
 
-        double orbitAngle = (worldTime % mainPlanetoidOrbitalPeriodTicks) /
-                (double) mainPlanetoidOrbitalPeriodTicks * 2.0 * Math.PI;
+        double orbitAngle = (worldTime % mainPlanetoidOrbitalPeriodTicks) / (double) mainPlanetoidOrbitalPeriodTicks *
+                2.0 * Math.PI;
 
         // Matches old GL calls: glRotatef(90,1,0,0) then glRotatef(orbitDeg,0,1,0)
         // Ry(orbit) * Rx(90) in column-major:
         // col0=(co,0,-so,0) col1=(so,0,co,0) col2=(0,-1,0,0) col3=(0,0,0,1)
         float co = (float) Math.cos(orbitAngle);
         float so = (float) Math.sin(orbitAngle);
-        float[] rot = {
-                co, 0f, -so, 0f,
-                so, 0f, co, 0f,
-                0f, -1f, 0f, 0f,
-                0f, 0f, 0f, 1f
-        };
+        float[] rot = { co, 0f, -so, 0f, so, 0f, co, 0f, 0f, -1f, 0f, 0f, 0f, 0f, 0f, 1f };
 
         int[] faceTexIds = new int[6];
-        for (int i = 0; i < 6; i++) faceTexIds[i] = mainCubemap.getFaceTexId(i);
+        for (int i = 0; i < 6; i++)
+            faceTexIds[i] = mainCubemap.getFaceTexId(i);
 
         float scale = 2500.0f;
         float planetY = -scale * 1.02f;
@@ -241,10 +239,8 @@ public class SuSySpaceRenderer extends IRenderHandler {
         float savedSunR = planetSurfaceRenderer.sunAngularRadius;
         planetSurfaceRenderer.sunAngularRadius = 0.0f;
 
-        planetSurfaceRenderer.render(
-                capturedView, capturedProj, sd,
-                new float[] { 0f, planetY, 0f },
-                scale, rot, faceTexIds);
+        planetSurfaceRenderer.render(capturedView, capturedProj, sd, new float[] { 0f, planetY, 0f }, scale, rot,
+                faceTexIds);
 
         planetSurfaceRenderer.sunAngularRadius = savedSunR;
     }
@@ -284,31 +280,34 @@ public class SuSySpaceRenderer extends IRenderHandler {
         // Rotate (0,0,-1) to point toward (-moonDir[0], -moonDir[1], -moonDir[2]).
         float tx = -moonDir[0], ty = -moonDir[1], tz = -moonDir[2];
         float len = (float) Math.sqrt(tx * tx + ty * ty + tz * tz);
-        if (len < 1e-6f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+        if (len < 1e-6f)
+            return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
         tx /= len;
         ty /= len;
         tz /= len;
 
         // Rodrigues rotation: (0,0,-1) → (tx,ty,tz)
         // axis = (0,0,-1) x (tx,ty,tz) = (-ty*(-1)-tz*0, tz*0-(-1)*tx-... )
-        // cross((0,0,-1),(tx,ty,tz)) = (0*tz-(-1)*ty, (-1)*tx-0*tz, 0*ty-0*tx) = (ty, -tx, 0)
+        // cross((0,0,-1),(tx,ty,tz)) = (0*tz-(-1)*ty, (-1)*tx-0*tz, 0*ty-0*tx) = (ty,
+        // -tx, 0)
         float ax = ty, ay = -tx, az = 0f;
         float sinA = (float) Math.sqrt(ax * ax + ay * ay);
         float cosA = -tz; // dot((0,0,-1),(tx,ty,tz))
 
         if (sinA < 1e-6f) {
-            if (cosA > 0) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-            else return new float[] { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
+            if (cosA > 0)
+                return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+            else
+                return new float[] { 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1 };
         }
 
         // Rodrigues: R = I*cos + (1-cos)*nnT + sin*[n]x where n = axis/|axis|
         float nx = ax / sinA, ny = ay / sinA;
         float c = cosA, s = sinA, mc = 1f - c;
-        return new float[] {
-                c + nx * nx * mc, ny * nx * mc + 0 * s, 0 * nx * mc - ny * s, 0f,  // col 0
-                nx * ny * mc - 0 * s, c + ny * ny * mc, 0 * ny * mc + nx * s, 0f,  // col 1
-                0 * nx * mc + ny * s, 0 * ny * mc - nx * s, c, 0f,  // col 2
-                0f, 0f, 0f, 1f   // col 3
+        return new float[] { c + nx * nx * mc, ny * nx * mc + 0 * s, 0 * nx * mc - ny * s, 0f, // col 0
+                nx * ny * mc - 0 * s, c + ny * ny * mc, 0 * ny * mc + nx * s, 0f, // col 1
+                0 * nx * mc + ny * s, 0 * ny * mc - nx * s, c, 0f, // col 2
+                0f, 0f, 0f, 1f // col 3
         };
     }
 }

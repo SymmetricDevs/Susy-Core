@@ -3,7 +3,6 @@ package supersymmetry.common.network;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
@@ -11,11 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
-import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 import supersymmetry.api.util.RenderMaskManager;
 
 @NullMarked
@@ -23,10 +22,8 @@ public class SPacketUpdateRenderMask implements IPacket, IClientExecutor {
 
     private boolean disable;
     private int dimId;
-    @Nullable
-    private BlockPos controllerPos;
-    @Nullable
-    private Collection<BlockPos> poses;
+    @Nullable private BlockPos controllerPos;
+    @Nullable private Collection<BlockPos> poses;
 
     @SuppressWarnings("unused")
     public SPacketUpdateRenderMask() {

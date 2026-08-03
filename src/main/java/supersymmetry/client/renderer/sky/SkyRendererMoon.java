@@ -46,7 +46,8 @@ public class SkyRendererMoon extends IRenderHandler {
         BufferBuilder bb = Tessellator.getInstance().getBuffer();
 
         GlStateManager.enableTexture2D();
-        // GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+        // GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+        // GlStateManager.DestFactor.ONE,
         // GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         mc.getTextureManager().bindTexture(EARTH_TEXTURE);
@@ -71,7 +72,8 @@ public class SkyRendererMoon extends IRenderHandler {
         GlStateManager.rotate(-90F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(getSunAngle(world), 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-        float sunSize = 25F; // A little smaller than on Earth, but mostly to exaggerate the distance between the sun
+        float sunSize = 25F; // A little smaller than on Earth, but mostly to exaggerate the distance between
+                             // the sun
                              // and Earth in the sky
         double distSun = distEarth * 2;
 

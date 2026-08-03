@@ -9,8 +9,8 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.RelativeDirection;
 
 /**
- * Represents a 3D grid for drawing a multiblock pattern. The origin point (0, 0, 0) is
- * at the left, bottom, front corner.
+ * Represents a 3D grid for drawing a multiblock pattern. The origin point (0,
+ * 0, 0) is at the left, bottom, front corner.
  */
 public class Grid3D {
 
@@ -21,11 +21,15 @@ public class Grid3D {
     private final Map<Character, TraceabilityPredicate> symbolMap = new HashMap<>();
 
     /**
-     * Initializes the grid with the given dimensions and sets all blocks to a space character.
+     * Initializes the grid with the given dimensions and sets all blocks to a space
+     * character.
      *
-     * @param width  X dimension, left-right
-     * @param height Y dimension, bottom-top
-     * @param depth  Z dimension, front-back
+     * @param width
+     *               X dimension, left-right
+     * @param height
+     *               Y dimension, bottom-top
+     * @param depth
+     *               Z dimension, front-back
      */
     public Grid3D(int width, int height, int depth) {
         this.width = width;
@@ -236,11 +240,12 @@ public class Grid3D {
     }
 
     /**
-     * Makes a shallow copy of the given builder, applies the grid shape to it, and returns the built
-     * shape info. It does not set the keys and block states, those are expected to have been
-     * previously configured.
+     * Makes a shallow copy of the given builder, applies the grid shape to it, and
+     * returns the built shape info. It does not set the keys and block states,
+     * those are expected to have been previously configured.
      *
-     * @param builder Base builder object with keys configured.
+     * @param builder
+     *                Base builder object with keys configured.
      * @return The built shape.
      */
     public MultiblockShapeInfo buildShape(MultiblockShapeInfo.Builder builder) {

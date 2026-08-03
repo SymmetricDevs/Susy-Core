@@ -38,8 +38,7 @@ public class BlockRobotArm extends VariantHorizontalRotatableBlock<BlockRobotArm
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

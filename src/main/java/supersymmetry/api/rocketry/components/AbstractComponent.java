@@ -47,9 +47,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     public List<MaterialCost> materials = new ArrayList<>();
     protected int height;
 
-    public AbstractComponent(
-                             String name,
-                             String type,
+    public AbstractComponent(String name, String type,
                              Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate) {
         this.detectionPredicate = detectionPredicate;
         this.name = name;
@@ -69,10 +67,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             try {
                 return nameToComponentRegistry.get(name).getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                SusyLog.logger.error(
-                        "something horrible happened during component instantiation. {} {}",
-                        e.getMessage(),
-                        e.getStackTrace());
+                SusyLog.logger.error("something horrible happened during component instantiation. {} {}",
+                        e.getMessage(), e.getStackTrace());
             }
         } else {
             throw new IllegalStateException("tried to get a non existing component");
@@ -84,14 +80,13 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     @SuppressWarnings("unchecked")
     public static void registerComponent(AbstractComponent<?> component) {
         if (!getRegistryLock()) {
-            nameToComponentRegistry.put(
-                    component.getName(), (Class<? extends AbstractComponent<?>>) component.getClass());
+            nameToComponentRegistry.put(component.getName(),
+                    (Class<? extends AbstractComponent<?>>) component.getClass());
             if (registry.stream().noneMatch(x -> x.getName().equals(component.getName()))) {
                 registry.add(component);
             }
         } else {
-            throw new IllegalStateException(
-                    "tried to register a component after the registry was closed. dumbass.");
+            throw new IllegalStateException("tried to register a component after the registry was closed. dumbass.");
         }
     }
 
@@ -149,12 +144,15 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     protected Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate;
 
-    // meant to verify the compatability between the component and the entire rocket stage so that you
-    // dont end up with a liquid fuel engine on a solid fuel tank, return true if everything is fine
+    // meant to verify the compatability between the component and the entire rocket
+    // stage so that you
+    // dont end up with a liquid fuel engine on a solid fuel tank, return true if
+    // everything is fine
     protected Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate = t -> {
         return true;
     };
-    // when in the aerospace flight simulator ui, this defines if a component can be put into a row
+    // when in the aerospace flight simulator ui, this defines if a component can be
+    // put into a row
     protected Predicate<String> componentSlotValidator = name -> name.equals(this.getType()) ||
             name.equals(this.getName());
 
@@ -215,8 +213,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         this.detectionPredicate = predicate;
     }
 
-    public abstract Optional<NBTTagCompound> analyzePattern(
-                                                            StructAnalysis analysis, AxisAlignedBB aabb);
+    public abstract Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb);
 
     public void collectInfo(StructAnalysis analysis, Set<BlockPos> connected, NBTTagCompound tag) {
         // These are sometimes done separately.
@@ -228,9 +225,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             this.height = analysis.getHeight(connected);
             tag.setInteger("height", height);
         }
-        this.mass = connected.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
+        this.mass = connected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block))).sum();
         tag.setDouble("mass", mass);
         tag.setString("type", type);
         tag.setString("name", name);

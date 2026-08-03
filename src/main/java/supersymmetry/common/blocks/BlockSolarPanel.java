@@ -38,8 +38,7 @@ public class BlockSolarPanel extends VariantBlock<BlockSolarPanel.SolarPanelType
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

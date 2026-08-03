@@ -129,13 +129,11 @@ public class SuSyMetaItems {
 
         // IDs start at 1 for historical reasons. Do not renumber existing items.
         CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
-        CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam")
-                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                        I18n.format("metaitem.conveyor.module.tooltip"),
+        CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam").addComponents(
+                new TooltipBehavior(lines -> Collections.addAll(lines, I18n.format("metaitem.conveyor.module.tooltip"),
                         I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))));
-        PUMP_STEAM = metaItem.addItem(3, "pump.steam")
-                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                        I18n.format("metaitem.electric.pump.tooltip"),
+        PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(
+                new TooltipBehavior(lines -> Collections.addAll(lines, I18n.format("metaitem.electric.pump.tooltip"),
                         I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))));
@@ -154,8 +152,8 @@ public class SuSyMetaItems {
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
         DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
+                .addComponents(new DataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),
+                        Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));

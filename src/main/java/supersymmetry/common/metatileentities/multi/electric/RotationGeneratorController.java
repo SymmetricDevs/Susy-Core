@@ -25,7 +25,9 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.materials.SusyMaterials;
 
 public abstract class RotationGeneratorController extends FuelMultiblockController
-                                                  implements IRotationSpeedHandler, ITieredMetaTileEntity {
+                                                  implements
+                                                  IRotationSpeedHandler,
+                                                  ITieredMetaTileEntity {
 
     public final int tier;
 
@@ -116,13 +118,9 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         sufficientFluids = lubricantStack.amount >= lubricantInfo.amount_required;
     }
 
-    private static final Material[] POSSIBLE_LUBRICANTS = {
-            SusyMaterials.SupremeLubricant,
-            SusyMaterials.PremiumLubricant,
-            SusyMaterials.MidgradeLubricant,
-            Materials.Lubricant,
-            SusyMaterials.LubricatingOil
-    };
+    private static final Material[] POSSIBLE_LUBRICANTS = { SusyMaterials.SupremeLubricant,
+            SusyMaterials.PremiumLubricant, SusyMaterials.MidgradeLubricant, Materials.Lubricant,
+            SusyMaterials.LubricatingOil };
 
     protected void setLubricantStack(IMultipleTankHandler tanks) {
         for (Material lubricant : POSSIBLE_LUBRICANTS) {
@@ -194,7 +192,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             if (proposedEUt > getMaximumAllowedVoltage()) {
                 return false;
             }
-            // Prevent recipe from starting if energy buffer is full and we're not voiding energy
+            // Prevent recipe from starting if energy buffer is full and we're not voiding
+            // energy
             if (isFull && !voidEnergy) {
                 return false;
             }
@@ -213,7 +212,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
-                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                // as recipe starts with progress on 1 this has to be > only not => to
+                // compensate for it
                 if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                 }
@@ -238,7 +238,8 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
             long euToDraw = -getActualVoltage(); // Will be negative
             long resultEnergy = getEnergyStored() - euToDraw;
             if (resultEnergy >= 0L && getEnergyStored() < getEnergyCapacity()) {
-                if (!simulate) getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
+                if (!simulate)
+                    getEnergyContainer().changeEnergy(-euToDraw); // So this is positive
                 return true;
             }
             // Turbine voids excess fuel to keep spinning in any case.
@@ -271,9 +272,12 @@ public abstract class RotationGeneratorController extends FuelMultiblockControll
         @Override
         protected long getMaxParallelVoltage() {
             // By returning the maximum here, the parallel limit will be based on the input
-            // fluid amount. If you scale production here, the parallel will be limited based
-            // on the speed. So, the first run will only do 1X parallel and will consume much less
-            // fluid, yet the speed will continue to increase and generate thousands of EU/t before
+            // fluid amount. If you scale production here, the parallel will be limited
+            // based
+            // on the speed. So, the first run will only do 1X parallel and will consume
+            // much less
+            // fluid, yet the speed will continue to increase and generate thousands of EU/t
+            // before
             // the initial fuel supply runs out.
             return getMaximumAllowedVoltage();
         }

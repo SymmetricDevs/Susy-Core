@@ -4,8 +4,6 @@ import static gregtech.api.util.GTUtility.getMetaTileEntity;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +21,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -93,22 +92,15 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         return super.getNeighbor(facing);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" CCC ")
-                .aisle("CPPPC")
-                .aisle("CPPPC")
-                .aisle("CPPPC")
-                .aisle(" CSC ")
-                .where(' ', any())
-                .where('S', selfPredicate())
-                .where('C', states(getCasingState()).setMinGlobalLimited(6)
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
-                .where('P', states(getPadState()))
-                .build();
+        return FactoryBlockPattern.start().aisle(" CCC ").aisle("CPPPC").aisle("CPPPC").aisle("CPPPC").aisle(" CSC ")
+                .where(' ', any()).where('S', selfPredicate())
+                .where('C',
+                        states(getCasingState()).setMinGlobalLimited(6)
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
+                .where('P', states(getPadState())).build();
     }
 
     @Override
@@ -121,8 +113,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         return new MetaTileEntityCargoDronePad(metaTileEntityId);
     }
 
-    @Nullable
-    public EntityDrone getDrone() {
+    @Nullable public EntityDrone getDrone() {
         return this.drone;
     }
 
@@ -490,8 +481,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         }
     }
 
-    @Nullable
-    public MetaTileEntity getBasketAtCoords(BlockPos pos) {
+    @Nullable public MetaTileEntity getBasketAtCoords(BlockPos pos) {
         MetaTileEntity tileEntity = getMetaTileEntity(this.getWorld(), pos);
         if (tileEntity instanceof MetaTileEntityDroneDepositBasket) {
             return tileEntity;
@@ -561,8 +551,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
             } else if (droneStack.isItemEqual(SuSyMetaItems.ELITE_CARGO_DRONE.getStackForm())) {
                 currentDroneTier = eliteDroneTier;
             }
-            if (targetBasket != null && hasSpaceInBasket(targetBasket) &&
-                    getTotalFlightTime(currentDroneTier) > -1) {
+            if (targetBasket != null && hasSpaceInBasket(targetBasket) && getTotalFlightTime(currentDroneTier) > -1) {
                 flightTime = 0;
                 totalFlightTime = getTotalFlightTime(currentDroneTier);
                 consumeItem(getFirstSlotWithItem());
@@ -626,8 +615,7 @@ public class MetaTileEntityCargoDronePad extends RecipeMapMultiblockController {
         if (targetBasket != null && targetPos != null) {
             textList.add(new TextComponentTranslation("susy.cargo_drone_pad.basket_pos",
                     "(" + targetPos.getX() + ", " + targetPos.getY() + ", " + targetPos.getZ() + ")"));
-            textList.add(new TextComponentTranslation("susy.cargo_drone_pad.distance",
-                    dist));
+            textList.add(new TextComponentTranslation("susy.cargo_drone_pad.distance", dist));
         }
         if (initiated) {
             textList.add(new TextComponentTranslation("susy.cargo_drone_pad.initiated"));

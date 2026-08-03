@@ -2,14 +2,14 @@ package supersymmetry.common.rocketry;
 
 import java.util.UUID;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import org.jspecify.annotations.Nullable;
+
 /**
- * Represents a queued lander spawn with all necessary data.
- * This entry will be processed by the LanderSpawnQueue system.
+ * Represents a queued lander spawn with all necessary data. This entry will be
+ * processed by the LanderSpawnQueue system.
  */
 public class LanderSpawnEntry {
 
@@ -24,12 +24,18 @@ public class LanderSpawnEntry {
     /**
      * Creates a new lander spawn entry.
      *
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param x              The X coordinate
-     * @param y              The Y coordinate
-     * @param z              The Z coordinate
-     * @param ticksRemaining The number of ticks to wait before spawning
-     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
+     * @param dimensionId
+     *                       The dimension ID where the lander should spawn
+     * @param x
+     *                       The X coordinate
+     * @param y
+     *                       The Y coordinate
+     * @param z
+     *                       The Z coordinate
+     * @param ticksRemaining
+     *                       The number of ticks to wait before spawning
+     * @param inventoryData
+     *                       Optional NBT data containing inventory contents (can be null)
      */
     public LanderSpawnEntry(int dimensionId, double x, double y, double z, int ticksRemaining,
                             @Nullable NBTTagCompound inventoryData) {
@@ -45,13 +51,16 @@ public class LanderSpawnEntry {
     /**
      * Creates a new lander spawn entry from a BlockPos.
      *
-     * @param dimensionId    The dimension ID where the lander should spawn
-     * @param pos            The position where the lander should spawn
-     * @param ticksRemaining The number of ticks to wait before spawning
-     * @param inventoryData  Optional NBT data containing inventory contents (can be null)
+     * @param dimensionId
+     *                       The dimension ID where the lander should spawn
+     * @param pos
+     *                       The position where the lander should spawn
+     * @param ticksRemaining
+     *                       The number of ticks to wait before spawning
+     * @param inventoryData
+     *                       Optional NBT data containing inventory contents (can be null)
      */
-    public LanderSpawnEntry(int dimensionId, BlockPos pos, int ticksRemaining,
-                            @Nullable NBTTagCompound inventoryData) {
+    public LanderSpawnEntry(int dimensionId, BlockPos pos, int ticksRemaining, @Nullable NBTTagCompound inventoryData) {
         this(dimensionId, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, ticksRemaining, inventoryData);
     }
 
@@ -97,8 +106,7 @@ public class LanderSpawnEntry {
         this.ticksRemaining--;
     }
 
-    @Nullable
-    public NBTTagCompound getInventoryData() {
+    @Nullable public NBTTagCompound getInventoryData() {
         return inventoryData;
     }
 
@@ -130,7 +138,8 @@ public class LanderSpawnEntry {
     /**
      * Deserializes a LanderSpawnEntry from NBT.
      *
-     * @param tag The NBT tag to deserialize from
+     * @param tag
+     *            The NBT tag to deserialize from
      * @return A new LanderSpawnEntry instance
      */
     public static LanderSpawnEntry deserializeNBT(NBTTagCompound tag) {

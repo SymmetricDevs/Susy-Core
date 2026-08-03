@@ -235,15 +235,13 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
         MultiblockDisplayText.builder(textList, this.isStructureFormed()).setWorkingStatus(true, isActive)
                 .addEnergyUsageLine(this.energyContainer)
                 .addEnergyTierLine(GTUtility.getTierByVoltage(this.energyContainer.getInputVoltage()))
-                .addWorkingStatusLine().addProgressLine(this.getProgressPercent())
-                .addLowPowerLine(hasNotEnoughEnergy)
+                .addWorkingStatusLine().addProgressLine(this.getProgressPercent()).addLowPowerLine(hasNotEnoughEnergy)
                 .addCustom((comps) -> {
                     if (!this.isStructureFormed()) {
                         return;
                     }
-                    Strand displayStrand = strand != null ? strand :
-                            ((output == null || output.getStrand() == null) ?
-                                    (input == null ? null : input.getStrand()) : output.getStrand());
+                    Strand displayStrand = strand != null ? strand : ((output == null || output.getStrand() == null) ?
+                            (input == null ? null : input.getStrand()) : output.getStrand());
                     if (displayStrand == null) {
                         comps.add(new TextComponentTranslation("susy.multiblock.strand_casting.no_strand"));
                         return;
@@ -311,12 +309,13 @@ public abstract class MetaTileEntityStrandShaper extends MultiblockWithDisplayBa
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
-                isActive, true);
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), isActive,
+                true);
     }
 
     protected TraceabilityPredicate rollOrientation(RelativeDirection direction) {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         return SuSyPredicates.axisOrientation(this, rollState(), direction, VariantAxialRotatableBlock.AXIS);
     }
 

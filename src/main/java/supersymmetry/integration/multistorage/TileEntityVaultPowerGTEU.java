@@ -17,13 +17,13 @@ public class TileEntityVaultPowerGTEU extends TileEntityVaultBase implements IEn
 
     @Override
     public boolean hasCapability(@NotNull Capability<?> capability, @Nullable EnumFacing side) {
-        if (side != null && capability == CAPABILITY_ENERGY_CONTAINER) return true;
+        if (side != null && capability == CAPABILITY_ENERGY_CONTAINER)
+            return true;
         return super.hasCapability(capability, side);
     }
 
     @Override
-    @Nullable
-    public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing side) {
+    @Nullable public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing side) {
         if (capability == CAPABILITY_ENERGY_CONTAINER) {
             IEnergyContainer delegate = findDelegate(side);
             if (delegate != null) {
@@ -34,31 +34,35 @@ public class TileEntityVaultPowerGTEU extends TileEntityVaultBase implements IEn
         return super.getCapability(capability, side);
     }
 
-    @Nullable
-    protected IEnergyContainer findDelegate(@Nullable EnumFacing side) {
-        if (side == null) return null;
+    @Nullable protected IEnergyContainer findDelegate(@Nullable EnumFacing side) {
+        if (side == null)
+            return null;
         EnumFacing targetFacing = side.getOpposite();
         TileEntity te = getWorld().getTileEntity(getPos().offset(targetFacing));
-        if (te == null || te instanceof TileEntityVaultPowerGTEU) return null;
+        if (te == null || te instanceof TileEntityVaultPowerGTEU)
+            return null;
 
         EnumFacing neighborSide = targetFacing.getOpposite();
-        if (!te.hasCapability(CAPABILITY_ENERGY_CONTAINER, neighborSide)) return null;
+        if (!te.hasCapability(CAPABILITY_ENERGY_CONTAINER, neighborSide))
+            return null;
         return te.getCapability(CAPABILITY_ENERGY_CONTAINER, neighborSide);
     }
 
-    @Nullable
-    protected IEnergyContainer findAnyDelegate() {
-        if (world == null || pos == null) return null;
+    @Nullable protected IEnergyContainer findAnyDelegate() {
+        if (world == null || pos == null)
+            return null;
         for (EnumFacing side : EnumFacing.VALUES) {
             IEnergyContainer delegate = findDelegate(side);
-            if (delegate != null) return delegate;
+            if (delegate != null)
+                return delegate;
         }
         return null;
     }
 
     @Override
     public long acceptEnergyFromNetwork(@Nullable EnumFacing side, long voltage, long amperage) {
-        if (side == null) return 0;
+        if (side == null)
+            return 0;
         IEnergyContainer delegate = findDelegate(side);
         if (delegate != null) {
             return delegate.acceptEnergyFromNetwork(side.getOpposite(), voltage, amperage);
@@ -68,7 +72,8 @@ public class TileEntityVaultPowerGTEU extends TileEntityVaultBase implements IEn
 
     @Override
     public boolean inputsEnergy(@Nullable EnumFacing side) {
-        if (side == null) return false;
+        if (side == null)
+            return false;
         IEnergyContainer delegate = findDelegate(side);
         return delegate != null && delegate.inputsEnergy(side.getOpposite());
     }

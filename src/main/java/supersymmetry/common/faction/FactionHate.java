@@ -20,23 +20,27 @@ public class FactionHate {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity().world.isRemote) return;
+        if (event.getEntity().world.isRemote)
+            return;
 
         EntityLivingBase dead = (EntityLivingBase) event.getEntity();
 
         // Get killer
         Entity source = event.getSource().getTrueSource();
-        if (!(source instanceof EntityPlayer)) return;
+        if (!(source instanceof EntityPlayer))
+            return;
 
         EntityPlayer player = (EntityPlayer) source;
 
         NBTTagCompound entityTag = dead.getEntityData();
-        if (!entityTag.hasKey(TAG_ROOT)) return;
+        if (!entityTag.hasKey(TAG_ROOT))
+            return;
 
         NBTTagCompound susy = entityTag.getCompoundTag(TAG_ROOT);
 
         String faction = susy.getString(TAG_FACTION);
-        if (faction.isEmpty()) return;
+        if (faction.isEmpty())
+            return;
 
         int hateValue = susy.getInteger(TAG_HATE);
 
@@ -47,16 +51,19 @@ public class FactionHate {
     // making sure the hate stays after you die
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (event.getEntity().world.isRemote) return;
+        if (event.getEntity().world.isRemote)
+            return;
 
         EntityPlayer original = event.getOriginal();
         EntityPlayer clone = (EntityPlayer) event.getEntity();
 
         NBTTagCompound originalData = original.getEntityData();
-        if (!originalData.hasKey(TAG_ROOT)) return;
+        if (!originalData.hasKey(TAG_ROOT))
+            return;
 
         NBTTagCompound susyData = originalData.getCompoundTag(TAG_ROOT);
-        if (!susyData.hasKey(TAG_HATE)) return;
+        if (!susyData.hasKey(TAG_HATE))
+            return;
 
         NBTTagCompound cloneData = clone.getEntityData();
         cloneData.setTag(TAG_ROOT, susyData.copy());

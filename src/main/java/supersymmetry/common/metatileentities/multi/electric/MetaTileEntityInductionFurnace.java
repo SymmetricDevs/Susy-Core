@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -32,34 +32,28 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" AAA ", " AAA ", " AAA ")
-                .aisle("AAAAA", "ACCCA", "AAAAA")
-                .aisle("AAAAA", "AC#CA", "AA#AA")
-                .aisle("AAAAA", "ACCCA", "AAAAA")
-                .aisle(" AAA ", " ASA ", " AAA ")
+        return FactoryBlockPattern.start().aisle(" AAA ", " AAA ", " AAA ").aisle("AAAAA", "ACCCA", "AAAAA")
+                .aisle("AAAAA", "AC#CA", "AA#AA").aisle("AAAAA", "ACCCA", "AAAAA").aisle(" AAA ", " ASA ", " AAA ")
                 .where('S', selfPredicate())
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(3))
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
+                .where('A',
+                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                                .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(3))
+                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
                 .where('C',
                         states(SuSyBlocks.INDUCTION_COIL_ASSEMBLY
                                 .getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER)))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where(' ', any()).where('#', air()).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;
     }

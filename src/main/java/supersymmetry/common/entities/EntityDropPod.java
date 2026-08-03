@@ -108,70 +108,30 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         }
 
         double offset = goingUp ? 0.2D : 0.5D;
-        SusyParticleFlame flame1 = new SusyParticleFlame(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame1 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame2 = new SusyParticleFlame(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame2 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame3 = new SusyParticleFlame(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame3 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame4 = new SusyParticleFlame(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame4 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
 
-        SusyParticleSmoke smoke1 = new SusyParticleSmoke(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke1 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke2 = new SusyParticleSmoke(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke2 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke3 = new SusyParticleSmoke(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke3 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke4 = new SusyParticleSmoke(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke4 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
 
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke1);
@@ -189,7 +149,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 BlockPos pos = new BlockPos(this.posX + i, above ? this.posY + 2 : this.posY - 1, this.posZ + j);
-                if (this.world.getBlockState(pos).getMaterial().isLiquid()) return;
+                if (this.world.getBlockState(pos).getMaterial().isLiquid())
+                    return;
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
@@ -282,8 +243,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 if (!this.commandsOnLanding.isEmpty()) {
                     for (String command : new ArrayList<>(this.commandsOnLanding)) { // copy to avoid concurrent
                                                                                      // modification
-                        this.world.getMinecraftServer().getCommandManager()
-                                .executeCommand(this.getCommandSender(), command);
+                        this.world.getMinecraftServer().getCommandManager().executeCommand(this.getCommandSender(),
+                                command);
                     }
                     this.commandsOnLanding.clear(); // ensure they only run once
                 }

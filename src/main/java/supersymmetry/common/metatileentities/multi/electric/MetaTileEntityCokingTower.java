@@ -4,14 +4,14 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -43,25 +43,13 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle(" CCSCCF", "PCP PCP")
-                .aisle(" CFCFCF", "PCP PCP")
-                .aisle(" CFCFCF", "PCP PCP")
-                .aisle(" CFCFCF", "PPP PPP")
-                .aisle(" CFCFCF", "  P   P")
-                .aisle(" CCCCCF", "  P   P")
-                .aisle("  FFFFF", "  P   P")
-                .aisle("  FF FF", "  P   P")
-                .aisle("  FF FF", "  P   P")
-                .aisle("  FF FF", "  P   P")
-                .aisle("  FF FF", "       ")
-                .aisle("  FF FF", "       ")
-                .where('S', this.selfPredicate())
-                .where('P', states(this.getPipeCasingState()))
-                .where('F', frames(Materials.Steel))
-                .where('C', states(this.getCasingState()).setMinGlobalLimited(20)
-                        .or(this.autoAbilities()))
-                .build();
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP).aisle(" CCSCCF", "PCP PCP").aisle(" CFCFCF", "PCP PCP")
+                .aisle(" CFCFCF", "PCP PCP").aisle(" CFCFCF", "PPP PPP").aisle(" CFCFCF", "  P   P")
+                .aisle(" CCCCCF", "  P   P").aisle("  FFFFF", "  P   P").aisle("  FF FF", "  P   P")
+                .aisle("  FF FF", "  P   P").aisle("  FF FF", "  P   P").aisle("  FF FF", "       ")
+                .aisle("  FF FF", "       ").where('S', this.selfPredicate())
+                .where('P', states(this.getPipeCasingState())).where('F', frames(Materials.Steel))
+                .where('C', states(this.getCasingState()).setMinGlobalLimited(20).or(this.autoAbilities())).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -81,8 +69,7 @@ public class MetaTileEntityCokingTower extends RecipeMapMultiblockController {
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @NonNull
-    protected ICubeRenderer getFrontOverlay() {
+    @NonNull protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
 

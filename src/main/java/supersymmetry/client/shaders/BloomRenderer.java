@@ -34,10 +34,10 @@ public class BloomRenderer {
     /** Pulse amplitude [0, 1]. */
     public float pulseAmp = 0.2f;
 
-    private Framebuffer emissiveFBO;  // emissive mesh render target
-    private Framebuffer maskFBO;      // after threshold pass
-    private Framebuffer horizFBO;     // after horizontal blur
-    private Framebuffer vertFBO;      // after vertical blur (= final bloom)
+    private Framebuffer emissiveFBO; // emissive mesh render target
+    private Framebuffer maskFBO; // after threshold pass
+    private Framebuffer horizFBO; // after horizontal blur
+    private Framebuffer vertFBO; // after vertical blur (= final bloom)
 
     private float gameTime = 0f;
 
@@ -46,7 +46,8 @@ public class BloomRenderer {
     /**
      * Call every tick/frame to keep the pulse uniform advancing.
      * 
-     * @param partialTicks interpolation factor (0–1)
+     * @param partialTicks
+     *                     interpolation factor (0–1)
      */
     public void tick(float partialTicks) {
         gameTime += partialTicks / 20f; // convert ticks → seconds
@@ -57,7 +58,8 @@ public class BloomRenderer {
      * render into it with the emissive mesh shader active.
      */
     public void beginEmissivePass() {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         Minecraft mc = ShaderManager.getMC();
         ensureFBOs(mc.displayWidth, mc.displayHeight);
@@ -75,7 +77,8 @@ public class BloomRenderer {
      * Stop drawing into the emissive FBO and restore GL state.
      */
     public void endEmissivePass() {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
@@ -85,12 +88,14 @@ public class BloomRenderer {
     }
 
     /**
-     * Runs all three bloom post-process passes and composites the result onto
-     * the main Minecraft framebuffer. Call after {@link #endEmissivePass()}.
+     * Runs all three bloom post-process passes and composites the result onto the
+     * main Minecraft framebuffer. Call after {@link #endEmissivePass()}.
      */
     public void renderBloom() {
-        if (!ShaderManager.shadersAllowed()) return;
-        if (ShaderManager.isOptiFineShaderPackLoaded()) return; // OF has its own pipeline
+        if (!ShaderManager.shadersAllowed())
+            return;
+        if (ShaderManager.isOptiFineShaderPackLoaded())
+            return; // OF has its own pipeline
 
         Minecraft mc = ShaderManager.getMC();
         Framebuffer sceneFBO = mc.getFramebuffer();
@@ -163,8 +168,8 @@ public class BloomRenderer {
     }
 
     /**
-     * Binds a raw GL texture ID to the given texture unit without disturbing
-     * other state.
+     * Binds a raw GL texture ID to the given texture unit without disturbing other
+     * state.
      */
     private static void bindTextureToUnit(int textureId, int unit) {
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit + unit);

@@ -17,8 +17,8 @@ import supersymmetry.api.unification.material.properties.MillBallProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 /**
- * Durability manager for mill balls.
- * Displays durability based on NBT-stored damage value and the material's MillBallProperty.
+ * Durability manager for mill balls. Displays durability based on NBT-stored
+ * damage value and the material's MillBallProperty.
  */
 public class MillBallDurabilityManager implements IItemDurabilityManager, IItemBehaviour {
 
@@ -77,10 +77,13 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
     }
 
     /**
-     * Applies damage to the mill ball. If damage exceeds durability, sets it to zero durability.
+     * Applies damage to the mill ball. If damage exceeds durability, sets it to
+     * zero durability.
      *
-     * @param itemStack     the mill ball ItemStack
-     * @param damageApplied the amount of damage to apply
+     * @param itemStack
+     *                      the mill ball ItemStack
+     * @param damageApplied
+     *                      the amount of damage to apply
      */
     public static boolean applyMillBallDamage(ItemStack itemStack, int damageApplied) {
         int maxDurability = getMillBallMaxDurability(itemStack);
@@ -122,7 +125,6 @@ public class MillBallDurabilityManager implements IItemDurabilityManager, IItemB
         int maxDurability = getMillBallMaxDurability(itemStack);
         int currentDamage = getMillBallDamage(itemStack);
 
-        lines.add(I18n.format("item.durability", maxDurability - currentDamage,
-                getMillBallMaxDurability(itemStack)));
+        lines.add(I18n.format("item.durability", maxDurability - currentDamage, getMillBallMaxDurability(itemStack)));
     }
 }

@@ -153,15 +153,11 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
                 .aisle("               ", "               ", "               ", "               ", "               ",
                         "               ", "               ", "               ", "               ", "  H#H#H#H#H#H  ",
                         "    #######    ")
-                .where('S', selfPredicate())
-                .where('F', frames(Materials.Aluminium))
+                .where('S', selfPredicate()).where('F', frames(Materials.Aluminium))
                 .where('I', frames(Materials.Aluminium).or(autoAbilities(false, true, true, true, true, true, false)))
                 .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.TUNGSTENSTEEL_ROBUST)))
                 .where('M', epoxyMirrorOrientation().or(steelMirrorOrientation()))
-                .where('H', heliostats(RelativeDirection.LEFT))
-                .where('#', air())
-                .where(' ', any())
-                .build();
+                .where('H', heliostats(RelativeDirection.LEFT)).where('#', air()).where(' ', any()).build();
     }
 
     @Override
@@ -222,139 +218,86 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
     /*
      * public class SolarFurnaceRecipeLogic extends MultiblockRecipeLogic {
      * 
-     * private int recipeJt;
-     * private int heatBuffer = 0;
-     * private boolean isHeating = false;
-     * private boolean isHalted;
+     * private int recipeJt; private int heatBuffer = 0; private boolean isHeating =
+     * false; private boolean isHalted;
      * 
      * public SolarFurnaceRecipeLogic(RecipeMapMultiblockController tileEntity) {
-     * super(tileEntity);
-     * }
+     * super(tileEntity); }
      * 
-     * @Override
-     * public boolean checkRecipe(@NotNull Recipe recipe) {
-     * return super.checkRecipe(recipe) && recipe.hasProperty(EvaporationEnergyProperty.getInstance());
-     * }
+     * @Override public boolean checkRecipe(@NotNull Recipe recipe) { return
+     * super.checkRecipe(recipe) &&
+     * recipe.hasProperty(EvaporationEnergyProperty.getInstance()); }
      * 
-     * @Override
-     * protected void setupRecipe(Recipe recipe) {
-     * super.setupRecipe(recipe);
-     * this.recipeJt = recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is this correct?
-     * this.heatBuffer = 0;
-     * }
+     * @Override protected void setupRecipe(Recipe recipe) {
+     * super.setupRecipe(recipe); this.recipeJt =
+     * recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is
+     * this correct? this.heatBuffer = 0; }
      * 
      * /// Do not overclock
      * 
-     * @Override
-     * protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
-     * return new int[] { recipe.getEUt(), recipe.getDuration() };
-     * }
+     * @Override protected int @NotNull [] calculateOverclock(@NotNull Recipe
+     * recipe) { return new int[] { recipe.getEUt(), recipe.getDuration() }; }
      * 
-     * @Override
-     * protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
-     * return true;
-     * }
+     * @Override protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+     * return true; }
      * 
-     * @Override
-     * protected void updateRecipeProgress() {
-     * if (this.canRecipeProgress) {
-     * int baseHeat = getHeatFromSunlight() + heatBuffer;
-     * int coilHeat = 0;
-     * int maxEnergy2Draw = (int) Math.min(Math.min(getEnergyStored(), getMaxEnergyInput()),
-     * getMaxHeatFromCoils() / SuSyUtility.JOULES_PER_EU);
-     * if (drawEnergy(maxEnergy2Draw, true)) {
-     * drawEnergy(maxEnergy2Draw, false);
-     * coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU;
-     * }
+     * @Override protected void updateRecipeProgress() { if (this.canRecipeProgress)
+     * { int baseHeat = getHeatFromSunlight() + heatBuffer; int coilHeat = 0; int
+     * maxEnergy2Draw = (int) Math.min(Math.min(getEnergyStored(),
+     * getMaxEnergyInput()), getMaxHeatFromCoils() / SuSyUtility.JOULES_PER_EU); if
+     * (drawEnergy(maxEnergy2Draw, true)) { drawEnergy(maxEnergy2Draw, false);
+     * coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU; }
      * 
-     * int totalHeat = (baseHeat + coilHeat);
-     * int remainingHeat = totalHeat % getRecipeJt();
-     * int maxProgress = totalHeat / getRecipeJt();
+     * int totalHeat = (baseHeat + coilHeat); int remainingHeat = totalHeat %
+     * getRecipeJt(); int maxProgress = totalHeat / getRecipeJt();
      * 
      * updateSpeedStats(maxProgress);
      * 
-     * boolean halted = maxProgress == 0;
-     * if (this.isHalted != halted) {
-     * this.isHalted = halted;
-     * writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf -> buf.writeBoolean(halted));
-     * }
-     * this.isHeating = coilHeat > 0;
+     * boolean halted = maxProgress == 0; if (this.isHalted != halted) {
+     * this.isHalted = halted; writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf
+     * -> buf.writeBoolean(halted)); } this.isHeating = coilHeat > 0;
      * 
-     * this.progressTime += maxProgress;
-     * this.heatBuffer = remainingHeat;
-     * if (this.progressTime > this.maxProgressTime) {
-     * this.completeRecipe();
-     * }
-     * }
-     * }
+     * this.progressTime += maxProgress; this.heatBuffer = remainingHeat; if
+     * (this.progressTime > this.maxProgressTime) { this.completeRecipe(); } } }
      * 
-     * /// Workaround for backwards compat
-     * /// Random fallback number IDK
+     * /// Workaround for backwards compat /// Random fallback number IDK
      * 
-     * @Deprecated
-     * protected int getRecipeJt() {
-     * return recipeJt != 0 ? recipeJt : 500;
-     * }
+     * @Deprecated protected int getRecipeJt() { return recipeJt != 0 ? recipeJt :
+     * 500; }
      * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter that much
-     * protected int getHeatFromSunlight() {
-     * return exposedBlocks * JT_PER_BLOCK;
-     * }
+     * /// This could potentially be cached in the mte, but ig it doesn't matter
+     * that much protected int getHeatFromSunlight() { return exposedBlocks *
+     * JT_PER_BLOCK; }
      * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter that much
-     * protected long getMaxEnergyInput() {
-     * IEnergyContainer energyContainer = getEnergyContainer();
-     * /// This seems to be correct as far as I've tested
-     * return energyContainer.getInputVoltage() * energyContainer.getInputAmperage();
-     * }
+     * /// This could potentially be cached in the mte, but ig it doesn't matter
+     * that much protected long getMaxEnergyInput() { IEnergyContainer
+     * energyContainer = getEnergyContainer(); /// This seems to be correct as far
+     * as I've tested return energyContainer.getInputVoltage() *
+     * energyContainer.getInputAmperage(); }
      * 
-     * @Override
-     * protected void completeRecipe() {
-     * super.completeRecipe();
-     * this.recipeJt = 0;
-     * this.heatBuffer = 0;
-     * }
+     * @Override protected void completeRecipe() { super.completeRecipe();
+     * this.recipeJt = 0; this.heatBuffer = 0; }
      * 
-     * @Override
-     * public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
-     * super.receiveCustomData(dataId, buf);
-     * if (dataId == SuSyDataCodes.UPDATE_WORK_HALTED) {
-     * this.isHalted = buf.readBoolean();
-     * }
-     * }
+     * @Override public void receiveCustomData(int dataId, @NotNull PacketBuffer
+     * buf) { super.receiveCustomData(dataId, buf); if (dataId ==
+     * SuSyDataCodes.UPDATE_WORK_HALTED) { this.isHalted = buf.readBoolean(); } }
      * 
-     * @Override
-     * public void writeInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.writeInitialSyncData(buf);
-     * buf.writeBoolean(this.isHalted);
-     * }
+     * @Override public void writeInitialSyncData(@NotNull PacketBuffer buf) {
+     * super.writeInitialSyncData(buf); buf.writeBoolean(this.isHalted); }
      * 
-     * @Override
-     * public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.receiveInitialSyncData(buf);
-     * this.isHalted = buf.readBoolean();
-     * }
+     * @Override public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
+     * super.receiveInitialSyncData(buf); this.isHalted = buf.readBoolean(); }
      * 
      * @NotNull
      * 
-     * @Override
-     * public NBTTagCompound serializeNBT() {
-     * NBTTagCompound compound = super.serializeNBT();
-     * if (this.progressTime > 0) {
-     * compound.setInteger("RecipeJt", recipeJt);
-     * }
-     * compound.setBoolean("IsHalted", this.isHalted);
-     * return compound;
-     * }
+     * @Override public NBTTagCompound serializeNBT() { NBTTagCompound compound =
+     * super.serializeNBT(); if (this.progressTime > 0) {
+     * compound.setInteger("RecipeJt", recipeJt); } compound.setBoolean("IsHalted",
+     * this.isHalted); return compound; }
      * 
-     * @Override
-     * public void deserializeNBT(@NotNull NBTTagCompound compound) {
-     * super.deserializeNBT(compound);
-     * if (this.progressTime > 0) {
-     * recipeJt = compound.getInteger("RecipeJt");
-     * }
-     * this.isHalted = compound.getBoolean("IsHalted");
-     * }
-     * }
+     * @Override public void deserializeNBT(@NotNull NBTTagCompound compound) {
+     * super.deserializeNBT(compound); if (this.progressTime > 0) { recipeJt =
+     * compound.getInteger("RecipeJt"); } this.isHalted =
+     * compound.getBoolean("IsHalted"); } }
      */
 }

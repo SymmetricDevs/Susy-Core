@@ -10,11 +10,11 @@ public final class SuSyOverclockingLogic {
 
     private SuSyOverclockingLogic() {}
 
-    @NonNull
-    public static double[] continuousOverclockingLogic(double recipeEUt, long maxVoltage, double recipeDuration,
+    @NonNull public static double[] continuousOverclockingLogic(double recipeEUt, long maxVoltage, double recipeDuration,
                                                        int numberOfOCs, double durationDivisor,
                                                        double voltageMultiplier) {
-        if (numberOfOCs <= 0) return new double[] { recipeEUt, recipeDuration };
+        if (numberOfOCs <= 0)
+            return new double[] { recipeEUt, recipeDuration };
 
         double resultDuration = recipeDuration;
 
@@ -32,20 +32,22 @@ public final class SuSyOverclockingLogic {
         return new double[] { resultVoltage, resultDuration };
     }
 
-    @NonNull
-    public static int[] catalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
+    @NonNull public static int[] catalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
                                                   int maxOverclocks, @NonNull CatalystInfo catalystInfo,
-                                                  int recipeRequiredCatalystTier, double durationDivisor,
-                                                  double voltageMultiplier) {
+                                                  int recipeRequiredCatalystTier,
+                                                  double durationDivisor, double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;
 
         double energyEfficiency = catalystInfo.getEnergyEfficiency();
         double catalystDurationDivisor = catalystInfo.getSpeedEfficiency();
 
-        // overclock recipe once with catalysts bonuses and once again with the usual overclock
+        // overclock recipe once with catalysts bonuses and once again with the usual
+        // overclock
         if (amountAboveRecipeTier > 0) {
-            // apply a multiplicative energy multiplier for every tier above the required recipe catalyst tier
-            // only apply this boost when the delta is > 0, since x^0 = 1, skipping some math
+            // apply a multiplicative energy multiplier for every tier above the required
+            // recipe catalyst tier
+            // only apply this boost when the delta is > 0, since x^0 = 1, skipping some
+            // math
             recipeEUt *= Math.min(1, Math.pow(energyEfficiency, amountAboveRecipeTier));
 
             // overclock
@@ -63,20 +65,22 @@ public final class SuSyOverclockingLogic {
                 voltageMultiplier);
     }
 
-    @NonNull
-    public static double[] continuousCatalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
+    @NonNull public static double[] continuousCatalystOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration,
                                                                int maxOverclocks, @NonNull CatalystInfo catalystInfo,
-                                                               int recipeRequiredCatalystTier, double durationDivisor,
-                                                               double voltageMultiplier) {
+                                                               int recipeRequiredCatalystTier,
+                                                               double durationDivisor, double voltageMultiplier) {
         int amountAboveRecipeTier = catalystInfo.getTier() - recipeRequiredCatalystTier;
 
         double energyEfficiency = catalystInfo.getEnergyEfficiency();
         double catalystDurationDivisor = catalystInfo.getSpeedEfficiency();
 
-        // calculate catalyst bonus catalysts bonuses and once again with the usual overclock
+        // calculate catalyst bonus catalysts bonuses and once again with the usual
+        // overclock
         if (amountAboveRecipeTier > 0) {
-            // apply a multiplicative energy multiplier for every tier above the required recipe catalyst tier
-            // only apply this boost when the delta is > 0, since x^0 = 1, skipping some math
+            // apply a multiplicative energy multiplier for every tier above the required
+            // recipe catalyst tier
+            // only apply this boost when the delta is > 0, since x^0 = 1, skipping some
+            // math
             recipeEUt *= Math.min(1, Math.pow(energyEfficiency, amountAboveRecipeTier));
 
             // catalyst bonus

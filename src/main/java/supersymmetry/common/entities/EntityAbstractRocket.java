@@ -31,27 +31,22 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public static final String ROCKET_CONFIG_KEY = "config";
 
-    protected static final DataParameter<Boolean> LAUNCHED = EntityDataManager.<Boolean>createKey(
-            EntityAbstractRocket.class,
-            DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> LAUNCHED = EntityDataManager
+            .<Boolean>createKey(EntityAbstractRocket.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> COUNTDOWN_STARTED = EntityDataManager
             .<Boolean>createKey(EntityAbstractRocket.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(EntityAbstractRocket.class,
             DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager.<Integer>createKey(
-            EntityAbstractRocket.class,
-            DataSerializers.VARINT);
-    protected static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager.<Integer>createKey(
-            EntityAbstractRocket.class,
-            DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LAUNCH_TIME = EntityDataManager
+            .<Integer>createKey(EntityAbstractRocket.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> FLIGHT_TIME = EntityDataManager
+            .<Integer>createKey(EntityAbstractRocket.class, DataSerializers.VARINT);
 
-    protected static final DataParameter<Float> START_POS = EntityDataManager.<Float>createKey(
-            EntityAbstractRocket.class,
-            DataSerializers.FLOAT);
-    protected static final DataParameter<Boolean> ACTED = EntityDataManager.<Boolean>createKey(
-            EntityAbstractRocket.class,
-            DataSerializers.BOOLEAN);
+    protected static final DataParameter<Float> START_POS = EntityDataManager
+            .<Float>createKey(EntityAbstractRocket.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Boolean> ACTED = EntityDataManager
+            .<Boolean>createKey(EntityAbstractRocket.class, DataSerializers.BOOLEAN);
     protected CargoItemStackHandler cargo;
 
     public EntityAbstractRocket(World worldIn) {
@@ -148,7 +143,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     protected abstract float getExplosionStrength();
 
     protected void act() {
-        if (this.world.isRemote) return;
+        if (this.world.isRemote)
+            return;
         NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instruments.getKeySet()) {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
@@ -215,13 +211,15 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
-        if (compound == null || compound.tagMap.size() == 0) return;
+        if (compound == null || compound.tagMap.size() == 0)
+            return;
         super.readEntityFromNBT(compound);
         if (this.cargo == null) {
             this.cargo = new CargoItemStackHandler(0, 0);
         }
         var cargoTag = compound.getCompoundTag("cargo");
-        if (cargoTag == null) return;
+        if (cargoTag == null)
+            return;
         try {
             this.cargo.deserializeNBT(cargoTag);
         } catch (Exception e) {
@@ -233,10 +231,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     public void updatePassenger(Entity passenger) {
         if (!passenger.world.isRemote && isCountdownStarted() && !isLaunched() &&
                 passenger instanceof EntityPlayer player) {
-            player.sendStatusMessage(
-                    new TextComponentTranslation("susy.rocket.msg.launch",
-                            (getLaunchTime() - this.world.getTotalWorldTime()) / 20),
-                    true);
+            player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.launch",
+                    (getLaunchTime() - this.world.getTotalWorldTime()) / 20), true);
         }
     }
 

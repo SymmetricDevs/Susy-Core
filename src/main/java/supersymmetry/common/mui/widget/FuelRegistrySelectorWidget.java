@@ -29,8 +29,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
     public int slots;
     public Consumer<RocketFuelEntry> cb;
 
-    public FuelRegistrySelectorWidget(
-                                      int x, int y, int w, int h, List<FluidStack> stacks,
+    public FuelRegistrySelectorWidget(int x, int y, int w, int h, List<FluidStack> stacks,
                                       @Nullable Consumer<RocketFuelEntry> cb) {
         super(new Position(x, y), new Size(w, h));
         this.stacks = stacks;
@@ -81,9 +80,7 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
     }
 
     public Optional<RocketFuelEntry> search() {
-        List<Fluid> userFluids = this.stacks.stream()
-                .filter(x -> x != null)
-                .map(FluidStack::getFluid)
+        List<Fluid> userFluids = this.stacks.stream().filter(x -> x != null).map(FluidStack::getFluid)
                 .collect(Collectors.toList());
 
         return RocketFuelEntry.search(userFluids);
@@ -95,27 +92,22 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
         x = x % this.getSize().width;
 
         Supplier<FluidStack> supplier = () -> stacks.get(index);
-        // run the supplier/updater on the client so the player's selection is captured there
-        return new PhantomFluidWidget(
-                x,
-                y,
-                18,
-                18,
-                supplier,
-                (stack) -> {
-                    // The phantom slot is edited on the client, so forward the change to the
-                    // server with a client action; PhantomFluidWidget also invokes this setter
-                    // server-side through its own sync, but there we let the action below be the
-                    // single authoritative update instead of applying it twice.
-                    this.onFluidChanged(stack, index);
-                    this.writeUpdateInfo(SYNC_FLUIDS, (buffer) -> {
-                        buffer.writeInt(index);
-                        buffer.writeBoolean(stack == null);
-                        if (stack != null) {
-                            buffer.writeCompoundTag(stack.writeToNBT(new NBTTagCompound()));
-                        }
-                    });
-                });
+        // run the supplier/updater on the client so the player's selection is captured
+        // there
+        return new PhantomFluidWidget(x, y, 18, 18, supplier, (stack) -> {
+            // The phantom slot is edited on the client, so forward the change to the
+            // server with a client action; PhantomFluidWidget also invokes this setter
+            // server-side through its own sync, but there we let the action below be the
+            // single authoritative update instead of applying it twice.
+            this.onFluidChanged(stack, index);
+            this.writeUpdateInfo(SYNC_FLUIDS, (buffer) -> {
+                buffer.writeInt(index);
+                buffer.writeBoolean(stack == null);
+                if (stack != null) {
+                    buffer.writeCompoundTag(stack.writeToNBT(new NBTTagCompound()));
+                }
+            });
+        });
     }
 
     @Override

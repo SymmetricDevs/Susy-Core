@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -13,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
@@ -49,14 +48,11 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
     protected @NotNull BlockPattern createStructurePattern() {
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(35);
 
-        return FactoryBlockPattern.start()
-                .aisle("CCCCCC", "CCCCCC", "III   ")
-                .aisle("CCCCCC", "IPPKGO", "I#ICCC")
+        return FactoryBlockPattern.start().aisle("CCCCCC", "CCCCCC", "III   ").aisle("CCCCCC", "IPPKGO", "I#ICCC")
                 .aisle("CCCCCC", "CSCCCC", "III   ")
                 /*
-                 * .aisle("CCC", "CKC", " C ")
-                 * .aisle("CCC", "CGC", " C ")
-                 * .aisle("CCC", "COC", " C ")
+                 * .aisle("CCC", "CKC", " C ") .aisle("CCC", "CGC", " C ") .aisle("CCC", "COC",
+                 * " C ")
                  */
                 .where('S', selfPredicate())
                 .where('C', casingPredicate.or(autoAbilities(true, true, false, false, false, false, false)))
@@ -66,9 +62,7 @@ public class MetaTileEntityInjectionMolder extends RecipeMapMultiblockController
                 .where('P', states(getPipeCasingState()))
                 .where('I', casingPredicate.or(autoAbilities(false, false, true, false, false, false, false)))
                 .where('O', casingPredicate.or(autoAbilities(false, false, false, true, false, false, false)))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where(' ', any()).where('#', air()).build();
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {

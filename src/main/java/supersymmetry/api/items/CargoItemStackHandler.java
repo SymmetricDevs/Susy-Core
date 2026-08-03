@@ -65,7 +65,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        if (nbt == null || nbt.tagMap.size() == 0) return;
+        if (nbt == null || nbt.tagMap.size() == 0)
+            return;
         this.maxVolume = nbt.getInteger("maxVolume");
         this.maxWeight = nbt.getInteger("maxWeight");
         this.currentVolume = nbt.getInteger("currentVolume");
@@ -150,7 +151,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (!SuSyUtility.isAllowedItemForSpace(stack)) return stack;
+        if (!SuSyUtility.isAllowedItemForSpace(stack))
+            return stack;
         int mass = getMassPerItem(stack);
         List<ItemStack> bucket = getBucketForItem(stack);
         int remainingWeight = maxWeight - currentWeight;
@@ -201,15 +203,13 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         int currentMass = 0;
         if (info != null) {
             currentMass += (int) (info.getMaterials().stream()
-                    .mapToLong((stack) -> stack.material.getMass() * stack.amount)
-                    .sum() /
-                    (GTValues.M / 36));
+                    .mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() / (GTValues.M / 36));
         } else {
             currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
         }
         NBTTagCompound tag = item.getTagCompound();
-        IFluidHandlerItem fluidHandlerItem = item
-                .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        IFluidHandlerItem fluidHandlerItem = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+                null);
         if (fluidHandlerItem != null) {
             for (IFluidTankProperties t : fluidHandlerItem.getTankProperties()) {
                 FluidStack fluid = t.getContents();
@@ -234,7 +234,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (cargo.isEmpty()) return ItemStack.EMPTY;
+        if (cargo.isEmpty())
+            return ItemStack.EMPTY;
         // Get just any item
         List<ItemStack> bucket = cargo.iterator().next();
         ItemStack last = bucket.getLast();
@@ -257,10 +258,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     /**
-     * Overwrites this handler's contents with a snapshot received from the server via
-     * {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}. Client-side only: it collapses
-     * the real multi-bucket cargo down to whatever is visible in the GUI, since the client only needs to
-     * render the exposed stack, not track every distinct item type on board.
+     * Overwrites this handler's contents with a snapshot received from the server
+     * via {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}.
+     * Client-side only: it collapses the real multi-bucket cargo down to whatever
+     * is visible in the GUI, since the client only needs to render the exposed
+     * stack, not track every distinct item type on board.
      */
     public void applyClientSync(ItemStack exposedStack, int currentVolume, int currentWeight) {
         this.cargo.clear();
@@ -274,7 +276,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     public ItemStack getExposedStack() {
-        if (cargo.isEmpty()) return ItemStack.EMPTY;
+        if (cargo.isEmpty())
+            return ItemStack.EMPTY;
         // Apparently the ItemStack is modified in place
         List<ItemStack> bucket = cargo.iterator().next();
         if (bucket.isEmpty()) {

@@ -1,7 +1,5 @@
 package supersymmetry.common.network;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
@@ -10,6 +8,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.network.IPacket;
 import gregtech.api.network.IServerExecutor;
@@ -65,8 +65,7 @@ public class CPacketRocketInteract implements IPacket, IServerExecutor {
         this.hand = buf.readEnumValue(EnumHand.class);
     }
 
-    @Nullable
-    public Entity getEntityFromWorld(World worldIn) {
+    @Nullable public Entity getEntityFromWorld(World worldIn) {
         return worldIn.getEntityByID(this.entityId);
     }
 }

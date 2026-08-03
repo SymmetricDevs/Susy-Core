@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -13,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
@@ -66,9 +65,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
                         "  BBB  ", "       ")
                 .aisle(" F   F ", " F   F ", " F   F ", " F   F ", " FF FF ", "  FAF  ", "  AGA  ", "   A   ",
                         "       ", "       ")
-                .where('#', air())
-                .where('S', selfPredicate())
-                .where('R', states(getRefractoryState()))
+                .where('#', air()).where('S', selfPredicate()).where('R', states(getRefractoryState()))
                 .where('H',
                         states(getCasingState()).setMinGlobalLimited(31)
                                 .or(autoAbilities(true, true, true, true, true, true, false)))
@@ -81,9 +78,7 @@ public class MetaTileEntityMetallurgicalConverter extends RecipeMapMultiblockCon
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where(' ', any())
-                .build();
+                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH)).where(' ', any()).build();
     }
 
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {

@@ -3,9 +3,6 @@ package supersymmetry.common.metatileentities.multi.primitive;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +19,8 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -55,10 +54,10 @@ import supersymmetry.common.blocks.BlockCoagulationTankWall;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockController
-                                           implements IGhostSlotConfigurable {
+                                           implements
+                                           IGhostSlotConfigurable {
 
-    @Nullable
-    protected GhostCircuitItemStackHandler circuitInventory;
+    @Nullable protected GhostCircuitItemStackHandler circuitInventory;
     private IItemHandlerModifiable actualImportItems;
     public int size;
 
@@ -74,19 +73,14 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         return new MetaTileEntityCoagulationTank(this.metaTileEntityId);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("XXX", "XXX", "XXX")
-                .aisle("XXX", "XIX", "X#X").setRepeatable(1, 4)
+        return FactoryBlockPattern.start().aisle("XXX", "XXX", "XXX").aisle("XXX", "XIX", "X#X").setRepeatable(1, 4)
                 .aisle("XXX", "XSX", "XXX")
-                .where('X', states(getCasingState())
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.IMPORT_FLUIDS)))
-                .where('#', air())
-                .where('I', isIndicatorPredicate())
-                .where('S', selfPredicate())
-                .build();
+                .where('X',
+                        states(getCasingState())
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS, MultiblockAbility.IMPORT_FLUIDS)))
+                .where('#', air()).where('I', isIndicatorPredicate()).where('S', selfPredicate()).build();
     }
 
     public static TraceabilityPredicate isIndicatorPredicate() {
@@ -126,13 +120,10 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
                 .setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
         builder.widget((new SlotWidget(this.importItems, 1, 48, 30, true, true)
                 .setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
-        builder.widget((new TankWidget(this.importFluids.getTankAt(1), 30, 48, 18, 18))
-                .setAlwaysShowFull(true)
-                .setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_PRIMITIVE)
-                .setContainerClicking(true, true));
-        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 48, 18, 18))
-                .setAlwaysShowFull(true).setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_PRIMITIVE)
-                .setContainerClicking(true, true));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(1), 30, 48, 18, 18)).setAlwaysShowFull(true)
+                .setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_PRIMITIVE).setContainerClicking(true, true));
+        builder.widget((new TankWidget(this.importFluids.getTankAt(0), 48, 48, 18, 18)).setAlwaysShowFull(true)
+                .setBackgroundTexture(SusyGuiTextures.FLUID_SLOT_PRIMITIVE).setContainerClicking(true, true));
         builder.widget((new SlotWidget(this.exportItems, 0, 106, 39, true, false)
                 .setBackgroundTexture(GuiTextures.PRIMITIVE_SLOT)));
 
@@ -141,16 +132,16 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         builder.widget(getCircuitSlotTooltip(circuitSlot))
                 .widget(new ClickButtonWidget(115, 62, 9, 9, "",
                         click -> circuitInventory.addCircuitValue(click.isShiftClick ? 5 : 1))
-                                .setShouldClientCallback(true)
-                                .setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_PLUS_PRIMITIVE)
-                                .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
-                                        circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_PLUS_PRIMITIVE)
+                        .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
+                                circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
                 .widget(new ClickButtonWidget(115, 71, 9, 9, "",
                         click -> circuitInventory.addCircuitValue(click.isShiftClick ? -5 : -1))
-                                .setShouldClientCallback(true)
-                                .setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_MINUS_PRIMITIVE)
-                                .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
-                                        circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
+                        .setShouldClientCallback(true)
+                        .setButtonTexture(SusyGuiTextures.BUTTON_INT_CIRCUIT_MINUS_PRIMITIVE)
+                        .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
+                                circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
 
         return builder.bindPlayerInventory(entityPlayer.inventory, GuiTextures.PRIMITIVE_SLOT, 0);
     }
@@ -197,8 +188,7 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
         super.initializeAbilities();
     }
 
-    @NonNull
-    protected ICubeRenderer getFrontOverlay() {
+    @NonNull protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
 
@@ -244,8 +234,9 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
 
     @Override
     public IItemHandlerModifiable getImportItems() {
-        if (actualImportItems == null) actualImportItems = circuitInventory == null ? super.getImportItems() :
-                new ItemHandlerList(Arrays.asList(super.getImportItems(), circuitInventory));
+        if (actualImportItems == null)
+            actualImportItems = circuitInventory == null ? super.getImportItems() :
+                    new ItemHandlerList(Arrays.asList(super.getImportItems(), circuitInventory));
         return actualImportItems;
     }
 
@@ -253,7 +244,8 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("size", this.size);
-        if (circuitInventory != null) circuitInventory.write(data);
+        if (circuitInventory != null)
+            circuitInventory.write(data);
         return data;
     }
 
@@ -266,7 +258,8 @@ public class MetaTileEntityCoagulationTank extends RecipeMapPrimitiveMultiblockC
                 ItemStackHandler legacyCircuitInventory = new ItemStackHandler();
                 for (int i = 0; i < legacyCircuitInventory.getSlots(); i++) {
                     ItemStack stack = legacyCircuitInventory.getStackInSlot(i);
-                    if (stack.isEmpty()) continue;
+                    if (stack.isEmpty())
+                        continue;
                     stack = GTTransferUtils.insertItem(importItems, stack, false);
                     circuitInventory.setCircuitValueFromStack(stack);
                 }

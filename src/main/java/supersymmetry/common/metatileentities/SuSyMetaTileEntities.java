@@ -238,9 +238,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityExtender UNIVERSAL_EXTENDER;
 
     public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
-    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_IMPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
     public static final MetaTileEntityMultiFluidHatch[] SUSY_QUADRUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
-    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3];   // LV-HV
+    public static final MetaTileEntityMultiFluidHatch[] SUSY_NONUPLE_EXPORT_HATCH = new MetaTileEntityMultiFluidHatch[3]; // LV-HV
 
     public static MetaTileEntityIncinerator[] INCINERATOR = new MetaTileEntityIncinerator[4];
 
@@ -410,7 +410,8 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(BATCH_REACTOR, 12, 14681, "batch_reactor", SuSyRecipeMaps.BATCH_REACTOR_RECIPES,
                 SusyTextures.BATCH_REACTOR_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
 
-        // max tier = 12 -> OpV [excludes ULv] -> 13 ids taken (add maxTier +1 to start ID to get next valid id)
+        // max tier = 12 -> OpV [excludes ULv] -> 13 ids taken (add maxTier +1 to start
+        // ID to get next valid id)
         registerSimpleMTE(CRYSTALLIZER, 12, 14593, "crystallizer", SuSyRecipeMaps.CRYSTALLIZER_RECIPES,
                 SusyTextures.CRYSTALLIZER_OVERLAY, true, SuSyUtility.reactorTankSizeFunction);
         registerSimpleMTE(DRYER, 12, 14621, "dryer", SuSyRecipeMaps.DRYER_RECIPES, SusyTextures.DRYER_OVERLAY, true,
@@ -465,12 +466,12 @@ public class SuSyMetaTileEntities {
         // Parallel Ore Processing
         ECCENTRIC_ROLL_CRUSHER = registerMetaTileEntity(14741, new MetaTileEntityEccentricRollCrusher(
                 susyId("eccentric_roll_crusher"), SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER));
-        BALL_MILL = registerMetaTileEntity(14742, new MetaTileEntityBallMill(
-                susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
-        ATTRITION_SCRUBBER = registerMetaTileEntity(14744, new MetaTileEntityAttritionScrubber(
-                susyId("attrition_scrubber")));
-        INDUSTRIAL_SIFTER = registerMetaTileEntity(14745, new MetaTileEntityIndustrialSifter(
-                susyId("industrial_sifter")));
+        BALL_MILL = registerMetaTileEntity(14742,
+                new MetaTileEntityBallMill(susyId("ball_mill"), SuSyRecipeMaps.BALL_MILL));
+        ATTRITION_SCRUBBER = registerMetaTileEntity(14744,
+                new MetaTileEntityAttritionScrubber(susyId("attrition_scrubber")));
+        INDUSTRIAL_SIFTER = registerMetaTileEntity(14745,
+                new MetaTileEntityIndustrialSifter(susyId("industrial_sifter")));
 
         GREENHOUSE = registerMetaTileEntity(14743, new MetaTileEntityGreenhouse(susyId("greenhouse")));
 
@@ -480,8 +481,7 @@ public class SuSyMetaTileEntities {
         PRIMITIVE_ITEM_EXPORT = registerMetaTileEntity(14802,
                 new MetaTileEntityPrimitiveItemBus(susyId("primitive_item_export"), true));
 
-        CUPOLA_FURNACE = registerMetaTileEntity(14850,
-                new MetaTileEntityCupolaFurnace(susyId("cupola_furnace")));
+        CUPOLA_FURNACE = registerMetaTileEntity(14850, new MetaTileEntityCupolaFurnace(susyId("cupola_furnace")));
 
         // oil stuff
         COKING_TOWER = registerMetaTileEntity(14635, new MetaTileEntityCokingTower(susyId("coking_tower")));
@@ -700,14 +700,16 @@ public class SuSyMetaTileEntities {
 
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id = 14500; id < 15000; id++) {
-            if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null) ids.add(id);
+            if (GregTechAPI.MTE_REGISTRY.getObjectById(id) == null)
+                ids.add(id);
         }
         SusyLog.logger.debug("Available ID(s) are: {}", ids);
 
         MIXER_SETTLER = registerMetaTileEntity(17100, new MetaTileEntityMixerSettler(susyId("mixer_settler")));
         MIXER_SETTLER_V2 = registerMetaTileEntity(17101, new MetaTileEntityMixerSettlerV2(susyId("mixer_settler_v2")));
 
-        // STOCK_DETECTOR = registerMetaTileEntity(18000, new MetaTileEntityStockDetector(susyId("stock_detector")));
+        // STOCK_DETECTOR = registerMetaTileEntity(18000, new
+        // MetaTileEntityStockDetector(susyId("stock_detector")));
         STOCK_FLUID_EXCHANGER = registerMetaTileEntity(18001,
                 new MetaTileEntityStockFluidExchanger(susyId("stock_fluid_exchanger")));
         STOCK_ITEM_EXCHANGER = registerMetaTileEntity(18002,
@@ -744,8 +746,7 @@ public class SuSyMetaTileEntities {
         ELECTRIC_DISCHARGE_MACHINE = registerMetaTileEntity(18111,
                 new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
-        CARGO_DRONE_PAD = registerMetaTileEntity(18112,
-                new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
+        CARGO_DRONE_PAD = registerMetaTileEntity(18112, new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
@@ -766,11 +767,9 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityLockedCrate(susyId("locked_crate.tungstensteel"), Materials.TungstenSteel, 144));
 
         DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18210,
-                new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), Materials.Polyethylene,
-                        4));
+                new MetaTileEntityDroneDepositBasket(susyId("drone_deposit_basket"), Materials.Polyethylene, 4));
         ADVANCED_DRONE_DEPOSIT_BASKET = registerMetaTileEntity(18211,
-                new MetaTileEntityDroneDepositBasket(susyId("advanced_drone_deposit_basket"), Materials.Epoxy,
-                        16));
+                new MetaTileEntityDroneDepositBasket(susyId("advanced_drone_deposit_basket"), Materials.Epoxy, 16));
 
         // Boilers
         LARGE_BRONZE_BOILER = registerMetaTileEntity(18300,
@@ -789,8 +788,7 @@ public class SuSyMetaTileEntities {
         // Large Steam Machines
         LARGE_STEAM_HAMMER = registerMetaTileEntity(18320,
                 new MetaTileEntitySuSyLargeHammer(susyId("large_steam_hammer")));
-        LOG_WASHER = registerMetaTileEntity(18321, new MetaTileEntitySuSyLogWasher(
-                susyId("log_washer")));
+        LOG_WASHER = registerMetaTileEntity(18321, new MetaTileEntitySuSyLogWasher(susyId("log_washer")));
 
         // Fuel Cells
         FUEL_CELL[0] = registerMetaTileEntity(18400,
@@ -833,25 +831,26 @@ public class SuSyMetaTileEntities {
         LUNAR_LAUNCH_COMPLEX = registerMetaTileEntity(18523,
                 new MetaTileEntityLunarLaunchComplex(susyId("lunar_launch_complex")));
 
-        SOLAR_FURNACE = registerMetaTileEntity(18524,
-                new MetaTileEntitySolarFurnace(susyId("solar_furnace")));
+        SOLAR_FURNACE = registerMetaTileEntity(18524, new MetaTileEntitySolarFurnace(susyId("solar_furnace")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
                                                RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator,
-                                               ICubeRenderer texture, boolean isBricked) {
+                                               ICubeRenderer texture,
+                                               boolean isBricked) {
         registerSimpleSteamMTE(machines, startId, name, recipeMap, progressIndicator, texture, isBricked, false);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
                                                RecipeMap<?> recipeMap, SuSySteamProgressIndicator progressIndicator,
-                                               ICubeRenderer texture, boolean isBricked, boolean ulvOnly) {
-        machines[0] = registerMetaTileEntity(startId, new SuSySimpleSteamMetaTileEntity(
-                susyId(String.format("%s.bronze", name)), recipeMap, progressIndicator, texture, isBricked, false,
-                ulvOnly));
-        machines[1] = registerMetaTileEntity(startId + 1, new SuSySimpleSteamMetaTileEntity(
-                susyId(String.format("%s.steel", name)), recipeMap, progressIndicator, texture, isBricked, true,
-                ulvOnly));
+                                               ICubeRenderer texture,
+                                               boolean isBricked, boolean ulvOnly) {
+        machines[0] = registerMetaTileEntity(startId,
+                new SuSySimpleSteamMetaTileEntity(susyId(String.format("%s.bronze", name)), recipeMap,
+                        progressIndicator, texture, isBricked, false, ulvOnly));
+        machines[1] = registerMetaTileEntity(startId + 1,
+                new SuSySimpleSteamMetaTileEntity(susyId(String.format("%s.steel", name)), recipeMap, progressIndicator,
+                        texture, isBricked, true, ulvOnly));
     }
 
     private static void registerSimpleMTE(SimpleMachineMetaTileEntity[] machines, int maxTier, int startId, String name,
@@ -889,7 +888,8 @@ public class SuSyMetaTileEntities {
 
     private static void registerCatalystMTE(CatalystMachineMetaTileEntity[] machines, int maxTier, int startId,
                                             String name, RecipeMap<?> map, ICubeRenderer texture,
-                                            boolean hasFrontFacing, Function<Integer, Integer> tankScalingFunction) {
+                                            boolean hasFrontFacing,
+                                            Function<Integer, Integer> tankScalingFunction) {
         for (int i = 0; i <= maxTier; i++) {
             machines[i] = registerMetaTileEntity(startId + i,
                     new CatalystMachineMetaTileEntity(

@@ -30,10 +30,10 @@ import supersymmetry.client.shaders.util.ShaderUtils;
  * Scene phases (driven by ReEntryPhase supplied from the server via the
  * ReEntrySequenceHandler):
  *
- * ORBIT – Earth spins below, sun arcs overhead, pod in low orbit.
- * REENTRY_BURN – startReEntry() shader triggered; fire / plasma effects begin.
- * DESCENT – Earth fills more and more of the screen as altitude drops.
- * TRANSFER – dimension transfer handled by ReEntrySequenceHandler.
+ * ORBIT – Earth spins below, sun arcs overhead, pod in low orbit. REENTRY_BURN
+ * – startReEntry() shader triggered; fire / plasma effects begin. DESCENT –
+ * Earth fills more and more of the screen as altitude drops. TRANSFER –
+ * dimension transfer handled by ReEntrySequenceHandler.
  */
 public class ReEntryRenderer extends IRenderHandler {
 
@@ -127,9 +127,7 @@ public class ReEntryRenderer extends IRenderHandler {
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(
-                GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         // --- Screen-space passes OUTSIDE the tilt matrix ---
         // Sun shader operates in NDC, must not be rotated
@@ -161,7 +159,8 @@ public class ReEntryRenderer extends IRenderHandler {
         }
         GlStateManager.popMatrix();
 
-        // Atmosphere glow — uses capturedView/capturedProj (pre-tilt), rendered in world space
+        // Atmosphere glow — uses capturedView/capturedProj (pre-tilt), rendered in
+        // world space
         if (earthObject != null && ShaderManager.shadersAllowed()) {
             float scale = computeEarthRenderScale();
             float planetY = -scale * 1.02f;
@@ -173,9 +172,8 @@ public class ReEntryRenderer extends IRenderHandler {
         // --- Plasma overlay: screen-space, outside tilt ---
         // Need to redo later
         /*
-         * if (reEntryStarted && plasmaIntensity > 0f && ShaderManager.shadersAllowed()) {
-         * renderPlasmaOverlay();
-         * }
+         * if (reEntryStarted && plasmaIntensity > 0f && ShaderManager.shadersAllowed())
+         * { renderPlasmaOverlay(); }
          */
 
         // Restore GL state
@@ -192,9 +190,9 @@ public class ReEntryRenderer extends IRenderHandler {
     // ---- private rendering helpers ----
 
     /**
-     * Returns the render scale for Earth in game units.
-     * During orbit it matches the LEO scale (~2500).
-     * During descent it grows toward a very large value so Earth fills the screen.
+     * Returns the render scale for Earth in game units. During orbit it matches the
+     * LEO scale (~2500). During descent it grows toward a very large value so Earth
+     * fills the screen.
      */
     private float computeEarthRenderScale() {
         // Orbit scale: planet just below, large but not overwhelming
@@ -216,20 +214,16 @@ public class ReEntryRenderer extends IRenderHandler {
 
         // Earth spin: full speed during orbit, slows slightly during reentry
         double spinMult = reEntryStarted ? Math.max(0.1, 1.0 - descentProgress * 0.3) : 1.0;
-        double orbitAngle = ((worldTime % earthOrbitalPeriodTicks) /
-                (double) earthOrbitalPeriodTicks) * 2.0 * Math.PI * spinMult;
+        double orbitAngle = ((worldTime % earthOrbitalPeriodTicks) / (double) earthOrbitalPeriodTicks) * 2.0 * Math.PI *
+                spinMult;
 
         float co = (float) Math.cos(orbitAngle);
         float so = (float) Math.sin(orbitAngle);
-        float[] rot = {
-                co, 0f, -so, 0f,
-                so, 0f, co, 0f,
-                0f, -1f, 0f, 0f,
-                0f, 0f, 0f, 1f
-        };
+        float[] rot = { co, 0f, -so, 0f, so, 0f, co, 0f, 0f, -1f, 0f, 0f, 0f, 0f, 0f, 1f };
 
         int[] faceTexIds = new int[6];
-        for (int i = 0; i < 6; i++) faceTexIds[i] = earthCubemap.getFaceTexId(i);
+        for (int i = 0; i < 6; i++)
+            faceTexIds[i] = earthCubemap.getFaceTexId(i);
 
         // Earth starts far (orbit) and grows to fill screen (5km)
         // podRotationT drives the "getting closer" feel during deorbit burn
@@ -240,13 +234,14 @@ public class ReEntryRenderer extends IRenderHandler {
 
         float savedSunR = planetRenderer.sunAngularRadius;
         planetRenderer.sunAngularRadius = 0.0f;
-        planetRenderer.render(capturedView, capturedProj, currentSunDir,
-                new float[] { 0f, planetY, 0f }, scale, rot, faceTexIds);
+        planetRenderer.render(capturedView, capturedProj, currentSunDir, new float[] { 0f, planetY, 0f }, scale, rot,
+                faceTexIds);
         planetRenderer.sunAngularRadius = savedSunR;
     }
 
     private void renderSunShader(long worldTime) {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
         float[] sd = currentSunDir;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -255,9 +250,7 @@ public class ReEntryRenderer extends IRenderHandler {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 
@@ -291,16 +284,15 @@ public class ReEntryRenderer extends IRenderHandler {
      */
     private void renderPlasmaOverlay() {
         int progId = ShaderManager.getRawProgram("reentry_plasma.vert", "reentry_plasma.frag");
-        if (progId <= 0) return;
+        if (progId <= 0)
+            return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
         GL20.glUseProgram(progId);
         ShaderUtils.setUniform1f(progId, "u_intensity", plasmaIntensity);

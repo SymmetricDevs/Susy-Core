@@ -32,7 +32,8 @@ public class EntityTaggerHandler {
         ItemStack stack = event.getItemStack();
         Entity target = event.getTarget();
 
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty())
+            return;
 
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_TAGGER.metaValue)
             return;
@@ -74,12 +75,14 @@ public class EntityTaggerHandler {
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
 
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty())
+            return;
 
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_TAGGER.metaValue)
             return;
 
-        if (!player.isSneaking()) return;
+        if (!player.isSneaking())
+            return;
 
         if (!player.world.isRemote) {
             NBTTagCompound tag = stack.getOrCreateSubCompound(TAG_ROOT);
@@ -102,12 +105,14 @@ public class EntityTaggerHandler {
         ItemStack stack = player.getHeldItemMainhand();
         Entity target = event.getTarget();
 
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty())
+            return;
 
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_TAGGER.metaValue)
             return;
 
-        if (!(target instanceof EntityLivingBase)) return;
+        if (!(target instanceof EntityLivingBase))
+            return;
 
         if (!player.world.isRemote) {
 
@@ -126,34 +131,35 @@ public class EntityTaggerHandler {
             susyTag.setInteger(TAG_HATE, newHate);
             entityTag.setTag(TAG_ROOT, susyTag);
 
-            player.sendMessage(new TextComponentString(
-                    "Mob hate value: " + newHate));
+            player.sendMessage(new TextComponentString("Mob hate value: " + newHate));
         }
 
         // Prevent damage
         event.setCanceled(true);
     }
 
-    // glow for easier attaching, dev only, might make a config to unsubscribe this so it doesn't spam the ticks
+    // glow for easier attaching, dev only, might make a config to unsubscribe this
+    // so it doesn't spam the ticks
     @SubscribeEvent
     public static void onPlayerTick(net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent event) {
-        if (event.phase != net.minecraftforge.fml.common.gameevent.TickEvent.Phase.END) return;
+        if (event.phase != net.minecraftforge.fml.common.gameevent.TickEvent.Phase.END)
+            return;
 
         EntityPlayer player = event.player;
 
-        if (player.world.isRemote) return; // SERVER ONLY
+        if (player.world.isRemote)
+            return; // SERVER ONLY
 
         // Only run every 5 ticks to not cook the server
-        if (player.ticksExisted % 5 != 0) return;
+        if (player.ticksExisted % 5 != 0)
+            return;
 
         ItemStack stack = player.getHeldItemMainhand();
 
         // If not holding correct item exit
-        if (stack.isEmpty() ||
-                SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_TAGGER.metaValue) {
+        if (stack.isEmpty() || SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_TAGGER.metaValue) {
 
-            List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(
-                    EntityLivingBase.class,
+            List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(EntityLivingBase.class,
                     player.getEntityBoundingBox().grow(radius));
 
             for (EntityLivingBase entity : entities) {
@@ -165,13 +171,14 @@ public class EntityTaggerHandler {
         }
 
         NBTTagCompound tag = stack.getSubCompound(TAG_ROOT);
-        if (tag == null) return;
+        if (tag == null)
+            return;
 
         String selectedFaction = tag.getString(TAG_FACTION);
-        if (selectedFaction.isEmpty()) return;
+        if (selectedFaction.isEmpty())
+            return;
 
-        List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(
-                EntityLivingBase.class,
+        List<EntityLivingBase> entities = player.world.getEntitiesWithinAABB(EntityLivingBase.class,
                 player.getEntityBoundingBox().grow(radius));
 
         for (EntityLivingBase entity : entities) {

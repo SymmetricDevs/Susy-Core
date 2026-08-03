@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -19,6 +17,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
@@ -214,7 +213,7 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
 
             case 4: // Fifth aisle
                 switch (layer) {
-                    case 2:  // "ECCCSCCCE" - special case
+                    case 2: // "ECCCSCCCE" - special case
                         return buildSpecialCenterString(sDist);
                     case 1:
                     case 3: // "GGGGGGGGG"
@@ -274,14 +273,14 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         if (getWorld() != null) {
             updateStructureDimensions();
         }
-        if (sDist < MIN_RADIUS) sDist = MIN_RADIUS;
+        if (sDist < MIN_RADIUS)
+            sDist = MIN_RADIUS;
         return createStructurePattern(sDist);
     }
 
     protected @NotNull BlockPattern createStructurePattern(int sDist) {
         String[] strings = buildVoxelStrings(sDist);
-        return FactoryBlockPattern.start()
-                .aisle(strings[0], strings[1], strings[2], strings[3], strings[4])
+        return FactoryBlockPattern.start().aisle(strings[0], strings[1], strings[2], strings[3], strings[4])
                 .aisle(strings[5], strings[6], strings[7], strings[8], strings[9])
                 .aisle(strings[10], strings[11], strings[12], strings[13], strings[14])
                 .aisle(strings[15], strings[16], strings[17], strings[18], strings[19])
@@ -293,16 +292,13 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                  * .aisle("ECCCCCCCE", "O G P G I", "G GFG GFG", "G PFG PFG", "ECCMCCCME")
                  * .aisle("ECCCSCCCE", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "ECCCCCCCE")
                  */
-                .where('S', selfPredicate())
-                .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
+                .where('S', selfPredicate()).where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
                 .where('T',
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
-                .where('P', states(getPipeCasingState()))
-                .where('D', states(getCasingState()))
-                .where('C', states(getCasingState()).or(autoAbilities()))
-                .where('G', states(getCasingState()))
+                .where('P', states(getPipeCasingState())).where('D', states(getCasingState()))
+                .where('C', states(getCasingState()).or(autoAbilities())).where('G', states(getCasingState()))
                 .where('M',
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
@@ -310,15 +306,13 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
                 .where('E',
                         states(getSecondaryCasingState())
                                 .or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS)))
-                .where(' ', air())
-                .where('#', any())
-                .build();
+                .where(' ', air()).where('#', any()).build();
     }
 
     public TraceabilityPredicate autoAbilities() {
-        return super.autoAbilities(true, false).or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
-                .setMaxGlobalLimited(2)
-                .setPreviewCount(1))
+        return super.autoAbilities(true, false)
+                .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)
+                        .setPreviewCount(1))
                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMaxGlobalLimited(1));
     }
 
@@ -380,7 +374,8 @@ public class MetaTileEntityMixerSettler extends RecipeMapMultiblockController {
         @Override
         protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
             int cellsOff = (sDist - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2)) / 2;
-            // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches
+            // Divides the duration by an increasing factor that approaches 2 as the number
+            // of cells approaches
             // infinity.
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 

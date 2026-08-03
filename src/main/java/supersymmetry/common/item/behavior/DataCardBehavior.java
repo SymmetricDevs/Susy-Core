@@ -40,8 +40,10 @@ public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
         if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
             for (String name : AbstractComponent.getNameRegistry().keySet()) {
                 AbstractComponent<?> component = AbstractComponent.getComponentFromName(name);
-                if (component == null) continue;
-                if (!component.configureDefaults()) continue;
+                if (component == null)
+                    continue;
+                if (!component.configureDefaults())
+                    continue;
                 ItemStack configured = itemStack.copy();
                 NBTTagCompound tag = new NBTTagCompound();
                 component.writeToNBT(tag);
@@ -55,13 +57,13 @@ public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
     public void addInformation(ItemStack itemStack, List<String> lines) {
         this.lines.accept(lines);
         NBTTagCompound tag = itemStack.getTagCompound();
-        if (tag == null) return;
+        if (tag == null)
+            return;
 
         for (String key : this.keys) {
             if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
-                lines.add(
-                        I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
-                                getID(tag));
+                lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
+                        getID(tag));
             }
         }
 

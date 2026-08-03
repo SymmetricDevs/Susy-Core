@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,12 +9,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantActiveBlock;
 
-/// This should actually be a [VariantBlock]. But changing it would void evaporation beds in existing saves.
-/// Also, it will need me to do extra code for exposure block counting, so I'll just leave it here untouched.
+/// This should actually be a [VariantBlock]. But changing it would void evaporation beds in existing saves. Also, it
+/// will need me to do extra code for exposure block counting, so I'll just leave it here untouched.
 public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.EvaporationBedType> {
 
     public BlockEvaporationBed() {
@@ -29,8 +28,7 @@ public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.
         setDefaultState(getState(EvaporationBedType.DIRT));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }
@@ -53,8 +51,7 @@ public class BlockEvaporationBed extends VariantActiveBlock<BlockEvaporationBed.
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

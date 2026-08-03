@@ -80,18 +80,14 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("BBB", "BBB", "SBS")
-                .aisle("BBB", "B#B", "B B")
+        return FactoryBlockPattern.start().aisle("BBB", "BBB", "SBS").aisle("BBB", "B#B", "B B")
                 .aisle("BBB", "BCB", "SBS")
-                .where('B', states(getCasingState()).setMinGlobalLimited(14)
-                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(1))
-                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(1)))
-                .where('C', selfPredicate())
-                .where('S', states(ModuleCore.Blocks.MASONRY_BRICK_SLAB.getDefaultState()))
-                .where('#', air().or(SNOW_PREDICATE))
-                .where(' ', air())
-                .build();
+                .where('B',
+                        states(getCasingState()).setMinGlobalLimited(14)
+                                .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(1))
+                                .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(1)))
+                .where('C', selfPredicate()).where('S', states(ModuleCore.Blocks.MASONRY_BRICK_SLAB.getDefaultState()))
+                .where('#', air().or(SNOW_PREDICATE)).where(' ', air()).build();
     }
 
     @Override

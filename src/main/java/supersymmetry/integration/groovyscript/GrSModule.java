@@ -21,14 +21,12 @@ import supersymmetry.modules.SuSyModules;
                 description = "GroovyScript Integration Module")
 public class GrSModule extends IntegrationSubmodule implements GroovyPlugin {
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getModId() {
         return Supersymmetry.MODID;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getContainerName() {
         return Supersymmetry.NAME;
     }

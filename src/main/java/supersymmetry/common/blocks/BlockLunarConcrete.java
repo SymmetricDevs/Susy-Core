@@ -57,16 +57,26 @@ public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarCon
     public enum LunarConcreteType implements IStringSerializable, IStateHarvestLevel {
 
         LUNAR_CONCRETE_SMOOTH("lunar_concrete_smooth", 1),
-        LUNAR_CONCRETE_BRICKS("lunar_concrete_bricks", 1),
+        LUNAR_CONCRETE_BRICKS("lunar_concrete_bricks",
+                1),
         LUNAR_CONCRETE_BRICKS_CRACKED("lunar_concrete_bricks_cracked", 1),
-        LUNAR_CONCRETE_BRICKS_SMALL("lunar_concrete_bricks_small", 1),
+        LUNAR_CONCRETE_BRICKS_SMALL(
+                "lunar_concrete_bricks_small",
+                1),
         LUNAR_CONCRETE_BRICKS_SQUARE("lunar_concrete_bricks_square", 1),
-        LUNAR_CONCRETE_CHISELED("lunar_concrete_chiseled", 1),
+        LUNAR_CONCRETE_CHISELED(
+                "lunar_concrete_chiseled",
+                1),
         LUNAR_CONCRETE_COBBLE("lunar_concrete_cobble", 1),
-        LUNAR_CONCRETE_POLISHED("lunar_concrete_polished", 1),
+        LUNAR_CONCRETE_POLISHED(
+                "lunar_concrete_polished",
+                1),
         LUNAR_CONCRETE_TILED("lunar_concrete_tiled", 1),
-        LUNAR_CONCRETE_TILED_SMALL("lunar_concrete_tiled_small", 1),
-        LUNAR_CONCRETE_WINDMILL_A("lunar_concrete_windmill_a", 1),
+        LUNAR_CONCRETE_TILED_SMALL(
+                "lunar_concrete_tiled_small",
+                1),
+        LUNAR_CONCRETE_WINDMILL_A("lunar_concrete_windmill_a",
+                1),
         LUNAR_CONCRETE_WINDMILL_B("lunar_concrete_windmill_b", 1);
 
         private final String name;

@@ -12,8 +12,7 @@ import shetiphian.multistorage.common.block.BlockVault;
 import supersymmetry.Supersymmetry;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_MULTISTORAGE,
+@GregTechModule(moduleID = SuSyModules.MODULE_MULTISTORAGE,
                 containerID = Supersymmetry.MODID,
                 modDependencies = "multistorage",
                 name = "SuSy MultiStorage Integration",

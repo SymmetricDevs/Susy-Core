@@ -31,23 +31,20 @@ public class MetaTileEntityLayupMachine extends RecipeMapMultiblockController {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" SGS ", "  A  ", "     ")
-                .aisle("sssss", "     ", "     ")
-                .aisle("sssss", "     ", "     ")
-                .aisle("sssss", "     ", "     ")
-                .aisle(" HCH ", " HHH ", " HHH ")
+        return FactoryBlockPattern.start().aisle(" SGS ", "  A  ", "     ").aisle("sssss", "     ", "     ")
+                .aisle("sssss", "     ", "     ").aisle("sssss", "     ", "     ").aisle(" HCH ", " HHH ", " HHH ")
                 .where('s', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN)))
                 .where('S', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
-                .where('H', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities()))
-                .where('A', SuSyPredicates.orientation(this,
-                        SuSyBlocks.ROBOT_ARM_LAYUP.getState(BlockRobotArmLayup.LayupRobotArmType.LAYUP),
-                        RelativeDirection.BACK, VariantHorizontalRotatableBlock.FACING))
+                .where('H',
+                        states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID))
+                                .or(autoAbilities()))
+                .where('A',
+                        SuSyPredicates.orientation(this,
+                                SuSyBlocks.ROBOT_ARM_LAYUP.getState(BlockRobotArmLayup.LayupRobotArmType.LAYUP),
+                                RelativeDirection.BACK, VariantHorizontalRotatableBlock.FACING))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('C', selfPredicate())
-                .build();
+                .where('C', selfPredicate()).build();
     }
 
     @Override

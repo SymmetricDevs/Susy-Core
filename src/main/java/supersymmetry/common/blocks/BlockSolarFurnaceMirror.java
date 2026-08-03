@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockSolarFurnaceMirror extends
+public class BlockSolarFurnaceMirror
+                                     extends
                                      VariantHorizontalRotatableBlock<BlockSolarFurnaceMirror.SolarFurnaceMirrorType> {
 
     public BlockSolarFurnaceMirror() {

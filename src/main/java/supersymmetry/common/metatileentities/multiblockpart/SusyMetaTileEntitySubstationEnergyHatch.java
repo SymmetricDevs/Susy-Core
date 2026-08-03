@@ -12,7 +12,8 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubst
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class SusyMetaTileEntitySubstationEnergyHatch extends MetaTileEntitySubstationEnergyHatch
-                                                     implements IMultiblockAbilityPart<IEnergyContainer> {
+                                                     implements
+                                                     IMultiblockAbilityPart<IEnergyContainer> {
 
     public SusyMetaTileEntitySubstationEnergyHatch(ResourceLocation metaTileEntityId, int tier, int amperage,
                                                    boolean isExportHatch) {
@@ -22,16 +23,20 @@ public class SusyMetaTileEntitySubstationEnergyHatch extends MetaTileEntitySubst
     @Override
     public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_64A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_SUBSTATION_ENERGY_OUTPUT_HATCH_256A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_SUBSTATION_ENERGY_INPUT_HATCH_64A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_SUBSTATION_ENERGY_INPUT_HATCH_256A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
     }
 }

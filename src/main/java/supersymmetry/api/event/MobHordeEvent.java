@@ -85,7 +85,8 @@ public class MobHordeEvent {
 
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
-        if (quantity <= 0) quantity = 1;
+        if (quantity <= 0)
+            quantity = 1;
 
         boolean didSpawn = false;
 
@@ -113,7 +114,8 @@ public class MobHordeEvent {
             return false;
         }
         if (requiredAdvancement != null) {
-            return false; // check if the event is locked behind advancement, if so, do not let natural spawn
+            return false; // check if the event is locked behind advancement, if so, do not let natural
+                          // spawn
         }
         if (player.dimension != this.dimension) {
             return false;
@@ -135,9 +137,7 @@ public class MobHordeEvent {
     }
 
     // the great addpattern unfucking
-    public MobHordeEvent addPattern(
-                                    Function<Double, Vec2> patternFunction,
-                                    List<String> commands,
+    public MobHordeEvent addPattern(Function<Double, Vec2> patternFunction, List<String> commands,
                                     Function<EntityPlayer, EntityLiving> supplierOverride,
                                     Function<EntityLiving, EntityLiving> postSpawnModifier) {
         if (patternFunction == null) {
@@ -150,7 +150,7 @@ public class MobHordeEvent {
         this.patternFunctions.add(patternFunction);
         this.commandsOnLandingPattern.add(commands);
         this.entitySupplierOverrides.add(supplierOverride); // can be null
-        this.postSpawnOverrides.add(postSpawnModifier);     // can be null
+        this.postSpawnOverrides.add(postSpawnModifier); // can be null
 
         return this;
     }
@@ -224,11 +224,13 @@ public class MobHordeEvent {
             double z = (int) (player.posZ + radius * Math.sin(angle)) + 0.5;
 
             BlockPos topPos = player.world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-            if (topPos.getY() < player.posY - 2 || topPos.getY() > player.posY + 8) continue;
+            if (topPos.getY() < player.posY - 2 || topPos.getY() > player.posY + 8)
+                continue;
 
             EntityLiving test = entitySupplier.apply(player);
             test.setPosition(x, topPos.getY() + 0.01, z);
-            if (!test.getCanSpawnHere() || !test.isNotColliding()) continue;
+            if (!test.getCanSpawnHere() || !test.isNotColliding())
+                continue;
 
             return topPos;
         }
@@ -321,26 +323,16 @@ public class MobHordeEvent {
                 Function<EntityLiving, EntityLiving> patternModifier = (i < postSpawnOverrides.size()) ?
                         postSpawnOverrides.get(i) : null;
 
-                finishSpawning |= spawnMobWithPattern(
-                        player,
-                        uuidConsumer,
-                        qtyForThisPattern,
-                        patternFunctions.get(i),
-                        commands,
-                        supplierOverride,
-                        patternModifier,
-                        offsetx,
-                        offsetz);
+                finishSpawning |= spawnMobWithPattern(player, uuidConsumer, qtyForThisPattern, patternFunctions.get(i),
+                        commands, supplierOverride, patternModifier, offsetx, offsetz);
             }
         }
 
         return finishSpawning;
     }
 
-    private boolean spawnMobWithPattern(EntityPlayer player, Consumer<UUID> uuidConsumer,
-                                        int quantity,
-                                        Function<Double, Vec2> pattern,
-                                        List<String> commands,
+    private boolean spawnMobWithPattern(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity,
+                                        Function<Double, Vec2> pattern, List<String> commands,
                                         Function<EntityPlayer, EntityLiving> supplierOverride,
                                         Function<EntityLiving, EntityLiving> patternModifier,
                                         Double centerX, Double centerZ) {
@@ -385,7 +377,8 @@ public class MobHordeEvent {
             }
 
             String key = ((int) Math.floor(x)) + "," + ((int) Math.floor(z));
-            if (occupiedCoordinates.contains(key)) continue;
+            if (occupiedCoordinates.contains(key))
+                continue;
             occupiedCoordinates.add(key);
 
             pod.setPosition(x, y, z);
@@ -399,9 +392,7 @@ public class MobHordeEvent {
             if (passenger != null) {
                 passenger.setPosition(x, y, z);
                 passenger.startRiding(pod, true);
-                passenger.onInitialSpawn(
-                        player.world.getDifficultyForLocation(new BlockPos(passenger)),
-                        null);
+                passenger.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(passenger)), null);
                 if (patternModifier != null) {
                     patternModifier.apply(passenger);
                 } else if (this.postSpawnModifier != null) {
@@ -434,9 +425,7 @@ public class MobHordeEvent {
         double z = player.posZ + (Math.random() - 0.5) * 60;
 
         mob.setPosition(x, y, z);
-        mob.onInitialSpawn(
-                player.world.getDifficultyForLocation(new BlockPos(mob)),
-                null);
+        mob.onInitialSpawn(player.world.getDifficultyForLocation(new BlockPos(mob)), null);
         mob.startRiding(pod, true);
         if (this.postSpawnModifier != null) {
             this.postSpawnModifier.apply(mob);

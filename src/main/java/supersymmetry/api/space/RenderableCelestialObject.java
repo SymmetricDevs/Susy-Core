@@ -67,9 +67,9 @@ public class RenderableCelestialObject {
     }
 
     /**
-     * Tidally locked: the same cubemap face always points toward the planet centre (origin).
-     * The object still orbits normally - only the self-rotation is locked.
-     * Use for the Moon.
+     * Tidally locked: the same cubemap face always points toward the planet centre
+     * (origin). The object still orbits normally - only the self-rotation is
+     * locked. Use for the Moon.
      */
     public RenderableCelestialObject setTidallyLocked(boolean locked) {
         this.tidallyLocked = locked;
@@ -93,7 +93,8 @@ public class RenderableCelestialObject {
     }
 
     private boolean ensureLoadedInternal() {
-        if (loadAttempted) return cubemap.isLoaded();
+        if (loadAttempted)
+            return cubemap.isLoaded();
         loadAttempted = true;
         try {
             cubemap.loadAll();
@@ -113,11 +114,8 @@ public class RenderableCelestialObject {
                 ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) / (double) orbitalPeriodTicks * 2.0 * Math.PI :
                 0.0;
         float incRad = (float) Math.toRadians(orbitalInclinationDeg);
-        return new float[] {
-                (float) Math.cos(angle),
-                (float) (Math.sin(angle) * Math.sin(incRad)),
-                (float) (Math.sin(angle) * Math.cos(incRad))
-        };
+        return new float[] { (float) Math.cos(angle), (float) (Math.sin(angle) * Math.sin(incRad)),
+                (float) (Math.sin(angle) * Math.cos(incRad)) };
     }
 
     public void renderAtPosition(long worldTime, QuadSphere mesh) {
@@ -127,10 +125,8 @@ public class RenderableCelestialObject {
             dy = fixedDy;
             dz = fixedDz;
         } else {
-            double angle = orbitalPeriodTicks > 0 ?
-                    ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
-                            (double) orbitalPeriodTicks * 2.0 * Math.PI :
-                    0.0;
+            double angle = orbitalPeriodTicks > 0 ? ((worldTime + phaseOffsetTicks) % orbitalPeriodTicks) /
+                    (double) orbitalPeriodTicks * 2.0 * Math.PI : 0.0;
             float incRad = (float) Math.toRadians(orbitalInclinationDeg);
             dx = (float) Math.cos(angle);
             dy = (float) (Math.sin(angle) * Math.sin(incRad));
@@ -152,7 +148,8 @@ public class RenderableCelestialObject {
             if (len > 1e-6f) {
                 float nx = -dx / len, ny = -dy / len, nz = -dz / len;
                 // Rotate default -Z axis (0,0,-1) to point toward (nx,ny,nz)
-                // Cross product: (0,0,-1) x (nx,ny,nz) = (0*nz-(-1)*ny, (-1)*nx-0*nz, 0*ny-0*nx)
+                // Cross product: (0,0,-1) x (nx,ny,nz) = (0*nz-(-1)*ny, (-1)*nx-0*nz,
+                // 0*ny-0*nx)
                 // = (ny, -nx, 0)
                 float crossX = ny, crossY = -nx, crossZ = 0f;
                 float sinA = (float) Math.sqrt(crossX * crossX + crossY * crossY);
@@ -197,7 +194,8 @@ public class RenderableCelestialObject {
 
             for (int face = 0; face < 6; face++) {
                 int faceTexId = cubemap.getFaceTexId(face);
-                if (faceTexId == -1) continue;
+                if (faceTexId == -1)
+                    continue;
                 GlStateManager.bindTexture(faceTexId);
                 GL11.glBegin(GL11.GL_QUADS);
                 for (int qi : faceQuadIndices.get(face)) {

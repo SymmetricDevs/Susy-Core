@@ -21,26 +21,22 @@ public class DefaultCapabilities {
 
     static {
         // Item
-        addCapability(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+        addCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
                 CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandler(1) {
 
-                    @NotNull
-                    @Override
+                    @NotNull @Override
                     public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
                         return stack;
                     }
 
-                    @NotNull
-                    @Override
+                    @NotNull @Override
                     public ItemStack extractItem(int slot, int amount, boolean simulate) {
                         return ItemStack.EMPTY;
                     }
                 }));
 
         // Fluid
-        addCapability(
-                CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
+        addCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
                 CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new FluidTank(10000) {
 
                     @Override
@@ -49,15 +45,13 @@ public class DefaultCapabilities {
                     }
 
                     @Override
-                    @Nullable
-                    public FluidStack drainInternal(int maxDrain, boolean doDrain) {
+                    @Nullable public FluidStack drainInternal(int maxDrain, boolean doDrain) {
                         return null;
                     }
                 }));
 
         // GTEU
-        addCapability(
-                GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER,
+        addCapability(GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER,
                 GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER.cast(IEnergyContainer.DEFAULT));
     }
 
@@ -65,8 +59,7 @@ public class DefaultCapabilities {
         return DEFAULT_CAPABILITIES.containsKey(capability);
     }
 
-    @Nullable
-    @SuppressWarnings("unchecked")
+    @Nullable @SuppressWarnings("unchecked")
     public static <T> T getCapability(@NotNull Capability<T> capability) {
         return (T) DEFAULT_CAPABILITIES.getOrDefault(capability, null);
     }

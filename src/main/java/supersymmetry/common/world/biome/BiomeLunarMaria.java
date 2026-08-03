@@ -3,9 +3,9 @@ package supersymmetry.common.world.biome;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.entity.EnumCreatureType;
+
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -22,8 +22,7 @@ public class BiomeLunarMaria extends PlanetaryBiome {
     }
 
     @Override
-    @NonNull
-    public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
+    @NonNull public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
         return new LinkedList<>();
     }
 

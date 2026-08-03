@@ -34,15 +34,13 @@ public class StrandCategory extends BasicRecipeCategory<StrandInfo, StrandInfo> 
                 .setTextureSize(20, 40).build();
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public IDrawable getIcon() {
         return this.icon;
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, StrandInfo recipeWrapper,
-                          @NotNull IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, StrandInfo recipeWrapper, @NotNull IIngredients ingredients) {
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 

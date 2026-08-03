@@ -48,21 +48,20 @@ public class HydrogenPoweredDroneBehavior implements IItemDurabilityManager, IIt
     public double getDurabilityForDisplay(@NotNull ItemStack itemStack) {
         IFluidHandlerItem fluidHandlerItem = itemStack
                 .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-        if (fluidHandlerItem == null) return 0;
+        if (fluidHandlerItem == null)
+            return 0;
         IFluidTankProperties fluidTankProperties = fluidHandlerItem.getTankProperties()[0];
         FluidStack fluidStack = fluidTankProperties.getContents();
         return fluidStack == null ? 0 : (double) fluidStack.amount / (double) fluidTankProperties.getCapacity();
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public Pair<Color, Color> getDurabilityColorsForDisplay(ItemStack itemStack) {
         return durabilityBarColors;
     }
 
     @Override
     public ICapabilityProvider createProvider(ItemStack itemStack) {
-        return new GTFluidHandlerItemStack(itemStack, maxCapacity)
-                .setFilter(HYDROGEN_FILTER);
+        return new GTFluidHandlerItemStack(itemStack, maxCapacity).setFilter(HYDROGEN_FILTER);
     }
 }

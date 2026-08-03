@@ -64,7 +64,8 @@ public interface IAnimatableMTE extends IFastRenderMetaTileEntity, IAnimatable {
         }
     }
 
-    // If this returns true, the TESR will keep rendering even when the chunk is culled.
+    // If this returns true, the TESR will keep rendering even when the chunk is
+    // culled.
     @Override
     default boolean isGlobalRenderer() {
         return true;

@@ -8,7 +8,8 @@ import net.minecraft.util.IStringSerializable;
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockRocketEngineGasGenerator extends
+public class BlockRocketEngineGasGenerator
+                                           extends
                                            VariantHorizontalRotatableBlock<BlockRocketEngineGasGenerator.GasGeneratorType> {
 
     public BlockRocketEngineGasGenerator() {

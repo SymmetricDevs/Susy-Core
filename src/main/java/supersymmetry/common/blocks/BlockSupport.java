@@ -51,10 +51,7 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
     }
 
     @Override
-    public boolean canCreatureSpawn(
-                                    @NotNull IBlockState state,
-                                    @NotNull IBlockAccess world,
-                                    @NotNull BlockPos pos,
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
                                     @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
@@ -101,14 +98,12 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
             this.name = name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String toString() {
             return getName();
         }

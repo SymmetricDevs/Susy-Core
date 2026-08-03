@@ -84,12 +84,8 @@ public class RocketFuelEntry {
 
     private double sIPerPressure;
 
-    public RocketFuelEntry(
-                           String registryName,
-                           ArrayList<Tuple<Fluid, Integer>> composition,
-                           double density,
-                           double sIVacuum,
-                           double sIPerPressure) {
+    public RocketFuelEntry(String registryName, ArrayList<Tuple<Fluid, Integer>> composition, double density,
+                           double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
         this.composition = composition;
         this.density = density;
@@ -139,9 +135,7 @@ public class RocketFuelEntry {
 
     public static @NotNull Optional<RocketFuelEntry> search(List<Fluid> userFluids) {
         for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
-            boolean matches = entry.getComposition().stream()
-                    .map(Tuple::getFirst)
-                    .allMatch(userFluids::contains);
+            boolean matches = entry.getComposition().stream().map(Tuple::getFirst).allMatch(userFluids::contains);
             if (matches) {
                 return Optional.of(entry);
             }

@@ -38,8 +38,7 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
         setDefaultState(getState(CoolingCoilType.MANGANESE_IRON_ARSENIC_PHOSPHIDE));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }
@@ -68,8 +67,10 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
 
         MANGANESE_IRON_ARSENIC_PHOSPHIDE("manganese_iron_arsenic_phosphide", 160,
                 SusyMaterials.ManganeseIronArsenicPhosphide),
-        PRASEODYMIUM_NICKEL("praseodymium_nickel", 50, SusyMaterials.PraseodymiumNickel),
-        GADOLINIUM_SILICON_GERMANIUM("gadolinium_silicon_germanium", 1, SusyMaterials.GadoliniumSiliconGermanium);
+        PRASEODYMIUM_NICKEL("praseodymium_nickel", 50,
+                SusyMaterials.PraseodymiumNickel),
+        GADOLINIUM_SILICON_GERMANIUM("gadolinium_silicon_germanium",
+                1, SusyMaterials.GadoliniumSiliconGermanium);
 
         public final String name;
         public final int coilTemperature;
@@ -81,14 +82,12 @@ public class BlockCoolingCoil extends VariantActiveBlock<BlockCoolingCoil.Coolin
             this.material = material;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String toString() {
             return getName();
         }

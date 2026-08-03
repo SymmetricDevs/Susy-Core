@@ -3,8 +3,6 @@ package supersymmetry.client.renderer.handler.entity;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,6 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.common.entities.EntityBlueprintRocket;
 
@@ -40,7 +40,8 @@ public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
         IBakedModel model;
 
         // Get modelManager from Minecraft.
-        // Don't forget to save it to a field or somewhere because reflection is a slow task.
+        // Don't forget to save it to a field or somewhere because reflection is a slow
+        // task.
         // No it's fast enough to do it once
         if (this.manager == null) {
             try {
@@ -64,7 +65,8 @@ public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
                                                                    // before rendering. Other specific are made so
                                                                    // Rubik's cube renders at the middle.
 
-        // Rotate the rocket based on its yaw and pitch (for troll mode and other flight dynamics)
+        // Rotate the rocket based on its yaw and pitch (for troll mode and other flight
+        // dynamics)
         GlStateManager.rotate(-entity.rotationYaw, 0.0F, 1.0F, 0.0F); // Rotate around Y axis for yaw
         GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F); // Rotate around X axis for pitch
 
@@ -86,7 +88,8 @@ public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
                                                            // some test.
 
         // Gets model quads for rendering
-        // State can be null. Because it checks if state is an instance of IExtendedState which it uses it to get
+        // State can be null. Because it checks if state is an instance of
+        // IExtendedState which it uses it to get
         // unlisted properties for some data. We don't use it and need it.
         // Side needs to be null. Obj models don't care about sides.
         // Rand doesn't get used in Obj models.
@@ -99,8 +102,7 @@ public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
     }
 
     // We don't use this.
-    @Nullable
-    @Override
+    @Nullable @Override
     protected ResourceLocation getEntityTexture(T entity) {
         return null;
     }

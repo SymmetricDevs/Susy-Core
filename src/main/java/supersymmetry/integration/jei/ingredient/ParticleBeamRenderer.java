@@ -3,8 +3,6 @@ package supersymmetry.integration.jei.ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,6 +11,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.TextFormatting;
+
+import org.jspecify.annotations.Nullable;
 
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -33,8 +33,7 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
     private final double emittance;
     private final double beamSize;
 
-    @Nullable
-    private final IDrawable overlay;
+    @Nullable private final IDrawable overlay;
     private final int width;
     private final int height;
 
@@ -44,7 +43,8 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
 
     public ParticleBeamRenderer(double energy, double bunchSpacing, double bunchLength, int nBunches,
                                 int nParticlesPerBunch, double emittance, double beamSize, @Nullable IDrawable overlay,
-                                int width, int height) {
+                                int width,
+                                int height) {
         this.energy = energy;
         this.bunchSpacing = bunchSpacing;
         this.bunchLength = bunchLength;
@@ -79,9 +79,11 @@ public class ParticleBeamRenderer implements IIngredientRenderer<ParticleBeam> {
 
     private void drawParticle(Minecraft minecraft, final int posX, final int posY,
                               @Nullable ParticleBeam particleBeam) {
-        if (particleBeam == null) return;
+        if (particleBeam == null)
+            return;
         Particle particle = particleBeam.getParticle();
-        if (particle == null) return;
+        if (particle == null)
+            return;
         minecraft.renderEngine.bindTexture(particleBeam.getParticle().getTexture());
         double zLevel = 100;
         double width = 16;

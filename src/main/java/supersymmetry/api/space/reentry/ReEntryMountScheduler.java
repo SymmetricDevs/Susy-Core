@@ -24,7 +24,8 @@ public class ReEntryMountScheduler {
 
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END)
+            return;
         Iterator<PendingMount> it = PENDING.iterator();
         while (it.hasNext()) {
             PendingMount pm = it.next();

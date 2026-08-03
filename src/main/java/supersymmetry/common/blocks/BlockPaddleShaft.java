@@ -39,11 +39,11 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
 
     @Nonnull
     @Override
-    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos,
-                                            @NotNull EnumFacing facing, float hitX, float hitY,
-                                            float hitZ, int meta, @NotNull EntityLivingBase placer) {
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
+    public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
+                                            float hitX, float hitY, float hitZ, int meta,
+                                            @NotNull EntityLivingBase placer) {
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING,
+                EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 
     @Nonnull
@@ -74,15 +74,13 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
 
     @Nonnull
     @Override
-    public ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target,
-                                  @NotNull World world, @NotNull BlockPos pos,
-                                  @NotNull EntityPlayer player) {
+    public ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
+                                  @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
     }
 
     @Override
-    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world,
-                                    @NotNull BlockPos pos,
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
                                     @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
@@ -92,8 +90,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

@@ -34,10 +34,13 @@ import gregtech.client.renderer.texture.Textures;
 import supersymmetry.common.util.RecipeCheckUtils;
 
 /**
- * This class is used to render a non-consumable input fluid according to given pattern.
- * It was designed for use in {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier} and
+ * This class is used to render a non-consumable input fluid according to given
+ * pattern. It was designed for use in
+ * {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityClarifier}
+ * and
  * {@link supersymmetry.common.metatileentities.multi.electric.MetaTileEntityFrothFlotationTank}.
- * Expects a recipemap with a fluid input and at least one consumable fluid input in every recipe.
+ * Expects a recipemap with a fluid input and at least one consumable fluid
+ * input in every recipe.
  *
  * @author h3tR / RMI
  */
@@ -66,7 +69,8 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     }
 
     public void updateRenderInfo(Recipe recipe) {
-        if (recipe == null) return;
+        if (recipe == null)
+            return;
         Optional<Fluid> fluid = getFluidToRender(recipe);
         fluid.ifPresent(fluidToRender -> {
             this.writeCustomData(UPDATE_FLUID_INFO, buf -> {
@@ -81,7 +85,8 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     }
 
     protected Optional<Fluid> getFluidToRender(Recipe recipe) {
-        // filters the input fluids for a consumed input fluid (ignores fluid flotation agents in case of froth
+        // filters the input fluids for a consumed input fluid (ignores fluid flotation
+        // agents in case of froth
         // flotation)
         return recipe.getFluidInputs().stream().filter(fluidInput -> !fluidInput.isNonConsumable()).findFirst()
                 .map(GTRecipeInput::getInputFluidStack).map(FluidStack::getFluid);
@@ -109,10 +114,8 @@ public abstract class FluidRenderRecipeMapMultiBlock extends CachedPatternRecipe
     }
 
     private void renderFluid(Vec3i offset, CCRenderState renderState, Matrix4 translation) {
-        IVertexOperation[] fluid_render_pipeline = {
-                new IconTransformation(fluidTexture),
-                new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(fluidColor))
-        };
+        IVertexOperation[] fluid_render_pipeline = { new IconTransformation(fluidTexture),
+                new ColourMultiplier(GTUtility.convertRGBtoOpaqueRGBA_CL(fluidColor)) };
         Textures.renderFace(renderState, translation.copy().translate(Vector3.fromVec3i(offset)), fluid_render_pipeline,
                 EnumFacing.UP, FLUID_RENDER_CUBOID, fluidTexture, BlockRenderLayer.CUTOUT_MIPPED);
     }

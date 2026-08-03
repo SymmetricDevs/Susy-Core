@@ -3,8 +3,6 @@ package supersymmetry.common.blocks;
 import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 import static net.minecraft.block.BlockDirectional.FACING;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -51,8 +50,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
         return hasTileEntity(state) ? createNewTileEntity(world, getMetaFromState(state)) : null;
     }
@@ -62,33 +60,28 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(ACTIVE);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
         return state.getValue(ACTIVE) ? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
                                             @NotNull EntityLivingBase placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
-                .withProperty(ACTIVE, false);
+                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)).withProperty(ACTIVE, false);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<RollType> enumClass = RollType.class;
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -101,8 +94,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(VARIANT).ordinal();
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
         // (InActive) North... -> 0...=5
         // (Active) North... -> 6...=11
@@ -110,9 +102,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         boolean active = meta > 5;
 
         EnumFacing enumfacing = EnumFacing.byIndex(facing);
-        return getDefaultState()
-                .withProperty(VARIANT, VALUES[meta / 12])
-                .withProperty(FACING, enumfacing)
+        return getDefaultState().withProperty(VARIANT, VALUES[meta / 12]).withProperty(FACING, enumfacing)
                 .withProperty(ACTIVE, active);
     }
 
@@ -121,8 +111,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
         return state.getValue(FACING).ordinal() + (state.getValue(ACTIVE) ? 6 : 0);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);
@@ -141,8 +130,8 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     }
 
     @Override
-    public void onEntityCollision(@NotNull World worldIn, @NotNull BlockPos pos,
-                                  @NotNull IBlockState state, @NotNull Entity entityIn) {
+    public void onEntityCollision(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                  @NotNull Entity entityIn) {
         super.onEntityCollision(worldIn, pos, state, entityIn);
 
         if (state.getValue(ACTIVE)) {
@@ -151,9 +140,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
     }
 
     @SuppressWarnings("deprecation")
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState,
-                                                 @NotNull IBlockAccess worldIn,
+    @Nullable public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState, @NotNull IBlockAccess worldIn,
                                                  @NotNull BlockPos pos) {
         return COLLISION_BOX;
     }
@@ -170,8 +157,7 @@ public class BlockEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

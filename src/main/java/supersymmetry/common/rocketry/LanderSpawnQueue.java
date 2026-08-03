@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -14,11 +12,13 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 
+import org.jspecify.annotations.NonNull;
+
 import supersymmetry.Supersymmetry;
 
 /**
- * WorldSavedData implementation that stores queued lander spawns.
- * This data persists across server restarts.
+ * WorldSavedData implementation that stores queued lander spawns. This data
+ * persists across server restarts.
  */
 public class LanderSpawnQueue extends WorldSavedData {
 
@@ -37,7 +37,8 @@ public class LanderSpawnQueue extends WorldSavedData {
     /**
      * Gets or creates the LanderSpawnQueue for the given world.
      *
-     * @param world The world to get the queue for
+     * @param world
+     *              The world to get the queue for
      * @return The LanderSpawnQueue instance for this world
      */
     public static LanderSpawnQueue get(World world) {
@@ -60,7 +61,8 @@ public class LanderSpawnQueue extends WorldSavedData {
     /**
      * Adds a new lander spawn entry to the queue.
      *
-     * @param entry The entry to add
+     * @param entry
+     *              The entry to add
      */
     public void addEntry(LanderSpawnEntry entry) {
         this.queuedSpawns.add(entry);
@@ -70,7 +72,8 @@ public class LanderSpawnQueue extends WorldSavedData {
     /**
      * Removes a lander spawn entry from the queue.
      *
-     * @param uuid The UUID of the entry to remove
+     * @param uuid
+     *             The UUID of the entry to remove
      * @return true if an entry was removed, false otherwise
      */
     public boolean removeEntry(UUID uuid) {
@@ -91,8 +94,8 @@ public class LanderSpawnQueue extends WorldSavedData {
     }
 
     /**
-     * Gets an iterator for processing entries.
-     * Use this when you need to remove entries while iterating.
+     * Gets an iterator for processing entries. Use this when you need to remove
+     * entries while iterating.
      *
      * @return An iterator over the queued entries
      */
@@ -131,8 +134,7 @@ public class LanderSpawnQueue extends WorldSavedData {
         }
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public NBTTagCompound writeToNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = new NBTTagList();
 

@@ -112,7 +112,8 @@ public class SuSyBlocks {
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
-                // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
+                // Try block is necessary in case getDeclaredConstructor does not exist (though
+                // it should)
                 try {
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
@@ -143,8 +144,10 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
-            if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
-            else registerItemModel(b);
+            if (b instanceof VariantActiveBlock)
+                ((VariantActiveBlock<?>) b).onModelRegister();
+            else
+                registerItemModel(b);
         });
         registerItemModel(REGOLITH);
     }
@@ -152,10 +155,8 @@ public class SuSyBlocks {
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(state.getProperties())));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(state.getProperties())));
         }
     }
 
@@ -163,8 +164,7 @@ public class SuSyBlocks {
         StringBuilder stringbuilder = new StringBuilder();
 
         List<Map.Entry<IProperty<?>, Comparable<?>>> entries = properties.entrySet().stream()
-                .sorted(Comparator.comparing(c -> c.getKey().getName()))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(c -> c.getKey().getName())).collect(Collectors.toList());
 
         for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {

@@ -52,9 +52,12 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
     @Override
     public void executeClient(NetHandlerPlayClient handler) {
         var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
-        if (snd == null) return;
-        if (bytes.length == 0) return;
-        if ((bytes.length & 1) != 0) return;
+        if (snd == null)
+            return;
+        if (bytes.length == 0)
+            return;
+        if ((bytes.length & 1) != 0)
+            return;
 
         var format = new AudioFormat(rate, 16, 1, true, false);
 
@@ -74,15 +77,15 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
         for (var target : targets) {
             boolean grouped = false;
             for (var c : chosen) {
-                if (Math.abs(c.posX - target.posX) <= 4 &&
-                        Math.abs(c.posZ - target.posZ) <= 4) {
+                if (Math.abs(c.posX - target.posX) <= 4 && Math.abs(c.posZ - target.posZ) <= 4) {
                     grouped = true;
                     break;
                 }
             }
             if (!grouped) {
                 chosen.add(target);
-                if (chosen.size() == 3) break;
+                if (chosen.size() == 3)
+                    break;
             }
         }
 
@@ -93,7 +96,8 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
 
             if (snd.playing(sourceId)) {
                 var decoder = SpeakerCodec.get(sourceId);
-                if (decoder != null) decoder.buffers.add(bytes);
+                if (decoder != null)
+                    decoder.buffers.add(bytes);
                 snd.setPosition(sourceId, (float) target.posX, (float) target.posY, (float) target.posZ);
                 continue;
             }
@@ -102,17 +106,10 @@ public class SPacketSpeakerBroadcastAudio implements IPacket, IClientExecutor {
             decoder.buffers.add(bytes);
 
             try {
-                snd.newStreamingSource(
-                        false,
-                        sourceId,
+                snd.newStreamingSource(false, sourceId,
                         new URI("file", null, String.format("/speaker_%s.speaker", sourceId), null).toURL(),
-                        String.format("speaker_%s.speaker", sourceId),
-                        false,
-                        (float) target.posX,
-                        (float) target.posY,
-                        (float) target.posZ,
-                        SoundSystemConfig.ATTENUATION_LINEAR,
-                        radius);
+                        String.format("speaker_%s.speaker", sourceId), false, (float) target.posX, (float) target.posY,
+                        (float) target.posZ, SoundSystemConfig.ATTENUATION_LINEAR, radius);
             } catch (URISyntaxException | MalformedURLException e) {
                 continue;
             }

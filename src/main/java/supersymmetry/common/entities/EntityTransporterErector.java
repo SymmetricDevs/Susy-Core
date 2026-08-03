@@ -75,7 +75,10 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         return super.getDefinition(TransporterErectorDefinition.class);
     }
 
-    /** True only once the rocket is fully assembled (a partially-built rocket is not "loaded"). */
+    /**
+     * True only once the rocket is fully assembled (a partially-built rocket is not
+     * "loaded").
+     */
     public boolean isRocketLoaded() {
         return assemblyProgress >= 1f || isDead();
     }
@@ -98,7 +101,8 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         return nextAssemblyProgress;
     }
 
-    // Set the assembly progress to a specific value, and the assembler for tracking progress more closely
+    // Set the assembly progress to a specific value, and the assembler for tracking
+    // progress more closely
     public void setAssemblyProgress(float assemblyProgress, float nextAssemblyProgress, float start, float end) {
         this.assemblyProgress = Math.clamp(assemblyProgress, 0f, 1f);
         this.nextAssemblyProgress = Math.clamp(nextAssemblyProgress, 0f, 1f);
@@ -178,9 +182,8 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
     @Override
     public ClickResult onClick(Player playerIn, Player.Hand hand) {
-        if (this.assemblyProgress == 0 && playerIn.isCreative() &&
-                playerIn.getHeldItem(hand).is(
-                        new ItemStack(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm()))) {
+        if (this.assemblyProgress == 0 && playerIn.isCreative() && playerIn.getHeldItem(hand)
+                .is(new ItemStack(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm()))) {
             TagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
             if (tag != null) {
                 AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));

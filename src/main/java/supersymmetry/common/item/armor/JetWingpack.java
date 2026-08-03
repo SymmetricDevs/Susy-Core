@@ -70,9 +70,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             Integer.MIN_VALUE, -2, Integer.MAX_VALUE);
 
     protected static final Function<FluidStack, Integer> FUEL_BURN_TIME = fluidStack -> {
-        Recipe recipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.findRecipe(
-                GTValues.V[GTValues.MV],
-                Collections.emptyList(),
+        Recipe recipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.findRecipe(GTValues.V[GTValues.MV], Collections.emptyList(),
                 Collections.singletonList(fluidStack));
         return recipe != null ? recipe.getDuration() : 0;
     };
@@ -126,10 +124,14 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         boolean wingActive = false;
         boolean engineActive = false;
 
-        if (data.hasKey("toggleTimer")) toggleTimer = data.getByte("toggleTimer");
-        if (data.hasKey("pressed")) pressed = data.getBoolean("pressed");
-        if (data.hasKey("wingActive")) wingActive = data.getBoolean("wingActive");
-        if (data.hasKey("engineActive")) engineActive = data.getBoolean("engineActive");
+        if (data.hasKey("toggleTimer"))
+            toggleTimer = data.getByte("toggleTimer");
+        if (data.hasKey("pressed"))
+            pressed = data.getBoolean("pressed");
+        if (data.hasKey("wingActive"))
+            wingActive = data.getBoolean("wingActive");
+        if (data.hasKey("engineActive"))
+            engineActive = data.getBoolean("engineActive");
 
         if (toggleTimer == 0 && KeyBind.ARMOR_MODE_SWITCH.isKeyDown(player)) {
             engineActive = !engineActive;
@@ -154,8 +156,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
                 // handles braking
                 player.motionX -= REVERSE_THRUST * (player.motionX - MIN_SPEED * lookVec.x); // v(t+1) = v(t) - THRUST *
                                                                                              // (v(t) - MIN_SPEED)
-                player.motionY -= REVERSE_THRUST * player.motionY + FALLING;                 // so that you won't fly
-                                                                                             // upwards when braking
+                player.motionY -= REVERSE_THRUST * player.motionY + FALLING; // so that you won't fly
+                                                                             // upwards when braking
                 player.motionZ -= REVERSE_THRUST * (player.motionZ - MIN_SPEED * lookVec.z);
             } else {
                 // handles acceleration
@@ -185,8 +187,10 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             }
         }
 
-        if (pressed && !KeyBind.VANILLA_JUMP.isKeyDown(player)) pressed = false;
-        if (toggleTimer > 0) toggleTimer--;
+        if (pressed && !KeyBind.VANILLA_JUMP.isKeyDown(player))
+            pressed = false;
+        if (toggleTimer > 0)
+            toggleTimer--;
 
         data.setByte("toggleTimer", toggleTimer);
         data.setBoolean("pressed", pressed);
@@ -248,7 +252,8 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
     protected boolean drainFuel(@NotNull ItemStack stack, int amount, boolean simulate) {
         NBTTagCompound data = GTUtility.getOrCreateNbtCompound(stack);
         short burnTimer = 0;
-        if (data.hasKey("burnTimer")) burnTimer = data.getShort("burnTimer");
+        if (data.hasKey("burnTimer"))
+            burnTimer = data.getShort("burnTimer");
         if (burnTimer > 0) {
             if (!simulate) {
                 data.setShort("burnTimer", (short) (burnTimer - 1));
@@ -257,12 +262,15 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         }
 
         IFluidHandlerItem fluidHandler = getFluidHandler(stack);
-        if (fluidHandler == null) return false;
+        if (fluidHandler == null)
+            return false;
         FluidStack fuelStack = fluidHandler.drain(amount, false);
-        if (fuelStack == null) return false;
+        if (fuelStack == null)
+            return false;
 
         int burnTime = FUEL_BURN_TIME.apply(fuelStack);
-        if (burnTime <= 0) return false;
+        if (burnTime <= 0)
+            return false;
 
         if (!simulate) {
             data.setShort("burnTimer", (short) (burnTime));
@@ -275,7 +283,11 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
     }
 
-    private static class ElytraFlyingProvider implements IItemComponent, IElytraFlyingProvider, ICapabilityProvider,
+    private static class ElytraFlyingProvider
+                                              implements
+                                              IItemComponent,
+                                              IElytraFlyingProvider,
+                                              ICapabilityProvider,
                                               IItemCapabilityProvider {
 
         @Override
@@ -296,8 +308,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
             return capability == SuSyCapabilities.ELYTRA_FLYING_PROVIDER;
         }
 
-        @Nullable
-        @Override
+        @Nullable @Override
         public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing facing) {
             return capability == SuSyCapabilities.ELYTRA_FLYING_PROVIDER ?
                     SuSyCapabilities.ELYTRA_FLYING_PROVIDER.cast(this) : null;
@@ -309,7 +320,11 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         }
     }
 
-    public class JetWingpackBehaviour implements IItemDurabilityManager, IItemCapabilityProvider, IItemBehaviour,
+    public class JetWingpackBehaviour
+                                      implements
+                                      IItemDurabilityManager,
+                                      IItemCapabilityProvider,
+                                      IItemBehaviour,
                                       ISubItemHandler {
 
         private static final IFilter<FluidStack> JET_WINGPACK_FUEL_FILTER = new IFilter<>() {
@@ -337,22 +352,21 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         public double getDurabilityForDisplay(@NotNull ItemStack itemStack) {
             IFluidHandlerItem fluidHandlerItem = itemStack
                     .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-            if (fluidHandlerItem == null) return 0;
+            if (fluidHandlerItem == null)
+                return 0;
             IFluidTankProperties fluidTankProperties = fluidHandlerItem.getTankProperties()[0];
             FluidStack fluidStack = fluidTankProperties.getContents();
             return fluidStack == null ? 0 : (double) fluidStack.amount / (double) fluidTankProperties.getCapacity();
         }
 
-        @Nullable
-        @Override
+        @Nullable @Override
         public Pair<Color, Color> getDurabilityColorsForDisplay(ItemStack itemStack) {
             return durabilityBarColors;
         }
 
         @Override
         public ICapabilityProvider createProvider(ItemStack itemStack) {
-            return new GTFluidHandlerItemStack(itemStack, maxCapacity)
-                    .setFilter(JET_WINGPACK_FUEL_FILTER);
+            return new GTFluidHandlerItemStack(itemStack, maxCapacity).setFilter(JET_WINGPACK_FUEL_FILTER);
         }
 
         @Override
@@ -386,9 +400,7 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
                 Optional<Recipe> firstRecipe = SuSyRecipeMaps.JET_WINGPACK_FUELS.getRecipeList().stream().findFirst();
                 firstRecipe.ifPresent(recipe -> {
                     Optional<FluidStack> inputFluidStack = recipe.getFluidInputs().stream()
-                            .map(GTRecipeInput::getInputFluidStack)
-                            .filter(Objects::nonNull)
-                            .findFirst();
+                            .map(GTRecipeInput::getInputFluidStack).filter(Objects::nonNull).findFirst();
                     inputFluidStack.ifPresent(stack -> {
                         Fluid fluid = stack.getFluid();
                         if (fluid != null && stack.amount > 0) {

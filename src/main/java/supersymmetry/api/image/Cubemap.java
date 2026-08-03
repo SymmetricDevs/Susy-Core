@@ -13,12 +13,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 /**
- * Loads a cubemap as 6 individual GL textures — one per face.
- * Used directly by RenderableCelestialObject to texture each QuadSphere face
- * with the matching cubemap face, eliminating seams entirely.
+ * Loads a cubemap as 6 individual GL textures — one per face. Used directly by
+ * RenderableCelestialObject to texture each QuadSphere face with the matching
+ * cubemap face, eliminating seams entirely.
  *
- * Face index order matches QuadSphere.build() face order:
- * 0=+X, 1=-X, 2=+Y, 3=-Y, 4=+Z, 5=-Z
+ * Face index order matches QuadSphere.build() face order: 0=+X, 1=-X, 2=+Y,
+ * 3=-Y, 4=+Z, 5=-Z
  */
 public class Cubemap {
 
@@ -29,8 +29,7 @@ public class Cubemap {
     private final ResourceLocation cross;
     protected boolean loaded = false;
 
-    public Cubemap(ResourceLocation px, ResourceLocation nx,
-                   ResourceLocation py, ResourceLocation ny,
+    public Cubemap(ResourceLocation px, ResourceLocation nx, ResourceLocation py, ResourceLocation ny,
                    ResourceLocation pz, ResourceLocation nz) {
         this.faces = new ResourceLocation[] { px, nx, py, ny, pz, nz };
         this.cross = null;
@@ -48,7 +47,8 @@ public class Cubemap {
     }
 
     public void loadAll() throws IOException {
-        if (loaded) return;
+        if (loaded)
+            return;
         loaded = true;
 
         BufferedImage[] imgs = loadFaceImages();
@@ -56,11 +56,15 @@ public class Cubemap {
             if (imgs[i] != null) {
                 faceTexIds[i] = uploadTexture(imgs[i]);
             }
-            // faceTexIds[i] stays -1 for missing faces, renderAtPosition already skips these
+            // faceTexIds[i] stays -1 for missing faces, renderAtPosition already skips
+            // these
         }
     }
 
-    /** Returns the GL texture id for a specific face (0=PX,1=NX,2=PY,3=NY,4=PZ,5=NZ). */
+    /**
+     * Returns the GL texture id for a specific face
+     * (0=PX,1=NX,2=PY,3=NY,4=PZ,5=NZ).
+     */
     public int getFaceTexId(int face) {
         return faceTexIds[face];
     }
@@ -99,8 +103,7 @@ public class Cubemap {
 
         java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
         buf.put(data).flip();
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
         return id;
     }
 
@@ -112,19 +115,20 @@ public class Cubemap {
             for (int i = 0; i < 6; i++) {
                 try (java.io.InputStream s = rm.getResource(faces[i]).getInputStream()) {
                     imgs[i] = ImageIO.read(s);
-                    if (imgs[i] == null) throw new IOException("ImageIO returned null for " + faces[i]);
+                    if (imgs[i] == null)
+                        throw new IOException("ImageIO returned null for " + faces[i]);
                 }
             }
         } else {
             try (java.io.InputStream s = rm.getResource(cross).getInputStream()) {
                 BufferedImage sheet = ImageIO.read(s);
-                if (sheet == null) throw new IOException("ImageIO returned null for " + cross);
+                if (sheet == null)
+                    throw new IOException("ImageIO returned null for " + cross);
                 int w = sheet.getWidth() / 4;
                 int h = sheet.getHeight() / 3;
 
                 // {col, row}
-                int[][] layout = {
-                        { 2, 1 }, // PX (face 0)
+                int[][] layout = { { 2, 1 }, // PX (face 0)
                         { 0, 1 }, // NX (face 1)
                         { 1, 0 }, // PY (face 2)
                         { 1, 2 }, // NY (face 3)

@@ -3,9 +3,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.List;
 import java.util.Random;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -15,6 +12,9 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -49,26 +49,22 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("   B   ", "   B   ", "   B   ", "       ", "       ")
+        return FactoryBlockPattern.start().aisle("   B   ", "   B   ", "   B   ", "       ", "       ")
                 .aisle("  AAA  ", "  AAA  ", "  AAA  ", "  AAA  ", "  AAA  ")
                 .aisle(" AAAAA ", " ABBBA ", " ABBBA ", " ADDDA ", " A   A ")
                 .aisle("BAAAAAB", "BABBBAB", "BABBBAB", " ADBDA ", " A E A ")
                 .aisle(" AAAAA ", " ABBBA ", " ABBBA ", " ADDDA ", " A   A ")
                 .aisle("  AAA  ", "  AAA  ", "  AAA  ", "  AAA  ", "  AAA  ")
-                .aisle("   B   ", "   B   ", "   S   ", "       ", "       ")
-                .where('S', selfPredicate())
+                .aisle("   B   ", "   B   ", "   S   ", "       ", "       ").where('S', selfPredicate())
                 .where('A',
                         states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN))
-                                .setMinGlobalLimited(51)
-                                .or(autoAbilities(true, true, true, true, true, true, true)))
+                                .setMinGlobalLimited(51).or(autoAbilities(true, true, true, true, true, true, true)))
                 .where('B', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('D',
                         states(SuSyBlocks.MULTIBLOCK_TANK.getState(BlockMultiblockTank.MultiblockTankType.FLOTATION)))
                 .where('E',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -99,8 +95,7 @@ public class MetaTileEntityFrothFlotationTank extends FluidRenderRecipeMapMultiB
         }
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FROTH_FLOTATION_OVERLAY;
     }

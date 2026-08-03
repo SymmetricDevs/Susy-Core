@@ -22,8 +22,7 @@ public class SusyMetaEntities {
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "drone"), EntityDrone.class, "Drone",
                 2, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"),
-                EntitySoyuzBasic.class,
-                "Rocket", 3, Supersymmetry.instance, 64, 3, true);
+                EntitySoyuzBasic.class, "Rocket", 3, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "lander"), EntityLander.class,
                 "Lander", 4, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "explosion"), EntityExplosion.class,

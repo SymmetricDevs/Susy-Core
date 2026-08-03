@@ -83,8 +83,10 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private boolean insert(int px, int py, int pz) {
-        if (!inBounds(px, py, pz)) return false;
-        if (state == State.FULL) return false;
+        if (!inBounds(px, py, pz))
+            return false;
+        if (state == State.FULL)
+            return false;
         if (size == MIN_SIZE) {
             state = State.FULL;
             count = 1;
@@ -103,8 +105,10 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private boolean remove(int px, int py, int pz) {
-        if (!inBounds(px, py, pz)) return false;
-        if (state == State.EMPTY) return false;
+        if (!inBounds(px, py, pz))
+            return false;
+        if (state == State.EMPTY)
+            return false;
         if (size == MIN_SIZE) {
             if (state == State.FULL) {
                 state = State.EMPTY;
@@ -126,14 +130,18 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private boolean contains(int px, int py, int pz) {
-        if (!inBounds(px, py, pz)) return false;
-        if (state == State.FULL) return true;
-        if (state == State.EMPTY) return false;
+        if (!inBounds(px, py, pz))
+            return false;
+        if (state == State.FULL)
+            return true;
+        if (state == State.EMPTY)
+            return false;
         return children[childIndex(px, py, pz)].contains(px, py, pz);
     }
 
     private void collectAll(List<BlockPos> result) {
-        if (state == State.EMPTY) return;
+        if (state == State.EMPTY)
+            return;
         if (state == State.FULL) {
             if (size == MIN_SIZE) {
                 result.add(new BlockPos(originX, originY, originZ));
@@ -187,11 +195,14 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private void tryCollapse() {
-        if (children == null) return;
+        if (children == null)
+            return;
         boolean allFull = true, allEmpty = true;
         for (Octree c : children) {
-            if (c.state != State.FULL) allFull = false;
-            if (c.state != State.EMPTY) allEmpty = false;
+            if (c.state != State.FULL)
+                allFull = false;
+            if (c.state != State.EMPTY)
+                allEmpty = false;
         }
         if (allFull) {
             state = State.FULL;
@@ -205,9 +216,8 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private boolean inBounds(int px, int py, int pz) {
-        return px >= originX && px < originX + size &&
-                py >= originY && py < originY + size &&
-                pz >= originZ && pz < originZ + size;
+        return px >= originX && px < originX + size && py >= originY && py < originY + size && pz >= originZ &&
+                pz < originZ + size;
     }
 
     public int getOriginX() {
@@ -229,11 +239,12 @@ public class Octree implements Iterable<BlockPos> {
     // ---- Serialization ----
 
     /**
-     * Serialize the octree structure as a compact byte array.
-     * Encoding: 0=EMPTY, 1=FULL, 2=MIXED (followed by 8 children recursively).
+     * Serialize the octree structure as a compact byte array. Encoding: 0=EMPTY,
+     * 1=FULL, 2=MIXED (followed by 8 children recursively).
      */
     public byte[] serialize() {
-        // Estimate upper bound: each node is 1 byte, max nodes is bounded by tree structure
+        // Estimate upper bound: each node is 1 byte, max nodes is bounded by tree
+        // structure
         List<Byte> bytes = new ArrayList<>();
         serializeNode(this, bytes);
         byte[] result = new byte[bytes.size()];
@@ -267,7 +278,8 @@ public class Octree implements Iterable<BlockPos> {
     }
 
     private static void deserializeNode(Octree node, byte[] data, int[] idx) {
-        if (idx[0] >= data.length) return;
+        if (idx[0] >= data.length)
+            return;
         byte b = data[idx[0]++];
         if (b == 0) {
             node.state = State.EMPTY;
@@ -319,7 +331,8 @@ public class Octree implements Iterable<BlockPos> {
 
         @Override
         public BlockPos next() {
-            if (next == null) throw new NoSuchElementException();
+            if (next == null)
+                throw new NoSuchElementException();
             BlockPos ret = next;
             advance();
             return ret;

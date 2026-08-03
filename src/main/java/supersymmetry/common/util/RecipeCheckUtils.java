@@ -43,13 +43,15 @@ public class RecipeCheckUtils {
     }
 
     public static boolean checkBiomeRequirement(@NotNull Recipe recipe, MetaTileEntity controller) {
-        if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
+        if (!recipe.hasProperty(BiomeProperty.getInstance()))
+            return true;
         return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                 .checkBiome(controller.getWorld().getBiome(controller.getPos()));
     }
 
     public static boolean checkBiomeRequirement(@NotNull Recipe recipe, World world, BlockPos pos) {
-        if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
+        if (!recipe.hasProperty(BiomeProperty.getInstance()))
+            return true;
         return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
                 .checkBiome(world.getBiome(pos));
     }

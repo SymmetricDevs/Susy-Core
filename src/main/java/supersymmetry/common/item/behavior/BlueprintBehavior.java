@@ -52,17 +52,16 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
     public void addInformation(ItemStack itemStack, List<String> lines) {
         this.lines.accept(lines);
         NBTTagCompound tag = itemStack.getTagCompound();
-        if (tag == null) return;
+        if (tag == null)
+            return;
 
         for (String key : this.keys) {
             if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
                 if (tag.hasKey("stages")) {
-                    lines.add(
-                            I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
-                                    getID(tag));
+                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
+                            getID(tag));
                 } else {
-                    lines.add(
-                            I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
+                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
                 }
             }
         }

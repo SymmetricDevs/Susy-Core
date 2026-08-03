@@ -6,8 +6,6 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenS
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -64,8 +63,7 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
 
-    @Nullable
-    private Collection<BlockPos> hiddenBlocks;
+    @Nullable private Collection<BlockPos> hiddenBlocks;
 
     public MetaTileEntityRotaryKilnV2(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROTARY_KILN);
@@ -84,43 +82,36 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
         return new MetaTileEntityRotaryKilnV2(this.metaTileEntityId);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(6);
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(1)
                 .setMaxGlobalLimited(1);
 
-        return FactoryBlockPattern.start()
-                .aisle("F         F", "LD   B   DR", "LDCCCBCCCDR", "GD   B   DG")
+        return FactoryBlockPattern.start().aisle("F         F", "LD   B   DR", "LDCCCBCCCDR", "GD   B   DG")
                 .aisle("     F     ", "LDCCCBCCCDR", "L#########R", "LDCCCBCCCDR")
-                .aisle("F         F", "LD   B   DR", "LDCCCSCCCDR", "GD   B   DG")
-                .where('S', selfPredicate())
-                .where('B', hiddenStates(getCasingState()))
-                .where('C', hiddenStates(getShellCasingState()))
-                .where('D', hiddenGearTooth(
-                        RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
-                                .getAxis()))
+                .aisle("F         F", "LD   B   DR", "LDCCCSCCCDR", "GD   B   DG").where('S', selfPredicate())
+                .where('B', hiddenStates(getCasingState())).where('C', hiddenStates(getShellCasingState()))
+                .where('D',
+                        hiddenGearTooth(RelativeDirection.LEFT
+                                .getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false).getAxis()))
                 .where('F', frames(Materials.Steel))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('L', casingPredicate
-                        .or(autoAbilities(false, false, true, false, false, true, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false)).setMinGlobalLimited(0)
-                        .or(maintenance))
-                .where('R', casingPredicate
-                        .or(autoAbilities(false, false, false, true, true, false, false))
-                        .or(autoAbilities(true, false, false, false, false, false, false)).setMinGlobalLimited(0)
-                        .or(maintenance))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('L',
+                        casingPredicate.or(autoAbilities(false, false, true, false, false, true, false))
+                                .or(autoAbilities(true, false, false, false, false, false, false))
+                                .setMinGlobalLimited(0).or(maintenance))
+                .where('R',
+                        casingPredicate.or(autoAbilities(false, false, false, true, true, false, false))
+                                .or(autoAbilities(true, false, false, false, false, false, false))
+                                .setMinGlobalLimited(0).or(maintenance))
+                .where(' ', any()).where('#', air()).build();
     }
 
     @Override
-    @Nullable
-    public Collection<BlockPos> getHiddenBlocks() {
+    @Nullable public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
     }
 
@@ -128,8 +119,7 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SideOnly(Side.CLIENT)
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ROTARY_KILN_OVERLAY;
@@ -248,8 +238,8 @@ public class MetaTileEntityRotaryKilnV2 extends RecipeMapMultiblockController im
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        event.getController().setAnimation(new AnimationBuilder()
-                .addAnimation("rotary_kiln.animation", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("rotary_kiln.animation", ILoopType.EDefaultLoopTypes.LOOP));
         return isActive() ? PlayState.CONTINUE : PlayState.STOP;
     }
 

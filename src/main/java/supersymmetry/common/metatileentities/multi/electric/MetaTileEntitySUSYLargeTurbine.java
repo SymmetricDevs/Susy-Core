@@ -4,8 +4,6 @@ import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -18,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -52,8 +51,8 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
 
     public MetaTileEntitySUSYLargeTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier,
                                           int maxSpeed, int accel, int decel, IBlockState casingState,
-                                          IBlockState rotorState, ICubeRenderer casingRenderer,
-                                          ICubeRenderer frontOverlay) {
+                                          IBlockState rotorState,
+                                          ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel);
         this.casingState = casingState;
         this.rotorState = rotorState;
@@ -76,34 +75,30 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1)
                 .setMinGlobalLimited(1);
 
-        return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
-                .aisle("GAAAAAAAO", "GDDDDCCCF", "GAAAAAAAO")
-                .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
+        return FactoryBlockPattern.start().aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
+                .aisle("GAAAAAAAO", "GDDDDCCCF", "GAAAAAAAO").aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
                 .where('S', selfPredicate())
-                .where('A', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, false, false))
-                        .or(maintenance))
-                .where('O', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, true, false))
-                        .or(maintenance))
-                .where('C', coilOrientation())
-                .where('D', rotorOrientation())
-                .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
-                .where('G', casingPredicate
-                        .or(autoAbilities(false, false, false, false, true, false, false))
-                        .or(maintenance))
-                .where(' ', any())
-                .build();
+                .where('A',
+                        casingPredicate.or(autoAbilities(false, false, false, false, false, false, false))
+                                .or(maintenance))
+                .where('O',
+                        casingPredicate
+                                .or(autoAbilities(false, false, false, false, false, true, false)).or(maintenance))
+                .where('C', coilOrientation()).where('D', rotorOrientation())
+                .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY)).where('G', casingPredicate
+                        .or(autoAbilities(false, false, false, false, true, false, false)).or(maintenance))
+                .where(' ', any()).build();
     }
 
     protected TraceabilityPredicate rotorOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         return SuSyPredicates.horizontalOrientation(this, rotorState, RelativeDirection.RIGHT, FACING);
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
 
@@ -116,8 +111,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         return casingRenderer;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return frontOverlay;
     }
@@ -217,33 +211,25 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
                         lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600) : 0;
             }
 
-            ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
-                    TextFormatting.GOLD,
+            ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(TextFormatting.GOLD,
                     TextFormattingUtil.formatNumbers(lubricantStored) + " / " +
                             TextFormattingUtil.formatNumbers(lubricantCapacity) + " L");
 
-            ITextComponent lubricantConsumption = TextComponentUtil.stringWithColor(
-                    TextFormatting.GOLD,
+            ITextComponent lubricantConsumption = TextComponentUtil.stringWithColor(TextFormatting.GOLD,
                     TextFormattingUtil.formatNumbers(lubricantConsumptionRate) + " L/min ");
 
-            hoverList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "susy.multiblock.rotation_generator.lubricant_amount",
-                    lubricantStorage, lubricantConsumption));
+            hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "susy.multiblock.rotation_generator.lubricant_amount", lubricantStorage, lubricantConsumption));
         } else {
             ITextComponent rpmTranslated = TextComponentUtil.translationWithColor(
                     getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
                     "gregtech.multiblock.turbine.rotor_rpm_unit_name");
             ITextComponent rotorInfo = TextComponentUtil.translationWithColor(
-                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
-                    "%s / %s %s",
+                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()), "%s / %s %s",
                     TextFormattingUtil.formatNumbers(getRotationSpeed()),
-                    TextFormattingUtil.formatNumbers(getMaxRotationSpeed()),
-                    rpmTranslated);
-            hoverList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "gregtech.multiblock.turbine.rotor_speed",
-                    rotorInfo));
+                    TextFormattingUtil.formatNumbers(getMaxRotationSpeed()), rpmTranslated);
+            hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gregtech.multiblock.turbine.rotor_speed", rotorInfo));
         }
     }
 
@@ -263,8 +249,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
 
         return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING,
-                logic::getVoidingEnergy, logic::setVoidingEnergy)
-                        .setTooltipText("susy.gui.toggle_energy_voiding");
+                logic::getVoidingEnergy, logic::setVoidingEnergy).setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
     public static void addFuelNeededLine(List<ITextComponent> textList, SuSyTurbineRecipeLogic recipeLogic) {
@@ -274,16 +259,14 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         int amount = previousRecipe != null ? previousRecipe.getFluidInputs().getFirst().getInputFluidStack().amount :
                 0;
 
-        ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED,
-                amount * parallel + "L");
-        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED, previousRecipe != null ?
-                amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L" : "0L");
+        ITextComponent fuelCurrent = TextComponentUtil.stringWithColor(TextFormatting.RED, amount * parallel + "L");
+        ITextComponent fuelNeeded = TextComponentUtil.stringWithColor(TextFormatting.RED,
+                previousRecipe != null ?
+                        amount * recipeLogic.getMaximumAllowedVoltage() / previousRecipe.getEUt() + "L" : "0L");
         ITextComponent numTicks = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
                 TextFormattingUtil.formatNumbers(recipeLogic.getPreviousRecipeDuration()));
-        textList.add(TextComponentUtil.translationWithColor(
-                TextFormatting.GRAY,
-                "susy.multiblock.rotation_generator.fuel_needed",
-                fuelCurrent, fuelNeeded, numTicks));
+        textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                "susy.multiblock.rotation_generator.fuel_needed", fuelCurrent, fuelNeeded, numTicks));
     }
 
     @Override
@@ -310,8 +293,7 @@ public class MetaTileEntitySUSYLargeTurbine extends RotationGeneratorController 
         }
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addWorkingStatusLine();
+                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive()).addWorkingStatusLine();
     }
 
     @Override

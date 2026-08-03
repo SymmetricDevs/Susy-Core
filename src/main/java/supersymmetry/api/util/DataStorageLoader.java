@@ -47,7 +47,8 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
 
     public boolean isEmpty() {
         return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR;
-        // gets set to air on the client for no good reason while remaining EMPTY / null on the server because uhh
+        // gets set to air on the client for no good reason while remaining EMPTY / null
+        // on the server because uhh
     }
 
     @Override

@@ -19,10 +19,11 @@ public class SuSyBiomeEntry extends BiomeEntry {
     }
 
     /**
-     * Sets the crater/regolith block for this biome entry.
-     * This allows inline configuration during planet setup.
+     * Sets the crater/regolith block for this biome entry. This allows inline
+     * configuration during planet setup.
      *
-     * @param block The IBlockState to use for crater ejecta in this biome
+     * @param block
+     *              The IBlockState to use for crater ejecta in this biome
      * @return this for method chaining
      */
     public SuSyBiomeEntry setCraterBlock(IBlockState block) {

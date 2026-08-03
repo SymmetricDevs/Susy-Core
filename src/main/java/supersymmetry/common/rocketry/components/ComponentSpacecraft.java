@@ -33,16 +33,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public double guidanceMultiplier;
 
     public ComponentSpacecraft() {
-        super(
-                "spacecraft",
-                "spacecraft",
-                tuple -> tuple.getSecond().stream()
-                        .anyMatch(
-                                pos -> tuple
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(SuSyBlocks.SPACECRAFT_HULL)));
+        super("spacecraft", "spacecraft", tuple -> tuple.getSecond().stream().anyMatch(
+                pos -> tuple.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)));
     }
 
     @Override
@@ -96,17 +88,25 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public Optional<ComponentSpacecraft> readFromNBT(NBTTagCompound compound) {
         ComponentSpacecraft spacecraft = new ComponentSpacecraft();
 
-        if (!compound.getString("name").equals(spacecraft.name)) return Optional.empty();
-        if (!compound.getString("type").equals(spacecraft.type)) return Optional.empty();
-        if (!compound.hasKey("radius", NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("mass", NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("hasAir")) return Optional.empty();
-        if (!compound.hasKey("volume", NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND)) return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
-        compound
-                .getTagList("materials", NBT.TAG_COMPOUND)
+        if (!compound.getString("name").equals(spacecraft.name))
+            return Optional.empty();
+        if (!compound.getString("type").equals(spacecraft.type))
+            return Optional.empty();
+        if (!compound.hasKey("radius", NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("mass", NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("hasAir"))
+            return Optional.empty();
+        if (!compound.hasKey("volume", NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND))
+            return Optional.empty();
+        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND))
+            return Optional.empty();
+        if (!compound.hasKey("materials", NBT.TAG_LIST))
+            return Optional.empty();
+        compound.getTagList("materials", NBT.TAG_COMPOUND)
                 .forEach(x -> spacecraft.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
         spacecraft.radius = compound.getDouble("radius");
@@ -135,18 +135,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         StructAnalysis.HullData hullCheck = analysis.checkHull(aabb, blocksConnected, false);
         Set<BlockPos> exterior = hullCheck.exterior();
         Set<BlockPos> interior = hullCheck.interior();
-        return spacecraftPattern(
-                blocksConnected,
-                exterior,
-                interior,
-                analysis);
+        return spacecraftPattern(blocksConnected, exterior, interior, analysis);
     }
 
-    public Optional<NBTTagCompound> spacecraftPattern(
-                                                      Set<BlockPos> blocksConnected,
-                                                      Set<BlockPos> exterior,
-                                                      Set<BlockPos> interior,
-                                                      StructAnalysis analysis) {
+    public Optional<NBTTagCompound> spacecraftPattern(Set<BlockPos> blocksConnected, Set<BlockPos> exterior,
+                                                      Set<BlockPos> interior, StructAnalysis analysis) {
         Predicate<BlockPos> lifeSupportCheck = bp -> analysis.world.getBlockState(bp).getBlock()
                 .equals(SuSyBlocks.LIFE_SUPPORT);
         Predicate<BlockPos> guidanceComputerCheck = bp -> analysis.world.getBlockState(bp).getBlock()
@@ -157,8 +150,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 .collect(Collectors.toList());
         NBTTagCompound tag = new NBTTagCompound();
 
-        lifeSupports.forEach(
-                bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
+        lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
 
         for (BlockPos bp : exterior) {
             if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
@@ -166,8 +158,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 for (EnumFacing side : EnumFacing.VALUES) {
                     // If it is both covered but facing another hull block
                     // or not covered but facing air, then fail.
-                    if (!te.isCovered(side) &&
-                            !exterior.contains(bp.add(side.getDirectionVec())) &&
+                    if (!te.isCovered(side) && !exterior.contains(bp.add(side.getDirectionVec())) &&
                             !interior.contains(bp.add(side.getDirectionVec()))) {
                         analysis.status = BuildStat.HULL_WEAK;
                         return analysis.errorPos(bp);
@@ -237,8 +228,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setString("type", type);
         tag.setString("name", name);
         tag.setDouble("radius", radius);
-        double mass = blocksConnected.stream()
-                .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
+        double mass = blocksConnected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
                 .sum();
         tag.setDouble("mass", mass);
         this.mass = mass;

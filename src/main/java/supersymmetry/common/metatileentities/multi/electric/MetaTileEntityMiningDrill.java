@@ -2,15 +2,15 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
@@ -115,8 +115,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                         "               ", "               ", "               ", "               ")
                 .where('S', selfPredicate())
                 .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
-                .where('B', frames(Materials.Steel)
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
+                .where('B', frames(Materials.Steel).or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('C',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('D',
@@ -127,9 +126,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
                 .where('G',
                         states(MetaBlocks.MULTIBLOCK_CASING
                                 .getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)))
-                .where('H', depositPredicate())
-                .where(' ', any())
-                .build();
+                .where('H', depositPredicate()).where(' ', any()).build();
     }
 
     @Override
@@ -170,8 +167,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.MINING_DRILL_OVERLAY;
     }
@@ -181,8 +177,7 @@ public class MetaTileEntityMiningDrill extends RecipeMapMultiblockController {
         return true;
     }
 
-    @NonNull
-    protected TraceabilityPredicate depositPredicate() {
+    @NonNull protected TraceabilityPredicate depositPredicate() {
         return new TraceabilityPredicate(blockWorldState -> {
             this.targetBlock = blockWorldState.getPos();
             if (this.isStructureFormed()) {

@@ -1,7 +1,5 @@
 package supersymmetry.api.blocks;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,6 +14,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 import gregtech.api.cover.CoverRayTracer;
@@ -28,7 +27,8 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
 
     public static final ICustomRotationBehavior BLOCK_AXIAL_BEHAVIOR = (state, world, pos, hitResult) -> {
         EnumFacing gridSide = CoverRayTracer.determineGridSideHit(hitResult);
-        if (gridSide == null) return false;
+        if (gridSide == null)
+            return false;
         EnumFacing.Axis axis = gridSide.getAxis();
         if (axis != state.getValue(VariantAxialRotatableBlock.AXIS)) {
             state = state.withProperty(VariantAxialRotatableBlock.AXIS, axis);
@@ -45,8 +45,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         CustomBlockRotations.registerCustomRotation(this, BLOCK_AXIAL_BEHAVIOR);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
@@ -60,8 +59,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return new ItemStack(this, amount, variant.ordinal() * 3);
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantAxialRotatableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -74,8 +72,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
         int i = meta / 3;
         int j = meta % 3;
@@ -84,9 +81,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         // 1 <-> Axis.X(ord = 0)
         // 2 <-> Axis.Y(ord = 1)
         EnumFacing.Axis axis = EnumFacing.Axis.values()[(j + 2) % 3];
-        return getDefaultState()
-                .withProperty(AXIS, axis)
-                .withProperty(VARIANT, VALUES[i % VALUES.length]);
+        return getDefaultState().withProperty(AXIS, axis).withProperty(VARIANT, VALUES[i % VALUES.length]);
     }
 
     @Override
@@ -97,8 +92,7 @@ public class VariantAxialRotatableBlock<T extends Enum<T> & IStringSerializable>
         return state.getValue(VARIANT).ordinal() * 3 + (state.getValue(AXIS).ordinal() + 1) % 3;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         return this.getItemVariant(state.getValue(VARIANT), 1);

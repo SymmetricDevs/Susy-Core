@@ -23,16 +23,8 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 public class ComponentInterstage extends AbstractComponent<ComponentInterstage> {
 
     public ComponentInterstage() {
-        super(
-                "interstage",
-                "interstage",
-                tuple -> tuple.getSecond().stream()
-                        .anyMatch(
-                                pos -> tuple
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .getBlock()
-                                                .equals(INTERSTAGE)));
+        super("interstage", "interstage", tuple -> tuple.getSecond().stream()
+                .anyMatch(pos -> tuple.getFirst().world.getBlockState(pos).getBlock().equals(INTERSTAGE)));
     }
 
     @Override
@@ -66,8 +58,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
         }
 
         ComponentInterstage interstage = new ComponentInterstage();
-        compound
-                .getTagList("materials", NBT.TAG_COMPOUND)
+        compound.getTagList("materials", NBT.TAG_COMPOUND)
                 .forEach(tag -> interstage.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
 
         interstage.radius = compound.getDouble("radius");
@@ -101,10 +92,8 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
                 return Optional.empty();
             }
 
-            if (previousAirLayer != null &&
-                    !previousAirLayer.equals(airLayer.stream()
-                            .map(pos -> new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))
-                            .collect(Collectors.toSet()))) {
+            if (previousAirLayer != null && !previousAirLayer.equals(airLayer.stream()
+                    .map(pos -> new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).collect(Collectors.toSet()))) {
                 analysis.status = BuildStat.INTERSTAGE_NOT_CYLINDRICAL;
                 return Optional.empty();
             }
@@ -125,8 +114,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
                         for (EnumFacing otherFace : tile.getSides()) {
                             if (otherFace.getAxis().equals(EnumFacing.Axis.Y) ||
                                     otherFace.getOpposite().equals(facing) ||
-                                    connectedBlocks.contains(neighbor.add(
-                                            otherFace.getDirectionVec()))) {
+                                    connectedBlocks.contains(neighbor.add(otherFace.getDirectionVec()))) {
                                 if (tile.isCovered(otherFace)) {
                                     analysis.status = BuildStat.WRONG_TILE;
                                     return analysis.errorPos(neighbor);

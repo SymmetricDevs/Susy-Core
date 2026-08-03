@@ -20,8 +20,10 @@ import util.Matrix4;
 
 public class TransporterErectorModel extends FreightModel<EntityTransporterErector, TransporterErectorDefinition> {
 
-    // The rocket is rotated about this point (in OBJ model space) by the lifter arm. It is also the
-    // end the rocket is assembled from, so the assembly sweep grows away from it along the X axis.
+    // The rocket is rotated about this point (in OBJ model space) by the lifter
+    // arm. It is also the
+    // end the rocket is assembled from, so the assembly sweep grows away from it
+    // along the X axis.
     private static final double PIVOT_X = -7.0;
     private static final double PIVOT_Y = 1.1;
 
@@ -44,8 +46,10 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
 
     @Override
     protected void postRender(EntityTransporterErector stock, RenderState state, float partialTicks) {
-        // Clone the incoming state before super mutates it: the rocket hangs off the non-rocking
-        // base, so it must not inherit the sway roll that postRender applies for the other parts.
+        // Clone the incoming state before super mutates it: the rocket hangs off the
+        // non-rocking
+        // base, so it must not inherit the sway roll that postRender applies for the
+        // other parts.
         RenderState rocketState = state.clone();
         super.postRender(stock, state, partialTicks);
 
@@ -56,16 +60,17 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
             return;
         }
 
-        // Match the GL state and transforms StockModel#renderEntity sets up for the base model.
+        // Match the GL state and transforms StockModel#renderEntity sets up for the
+        // base model.
         double scale = stock.gauge.scale();
         rocketState.lighting(true).cull_face(false).rescale_normal(true).scale(scale, scale, scale);
-        rocketState.model_view().multiply(new Matrix4()
-                .translate(PIVOT_X, PIVOT_Y, 0)
-                .rotate(stock.getLifterAngle(), 0, 0, 1)
-                .translate(-PIVOT_X, -PIVOT_Y, 0));
+        rocketState.model_view().multiply(new Matrix4().translate(PIVOT_X, PIVOT_Y, 0)
+                .rotate(stock.getLifterAngle(), 0, 0, 1).translate(-PIVOT_X, -PIVOT_Y, 0));
 
-        // bind() applies the above onto the fixed-function modelview matrix, so a clip plane set
-        // afterwards (expressed in the rocket's local coordinates) cleaves the geometry along the
+        // bind() applies the above onto the fixed-function modelview matrix, so a clip
+        // plane set
+        // afterwards (expressed in the rocket's local coordinates) cleaves the geometry
+        // along the
         // length axis regardless of how the individual triangles are laid out.
         OBJRender.Binding binding = this.binder().texture(stock.getTexture()).bind(rocketState);
         boolean clip = false;
@@ -79,7 +84,8 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
                 binding.draw(component.modelIDs);
             }
         } finally {
-            // Always disable the clip plane if it was enabled, or it would clip everything else too.
+            // Always disable the clip plane if it was enabled, or it would clip everything
+            // else too.
             if (clip) {
                 GL11.glDisable(GL11.GL_CLIP_PLANE0);
             }
@@ -88,10 +94,11 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
     }
 
     /**
-     * Configures {@link GL11#GL_CLIP_PLANE0} (in the rocket's local space) to keep only the portion
-     * of the rocket up to {@code progress} of its length, sweeping from the base (the end nearest
-     * the lifter pivot) toward the nose. The plane equation is given in object coordinates; OpenGL
-     * transforms it by the currently-bound modelview matrix.
+     * Configures {@link GL11#GL_CLIP_PLANE0} (in the rocket's local space) to keep
+     * only the portion of the rocket up to {@code progress} of its length, sweeping
+     * from the base (the end nearest the lifter pivot) toward the nose. The plane
+     * equation is given in object coordinates; OpenGL transforms it by the
+     * currently-bound modelview matrix.
      */
     private void setLengthClipPlane(ModelComponent component, float progress) {
         double minX = component.min.x;

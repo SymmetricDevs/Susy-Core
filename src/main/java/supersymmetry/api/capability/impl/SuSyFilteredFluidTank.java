@@ -38,43 +38,40 @@ public class SuSyFilteredFluidTank extends NotifiableFilteredFluidHandler {
     @Override
     public IFluidTankProperties[] getTankProperties() {
         IFluidTankProperties[] properties = super.getTankProperties();
-        return new IFluidTankProperties[] {
-                new IFluidTankProperties() {
+        return new IFluidTankProperties[] { new IFluidTankProperties() {
 
-                    @Override
-                    public FluidStack getContents() {
-                        return properties[0].getContents();
-                    }
+            @Override
+            public FluidStack getContents() {
+                return properties[0].getContents();
+            }
 
-                    @Override
-                    public int getCapacity() {
-                        return properties[0].getCapacity();
-                    }
+            @Override
+            public int getCapacity() {
+                return properties[0].getCapacity();
+            }
 
-                    @Override
-                    public boolean canFill() {
-                        return properties[0].canFill();
-                    }
+            @Override
+            public boolean canFill() {
+                return properties[0].canFill();
+            }
 
-                    @Override
-                    public boolean canDrain() {
-                        return properties[0].canDrain();
-                    }
+            @Override
+            public boolean canDrain() {
+                return properties[0].canDrain();
+            }
 
-                    @Override
-                    public boolean canFillFluidType(FluidStack fluidStack) {
-                        boolean result = fluidStack != null && SuSyFilteredFluidTank.this.canFillFluidType(fluidStack);
-                        System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
-                                (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " +
-                                result);
-                        return result;
-                    }
+            @Override
+            public boolean canFillFluidType(FluidStack fluidStack) {
+                boolean result = fluidStack != null && SuSyFilteredFluidTank.this.canFillFluidType(fluidStack);
+                System.out.println("[SuSyFilteredFluidTank] getTankProperties().canFillFluidType() with: " +
+                        (fluidStack != null ? fluidStack.getFluid().getName() : "null") + ", result: " + result);
+                return result;
+            }
 
-                    @Override
-                    public boolean canDrainFluidType(FluidStack fluidStack) {
-                        return properties[0].canDrainFluidType(fluidStack);
-                    }
-                }
-        };
+            @Override
+            public boolean canDrainFluidType(FluidStack fluidStack) {
+                return properties[0].canDrainFluidType(fluidStack);
+            }
+        } };
     }
 }

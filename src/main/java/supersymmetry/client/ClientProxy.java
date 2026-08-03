@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
@@ -49,6 +47,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.input.Keyboard;
 
 import dev.tianmi.sussypatches.common.SusConfig;
@@ -120,7 +119,8 @@ public class ClientProxy extends CommonProxy {
     public static void addMaterialFormulaHandler(@NonNull ItemTooltipEvent event) {
         // ensure itemstack is a sheetedframe
         ItemStack itemStack = event.getItemStack();
-        if (!(itemStack.getItem() instanceof SheetedFrameItemBlock)) return;
+        if (!(itemStack.getItem() instanceof SheetedFrameItemBlock))
+            return;
 
         UnificationEntry unificationEntry = OreDictUnifier.getUnificationEntry(itemStack);
 
@@ -243,23 +243,22 @@ public class ClientProxy extends CommonProxy {
                     return;
                 }
                 // This is literally how you have to use this method. I'm sorry.
-                gui.displayTitle(null, null,
-                        20, 100, 30);
-                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i),
-                        20, 100, 30);
-                gui.displayTitle(I18n.format("supersymmetry.title." + i), null,
-                        20, 100, 30);
+                gui.displayTitle(null, null, 20, 100, 30);
+                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i), 20, 100, 30);
+                gui.displayTitle(I18n.format("supersymmetry.title." + i), null, 20, 100, 30);
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void afterRenderSubtitles(RenderGameOverlayEvent.Pre event) {
-        // Subtitles are the last thing to render before the titles, and it seems bad to not let the subtitles render,
+        // Subtitles are the last thing to render before the titles, and it seems bad to
+        // not let the subtitles render,
         // so this is the best place.
 
         if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
-            // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
+            // Render a black foreground. The alpha should stay at 255 until the first
+            // title, at which it starts fading.
             // This is taken from Gui.java, with some cleanup.
             double left = 0, top = 0, right = event.getResolution().getScaledWidth(),
                     bottom = event.getResolution().getScaledHeight();
@@ -269,13 +268,15 @@ public class ClientProxy extends CommonProxy {
             // Fade out the top color:
             if (titleRenderTimer > TITLE_RENDER_LENGTH * 5 / 2) {
                 topColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 5 / 2) * 255 / TITLE_RENDER_LENGTH;
-                if (topColor < 0) topColor = 0;
+                if (topColor < 0)
+                    topColor = 0;
             }
             int bottomColor = 255;
             // Fade out the bottom color:
             if (titleRenderTimer > TITLE_RENDER_LENGTH * 2) {
                 bottomColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 2) * 255 / TITLE_RENDER_LENGTH;
-                if (bottomColor < 0) bottomColor = 0;
+                if (bottomColor < 0)
+                    bottomColor = 0;
             }
             GlStateManager.disableTexture2D();
             GlStateManager.enableBlend();
@@ -304,11 +305,13 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
         var livingBase = event.getEntityLiving();
-        if (!(livingBase instanceof EntityPlayer)) return;
+        if (!(livingBase instanceof EntityPlayer))
+            return;
 
         ItemStack from = event.getFrom(), into = event.getTo();
 
-        if (from.isItemEqual(into)) return;
+        if (from.isItemEqual(into))
+            return;
 
         EntityEquipmentSlot slot = event.getSlot();
         changeSkinVisibility(from, slot, false);
@@ -316,7 +319,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public static void changeSkinVisibility(ItemStack armor, EntityEquipmentSlot slot, boolean into) {
-        if (armor.getItem() instanceof ArmorMetaItem<?>metaArmor) {
+        if (armor.getItem() instanceof ArmorMetaItem<?> metaArmor) {
             var metaValueArmor = metaArmor.getItem(armor);
             // Using a Class#equals(Class) here to avoid counting in child classes
             // May be changed later

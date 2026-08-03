@@ -21,7 +21,8 @@ import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockTurboPump extends VariantDirectionalRotatableBlock<BlockTurboPump.HPPType>
-                            implements WeightedBlock<BlockTurboPump.HPPType> {
+                            implements
+                            WeightedBlock<BlockTurboPump.HPPType> {
 
     public BlockTurboPump() {
         super(Material.IRON);

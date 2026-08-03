@@ -15,13 +15,13 @@ import net.minecraft.world.World;
  * Handles lazy revalidation of regions.
  *
  * <p>
- * When a wall is built that might split a region, the revalidator
- * re-floods from the disperser source, diffs against the existing octree,
- * and splits disconnected portions into separate regions (or removes them).
+ * When a wall is built that might split a region, the revalidator re-floods
+ * from the disperser source, diffs against the existing octree, and splits
+ * disconnected portions into separate regions (or removes them).
  *
  * <p>
- * Revalidation is budgeted: each call to {@link #tick} processes up to
- * a configurable number of blocks, so it can run across multiple game ticks.
+ * Revalidation is budgeted: each call to {@link #tick} processes up to a
+ * configurable number of blocks, so it can run across multiple game ticks.
  */
 public class AtmosphereRevalidator {
 
@@ -65,7 +65,8 @@ public class AtmosphereRevalidator {
     }
 
     public void tick(World world, SplitCallback onSplit) {
-        if (pendingJobs.isEmpty()) return;
+        if (pendingJobs.isEmpty())
+            return;
 
         int remaining = budgetPerTick;
 

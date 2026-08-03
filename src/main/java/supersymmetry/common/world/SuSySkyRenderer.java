@@ -106,9 +106,7 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(
-                GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         if (sunObject != null && ShaderManager.shadersAllowed()) {
             renderSunShader();
@@ -123,25 +121,27 @@ public class SuSySkyRenderer extends IRenderHandler {
         GL11.glScalef(100f, 100f, 100f);
 
         for (RenderableCelestialObject obj : objects) {
-            if (obj == sunObject) continue;
+            if (obj == sunObject)
+                continue;
 
             if (ShaderManager.shadersAllowed() && obj.ensureLoaded()) {
                 float[] dir = obj.getWorldDirection(worldTime);
                 float scale = 100f * (float) Math.tan(Math.toRadians(obj.getAngularSizeDeg() / 2.0));
                 float[] rot = buildCubemapRotation(dir);
                 int[] faces = new int[6];
-                for (int i = 0; i < 6; i++) faces[i] = obj.getCubemap().getFaceTexId(i);
+                for (int i = 0; i < 6; i++)
+                    faces[i] = obj.getCubemap().getFaceTexId(i);
 
                 boolean hasAtmosphere = isEarthLike(obj);
                 float savedSunR = planetSurfaceRenderer.sunAngularRadius;
-                if (hasAtmosphere) planetSurfaceRenderer.sunAngularRadius = 0.0f;
+                if (hasAtmosphere)
+                    planetSurfaceRenderer.sunAngularRadius = 0.0f;
 
-                planetSurfaceRenderer.render(
-                        capturedView, capturedProj, currentSunDir,
-                        new float[] { dir[0] * 100f, dir[1] * 100f, dir[2] * 100f },
-                        scale, rot, faces);
+                planetSurfaceRenderer.render(capturedView, capturedProj, currentSunDir,
+                        new float[] { dir[0] * 100f, dir[1] * 100f, dir[2] * 100f }, scale, rot, faces);
 
-                if (hasAtmosphere) planetSurfaceRenderer.sunAngularRadius = savedSunR;
+                if (hasAtmosphere)
+                    planetSurfaceRenderer.sunAngularRadius = savedSunR;
             } else {
                 obj.renderAtPosition(worldTime, mesh);
             }
@@ -150,15 +150,14 @@ public class SuSySkyRenderer extends IRenderHandler {
         GlStateManager.popMatrix();
 
         for (RenderableCelestialObject obj : objects) {
-            if (obj == sunObject || !isEarthLike(obj)) continue;
-            if (!ShaderManager.shadersAllowed()) continue;
+            if (obj == sunObject || !isEarthLike(obj))
+                continue;
+            if (!ShaderManager.shadersAllowed())
+                continue;
 
             float[] dir = obj.getWorldDirection(worldTime);
             float scale = 100f * (float) Math.tan(Math.toRadians(obj.getAngularSizeDeg() / 2.0));
-            atmosphereRenderer.render(
-                    capturedView, capturedProj, currentSunDir,
-                    dir[1] * 100f,
-                    scale);
+            atmosphereRenderer.render(capturedView, capturedProj, currentSunDir, dir[1] * 100f, scale);
         }
 
         GlStateManager.disableBlend();
@@ -174,7 +173,8 @@ public class SuSySkyRenderer extends IRenderHandler {
     private static float[] buildCubemapRotation(float[] dir) {
         // Normalise
         float len = (float) Math.sqrt(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
-        if (len < 1e-6f) return identity();
+        if (len < 1e-6f)
+            return identity();
         float dx = dir[0] / len, dy = dir[1] / len, dz = dir[2] / len;
 
         // World-up candidate; fall back to -Z when dir is nearly vertical
@@ -190,7 +190,8 @@ public class SuSySkyRenderer extends IRenderHandler {
         float ry = dz * ux - dx * uz;
         float rz = dx * uy - dy * ux;
         float rlen = (float) Math.sqrt(rx * rx + ry * ry + rz * rz);
-        if (rlen < 1e-6f) return identity();
+        if (rlen < 1e-6f)
+            return identity();
         rx /= rlen;
         ry /= rlen;
         rz /= rlen;
@@ -200,11 +201,10 @@ public class SuSySkyRenderer extends IRenderHandler {
         float upy = rz * dx - rx * dz;
         float upz = rx * dy - ry * dx;
 
-        return new float[] {
-                -rx, -ry, -rz, 0f,   // col 0: cubemap +X (negated = fix mirror)
-                upx, upy, upz, 0f,   // col 1: cubemap +Y
-                dx, dy, dz, 0f,   // col 2: cubemap +Z (toward object)
-                0f, 0f, 0f, 1f    // col 3
+        return new float[] { -rx, -ry, -rz, 0f, // col 0: cubemap +X (negated = fix mirror)
+                upx, upy, upz, 0f, // col 1: cubemap +Y
+                dx, dy, dz, 0f, // col 2: cubemap +Z (toward object)
+                0f, 0f, 0f, 1f // col 3
         };
     }
 
@@ -226,14 +226,18 @@ public class SuSySkyRenderer extends IRenderHandler {
 
         for (int i = 0; i < 6; i++) {
             GlStateManager.pushMatrix();
-            if (i == 1) GlStateManager.rotate(90f, 1f, 0f, 0f);
-            if (i == 2) GlStateManager.rotate(-90f, 1f, 0f, 0f);
-            if (i == 3) GlStateManager.rotate(180f, 1f, 0f, 0f);
-            if (i == 4) GlStateManager.rotate(90f, 0f, 0f, 1f);
-            if (i == 5) GlStateManager.rotate(-90f, 0f, 0f, 1f);
+            if (i == 1)
+                GlStateManager.rotate(90f, 1f, 0f, 0f);
+            if (i == 2)
+                GlStateManager.rotate(-90f, 1f, 0f, 0f);
+            if (i == 3)
+                GlStateManager.rotate(180f, 1f, 0f, 0f);
+            if (i == 4)
+                GlStateManager.rotate(90f, 0f, 0f, 1f);
+            if (i == 5)
+                GlStateManager.rotate(-90f, 0f, 0f, 1f);
 
-            buf.begin(GL11.GL_QUADS,
-                    net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION);
+            buf.begin(GL11.GL_QUADS, net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION);
             buf.pos(-100, -100, -100).endVertex();
             buf.pos(-100, -100, 100).endVertex();
             buf.pos(100, -100, 100).endVertex();
@@ -248,10 +252,12 @@ public class SuSySkyRenderer extends IRenderHandler {
     }
 
     private void renderSunShader() {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         int progId = ShaderManager.getRawProgram("sun.vert", "sun.frag");
-        if (progId <= 0) return;
+        if (progId <= 0)
+            return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -259,9 +265,7 @@ public class SuSySkyRenderer extends IRenderHandler {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 

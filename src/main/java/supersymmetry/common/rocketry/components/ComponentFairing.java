@@ -39,17 +39,10 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
     public int height;
 
     public ComponentFairing() {
-        super(
-                "alu_fairing",
-                "fairing",
-                t -> {
-                    return t.getSecond().stream()
-                            .anyMatch(
-                                    bp -> t.getFirst().world
-                                            .getBlockState(bp)
-                                            .getBlock()
-                                            .equals(SuSyBlocks.FAIRING_HULL));
-                });
+        super("alu_fairing", "fairing", t -> {
+            return t.getSecond().stream()
+                    .anyMatch(bp -> t.getFirst().world.getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_HULL));
+        });
     }
 
     @Override
@@ -82,11 +75,13 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         ComponentFairing fairing = new ComponentFairing();
         if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty())
             return Optional.empty();
-        if (!compound.hasKey("height", Constants.NBT.TAG_INT)) return Optional.empty();
-        if (!compound.hasKey("bottom_radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST)) return Optional.empty();
-        compound
-                .getTagList("materials", NBT.TAG_COMPOUND)
+        if (!compound.hasKey("height", Constants.NBT.TAG_INT))
+            return Optional.empty();
+        if (!compound.hasKey("bottom_radius", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("materials", NBT.TAG_LIST))
+            return Optional.empty();
+        compound.getTagList("materials", NBT.TAG_COMPOUND)
                 .forEach(x -> fairing.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
         fairing.radius = compound.getDouble("bottom_radius");
         fairing.height = compound.getInteger("height");
@@ -95,18 +90,20 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB interiorBB) {
-        Set<BlockPos> blocksConnected = analysis.getBlockConn(
-                interiorBB, analysis.getBlocks(analysis.world, interiorBB, true).get(0));
+        Set<BlockPos> blocksConnected = analysis.getBlockConn(interiorBB,
+                analysis.getBlocks(analysis.world, interiorBB, true).get(0));
 
         World world = analysis.world;
         AxisAlignedBB fairingBB = analysis.getBB(blocksConnected);
         Predicate<BlockPos> connCheck = bp -> world.getBlockState(bp).getBlock().equals(SuSyBlocks.FAIRING_CONNECTOR);
         Set<BlockPos> connectorBlocks = blocksConnected.stream().filter(connCheck).collect(Collectors.toSet());
 
-        // If there are more than 2 partitions of air in the bounding box, then there's an abnormality
+        // If there are more than 2 partitions of air in the bounding box, then there's
+        // an abnormality
         // with the hull shape.
         // If there's only one partition, then the hull has a hole in it.
-        // We know already that the exterior loop is touching the edge of the bounding box.
+        // We know already that the exterior loop is touching the edge of the bounding
+        // box.
         // So, if there are 2 partitions, then the fairing hull is of the desired shape.
 
         List<HashSet<BlockPos>> partitions = analysis.getPartitions(fairingBB);
@@ -114,9 +111,11 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
             analysis.status = BuildStat.WEIRD_FAIRING;
             return Optional.empty();
         }
-        // Objective: We don't really want tiles on the inside of the fairing - that wouldn't make any
+        // Objective: We don't really want tiles on the inside of the fairing - that
+        // wouldn't make any
         // sense!
-        // So, we're going to obtain the fairing with a ceiling (if it didn't have one, it wouldn't have
+        // So, we're going to obtain the fairing with a ceiling (if it didn't have one,
+        // it wouldn't have
         // )
         // Note that
         Set<BlockPos> intPartition;
@@ -158,8 +157,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         Set<BlockPos> toConnect = new HashSet<>();
         toConnect.add(start);
         while (!collectedConnectors.containsAll(connectorBlocks)) {
-            if (toConnect
-                    .isEmpty()) { // either there's one connector, or the connector set is disconnected
+            if (toConnect.isEmpty()) { // either there's one connector, or the connector set is disconnected
                 analysis.status = BuildStat.WEIRD_FAIRING;
                 return Optional.empty();
             }
@@ -167,17 +165,14 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
             for (BlockPos initiate : toConnect) {
                 Set<BlockPos> blockNeighbors = analysis
                         .getBlockNeighbors(initiate, fairingBB, StructAnalysis.neighborVecs).stream()
-                        .filter(connectorBlocks::contains)
-                        .collect(Collectors.toSet());
+                        .filter(connectorBlocks::contains).collect(Collectors.toSet());
                 // Ensures that there's one line of connectors (no branching)
                 if (blockNeighbors.size() > 2) {
                     analysis.status = BuildStat.WEIRD_FAIRING;
                     return analysis.errorPos(initiate);
                 }
-                newNeighbors.addAll(
-                        blockNeighbors.stream()
-                                .filter(p -> !collectedConnectors.contains(p))
-                                .collect(Collectors.toSet()));
+                newNeighbors.addAll(blockNeighbors.stream().filter(p -> !collectedConnectors.contains(p))
+                        .collect(Collectors.toSet()));
             }
             collectedConnectors.addAll(toConnect);
             toConnect.clear();
@@ -195,12 +190,9 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
             // Takes all orth neighbors which are blocks or are interior neighbors
             List<BlockPos> solidNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs).stream()
-                    .filter(pos -> !world.isAirBlock(pos))
-                    .collect(Collectors.toList());
+                    .filter(pos -> !world.isAirBlock(pos)).collect(Collectors.toList());
             List<BlockPos> intAirNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs)
-                    .stream()
-                    .filter(intPartition::contains)
-                    .collect(Collectors.toList());
+                    .stream().filter(intPartition::contains).collect(Collectors.toList());
             for (EnumFacing facing : EnumFacing.VALUES) {
                 boolean expectation = true;
                 BlockPos pointingTo = bp.add(facing.getDirectionVec());
@@ -213,8 +205,8 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 if (world.getBlockState(bp).getValue(FACING).equals(facing) && b instanceof BlockFairingConnector) {
                     expectation = false;
                 }
-                if (expectation ^ te.isCovered(
-                        facing)) { // xor: one is true, one is false, therefore the expectation is wrong
+                if (expectation ^ te.isCovered(facing)) { // xor: one is true, one is false, therefore the expectation
+                                                          // is wrong
                     analysis.status = BuildStat.WRONG_TILE;
                     return analysis.errorPos(bp);
                 }
@@ -229,7 +221,8 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         tag.setInteger("num_conns", connectorBlocks.size());
         tag.setInteger("volume", intPartition.size());
 
-        // If it really is a semicircle, then the tightest radius has to be the same as the semicircle's.
+        // If it really is a semicircle, then the tightest radius has to be the same as
+        // the semicircle's.
         double bottomRadius = analysis.getRadius(analysis.getLowestLayer(blocksConnected));
         tag.setDouble("bottom_radius", bottomRadius);
 

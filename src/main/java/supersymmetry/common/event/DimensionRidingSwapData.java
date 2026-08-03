@@ -8,8 +8,10 @@ public class DimensionRidingSwapData {
     public Entity passenger;
     public long time;
     // Set once the player has actually been moved into the mount's dimension. The
-    // re-mount is deferred until MOUNT_DELAY ticks after this, so the client has time
-    // to finish its two-phase world/player reload before SPacketSetPassengers arrives.
+    // re-mount is deferred until MOUNT_DELAY ticks after this, so the client has
+    // time
+    // to finish its two-phase world/player reload before SPacketSetPassengers
+    // arrives.
     public boolean transferred = false;
     public long transferTime = 0;
 

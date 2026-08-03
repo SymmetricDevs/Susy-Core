@@ -72,8 +72,7 @@ public class CelestialObject {
         this.radius = radius;
     }
 
-    @Nullable
-    public CelestialObject getParentBody() {
+    @Nullable public CelestialObject getParentBody() {
         return parentBody;
     }
 

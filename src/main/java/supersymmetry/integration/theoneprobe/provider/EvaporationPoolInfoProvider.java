@@ -1,11 +1,11 @@
 package supersymmetry.integration.theoneprobe.provider;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.util.GTUtility;
 import mcjty.theoneprobe.api.*;
@@ -24,8 +24,7 @@ public class EvaporationPoolInfoProvider implements IProbeInfoProvider {
                              @NonNull World world, @NonNull IBlockState blockState, @NonNull IProbeHitData data) {
         if (GTUtility.getMetaTileEntity(world, data.getPos()) instanceof MetaTileEntityEvaporationPool evapPool) {
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool_heated_preface*}" + " " +
-                    (evapPool.isHeating() ?
-                            (TextFormatting.GREEN + "{*susy.multiblock.evaporation_pool.is_heating*}") :
+                    (evapPool.isHeating() ? (TextFormatting.GREEN + "{*susy.multiblock.evaporation_pool.is_heating*}") :
                             (TextFormatting.RED + "{*susy.multiblock.evaporation_pool.is_not_heating*}")));
             probeInfo.text(TextStyleClass.INFO + "{*susy.top.evaporation_pool.exposed_blocks*}" + " " +
                     (TextFormatting.YELLOW + String.valueOf(evapPool.getExposedBlocks())));

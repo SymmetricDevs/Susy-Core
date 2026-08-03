@@ -6,8 +6,6 @@ import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 import java.util.*;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -19,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
@@ -49,8 +48,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
 
     private static final int UPDATE_MATERIAL_COLOR = GregtechDataCodes.assignId();
 
-    private static final String[][] ROTOR_PATTERN = { { "", "RRR", "", "" },
-            { "", "", "", "", "RRR" } };
+    private static final String[][] ROTOR_PATTERN = { { "", "RRR", "", "" }, { "", "", "", "", "RRR" } };
     private static final Vec3i PATTERN_OFFSET = new Vec3i(-1, 2, 1);
 
     private int[] particleColors;
@@ -74,7 +72,8 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     }
 
     public void updateRenderInfo(Recipe recipe) {
-        if (recipe == null) return;
+        if (recipe == null)
+            return;
         Stream<ItemStack> flattenedInputs = recipe.getInputs().stream().map(GTRecipeInput::getInputStacks)
                 .map(Arrays::asList).flatMap(List::stream)
                 .filter(stack -> MetaPrefixItem.tryGetMaterial(stack) != null);
@@ -105,8 +104,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
         return new MetaTileEntityGravitySeparator(this.metaTileEntityId);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCYM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(90);
@@ -121,12 +119,13 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
                 .aisle("     ", "C   C", "C   C", " CCC ", "C###C", "RRRRR", "J###J")
                 .aisle("C   C", "CC CC", "CCCCC", " CCC ", " CCC ", "CCCCC", "CIIIC")
                 /*
-                 * Other orientation
-                 * .aisle("C CC  C", "C CC CC", "CCCECCC", "CRCRC  ", " CRCRC ", " CCCCRC", "    CJC")
-                 * .aisle("       ", "CO    C", "F#CC  C", "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I")
-                 * .aisle("       ", " O    C", "C#CC  C", "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I")
-                 * .aisle("       ", "CO    C", "F#CC  C", "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I")
-                 * .aisle("C CC  C", "C CC CC", "CCCSCCC", "CRCRC  ", " CRCRC ", " CCCCRC", "    CJC")
+                 * Other orientation .aisle("C CC  C", "C CC CC", "CCCECCC", "CRCRC  ",
+                 * " CRCRC ", " CCCCRC", "    CJC") .aisle("       ", "CO    C", "F#CC  C",
+                 * "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I") .aisle("       ", " O    C",
+                 * "C#CC  C", "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I") .aisle("       ",
+                 * "CO    C", "F#CC  C", "CR#RCCC", "C#R#R#C", "C  ##RC", "    ##I")
+                 * .aisle("C CC  C", "C CC CC", "CCCSCCC", "CRCRC  ", " CRCRC ", " CCCCRC",
+                 * "    CJC")
                  */.where('S', selfPredicate()).where('R', rotorOrientation()).where('C', casingPredicate)
                 .where('M', casingPredicate.or(autoAbilities(true, false)))
                 .where('E', casingPredicate.or(autoAbilities(true, false, false, false, false, false, false)))
@@ -138,24 +137,22 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
     }
 
     /*
-     * can be reimplemented with states for R if rotation is not supposed to be specified
-     * public IBlockState[] getRotorStates() {
-     * return new IBlockState[] {
-     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING,
-     * EnumFacing.SOUTH),
-     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING,
-     * EnumFacing.NORTH),
-     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING,
-     * EnumFacing.EAST),
-     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.BlockSeparatorRotorType.STEEL).withProperty(FACING,
-     * EnumFacing.WEST)
-     * };
-     * }
+     * can be reimplemented with states for R if rotation is not supposed to be
+     * specified public IBlockState[] getRotorStates() { return new IBlockState[] {
+     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.
+     * BlockSeparatorRotorType.STEEL).withProperty(FACING, EnumFacing.SOUTH),
+     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.
+     * BlockSeparatorRotorType.STEEL).withProperty(FACING, EnumFacing.NORTH),
+     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.
+     * BlockSeparatorRotorType.STEEL).withProperty(FACING, EnumFacing.EAST),
+     * SuSyBlocks.SEPARATOR_ROTOR.getState(BlockSeparatorRotor.
+     * BlockSeparatorRotorType.STEEL).withProperty(FACING, EnumFacing.WEST) }; }
      */
 
     // makes sure block at position is properly oriented rotor
     protected TraceabilityPredicate rotorOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         return SuSyPredicates.horizontalOrientation(this, steelRotorState(), RelativeDirection.RIGHT, FACING);
     }
 
@@ -171,8 +168,7 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    @NonNull
-    protected ICubeRenderer getFrontOverlay() {
+    @NonNull protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }
 
@@ -194,13 +190,11 @@ public class MetaTileEntityGravitySeparator extends CachedPatternRecipeMapMultib
             BlockPos pos = this.getPos().add(offset);
 
             // Lots of particles, not sure how performant this is
-            Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleDust(getWorld(),
-                    pos.getX() + rand.nextDouble(),
-                    pos.getY() + .5F / 16,
-                    pos.getZ() + rand.nextDouble(),
-                    PARTICLE_SPEED * this.getFrontFacing().getXOffset(), 0,
-                    PARTICLE_SPEED * this.getFrontFacing().getZOffset(), 1,
-                    3F, particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
+            Minecraft.getMinecraft().effectRenderer
+                    .addEffect(new SusyParticleDust(getWorld(), pos.getX() + rand.nextDouble(), pos.getY() + .5F / 16,
+                            pos.getZ() + rand.nextDouble(), PARTICLE_SPEED * this.getFrontFacing().getXOffset(), 0,
+                            PARTICLE_SPEED * this.getFrontFacing().getZOffset(), 1, 3F,
+                            particleColors[Math.abs(rand.nextInt() % particleColors.length)]));
         }
     }
 

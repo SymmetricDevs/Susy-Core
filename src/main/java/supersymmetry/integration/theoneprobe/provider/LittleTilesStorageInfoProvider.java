@@ -28,9 +28,11 @@ public class LittleTilesStorageInfoProvider implements IProbeInfoProvider {
         return Supersymmetry.MODID + ":little_tiles_storage_info_provider";
     }
 
-    static boolean searchChildren(LittleStructure structure) throws CorruptedConnectionException,
+    static boolean searchChildren(LittleStructure structure)
+                                                             throws CorruptedConnectionException,
                                                              NotYetConnectedException {
-        if (structure == null) return false;
+        if (structure == null)
+            return false;
         for (StructureChildConnection child : structure.getChildren()) {
             if (child.getStructure() instanceof LittleStorage storage) {
                 for (int i = 0; i < storage.inventory.getSizeInventory(); i++) {

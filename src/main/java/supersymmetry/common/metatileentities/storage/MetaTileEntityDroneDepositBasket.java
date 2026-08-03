@@ -66,8 +66,7 @@ public class MetaTileEntityDroneDepositBasket extends MetaTileEntityCrate {
     }
 
     @Override
-    public boolean onRightClick(EntityPlayer player, EnumHand hand, EnumFacing facing,
-                                CuboidRayTraceResult hitResult) {
+    public boolean onRightClick(EntityPlayer player, EnumHand hand, EnumFacing facing, CuboidRayTraceResult hitResult) {
         if (player.isSneaking()) {
             ItemStack stack = player.getHeldItem(hand);
             if (stack.isItemEqual(SuSyMetaItems.LOCATION_CARD.getStackForm())) {
@@ -76,8 +75,7 @@ public class MetaTileEntityDroneDepositBasket extends MetaTileEntityCrate {
                     tag.setInteger(TAG_X, this.getPos().getX());
                     tag.setInteger(TAG_Y, this.getPos().getY());
                     tag.setInteger(TAG_Z, this.getPos().getZ());
-                    player.sendStatusMessage(
-                            new TextComponentTranslation("chat.susy.location_card.encode"), false);
+                    player.sendStatusMessage(new TextComponentTranslation("chat.susy.location_card.encode"), false);
                 }
                 return true;
 

@@ -102,8 +102,7 @@ public class MetaTileEntitySuSyLogWasher extends RecipeMapSteamMultiblockControl
             super(tileEntity, conversionRate);
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public ParallelLogicType getParallelLogicType() {
             return ParallelLogicType.MULTIPLY;
         }
@@ -125,42 +124,26 @@ public class MetaTileEntitySuSyLogWasher extends RecipeMapSteamMultiblockControl
 
     private static IBlockState[] getShaftStates() {
         IBlockState shaftState = SuSyBlocks.PADDLE_SHAFT.getState(BlockPaddleShaft.ShaftType.IRON);
-        return new IBlockState[] {
-                shaftState.withProperty(FACING, EnumFacing.NORTH),
-                shaftState.withProperty(FACING, EnumFacing.SOUTH),
-                shaftState.withProperty(FACING, EnumFacing.WEST),
-                shaftState.withProperty(FACING, EnumFacing.EAST)
-        };
+        return new IBlockState[] { shaftState.withProperty(FACING, EnumFacing.NORTH),
+                shaftState.withProperty(FACING, EnumFacing.SOUTH), shaftState.withProperty(FACING, EnumFacing.WEST),
+                shaftState.withProperty(FACING, EnumFacing.EAST) };
     }
 
     @Override
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("PIIP", "    ", "    ")
-                .aisle("FPPF", "PSSP", "    ")
-                .aisle(" BB ", "PSSP", "    ")
-                .aisle(" BB ", "PSSP", "    ")
-                .aisle(" BB ", "PSSP", "    ")
-                .aisle("F  F", "FBBF", "PSSP")
-                .aisle("    ", " BB ", "PSSP")
-                .aisle("    ", " BB ", "PSSP")
-                .aisle("F  F", "FXXF", "CGGX")
-                .where('C', this.selfPredicate())
-                .where('P', states(getPipeCasingState()))
-                .where('F', frames(Materials.Bronze))
-                .where('S', states(getShaftStates()))
-                .where('X', abilities(MultiblockAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1)
-                        .or(abilities(MultiblockAbility.STEAM).setPreviewCount(1))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(1))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(0)))
-                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
-                        .or(states(getCasingState())))
-                .where('G', states(getGearBoxState()))
-                .where('B', states(getCasingState()))
-                .where('#', air())
-                .where(' ', any())
-                .build();
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start().aisle("PIIP", "    ", "    ").aisle("FPPF", "PSSP", "    ")
+                .aisle(" BB ", "PSSP", "    ").aisle(" BB ", "PSSP", "    ").aisle(" BB ", "PSSP", "    ")
+                .aisle("F  F", "FBBF", "PSSP").aisle("    ", " BB ", "PSSP").aisle("    ", " BB ", "PSSP")
+                .aisle("F  F", "FXXF", "CGGX").where('C', this.selfPredicate()).where('P', states(getPipeCasingState()))
+                .where('F', frames(Materials.Bronze)).where('S', states(getShaftStates()))
+                .where('X',
+                        abilities(MultiblockAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1)
+                                .or(abilities(MultiblockAbility.STEAM).setPreviewCount(1))
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(1))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(0)))
+                .where('I', abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).or(states(getCasingState())))
+                .where('G', states(getGearBoxState())).where('B', states(getCasingState())).where('#', air())
+                .where(' ', any()).build();
     }
 
     protected static IBlockState getCasingState() {

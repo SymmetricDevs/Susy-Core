@@ -18,7 +18,7 @@ public class SkyRenderData {
     private boolean reversePhases;
 
     private final float orbitalInclination; // Max angle (degrees) the path deviates from the equator
-    private final float nodalPeriodLength;  // Time (in ticks) for one full cycle of the inclination (e.g., eclipse
+    private final float nodalPeriodLength; // Time (in ticks) for one full cycle of the inclination (e.g., eclipse
     private final float baseInclination;
 
     private SkyRenderData(Builder builder) {
@@ -90,7 +90,8 @@ public class SkyRenderData {
     }
 
     public float getCurrentInclination(long worldTime) {
-        if (nodalPeriodLength <= 0) return baseInclination;
+        if (nodalPeriodLength <= 0)
+            return baseInclination;
         // Oscillate AROUND the base inclination
         float progress = (worldTime % (long) nodalPeriodLength) / nodalPeriodLength;
         float oscillation = (float) Math.sin(progress * Math.PI * 2.0) * orbitalInclination;
@@ -98,7 +99,8 @@ public class SkyRenderData {
     }
 
     public int getCurrentPhase(long worldTime) {
-        if (phaseData == null) return 0;
+        if (phaseData == null)
+            return 0;
 
         float minecraftDays = worldTime / 24000.0f;
         float phaseProgress = (minecraftDays % phaseData.cycleLength) / phaseData.cycleLength;
@@ -112,8 +114,8 @@ public class SkyRenderData {
     }
 
     public enum PositionType {
-        CELESTIAL_SPHERE,  // Follows the day/night cycle
-        ZENITH,             // Fixed at zenith (like Earth from Moon)
+        CELESTIAL_SPHERE, // Follows the day/night cycle
+        ZENITH, // Fixed at zenith (like Earth from Moon)
         CUSTOM
     }
 

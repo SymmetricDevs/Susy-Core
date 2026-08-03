@@ -45,8 +45,8 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         public boolean test(@NotNull FluidStack fluid) {
             FluidStack largeFluidStack = fluid.copy();
             largeFluidStack.amount = 1000;
-            Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
-                    GTValues.V[GTValues.MAX], NonNullList.create(), Collections.singletonList(largeFluidStack));
+            Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(GTValues.V[GTValues.MAX],
+                    NonNullList.create(), Collections.singletonList(largeFluidStack));
             return fluidFuelRecipe != null;
         }
 
@@ -100,17 +100,18 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
 
         for (IFluidTank fluidTank : importFluids.getFluidTanks()) {
             FluidStack fuelStack = fluidTank.drain(Integer.MAX_VALUE, false);
-            if (fuelStack == null || !BOILER_FUEL.test(fuelStack)) continue;
+            if (fuelStack == null || !BOILER_FUEL.test(fuelStack))
+                continue;
 
-            Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
-                    GTValues.V[GTValues.MAX], dummyList, Collections.singletonList(fuelStack));
-            // run only if it can apply a certain amount of "parallel", this is to mitigate int division
+            Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(GTValues.V[GTValues.MAX],
+                    dummyList, Collections.singletonList(fuelStack));
+            // run only if it can apply a certain amount of "parallel", this is to mitigate
+            // int division
             if (fluidFuelRecipe != null) {
                 int consumption = fluidFuelRecipe.getFluidInputs().get(0).getInputFluidStack().amount;
                 fluidTank.drain(consumption, true);
                 int fuelBurnTime = (fluidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick());
-                setMaxProgress(adjustBurnTimeForThrottle(
-                        Math.max(1, boiler.boilerType.runtimeBoost(fuelBurnTime))));
+                setMaxProgress(adjustBurnTimeForThrottle(Math.max(1, boiler.boilerType.runtimeBoost(fuelBurnTime))));
                 didStartRecipe = true;
                 break;
             }
@@ -121,11 +122,13 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
             for (int i = 0; i < importItems.getSlots(); i++) {
                 ItemStack stack = importItems.getStackInSlot(i);
                 OrePrefix prefix = OreDictUnifier.getPrefix(stack);
-                if (!isSupportedOrePrefix(prefix)) continue;
+                if (!isSupportedOrePrefix(prefix))
+                    continue;
 
                 Recipe solidFuelRecipe = SuSyRecipeMaps.BOILER_RECIPES.findRecipe(GTValues.V[GTValues.MAX],
                         Collections.singletonList(stack), NonNullList.create());
-                if (solidFuelRecipe == null) continue;
+                if (solidFuelRecipe == null)
+                    continue;
                 int fuelBurnTime = solidFuelRecipe.getDuration() * 96 / boiler.boilerType.steamPerTick();
                 if (fuelBurnTime > 0) { // try to ensure this fuel can burn for at least 1 tick
                     setMaxProgress(adjustBurnTimeForThrottle(boiler.boilerType.runtimeBoost(fuelBurnTime)));
@@ -201,7 +204,8 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         if (ConfigHolder.machines.enableMaintenance) {
             return (int) Math.min(currentHeat,
                     (1 - 0.1 * getMetaTileEntity().getNumMaintenanceProblems()) * getMaximumHeat());
-        } else return currentHeat;
+        } else
+            return currentHeat;
     }
 
     private int adjustEUtForThrottle(int rawEUt) {
@@ -272,14 +276,12 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         wasActiveAndNeedsUpdate = true;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public MetaTileEntitySuSyLargeBoiler getMetaTileEntity() {
         return (MetaTileEntitySuSyLargeBoiler) super.getMetaTileEntity();
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound compound = super.serializeNBT();
         compound.setInteger("Heat", currentHeat);
@@ -320,7 +322,8 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
         }
     }
 
-    // Required overrides to use RecipeLogic, but all of them are redirected by the above overrides.
+    // Required overrides to use RecipeLogic, but all of them are redirected by the
+    // above overrides.
 
     @Override
     protected long getEnergyInputPerSecond() {
@@ -353,13 +356,15 @@ public class SuSyBoilerLogic extends AbstractRecipeLogic {
     }
 
     /**
-     * @param fluidHandler the handler to drain from
-     * @param amount       the amount to drain
+     * @param fluidHandler
+     *                     the handler to drain from
+     * @param amount
+     *                     the amount to drain
      * @return a valid boiler fluid from a container
      */
-    @Nullable
-    private static FluidStack getBoilerFluidFromContainer(@NotNull IFluidHandler fluidHandler, int amount) {
-        if (amount == 0) return null;
+    @Nullable private static FluidStack getBoilerFluidFromContainer(@NotNull IFluidHandler fluidHandler, int amount) {
+        if (amount == 0)
+            return null;
         FluidStack drainedWater = fluidHandler.drain(Materials.Water.getFluid(amount), true);
         if (drainedWater == null || drainedWater.amount == 0) {
             drainedWater = fluidHandler.drain(Materials.DistilledWater.getFluid(amount), true);

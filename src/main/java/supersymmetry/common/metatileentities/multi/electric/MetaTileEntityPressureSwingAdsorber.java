@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -31,17 +31,12 @@ public class MetaTileEntityPressureSwingAdsorber extends RecipeMapMultiblockCont
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("AAA", "AAA", "AAA", "AAA")
-                .aisle("AAA", "ABA", "ABA", "AAA")
-                .aisle("AAA", "ASA", "AAA", "AAA")
-                .where('S', selfPredicate())
+        return FactoryBlockPattern.start().aisle("AAA", "AAA", "AAA", "AAA").aisle("AAA", "ABA", "ABA", "AAA")
+                .aisle("AAA", "ASA", "AAA", "AAA").where('S', selfPredicate())
                 .where('A',
                         states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
-                                .setMinGlobalLimited(25)
-                                .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .build();
+                                .setMinGlobalLimited(25).or(autoAbilities(true, true, true, true, true, true, false)))
+                .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE))).build();
     }
 
     @Override
@@ -49,8 +44,7 @@ public class MetaTileEntityPressureSwingAdsorber extends RecipeMapMultiblockCont
         return Textures.FROST_PROOF_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.PRESSURE_SWING_ABSORBER_OVERLAY;
     }

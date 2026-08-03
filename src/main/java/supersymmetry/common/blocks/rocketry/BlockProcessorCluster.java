@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks.rocketry;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
@@ -69,8 +68,7 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
             this.computation = computation;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

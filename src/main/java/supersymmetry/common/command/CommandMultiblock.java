@@ -97,7 +97,7 @@ public class CommandMultiblock extends CommandBase {
                     int relX = x - minX;
                     int relY = y - minY;
                     int relZ = z - minZ;
-                    structure[relY][relZ][relX] = blockToChar.get(blockKey);  // Changed indexing order
+                    structure[relY][relZ][relX] = blockToChar.get(blockKey); // Changed indexing order
                 }
             }
         }
@@ -113,7 +113,7 @@ public class CommandMultiblock extends CommandBase {
             for (int z = 0; z < sizeZ; z++) {
                 pattern.append("\"");
                 for (int x = 0; x < sizeX; x++) {
-                    pattern.append(structure[y][z][x]);  // Changed indexing order
+                    pattern.append(structure[y][z][x]); // Changed indexing order
                 }
                 pattern.append("\"");
                 if (z < sizeZ - 1) {

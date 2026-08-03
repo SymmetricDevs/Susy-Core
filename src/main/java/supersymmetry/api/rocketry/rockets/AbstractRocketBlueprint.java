@@ -97,9 +97,7 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
     }
 
     public double getThrust(RocketFuelEntry entry, String componentType) {
-        return this.getStages().stream()
-                .mapToDouble((stage) -> stage.getThrust(entry, componentType))
-                .sum();
+        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, componentType)).sum();
     }
 
     public double getFuelVolume() {
@@ -107,17 +105,13 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
     }
 
     public int getComponentCount(String componentType) {
-        return this.getStages().stream()
-                .mapToInt((comp) -> comp.getComponentCount(componentType))
-                .sum();
+        return this.getStages().stream().mapToInt((comp) -> comp.getComponentCount(componentType)).sum();
     }
 
     public List<AbstractComponent> getComponents(String componentType) {
-        return this.getStages().stream()
-                .map(RocketStage::getComponents)
+        return this.getStages().stream().map(RocketStage::getComponents)
                 .flatMap((list) -> list.values().stream().flatMap(List::stream))
-                .filter(c -> c.getType().equals(componentType))
-                .collect(Collectors.toList());
+                .filter(c -> c.getType().equals(componentType)).collect(Collectors.toList());
     }
 
     public double getGuidanceMultiplier() {
@@ -127,13 +121,11 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
 
     public double getCargoVolume() {
         return this.getComponents("spacecraft").stream()
-                .mapToDouble(component -> ((ComponentSpacecraft) component).volume)
-                .sum();
+                .mapToDouble(component -> ((ComponentSpacecraft) component).volume).sum();
     }
 
     public Map<String, Integer> getInstruments() {
-        return this.getComponents("spacecraft").stream()
-                .map(component -> ((ComponentSpacecraft) component).instruments)
+        return this.getComponents("spacecraft").stream().map(component -> ((ComponentSpacecraft) component).instruments)
                 .reduce(new HashMap<>(), (map, entry) -> {
                     // computeAll basically
                     entry.forEach((key, value) -> map.merge(key, value, Integer::sum));

@@ -17,15 +17,17 @@ public class SpaceGravityHandler {
         EntityLivingBase entity = event.getEntityLiving();
 
         WorldProvider provider = entity.world.provider;
-        if (!(provider instanceof WorldProviderSpace)) return;
+        if (!(provider instanceof WorldProviderSpace))
+            return;
 
         float customGravity = ((WorldProviderSpace) provider).getGravity();
 
-        if (entity.isRiding() || entity.isInWater() || entity.isInLava()) return;
+        if (entity.isRiding() || entity.isInWater() || entity.isInLava())
+            return;
 
         // Vanilla will subtract VANILLA_GRAVITY this tick unconditionally.
         // Pre-correct so the net result equals our custom gravity.
-        entity.motionY += VANILLA_GRAVITY;    // undo vanilla (which hasn't run yet at HIGHEST)
-        entity.motionY -= customGravity;      // apply ours
+        entity.motionY += VANILLA_GRAVITY; // undo vanilla (which hasn't run yet at HIGHEST)
+        entity.motionY -= customGravity; // apply ours
     }
 }

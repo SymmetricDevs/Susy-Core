@@ -38,8 +38,7 @@ public class BlockRobotArmLayup extends VariantHorizontalRotatableBlock<BlockRob
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

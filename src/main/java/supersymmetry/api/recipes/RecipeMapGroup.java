@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
@@ -32,8 +31,7 @@ public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
         this.recipeMaps = recipeMaps;
     }
 
-    @NonNull
-    public static RecipeMapGroup<SimpleRecipeBuilder> create(@NotNull String unlocalizedName,
+    @NonNull public static RecipeMapGroup<SimpleRecipeBuilder> create(@NotNull String unlocalizedName,
                                                              @NotNull RecipeMap<?>... recipeMaps) {
         int maxInputs = 0, maxOutputs = 0, maxFluidInputs = 0, maxFluidOutputs = 0;
         for (RecipeMap<?> recipeMap : recipeMaps) {
@@ -46,20 +44,16 @@ public class RecipeMapGroup<R extends RecipeBuilder<R>> extends RecipeMap<R> {
                 new SimpleRecipeBuilder(), true, recipeMaps);
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public Recipe findRecipe(long voltage, List<ItemStack> inputs, List<FluidStack> fluidInputs, boolean exactVoltage) {
         AtomicReference<Recipe> recipe = new AtomicReference<>();
-        Arrays.stream(recipeMaps)
-                .parallel()
+        Arrays.stream(recipeMaps).parallel()
                 .map(recipeMap -> recipeMap.findRecipe(voltage, inputs, fluidInputs, exactVoltage))
-                .filter(java.util.Objects::nonNull)
-                .findFirst().ifPresent(recipe::set);
+                .filter(java.util.Objects::nonNull).findFirst().ifPresent(recipe::set);
         return recipe.get();
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public Map<GTRecipeCategory, List<Recipe>> getRecipesByCategory() {
         Map<GTRecipeCategory, List<Recipe>> res = new Object2ObjectOpenHashMap<>();
         for (RecipeMap<?> recipeMap : recipeMaps) {

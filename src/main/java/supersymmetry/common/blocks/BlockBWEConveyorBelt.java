@@ -33,8 +33,7 @@ public class BlockBWEConveyorBelt extends VariantHorizontalRotatableBlock<BlockB
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }

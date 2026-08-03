@@ -40,8 +40,7 @@ public class ComponentCardSlotWidget extends SlotWidget implements IGhostIngredi
 
     private boolean clearSlotOnRightClick;
 
-    public ComponentCardSlotWidget(
-                                   IItemHandlerModifiable itemHandler, int slotIndex, int xPosition, int yPosition) {
+    public ComponentCardSlotWidget(IItemHandlerModifiable itemHandler, int slotIndex, int xPosition, int yPosition) {
         super(itemHandler, slotIndex, xPosition, yPosition, false, false);
     }
 
@@ -88,15 +87,13 @@ public class ComponentCardSlotWidget extends SlotWidget implements IGhostIngredi
             IItemHandlerModifiable handler = getHandler();
             handler.insertItem(0, is, false);
             syncSlot();
-            writeClientAction(
-                    1,
-                    buffer -> {
-                        buffer.writeItemStack(slotReference.getStack());
-                        int mouseButton = Mouse.getEventButton();
-                        boolean shiftDown = TooltipHelper.isShiftDown();
-                        buffer.writeVarInt(mouseButton);
-                        buffer.writeBoolean(shiftDown);
-                    });
+            writeClientAction(1, buffer -> {
+                buffer.writeItemStack(slotReference.getStack());
+                int mouseButton = Mouse.getEventButton();
+                boolean shiftDown = TooltipHelper.isShiftDown();
+                buffer.writeVarInt(mouseButton);
+                buffer.writeBoolean(shiftDown);
+            });
             return true;
         }
         return false;
@@ -126,7 +123,8 @@ public class ComponentCardSlotWidget extends SlotWidget implements IGhostIngredi
     private ItemStack slotClickPhantom(int mouseButton, ClickType clickTypeIn, ItemStack stackHeld) {
         IItemHandlerModifiable handler = getHandler();
         // the positions are desynced but i stopped caring about them
-        // SusyLog.logger.info("slotClickPhantom ({}, {}, {}) xy {}:{}", mouseButton, clickTypeIn,
+        // SusyLog.logger.info("slotClickPhantom ({}, {}, {}) xy {}:{}", mouseButton,
+        // clickTypeIn,
         // stackHeld,this.getPosition().x,this.getPosition().y);
 
         if (mouseButton == 0 || mouseButton == 1) {
@@ -151,32 +149,28 @@ public class ComponentCardSlotWidget extends SlotWidget implements IGhostIngredi
             return Collections.emptyList();
         }
         Rectangle rectangle = toRectangleBox();
-        return Lists.newArrayList(
-                new Target<Object>() {
+        return Lists.newArrayList(new Target<Object>() {
 
-                    @NotNull
-                    @Override
-                    public Rectangle getArea() {
-                        return rectangle;
-                    }
+            @NotNull @Override
+            public Rectangle getArea() {
+                return rectangle;
+            }
 
-                    @Override
-                    public void accept(@NotNull Object ingredient) {
-                        if (ingredient instanceof ItemStack) {
-                            int mouseButton = Mouse.getEventButton();
-                            boolean shiftDown = TooltipHelper.isShiftDown();
-                            ClickType clickType = shiftDown ? ClickType.QUICK_MOVE : ClickType.PICKUP;
-                            slotClickPhantom(mouseButton, clickType, (ItemStack) ingredient);
-                            writeClientAction(
-                                    1,
-                                    buffer -> {
-                                        buffer.writeItemStack((ItemStack) ingredient);
-                                        buffer.writeVarInt(mouseButton);
-                                        buffer.writeBoolean(shiftDown);
-                                    });
-                        }
-                    }
-                });
+            @Override
+            public void accept(@NotNull Object ingredient) {
+                if (ingredient instanceof ItemStack) {
+                    int mouseButton = Mouse.getEventButton();
+                    boolean shiftDown = TooltipHelper.isShiftDown();
+                    ClickType clickType = shiftDown ? ClickType.QUICK_MOVE : ClickType.PICKUP;
+                    slotClickPhantom(mouseButton, clickType, (ItemStack) ingredient);
+                    writeClientAction(1, buffer -> {
+                        buffer.writeItemStack((ItemStack) ingredient);
+                        buffer.writeVarInt(mouseButton);
+                        buffer.writeBoolean(shiftDown);
+                    });
+                }
+            }
+        });
     }
 
     @Override

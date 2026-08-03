@@ -46,22 +46,19 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
                 .aisle("SSSPSSS", "SIIHIIS", "SICXCIS", "SICXCIS", "SICXCIS", "SIIhIIS", "SSSPSSS")
                 .aisle("SSSPSSS", "SIIIIIS", "SICXCIS", "SICXCIS", "SICXCIS", "SIIPIIS", "SSSPSSS")
                 .aisle(" SSPSS ", " SIIIS ", " SIIIS ", " SIIIS ", " SIIIS ", " SIPIS ", " SSPSS ")
-                .aisle("  SPS  ", "  SOS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ")
-                .where(' ', any())
+                .aisle("  SPS  ", "  SOS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ", "  SPS  ").where(' ', any())
                 .where('O', selfPredicate())
                 .where('S',
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING))
-                                        .setMinGlobalLimited(27).or(autoAbilities()))
+                                .setMinGlobalLimited(27).or(autoAbilities()))
                 .where('I',
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.SILICON_CARBIDE_CASING)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where('C', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME)))
-                .where('X', air())
+                .where('C', states(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME))).where('X', air())
                 .where('H', hydraulicOrientation(RelativeDirection.UP))
-                .where('h', hydraulicOrientation(RelativeDirection.DOWN))
-                .where('F', frames(getFrameMaterial()))
+                .where('h', hydraulicOrientation(RelativeDirection.DOWN)).where('F', frames(getFrameMaterial()))
                 .build();
     }
 
@@ -79,7 +76,8 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
 
     protected Material getFrameMaterial() {
         Material mat = GregTechAPI.materialManager.getMaterial("incoloy_nine_zero_eight");
-        if (mat == null) mat = Materials.Invar;
+        if (mat == null)
+            mat = Materials.Invar;
         return mat;
     }
 

@@ -16,7 +16,8 @@ public class InstrumentLander implements Instrument {
 
     public void act(int count, EntityAbstractRocket rocket) {
         RocketConfiguration.MissionConfiguration next = getMissionConfiguration(rocket);
-        if (next == null) return;
+        if (next == null)
+            return;
         if (rocket.getPassengers().isEmpty()) {
             spawnLander(rocket, next, true);
             return;
@@ -25,15 +26,18 @@ public class InstrumentLander implements Instrument {
         int i = 0;
         for (Entity passenger : rocket.getPassengers()) {
             i++;
-            if (EventHandlers.isEntityTravelling(passenger)) continue;
-            if (i > count) break;
+            if (EventHandlers.isEntityTravelling(passenger))
+                continue;
+            if (i > count)
+                break;
 
-            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(
-                    spawnLander(rocket, next, i == 0), passenger));
+            EventHandlers.travellingPassengers
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, next, i == 0), passenger));
         }
     }
 
-    public static RocketConfiguration.@Nullable MissionConfiguration getMissionConfiguration(EntityAbstractRocket rocket) {
+    public static RocketConfiguration.@Nullable MissionConfiguration getMissionConfiguration(
+                                                                                             EntityAbstractRocket rocket) {
         RocketConfiguration config = rocket.getRocketConfiguration();
         if (config.isEmpty()) {
             return null;

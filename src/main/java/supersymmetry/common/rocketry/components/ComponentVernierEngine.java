@@ -33,18 +33,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     public double fuelThroughput;
 
     public ComponentVernierEngine() {
-        super(
-                "vernier_engine",
-                "engine_small",
-                candidate -> candidate.getSecond().stream()
-                        .anyMatch(
-                                pos -> candidate
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
-                                                        BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
-        this.setComponentSlotValidator(
-                x -> x.equals(this.getName()) || x.equals(this.getType()));
+        super("vernier_engine", "engine_small", candidate -> candidate.getSecond().stream()
+                .anyMatch(pos -> candidate.getFirst().world.getBlockState(pos).equals(
+                        SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
+        this.setComponentSlotValidator(x -> x.equals(this.getName()) || x.equals(this.getType()));
     }
 
     @Override
@@ -61,13 +53,17 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
             return Optional.empty();
         }
         ComponentVernierEngine engine = new ComponentVernierEngine();
-        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
-        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        compound
-                .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST))
+            return Optional.empty();
+        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
         engine.areaRatio = compound.getDouble("area_ratio");
@@ -117,14 +113,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         int fin = initial;
 
         /*
-         * for (int a : areas) {
-         * if (fin <= a) {
-         * fin = a;
-         * } else {
-         * analysis.status = BuildStat.NOT_LAVAL;
-         * return Optional.empty();
-         * }
-         * }
+         * for (int a : areas) { if (fin <= a) { fin = a; } else { analysis.status =
+         * BuildStat.NOT_LAVAL; return Optional.empty(); } }
          */
         float computedAreaRatio = ((float) fin) / initial;
         if (computedAreaRatio < 1) {
@@ -142,8 +132,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         // Below the chamber: Open space
         BlockPos cChamber = cChambers.get(0);
         Set<BlockPos> pumps = analysis
-                .getOfBlockType(
-                        analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
+                .getOfBlockType(analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
                 .collect(Collectors.toSet());
         if (nozzleBB.contains(new Vec3d(cChamber))) {
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
@@ -156,11 +145,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         // Analyze turbopumps
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
-                .getState(chamberState)))
-                        .getMinPumps();
+                .getState(chamberState))).getMinPumps();
 
-        if (!((VariantBlock<?>) chamberState.getBlock()).getState(chamberState).equals(
-                BlockCombustionChamber.CombustionType.MONOPROPELLANT)) {
+        if (!((VariantBlock<?>) chamberState.getBlock()).getState(chamberState)
+                .equals(BlockCombustionChamber.CombustionType.MONOPROPELLANT)) {
             analysis.status = BuildStat.WRONG_CHAMBER_TYPE;
             return Optional.empty();
         }
@@ -192,8 +180,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
         engineBlocks.addAll(pumps);
         engineBlocks.add(cChamber);
-        engineBlocks.addAll(
-                analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
+        engineBlocks.addAll(analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
         engineBlocks.addAll(stickBlocks);
 
         if (engineBlocks.size() < blocks.size()) {
@@ -206,8 +193,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         tag.setDouble("area_ratio", computedAreaRatio);
         this.areaRatio = computedAreaRatio;
         // Not the default; more of an inner radius
-        this.radius = analysis.getRadius(
-                blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
+        this.radius = analysis
+                .getRadius(blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
         tag.setDouble("radius", radius);
 
         collectInfo(analysis, blocks, tag);

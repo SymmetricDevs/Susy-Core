@@ -29,47 +29,59 @@ public class OxygenSensorBehavior implements IItemBehaviour {
 
     @Override
     public void onUpdate(ItemStack itemStack, Entity entity) {
-        // i dont know whats meant to happen here and i failed to merge it correctly sorry
+        // i dont know whats meant to happen here and i failed to merge it correctly
+        // sorry
 
-        if (!(entity instanceof EntityPlayer)) return;
+        if (!(entity instanceof EntityPlayer))
+            return;
 
         EntityPlayer player = (EntityPlayer) entity;
-        if (player.world.isRemote) return;
-        if (player.ticksExisted % CHECK_INTERVAL != 0) return;
+        if (player.world.isRemote)
+            return;
+        if (player.ticksExisted % CHECK_INTERVAL != 0)
+            return;
 
         IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
-        if (electricItem == null) return;
+        if (electricItem == null)
+            return;
 
         boolean isHeld = player.getHeldItemMainhand() == itemStack || player.getHeldItemOffhand() == itemStack;
 
         boolean inHazard = DimensionBreathabilityHandler.isInDepressurizationHazard(player);
-        double pressure = !inHazard ? 1 : AtmosphereWorldData.get(player.getEntityWorld()).getGraph()
-                .getOxygenation(player.getPosition());
+        double pressure = !inHazard ? 1 :
+                AtmosphereWorldData.get(player.getEntityWorld()).getGraph().getOxygenation(player.getPosition());
         boolean insufficient = pressure < 0.1;
 
         long euCost = EU_PER_CHECK;
-        if (isHeld) euCost += EU_PER_DISPLAY;
-        if (insufficient) euCost += EU_PER_BEEP;
+        if (isHeld)
+            euCost += EU_PER_DISPLAY;
+        if (insufficient)
+            euCost += EU_PER_BEEP;
 
-        if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost) return;
+        if (electricItem.discharge(euCost, Integer.MAX_VALUE, true, false, false) < euCost)
+            return;
 
         if (isHeld) {
             String level = getOxygenLevel(pressure);
-            player.sendStatusMessage(
-                    new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level), true);
+            player.sendStatusMessage(new TextComponentTranslation("metaitem.oxygen_sensor.oxygen_level." + level),
+                    true);
         }
 
         if (insufficient) {
-            player.world.playSound(null, player.posX, player.posY, player.posZ,
-                    SusySounds.OXYGEN_SENSOR_BEEP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            player.world.playSound(null, player.posX, player.posY, player.posZ, SusySounds.OXYGEN_SENSOR_BEEP,
+                    SoundCategory.PLAYERS, 1.0F, 1.0F);
         }
     }
 
     private String getOxygenLevel(double pressure) {
-        if (pressure < 0.01) return "none";
-        if (pressure < 0.1) return "very_low";
-        if (pressure < 0.3) return "low";
-        if (pressure < 0.7) return "medium";
+        if (pressure < 0.01)
+            return "none";
+        if (pressure < 0.1)
+            return "very_low";
+        if (pressure < 0.3)
+            return "low";
+        if (pressure < 0.7)
+            return "medium";
         return "high";
     }
 
@@ -77,8 +89,8 @@ public class OxygenSensorBehavior implements IItemBehaviour {
     public void addInformation(ItemStack itemStack, List<String> lines) {
         IElectricItem electricItem = itemStack.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
         if (electricItem != null) {
-            lines.add(I18n.format("metaitem.oxygen_sensor.tooltip.charge",
-                    electricItem.getCharge(), electricItem.getMaxCharge()));
+            lines.add(I18n.format("metaitem.oxygen_sensor.tooltip.charge", electricItem.getCharge(),
+                    electricItem.getMaxCharge()));
         }
         lines.add(I18n.format("metaitem.oxygen_sensor.tooltip.1"));
     }

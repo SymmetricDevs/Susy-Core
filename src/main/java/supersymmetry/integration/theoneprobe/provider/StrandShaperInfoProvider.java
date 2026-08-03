@@ -29,7 +29,8 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                              IBlockState blockState, IProbeHitData data) {
         if (blockState.getBlock().hasTileEntity(blockState)) {
             TileEntity tileEntity = world.getTileEntity(data.getPos());
-            if (!(tileEntity instanceof IGregTechTileEntity)) return;
+            if (!(tileEntity instanceof IGregTechTileEntity))
+                return;
 
             MetaTileEntity metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity();
             if (metaTileEntity instanceof MetaTileEntityStrandShaper shaper) {
@@ -38,8 +39,8 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                 }
                 long EUt = shaper.getVoltage();
                 String text = TextFormatting.RED + TextFormattingUtil.formatNumbers(EUt) + TextStyleClass.INFO +
-                        " EU/t" + TextFormatting.GREEN +
-                        " (" + GTValues.VN[GTUtility.getTierByVoltage(EUt)] + TextFormatting.GREEN + ")";
+                        " EU/t" + TextFormatting.GREEN + " (" + GTValues.VN[GTUtility.getTierByVoltage(EUt)] +
+                        TextFormatting.GREEN + ")";
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.energy_consumption*} " + text);
             } else if (metaTileEntity instanceof IStrandProvider bus) {
                 if (bus.getStrand() == null) {

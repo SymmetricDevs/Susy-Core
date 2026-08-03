@@ -18,8 +18,7 @@ public class CatalystPropertyValue {
         return tier;
     }
 
-    @NonNull
-    public CatalystGroup getCatalystGroup() {
+    @NonNull public CatalystGroup getCatalystGroup() {
         return catalystGroup;
     }
 }

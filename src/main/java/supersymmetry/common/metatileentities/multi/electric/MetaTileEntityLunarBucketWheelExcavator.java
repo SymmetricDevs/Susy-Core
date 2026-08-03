@@ -63,8 +63,7 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
 
-    @Nullable
-    private Collection<BlockPos> hiddenBlocks;
+    @Nullable private Collection<BlockPos> hiddenBlocks;
 
     public MetaTileEntityLunarBucketWheelExcavator(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.LUNAR_BUCKET_WHEEL_EXCAVATOR);
@@ -107,19 +106,15 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
         return new MetaTileEntityLunarBucketWheelExcavator(this.metaTileEntityId);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(120);
 
-        return FactoryBlockPattern.start()
-                .aisle("          TTTTTTTT           ", "                             ",
-                        "         HHHHHHHH            ", "         HHHHHHHH            ",
-                        "                             ", "                             ",
-                        "                             ", "                             ",
-                        "                             ", "                             ",
-                        "                             ")
+        return FactoryBlockPattern.start().aisle("          TTTTTTTT           ", "                             ",
+                "         HHHHHHHH            ", "         HHHHHHHH            ", "                             ",
+                "                             ", "                             ", "                             ",
+                "                             ", "                             ", "                             ")
                 .aisle("          TTTTTTTT           ", "             AA              ",
                         "        HHHHHHHHHH           ", "        HHHHHHHHHH       A   ",
                         "               AA       AEA  ", "              AAA     AACA   ",
@@ -150,30 +145,23 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                         "                             ", "                             ",
                         "                             ", "                             ",
                         "                             ")
-                .where('T', trackOrientation().or(trackOrientation2()))
-                .where('A', casingPredicate)
-                .where('B', hiddenStates(getWheelCasingState()))
-                .where('C', frames(Materials.StainlessSteel))
-                .where('E', states(MetaBlocks.TURBINE_CASING.getState(
-                        BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
-                .where('F', states(MetaBlocks.TURBINE_CASING.getState(
-                        BlockTurbineCasing.TurbineCasingType.TITANIUM_GEARBOX)))
-                .where('O', casingPredicate
-                        .or(autoAbilities(false, false, false, true, false, false, false)))
-                .where('H', casingPredicate
-                        .or(autoAbilities(true, false, true, false, false, false, false)))
-                .where('M', casingPredicate
-                        .or(autoAbilities(false, true, false, false, false, false, false)))
-                .where('S', selfPredicate())
-                .where('P', conveyorOrientation().or(conveyorOrientation2()))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('T', trackOrientation().or(trackOrientation2())).where('A', casingPredicate)
+                .where('B', hiddenStates(getWheelCasingState())).where('C', frames(Materials.StainlessSteel))
+                .where('E',
+                        states(MetaBlocks.TURBINE_CASING
+                                .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
+                .where('F',
+                        states(MetaBlocks.TURBINE_CASING
+                                .getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_GEARBOX)))
+                .where('O', casingPredicate.or(autoAbilities(false, false, false, true, false, false, false)))
+                .where('H', casingPredicate.or(autoAbilities(true, false, true, false, false, false, false)))
+                .where('M', casingPredicate.or(autoAbilities(false, true, false, false, false, false, false)))
+                .where('S', selfPredicate()).where('P', conveyorOrientation().or(conveyorOrientation2()))
+                .where(' ', any()).where('#', air()).build();
     }
 
     @Override
-    @Nullable
-    public Collection<BlockPos> getHiddenBlocks() {
+    @Nullable public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
     }
 
@@ -302,8 +290,8 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        event.getController().setAnimation(new AnimationBuilder()
-                .addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController()
+                .setAnimation(new AnimationBuilder().addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
         return isActive() ? PlayState.CONTINUE : PlayState.STOP;
     }
 

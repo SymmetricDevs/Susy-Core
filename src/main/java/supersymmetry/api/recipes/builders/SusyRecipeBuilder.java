@@ -113,17 +113,14 @@ public class SusyRecipeBuilder extends RecipeBuilder<SusyRecipeBuilder> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
+        return new ToStringBuilder(this).appendSuper(super.toString())
                 .append(DimensionProperty.getInstance().getKey(), getDimensionIDs().toString())
-                .append("biomes", getBiomePropertyList())
-                .toString();
+                .append("biomes", getBiomePropertyList()).toString();
     }
 
     public Boolean getAtmosphereProperty() {
         return this.recipePropertyStorage == null ? null :
-                this.recipePropertyStorage.getRecipePropertyValue(AtmosphereProperty.getInstance(),
-                        null);
+                this.recipePropertyStorage.getRecipePropertyValue(AtmosphereProperty.getInstance(), null);
     }
 
     public SusyRecipeBuilder biomes(String... biomes) {

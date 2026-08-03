@@ -33,7 +33,10 @@ public class SuSyDimensions {
     public static List<Biome> BIOMES = new ArrayList<>();
     public static Map<Integer, PlanetoidHandler> PLANETS = new Int2ObjectArrayMap<>();
 
-    /** Registry of all SpaceDimensions, keyed by dimension id. Populated via SpaceDimension#load(). */
+    /**
+     * Registry of all SpaceDimensions, keyed by dimension id. Populated via
+     * SpaceDimension#load().
+     */
     public static Map<Integer, SpaceDimension> SPACE = new Int2ObjectArrayMap<>();
 
     static long leoOrbitTicks = 110_400L;
@@ -41,7 +44,8 @@ public class SuSyDimensions {
     public static void init() {
         int id = -2;
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() < id) id = type.getId();
+            if (type.getId() < id)
+                id = type.getId();
         }
         id--;
 
@@ -51,35 +55,24 @@ public class SuSyDimensions {
         SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
         spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
-        Cubemap solCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
+        Cubemap solCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/sun/cubemap.png"));
         RenderableCelestialObject SUN = new RenderableCelestialObject(CelestialObjects.SUN, solCubemap)
-                .setAngularSize(20.0f)
-                .setOrbitalPeriod(leoOrbitTicks)
-                .setOrbitalInclination(23.5f);
+                .setAngularSize(20.0f).setOrbitalPeriod(leoOrbitTicks).setOrbitalInclination(23.5f);
 
-        Cubemap moonCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
+        Cubemap moonCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/moon/cubemap.png"));
         long lunarDayTicks = 708_734L;
         RenderableCelestialObject renderableMoon = new RenderableCelestialObject(CelestialObjects.MOON, moonCubemap)
-                .setAngularSize(4.0f)
-                .setOrbitalPeriod(lunarDayTicks)
-                .setOrbitalInclination(5.14f)
-                .setTidallyLocked(true)
-                .setSunReference(SUN);
+                .setAngularSize(4.0f).setOrbitalPeriod(lunarDayTicks).setOrbitalInclination(5.14f)
+                .setTidallyLocked(true).setSunReference(SUN);
 
-        Cubemap earthCubemap = new Cubemap(
-                new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
+        Cubemap earthCubemap = new Cubemap(new ResourceLocation("susy", "textures/space/earth/cubemap.png"));
         RenderableCelestialObject renderableEarth = new RenderableCelestialObject(CelestialObjects.EARTH, earthCubemap)
-                .setAngularSize(180.0f)
-                .setFixedDirection(0, -1, 0);
+                .setAngularSize(180.0f).setFixedDirection(0, -1, 0);
 
         // BEGIN MOON
 
         RenderableCelestialObject renderableEarthMoon = new RenderableCelestialObject(CelestialObjects.EARTH,
-                earthCubemap)
-                        .setAngularSize(15.0f)
-                        .setFixedDirection(0, 1, 0); // straight up overhead
+                earthCubemap).setAngularSize(15.0f).setFixedDirection(0, 1, 0); // straight up overhead
 
         SuSySkyRenderer moonSky = null;
 
@@ -98,32 +91,23 @@ public class SuSyDimensions {
             moonSky.setCelestialObjects(renderableEarthMoon);
 
             // Pitch-black sky – no atmosphere on the Moon.
-            SkyColorData moonColors = new SkyColorData.Builder()
-                    .sunriseColor(0.0, 0.0, 0.0)
-                    .noonColor(0.0, 0.0, 0.0)
-                    .sunsetColor(0.0, 0.0, 0.0)
-                    .midnightColor(0.0, 0.0, 0.0)
-                    .noFog()
-                    .build();
+            SkyColorData moonColors = new SkyColorData.Builder().sunriseColor(0.0, 0.0, 0.0).noonColor(0.0, 0.0, 0.0)
+                    .sunsetColor(0.0, 0.0, 0.0).midnightColor(0.0, 0.0, 0.0).noFog().build();
             moonSky.setSkyColorData(moonColors);
         }
 
-        new PlanetoidHandler(CelestialObjects.MOON).setBiomeList(
-                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
-                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
-                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 80)
-                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)),
-                new SuSyBiomeEntry(SuSyBiomes.LUNAR_KREEP_TERRANE, 25)
-                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
+        new PlanetoidHandler(CelestialObjects.MOON)
+                .setBiomeList(
+                        new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 100)
+                                .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
+                        new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 80)
+                                .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)),
+                        new SuSyBiomeEntry(SuSyBiomes.LUNAR_KREEP_TERRANE, 25)
+                                .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.LEUCOBASALT))
-                .setSuSySkyRenderer(moonSky)
-                .setGravity(0.166f)
-                .setBiomeSize(7)
-                .setTicksPerDay(lunarDayTicks)
-                .setDayLength(29.53f)
-                .setTimeOffset(0.0f)
-                .load();
+                .setSuSySkyRenderer(moonSky).setGravity(0.166f).setBiomeSize(7).setTicksPerDay(lunarDayTicks)
+                .setDayLength(29.53f).setTimeOffset(0.0f).load();
 
         // END MOON
 
@@ -137,15 +121,9 @@ public class SuSyDimensions {
             leoRenderer.setSunObject(SUN);
         }
 
-        new SpaceDimension(802, "low_earth_orbit")
-                .setOrbitTarget(renderableEarth)
-                .setCelestialObjects(SUN, renderableMoon, renderableEarth)
-                .setRenderer(leoRenderer)
-                .setGravity(0.0f)
-                .setAmbientLight(0.02f)
-                .setVacuum(true)
-                .setDayCycle(leoOrbitTicks, 1.53f, 0.0f)
-                .load();
+        new SpaceDimension(802, "low_earth_orbit").setOrbitTarget(renderableEarth)
+                .setCelestialObjects(SUN, renderableMoon, renderableEarth).setRenderer(leoRenderer).setGravity(0.0f)
+                .setAmbientLight(0.02f).setVacuum(true).setDayCycle(leoOrbitTicks, 1.53f, 0.0f).load();
 
         if (!DimensionManager.isDimensionRegistered(802)) {
             DimensionManager.registerDimension(802, spaceType);

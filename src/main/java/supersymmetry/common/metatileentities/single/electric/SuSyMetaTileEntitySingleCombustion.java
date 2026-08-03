@@ -65,7 +65,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
     @Override
     // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
-        if (workable == null) return new FluidTankList(false);
+        if (workable == null)
+            return new FluidTankList(false);
         FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() + 2];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         for (int i = 0; i < fluidImports.length - 2; i++) {
@@ -75,12 +76,10 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             displayedTanks[i] = filteredFluidHandler;
         }
 
-        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false)
-                .setFilter(SuSyFluidFilters.LUBRICANT);
+        this.lubricantTank = new SuSyFilteredFluidTank(1000, this, false).setFilter(SuSyFluidFilters.LUBRICANT);
         fluidImports[fluidImports.length - 2] = lubricantTank;
 
-        this.coolantTank = new SuSyFilteredFluidTank(1000, this, false)
-                .setFilter(SuSyFluidFilters.COOLANT);
+        this.coolantTank = new SuSyFilteredFluidTank(1000, this, false).setFilter(SuSyFluidFilters.COOLANT);
         fluidImports[fluidImports.length - 1] = coolantTank;
 
         this.displayedTankList = new FluidTankList(false, displayedTanks);
@@ -100,7 +99,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
             updateSufficientFluids();
             isFull = energyContainer.getEnergyStored() >= energyContainer.getEnergyCapacity();
 
-            if (workable.isWorking() && !isFull) workCounter += 1;
+            if (workable.isWorking() && !isFull)
+                workCounter += 1;
             if (workCounter == 600) {
                 workCounter = 0;
 
@@ -134,22 +134,19 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         int yOffset = 15;
 
         ModularUI.Builder builder;
-        builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems,
-                exportItems, displayedTankList, exportFluids, yOffset);
-        builder.widget(new LabelWidget(6, 6, getMetaFullName()))
-                .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
+        builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems, exportItems,
+                displayedTankList, exportFluids, yOffset);
+        builder.widget(new LabelWidget(6, 6, getMetaFullName())).bindPlayerInventory(player.inventory, GuiTextures.SLOT,
+                yOffset);
 
         builder.widget(new TankWidget(lubricantTank, 110, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
-                .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)).setAlwaysShowFull(false)
+                .setContainerClicking(true, true)); // Filter should prevent wrong fluids
         builder.widget(new TankWidget(coolantTank, 124, 21, 10, 54)
-                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true))
-                .setAlwaysShowFull(false)
-                .setContainerClicking(true, true));  // Filter should prevent wrong fluids
+                .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)).setAlwaysShowFull(false)
+                .setContainerClicking(true, true)); // Filter should prevent wrong fluids
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
-                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
-                        .setIgnoreColor(true));
+                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO).setIgnoreColor(true));
 
         return builder;
     }
@@ -182,7 +179,8 @@ public class SuSyMetaTileEntitySingleCombustion extends MetaTileEntitySingleComb
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
                 drawEnergy(recipeEUt, false);
-                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                // as recipe starts with progress on 1 this has to be > only not => to
+                // compensate for it
                 if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                 }

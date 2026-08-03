@@ -7,25 +7,21 @@ import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
 import supersymmetry.api.space.RenderableCelestialObject;
 
 /**
- * Represents a cosmic environment for a Minecraft dimension:
- * - The objects visible in the sky (stars, planets, moons)
- * - The main body you're orbiting (e.g. Earth, Mars)
- * - Static or moving background stars
- * - Space environmental settings for rendering and gameplay
+ * Represents a cosmic environment for a Minecraft dimension: - The objects
+ * visible in the sky (stars, planets, moons) - The main body you're orbiting
+ * (e.g. Earth, Mars) - Static or moving background stars - Space environmental
+ * settings for rendering and gameplay
  */
 public class SpaceEnvironment {
 
     /** The main object the player is orbiting (could be a planet or star) */
-    @Nullable
-    public RenderableCelestialObject objectToOrbit;
+    @Nullable public RenderableCelestialObject objectToOrbit;
 
     /** All objects visible in this dimension (planets, moons, stars) */
-    @NonNull
-    public RenderableCelestialObject[] visibleObjects;
+    @NonNull public RenderableCelestialObject[] visibleObjects;
 
     /** Random background stars or skybox texture (optional) */
-    @Nullable
-    public int starfieldTextureId = -1;
+    @Nullable public int starfieldTextureId = -1;
 
     /** Whether to render a cubemap/starfield around the player */
     public boolean renderStarfield = true;
@@ -48,8 +44,7 @@ public class SpaceEnvironment {
     /** Should fog be rendered? Space usually has none. */
     public boolean renderFog = false;
 
-    public SpaceEnvironment(
-                            @Nullable RenderableCelestialObject objectToOrbit,
+    public SpaceEnvironment(@Nullable RenderableCelestialObject objectToOrbit,
                             @NonNull RenderableCelestialObject[] visibleObjects) {
         this.objectToOrbit = objectToOrbit;
         this.visibleObjects = visibleObjects;

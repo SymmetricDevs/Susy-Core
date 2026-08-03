@@ -94,8 +94,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        MultiblockDisplayText.builder(textList, isStructureFormed())
-                .addEnergyUsageExactLine(VA[LV])
+        MultiblockDisplayText.builder(textList, isStructureFormed()).addEnergyUsageExactLine(VA[LV])
                 .addLowPowerLine(energyContainer.getEnergyStored() < VA[LV]);
 
         textList.add(new TextComponentTranslation("susy.landing_pad." + (extractItems ? "extracting" : "inserting")));
@@ -104,10 +103,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         return new ImageCycleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_INSERT_EXTRACT, 2,
-                () -> this.extractItems ? 0 : 1,
-                this::setExtractItems)
-                        .setTooltipHoverString(mode -> mode == 0 ? "susy.landing_pad.extracting" :
-                                "susy.landing_pad.inserting");
+                () -> this.extractItems ? 0 : 1, this::setExtractItems).setTooltipHoverString(
+                        mode -> mode == 0 ? "susy.landing_pad.extracting" : "susy.landing_pad.inserting");
     }
 
     @Override
@@ -182,11 +179,9 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
                 this.isActive(), true);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("     CCCCC     ", "      CCC      ", "      CCC      ")
+        return FactoryBlockPattern.start().aisle("     CCCCC     ", "      CCC      ", "      CCC      ")
                 .aisle("   CCPPPPPCC   ", "     PPPPP     ", "     AAAAA     ")
                 .aisle("  CPPPPPPPPPC  ", "   PPPPPPPPP   ", "   AAAAAAAAA   ")
                 .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
@@ -200,17 +195,14 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
                 .aisle(" CPPPPPPPPPPPC ", "  PPPPPPPPPPP  ", "  AAAAAAAAAAA  ")
                 .aisle("  CPPPPPPPPPC  ", "   PPPPPPPPP   ", "   AAAAAAAAA   ")
                 .aisle("   CCPPPPPCC   ", "     PPPPP     ", "     AAAAA     ")
-                .aisle("     CCSCC     ", "      CCC      ", "      CCC      ")
-                .where(' ', any())
-                .where('A', air())
+                .aisle("     CCSCC     ", "      CCC      ", "      CCC      ").where(' ', any()).where('A', air())
                 .where('S', selfPredicate())
                 .where('C',
                         states(getCasingState()).setMinGlobalLimited(6)
                                 .or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS,
                                         MultiblockAbility.INPUT_ENERGY))
                                 .or(autoAbilities()))
-                .where('P', states(getPadState()))
-                .build();
+                .where('P', states(getPadState())).build();
     }
 
     @Override
@@ -235,8 +227,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     }
 
     public EntityLander getLander() {
-        for (EntityLander entity : this.getWorld().getEntitiesWithinAABB(EntityLander.class,
-                this.landingAreaBB)) {
+        for (EntityLander entity : this.getWorld().getEntitiesWithinAABB(EntityLander.class, this.landingAreaBB)) {
             if (entity.onGround) {
                 return entity;
             }

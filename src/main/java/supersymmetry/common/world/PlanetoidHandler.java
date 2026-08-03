@@ -137,8 +137,7 @@ public class PlanetoidHandler {
 
     public PlanetoidHandler setBiomeList(SuSyBiomeEntry... biomeList) {
         // Convert to standard BiomeEntry list
-        this.biomeList = Arrays.stream(biomeList)
-                .collect(Collectors.toList());
+        this.biomeList = Arrays.stream(biomeList).collect(Collectors.toList());
         return this;
     }
 
@@ -167,8 +166,7 @@ public class PlanetoidHandler {
 
     @Override
     public String toString() {
-        return "Planet Name: " + this.getPlanetName() + " Planet DIM ID: " +
-                this.getDimID();
+        return "Planet Name: " + this.getPlanetName() + " Planet DIM ID: " + this.getDimID();
     }
 
     public PlanetoidHandler setSkyRenderer(IRenderHandler skyRenderer) {

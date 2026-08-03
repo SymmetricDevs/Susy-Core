@@ -23,13 +23,14 @@ public class SkyColorData {
     }
 
     /**
-     * Get the sky color for a given celestial angle (0.0 to 1.0)
-     * 0.0 = sunrise, 0.25 = noon, 0.5 = sunset, 0.75 = midnight
+     * Get the sky color for a given celestial angle (0.0 to 1.0) 0.0 = sunrise,
+     * 0.25 = noon, 0.5 = sunset, 0.75 = midnight
      */
     public Vec3d getSkyColor(float celestialAngle) {
         // Normalize angle to 0-1 range
         celestialAngle = celestialAngle % 1.0F;
-        if (celestialAngle < 0) celestialAngle += 1.0F;
+        if (celestialAngle < 0)
+            celestialAngle += 1.0F;
 
         // Determine which phase we're in and interpolate
         if (celestialAngle < 0.25F) {
@@ -52,13 +53,14 @@ public class SkyColorData {
     }
 
     /**
-     * Get sunrise/sunset colors (vanilla Minecraft style)
-     * Returns null if no sunrise/sunset colors should be rendered
+     * Get sunrise/sunset colors (vanilla Minecraft style) Returns null if no
+     * sunrise/sunset colors should be rendered
      */
     public float[] getSunriseSunsetColors(float celestialAngle) {
         // Only show sunrise/sunset colors near those times
         celestialAngle = celestialAngle % 1.0F;
-        if (celestialAngle < 0) celestialAngle += 1.0F;
+        if (celestialAngle < 0)
+            celestialAngle += 1.0F;
 
         // Sunrise period (around 0.0, from -0.1 to 0.1 normalized)
         if (celestialAngle > 0.9F || celestialAngle < 0.1F) {
@@ -72,12 +74,8 @@ public class SkyColorData {
             // Peak intensity at exactly sunrise
             float intensity = 1.0F - Math.abs(normalizedAngle - 0.5F) * 2.0F;
 
-            return new float[] {
-                    (float) sunriseColor.x * intensity,
-                    (float) sunriseColor.y * intensity,
-                    (float) sunriseColor.z * intensity,
-                    intensity
-            };
+            return new float[] { (float) sunriseColor.x * intensity, (float) sunriseColor.y * intensity,
+                    (float) sunriseColor.z * intensity, intensity };
         }
 
         // Sunset period (around 0.5, from 0.4 to 0.6)
@@ -85,12 +83,8 @@ public class SkyColorData {
             float normalizedAngle = (celestialAngle - 0.4F) / 0.2F;
             float intensity = 1.0F - Math.abs(normalizedAngle - 0.5F) * 2.0F;
 
-            return new float[] {
-                    (float) sunsetColor.x * intensity,
-                    (float) sunsetColor.y * intensity,
-                    (float) sunsetColor.z * intensity,
-                    intensity
-            };
+            return new float[] { (float) sunsetColor.x * intensity, (float) sunsetColor.y * intensity,
+                    (float) sunsetColor.z * intensity, intensity };
         }
 
         // No sunrise/sunset colors during other times
@@ -109,19 +103,17 @@ public class SkyColorData {
      * Linear interpolation between two colors
      */
     private Vec3d lerpColor(Vec3d start, Vec3d end, float t) {
-        return new Vec3d(
-                start.x + (end.x - start.x) * t,
-                start.y + (end.y - start.y) * t,
+        return new Vec3d(start.x + (end.x - start.x) * t, start.y + (end.y - start.y) * t,
                 start.z + (end.z - start.z) * t);
     }
 
     public static class Builder {
 
         private Vec3d sunriseColor = new Vec3d(1.0, 0.5, 0.2); // Orange
-        private Vec3d noonColor = new Vec3d(0.5, 0.7, 1.0);     // Light blue
-        private Vec3d sunsetColor = new Vec3d(1.0, 0.3, 0.1);   // Red-orange
+        private Vec3d noonColor = new Vec3d(0.5, 0.7, 1.0); // Light blue
+        private Vec3d sunsetColor = new Vec3d(1.0, 0.3, 0.1); // Red-orange
         private Vec3d midnightColor = new Vec3d(0.0, 0.0, 0.1); // Dark blue
-        private Vec3d fogColor = new Vec3d(0.8, 0.8, 0.8);      // Light gray
+        private Vec3d fogColor = new Vec3d(0.8, 0.8, 0.8); // Light gray
         private boolean useFogColor = false;
 
         public Builder sunriseColor(double r, double g, double b) {

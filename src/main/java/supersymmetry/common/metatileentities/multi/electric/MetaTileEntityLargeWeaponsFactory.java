@@ -1,11 +1,10 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -34,31 +33,18 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
         return new MetaTileEntityLargeWeaponsFactory(metaTileEntityId);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(4);
-        return FactoryBlockPattern.start()
-                .aisle("FBF", "FFF")
-                .aisle("CBC", " A ")
-                .aisle("CBC", " A ")
-                .aisle("CBC", "CAC")
-                .aisle("CBC", "CAC")
-                .aisle("CBC", " A ")
-                .aisle("CBC", " A ")
-                .aisle("DDD", "DSD")
-                .where('S', selfPredicate())
-                .where('A', casingPredicate)
+        return FactoryBlockPattern.start().aisle("FBF", "FFF").aisle("CBC", " A ").aisle("CBC", " A ")
+                .aisle("CBC", "CAC").aisle("CBC", "CAC").aisle("CBC", " A ").aisle("CBC", " A ").aisle("DDD", "DSD")
+                .where('S', selfPredicate()).where('A', casingPredicate)
                 .where('B',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('C', frames(Materials.Steel)
-                        .or(autoAbilities(true, true, false, false, false, false, false)))
-                .where('D', casingPredicate
-                        .or(autoAbilities(false, false, true, false, true, false, false)))
-                .where('F', casingPredicate
-                        .or(autoAbilities(false, false, false, true, false, false, false)))
-                .where(' ', any())
-                .build();
+                .where('C', frames(Materials.Steel).or(autoAbilities(true, true, false, false, false, false, false)))
+                .where('D', casingPredicate.or(autoAbilities(false, false, true, false, true, false, false)))
+                .where('F', casingPredicate.or(autoAbilities(false, false, false, true, false, false, false)))
+                .where(' ', any()).build();
     }
 
     @Override
@@ -66,8 +52,7 @@ public class MetaTileEntityLargeWeaponsFactory extends RecipeMapMultiblockContro
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LARGE_WEAPONS_FACTORY_OVERLAY;
     }

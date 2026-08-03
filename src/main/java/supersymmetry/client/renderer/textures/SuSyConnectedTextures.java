@@ -43,61 +43,28 @@ public class SuSyConnectedTextures {
     }
 
     public static void init() {
-        SOLID_STEEL_CASING_CTM.override(susyId("cluster_mill"),
-                susyId("flying_shear"),
-                susyId("rolling_mill"),
-                susyId("slab_mold"),
-                susyId("billet_mold"),
-                susyId("turning_zone"),
-                susyId("arc_furnace_complex"),
-                susyId("clarifier"),
-                susyId("coking_tower"),
-                susyId("drone_pad"),
-                susyId("dumper"),
-                susyId("electrolytic_cell"),
-                susyId("evaporation_pool"),
-                susyId("flare_stack"),
-                susyId("gas_atomizer"),
-                susyId("gravity_separator"),
-                susyId("heat_exchanger"),
-                susyId("heat_radiator"),
-                susyId("injection_molder"),
-                susyId("large_fluid_pump"),
-                susyId("large_weapons_factory"),
-                susyId("metallurgical_converter"),
-                susyId("mining_drill"),
-                susyId("natural_draft_cooling_tower"),
-                susyId("ore_sorter"),
-                susyId("polymerization_tank"),
-                susyId("quarry"),
-                susyId("railroad_engineering_station"),
-                susyId("rocket_assembler"),
-                susyId("rocket_programmer"),
-                susyId("rotary_kiln"),
-                susyId("smoke_stack"),
-                susyId("vacuum_distillation_tower"),
-                susyId("landing_pad"),
-                susyId("advanced_arc_furnace"),
-                susyId("internal_combustion_generator"),
-                susyId("large_steam_hammer"),
-                susyId("layup_machine"));
-        FROST_PROOF_CASING_CTM.override(susyId("condenser"),
-                susyId("high_pressure_cryogenic_distillation_plant"),
+        SOLID_STEEL_CASING_CTM.override(susyId("cluster_mill"), susyId("flying_shear"), susyId("rolling_mill"),
+                susyId("slab_mold"), susyId("billet_mold"), susyId("turning_zone"), susyId("arc_furnace_complex"),
+                susyId("clarifier"), susyId("coking_tower"), susyId("drone_pad"), susyId("dumper"),
+                susyId("electrolytic_cell"), susyId("evaporation_pool"), susyId("flare_stack"), susyId("gas_atomizer"),
+                susyId("gravity_separator"), susyId("heat_exchanger"), susyId("heat_radiator"),
+                susyId("injection_molder"), susyId("large_fluid_pump"), susyId("large_weapons_factory"),
+                susyId("metallurgical_converter"), susyId("mining_drill"), susyId("natural_draft_cooling_tower"),
+                susyId("ore_sorter"), susyId("polymerization_tank"), susyId("quarry"),
+                susyId("railroad_engineering_station"), susyId("rocket_assembler"), susyId("rocket_programmer"),
+                susyId("rotary_kiln"), susyId("smoke_stack"), susyId("vacuum_distillation_tower"),
+                susyId("landing_pad"), susyId("advanced_arc_furnace"), susyId("internal_combustion_generator"),
+                susyId("large_steam_hammer"), susyId("layup_machine"));
+        FROST_PROOF_CASING_CTM.override(susyId("condenser"), susyId("high_pressure_cryogenic_distillation_plant"),
                 susyId("low_pressure_cryogenic_distillation_plant"),
-                susyId("single_column_cryogenic_distillation_plant"),
-                susyId("magnetic_refrigerator"),
+                susyId("single_column_cryogenic_distillation_plant"), susyId("magnetic_refrigerator"),
                 susyId("pressure_swing_adsorber"));
-        CLEAN_STAINLESS_STEEL_CASING_CTM.override(susyId("catalytic_reformer"),
-                susyId("curtain_coater"),
-                susyId("froth_flotation_tank"),
-                susyId("mixer_settler"),
-                susyId("quencher"),
+        CLEAN_STAINLESS_STEEL_CASING_CTM.override(susyId("catalytic_reformer"), susyId("curtain_coater"),
+                susyId("froth_flotation_tank"), susyId("mixer_settler"), susyId("quencher"),
                 susyId("sieve_distillation_tower"));
         STEEL_TURBINE_CASING_CTM.override(susyId("basic_steam_turbine"));
-        TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"),
-                susyId("gas_turbine"));
-        INERT_PTFE_CASING_CTM.override(susyId("fluidized_bed_reactor"),
-                susyId("blender"));
+        TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"), susyId("gas_turbine"));
+        INERT_PTFE_CASING_CTM.override(susyId("fluidized_bed_reactor"), susyId("blender"));
         SILICON_CARBIDE_CASING_CTM.override(susyId("high_temperature_distillation_tower"),
                 susyId("hot_isostatic_press"));
         WOODEN_COAGULATION_TANK_WALL_CTM.override(susyId("coagulation_tank"));
@@ -118,9 +85,8 @@ public class SuSyConnectedTextures {
         registerCustomOverride(susyId("multi_stage_flash_distiller"), SuSyConnectedTextures::msfdHandler);
     }
 
-    @NotNull
-    private static ICubeRenderer msfdHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
+    @NotNull private static ICubeRenderer msfdHandler(@Nullable IMultiblockPart part) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
                 return Textures.CLEAN_STAINLESS_STEEL_CASING;
@@ -129,9 +95,8 @@ public class SuSyConnectedTextures {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NotNull
-    private static ICubeRenderer millingHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
+    @NotNull private static ICubeRenderer millingHandler(@Nullable IMultiblockPart part) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
                 return SOLID_STEEL_CASING_CTM;
@@ -140,9 +105,8 @@ public class SuSyConnectedTextures {
         return CLEAN_STAINLESS_STEEL_CASING_CTM;
     }
 
-    @NotNull
-    private static ICubeRenderer strandMoldHandler(@Nullable IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
+    @NotNull private static ICubeRenderer strandMoldHandler(@Nullable IMultiblockPart part) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             MultiblockAbility<?> ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.IMPORT_FLUIDS || ability == MultiblockAbility.EXPORT_FLUIDS ||
                     ability == SuSyMultiblockAbilities.STRAND_EXPORT) {

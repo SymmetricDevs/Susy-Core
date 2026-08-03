@@ -43,12 +43,7 @@ public class NoEnergyMultiblockRecipeLogic extends MultiblockRecipeLogic {
     @Override
     protected int @NotNull [] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
                                                    long maxVoltage, int recipeDuration, int amountOC) {
-        return standardOverclockingLogic(
-                1,
-                getMaxVoltage(),
-                recipeDuration,
-                amountOC,
-                getOverclockingDurationDivisor(),
+        return standardOverclockingLogic(1, getMaxVoltage(), recipeDuration, amountOC, getOverclockingDurationDivisor(),
                 getOverclockingVoltageMultiplier()
 
         );

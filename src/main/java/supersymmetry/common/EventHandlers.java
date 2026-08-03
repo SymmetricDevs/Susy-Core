@@ -65,7 +65,8 @@ public class EventHandlers {
 
             data.setBoolean(FIRST_SPAWN, true);
             playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
-            if (event.player.isCreative()) return;
+            if (event.player.isCreative())
+                return;
 
             GregTechAPI.networkHandler.sendTo(new SPacketFirstJoin(), (EntityPlayerMP) event.player);
 
@@ -126,7 +127,8 @@ public class EventHandlers {
             return;
         }
 
-        // to be replaced with a proper setter/getter in grs, we will have invasions in other later dims as well
+        // to be replaced with a proper setter/getter in grs, we will have invasions in
+        // other later dims as well
         if (world.provider.getDimension() != 0) {
             return;
         }
@@ -144,8 +146,10 @@ public class EventHandlers {
     }
 
     // Ticks to wait after moving the player into the destination dimension before
-    // re-mounting them. transferPlayerToDimension triggers a client respawn that tears
-    // down and rebuilds the client world (and player entity) twice; mounting before that
+    // re-mounting them. transferPlayerToDimension triggers a client respawn that
+    // tears
+    // down and rebuilds the client world (and player entity) twice; mounting before
+    // that
     // settles binds the passenger to a transient client player that is immediately
     // discarded, leaving the player frozen with a phantom "unmount" prompt.
     private static final int MOUNT_DELAY = 4;
@@ -167,15 +171,11 @@ public class EventHandlers {
                 if (mount.dimension != passenger.dimension && now - data.time > 2) {
                     WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
                     passenger.dismountRidingEntity();
-                    passenger.setLocationAndAngles(mount.getPosition().getX(),
-                            mount.getPosition().getY(),
-                            mount.getPosition().getZ(),
-                            mount.rotationYaw,
-                            mount.rotationPitch);
+                    passenger.setLocationAndAngles(mount.getPosition().getX(), mount.getPosition().getY(),
+                            mount.getPosition().getZ(), mount.rotationYaw, mount.rotationPitch);
                     passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
-                            mount.dimension,
-                            new GTTeleporter(newWorld, mount.getPosition().getX(), mount.getPosition().getY(),
-                                    mount.getPosition().getZ()));
+                            mount.dimension, new GTTeleporter(newWorld, mount.getPosition().getX(),
+                                    mount.getPosition().getY(), mount.getPosition().getZ()));
                     Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
                     if (realMount != null) {
                         realMount.forceSpawn = true;
@@ -251,8 +251,10 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         World world = event.getWorld();
-        if (world.isRemote) return;
-        if (!(world.provider instanceof WorldProviderPlanet)) return;
+        if (world.isRemote)
+            return;
+        if (!(world.provider instanceof WorldProviderPlanet))
+            return;
         AtmosphereWorldData.get(world).getGraph().onBlockBreak(world, event.getPos());
         AtmosphereWorldData.get(world).markDirty();
     }
@@ -275,8 +277,9 @@ public class EventHandlers {
     }
 
     /**
-     * Processes the lander spawn queue, decrementing timers and spawning landers when ready.
-     * This method handles cross-dimensional spawning and ensures chunks are loaded.
+     * Processes the lander spawn queue, decrementing timers and spawning landers
+     * when ready. This method handles cross-dimensional spawning and ensures chunks
+     * are loaded.
      */
     private static void processLanderSpawnQueue(WorldServer world) {
         LanderSpawnQueue queue = LanderSpawnQueue.get(world);
@@ -307,8 +310,8 @@ public class EventHandlers {
     }
 
     /**
-     * Spawns a lander entity based on the provided spawn entry.
-     * Handles cross-dimensional spawning and inventory loading.
+     * Spawns a lander entity based on the provided spawn entry. Handles
+     * cross-dimensional spawning and inventory loading.
      */
     private static void spawnLander(WorldServer originWorld, LanderSpawnEntry entry) {
         try {
@@ -339,8 +342,8 @@ public class EventHandlers {
             // Spawn the lander
             targetWorld.spawnEntity(lander);
 
-            SusyLog.logger.info("Spawned lander at ({}, {}, {}) in dimension {}",
-                    entry.getX(), entry.getY(), entry.getZ(), entry.getDimensionId());
+            SusyLog.logger.info("Spawned lander at ({}, {}, {}) in dimension {}", entry.getX(), entry.getY(),
+                    entry.getZ(), entry.getDimensionId());
 
         } catch (Exception e) {
             SusyLog.logger.error("Error spawning lander: {}", entry, e);

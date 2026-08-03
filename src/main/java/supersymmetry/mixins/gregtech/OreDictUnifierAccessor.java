@@ -16,8 +16,7 @@ public interface OreDictUnifierAccessor {
 
     @Accessor("materialUnificationInfo")
     @Final
-    @NotNull
-    static Map<ItemAndMetadata, ItemMaterialInfo> getUnificationInfo() {
+    @NotNull static Map<ItemAndMetadata, ItemMaterialInfo> getUnificationInfo() {
         throw new AssertionError();
     }
 }

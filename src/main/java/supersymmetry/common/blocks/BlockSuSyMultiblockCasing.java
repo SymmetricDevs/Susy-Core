@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -66,20 +65,31 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
 
         SILICON_CARBIDE_CASING("silicon_carbide_casing"),
         SIEVE_TRAY("sieve_tray"),
-        STRUCTURAL_PACKING("structural_packing"),
+        STRUCTURAL_PACKING(
+                "structural_packing"),
         ULV_STRUCTURAL_CASING("ulv_structural_casing"),
-        DRONE_PAD("drone_pad"),
+        DRONE_PAD(
+                "drone_pad"),
         MONEL_500_CASING("monel_casing"),
-        MONEL_500_PIPE("monel_casing_pipe"),
+        MONEL_500_PIPE(
+                "monel_casing_pipe"),
         COPPER_PIPE("copper_casing_pipe"),
-        HEAVY_DUTY_PAD("heavy_duty_pad"),
-        TABULAR_ALUMINA_REFRACTORY("tabular_alumina_refractory"),
-        COALESCENCE_PLATE("coalescence_plate"),
-        SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory"),
-        HYDROSTATIC_CASING("hydrostatic_casing"),
-        ALUMINIUM_GEARBOX("aluminium_gearbox"),
-        HARDENED_TITANIUM_CASING("hardened_titanium_casing"),
-        SCREENER_DECK("screener_deck");
+        HEAVY_DUTY_PAD(
+                "heavy_duty_pad"),
+        TABULAR_ALUMINA_REFRACTORY(
+                "tabular_alumina_refractory"),
+        COALESCENCE_PLATE(
+                "coalescence_plate"),
+        SYNTHETIC_MULLITE_REFRACTORY(
+                "synthetic_mullite_refractory"),
+        HYDROSTATIC_CASING(
+                "hydrostatic_casing"),
+        ALUMINIUM_GEARBOX(
+                "aluminium_gearbox"),
+        HARDENED_TITANIUM_CASING(
+                "hardened_titanium_casing"),
+        SCREENER_DECK(
+                "screener_deck");
 
         private final String name;
 
@@ -87,8 +97,7 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
             this.name = name;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

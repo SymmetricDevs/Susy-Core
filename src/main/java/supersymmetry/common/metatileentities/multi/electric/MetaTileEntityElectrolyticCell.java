@@ -2,14 +2,14 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -44,16 +44,10 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCCCC", "CCCCC")
-                .aisle("CCCCC", "CPPPC", "CPPPC")
-                .aisle("CCCCC", "CPPPC", "CPPPC")
-                .aisle("CCCCC", "CCSCC", "CCCCC")
-                .where('S', this.selfPredicate())
+        return FactoryBlockPattern.start().aisle("CCCCC", "CCCCC", "CCCCC").aisle("CCCCC", "CPPPC", "CPPPC")
+                .aisle("CCCCC", "CPPPC", "CPPPC").aisle("CCCCC", "CCSCC", "CCCCC").where('S', this.selfPredicate())
                 .where('P', states(this.getPipeCasingState()))
-                .where('C', states(this.getCasingState()).setMinGlobalLimited(30)
-                        .or(this.autoAbilities()))
-                .build();
+                .where('C', states(this.getCasingState()).setMinGlobalLimited(30).or(this.autoAbilities())).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -73,8 +67,7 @@ public class MetaTileEntityElectrolyticCell extends RecipeMapMultiblockControlle
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ELECTROLYTIC_CELL_OVERLAY;
     }

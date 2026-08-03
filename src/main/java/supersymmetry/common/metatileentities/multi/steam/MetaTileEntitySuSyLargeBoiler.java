@@ -51,7 +51,9 @@ import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 
 public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
-                                           implements IProgressBarMultiblock, IRedstoneControllable {
+                                           implements
+                                           IProgressBarMultiblock,
+                                           IRedstoneControllable {
 
     public final SuSyBoilerType boilerType;
     protected SuSyBoilerLogic recipeLogic;
@@ -71,31 +73,26 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
         signalNames.add("set25");
         signalNames.add("set100");
 
-        signalOps.add(
-                (self) -> {
-                    self.throttlePercentage = 25;
-                });
-        signalOps.add(
-                (self) -> {
-                    self.throttlePercentage = 100;
-                });
+        signalOps.add((self) -> {
+            self.throttlePercentage = 25;
+        });
+        signalOps.add((self) -> {
+            self.throttlePercentage = 100;
+        });
 
         for (Integer i : steps) {
             signalNames.add(String.format("incr%d", i));
             signalNames.add(String.format("dec%d", i));
-            signalOps.add(
-                    (self) -> {
-                        self.throttlePercentage = Math.clamp(self.throttlePercentage + i, 25, 100);
-                    });
-            signalOps.add(
-                    (self) -> {
-                        self.throttlePercentage = Math.clamp(self.throttlePercentage - i, 25, 100);
-                    });
+            signalOps.add((self) -> {
+                self.throttlePercentage = Math.clamp(self.throttlePercentage + i, 25, 100);
+            });
+            signalOps.add((self) -> {
+                self.throttlePercentage = Math.clamp(self.throttlePercentage - i, 25, 100);
+            });
         }
     }
 
-    public MetaTileEntitySuSyLargeBoiler(
-                                         ResourceLocation metaTileEntityId, SuSyBoilerType boilerType) {
+    public MetaTileEntitySuSyLargeBoiler(ResourceLocation metaTileEntityId, SuSyBoilerType boilerType) {
         super(metaTileEntityId);
         this.boilerType = boilerType;
         this.recipeLogic = new SuSyBoilerLogic(this);
@@ -157,44 +154,30 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         MultiblockDisplayText.builder(textList, isStructureFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                .addCustom(
-                        tl -> {
-                            if (isStructureFormed()) {
-                                // Steam Output line
-                                ITextComponent steamOutput = TextComponentUtil.stringWithColor(
-                                        TextFormatting.AQUA,
-                                        TextFormattingUtil.formatNumbers(recipeLogic.getLastTickSteam()) + " L/t");
+                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive()).addCustom(tl -> {
+                    if (isStructureFormed()) {
+                        // Steam Output line
+                        ITextComponent steamOutput = TextComponentUtil.stringWithColor(TextFormatting.AQUA,
+                                TextFormattingUtil.formatNumbers(recipeLogic.getLastTickSteam()) + " L/t");
 
-                                tl.add(
-                                        TextComponentUtil.translationWithColor(
-                                                TextFormatting.GRAY,
-                                                "gregtech.multiblock.large_boiler.steam_output",
-                                                steamOutput));
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "gregtech.multiblock.large_boiler.steam_output", steamOutput));
 
-                                // Efficiency line
-                                ITextComponent efficiency = TextComponentUtil.stringWithColor(
-                                        getNumberColor(recipeLogic.getHeatScaled()),
-                                        recipeLogic.getHeatScaled() + "%");
+                        // Efficiency line
+                        ITextComponent efficiency = TextComponentUtil.stringWithColor(
+                                getNumberColor(recipeLogic.getHeatScaled()), recipeLogic.getHeatScaled() + "%");
 
-                                tl.add(
-                                        TextComponentUtil.translationWithColor(
-                                                TextFormatting.GRAY,
-                                                "gregtech.multiblock.large_boiler.efficiency",
-                                                efficiency));
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "gregtech.multiblock.large_boiler.efficiency", efficiency));
 
-                                // Throttle line
-                                ITextComponent throttle = TextComponentUtil.stringWithColor(
-                                        getNumberColor(getThrottle()), getThrottle() + "%");
+                        // Throttle line
+                        ITextComponent throttle = TextComponentUtil.stringWithColor(getNumberColor(getThrottle()),
+                                getThrottle() + "%");
 
-                                tl.add(
-                                        TextComponentUtil.translationWithColor(
-                                                TextFormatting.GRAY,
-                                                "gregtech.multiblock.large_boiler.throttle",
-                                                throttle));
-                            }
-                        })
-                .addWorkingStatusLine();
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "gregtech.multiblock.large_boiler.throttle", throttle));
+                    }
+                }).addWorkingStatusLine();
     }
 
     private TextFormatting getNumberColor(int number) {
@@ -215,12 +198,10 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
         if (isStructureFormed()) {
             int[] waterAmount = getWaterAmount();
             if (waterAmount[0] == 0) {
-                textList.add(
-                        TextComponentUtil.translationWithColor(
-                                TextFormatting.YELLOW, "gregtech.multiblock.large_boiler.no_water"));
-                textList.add(
-                        TextComponentUtil.translationWithColor(
-                                TextFormatting.GRAY, "gregtech.multiblock.large_boiler.explosion_tooltip"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                        "gregtech.multiblock.large_boiler.no_water"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gregtech.multiblock.large_boiler.explosion_tooltip"));
             }
         }
     }
@@ -228,14 +209,12 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         WidgetGroup group = new WidgetGroup(x, y, width, height);
-        group.addWidget(
-                new ClickButtonWidget(0, 0, 9, 18, "", this::decrementThrottle)
-                        .setButtonTexture(GuiTextures.BUTTON_THROTTLE_MINUS)
-                        .setTooltipText("gregtech.multiblock.large_boiler.throttle_decrement"));
-        group.addWidget(
-                new ClickButtonWidget(9, 0, 9, 18, "", this::incrementThrottle)
-                        .setButtonTexture(GuiTextures.BUTTON_THROTTLE_PLUS)
-                        .setTooltipText("gregtech.multiblock.large_boiler.throttle_increment"));
+        group.addWidget(new ClickButtonWidget(0, 0, 9, 18, "", this::decrementThrottle)
+                .setButtonTexture(GuiTextures.BUTTON_THROTTLE_MINUS)
+                .setTooltipText("gregtech.multiblock.large_boiler.throttle_decrement"));
+        group.addWidget(new ClickButtonWidget(9, 0, 9, 18, "", this::incrementThrottle)
+                .setButtonTexture(GuiTextures.BUTTON_THROTTLE_PLUS)
+                .setTooltipText("gregtech.multiblock.large_boiler.throttle_increment"));
         return group;
     }
 
@@ -254,28 +233,17 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("XXX", "CCC", "CCC", "CCC")
-                .aisle("XXX", "CPC", "CPC", "CCC")
-                .aisle("XXX", "CSC", "CCC", "CCC")
-                .where('S', selfPredicate())
-                .where('P', states(boilerType.pipeState))
-                .where(
-                        'X',
-                        states(boilerType.fireboxState)
-                                .setMinGlobalLimited(4)
-                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
-                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
-                                .or(autoAbilities())) // muffler, maintenance
-                .where(
-                        'C',
-                        states(boilerType.casingState)
-                                .setMinGlobalLimited(20)
+        return FactoryBlockPattern.start().aisle("XXX", "CCC", "CCC", "CCC").aisle("XXX", "CPC", "CPC", "CCC")
+                .aisle("XXX", "CSC", "CCC", "CCC").where('S', selfPredicate()).where('P', states(boilerType.pipeState))
+                .where('X', states(boilerType.fireboxState).setMinGlobalLimited(4)
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1)).or(autoAbilities())) // muffler,
+                                                                                                                   // maintenance
+                .where('C',
+                        states(boilerType.casingState).setMinGlobalLimited(20)
                                 .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1))
-                                .or(
-                                        MetaTileEntityComponentRedstoneController.controllerPredicate()
-                                                .setMaxGlobalLimited(4)
-                                                .setPreviewCount(0)))
+                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
+                                        .setMaxGlobalLimited(4).setPreviewCount(0)))
                 .build();
     }
 
@@ -285,37 +253,24 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     }
 
     @Override
-    public void addInformation(
-                               ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(
-                I18n.format(
-                        "gregtech.multiblock.large_boiler.heat_time_tooltip",
-                        boilerType.getTicksToBoiling() / 20));
-        tooltip.add(
-                I18n.format("gregtech.universal.tooltip.base_production_fluid", boilerType.steamPerTick()));
-        tooltip.add(
-                TooltipHelper.BLINKING_RED + I18n.format("gregtech.multiblock.large_boiler.explosion_tooltip"));
+                I18n.format("gregtech.multiblock.large_boiler.heat_time_tooltip", boilerType.getTicksToBoiling() / 20));
+        tooltip.add(I18n.format("gregtech.universal.tooltip.base_production_fluid", boilerType.steamPerTick()));
+        tooltip.add(TooltipHelper.BLINKING_RED + I18n.format("gregtech.multiblock.large_boiler.explosion_tooltip"));
     }
 
     @Override
-    public void renderMetaTileEntity(
-                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay()
-                .renderOrientedState(
-                        renderState,
-                        translation,
-                        pipeline,
-                        getFrontFacing(),
-                        isActive(),
-                        recipeLogic.isWorkingEnabled());
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), isActive(),
+                recipeLogic.isWorkingEnabled());
     }
 
     @SideOnly(Side.CLIENT)
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return boilerType.frontOverlay;
     }
@@ -403,9 +358,11 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
 
     @Override
     public double getFillPercentage(int index) {
-        if (!isStructureFormed()) return 0;
+        if (!isStructureFormed())
+            return 0;
         int[] waterAmount = getWaterAmount();
-        if (waterAmount[1] == 0) return 0; // no water capacity
+        if (waterAmount[1] == 0)
+            return 0; // no water capacity
         return (1.0 * waterAmount[0]) / waterAmount[1];
     }
 
@@ -417,38 +374,35 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     @Override
     public void addBarHoverText(List<ITextComponent> hoverList, int index) {
         if (!isStructureFormed()) {
-            hoverList.add(
-                    TextComponentUtil.translationWithColor(
-                            TextFormatting.GRAY, "gregtech.multiblock.invalid_structure"));
+            hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gregtech.multiblock.invalid_structure"));
         } else {
             int[] waterAmount = getWaterAmount();
             if (waterAmount[0] == 0) {
-                hoverList.add(
-                        TextComponentUtil.translationWithColor(
-                                TextFormatting.YELLOW, "gregtech.multiblock.large_boiler.no_water"));
+                hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                        "gregtech.multiblock.large_boiler.no_water"));
             } else {
-                ITextComponent waterInfo = TextComponentUtil.translationWithColor(
-                        TextFormatting.BLUE, "%s / %s L", waterAmount[0], waterAmount[1]);
-                hoverList.add(
-                        TextComponentUtil.translationWithColor(
-                                TextFormatting.GRAY,
-                                "gregtech.multiblock.large_boiler.water_bar_hover",
-                                waterInfo));
+                ITextComponent waterInfo = TextComponentUtil.translationWithColor(TextFormatting.BLUE, "%s / %s L",
+                        waterAmount[0], waterAmount[1]);
+                hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gregtech.multiblock.large_boiler.water_bar_hover", waterInfo));
             }
         }
     }
 
     /**
-     * Returns an int[] of {AmountFilled, Capacity} where capacity is the sum of hatches with some
-     * water in them. If there is no water in the boiler (or the structure isn't formed, both of these
-     * values will be zero.
+     * Returns an int[] of {AmountFilled, Capacity} where capacity is the sum of
+     * hatches with some water in them. If there is no water in the boiler (or the
+     * structure isn't formed, both of these values will be zero.
      */
     private int[] getWaterAmount() {
-        if (!isStructureFormed()) return new int[] { 0, 0 };
+        if (!isStructureFormed())
+            return new int[] { 0, 0 };
         List<IFluidTank> tanks = getAbilities(MultiblockAbility.IMPORT_FLUIDS);
         int filled = 0, capacity = 0;
         for (IFluidTank tank : tanks) {
-            if (tank == null || tank.getFluid() == null) continue;
+            if (tank == null || tank.getFluid() == null)
+                continue;
             if (CommonFluidFilters.BOILER_FLUID.test(tank.getFluid())) {
                 filled += tank.getFluidAmount();
                 capacity += tank.getCapacity();

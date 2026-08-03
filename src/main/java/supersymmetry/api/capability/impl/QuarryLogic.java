@@ -40,10 +40,8 @@ public class QuarryLogic {
     }
 
     public void init() {
-        this.origin = quarryTileEntity.getPos()
-                .offset(quarryTileEntity.getFrontFacing().getOpposite(), 2) // inside 2
-                .offset(quarryTileEntity.getFrontFacing().getOpposite().rotateY(), -getQuarryWidth() / 2)
-                .add(0, -2, 0);
+        this.origin = quarryTileEntity.getPos().offset(quarryTileEntity.getFrontFacing().getOpposite(), 2) // inside 2
+                .offset(quarryTileEntity.getFrontFacing().getOpposite().rotateY(), -getQuarryWidth() / 2).add(0, -2, 0);
         Vec3i front = quarryTileEntity.getFrontFacing().getOpposite().getDirectionVec();
         Vec3i right = quarryTileEntity.getFrontFacing().getOpposite().rotateY().getDirectionVec();
         this.layerProgression = new BlockPos(front.getX() + right.getX(), 0, front.getZ() + right.getZ());
@@ -67,7 +65,8 @@ public class QuarryLogic {
         }
 
         // Don't break TEs or unbreakable (hardness -1) blocks
-        if (!state.getBlock().hasTileEntity(state) & state.getBlock().getBlockHardness(state, world, currentPos) != -1F) {
+        if (!state.getBlock().hasTileEntity(state) &
+                state.getBlock().getBlockHardness(state, world, currentPos) != -1F) {
             GTTransferUtils.addItemsToItemHandler(quarryTileEntity.getOutputInventory(), false,
                     state.getBlock().getDrops(world, currentPos, state, 0));
             world.destroyBlock(currentPos, false);
@@ -123,10 +122,8 @@ public class QuarryLogic {
     }
 
     private BlockPos getCurrentPos() {
-        return this.origin.add(new Vec3i(
-                column * this.layerProgression.getX(),
-                -layer,
-                row * this.layerProgression.getZ()));
+        return this.origin
+                .add(new Vec3i(column * this.layerProgression.getX(), -layer, row * this.layerProgression.getZ()));
     }
 
     private int getDimensionLowestY() {

@@ -53,8 +53,7 @@ public class ItemCostWidget extends Widget {
     // shouldnt be rendered when the recipe is in progress
     public BooleanSupplier shouldRender;
 
-    public ItemCostWidget(
-                          Size size, Position pos, RecipeProvider provider, BooleanSupplier shouldRender) {
+    public ItemCostWidget(Size size, Position pos, RecipeProvider provider, BooleanSupplier shouldRender) {
         super(pos, size);
         this.provider = provider;
         this.shouldRender = shouldRender;
@@ -118,50 +117,37 @@ public class ItemCostWidget extends Widget {
         Recipe recipe = this.provider.get();
         if (recipe == null) {
             this.lastSyncedItems.clear();
-            writeUpdateInfo(
-                    100,
-                    buf -> {
-                        buf.writeInt(0);
-                    });
+            writeUpdateInfo(100, buf -> {
+                buf.writeInt(0);
+            });
             return;
         }
         List<ItemStack> items = new ArrayList<>();
-        recipe.getInputs().stream()
-                .forEach(
-                        x -> {
-                            for (ItemStack i : x.getInputStacks()) {
-                                items.add(i);
-                            }
-                        });
+        recipe.getInputs().stream().forEach(x -> {
+            for (ItemStack i : x.getInputStacks()) {
+                items.add(i);
+            }
+        });
 
-        if (!items.stream()
-                .allMatch(
-                        x -> lastSyncedItems.stream()
-                                .map(y -> y.toString())
-                                .collect(Collectors.toList())
-                                .contains(x.toString())) ||
-                (items.size() == 0 && lastSyncedItems.size() == 0)) {
-            this.writeUpdateInfo(
-                    100,
-                    buf -> {
-                        buf.writeInt(items.size());
-                        items.forEach(x -> buf.writeCompoundTag(x.writeToNBT(new NBTTagCompound())));
-                    });
+        if (!items.stream().allMatch(x -> lastSyncedItems.stream().map(y -> y.toString()).collect(Collectors.toList())
+                .contains(x.toString())) || (items.size() == 0 && lastSyncedItems.size() == 0)) {
+            this.writeUpdateInfo(100, buf -> {
+                buf.writeInt(items.size());
+                items.forEach(x -> buf.writeCompoundTag(x.writeToNBT(new NBTTagCompound())));
+            });
             this.lastSyncedItems = items;
         }
     }
 
     @Override
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
-        if (!this.shouldRender.getAsBoolean()) return;
+        if (!this.shouldRender.getAsBoolean())
+            return;
         Position pos = new Position(getPosition().x, getPosition().y);
         // TODO: move this out of the widget and just use a text widget
         if (lastSyncedItems.size() > 0) {
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-            fontRenderer.drawString(
-                    I18n.format("susy.machine.rocket_assembler.gui.required_items"),
-                    pos.x,
-                    pos.y - 8,
+            fontRenderer.drawString(I18n.format("susy.machine.rocket_assembler.gui.required_items"), pos.x, pos.y - 8,
                     TEXT_COLOR);
         }
         if (!isPositionInsideScissor(mouseX, mouseY)) {
@@ -174,28 +160,21 @@ public class ItemCostWidget extends Widget {
         int paneSize = scrollPaneWidth;
         int scrollX = position.x + size.width - paneSize;
         if (this.lastSyncedItems.size() > this.getSize().height / HEIGHT_OFFSET) {
-            GuiTextures.SLIDER_BACKGROUND_VERTICAL.draw(
-                    scrollX + 1, position.y + 1, paneSize - 2, size.height - 2);
+            GuiTextures.SLIDER_BACKGROUND_VERTICAL.draw(scrollX + 1, position.y + 1, paneSize - 2, size.height - 2);
 
             int maxScrollOffset = getSize().height - this.getListHeight() - 1;
             float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
             int scrollSliderHeight = 14;
             int scrollSliderY = Math.round(position.y + (size.height - scrollSliderHeight) * scrollPercent);
-            GuiTextures.SLIDER_ICON.draw(
-                    scrollX + 1, scrollSliderY + 2, paneSize - 2, scrollSliderHeight);
+            GuiTextures.SLIDER_ICON.draw(scrollX + 1, scrollSliderY + 2, paneSize - 2, scrollSliderHeight);
         }
-        RenderUtil.useScissor(
-                position.x,
-                position.y,
-                size.width - paneSize,
-                size.height,
-                () -> {
-                    Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
-                    for (ItemStack itemStack : lastSyncedItems) {
-                        startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
-                        this.drawStack(startpos, size, itemStack);
-                    }
-                });
+        RenderUtil.useScissor(position.x, position.y, size.width - paneSize, size.height, () -> {
+            Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
+            for (ItemStack itemStack : lastSyncedItems) {
+                startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
+                this.drawStack(startpos, size, itemStack);
+            }
+        });
     }
 
     public void drawStack(Position pos, Size size, ItemStack stack) {
@@ -211,8 +190,7 @@ public class ItemCostWidget extends Widget {
         RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
         GlStateManager.scale(HEIGHT_SCALE, HEIGHT_SCALE, HEIGHT_SCALE);
-        itemRender.renderItemAndEffectIntoGUI(
-                stack, (int) (pos.x / HEIGHT_SCALE), (int) (pos.y / HEIGHT_SCALE) - 4);
+        itemRender.renderItemAndEffectIntoGUI(stack, (int) (pos.x / HEIGHT_SCALE), (int) (pos.y / HEIGHT_SCALE) - 4);
         GlStateManager.enableAlpha();
 
         GlStateManager.popMatrix();
@@ -225,10 +203,8 @@ public class ItemCostWidget extends Widget {
         GlStateManager.pushMatrix();
         GlStateManager.scale(HEIGHT_SCALE, HEIGHT_SCALE, HEIGHT_SCALE);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(
-                String.format("%s, x%d", item_name, stack.getCount()),
-                (int) ((pos.x + HEIGHT_OFFSET + 6 / HEIGHT_SCALE) / HEIGHT_SCALE),
-                (int) (pos.y / HEIGHT_SCALE),
+        fontRenderer.drawString(String.format("%s, x%d", item_name, stack.getCount()),
+                (int) ((pos.x + HEIGHT_OFFSET + 6 / HEIGHT_SCALE) / HEIGHT_SCALE), (int) (pos.y / HEIGHT_SCALE),
                 TEXT_COLOR);
         GlStateManager.popMatrix();
     }
@@ -253,8 +229,7 @@ public class ItemCostWidget extends Widget {
     private void addScrollOffset(int offset) {
         if (this.shouldRender.getAsBoolean()) {
             int maxScrollOffset = getSize().height - this.getListHeight() - 1;
-            this.scrollOffset = MathHelper.clamp(
-                    scrollOffset + offset * maxScrollOffset / (getSize().height - 14),
+            this.scrollOffset = MathHelper.clamp(scrollOffset + offset * maxScrollOffset / (getSize().height - 14),
                     -(this.getListHeight() - this.getSize().height), 0);
         }
     }
@@ -266,7 +241,6 @@ public class ItemCostWidget extends Widget {
     private boolean isOnScrollPane(int mouseX, int mouseY) {
         Position pos = getPosition();
         Size size = getSize();
-        return isMouseOver(
-                pos.x + size.width - scrollPaneWidth, pos.y, scrollPaneWidth, size.height, mouseX, mouseY);
+        return isMouseOver(pos.x + size.width - scrollPaneWidth, pos.y, scrollPaneWidth, size.height, mouseX, mouseY);
     }
 }

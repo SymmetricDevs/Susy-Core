@@ -17,8 +17,8 @@ public class LocationCardBehavior implements IItemBehaviour {
         if (itemStack.hasTagCompound()) {
             NBTTagCompound tag = itemStack.getSubCompound(TAG_ROOT);
             if (tag.hasKey(TAG_X) && tag.hasKey(TAG_Y) && tag.hasKey(TAG_Z)) {
-                lines.add(I18n.format("susy.location_card.tooltip.coords") + "(" + tag.getInteger(TAG_X) +
-                        ", " + tag.getInteger(TAG_Y) + ", " + tag.getInteger(TAG_Z) + ")");
+                lines.add(I18n.format("susy.location_card.tooltip.coords") + "(" + tag.getInteger(TAG_X) + ", " +
+                        tag.getInteger(TAG_Y) + ", " + tag.getInteger(TAG_Z) + ")");
             } else {
                 lines.add(I18n.format("susy.location_card.tooltip.no_coords"));
             }

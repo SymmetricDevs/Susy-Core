@@ -56,26 +56,14 @@ public class MetaTileEntityIndustrialSifter extends RecipeMapMultiblockControlle
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("       ", "       ", "  CCC  ", "       ")
-                .aisle("       ", "  CCC  ", " C$$$C ", "  CCC  ")
-                .aisle("  F F  ", " CCCCC ", "X$$$$$X", " CCCCC ")
-                .aisle("       ", " CCCCC ", "X$$G$$X", " CCCCC ")
-                .aisle("  F F  ", " CCCCC ", "X$$$$$X", " CCCCC ")
-                .aisle("       ", "  CCC  ", " C$$$C ", "  CCC  ")
-                .aisle("       ", "       ", "  CSC  ", "       ")
-                .where('C', states(getCasingState()).or(autoAbilities(
-                        true, true, false,
-                        false, false, false, false)))
-                .where('X', states(getCasingState()).or(autoAbilities(
-                        false, false, true,
-                        true, true, true, false)))
-                .where('G', states(getGearboxState()))
-                .where('F', frames(Materials.StainlessSteel))
-                .where('$', states(getMeshState()))
-                .where('S', selfPredicate())
-                .where(' ', any())
-                .build();
+        return FactoryBlockPattern.start().aisle("       ", "       ", "  CCC  ", "       ")
+                .aisle("       ", "  CCC  ", " C$$$C ", "  CCC  ").aisle("  F F  ", " CCCCC ", "X$$$$$X", " CCCCC ")
+                .aisle("       ", " CCCCC ", "X$$G$$X", " CCCCC ").aisle("  F F  ", " CCCCC ", "X$$$$$X", " CCCCC ")
+                .aisle("       ", "  CCC  ", " C$$$C ", "  CCC  ").aisle("       ", "       ", "  CSC  ", "       ")
+                .where('C', states(getCasingState()).or(autoAbilities(true, true, false, false, false, false, false)))
+                .where('X', states(getCasingState()).or(autoAbilities(false, false, true, true, true, true, false)))
+                .where('G', states(getGearboxState())).where('F', frames(Materials.StainlessSteel))
+                .where('$', states(getMeshState())).where('S', selfPredicate()).where(' ', any()).build();
     }
 
     @Override
@@ -84,8 +72,7 @@ public class MetaTileEntityIndustrialSifter extends RecipeMapMultiblockControlle
     }
 
     @SideOnly(Side.CLIENT)
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.SIFTER_OVERLAY;
     }

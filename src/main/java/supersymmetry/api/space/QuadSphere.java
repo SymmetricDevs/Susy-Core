@@ -35,7 +35,8 @@ public class QuadSphere {
         }
 
         void finalizeNormal() {
-            if (accCount == 0) return;
+            if (accCount == 0)
+                return;
             float len = (float) Math.sqrt(accNx * accNx + accNy * accNy + accNz * accNz);
             if (len > 1e-6f) {
                 nx = accNx / len;
@@ -51,7 +52,10 @@ public class QuadSphere {
     private final List<float[][]> quadUVs = new ArrayList<>();
     private final List<Integer> quadFace = new ArrayList<>();
 
-    /** Precomputed: faceQuadIndices.get(f) = list of quad indices belonging to face f */
+    /**
+     * Precomputed: faceQuadIndices.get(f) = list of quad indices belonging to face
+     * f
+     */
     private final List<List<Integer>> faceQuadIndices = new ArrayList<>();
 
     public final int subdivisions;
@@ -84,7 +88,10 @@ public class QuadSphere {
         return quadUVs;
     }
 
-    /** Precomputed per-face quad index lists — use this in the renderer instead of getQuadFaces(). */
+    /**
+     * Precomputed per-face quad index lists — use this in the renderer instead of
+     * getQuadFaces().
+     */
     public List<List<Integer>> getFaceQuadIndices() {
         return faceQuadIndices;
     }
@@ -92,7 +99,8 @@ public class QuadSphere {
     // ------------------------------------------------------------------
 
     private void build() {
-        for (int i = 0; i < 6; i++) faceQuadIndices.add(new ArrayList<>());
+        for (int i = 0; i < 6; i++)
+            faceQuadIndices.add(new ArrayList<>());
 
         makeFace(new Vector3f(1, 0, 0), new Vector3f(0, 0, -1), new Vector3f(0, -1, 0)); // +X
         makeFace(new Vector3f(-1, 0, 0), new Vector3f(0, 0, 1), new Vector3f(0, -1, 0)); // -X
@@ -144,8 +152,7 @@ public class QuadSphere {
                 float v1 = clamp((float) (y + 1) / N, eps);
 
                 // Corner order matches quad: BL BR TR TL
-                quadUVs.add(new float[][] {
-                        { u0, v0 }, // BL
+                quadUVs.add(new float[][] { { u0, v0 }, // BL
                         { u1, v0 }, // BR
                         { u1, v1 }, // TR
                         { u0, v1 }, // TL
@@ -178,7 +185,8 @@ public class QuadSphere {
             v2.accumulateNormal(fnx, fny, fnz);
             v3.accumulateNormal(fnx, fny, fnz);
         }
-        for (Vertex v : vertices) v.finalizeNormal();
+        for (Vertex v : vertices)
+            v.finalizeNormal();
     }
 
     private static long vertexKey(float x, float y, float z) {
@@ -191,7 +199,8 @@ public class QuadSphere {
     private int getOrCreateVertex(float x, float y, float z) {
         long key = vertexKey(x, y, z);
         Integer existing = vertexCache.get(key);
-        if (existing != null) return existing;
+        if (existing != null)
+            return existing;
         int index = vertices.size();
         vertices.add(new Vertex(x, y, z));
         vertexCache.put(key, index);

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +27,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import cam72cam.immersiverailroading.IRBlocks;
 import cam72cam.immersiverailroading.IRItems;
@@ -112,7 +111,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @Override
     protected BlockPattern createStructurePattern() {
-        // When changing the structure, do not forget to update the preview and the structure AABB - It's best ot just
+        // When changing the structure, do not forget to update the preview and the
+        // structure AABB - It's best ot just
         // bug MTBO if you do not understand what that means
         return FactoryBlockPattern.start()
                 .aisle("                 ", "                 ", "                 ", "                 ",
@@ -166,23 +166,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 .aisle("                 ", "                 ", "                 ", "                 ",
                         "                 ", "                 ", "                 ", "                 ",
                         "       F F       ", "                 ")
-                .where('S', selfPredicate())
-                .where('F', frames(Materials.Steel))
+                .where('S', selfPredicate()).where('F', frames(Materials.Steel))
                 .where('M', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('C',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('A', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(true, false)))
+                .where('A',
+                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                                .or(autoAbilities(true, false)))
                 .where('B',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                                        .or(autoAbilities(true, false, true, false, true, false, false)))
-                .where(' ', any())
-                .where('R', SuSyPredicates.rails())
-                .build();
+                                .or(autoAbilities(true, false, true, false, true, false, false)))
+                .where(' ', any()).where('R', SuSyPredicates.rails()).build();
     }
 
     @Override
@@ -197,8 +195,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RAILROAD_ENGINEERING_STATION_OVERLAY;
     }
@@ -329,8 +326,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                         if (rollingStock.getUUID().equals(this.previousEntityUUID)) {
                             this.spawnedRollingStock = rollingStock;
                             this.spawnedRollingStackComponentsSorted = rollingStock.getDefinition().getItemComponents()
-                                    .stream()
-                                    .sorted(Comparator.comparingInt(i -> i.ordinal()))
+                                    .stream().sorted(Comparator.comparingInt(i -> i.ordinal()))
                                     .collect(Collectors.toList());
                             break;
                         }
@@ -366,9 +362,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 if (!this.rollingStocks.isEmpty()) {
                     this.setSelectedEntity(this.rollingStocks.get(0));
                 } else {
-                    this.trainInputSlot.setStackInSlot(
-                            0,
-                            net.minecraft.item.ItemStack.EMPTY);
+                    this.trainInputSlot.setStackInSlot(0, net.minecraft.item.ItemStack.EMPTY);
                     this.selectedRollingStock = null;
                 }
             }
@@ -395,7 +389,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
     }
 
     private net.minecraft.item.ItemStack getTrainItemStack(EntityRollingStock rollingStock) {
-        // What the actual fucking shit is wrong with the shit fucking stupid fucking IR codebase I fucking cant
+        // What the actual fucking shit is wrong with the shit fucking stupid fucking IR
+        // codebase I fucking cant
         // why the fuck is there no fuckingapi what the fuck
         // what hte fuck is a Itemstack.internal why the fuck would you do this
         // I will fucjing stab you to death with your stupid giant fucking wrench
@@ -411,9 +406,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     private void setSelectedEntity(EntityRollingStock rollingStock) {
         this.selectedRollingStock = rollingStock;
-        this.trainInputSlot.setStackInSlot(
-                0,
-                this.getTrainItemStackFromCache(this.selectedRollingStock));
+        this.trainInputSlot.setStackInSlot(0, this.getTrainItemStackFromCache(this.selectedRollingStock));
     }
 
     public float getTrainSpawnAngle() {
@@ -440,24 +433,21 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
         if (def != null) {
             World irWorld = World.get(getWorld());
 
-            // net.minecraft.util.math.Vec3i direction = this.getFrontFacing().getOpposite().getDirectionVec();
+            // net.minecraft.util.math.Vec3i direction =
+            // this.getFrontFacing().getOpposite().getDirectionVec();
 
             // Centered around the middle rail
 
-            // double offset = def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge) -
+            // double offset =
+            // def.getCouplerPosition(EntityCoupleableRollingStock.CouplerType.BACK, gauge)
+            // -
             // Config.ConfigDebug.couplerRange;
 
             BlockPos railPos = getRailPos(this.getFrontFacing().getOpposite().getDirectionVec());
 
-            TickPos tp = new TickPos(
-                    0,
-                    Speed.ZERO,
+            TickPos tp = new TickPos(0, Speed.ZERO,
                     (new Vec3d(railPos.getX(), railPos.getY(), railPos.getZ())).add(0.0, 0.25, 0.0).add(0.5, 0.0, 0.5),
-                    0,
-                    0,
-                    0,
-                    0.0F,
-                    false);
+                    0, 0, 0, 0.0F, false);
             EntityRollingStock stock = def.spawn(irWorld, tp.position, 0, gauge, data.texture);
 
             float yaw = this.getTrainSpawnAngle();
@@ -469,14 +459,14 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 mrs.initPositions(tp);
             }
 
-            // Buildable Rolling Stocks will be continuously built - we have to spawn them now as opposed to after the
+            // Buildable Rolling Stocks will be continuously built - we have to spawn them
+            // now as opposed to after the
             // recipe completion
             if (stock instanceof EntityBuildableRollingStock) {
                 this.setStockInWorld(stock);
                 // Also sort the item components of the thing
                 this.spawnedRollingStackComponentsSorted = def.getItemComponents().stream()
-                        .sorted(Comparator.comparingInt(i -> i.ordinal()))
-                        .collect(Collectors.toList());
+                        .sorted(Comparator.comparingInt(i -> i.ordinal())).collect(Collectors.toList());
             }
             return stock;
         }
@@ -603,8 +593,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
     @SideOnly(Side.CLIENT)
     public void spawnWorkingParticles() {
-        SusyParticleFlame spark = new SusyParticleFlame(
-                this.getWorld(),
+        SusyParticleFlame spark = new SusyParticleFlame(this.getWorld(),
                 this.getPos().getX() + this.getFrontFacing().getOpposite().getDirectionVec().getX() * 5 +
                         (1 - this.getFrontFacing().getOpposite().getDirectionVec().getX()) * 3 *
                                 (GTValues.RNG.nextFloat() - 0.5),
@@ -612,8 +601,7 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
                 this.getPos().getZ() + this.getFrontFacing().getOpposite().getDirectionVec().getZ() * 5 +
                         (1 - this.getFrontFacing().getOpposite().getDirectionVec().getZ()) * 3 *
                                 (GTValues.RNG.nextFloat() - 0.5),
-                (GTValues.RNG.nextFloat() - 0.5) * 1.2F,
-                GTValues.RNG.nextFloat() * 1.5F,
+                (GTValues.RNG.nextFloat() - 0.5) * 1.2F, GTValues.RNG.nextFloat() * 1.5F,
                 (GTValues.RNG.nextFloat() - 0.5) * 1.2F);
         Minecraft.getMinecraft().effectRenderer.addEffect(spark);
     }
@@ -642,7 +630,8 @@ public class MetaTileEntityRailroadEngineeringStation extends RecipeMapMultibloc
 
             List<IItemHandlerModifiable> inputList = new ArrayList<>();
 
-            if (inputs != null) inputList.add(inputs);
+            if (inputs != null)
+                inputList.add(inputs);
             inputList.add(trainInput);
 
             return new ItemHandlerList(inputList);

@@ -72,14 +72,16 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
 
         boolean withinBudget = true;
         if (this.stock instanceof EntityTransporterErector erector) {
-            withinBudget = this.circuitHolder.program(erector.getRocketNBT(),
-                    this.getWorld().provider.getDimension());
+            withinBudget = this.circuitHolder.program(erector.getRocketNBT(), this.getWorld().provider.getDimension());
         }
-        // The lunar launch complex builds its rocket straight onto the pad, so there is no erector passing through
-        // to stamp on the way in. Program any rocket standing in the box directly instead.
+        // The lunar launch complex builds its rocket straight onto the pad, so there is
+        // no erector passing through
+        // to stamp on the way in. Program any rocket standing in the box directly
+        // instead.
         for (EntityBlueprintRocket rocket : this.getWorld().getEntitiesWithinAABB(EntityBlueprintRocket.class,
                 this.getInteractionBoundingBox())) {
-            if (rocket.isLaunched()) continue;
+            if (rocket.isLaunched())
+                continue;
             withinBudget &= this.circuitHolder.program(rocket);
         }
         setLowTierWarning(withinBudget);
@@ -131,63 +133,34 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
         BooleanSyncValue highlightSelectedStockValue = new BooleanSyncValue(() -> highlightSelectedStock,
                 val -> highlightSelectedStock = val);
 
-        ModularPanel mainPanel = Mui2Utils.defaultPanel(this)
-                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
+        ModularPanel mainPanel = Mui2Utils.defaultPanel(this).child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
                 .child(SlotGroupWidget.playerInventory(true).left(7).bottom(7))
                 .child(Mui2Utils.getLogo().asWidget().size(17).right(7).bottom(88))
-                .child(new CycleButtonWidget()
-                        .left(7)
-                        .bottom(90)
-                        .background(GuiTextures.BUTTON_CLEAN)
-                        .hoverBackground(GuiTextures.BUTTON_CLEAN)
-                        .stateCount(2)
-                        .stateOverlay(SusyGuiTextures.BUTTON_POWER)
-                        .value(workingStateValue))
-                .child(Flow.column()
-                        .top(18)
-                        .margin(7, 0)
-                        .widthRel(1f)
-                        .coverChildrenHeight()
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
-                                .child(new ToggleButton()
-                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA
-                                                .asIcon()
-                                                .size(16))
-                                        .addTooltipLine(IKey.lang(
-                                                "susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
-                                        .value(renderBoundingBoxValue))
-                                .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box")
-                                        .asWidget()
-                                        .align(Alignment.CenterRight)
-                                        .height(18)))
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
-                                .child(new ToggleButton()
-                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA
-                                                .asIcon()
-                                                .size(16))
+                .child(new CycleButtonWidget().left(7).bottom(90).background(GuiTextures.BUTTON_CLEAN)
+                        .hoverBackground(GuiTextures.BUTTON_CLEAN).stateCount(2)
+                        .stateOverlay(SusyGuiTextures.BUTTON_POWER).value(workingStateValue))
+                .child(Flow.column().top(18).margin(7, 0).widthRel(1f).coverChildrenHeight().child(Flow.row()
+                        .coverChildrenHeight().marginBottom(2).widthRel(1f)
+                        .child(new ToggleButton().overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
+                                .addTooltipLine(
+                                        IKey.lang("susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
+                                .value(renderBoundingBoxValue))
+                        .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box").asWidget()
+                                .align(Alignment.CenterRight).height(18)))
+                        .child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
+                                .child(new ToggleButton().overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
                                         .addTooltipLine(IKey.lang(
                                                 "susy.gui.stock_interactor.button.highlight_selected_stock.tooltip"))
                                         .value(highlightSelectedStockValue))
-                                .child(IKey.lang("susy.gui.stock_interactor.title.highlight_selected_stock")
-                                        .asWidget()
-                                        .align(Alignment.CenterRight)
-                                        .height(18)))
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
+                                .child(IKey.lang("susy.gui.stock_interactor.title.highlight_selected_stock").asWidget()
+                                        .align(Alignment.CenterRight).height(18)))
+                        .child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
                                 .child(IKey.lang("susy.rocket_programmer.circuit_slot").asWidget()
                                         .align(Alignment.CenterRight).height(18))
-                                .child(new ItemSlot().slot(SyncHandlers.itemSlot(this.circuitHolder, 0)
-                                        .singletonSlotGroup()
-                                        .filter((itemStack -> itemStack
-                                                .isItemEqual(SuSyMetaItems.ROCKET_CONFIGURER.getStackForm(1))))))
+                                .child(new ItemSlot()
+                                        .slot(SyncHandlers.itemSlot(this.circuitHolder, 0).singletonSlotGroup()
+                                                .filter((itemStack -> itemStack.isItemEqual(
+                                                        SuSyMetaItems.ROCKET_CONFIGURER.getStackForm(1))))))
                                 .child(IKey.lang("susy.rocket_programmer.not_enough_budget").asWidget()
                                         .align(Alignment.CenterRight).height(18)
                                         .setEnabledIf((p) -> !canHandleFullConfig.getValue()))));

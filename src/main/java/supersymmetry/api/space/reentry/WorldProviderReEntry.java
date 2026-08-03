@@ -27,9 +27,8 @@ public class WorldProviderReEntry extends WorldProvider {
         this.config = ReEntryDimensions.REENTRY.get(dimId);
 
         if (config == null) {
-            throw new IllegalStateException(
-                    "[ReEntry] No ReEntryDimension registered for id " + dimId + ". REENTRY map has: " +
-                            ReEntryDimensions.REENTRY.keySet());
+            throw new IllegalStateException("[ReEntry] No ReEntryDimension registered for id " + dimId +
+                    ". REENTRY map has: " + ReEntryDimensions.REENTRY.keySet());
         }
 
         SusyLog.logger.info("[ReEntry] WorldProviderReEntry.init() dimId=" + dimId + " name=" + config.name);
@@ -97,7 +96,8 @@ public class WorldProviderReEntry extends WorldProvider {
 
     @Override
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
-        if (config == null) return 0f;
+        if (config == null)
+            return 0f;
         double fraction = (worldTime % config.orbitalPeriodTicks) / (double) config.orbitalPeriodTicks;
         return (float) fraction;
     }

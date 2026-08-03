@@ -13,23 +13,29 @@ public final class SuSyCoverBehaviors {
     public static void init() {
         SusyLog.logger.info("Registering cover behaviors ...");
 
-        registerBehavior(SuSyUtility.susyId("conveyor.steam"), SuSyMetaItems.CONVEYOR_STEAM,
-                (definition, coverableView, attachedSide) -> new CoverSteamConveyor(definition, coverableView,
-                        attachedSide, 4));
+        registerBehavior(SuSyUtility.susyId("conveyor.steam"), SuSyMetaItems.CONVEYOR_STEAM, (definition, coverableView,
+                                                                                              attachedSide) -> new CoverSteamConveyor(
+                                                                                                      definition,
+                                                                                                      coverableView,
+                                                                                                      attachedSide, 4));
 
-        registerBehavior(SuSyUtility.susyId("pump.steam"), SuSyMetaItems.PUMP_STEAM,
-                (definition, coverableView, attachedSide) -> new CoverSteamPump(definition, coverableView, attachedSide,
-                        640));
+        registerBehavior(SuSyUtility.susyId("pump.steam"), SuSyMetaItems.PUMP_STEAM, (definition, coverableView,
+                                                                                      attachedSide) -> new CoverSteamPump(
+                                                                                              definition, coverableView,
+                                                                                              attachedSide, 640));
 
-        registerBehavior(SuSyUtility.susyId("air_vent"), SuSyMetaItems.AIR_VENT,
-                (definition, coverableView, attachedSide) -> new CoverAirVent(definition, coverableView, attachedSide,
-                        100));
+        registerBehavior(SuSyUtility.susyId("air_vent"), SuSyMetaItems.AIR_VENT, (definition, coverableView,
+                                                                                  attachedSide) -> new CoverAirVent(
+                                                                                          definition, coverableView,
+                                                                                          attachedSide, 100));
 
         registerBehavior(SuSyUtility.susyId("restrictive_filter"), SuSyMetaItems.RESTRICTIVE_FILTER,
                 CoverRestrictive::new);
 
-        registerBehavior(SuSyUtility.susyId("air_disperser"), SuSyMetaItems.AIR_DISPERSER,
-                (definition, coverableView, attachedSide) -> new CoverAirDisperser(definition, coverableView,
-                        attachedSide, 100));
+        registerBehavior(SuSyUtility.susyId("air_disperser"), SuSyMetaItems.AIR_DISPERSER, (definition, coverableView,
+                                                                                            attachedSide) -> new CoverAirDisperser(
+                                                                                                    definition,
+                                                                                                    coverableView,
+                                                                                                    attachedSide, 100));
     }
 }

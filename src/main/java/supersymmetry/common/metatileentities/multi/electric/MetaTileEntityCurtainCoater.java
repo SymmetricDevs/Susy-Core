@@ -4,8 +4,6 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.conveyo
 
 import java.util.*;
 
-import org.jspecify.annotations.NonNull;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -14,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -48,30 +47,24 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCKCC", "CWGWC", "  G  ")
-                .aisle("CCCCC", "I>>>O", "CCGCC")
-                .aisle("CCSCC", "CWHWC", "  G  ")
-                .where('S', selfPredicate())
+        return FactoryBlockPattern.start().aisle("CCKCC", "CWGWC", "  G  ").aisle("CCCCC", "I>>>O", "CCGCC")
+                .aisle("CCSCC", "CWHWC", "  G  ").where('S', selfPredicate())
                 .where('I', abilities(MultiblockAbility.IMPORT_ITEMS))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
                 .where('H', abilities(MultiblockAbility.IMPORT_FLUIDS))
                 .where('K', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .where('C', states(getCasingState()).setMinGlobalLimited(17)
-                        .or(autoAbilities(true, true, false, false, false, false, false)))
-                .where('G', states(getGearBoxState()))
-                .where('W', states(getGlassState()))
-                .where('>', conveyorBelts(RelativeDirection.LEFT))
-                .where(' ', any())
-                .build();
+                .where('C',
+                        states(getCasingState()).setMinGlobalLimited(17)
+                                .or(autoAbilities(true, true, false, false, false, false, false)))
+                .where('G', states(getGearBoxState())).where('W', states(getGlassState()))
+                .where('>', conveyorBelts(RelativeDirection.LEFT)).where(' ', any()).build();
     }
 
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
-                .where('S', SuSyMetaTileEntities.CURTAIN_COATER, EnumFacing.SOUTH)
-                .where('C', getCasingState())
+                .where('S', SuSyMetaTileEntities.CURTAIN_COATER, EnumFacing.SOUTH).where('C', getCasingState())
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.WEST)
                 .where('i', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.EAST)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.WEST)
@@ -79,8 +72,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                 .where('H', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('K', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
-                .where('G', getGearBoxState())
-                .where('W', getGlassState())
+                .where('G', getGearBoxState()).where('W', getGlassState())
                 .where('>',
                         SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.EAST))
                 .where('<',
@@ -89,16 +81,10 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
                                 getCasingState(),
                         EnumFacing.SOUTH);
-        shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("CCKCC", "CWGWC", "  G  ")
-                .aisle("CCCCC", "I>>>o", "CCGCC")
-                .aisle("CESMC", "CWHWC", "  G  ")
-                .build());
-        shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("CCCCC", "CWGWC", "  G  ")
-                .aisle("CCCCC", "O<<<i", "CCGCC")
-                .aisle("CESMC", "CWHWC", "  G  ")
-                .build());
+        shapeInfo.add(baseBuilder.shallowCopy().aisle("CCKCC", "CWGWC", "  G  ").aisle("CCCCC", "I>>>o", "CCGCC")
+                .aisle("CESMC", "CWHWC", "  G  ").build());
+        shapeInfo.add(baseBuilder.shallowCopy().aisle("CCCCC", "CWGWC", "  G  ").aisle("CCCCC", "O<<<i", "CCGCC")
+                .aisle("CESMC", "CWHWC", "  G  ").build());
         return shapeInfo;
     }
 
@@ -148,8 +134,7 @@ public class MetaTileEntityCurtainCoater extends RecipeMapMultiblockController {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.BLAST_FURNACE_OVERLAY;
     }

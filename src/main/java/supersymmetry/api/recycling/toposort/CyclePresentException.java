@@ -21,8 +21,8 @@ public final class CyclePresentException extends IllegalArgumentException {
 
     /// Accesses the cycles present in the sorted graph.
     ///
-    /// Each element in the outer set represents a cycle; each cycle, or the inner set,
-    /// forms a strongly connected component with two or more elements.
+    /// Each element in the outer set represents a cycle; each cycle, or the inner set, forms a strongly connected
+    /// component with two or more elements.
     ///
     /// @param <T> the type of node sorted
     /// @return the cycles identified

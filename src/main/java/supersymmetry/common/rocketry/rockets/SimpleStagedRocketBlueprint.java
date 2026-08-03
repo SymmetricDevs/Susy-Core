@@ -95,25 +95,25 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
     @Override
     public boolean readFromNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
-        if (!tag.hasKey("buildstat")) return false;
+        if (!tag.hasKey("name", NBT.TAG_STRING))
+            return false;
+        if (!tag.hasKey("buildstat"))
+            return false;
         this.stages.clear();
 
         this.setName(tag.getString("name"));
         if (tag.getBoolean("buildstat")) {
-            boolean ok = tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream()
-                    .map(x -> (NBTTagCompound) x)
-                    .map(
-                            comp -> {
-                                RocketStage s = new RocketStage();
-                                if (s.readFromNBT(comp)) {
-                                    this.stages.add(s);
-                                    return true;
-                                }
-                                return false;
-                            })
-                    .allMatch(Boolean::booleanValue);
-            if (!ok) return false;
+            boolean ok = tag.getTagList("stages", NBT.TAG_COMPOUND).tagList.stream().map(x -> (NBTTagCompound) x)
+                    .map(comp -> {
+                        RocketStage s = new RocketStage();
+                        if (s.readFromNBT(comp)) {
+                            this.stages.add(s);
+                            return true;
+                        }
+                        return false;
+                    }).allMatch(Boolean::booleanValue);
+            if (!ok)
+                return false;
         } else {
             this.stages = new ArrayList<>(AbstractRocketBlueprint.getBlueprintsRegistry().get(name).stages);
         }
@@ -138,11 +138,13 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     }
 
     public double getMaximumCargoMass(RocketFuelEntry fuel, double escapeVelocity) {
-        // DeltaV given some cargo mass x from the above is as such, with w_x being the base wet weight at stage x and
+        // DeltaV given some cargo mass x from the above is as such, with w_x being the
+        // base wet weight at stage x and
         // d_x being the base dry weight:
         // escapeVelocity = sum(ln((w_x + x) / (d_x + x)) * v_i)
         // We have to solve numerically
-        // Newton's method, finding largest root specifically. The guess must start at zero since it's decreasing
+        // Newton's method, finding largest root specifically. The guess must start at
+        // zero since it's decreasing
         // concave up
         double guess = 0;
         double totalWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume();
@@ -157,8 +159,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             for (RocketStage stage : this.stages) {
                 double currentFuelWeight = stage.getFuelCapacity() * fuel.getDensity();
                 double dryWeight = remainingWeight - currentFuelWeight;
-                fprime += stage.getEffectiveFuelVelocity(fuel) * dryWeight / remainingWeight *
-                        -currentFuelWeight / Math.pow(dryWeight, 2);
+                fprime += stage.getEffectiveFuelVelocity(fuel) * dryWeight / remainingWeight * -currentFuelWeight /
+                        Math.pow(dryWeight, 2);
                 f += stage.getEffectiveFuelVelocity(fuel) * Math.log(remainingWeight / dryWeight);
                 remainingWeight -= stage.getMass() + currentFuelWeight;
             }
@@ -167,7 +169,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
                 return 0; // Exit early as to not blow up
             }
             guess -= f / fprime;
-            if (f < 1e-8) break;
+            if (f < 1e-8)
+                break;
         }
         return guess;
     }
@@ -179,7 +182,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double weight = this.getMass() * gravity;
         double thrust = this.getThrust(fuel, "engine");
         double thrustToWeightRatio = thrust / weight;
-        if (thrustToWeightRatio < 1) success = 0;
+        if (thrustToWeightRatio < 1)
+            success = 0;
 
         double velocitySpeedup = calculateVelocity(fuel, 0);
 
@@ -217,8 +221,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success = augmentSuccess(success, augmentation);
 
         return new SuccessCalculation.AFSStats(success, weight, fuel.getDensity() * this.getFuelVolume(),
-                velocitySpeedup, escapeVelocity,
-                getMaximumCargoMass(fuel, escapeVelocity), radialInstability, thrust, oblateness);
+                velocitySpeedup, escapeVelocity, getMaximumCargoMass(fuel, escapeVelocity), radialInstability, thrust,
+                oblateness);
     }
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
@@ -277,8 +281,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
         } else {
-            double engineActivity = this.getThrust(rocket.getFuel(), "engine") *
-                    this.getComponentCount("tank");
+            double engineActivity = this.getThrust(rocket.getFuel(), "engine") * this.getComponentCount("tank");
             double chanceExplosion = 1 - Math.exp(-engineActivity / 10000000);
             return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
                     SuccessCalculation.LaunchResult.CRASHES;

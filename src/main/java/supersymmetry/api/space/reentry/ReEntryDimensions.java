@@ -23,17 +23,13 @@ public class ReEntryDimensions {
     public static void init() {
         int id = -2;
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() < id) id = type.getId();
+            if (type.getId() < id)
+                id = type.getId();
         }
         id--;
 
         SusyLog.logger.info("[ReEntry] Registering re-entry dimension type at id " + id);
-        reEntryType = DimensionType.register(
-                "susy_reentry",
-                "_susyreentry",
-                id,
-                WorldProviderReEntry.class,
-                false);
+        reEntryType = DimensionType.register("susy_reentry", "_susyreentry", id, WorldProviderReEntry.class, false);
 
         ReEntryDimension.createEarthReEntry(EARTH_REENTRY_DIM_ID, 0).load();
 

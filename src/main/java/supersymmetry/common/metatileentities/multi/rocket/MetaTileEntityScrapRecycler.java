@@ -56,21 +56,13 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
-                .where(' ', any())
-                .where('A', air())
-                .where('S', this.selfPredicate())
-                .where('P', states(getPipeCasingState()))
-                .where('C', states(getCasingState()))
-                .where('^', conveyorBelts(RelativeDirection.BACK))
-                .where('V', conveyorBelts(RelativeDirection.FRONT))
+        return FactoryBlockPattern.start().aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
+                .where(' ', any()).where('A', air()).where('S', this.selfPredicate())
+                .where('P', states(getPipeCasingState())).where('C', states(getCasingState()))
+                .where('^', conveyorBelts(RelativeDirection.BACK)).where('V', conveyorBelts(RelativeDirection.FRONT))
                 .where('R', robotArms(RelativeDirection.RIGHT))
                 .where('I',
                         states(getCasingState()).or(this.autoAbilities(false, false, true, false, false, false, false)))
@@ -111,8 +103,7 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
-                .where('S', SuSyMetaTileEntities.SCRAP_RECYCLER, EnumFacing.SOUTH)
-                .where('C', getCasingState())
+                .where('S', SuSyMetaTileEntities.SCRAP_RECYCLER, EnumFacing.SOUTH).where('C', getCasingState())
                 .where('P', getPipeCasingState())
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.EV], EnumFacing.SOUTH)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.EV], EnumFacing.SOUTH)
@@ -121,20 +112,15 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
                         SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.NORTH))
                 .where('V',
                         SuSyBlocks.CONVEYOR_BELT.getDefaultState().withProperty(BlockConveyor.FACING, EnumFacing.SOUTH))
-                .where('R',
-                        SuSyBlocks.ROBOT_ARM.getState(BlockRobotArm.RobotArmType.GRABBER, EnumFacing.WEST))
+                .where('R', SuSyBlocks.ROBOT_ARM.getState(BlockRobotArm.RobotArmType.GRABBER, EnumFacing.WEST))
                 .where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
                                 getCasingState(),
                         EnumFacing.UP);
-        shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CMC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CEC ")
-                .aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
+        shapeInfo.add(baseBuilder.shallowCopy().aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CCC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CMC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CEC ").aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
                 .build());
         return shapeInfo;
     }

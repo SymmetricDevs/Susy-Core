@@ -77,7 +77,11 @@ import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
 public class EntityLander extends EntityAbstractRocket
-                          implements IAnimatable, IInventory, IGuiHolder<EntityGuiData>, IEntityAdditionalSpawnData {
+                          implements
+                          IAnimatable,
+                          IInventory,
+                          IGuiHolder<EntityGuiData>,
+                          IEntityAdditionalSpawnData {
 
     private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
             DataSerializers.BOOLEAN);
@@ -131,70 +135,30 @@ public class EntityLander extends EntityAbstractRocket
         }
 
         double offset = goingUp ? 0.2D : 0.5D;
-        SusyParticleFlame flame1 = new SusyParticleFlame(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame1 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame2 = new SusyParticleFlame(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame2 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame3 = new SusyParticleFlame(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame3 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame4 = new SusyParticleFlame(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08,
-                -1.5,
+        SusyParticleFlame flame4 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
 
-        SusyParticleSmoke smoke1 = new SusyParticleSmoke(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke1 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke2 = new SusyParticleSmoke(
-                this.world,
-                this.posX + 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke2 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke3 = new SusyParticleSmoke(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ + 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke3 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke4 = new SusyParticleSmoke(
-                this.world,
-                this.posX - 0.8D,
-                this.posY + 0.9D + offset,
-                this.posZ - 0.2D,
-                1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16,
-                -1.5,
+        SusyParticleSmoke smoke4 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
+                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
                 1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
 
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke1);
@@ -212,7 +176,8 @@ public class EntityLander extends EntityAbstractRocket
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 BlockPos pos = new BlockPos(this.posX + i, above ? this.posY + 2 : this.posY - 1, this.posZ + j);
-                if (this.world.getBlockState(pos).getMaterial().isLiquid()) return;
+                if (this.world.getBlockState(pos).getMaterial().isLiquid())
+                    return;
                 if (this.world.getBlockState(pos).getBlockHardness(this.world, pos) < 0.3) {
                     this.world.setBlockToAir(pos);
                 } else if (above) {
@@ -589,12 +554,15 @@ public class EntityLander extends EntityAbstractRocket
 
         ItemStackHandler insertScratch = new ItemStackHandler(1);
 
-        ModularSlot insertSlot = new ModularSlot(insertScratch, 0)
-                .filter(SuSyUtility::isAllowedItemForSpace)          // reuse cargo's own gate
+        ModularSlot insertSlot = new ModularSlot(insertScratch, 0).filter(SuSyUtility::isAllowedItemForSpace) // reuse
+                                                                                                              // cargo's
+                                                                                                              // own
+                                                                                                              // gate
                 .changeListener((newItem, onlyAmount, client, init) -> {
-                    if (init || newItem.isEmpty()) return;
+                    if (init || newItem.isEmpty())
+                        return;
                     ItemStack remainder = cargo.insertItem(0, newItem, false);
-                    insertScratch.setStackInSlot(0, remainder);       // leftover stays visible
+                    insertScratch.setStackInSlot(0, remainder); // leftover stays visible
                 });
 
         IItemHandler extractView = new IItemHandler() {
@@ -636,21 +604,22 @@ public class EntityLander extends EntityAbstractRocket
             }
         });
 
-        return ModularPanel.defaultPanel("lander")
-                .child(new Flow(GuiAxis.X)
-                        .top(18)
-                        .margin(7, 0)
-                        .widthRel(1f)
-                        .coverChildrenHeight()
-                        .child(new ItemSlot().slot(insertSlot.singletonSlotGroup()).overlay(SusyGuiTextures.OVERLAY_IN))
-                        .child(new ItemSlot().slot(extractSlot.slotGroup(cargoInventory))
-                                .overlay(SusyGuiTextures.OVERLAY_OUT))
-                        .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
-                                .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() }).asWidget()
-                                        .rightRel(0.5f).height(18))
-                                .child(IKey.lang("susy.lander.volume", () -> new Object[] { getCargoVolumeString() })
-                                        .asWidget()
-                                        .rightRel(0.5f).height(18))))
+        return ModularPanel
+                .defaultPanel("lander").child(
+                        new Flow(GuiAxis.X).top(18).margin(7, 0).widthRel(1f).coverChildrenHeight()
+                                .child(new ItemSlot().slot(insertSlot.singletonSlotGroup())
+                                        .overlay(SusyGuiTextures.OVERLAY_IN))
+                                .child(new ItemSlot()
+                                        .slot(extractSlot
+                                                .slotGroup(cargoInventory))
+                                        .overlay(SusyGuiTextures.OVERLAY_OUT))
+                                .child(new Flow(GuiAxis.Y).childPadding(10).coverChildrenHeight()
+                                        .child(IKey.lang("susy.lander.mass", () -> new Object[] { getCargoMass() })
+                                                .asWidget().rightRel(0.5f).height(18))
+                                        .child(IKey
+                                                .lang("susy.lander.volume",
+                                                        () -> new Object[] { getCargoVolumeString() })
+                                                .asWidget().rightRel(0.5f).height(18))))
                 .bindPlayerInventory();
     }
 
@@ -664,9 +633,11 @@ public class EntityLander extends EntityAbstractRocket
         return false;
     }
 
-    @Override // The override is about leashing the rocket, which makes it alright to completely ignore
+    @Override // The override is about leashing the rocket, which makes it alright to
+              // completely ignore
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d hitVec, EnumHand hand) {
-        if (player.isRidingSameEntity(this) || hitVec.length() > 7) return EnumActionResult.PASS;
+        if (player.isRidingSameEntity(this) || hitVec.length() > 7)
+            return EnumActionResult.PASS;
         if (!this.world.isRemote) {
             processInitialInteract(player, hand);
         } else {
@@ -703,11 +674,13 @@ public class EntityLander extends EntityAbstractRocket
     }
 
     /**
-     * Pushes {@link CargoItemStackHandler}'s aggregate state (exposed stack, volume, weight) to the client
-     * every tick it changes, regardless of what caused the change (GUI interaction, a landing pad moving
-     * items in/out, etc). The client mirrors the snapshot into its own {@code cargo} instance so that the
-     * existing slot views and mass/volume labels, which all read directly from {@code cargo}, stay correct
-     * without needing to know about the sync packet themselves.
+     * Pushes {@link CargoItemStackHandler}'s aggregate state (exposed stack,
+     * volume, weight) to the client every tick it changes, regardless of what
+     * caused the change (GUI interaction, a landing pad moving items in/out, etc).
+     * The client mirrors the snapshot into its own {@code cargo} instance so that
+     * the existing slot views and mass/volume labels, which all read directly from
+     * {@code cargo}, stay correct without needing to know about the sync packet
+     * themselves.
      */
     public static class CargoSyncHandler extends SyncHandler {
 
@@ -725,7 +698,8 @@ public class EntityLander extends EntityAbstractRocket
         @Override
         public void detectAndSendChanges(boolean init) {
             ItemStack exposedStack = cargo.getExposedStack();
-            if (exposedStack == null) exposedStack = ItemStack.EMPTY;
+            if (exposedStack == null)
+                exposedStack = ItemStack.EMPTY;
             int volume = cargo.getCurrentVolume();
             int weight = cargo.mass();
             if (init || volume != this.lastVolume || weight != this.lastWeight ||
@@ -754,7 +728,8 @@ public class EntityLander extends EntityAbstractRocket
 
         @Override
         public void readOnServer(int id, PacketBuffer buf) {
-            // cargo is only ever mutated server-side through gameplay actions, never from a client packet
+            // cargo is only ever mutated server-side through gameplay actions, never from a
+            // client packet
         }
     }
 }
