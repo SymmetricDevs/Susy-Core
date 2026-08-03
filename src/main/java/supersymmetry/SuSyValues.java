@@ -18,5 +18,7 @@ public class SuSyValues {
     public static final ModelResourceLocation modelICBM = new ModelResourceLocation(
             new ResourceLocation(Supersymmetry.MODID, "icbm"), "inventory");
     public static ModelResourceLocation modelLunarRocket = new ModelResourceLocation(
-            new ResourceLocation(Supersymmetry.MODID, "lunar_rocket"), "inventory");;
+            new ResourceLocation(Supersymmetry.MODID, "lunar_rocket"), "inventory");
+
+    public static final double G0 = 9.81;
 }

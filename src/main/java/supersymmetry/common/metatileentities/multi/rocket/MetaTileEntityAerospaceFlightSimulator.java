@@ -57,6 +57,7 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
+import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
@@ -119,7 +120,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public RocketFuelEntry fuel;
     public final List<FluidStack> fuelList = new ArrayList<>();
 
-    private double gravity = 9.81;
+    private double gravity = SuSyValues.G0;
     private AFSStats stats = AFSStats.none();
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
@@ -717,10 +718,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 try {
                                     gravity = Double.parseDouble(value);
                                     if (gravity <= 0) {
-                                        gravity = 9.81;
+                                        gravity = SuSyValues.G0;
                                     }
                                 } catch (NumberFormatException ignored) {
-                                    gravity = 9.81;
+                                    gravity = SuSyValues.G0;
                                 }
                             }
                         })

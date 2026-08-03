@@ -32,7 +32,7 @@ import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
 
-public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRender, AFSRendered {
+public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRender {
 
     /**
      * Horizontal (x, z) offsets of the four boosters plus the core engine.
@@ -196,12 +196,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     @Override
     public double getMountedYOffset() {
         return 38D;
-    }
-
-    @Override
-    public AxisAlignedBB modelAABB() {
-        double radius = getModelRadius();
-        return new AxisAlignedBB(new Vec3d(radius, getRocketHeight(), radius), new Vec3d(-radius, 0, -radius));
     }
 
     @Override

@@ -13,6 +13,12 @@ import supersymmetry.api.space.Planetoid;
 
 public class RocketConfiguration {
 
+    /**
+     * The delta-v budget every launch site currently programs with.
+     */
+    // TODO: derive this from the rocket's tier instead of assuming everything is a Soyuz
+    public static final int DEFAULT_BUDGET = 2;
+
     public enum MissionType {
         Manned,
         UnmannedCargo,

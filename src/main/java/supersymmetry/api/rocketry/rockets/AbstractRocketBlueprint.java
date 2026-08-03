@@ -96,9 +96,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         return this.getStages().stream().mapToDouble(RocketStage::getHeight).sum();
     }
 
-    public double getThrust(RocketFuelEntry entry, double gravity, String componentType) {
+    public double getThrust(RocketFuelEntry entry, String componentType) {
         return this.getStages().stream()
-                .mapToDouble((stage) -> stage.getThrust(entry, gravity, componentType))
+                .mapToDouble((stage) -> stage.getThrust(entry, componentType))
                 .sum();
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.RocketEngine;
@@ -149,12 +150,12 @@ public class RocketStage implements Cloneable {
                 .count();
     }
 
-    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry, double gravity) {
-        return rocketFuelEntry.getSpecificImpulse() * gravity;
+    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry) {
+        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity, String componentType) {
-        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry, gravity);
+    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType) {
+        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry);
     }
 
     public double getRadius() {

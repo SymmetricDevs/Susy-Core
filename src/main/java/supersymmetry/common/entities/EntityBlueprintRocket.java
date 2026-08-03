@@ -28,6 +28,7 @@ import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
@@ -37,7 +38,7 @@ import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
-public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
+public abstract class EntityBlueprintRocket extends EntityAbstractRocket implements AFSRendered {
 
     protected static final float jerk = 0.0001F;
 
@@ -393,5 +394,11 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket {
             }
         }
         return mass + (double) cargo.mass() / 1000;
+    }
+
+    @Override
+    public AxisAlignedBB modelAABB() {
+        double radius = getModelRadius();
+        return new AxisAlignedBB(new Vec3d(radius, getRocketHeight(), radius), new Vec3d(-radius, 0, -radius));
     }
 }
