@@ -99,6 +99,12 @@
       "textures": {
         "all": "gregtech:blocks/multiblock_casing/aluminium_gearbox"
       }
+    },
+    "variant=screener_deck" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/screener_deck"
+      }
     }
   }
 }
