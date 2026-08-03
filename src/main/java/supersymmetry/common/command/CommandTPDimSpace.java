@@ -3,7 +3,7 @@ package supersymmetry.common.command;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

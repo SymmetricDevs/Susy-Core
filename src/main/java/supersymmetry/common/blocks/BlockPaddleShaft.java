@@ -2,7 +2,7 @@ package supersymmetry.common.blocks;
 
 import static net.minecraft.block.BlockDirectional.FACING;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
@@ -37,7 +37,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         setDefaultState(getState(ShaftType.IRON).withProperty(FACING, EnumFacing.NORTH));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing,
                                             float hitX, float hitY, float hitZ, int meta,
@@ -46,7 +46,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
                 EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BlockStateContainer createBlockState() {
         Class<ShaftType> enumClass = ShaftType.class;
@@ -60,7 +60,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
@@ -72,7 +72,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
         return state.getValue(FACING).ordinal();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target, @NotNull World world,
                                   @NotNull BlockPos pos, @NotNull EntityPlayer player) {
@@ -107,7 +107,7 @@ public class BlockPaddleShaft extends VariantBlock<BlockPaddleShaft.ShaftType> {
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getName() {
             return this.name;

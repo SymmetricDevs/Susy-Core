@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -44,7 +44,7 @@ public class SusyRecipeBuilder extends RecipeBuilder<SusyRecipeBuilder> {
     }
 
     @Override
-    public boolean applyProperty(@Nonnull String key, Object value) {
+    public boolean applyProperty(@NonNull String key, Object value) {
         if (key.equals(DimensionProperty.KEY)) {
             if (value instanceof Integer) {
                 this.dimension((Integer) value);

@@ -6,8 +6,6 @@ import static gregtech.api.GTValues.VA;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -206,7 +204,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NotNull IMultiblockPart part) {
         return true;
     }
 
@@ -220,8 +218,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
         return true;
     }
 
-    @Nonnull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.ASSEMBLER_OVERLAY;
     }

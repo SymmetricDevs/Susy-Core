@@ -5,7 +5,7 @@ import static net.minecraft.block.BlockDirectional.FACING;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -177,7 +177,7 @@ public class MetaTileEntitySuSyLogWasher extends RecipeMapSteamMultiblockControl
         return false;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LOG_WASHER_OVERLAY;

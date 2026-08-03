@@ -2,7 +2,7 @@ package supersymmetry.common.blocks;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -87,7 +87,7 @@ public class BlockLunarConcrete extends VariantBlock<BlockLunarConcrete.LunarCon
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
+        @NonNull
         public String getName() {
             return this.name;
         }

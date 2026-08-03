@@ -48,6 +48,9 @@ worldEdit = "2941712"
 worldEditCuiForgeEdition3 = "3191629"
 configAnytime = "3.0"
 flare = "6598523"
+openComputers = "6608365"
+shetiphianCore = "2661618"
+multiStorage = "2710024"
 
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
@@ -93,6 +96,9 @@ cbMultipart = { module = "curse.maven:cb-multipart-258426", version.ref = "cbMul
 projectRedCore = { module = "curse.maven:project-red-core-228702", version.ref = "projectRedCore" }
 serverUtil = { module = "curse.maven:serverutil-282484", version.ref = "serverUtil" }
 icbm = { module = "curse.maven:icbm-244451", version.ref = "icbm" }
+openComputers = { module = "curse.maven:opencomputers-223008", version.ref = "openComputers" }
+shetiphianCore = { module = "curse.maven:shetiphiancore-71738", version.ref = "shetiphianCore" }
+multiStorage = { module = "curse.maven:multistorage-244864", version.ref = "multiStorage" }
 theBeneath = { module = "curse.maven:the-beneath-254629", version.ref = "theBeneath" }
 realisticTerrainGenerationUnofficial = { module = "curse.maven:realistic-terrain-generation-unofficial-648514", version.ref = "realisticTerrainGenerationUnofficial" }
 worldEdit = { module = "curse.maven:worldedit-225608", version.ref = "worldEdit" }

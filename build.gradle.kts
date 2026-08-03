@@ -93,6 +93,12 @@ dependencies {
     // LittleTiles
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
+    // OpenComputers
+    compileOnly(deps.openComputers.deobf())
+
+    // Multistorage
+    compileOnly(deps.shetiphianCore.deobf())
+    compileOnly(deps.multiStorage.deobf())
 
     // ProjectRed
     compileOnly(deps.chickenAsm) { isTransitive = false }
