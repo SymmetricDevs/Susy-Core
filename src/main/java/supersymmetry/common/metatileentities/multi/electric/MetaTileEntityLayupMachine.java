@@ -19,6 +19,7 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRobotArmLayup;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -52,6 +53,11 @@ public class MetaTileEntityLayupMachine extends RecipeMapMultiblockController {
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return Textures.SOLID_STEEL_CASING;
+    }
+
+    @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return SusyTextures.LAYUP_OVERLAY;
     }
 
     @Override
