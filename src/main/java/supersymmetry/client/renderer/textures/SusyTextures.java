@@ -1,17 +1,17 @@
 package supersymmetry.client.renderer.textures;
 
-import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.item.EnumDyeColor;
 
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
 public class SusyTextures {
-
 
     public SusyTextures() {}
 

@@ -1,5 +1,7 @@
 package supersymmetry.api.items;
 
+import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +27,6 @@ import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import supersymmetry.api.util.SuSyUtility;
-
-import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
 
 public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
 
@@ -231,7 +231,6 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         }
         return (int) (mat.getMass() * fluid.amount / 144);
     }
-
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {

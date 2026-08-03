@@ -951,7 +951,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             this.parallelRecipesPerformed = 0;
             this.overclockResults = new int[] { 0, 0 };
             this.getMetaTileEntity().completeSpawnedStock();
-
         }
     }
 

@@ -22,7 +22,6 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import supersymmetry.SuSyValues;
 import supersymmetry.common.entities.EntityBlueprintRocket;
 
 @SideOnly(Side.CLIENT)

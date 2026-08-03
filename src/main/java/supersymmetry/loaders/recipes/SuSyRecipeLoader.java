@@ -19,7 +19,6 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.category.RecipeCategories;
 import gregtech.api.unification.material.Materials;
 import gregtech.common.blocks.MetaBlocks;

@@ -11,24 +11,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
-import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
-
 import com.google.common.base.CaseFormat;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.*;
+import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
 import gregtech.api.unification.material.Material;
@@ -41,7 +31,6 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import gregtech.api.items.metaitem.ElectricStats;
 import supersymmetry.common.item.behavior.*;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 

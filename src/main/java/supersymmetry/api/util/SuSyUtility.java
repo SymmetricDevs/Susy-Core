@@ -7,17 +7,17 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import gregtech.api.block.machines.MachineItemBlock;
-import gregtech.api.items.metaitem.MetaItem;
-import gregtech.api.util.GTUtility;
-import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
+import gregtech.api.block.machines.MachineItemBlock;
+import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.material.Material;
+import gregtech.api.util.GTUtility;
+import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
 
