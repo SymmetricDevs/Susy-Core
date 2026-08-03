@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -34,6 +35,9 @@ import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -71,6 +75,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntitySoyuzBasic;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
 public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE {
 
@@ -80,6 +85,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private LaunchPadState state = LaunchPadState.EMPTY;
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
+    /**
+     * Optional. A rocket programmer along the track normally stamps the mission list onto the erector, but the
+     * configurer can also be dropped in here to program whatever rocket is standing on the pad.
+     */
+    protected final RocketConfigurerHandler configurerSlot = new RocketConfigurerHandler(this);
+    private boolean configWithinBudget = true;
 
     // Animation helpers
     private double supportAngle = Math.PI / 4;
@@ -401,6 +412,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
+                if (this.getOffsetTimer() % 4 == 0) {
+                    setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
+                }
                 if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
                 }
@@ -480,6 +494,13 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         writeCustomData(SuSyDataCodes.UPDATE_FUEL_PROGRESS, (buf) -> buf.writeInt(fuelingProgress));
     }
 
+    private void setConfigWithinBudget(boolean withinBudget) {
+        if (this.configWithinBudget != withinBudget) {
+            this.configWithinBudget = withinBudget;
+            writeCustomData(SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG, (buf) -> buf.writeBoolean(withinBudget));
+        }
+    }
+
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
@@ -539,13 +560,21 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.readFromNBT(data);
         this.state = LaunchPadState.valueOf(data.getString("state"));
         this.fuelingProgress = data.getInteger("fuelingProgress");
+        this.configurerSlot.deserializeNBT(data.getCompoundTag("configurer"));
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setString("state", this.state.name());
         data.setInteger("fuelingProgress", this.fuelingProgress);
+        data.setTag("configurer", this.configurerSlot.serializeNBT());
         return super.writeToNBT(data);
+    }
+
+    @Override
+    public void clearMachineInventory(NonNullList<ItemStack> itemBuffer) {
+        super.clearMachineInventory(itemBuffer);
+        clearInventory(itemBuffer, this.configurerSlot);
     }
 
     @Override
@@ -557,6 +586,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         }
         buf.writeEnumValue(this.state);
         buf.writeInt(this.fuelingProgress);
+        buf.writeBoolean(this.configWithinBudget);
         World world = getWorld();
         if (world != null && !world.isRemote) {
             disableBlockRendering(isStructureFormed());
@@ -568,6 +598,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.receiveInitialSyncData(buf);
         this.state = buf.readEnumValue(LaunchPadState.class);
         this.fuelingProgress = buf.readInt();
+        this.configWithinBudget = buf.readBoolean();
     }
 
     @Override
@@ -580,6 +611,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             this.state = buf.readEnumValue(LaunchPadState.class);
         } else if (dataId == SuSyDataCodes.UPDATE_FUEL_PROGRESS) {
             this.fuelingProgress = buf.readInt();
+        } else if (dataId == SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG) {
+            this.configWithinBudget = buf.readBoolean();
         } else {
             super.receiveCustomData(dataId, buf);
         }
@@ -657,6 +690,17 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             textList.add(new TextComponentTranslation("susy.launch_pad.gui.fuel_progress", this.fuelingProgress,
                     maxFuelingProgress));
         }
+        if (!this.configWithinBudget) {
+            textList.add(new TextComponentTranslation("susy.rocket_programmer.not_enough_budget"));
+        }
+    }
+
+    @Override
+    protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
+        return super.createUITemplate(entityPlayer)
+                .widget(new SlotWidget(this.configurerSlot, 0, 173, 79)
+                        .setBackgroundTexture(GuiTextures.SLOT_DARK)
+                        .setTooltipText("susy.launch_pad.gui.configurer_slot"));
     }
 
     @Override

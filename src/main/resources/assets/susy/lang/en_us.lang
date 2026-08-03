@@ -418,6 +418,7 @@ tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
 metaitem.padding_cloth.name=Padding Cloth
 
 susy.rocketry.soyuz.name=Soyuz FG
+susy.rocketry.lunar.name=Lunar-sized Rocket
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
@@ -1409,6 +1410,7 @@ metaitem.data_card.active.name=Loaded Structure Card
 metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build the component.
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
 metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
+metaitem.data_card.master_blueprint.tag.lunar=§6Lunar-sized Rocket
 metaitem.data_card.active.tag.engine=§6Engine
 metaitem.data_card.active.tag.engine_small=§6Vernier Engine
 metaitem.data_card.active.tag.fairing=§6Fairing
@@ -1773,7 +1775,7 @@ susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
 
 entity.Rocket.name=Soyuz FG Rocket
 entity.Lander.name=Moon Lander
-entity.Lunar Rocket.name=Lunar Rocket
+entity.Lunar Rocket.name=Lunar-sized Rocket
 
 susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
 susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
@@ -1792,6 +1794,7 @@ susy.launch_pad.loading=Loading rocket...
 susy.launch_pad.loaded=Rocket ready for launch
 susy.launch_pad.launching=Launching rocket...
 susy.launch_pad.gui.fuel_progress=Fuel: %s mB/%s mB
+susy.launch_pad.gui.configurer_slot=Optional: insert a Rocket Configurer to program the mission
 
 susy.machine.lunar_launch_complex.name=Lunar Launch Complex
 susy.machine.lunar_launch_complex.signal.0=Start assembly

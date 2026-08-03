@@ -45,6 +45,9 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     public Recipe getRecipe(long maxVoltage) {
         if (!assembler.isAssemblyWorking()) return null;
 
+        if (assembler.getComponentCount() == assembler.getComponentIndex()) {
+            return null;
+        }
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null) return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()

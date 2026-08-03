@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -79,6 +80,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
+import supersymmetry.common.rocketry.RocketConfigurerHandler;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 
 /**
@@ -121,6 +123,13 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     private EntityLunarRocket selectedRocket;
     private AxisAlignedBB rocketAABB;
     private int fuelingProgress;
+
+    /**
+     * Optional. Nothing rolls through a rocket programmer on the way here, so this is the only way to give a rocket
+     * built by the complex a mission list.
+     */
+    public final RocketConfigurerHandler configurerSlot = new RocketConfigurerHandler(this);
+    private boolean configWithinBudget = true;
 
     /**
      * Latched by the launch redstone signal. The front face signal is polled directly instead, so it does not need
@@ -327,6 +336,9 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                     setComplexState(LaunchComplexState.IDLE);
                     break;
                 }
+                if (getOffsetTimer() % 4 == 0) {
+                    setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
+                }
                 if (!loadCargo() || !isLaunchAuthorized()) {
                     break;
                 }
@@ -435,6 +447,13 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     private void setFuelingProgress(int fuelingProgress) {
         this.fuelingProgress = fuelingProgress;
         writeCustomData(SuSyDataCodes.UPDATE_FUEL_PROGRESS, buf -> buf.writeInt(fuelingProgress));
+    }
+
+    private void setConfigWithinBudget(boolean withinBudget) {
+        if (this.configWithinBudget != withinBudget) {
+            this.configWithinBudget = withinBudget;
+            writeCustomData(SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG, buf -> buf.writeBoolean(withinBudget));
+        }
     }
 
     // --- Redstone ------------------------------------------------------------------------------------------------
@@ -564,7 +583,14 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         data.setInteger("componentIndex", this.componentIndex);
         data.setString("state", this.state.name());
         data.setInteger("fuelingProgress", this.fuelingProgress);
+        data.setTag("configurer", this.configurerSlot.serializeNBT());
         return data;
+    }
+
+    @Override
+    public void clearMachineInventory(NonNullList<ItemStack> itemBuffer) {
+        super.clearMachineInventory(itemBuffer);
+        clearInventory(itemBuffer, this.configurerSlot);
     }
 
     @Override
@@ -578,6 +604,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         this.componentIndex = data.getInteger("componentIndex");
         this.blueprintSlot.setLocked(this.isAssemblyWorking);
         this.fuelingProgress = data.getInteger("fuelingProgress");
+        this.configurerSlot.deserializeNBT(data.getCompoundTag("configurer"));
         try {
             this.state = LaunchComplexState.valueOf(data.getString("state"));
         } catch (IllegalArgumentException e) {
@@ -602,6 +629,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         buf.writeInt(this.componentIndex);
         buf.writeEnumValue(this.state);
         buf.writeInt(this.fuelingProgress);
+        buf.writeBoolean(this.configWithinBudget);
     }
 
     @Override
@@ -611,6 +639,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         this.componentIndex = buf.readInt();
         this.state = buf.readEnumValue(LaunchComplexState.class);
         this.fuelingProgress = buf.readInt();
+        this.configWithinBudget = buf.readBoolean();
         this.blueprintSlot.setLocked(this.isAssemblyWorking);
     }
 
@@ -620,6 +649,8 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
             this.state = buf.readEnumValue(LaunchComplexState.class);
         } else if (dataId == SuSyDataCodes.UPDATE_FUEL_PROGRESS) {
             this.fuelingProgress = buf.readInt();
+        } else if (dataId == SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG) {
+            this.configWithinBudget = buf.readBoolean();
         } else {
             super.receiveCustomData(dataId, buf);
             if (dataId == GregtechDataCodes.LOCK_OBJECT_HOLDER) {
@@ -663,11 +694,16 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        textList.add(new TextComponentTranslation(
-                "susy.lunar_launch_complex." + this.state.name().toLowerCase(Locale.ROOT)));
+        if (this.state != LaunchComplexState.ASSEMBLING) {
+            textList.add(new TextComponentTranslation(
+                    "susy.lunar_launch_complex." + this.state.name().toLowerCase(Locale.ROOT)));
+        }
         if (this.state == LaunchComplexState.LOADED && this.selectedRocket != null) {
             textList.add(new TextComponentTranslation("susy.launch_pad.gui.fuel_progress", this.fuelingProgress,
                     this.selectedRocket.getFuelVolume()));
+        }
+        if (!this.configWithinBudget) {
+            textList.add(new TextComponentTranslation("susy.rocket_programmer.not_enough_budget"));
         }
     }
 
@@ -752,6 +788,10 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                     }
                 });
         builder.widget(blueprintSlotWidget);
+        builder.widget(
+                new SlotWidget(this.configurerSlot, 0, 173, 61)
+                        .setBackgroundTexture(GuiTextures.SLOT_DARK)
+                        .setTooltipText("susy.launch_pad.gui.configurer_slot"));
         builder.widget(
                 new ItemCostWidget(
                         new Size(158, 50),

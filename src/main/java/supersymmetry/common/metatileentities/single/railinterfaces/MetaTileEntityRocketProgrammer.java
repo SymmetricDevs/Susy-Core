@@ -1,17 +1,12 @@
 package supersymmetry.common.metatileentities.single.railinterfaces;
 
-import static supersymmetry.common.entities.EntityAbstractRocket.ROCKET_CONFIG_KEY;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
@@ -36,14 +31,14 @@ import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.Mui2Utils;
 import supersymmetry.api.stockinteraction.StockFilter;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.entities.EntityBlueprintRocket;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.rocketry.RocketConfiguration;
+import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
 public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteractor {
 
-    protected IItemHandlerModifiable circuitHolder = new ItemStackHandler(1);
-    protected AxisAlignedBB structureAABB;
+    protected RocketConfigurerHandler circuitHolder = new RocketConfigurerHandler(this);
     protected boolean canHandleFullConfig = true;
 
     public MetaTileEntityRocketProgrammer(ResourceLocation metaTileEntityId) {
@@ -66,16 +61,28 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
     @Override
     public void updateStock() {
         super.updateStock();
-        if (this.getOffsetTimer() % 4 == 0 && this.getConfig() != null) {
-            EntityTransporterErector rocket = (EntityTransporterErector) this.stock;
-            if (rocket != null) {
-                RocketConfiguration config = new RocketConfiguration(this.getConfig());
-                // Set budget to 2
-                // TODO: Make the transporter erector hold rocket types for IV
-                setLowTierWarning(config.setBudget(this.getWorld().provider.getDimension(), 2));
-                rocket.getRocketNBT().setTag(ROCKET_CONFIG_KEY, config.serialize());
-            }
+        if (this.getWorld().isRemote || this.getOffsetTimer() % 4 != 0) {
+            return;
         }
+        if (this.circuitHolder.isEmpty()) {
+            // Nothing left to warn about once the config is pulled back out.
+            setLowTierWarning(true);
+            return;
+        }
+
+        boolean withinBudget = true;
+        if (this.stock instanceof EntityTransporterErector erector) {
+            withinBudget = this.circuitHolder.program(erector.getRocketNBT(),
+                    this.getWorld().provider.getDimension());
+        }
+        // The lunar launch complex builds its rocket straight onto the pad, so there is no erector passing through
+        // to stamp on the way in. Program any rocket standing in the box directly instead.
+        for (EntityBlueprintRocket rocket : this.getWorld().getEntitiesWithinAABB(EntityBlueprintRocket.class,
+                this.getInteractionBoundingBox())) {
+            if (rocket.isLaunched()) continue;
+            withinBudget &= this.circuitHolder.program(rocket);
+        }
+        setLowTierWarning(withinBudget);
     }
 
     @Override

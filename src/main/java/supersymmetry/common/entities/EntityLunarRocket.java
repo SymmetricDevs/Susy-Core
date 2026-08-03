@@ -1,5 +1,6 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 

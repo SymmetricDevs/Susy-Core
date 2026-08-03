@@ -31,7 +31,7 @@ public class MetaTileEntityLayupMachine extends RecipeMapMultiblockController {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(" SGS ", "  S  ", "  A  ")
+                .aisle(" SGS ", "  A  ", "     ")
                 .aisle("sssss", "     ", "     ")
                 .aisle("sssss", "     ", "     ")
                 .aisle("sssss", "     ", "     ")
