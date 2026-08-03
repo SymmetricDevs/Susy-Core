@@ -4,7 +4,6 @@ import static supersymmetry.api.fluids.SusyGeneratedFluidHandler.CAST_MATERIALS;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -87,12 +86,6 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.SLAB_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.BILLET_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STRAND_COOLER.getStackForm(), strandCastingId);
-
-        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
-                .collect(Collectors.toList()), RocketFuelCategory.UID);
-        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
-        String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
-        registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
     }
 
     @Override

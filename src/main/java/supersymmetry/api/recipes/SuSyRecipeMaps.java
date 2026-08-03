@@ -572,13 +572,6 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> CARGO_DRONE_PAD = new RecipeMap<>(
             "cargo_drone_pad", 1, 1, 0, 0, new SimpleRecipeBuilder(), true);
 
-    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RAILROAD_ENGINEERING_STATION_RECIPES = LargeRESRecipeMap.RES_RECIPES;
-
-    public static final RecipeMap<?> LARGE_RES = LargeRESRecipeMap.RES_RECIPES;
-
-    public static final RecipeMap<SimpleRecipeBuilder> LAYUP = new RecipeMap<>("layup", 2, 1, 2, 0,
-            new SimpleRecipeBuilder(), false);
-
     public static final RecipeMap<SimpleRecipeBuilder> LUNAR_BUCKET_WHEEL_EXCAVATOR = new RecipeMap<>(
             "lunar_bwe", 1, 3, 0, 0, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.DRILL_TOOL);
