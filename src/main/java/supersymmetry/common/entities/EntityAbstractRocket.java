@@ -1,6 +1,12 @@
 package supersymmetry.common.entities;
 
+import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
+
+import java.util.Arrays;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,12 +15,15 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
@@ -54,7 +63,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.dataManager.register(LAUNCHED, false);
         this.dataManager.register(COUNTDOWN_STARTED, false);
         this.dataManager.register(AGE, 0);
-        this.dataManager.register(LAUNCH_TIME, 0);
+        this.dataManager.register(LAUNCH_TIME, -1);
         this.dataManager.register(FLIGHT_TIME, 0);
         this.dataManager.register(START_POS, 0.F);
         this.dataManager.register(ACTED, false);
@@ -68,7 +77,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.dataManager.set(LAUNCHED, launched);
     }
 
-    public boolean isCountDownStarted() {
+    public boolean isCountdownStarted() {
         return this.dataManager.get(COUNTDOWN_STARTED);
     }
 
@@ -118,13 +127,16 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public void startCountdown(int length) {
         this.setCountdownStarted(true);
-        this.setLaunchTime(this.getAge() + length);
+        // it will take six years chillax
+        this.setLaunchTime((int) this.world.getTotalWorldTime() + length);
         this.setStartPos((float) this.posY);
     }
 
     public void launchRocket() {
-        this.setLaunched(true);
-        this.setActed(false);
+        if (!this.world.isRemote) {
+            this.setLaunched(true);
+            this.setActed(false);
+        }
         this.isAirBorne = true;
     }
 
@@ -135,26 +147,21 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     protected abstract float getExplosionStrength();
 
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-
-        if (this.posY > 600 && this.isLaunched()) {
-            if (this.hasActed() && this.getPassengers().isEmpty()) {
-                this.setDead();
-            } else {
-                act();
-                this.setActed(true);
-            }
-        }
-    }
-
     protected void act() {
-        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag("instruments");
+        if (this.world.isRemote) return;
+        NBTTagCompound instruments = this.getEntityData().getCompoundTag("rocket").getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instruments.getKeySet()) {
-            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.valueOf(key);
+            BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
             int count = instruments.getInteger(key);
             instrument.act(count, this);
+        }
+        for (Entity passenger : this.getPassengers()) {
+            if (!EventHandlers.isEntityTravelling(passenger)) {
+                if (passenger instanceof EntityLivingBase living) {
+                    living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
+                }
+                passenger.setDead();
+            }
         }
     }
 
@@ -164,7 +171,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     @Override
     public Iterable<ItemStack> getArmorInventoryList() {
-        return null;
+        return Arrays.asList();
     }
 
     @Override
@@ -208,8 +215,41 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     @Override
     public void readEntityFromNBT(@NotNull NBTTagCompound compound) {
+        if (compound == null || compound.tagMap.size() == 0) return;
         super.readEntityFromNBT(compound);
-        this.cargo.deserializeNBT(compound.getCompoundTag("cargo"));
+        if (this.cargo == null) {
+            this.cargo = new CargoItemStackHandler(0, 0);
+        }
+        var cargoTag = compound.getCompoundTag("cargo");
+        if (cargoTag == null) return;
+        try {
+            this.cargo.deserializeNBT(cargoTag);
+        } catch (Exception e) {
+            // shrug
+        }
+    }
+
+    @Override
+    public void updatePassenger(Entity passenger) {
+        if (!passenger.world.isRemote && isCountdownStarted() && !isLaunched() &&
+                passenger instanceof EntityPlayer player) {
+            player.sendStatusMessage(
+                    new TextComponentTranslation("susy.rocket.msg.launch",
+                            (getLaunchTime() - this.world.getTotalWorldTime()) / 20),
+                    true);
+        }
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        boolean launched = this.isLaunched();
+        int launchTime = this.getLaunchTime();
+
+        if (this.isCountdownStarted() && !launched && this.world.getTotalWorldTime() >= launchTime) {
+            this.launchRocket();
+        }
+        this.setAge(this.getAge() + 1);
     }
 
     public CargoItemStackHandler getInventory() {

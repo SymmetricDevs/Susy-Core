@@ -1,63 +1,74 @@
 package supersymmetry.common.mui.widget;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Tuple;
-
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.widgets.AbstractWidgetGroup;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.DynamicLabelWidget;
-import gregtech.api.gui.widgets.SlotWidget;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.widgets.*;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
 import supersymmetry.api.gui.SusyGuiTextures;
-import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
-import supersymmetry.api.rocketry.rockets.RocketStage.ComponentValidationResult;
 import supersymmetry.api.util.DataStorageLoader;
 
 public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
     @FunctionalInterface
-    public interface slotProvider {
+    public interface BlueprintProvider {
 
-        List<DataStorageLoader> getItemFor(RocketStage stage, String compname);
+        AbstractRocketBlueprint get();
     }
 
-    public List<RocketStage> stages = new ArrayList<>();
-    protected ClickButtonWidget previousButton;
-    protected ClickButtonWidget nextButton;
-    protected DynamicLabelWidget amountTextField;
-    protected DynamicLabelWidget stageName;
-    protected slotProvider provider;
-    public String errorStage = "";
-    public String errorComponentType = "";
-    public Consumer<RocketStageDisplayWidget> removalAction;
-    public Consumer<RocketStageDisplayWidget> insertionAction;
-    public RocketStage.ComponentValidationResult error = ComponentValidationResult.UNKNOWN;
-    public int selectedStageIndex = 0;
-    // a hashmap of ui elements, this is a bad idea, but its either that or a hashmap of hashmaps of
-    // booleans for the button
-    protected Map<String, RocketSimulatorComponentContainerWidget> stageContainers = new HashMap<>();
+    @FunctionalInterface
+    public interface RowStateProvider {
 
-    public RocketStageDisplayWidget(Position pos, Size size, slotProvider slotProvider) {
+        BlueprintRowState get(RocketStage stage, String componentType);
+    }
+
+    @FunctionalInterface
+    public interface StageIndexCallback {
+
+        void onStageChange(int newIndex);
+    }
+
+    @FunctionalInterface
+    public interface BlueprintActionCallback {
+
+        void onBlueprintAction(int actionType, PacketBuffer data);
+    }
+
+    public final BlueprintProvider blueprintProvider;
+    public final RowStateProvider rowStateProvider;
+    public final Runnable markDirty;
+
+    public int selectedStageIndex = 0;
+    public int previousSelectedStageIndex = 0;
+
+    public ClickButtonWidget previousButton;
+    public ClickButtonWidget nextButton;
+    public DynamicLabelWidget selectedStageText;
+
+    public Map<String, StageContainerWidget> stageContainers = new TreeMap<>();
+
+    public RocketStageDisplayWidget(
+                                    Position pos,
+                                    Size size,
+                                    BlueprintProvider blueprintProvider,
+                                    RowStateProvider rowStateProvider,
+                                    Runnable markDirty) {
         super(pos, size);
-        this.provider = slotProvider;
+        this.blueprintProvider = blueprintProvider;
+        this.rowStateProvider = rowStateProvider;
+        this.markDirty = markDirty;
 
         previousButton = new ClickButtonWidget(
                 0,
@@ -65,267 +76,471 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 10,
                 10,
                 "",
-                (d) -> {
-                    selectedStageIndex = (selectedStageIndex == 0) ? stages.size() : selectedStageIndex - 1;
-                    this.updateSelectedStageView();
+                (data) -> {
+                    AbstractRocketBlueprint bp = blueprintProvider.get();
+                    if (bp != null && !bp.getStages().isEmpty()) {
+                        selectedStageIndex = (selectedStageIndex - 1 + bp.getStages().size()) % bp.getStages().size();
+                        updateStageVisibility();
+                    }
                 })
                         .setShouldClientCallback(true)
                         .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+
         nextButton = new ClickButtonWidget(
                 (size.width - 20),
                 0,
                 10,
                 10,
                 "",
-                (_) -> {
-                    this.selectedStageIndex++;
-                    this.updateSelectedStageView();
+                (data) -> {
+                    AbstractRocketBlueprint bp = blueprintProvider.get();
+                    if (bp != null && !bp.getStages().isEmpty()) {
+                        selectedStageIndex = (selectedStageIndex + 1) % bp.getStages().size();
+                        updateStageVisibility();
+                    }
                 })
                         .setShouldClientCallback(true)
                         .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
-        amountTextField = new DynamicLabelWidget(
-                (int) ((size.width / 5) * 2.5),
+
+        selectedStageText = new DynamicLabelWidget(
+                (int) ((size.width / 5) * 1.5),
                 -1,
-                () -> this.getSelectedIndex() + 1 + "/" + this.stages.size());
-        stageName = new DynamicLabelWidget(
-                2,
-                12,
                 () -> {
-                    if (this.stages.isEmpty()) return "";
+                    AbstractRocketBlueprint bp = blueprintProvider.get();
+                    if (bp == null || bp.getStages().isEmpty()) {
+                        return "0/0";
+                    }
+
+                    RocketStage stage = getSelectedStage();
+                    if (stage == null) {
+                        return "0/" + bp.getStages().size();
+                    }
                     return I18n.format(
                             "susy.machine.blueprint_assembler.stagename",
-                            I18n.format(this.getSelectedStage().getLocalizationKey()));
-                },
-                0xffffff);
+                            (selectedStageIndex + 1) + "/" + bp.getStages().size(),
+                            I18n.format(stage.getLocalizationKey()));
+                });
 
-        this.addWidget(amountTextField);
+        this.addWidget(selectedStageText);
         this.addWidget(nextButton);
         this.addWidget(previousButton);
-        this.addWidget(stageName);
     }
 
     @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        this.amountTextField.setVisible(visible);
-        this.nextButton.setVisible(visible);
-        this.previousButton.setVisible(visible);
+    public void setVisible(boolean v) {
+        super.setVisible(v);
+        this.selectedStageText.setVisible(v);
+        this.nextButton.setVisible(v);
+        this.previousButton.setVisible(v);
     }
 
     @Override
-    public void setActive(boolean active) {
-        super.setActive(active);
-        this.amountTextField.setActive(active);
-        this.nextButton.setActive(active);
-        this.previousButton.setActive(active);
+    public void setActive(boolean a) {
+        super.setActive(a);
+        this.selectedStageText.setActive(a);
+        this.nextButton.setActive(a);
+        this.previousButton.setActive(a);
     }
 
     public int getSelectedIndex() {
-        return this.stages.isEmpty() ? 0 : selectedStageIndex % this.stages.size();
+        AbstractRocketBlueprint bp = blueprintProvider.get();
+        if (bp == null || bp.getStages().isEmpty()) {
+            return 0;
+        }
+        return selectedStageIndex % bp.getStages().size();
     }
 
     public RocketStage getSelectedStage() {
-        return this.stages.get(getSelectedIndex());
+        AbstractRocketBlueprint bp = blueprintProvider.get();
+        if (bp == null || bp.getStages().isEmpty()) {
+            return null;
+        }
+        List<RocketStage> stages = bp.getStages();
+        int idx = ((selectedStageIndex % stages.size()) + stages.size()) % stages.size();
+        return stages.get(idx);
     }
 
-    public void updateSelectedStageView() {
-        this.stageContainers
-                .values()
-                .forEach(
-                        x -> {
-                            // i have no clue how but this causes a ConcurrentModificationException
-                            x.setPrimary(false);
-                        });
-
-        if (!this.stageContainers.containsKey(this.getSelectedStage().getName())) {
-            // this would happen if the key was RocketStage and not a String and im not sure why
+    public void updateStageVisibility() {
+        AbstractRocketBlueprint bp = blueprintProvider.get();
+        if (bp == null) {
             return;
         }
-        this.stageContainers.get(this.getSelectedStage().getName()).setPrimary(true);
+
+        RocketStage selectedStage = getSelectedStage();
+        if (selectedStage == null) {
+            return;
+        }
+
+        for (Map.Entry<String, StageContainerWidget> entry : stageContainers.entrySet()) {
+            boolean isSelected = entry.getKey().equals(selectedStage.getName());
+            entry.getValue().setPrimary(isSelected);
+        }
     }
 
-    public void generateSelectedStageView(RocketStage stage) {
-        if (!this.stageContainers.containsKey(stage.getName())) {
-            RocketSimulatorComponentContainerWidget stageView = new RocketSimulatorComponentContainerWidget(
-                    new Position(0, 15), new Size(this.getSize().width, this.getSize().height - 15));
-            for (Map.Entry<String, int[]> componentLimits : stage.getComponentLimits().entrySet()) {
-                int maxSlotCount = stage.maxComponentsOf(componentLimits.getKey());
-                HorizontalScrollableListWidget slots = new HorizontalScrollableListWidget(0, 0, 18 * 5, 28);
-                for (int i = 0; i < maxSlotCount; i++) {
-                    slots.addWidget(
-                            new SlotWidget(
-                                    this.provider.getItemFor(stage, componentLimits.getKey()).get(i),
-                                    0,
-                                    0 /* i forgot where exactly, but the x possition gets set later somewhere */,
-                                    0)
-                                            .setBackgroundTexture(GuiTextures.SLOT_DARK));
-                }
+    public boolean containersBuilt = false;
 
-                slots.setSliderActive(slots.widgets.size() > 5);
-                RocketComponentEntryWidget entry = new RocketComponentEntryWidget(
-                        new Position(0, 0), new Size(18 * 5, 28), slots, componentLimits.getValue());
-                stageView.addSlotList(
-                        componentLimits.getKey(),
-                        "susy.rocketry.components." + componentLimits.getKey() + ".name",
-                        entry);
-            }
+    public void buildContainers() {
+        if (containersBuilt) {
+            return;
+        }
+
+        for (StageContainerWidget container : stageContainers.values()) {
+            this.removeWidget(container);
+        }
+        stageContainers.clear();
+
+        AbstractRocketBlueprint bp = blueprintProvider.get();
+        if (bp == null || bp.getStages().isEmpty()) {
+            return;
+        }
+
+        for (RocketStage stage : bp.getStages()) {
+            StageContainerWidget stageView = new StageContainerWidget(
+                    new Position(0, 0),
+                    new Size(this.getSize().width, this.getSize().height - 15),
+                    stage,
+                    rowStateProvider,
+                    markDirty);
+
             stageContainers.put(stage.getName(), stageView);
             this.addWidget(stageView);
         }
+
+        containersBuilt = true;
+        updateStageVisibility();
     }
 
-    public void generateFromBlueprint(AbstractRocketBlueprint blueprint) {
-        this.stages = blueprint.getStages();
-        this.selectedStageIndex = 0;
-        this.stageContainers.values().forEach(x -> this.removeWidget(x));
-        this.stageContainers.clear();
-        this.stages.forEach(
-                x -> {
-                    this.generateSelectedStageView(x);
-                });
-        this.updateSelectedStageView();
+    public void rebuildContainers() {
+        containersBuilt = false;
+        buildContainers();
     }
 
-    // this thing is an absolute mess
-    // takes in a blueprint, adds the component entries into it with all of the AbstractComponent<?>
-    // stuff. taken from the gui slots. this is here because of the shortview buttons
-    public boolean blueprintBuildAttempt(AbstractRocketBlueprint blueprint) {
-        this.error = ComponentValidationResult.UNKNOWN;
-        // go through every stage widget
-        for (Entry<String, RocketSimulatorComponentContainerWidget> stageEntry : this.stageContainers.entrySet()) {
-            RocketStage stageFrombp;
-            Optional<RocketStage> st = blueprint.getStages().stream()
-                    .filter(x -> x.getName().hashCode() == stageEntry.getKey().hashCode())
-                    .findFirst();
-            if (!st.isPresent()) {
-                // it appears like strings with the same exact text are not always equal in java..
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-                // SusyLog.logger.error(
-                // "blueprint stages: {} actually here: {}",
-                // blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList()),
-                // this.stageContainers.keySet());
-                // for (RocketStage stage : blueprint.getStages()) {
-                // for (Entry<String, RocketSimulatorComponentContainerWidget> guiEntry :
-                // this.stageContainers.entrySet()) {
-                // SusyLog.logger.info(
-                // "stage name: \"{}\" guiEntry name: \"{}\" equal??? {}",
-                // stage.getName(),
-                // guiEntry.getKey(),
-                // stage.getName().hashCode() == guiEntry.getKey().hashCode());
-                // }
-                // }
-                throw new RuntimeException(
-                        String.format(
-                                "failed to match a stage to the provided blueprint, %s not in %s",
-                                stageEntry.getKey(),
-                                blueprint.getStages().stream().map(x -> x.getName()).collect(Collectors.toList())));
-            }
-            stageFrombp = st.get();
+        AbstractRocketBlueprint bp = blueprintProvider.get();
+        boolean hasBlueprint = bp != null && !bp.getStages().isEmpty();
 
-            this.errorStage = stageFrombp.getName();
-            // go through every component type within that stage component
-            for (Entry<String, RocketComponentEntryWidget> entryWidgets : stageEntry.getValue().components.entrySet()) {
-                List<AbstractComponent<?>> components = new ArrayList<>();
-                this.errorComponentType = entryWidgets.getKey();
-
-                if (!entryWidgets.getValue().isShortView()) {
-                    // go through each slot and add each component separately
-                    for (DataStorageLoader componentContainer : entryWidgets.getValue().getSlots()) {
-                        @NotNull
-                        ItemStack cardStack = componentContainer.getStackInSlot(0);
-                        if (!cardStack.hasTagCompound()) {
-                            // this.error = ComponentValidationResult.INVALID_CARD;
-                            // return false;
-                            continue;
-                        }
-                        NBTTagCompound tag = cardStack.getTagCompound();
-                        Optional<? extends AbstractComponent<?>> component = AbstractComponent
-                                .getComponentFromName(tag.getString("name")).readFromNBT(tag);
-                        if (!component.isPresent()) {
-                            // this.error = ComponentValidationResult.INVALID_CARD;
-                            // return false;
-                            continue;
-                        }
-                        components.add(component.get());
-                    }
-                }
-                // duplicate the component from the first slot n times since its the same stuff most of the
-                // times
-                else {
-                    @NotNull
-                    ItemStack cardStack = entryWidgets.getValue().getSlots().get(0).getStackInSlot(0);
-                    if (!cardStack.hasTagCompound()) {
-                        this.error = ComponentValidationResult.INVALID_CARD;
-                        return false;
-                    }
-                    NBTTagCompound tag = cardStack.getTagCompound();
-                    Optional<? extends AbstractComponent<?>> component = AbstractComponent
-                            .getComponentFromName(tag.getString("name")).readFromNBT(tag);
-                    if (!component.isPresent()) {
-                        this.error = ComponentValidationResult.INVALID_CARD;
-                        return false;
-                    }
-                    for (int i = 0; i < entryWidgets.getValue().getAmount(); i++) {
-                        components.add(component.get());
-                    }
-                }
-                // actually set the component type lists with the generated AbstractComponents
-                ComponentValidationResult res = stageFrombp.setComponentListEntry(entryWidgets.getKey(), components);
-                if (res != ComponentValidationResult.SUCCESS) {
-                    this.error = res;
-                    return false;
-                }
-            }
-            for (Entry<String, List<AbstractComponent<?>>> componentLists : stageFrombp.getComponents().entrySet()) {
-                ComponentValidationResult stat = stageFrombp
-                        .getComponentValidationFunction()
-                        .apply(
-                                new Tuple<String, List<AbstractComponent<?>>>(
-                                        componentLists.getKey(), componentLists.getValue()));
-                if (stat != ComponentValidationResult.SUCCESS) {
-                    this.error = stat;
-                    return false;
-                }
-            }
+        if (hasBlueprint && selectedStageIndex != previousSelectedStageIndex) {
+            writeUpdateInfo(2, buffer -> buffer.writeVarInt(selectedStageIndex));
+            previousSelectedStageIndex = selectedStageIndex;
         }
-        this.error = ComponentValidationResult.SUCCESS;
-        return true;
     }
 
-    // a very bad way to just call a function when the server needs it
+    public void notifyBlueprintChanged() {
+        rebuildContainers();
+        selectedStageIndex = 0;
+        previousSelectedStageIndex = 0;
+    }
+
     @Override
     public void readUpdateInfo(int id, PacketBuffer buffer) {
         super.readUpdateInfo(id, buffer);
-        if (id == 100) {
-            this.insertionAction.accept(this);
-        } else if (id == 101) {
-            this.removalAction.accept(this);
+        if (id == 2) {
+            selectedStageIndex = buffer.readVarInt();
+            updateStageVisibility();
         }
     }
 
-    public void onBlueprintRemoved() {
-        this.writeUpdateInfo(101, (buf) -> {});
-        this.removalAction.accept(this);
+    public void setSelectedStageIndex(int index) {
+        this.selectedStageIndex = index;
+        this.previousSelectedStageIndex = index;
+        updateStageVisibility();
     }
 
-    public void onBlueprintInserted() {
-        this.writeUpdateInfo(100, (buf) -> {});
-        this.insertionAction.accept(this);
-    }
+    public static class StageContainerWidget extends AbstractWidgetGroup {
 
-    // TODO: fix server desync
-    public String getStatusText() {
-        if (this.error == ComponentValidationResult.SUCCESS) {
-            return I18n.format(ComponentValidationResult.SUCCESS.getTranslationKey());
-        } else {
-            if (this.errorComponentType == "" || this.errorStage == ""
-            // || this.error == ComponentValidationResult.UNKNOWN
-            ) return "";
+        public Map<String, ComponentEntryWidget> components = new TreeMap<>();
+        public int rowSkip = 0;
+
+        public static final int ROW_SEPARATION = 18;
+
+        private static class RowLayoutEntry {
+
+            final DynamicLabelWidget label;
+            final ComponentEntryWidget entry;
+            final int labelX;
+
+            RowLayoutEntry(DynamicLabelWidget label, ComponentEntryWidget entry, int labelX) {
+                this.label = label;
+                this.entry = entry;
+                this.labelX = labelX;
+            }
         }
-        return String.format(
-                "%s \n%s \n%s",
-                I18n.format(this.error.getTranslationKey()),
-                I18n.format("susy.rocketry.stages." + this.errorStage + ".name"),
-                I18n.format("susy.rocketry.components." + this.errorComponentType + ".name"));
+
+        private final List<RowLayoutEntry> rowEntries = new ArrayList<>();
+
+        public StageContainerWidget(
+                                    Position pos, Size size, RocketStage stage, RowStateProvider rowStateProvider,
+                                    Runnable markDirty) {
+            super(pos, size);
+
+            for (Map.Entry<String, int[]> componentLimits : stage.getComponentLimits().entrySet()) {
+                String componentType = componentLimits.getKey();
+                int maxSlotCount = stage.maxComponentsOf(componentType);
+
+                BlueprintRowState rowState = rowStateProvider.get(stage, componentType);
+
+                HorizontalScrollableListWidget slotsw = new HorizontalScrollableListWidget(0, 0, 18 * 5, 28);
+
+                if (rowState != null) {
+                    for (int i = 0; i < maxSlotCount; i++) {
+                        DataStorageLoader slot = rowState.slots.get(i);
+                        SlotWidget s = new ComponentCardSlotWidget(slot, 0, 0, 0);
+                        s.setBackgroundTexture(GuiTextures.SLOT_DARK);
+                        slotsw.addWidget(s);
+                    }
+                }
+
+                slotsw.setSliderActive(slotsw.widgets.size() > 5);
+
+                // dial button
+                ComponentEntryWidget entry = new ComponentEntryWidget(
+                        new Position(0, 0), new Size(18 * 5, 28), slotsw, rowState, markDirty);
+
+                addSlotList(componentType, "susy.rocketry.components." + componentType + ".name", entry);
+            }
+        }
+
+        public void addSlotList(String entryName, String localizationKey, ComponentEntryWidget entry) {
+            // Use the natural (non-short-view) slider state so rows initialized with shortView=true
+            // still reserve the right amount of vertical space for their scrollbar.
+            boolean naturalSlider = entry.shortView ? entry.previousSliderState : entry.itemList.sliderActive;
+            int scrollbarPadding = naturalSlider ? HorizontalScrollableListWidget.scrollPaneWidth : 0;
+
+            entry.setSelfPosition(new Position(0, rowSkip + ROW_SEPARATION + scrollbarPadding));
+            entry.setSize(new Size(90, 28));
+            this.addWidget(entry);
+
+            // part name
+            String text = I18n.format(localizationKey);
+            int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
+            int xPos = this.getSize().width - textWidth - 10;
+
+            DynamicLabelWidget textWidget = new DynamicLabelWidget(
+                    xPos,
+                    rowSkip + ROW_SEPARATION + scrollbarPadding,
+                    () -> text,
+                    0xffffff);
+
+            this.addWidget(textWidget);
+
+            rowEntries.add(new RowLayoutEntry(textWidget, entry, xPos));
+
+            components.put(entryName, entry);
+            rowSkip += ROW_SEPARATION + scrollbarPadding;
+        }
+
+        public void setPrimary(boolean active) {
+            this.setActive(active);
+            this.setVisible(active);
+
+            for (ComponentEntryWidget entry : components.values()) {
+                entry.setActive(active);
+                entry.setVisible(active);
+            }
+        }
+    }
+
+    public static class ComponentEntryWidget extends AbstractWidgetGroup {
+
+        public class WidgetIntSelector extends AbstractWidgetGroup {
+
+            public final ClickButtonWidget decreaseButton;
+            public final ClickButtonWidget increaseButton;
+            public final DynamicLabelWidget amountTextField;
+            public final int[] validValues;
+            public int selectedIndex = 0;
+
+            public WidgetIntSelector(int[] validValues, Position position, Size size) {
+                super(position, size);
+                this.validValues = validValues;
+
+                decreaseButton = new ClickButtonWidget(
+                        0,
+                        0,
+                        size.width / 5,
+                        size.height,
+                        "",
+                        (data) -> {
+                            selectedIndex = (selectedIndex - 1 + validValues.length) % validValues.length;
+                            writeClientAction(3, buf -> buf.writeVarInt(selectedIndex));
+                        })
+                                .setShouldClientCallback(true)
+                                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+
+                increaseButton = new ClickButtonWidget(
+                        (size.width / 5) * 4,
+                        0,
+                        size.width / 5,
+                        size.height,
+                        "",
+                        (data) -> {
+                            selectedIndex = (selectedIndex + 1) % validValues.length;
+                            writeClientAction(3, buf -> buf.writeVarInt(selectedIndex));
+                        })
+                                .setShouldClientCallback(true)
+                                .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
+
+                amountTextField = new DynamicLabelWidget(
+                        (int) ((size.width / 5) * 1.5),
+                        3,
+                        () -> Integer.toString(getSelectedValue()) + "x",
+                        0xffffff);
+
+                this.addWidget(amountTextField);
+                this.addWidget(increaseButton);
+                this.addWidget(decreaseButton);
+
+                decreaseButton.setVisible(validValues.length > 1);
+                decreaseButton.setActive(validValues.length > 1);
+                increaseButton.setVisible(validValues.length > 1);
+                increaseButton.setActive(validValues.length > 1);
+            }
+
+            public int getSelectedValue() {
+                return validValues[selectedIndex];
+            }
+
+            @Override
+            public void handleClientAction(int id, PacketBuffer buffer) {
+                super.handleClientAction(id, buffer);
+                if (id == 3) {
+                    selectedIndex = buffer.readVarInt();
+                    if (boundRow != null) {
+                        boundRow.multiplierIndex = selectedIndex;
+                        markDirty.run();
+                    }
+                }
+            }
+        }
+
+        public WidgetIntSelector selector;
+        public boolean shortView = false;
+        public HorizontalScrollableListWidget itemList;
+        public final Widget shortViewButton;
+        public final BlueprintRowState boundRow;
+        public final Runnable markDirty;
+
+        public Size previousStateSize = new Size(18 * 5 + 2, 28);
+        public boolean previousSliderState = false;
+
+        public ComponentEntryWidget(
+                                    Position pos, Size size, HorizontalScrollableListWidget itemList,
+                                    BlueprintRowState boundRow, Runnable markDirty) {
+            super(pos, size);
+            this.itemList = itemList;
+            this.boundRow = boundRow;
+            this.markDirty = markDirty;
+
+            int[] validValues = (boundRow != null) ? boundRow.validMultiplierValues : new int[] { 1 };
+
+            shortViewButton = new ToggleButtonWidget(
+                    itemList.getSize().width + 10,
+                    0,
+                    16,
+                    16,
+                    this::isShortView,
+                    (isShort) -> {
+                        setShortView(isShort);
+                    }) {
+
+                @Override
+                @SideOnly(Side.CLIENT)
+                public boolean mouseClicked(int mouseX, int mouseY, int button) {
+                    if (super.mouseClicked(mouseX, mouseY, button)) {
+                        setShortView(this.isPressed);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+                    .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW)
+                    .setTooltipText("susy.gui.toggle_short_view");
+
+            selector = new WidgetIntSelector(
+                    validValues,
+                    new Position(itemList.getSize().width - 25, 0),
+                    new Size(itemList.getSize().width / 2 - 10, 18));
+
+            selector.setVisible(false);
+            selector.setActive(false);
+
+            this.addWidget(itemList);
+            this.addWidget(shortViewButton);
+            this.addWidget(selector);
+
+            if (boundRow != null) {
+                selector.selectedIndex = Math.min(boundRow.multiplierIndex, validValues.length - 1);
+                if (boundRow.shortView) {
+                    applyShortViewSize(true);
+                    this.shortView = true;
+                    selector.setActive(true);
+                    selector.setVisible(true);
+                }
+            }
+        }
+
+        @Override
+        public void setActive(boolean active) {
+            this.selector.setActive(active);
+            this.itemList.widgets.forEach(x -> x.setActive(active));
+            this.itemList.setActive(active);
+        }
+
+        public int getAmount() {
+            return selector.getSelectedValue();
+        }
+
+        public boolean isShortView() {
+            return shortView;
+        }
+
+        private void applyShortViewSize(boolean state) {
+            if (state) {
+                previousStateSize = itemList.getSize();
+                previousSliderState = itemList.sliderActive;
+                itemList.setSize(new Size(18, 18));
+                itemList.setSliderActive(false);
+                itemList.setSliderOffset(0f);
+            } else {
+                itemList.setSize(previousStateSize);
+                itemList.setSliderActive(previousSliderState);
+            }
+        }
+
+        public void setShortView(boolean state) {
+            if (this.shortView == state) return;
+
+            applyShortViewSize(state);
+
+            this.shortView = state;
+            if (boundRow != null) {
+                boundRow.shortView = state;
+                markDirty.run();
+            }
+            selector.setActive(state);
+            selector.setVisible(state);
+            writeClientAction(4, buf -> buf.writeBoolean(state));
+        }
+
+        @Override
+        public void handleClientAction(int id, PacketBuffer buffer) {
+            super.handleClientAction(id, buffer);
+            if (id == 4) {
+                boolean state = buffer.readBoolean();
+                if (this.shortView != state) {
+                    applyShortViewSize(state);
+                    this.shortView = state;
+                    if (boundRow != null) {
+                        boundRow.shortView = state;
+                        markDirty.run();
+                    }
+                    selector.setActive(state);
+                    selector.setVisible(state);
+                }
+            }
+        }
     }
 }

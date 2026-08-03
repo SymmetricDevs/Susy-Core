@@ -16,11 +16,13 @@ import org.jetbrains.annotations.NotNull;
 
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import gregtech.api.modules.GregTechModule;
 import gregtech.common.items.MetaItems;
 import gregtech.integration.IntegrationSubmodule;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ArmorBaubleBehavior;
 import supersymmetry.modules.SuSyModules;
@@ -40,6 +42,7 @@ public class BaublesModule extends IntegrationSubmodule {
         MetaItems.ELECTRIC_JETPACK_ADVANCED.addComponents(new ArmorBaubleBehavior(BaubleType.BODY));
         SuSyMetaItems.JET_WINGPACK.addComponents(new ArmorBaubleBehavior(BaubleType.BODY));
         MetaItems.NIGHTVISION_GOGGLES.addComponents(new ArmorBaubleBehavior(BaubleType.HEAD));
+        SuSyMetaItems.OXYGEN_SENSOR.addComponents(new ArmorBaubleBehavior(BaubleType.BODY));
     }
 
     @NotNull
@@ -59,5 +62,14 @@ public class BaublesModule extends IntegrationSubmodule {
             return BaublesApi.getBaublesHandler(player).getStackInSlot(5);
         }
         return ItemStack.EMPTY;
+    }
+
+    public static int getBaubleMass(EntityPlayer entity) {
+        int mass = 0;
+        IBaublesItemHandler handler = BaublesApi.getBaublesHandler(entity);
+        for (int i = 0; i < handler.getSlots(); i++) {
+            mass += CargoItemStackHandler.getMassPerItem(handler.getStackInSlot(i));
+        }
+        return mass;
     }
 }

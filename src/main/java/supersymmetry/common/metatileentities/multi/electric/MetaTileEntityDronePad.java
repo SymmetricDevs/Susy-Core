@@ -26,13 +26,12 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -178,15 +177,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
     }
 
-    public boolean checkRecipe(@NotNull Recipe recipe) {
-        for (int dimension : recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST)) {
-            if (dimension == this.getWorld().provider.getDimension()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
@@ -251,7 +241,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            return ((MetaTileEntityDronePad) metaTileEntity).checkRecipe(recipe) && super.checkRecipe(recipe);
+            return RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity) && super.checkRecipe(recipe);
         }
 
         @Override

@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=default": { "model": "susy:heliostat/default", "y": 180 },
+    "facing=south,variant=default": { "model": "susy:heliostat/default"},
+    "facing=west,variant=default": { "model": "susy:heliostat/default", "y": 90 },
+    "facing=east,variant=default": { "model": "susy:heliostat/default", "y": 270 }
+  }
+}

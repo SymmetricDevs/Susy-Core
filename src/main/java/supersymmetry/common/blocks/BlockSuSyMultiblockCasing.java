@@ -78,6 +78,7 @@ public class BlockSuSyMultiblockCasing extends VariantBlock<BlockSuSyMultiblockC
         SYNTHETIC_MULLITE_REFRACTORY("synthetic_mullite_refractory"),
         HYDROSTATIC_CASING("hydrostatic_casing"),
         ALUMINIUM_GEARBOX("aluminium_gearbox"),
+        HARDENED_TITANIUM_CASING("hardened_titanium_casing"),
         SCREENER_DECK("screener_deck");
 
         private final String name;

@@ -4,10 +4,6 @@ import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -90,12 +86,19 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockRobotArm ROBOT_ARM;
+    public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
+    public static BlockVehicleTrack VEHICLE_TRACK;
+    public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
     public static BlockSolarPanel SOLAR_PANEL;
     public static BlockPaddleShaft PADDLE_SHAFT;
+    public static BlockSolarFurnaceMirror SOLAR_FURNACE_MIRROR;
+    public static BlockHeliostat HELIOSTAT;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 

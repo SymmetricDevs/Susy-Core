@@ -23,6 +23,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "celeritas",
             "projectred-core",
             "icbmclassic",
+            "appliedenergistics2",
             "universalmodcore");
 
     @Override

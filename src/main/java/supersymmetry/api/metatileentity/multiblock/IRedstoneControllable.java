@@ -1,7 +1,6 @@
 package supersymmetry.api.metatileentity.multiblock;
 
-import java.util.List;
-
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 
 public interface IRedstoneControllable {
@@ -14,14 +13,15 @@ public interface IRedstoneControllable {
         }
     }
 
-    public default int getSignalCeiling() {
-        return this.getSignals().size() - 1;
+    public int getSignalCeiling();
+
+    public default String getSignalTranslationKey(int sig) {
+        if (this instanceof MetaTileEntity mte) {
+            return mte.getMetaName() + ".signal." + Integer.toString(sig);
+        } else {
+            return null;
+        }
     }
-
-    // these are used as translation keys, but maybe one day it will be hooked up to an oc api
-    public String getSignalName(int sig);
-
-    public List<String> getSignals();
 
     public void pulse(int sig);
 }

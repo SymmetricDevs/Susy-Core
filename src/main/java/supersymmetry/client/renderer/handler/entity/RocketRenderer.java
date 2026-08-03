@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -22,15 +23,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import supersymmetry.SuSyValues;
-import supersymmetry.common.entities.EntityRocket;
+import supersymmetry.common.entities.EntityBlueprintRocket;
 
 @SideOnly(Side.CLIENT)
-public class RocketRenderer<T extends EntityRocket> extends Render<T> {
+public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
 
     private ModelManager manager = null;
+    private final ModelResourceLocation modelLocation;
 
-    public RocketRenderer(RenderManager renderManager) {
+    public RocketRenderer(RenderManager renderManager, ModelResourceLocation modelLocation) {
         super(renderManager);
+        this.modelLocation = modelLocation;
     }
 
     @Override
@@ -61,6 +64,11 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
         GlStateManager.translate((float) x, (float) y, (float) z); // You shouldn't forget to translate to x, y, z
                                                                    // before rendering. Other specific are made so
                                                                    // Rubik's cube renders at the middle.
+
+        // Rotate the rocket based on its yaw and pitch (for troll mode and other flight dynamics)
+        GlStateManager.rotate(-entity.rotationYaw, 0.0F, 1.0F, 0.0F); // Rotate around Y axis for yaw
+        GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F); // Rotate around X axis for pitch
+
         GlStateManager.scale(1F, 1F, 1F); // Yep models are too ginormous for buffer builder.
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -70,7 +78,7 @@ public class RocketRenderer<T extends EntityRocket> extends Render<T> {
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
 
-        model = this.manager.getModel(SuSyValues.modelRocket); // Get the model
+        model = this.manager.getModel(this.modelLocation); // Get the model
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); // Bind the blocks texture. See
                                                               // Test#stitchTexture(TextureStitchEvent.Pre) for more
                                                               // information.

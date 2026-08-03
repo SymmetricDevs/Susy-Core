@@ -34,6 +34,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.*;
@@ -42,6 +43,7 @@ import gregtech.common.blocks.*;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.*;
+import supersymmetry.common.world.WorldProviderPlanet;
 
 public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorController
                                                     implements IProgressBarMultiblock {
@@ -58,7 +60,17 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
         this.tier = tier;
-        this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
+        this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this) {
+
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                if (this.getMetaTileEntity().getWorld().provider instanceof WorldProviderPlanet) {
+                    return false;
+                }
+
+                return super.checkRecipe(recipe);
+            }
+        };
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
 
@@ -66,6 +78,11 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityInternalCombustionEngine(metaTileEntityId, recipeMap, maxSpeed, accel, decel, tier,
                 casingRenderer, frontOverlay);
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
+        return super.checkRecipe(recipe, consumeIfSuccess);
     }
 
     @Override
@@ -157,6 +174,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2],
                 GTValues.VNF[tier + 2]));
         tooltip.add(I18n.format("susy.multiblock.rotation_generator.tooltip", maxSpeed, accel, decel));
+        tooltip.add(I18n.format("susy.general.requires_atmosphere"));
     }
 
     // GUI stuff

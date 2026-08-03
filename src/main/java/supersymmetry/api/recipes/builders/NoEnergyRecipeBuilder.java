@@ -12,6 +12,7 @@ import gregtech.api.util.ValidationResult;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
+import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> {
@@ -72,5 +73,15 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
                 this.recipePropertyStorage.getRecipePropertyValue(DimensionProperty.getInstance(),
                         IntLists.EMPTY_LIST);
+    }
+
+    public NoEnergyRecipeBuilder requireAtmosphere() {
+        this.applyProperty(AtmosphereProperty.getInstance(), true);
+        return this;
+    }
+
+    public NoEnergyRecipeBuilder requireVacuum() {
+        this.applyProperty(AtmosphereProperty.getInstance(), false);
+        return this;
     }
 }

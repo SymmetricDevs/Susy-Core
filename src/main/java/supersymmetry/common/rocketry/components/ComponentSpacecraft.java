@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,11 +30,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public Map<String, Integer> instruments = new HashMap<>();
     public boolean hasAir;
     public double volume;
+    public double guidanceMultiplier;
 
     public ComponentSpacecraft() {
         super(
-                "spacecraft_hull",
-                "spacecraft_hull",
+                "spacecraft",
+                "spacecraft",
                 tuple -> tuple.getSecond().stream()
                         .anyMatch(
                                 pos -> tuple
@@ -42,11 +46,40 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     }
 
     @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 3.0;
+        this.volume = 5.0;
+        this.mass = 1000.0;
+        this.guidanceMultiplier = 0.9;
+        this.hasAir = true;
+        this.instruments.put("lander", 1);
+        this.instruments.put("arm", 1);
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("volume")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
+        }
+        if (tag.hasKey("hasAir") && tag.getBoolean("hasAir")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.life_supported"));
+        } else {
+            lines.add(I18n.format("susy.rocketry.tooltip.life_not_supported"));
+        }
+        // not sure what hasAir means here so no tooltip for that
+        return lines;
+    }
+
+    @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
+        tag.setDouble("guidanceMultiplier", this.guidanceMultiplier);
         NBTTagCompound instrumentsTag = new NBTTagCompound();
         NBTTagCompound partsTag = new NBTTagCompound();
         for (Entry<String, Integer> part : this.parts.entrySet()) {
@@ -80,10 +113,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         spacecraft.mass = compound.getDouble("mass");
         spacecraft.volume = compound.getDouble("volume");
         spacecraft.hasAir = compound.getBoolean("hasAir");
+        spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
 
         NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
-            spacecraft.instruments.put(key, compound.getInteger(key));
+            spacecraft.instruments.put(key, instrumentsList.getInteger(key));
         }
 
         NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);
@@ -155,7 +189,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         }
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
         tag.setString("guidance", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).toString());
-
+        this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
+        tag.setDouble("guidanceMultiplier",
+                SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
             if (!interior.isEmpty()) {
@@ -194,14 +230,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
         }
-        double radius = analysis.getRadius(blocksConnected);
+        this.radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
         tag.setString("type", type);
         tag.setString("name", name);
         tag.setDouble("radius", radius);
-        this.radius = radius;
         double mass = blocksConnected.stream()
                 .mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
                 .sum();

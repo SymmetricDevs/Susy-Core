@@ -21,6 +21,7 @@ import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.capability.impl.PrimitiveRecipeLogic;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -30,6 +31,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.util.GTUtility;
 import gregtech.client.particle.VanillaParticleEffects;
 import gregtech.client.renderer.CubeRendererState;
@@ -41,6 +43,7 @@ import gregtech.common.ConfigHolder;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblockController {
 
@@ -49,6 +52,14 @@ public class MetaTileEntityPrimitiveSmelter extends RecipeMapPrimitiveMultiblock
 
     public MetaTileEntityPrimitiveSmelter(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.PRIMITIVE_SMELTER);
+
+        this.recipeMapWorkable = new PrimitiveRecipeLogic(this, SuSyRecipeMaps.PRIMITIVE_SMELTER) {
+
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                return super.checkRecipe(recipe) && RecipeCheckUtils.checkAtmosphere(this.metaTileEntity, true);
+            }
+        };
     }
 
     @Override

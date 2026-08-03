@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,7 +23,6 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.tileentities.TileEntityCoverable;
 
 /**
  * componentLiquidFuelTank
@@ -109,11 +111,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 analysis.status = BuildStat.HULL_WEAK;
                 return analysis.errorPos(block);
             }
-            TileEntityCoverable blockTiles = (TileEntityCoverable) analysis.world.getTileEntity(block);
-            if (blockTiles == null) {
-                analysis.status = BuildStat.ERROR;
-                return analysis.errorPos(block);
-            }
             EnumFacing facingFromBlock = analysis.world.getBlockState(block).getValue(FACING);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos neighbor = block.add(facing.getDirectionVec());
@@ -124,19 +121,11 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                         analysis.status = BuildStat.HULL_WEAK;
                         return analysis.errorPos(block);
                     }
-                } else if (!interiorAir.contains(neighbor) &&
-                        (analysis.world.isAirBlock(neighbor) ||
-                                !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
-                                    if (!blockTiles.isCovered(facing)) {
-                                        analysis.status = BuildStat.MISSING_TILE;
-                                        return analysis.errorPos(block);
-                                    }
-                                }
-
+                }
             }
         }
 
-        double radius = analysis.getRadius(blocks);
+        this.radius = analysis.getRadius(blocks);
         int calculatedHeight = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
         if (calculatedHeight > radius * 2) {
             analysis.status = BuildStat.TOO_SHORT;
@@ -151,5 +140,23 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         collectInfo(analysis, blocks, tag);
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+        this.radius = 5.0;
+        this.volume = 80;
+        this.mass = 3000.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("volume")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getInteger("volume")));
+        }
+        return lines;
     }
 }

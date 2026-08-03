@@ -1,7 +1,7 @@
 package supersymmetry.common.mui.widget;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.minecraft.client.resources.I18n;
 
@@ -14,7 +14,7 @@ public class RocketSimulatorComponentContainerWidget extends AbstractWidgetGroup
 
     public static int rowSeparation = 18; // mc slot size hopefully
     public int rowSkip; // to keep track of the distance between widgets
-    public Map<String, RocketComponentEntryWidget> components = new HashMap<>();
+    public Map<String, RocketComponentEntryWidget> components = new TreeMap<>();
 
     public RocketSimulatorComponentContainerWidget(Position position, Size size) {
         super(position, size);

@@ -45,7 +45,7 @@ import supersymmetry.common.rocketry.RocketConfiguration.MissionType;
 public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemUIFactory {
 
     private int pageNum = 0;
-    public static final int MAX_PAGES = 10;
+    public static final int MAX_PAGES = 2;  // TODO: better instrument handling
 
     @Override
     public ModularPanel buildUI(PlayerInventoryGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
@@ -81,7 +81,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                 v -> setDestinationType(pageNum, stack, v));
         syncManager.syncValue("destination_type", destinationType);
 
-        panel.child(new Row().top(10).horizontalCenter().coverChildren()
+        panel.child(new Row().childPadding(3).top(10).horizontalCenter().coverChildren()
                 .child(new ButtonWidget<>().size(12).onMousePressed((w) -> {
                     pageNum--;
                     return true;
@@ -90,7 +90,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                 .child(new ButtonWidget<>().size(12).onMousePressed((w) -> {
                     pageNum++;
                     return true;
-                })).setEnabledIf((w) -> pageNum <= MAX_PAGES - 1).overlay(ICON_RIGHT));
+                }).setEnabledIf((w) -> pageNum <= MAX_PAGES - 1).overlay(ICON_RIGHT)));
         Flow overallFlow = new Flow(GuiAxis.Y);
 
         Flow rowFlow = new Column().coverChildren().padding(10, 10, 30, 10)
@@ -249,7 +249,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
 
     private void setLandingCoord(int page, ItemStack stack, EnumFacing.Axis axis, int x) {
         NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("landing_" + axis + page);
+        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
         pageTag.setInteger("landing_" + axis, x);
     }
 }

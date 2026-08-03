@@ -13,6 +13,12 @@ import supersymmetry.api.space.Planetoid;
 
 public class RocketConfiguration {
 
+    /**
+     * The delta-v budget every launch site currently programs with.
+     */
+    // TODO: derive this from the rocket's tier instead of assuming everything is a Soyuz
+    public static final int DEFAULT_BUDGET = 2;
+
     public enum MissionType {
         Manned,
         UnmannedCargo,
@@ -55,6 +61,11 @@ public class RocketConfiguration {
         public int getDimension() {
             return this.dimension;
         }
+
+        public boolean isDefault() {
+            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
+                    this.missionType == MissionType.Manned && this.destinationType == DestinationType.Landing;
+        }
     }
 
     private final List<MissionConfiguration> missions = new ArrayList<>();
@@ -62,8 +73,10 @@ public class RocketConfiguration {
     public RocketConfiguration(NBTTagCompound tag) {
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
-            if (!missionTag.isEmpty() && missionTag.getInteger("landing_y") != 0) {
-                missions.add(new MissionConfiguration(missionTag));
+            if (!missionTag.isEmpty()) {
+                MissionConfiguration config = new MissionConfiguration(missionTag);
+                if (i == 0 || !config.isDefault())
+                    missions.add(new MissionConfiguration(missionTag));
             }
         }
     }
@@ -111,5 +124,9 @@ public class RocketConfiguration {
 
     public MissionConfiguration popFront() {
         return this.missions.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return this.missions.isEmpty();
     }
 }

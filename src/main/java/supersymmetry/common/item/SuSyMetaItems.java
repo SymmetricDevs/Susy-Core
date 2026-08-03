@@ -11,12 +11,23 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
+import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
+
 import com.google.common.base.CaseFormat;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
+import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
@@ -30,7 +41,9 @@ import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
+import gregtech.api.items.metaitem.ElectricStats;
 import supersymmetry.common.item.behavior.*;
+import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class SuSyMetaItems {
 
@@ -59,6 +72,9 @@ public class SuSyMetaItems {
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
     public static MetaValueItem PADDING_CLOTH;
+
+    public static MetaValueItem AIR_DISPERSER;
+    public static MetaValueItem OXYGEN_SENSOR;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -153,11 +169,10 @@ public class SuSyMetaItems {
                         lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
-                        Arrays.asList("rocketType")));
+                .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));
 
-        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
+        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode").setMaxStackSize(1)
+                .addComponents(ElectrodeDurabilityManager.INSTANCE);
 
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
@@ -177,6 +192,10 @@ public class SuSyMetaItems {
 
         ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
                 .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
+
+        AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
+
+        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1);
     }
 
     private static void addExtraBehaviours() {

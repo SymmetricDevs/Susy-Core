@@ -1,5 +1,7 @@
 package supersymmetry.common.world.gen;
 
+import static supersymmetry.common.blocks.SuSyBlocks.DEPOSIT_BLOCK;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -23,7 +25,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
     public static final IBlockState BASALT = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
             .getState(StoneVariantBlock.StoneType.BASALT);
-    public static final Block PIT = Blocks.END_PORTAL_FRAME;
+    public static final IBlockState PIT = Blocks.AIR.getDefaultState();  // This spawns stuff midair for some reason
 
     // modified from net.minecraft.world.gen.MapGenCaves
     protected void addTunnel(long seed, int x, int z, ChunkPrimer primer, double startX, double startY, double startZ,
@@ -146,8 +148,7 @@ public class MapGenLunarLavaTube extends MapGenBase {
                     int z3 = MathHelper.floor(startZ) - z * 16;
                     if (0 <= x3 && x3 < 16 && 0 < z3 && z3 < 16 && width > 0x3 && localRandom.nextInt(0x4) == 1 &&
                             y2 > primer.findGroundBlockIdx(x3, z3 - 1) - 2) {
-                        fillBlock(primer, x3, 0x60, z3, null, AIR,
-                                PIT.getStateFromMeta(width > 0xa ? 7 : (int) (width - 3)));
+                        fillBlock(primer, x3, 0x60, z3, null, AIR, PIT);
                     }
 
                     // lx: local x
@@ -197,7 +198,8 @@ public class MapGenLunarLavaTube extends MapGenBase {
         Block block = state.getBlock();
         return block == SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH) ||
                 block == SuSyBlocks.REGOLITH ||
-                block == MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH) || block == Blocks.AIR;
+                block == MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH) || block == Blocks.AIR ||
+                block == DEPOSIT_BLOCK;  // Allow caves to carve through crater deposits
     }
 
     @Override

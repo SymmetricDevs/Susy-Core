@@ -43,15 +43,13 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSerpentine;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
@@ -360,11 +358,7 @@ public class MetaTileEntityHeatRadiator extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        IntList dimensionIDs = recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST);
-        if (dimensionIDs.isEmpty() || dimensionIDs.contains(this.getWorld().provider.getDimension())) {
-            return super.checkRecipe(recipe, consumeIfSuccess);
-        }
-        return false;
+        return RecipeCheckUtils.checkDimension(recipe, this) && super.checkRecipe(recipe, consumeIfSuccess);
     }
 
     private class ParallelableNoEnergyMultiblockRecipeLogic extends NoEnergyMultiblockRecipeLogic {

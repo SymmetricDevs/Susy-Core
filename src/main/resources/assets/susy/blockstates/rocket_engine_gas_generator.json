@@ -1,0 +1,8 @@
+{
+  "variants" : {
+    "facing=north,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator" },
+    "facing=east,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 90 },
+    "facing=south,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 180 },
+    "facing=west,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 270 }
+  }
+}

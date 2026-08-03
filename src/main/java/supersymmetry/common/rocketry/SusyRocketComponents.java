@@ -2,6 +2,8 @@ package supersymmetry.common.rocketry;
 
 import net.minecraft.util.ResourceLocation;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -15,6 +17,7 @@ public class SusyRocketComponents {
 
     public static SimpleStagedRocketBlueprint ROCKET_SOYUZ_BLUEPRINT_DEFAULT;
     public static SimpleStagedRocketBlueprint ROCKET_V1_BLUEPRINT_DEFAULT;
+    public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
         AbstractComponent.registerComponent(new ComponentFairing());
@@ -24,27 +27,43 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
         AbstractComponent.lockRegistry();
-        if (Materials.Benzene == null || Materials.Oxygen == null) {
-            throw new RuntimeException();
-        }
-        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox")
-                .addComponent(Materials.Benzene, 1)
-                .addComponent(Materials.Oxygen, 1)
-                .density(1000).sIVacuum(1000).sIPerPressure(1000)
+
+        new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
+                .addComponent(Materials.Methane.getFluid(FluidStorageKeys.LIQUID) != null ?
+                        Materials.Methane.getFluid(FluidStorageKeys.LIQUID) :
+                        Materials.Methane.getFluid(), 100)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355)
+                .density(0.983).sIVacuum(330).sIPerPressure(240)
                 .register();
 
-        // TODO add the emergency escape system
+        if (GregTechAPI.materialManager.getMaterial("rp_one") != null) {
+            new RocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
+                    .addComponent(GregTechAPI.materialManager.getMaterial("rp_one").getFluid(), 100)
+                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 256)
+                    .density(0.915).sIVacuum(350).sIPerPressure(290)
+                    .register();
+        }
+
+        if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
+                (GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide") != null)) {
+            new RocketFuelEntry.RocketFuelEntryBuilder("MMH-N2O4")
+                    .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
+                    .addComponent(GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide").getFluid(), 216)
+                    .density(1.2).sIVacuum(410).sIPerPressure(350)
+                    .register();
+        }
+
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
                 .stage(
                         new RocketStage.Builder("boosters")
                                 .type("engine")
-                                .limit(16)
+                                .limit(4)
                                 .type("tank")
-                                .limit(8)
+                                .limit(4)
                                 .type("engine_small")
-                                .limit(8)
+                                .limit(12)
                                 .build())
-                .ignitesWith(
+                .stage(
                         new RocketStage.Builder("block_A")
                                 .type("engine")
                                 .limit(4)
@@ -52,6 +71,8 @@ public class SusyRocketComponents {
                                 .limit(4)
                                 .type("tank")
                                 .limit(2)
+                                .type("interstage")
+                                .limit(1)
                                 .build())
                 .stage(
                         new RocketStage.Builder("block_F")
@@ -61,6 +82,19 @@ public class SusyRocketComponents {
                                 .limit(4)
                                 .type("tank")
                                 .limit(2)
+                                .type("interstage")
+                                .limit(1)
+                                .build())
+                .stage(
+                        new RocketStage.Builder("payload")
+                                .type("spacecraft")
+                                .limit(1)
+                                .type("fairing")
+                                .limit(2)
+                                .type("engine_small")
+                                .limit(3)
+                                .type("tank")
+                                .limit(1)
                                 .build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .build();
@@ -81,8 +115,44 @@ public class SusyRocketComponents {
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .build();
 
-        AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
+        ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar")
+                .stage(
+                        new RocketStage.Builder("block_A")
+                                .type("engine")
+                                .limit(4)
+                                .type("engine_small")
+                                .limit(4)
+                                .type("tank")
+                                .limit(2)
+                                .build())
+                .stage(
+                        new RocketStage.Builder("block_F")
+                                .type("engine")
+                                .limit(4)
+                                .type("engine_small")
+                                .limit(4)
+                                .type("tank")
+                                .limit(2)
+                                .type("interstage")
+                                .limit(1)
+                                .build())
+                .stage(
+                        new RocketStage.Builder("payload")
+                                .type("spacecraft")
+                                .limit(1)
+                                .type("fairing")
+                                .limit(2)
+                                .type("engine_small")
+                                .limit(3)
+                                .type("tank")
+                                .limit(1)
+                                .build())
+                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
+                .build();
+
+        // AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
+        AbstractRocketBlueprint.registerBlueprint(ROCKET_LUNAR_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.setRegistryLock(true);
     }
 }

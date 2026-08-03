@@ -1,7 +1,6 @@
 package supersymmetry.common.mui.widget;
 
-import static supersymmetry.api.capability.SuSyDataCodes.LATE_INIT_WIDGET;
-import static supersymmetry.api.capability.SuSyDataCodes.STATE_UPDATE;
+import static supersymmetry.api.capability.SuSyDataCodes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
