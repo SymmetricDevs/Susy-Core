@@ -528,6 +528,8 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false)
                     .setSound(GTSoundEvents.FURNACE);
 
+    public static final RecipeMap<?> LARGE_RES = LargeRESRecipeMap.RES_RECIPES;
+
     public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 4, 1,
             new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.ARC);
@@ -558,6 +560,9 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 4,
             2,
+            new SimpleRecipeBuilder(), false);
+
+    public static final RecipeMap<SimpleRecipeBuilder> LAYUP = new RecipeMap<>("layup", 2, 1, 2, 0,
             new SimpleRecipeBuilder(), false);
 
     public static final RecipeMap<SimpleRecipeBuilder> EDM_RECIPES = new RecipeMap<>(

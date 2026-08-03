@@ -5,6 +5,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -220,5 +222,30 @@ public class WorldProviderPlanet extends WorldProvider {
             }
         }
         return super.calculateCelestialAngle(worldTime, partialTicks);
+    }
+
+    @Override
+    public boolean canDoRainSnowIce(net.minecraft.world.chunk.Chunk chunk) {
+        return false;
+    }
+
+    @Override
+    public void onWorldUpdateEntities() {
+        super.onWorldUpdateEntities();
+        this.world.getWorldInfo().setRainTime(0);
+        this.world.getWorldInfo().setRaining(false);
+    }
+
+    @Override
+    public void updateWeather() {
+        this.world.getWorldInfo().setRainTime(0);
+        this.world.getWorldInfo().setRaining(false);
+        this.world.getWorldInfo().setThunderTime(0);
+        this.world.getWorldInfo().setThundering(false);
+    }
+
+    @Override
+    public boolean canDoLightning(net.minecraft.world.chunk.Chunk chunk) {
+        return false;
     }
 }

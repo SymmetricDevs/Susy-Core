@@ -109,8 +109,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         worldIn.setSeaLevel(this.seaLevel);
 
         net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld ctx = new net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld(
-                minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise,
-                forestNoise);
+                minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise,
+                scaleNoise, depthNoise, forestNoise);
         ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(worldIn, this.rand, ctx);
         this.minLimitPerlinNoise = ctx.getLPerlin1();
         this.maxLimitPerlinNoise = ctx.getLPerlin2();

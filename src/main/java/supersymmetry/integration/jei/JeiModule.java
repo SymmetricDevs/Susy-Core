@@ -24,7 +24,6 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.integration.jei.category.StrandCategory;
 import supersymmetry.integration.jei.category.StrandInfo;
@@ -88,11 +87,18 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.SLAB_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.BILLET_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STRAND_COOLER.getStackForm(), strandCastingId);
+
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+                .collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
+        String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 }

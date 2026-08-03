@@ -78,7 +78,7 @@ public class LittleTilesStorageInfoProvider implements IProbeInfoProvider {
                                     info.text(lt_loot);
                                     return;
                                 }
-                            } catch (CorruptedConnectionException | NotYetConnectedException e) {}
+                            } catch (CorruptedConnectionException | NotYetConnectedException x) {}
                         }
                     }
                 }

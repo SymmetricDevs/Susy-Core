@@ -27,6 +27,7 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
+import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;

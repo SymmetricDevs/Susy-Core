@@ -826,6 +826,7 @@ public class SuSyMetaTileEntities {
 
         LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,
                 new MetaTileEntityLunarBucketWheelExcavator(susyId("lunar_bucket_wheel_excavator")));
+
         LUNAR_LAUNCH_COMPLEX = registerMetaTileEntity(18523,
                 new MetaTileEntityLunarLaunchComplex(susyId("lunar_launch_complex")));
 

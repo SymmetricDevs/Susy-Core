@@ -1,6 +1,5 @@
 package supersymmetry;
 
-import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -12,9 +11,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
-import li.cil.oc.api.Driver;
-import li.cil.oc.api.FileSystem;
-import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
@@ -97,14 +93,6 @@ public class Supersymmetry {
             ShaderManager.initShaders();
         }
         SuSyCoverBehaviors.init();
-
-        Driver.add(new supersymmetry.integration.opencomputers.DriverSpeaker());
-
-        Items.registerFloppy(
-                "speaker example",
-                EnumDyeColor.GRAY,
-                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
-                true);
     }
 
     @Mod.EventHandler
@@ -117,20 +105,21 @@ public class Supersymmetry {
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
+        CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
         CommandMultiblock multiblockCommand = new CommandMultiblock();
         CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
-        CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
-
-        hordeCommand.addSubcommand(new CommandHordeStart());
-        hordeCommand.addSubcommand(new CommandHordeStop());
-        hordeCommand.addSubcommand(new CommandHordeStatus());
-        hordeCommand.addSubcommand(new CommandHordeKill());
 
         event.registerServerCommand(hordeCommand);
         event.registerServerCommand(jeidump);
         event.registerServerCommand(untranslatedKeys);
         event.registerServerCommand(multiblockCommand);
         event.registerServerCommand(tpDimSpace);
+
+        hordeCommand.addSubcommand(new CommandHordeStart());
+        hordeCommand.addSubcommand(new CommandHordeStop());
+        hordeCommand.addSubcommand(new CommandHordeStatus());
+        hordeCommand.addSubcommand(new CommandHordeKill());
+        hordeCommand.addSubcommand(new CommandHordeResetScripted());
 
         event.registerServerCommand(new CommandFactionHate());
     }
