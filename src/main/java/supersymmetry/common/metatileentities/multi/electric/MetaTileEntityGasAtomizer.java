@@ -66,21 +66,6 @@ public class MetaTileEntityGasAtomizer extends RecipeMapMultiblockController {
         return SuSyBlocks.ELECTRODE_ASSEMBLY.getState(BlockElectrodeAssembly.ElectrodeAssemblyType.CARBON);
     }
 
-    protected TraceabilityPredicate orientation(IBlockState state, RelativeDirection direction,
-                                                IProperty<EnumFacing> facingProperty) {
-        EnumFacing facing = this.getRelativeFacing(direction);
-
-        Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
-                new BlockInfo(state.withProperty(facingProperty, facing)) };
-        return new TraceabilityPredicate(blockWorldState -> {
-            if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
-                getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, facing));
-            }
-            return true;
-        }, supplier);
-    }
-
     protected EnumFacing getRelativeFacing(RelativeDirection dir) {
         return dir.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
     }
