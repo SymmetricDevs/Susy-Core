@@ -1,14 +1,17 @@
 package supersymmetry.client.renderer.textures;
 
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.item.EnumDyeColor;
 
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 
 public class SusyTextures {
+
 
     public SusyTextures() {}
 
@@ -193,6 +196,8 @@ public class SusyTextures {
             "machines/multiblocks/aerospace_flight_simulator");
     public static final OrientedOverlayRenderer BLUEPRINT_ASSEMBLER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/blueprint_assembler");
+    public static final @NotNull ICubeRenderer LAYUP_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/layup");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
