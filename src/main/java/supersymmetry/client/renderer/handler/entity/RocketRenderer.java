@@ -31,10 +31,6 @@ public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
     private ModelManager manager = null;
     private final ModelResourceLocation modelLocation;
 
-    public RocketRenderer(RenderManager renderManager) {
-        this(renderManager, SuSyValues.modelRocket);
-    }
-
     public RocketRenderer(RenderManager renderManager, ModelResourceLocation modelLocation) {
         super(renderManager);
         this.modelLocation = modelLocation;
