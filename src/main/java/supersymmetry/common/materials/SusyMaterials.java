@@ -203,14 +203,6 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
-
-        Materials.Copper.addFlags(SuSyMaterialFlags.RESISTANCE_MELT);
-
-        Materials.Aluminium.addFlags(SuSyMaterialFlags.RESISTANCE_MELT);
-
-        Materials.Copper.addFlags(SuSyMaterialFlags.INDUCTION_MELT);
-
-        Materials.Aluminium.addFlags(SuSyMaterialFlags.INDUCTION_MELT);
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
@@ -289,18 +281,6 @@ public class SusyMaterials {
         MOLTEN_TEMPERATURES.put(Materials.HSSG, 1700);
         MOLTEN_TEMPERATURES.put(Materials.HSSE, 1715);
         MOLTEN_TEMPERATURES.put(Materials.HSSS, 1730);
-
-        MOLTEN_TEMPERATURES.put(Materials.Potin, 1270);
-        MOLTEN_TEMPERATURES.put(Materials.DamascusSteel, null);
-        MOLTEN_TEMPERATURES.put(Materials.Electrum, null);
-        MOLTEN_TEMPERATURES.put(Materials.SterlingSilver, null);
-        MOLTEN_TEMPERATURES.put(Materials.RoseGold, null);
-        MOLTEN_TEMPERATURES.put(Materials.BlackBronze, null);
-        MOLTEN_TEMPERATURES.put(Materials.BismuthBronze, null);
-        MOLTEN_TEMPERATURES.put(Materials.TinAlloy, null);
-        MOLTEN_TEMPERATURES.put(Materials.BatteryAlloy, 570);
-        MOLTEN_TEMPERATURES.put(Materials.BlackSteel, null);
-        MOLTEN_TEMPERATURES.put(Materials.CobaltBrass, null);
 
         MOLTEN_TEMPERATURES.put(Materials.RedAlloy, 1357);
     }

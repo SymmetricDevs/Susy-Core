@@ -510,7 +510,7 @@ public class SuSyRecipeMaps {
                     .allowEmptyOutput();
 
     public static final RecipeMap<SimpleRecipeBuilder> INDUCTION_FURNACE = new RecipeMap<>(
-            "induction_furnace", 6, 3, 3, 3, new SimpleRecipeBuilder(), false)
+            "induction_furnace", 9, 3, 3, 3, new SimpleRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ARC);
 
@@ -645,7 +645,6 @@ public class SuSyRecipeMaps {
                 // Add first two outputs, get the third output meta
                 List<ItemStack> outputs = recipeBuilder.getAllItemOutputs();
                 int meta = outputs.get(2).getMetadata();
-                SusyLog.logger.info("Meta: " + meta);
                 if (MaterialRegistryManager.getInstance().getMaterial("granite_tailing_slurry") != null) {
                     switch (meta) {
                         case 4039: // Granite
@@ -679,12 +678,38 @@ public class SuSyRecipeMaps {
             int temperature = recipeBuilder.getTemperature();
 
             if (temperature != 0) {
-                if (temperature <= 1473) {
-                    recipeBuilder.copy().notConsumable(spring, Nichrome).buildAndRegister();
-                    recipeBuilder.copy().notConsumable(spring, Cupronickel)
-                            .duration((int) (recipeBuilder.getDuration() * 1.25)).buildAndRegister();
+                int baseDuration = recipeBuilder.getDuration();
+
+                if (baseDuration == 0) {
+                    baseDuration = temperature / 6;
                 }
-                recipeBuilder.notConsumable(spring, Kanthal).duration((int) (recipeBuilder.getDuration() * 0.75));
+
+                if (temperature <= 1473) {recipeBuilder.copy().notConsumable(spring, Nichrome).duration(baseDuration).buildAndRegister();
+
+                    recipeBuilder.copy().notConsumable(spring, Cupronickel).duration(Math.round(baseDuration * 1.25f)).buildAndRegister();
+                }
+
+                recipeBuilder.notConsumable(spring, Kanthal).duration(Math.round(baseDuration * 0.75f));
+            }
+        });
+
+        SuSyRecipeMaps.INDUCTION_FURNACE.onRecipeBuild(recipeBuilder -> {
+
+            int fluidInput = 0;
+            if (!recipeBuilder.getFluidInputs().isEmpty()) {
+                fluidInput = recipeBuilder.getFluidInputs().getFirst().getInputFluidStack().amount;
+            }
+
+            if (fluidInput != 0 && recipeBuilder.getDuration() == 0) {
+                int fluidOutput = 0;
+
+                if (!recipeBuilder.getFluidOutputs().isEmpty()) {
+                    fluidOutput = recipeBuilder.getFluidOutputs().getFirst().amount;
+                }
+
+                int netFluid = fluidOutput - fluidInput;
+
+                recipeBuilder.duration(netFluid / 144 * 40);
             }
         });
     }
