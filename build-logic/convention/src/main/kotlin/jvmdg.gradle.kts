@@ -17,12 +17,12 @@ configurations.compileOnly {
 }
 
 dependencies {
-    testImplementation(variantOf(libs.jvmdowngrader.javaApi) { classifier("downgraded-8") })
+    implementation(variantOf(libs.jvmdowngrader.javaApi) { classifier("downgraded-8") })
 }
 
 jvmdg.apply {
     shadePath = ConstantShadePath(jvmdgShadowPath)
-    dg(shadowDowngrade)
+    dg(shadowDowngrade, false)
 }
 
 tasks.withType<DowngradeJar>().configureEach { logLevel.set("FATAL") }

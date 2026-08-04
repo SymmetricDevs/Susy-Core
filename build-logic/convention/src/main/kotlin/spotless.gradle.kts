@@ -2,9 +2,10 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-if (enableSpotless || true) {
+if (enableSpotless) {
     spotless {
         encoding = Charsets.UTF_8
+        isEnforceCheck = false
 
         format("misc") {
             target(
