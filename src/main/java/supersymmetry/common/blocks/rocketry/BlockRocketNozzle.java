@@ -1,15 +1,28 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType> implements WeightedBlock {
+public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType>
+                               implements
+                               WeightedBlock<BlockRocketNozzle.NozzleShapeType> {
 
     public BlockRocketNozzle() {
         super(Material.IRON);
@@ -23,9 +36,7 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
 
     public enum NozzleShapeType implements IStringSerializable, IStateHarvestLevel {
 
-        BELL_NOZZLE("bell_basic", 4),
-        PLUG_NOZZLE("plug", 4), // note: these must be used with plug blocks
-        EXPANDING_NOZZLE("expanding", 4);
+        BELL_NOZZLE("bell_basic", 4);
 
         private String name;
         private int harvestLevel;
@@ -52,13 +63,15 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
     }
 
     @Override
-    public double getMass(IBlockState state) {
-        NozzleShapeType type = getState(state);
-        double multiplier = switch (type) {
-            case BELL_NOZZLE -> 60.0;
-            case PLUG_NOZZLE -> 65.0;
-            case EXPANDING_NOZZLE -> 80.0;
+    public double getMass(NozzleShapeType type) {
+        return switch (type) {
+            case BELL_NOZZLE -> 70;
         };
-        return 500 + 100 * multiplier;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

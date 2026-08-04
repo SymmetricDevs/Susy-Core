@@ -25,7 +25,8 @@ public class SuSyExpansions {
     }
 
     public static void addMillBall(Material m, int durability) {
-        if (checkFrozen("add mill ball property to a material")) return;
+        if (checkFrozen("add mill ball property to a material"))
+            return;
         m.setProperty(SuSyPropertyKey.MILL_BALL, new MillBallProperty(durability));
     }
 
@@ -38,7 +39,8 @@ public class SuSyExpansions {
     }
 
     public static void setAttribute(Material m, FluidStorageKey key, FluidAttribute attribute) {
-        if (checkFrozen("make a material acidic")) return;
+        if (checkFrozen("make a material acidic"))
+            return;
         if (!m.hasProperty(PropertyKey.FLUID)) {
             GroovyLog.get().error("Material {} does not have a FluidProperty!", m);
             return;
@@ -54,7 +56,8 @@ public class SuSyExpansions {
     }
 
     public static void setBaseProof(Material m, boolean baseProof) {
-        if (checkFrozen("set a material as base-proof")) return;
+        if (checkFrozen("set a material as base-proof"))
+            return;
         if (!m.hasProperty(PropertyKey.FLUID_PIPE)) {
             GroovyLog.get().error("Material {} does not have a FluidPipeProperty!", m);
             return;
@@ -72,7 +75,8 @@ public class SuSyExpansions {
     }
 
     public static void setupFluidTypes(Material m, int temp, FluidStorageKey... keys) {
-        if (checkFrozen("add fluid types to a material")) return;
+        if (checkFrozen("add fluid types to a material"))
+            return;
         boolean hasFluidProperty = m.hasProperty(PropertyKey.FLUID);
         var property = hasFluidProperty ? m.getProperty(PropertyKey.FLUID) : new FluidProperty();
         for (var key : keys) {
@@ -83,11 +87,13 @@ public class SuSyExpansions {
                 queued.temperature(temp);
             }
         }
-        if (!hasFluidProperty) m.setProperty(PropertyKey.FLUID, property);
+        if (!hasFluidProperty)
+            m.setProperty(PropertyKey.FLUID, property);
     }
 
     public static void setOreByProducts(Material m, Material... byproducts) {
-        if (checkFrozen("set ore byproducts of a material")) return;
+        if (checkFrozen("set ore byproducts of a material"))
+            return;
         if (!m.hasProperty(PropertyKey.ORE)) {
             GroovyLog.get().error("Material {} does not have an OreProperty!", m);
             return;
@@ -97,7 +103,8 @@ public class SuSyExpansions {
 
     public static void addFluidPipes(Material m, int maxFluidTemperature, int throughput, boolean gasProof,
                                      boolean acidProof, boolean cryoProof, boolean plasmaProof, boolean baseProof) {
-        if (checkFrozen("add fluid pipes to a material")) return;
+        if (checkFrozen("add fluid pipes to a material"))
+            return;
         MaterialPropertyExpansion.addFluidPipes(m, maxFluidTemperature, throughput, gasProof, acidProof, cryoProof,
                 plasmaProof);
         m.getProperty(PropertyKey.FLUID_PIPE).setCanContain(SuSyFluidAttributes.BASE, baseProof);

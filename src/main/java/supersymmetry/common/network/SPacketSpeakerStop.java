@@ -6,6 +6,7 @@ import net.minecraft.network.PacketBuffer;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
+import paulscode.sound.SoundSystem;
 import supersymmetry.api.SusyLog;
 
 public class SPacketSpeakerStop implements IPacket, IClientExecutor {
@@ -20,8 +21,9 @@ public class SPacketSpeakerStop implements IPacket, IClientExecutor {
 
     @Override
     public void executeClient(NetHandlerPlayClient handler) {
-        var snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
-        if (snd == null) return;
+        SoundSystem snd = Minecraft.getMinecraft().getSoundHandler().sndManager.sndSystem;
+        if (snd == null)
+            return;
         if (id == null || id.isEmpty()) {
             SusyLog.logger.error("speaker stop packet with missing id");
             return;

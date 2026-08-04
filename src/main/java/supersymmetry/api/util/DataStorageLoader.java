@@ -7,7 +7,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 
-public class DataStorageLoader extends NotifiableItemStackHandler implements IItemHandlerModifiable {
+public class DataStorageLoader extends NotifiableItemStackHandler {
 
     private ItemStack dataStorage = ItemStack.EMPTY;
     private boolean locked = false;
@@ -26,6 +25,11 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
         super(mte, 1, mte, false);
         this.mte = mte;
         acceptableTypes = predicate;
+    }
+
+    @Override
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        return slot == 0 && acceptableTypes.test(stack);
     }
 
     @Override
@@ -43,7 +47,8 @@ public class DataStorageLoader extends NotifiableItemStackHandler implements IIt
 
     public boolean isEmpty() {
         return dataStorage == ItemStack.EMPTY || dataStorage.getItem() == Items.AIR;
-        // gets set to air on the client for no good reason while remaining EMPTY / null on the server because uhh
+        // gets set to air on the client for no good reason while remaining EMPTY / null
+        // on the server because uhh
     }
 
     @Override

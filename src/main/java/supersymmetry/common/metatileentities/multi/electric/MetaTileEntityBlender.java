@@ -3,9 +3,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -17,6 +14,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -55,20 +55,14 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
     protected BlockPattern createStructurePattern() {
         TraceabilityPredicate casing = states(getCasingState()).setMinGlobalLimited(34);
         TraceabilityPredicate abilities = autoAbilities();
-        return FactoryBlockPattern.start()
-                .aisle(" XXX ", " XPX ", " XXX ", "  X  ")
-                .aisle("XXXXX", "X D X", "X   X", "  X  ")
-                .aisle("XXXXX", "PDDDP", "X E X", "XXCXX")
-                .aisle("XXXXX", "X D X", "X   X", "  X  ")
-                .aisle(" XXX ", " XSX ", " XXX ", "  X  ")
-                .where('S', selfPredicate())
-                .where('X', casing.or(abilities))
-                .where('P', states(getPipeCasingState()))
+        return FactoryBlockPattern.start().aisle(" XXX ", " XPX ", " XXX ", "  X  ")
+                .aisle("XXXXX", "X D X", "X   X", "  X  ").aisle("XXXXX", "PDDDP", "X E X", "XXCXX")
+                .aisle("XXXXX", "X D X", "X   X", "  X  ").aisle(" XXX ", " XSX ", " XXX ", "  X  ")
+                .where('S', selfPredicate()).where('X', casing.or(abilities)).where('P', states(getPipeCasingState()))
                 .where('D', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN)))
                 .where('E', frames(Materials.StainlessSteel))
                 .where('C', states(MetaBlocks.TURBINE_CASING.getState(TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     @SideOnly(Side.CLIENT)
@@ -97,8 +91,7 @@ public class MetaTileEntityBlender extends FluidRenderRecipeMapMultiBlock {
     }
 
     @SideOnly(Side.CLIENT)
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.LARGE_CHEMICAL_REACTOR_OVERLAY;
     }

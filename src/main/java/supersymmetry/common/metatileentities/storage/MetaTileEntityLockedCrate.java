@@ -113,13 +113,7 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
 
                     // Play failure sound effect
                     BlockPos pos = getPos();
-                    getWorld().playSound(
-                            null,
-                            pos,
-                            SusySounds.LOCKED_CRATE,
-                            SoundCategory.BLOCKS,
-                            0.5F,
-                            1.0F);
+                    getWorld().playSound(null, pos, SusySounds.LOCKED_CRATE, SoundCategory.BLOCKS, 0.5F, 1.0F);
                 }
             }
         }

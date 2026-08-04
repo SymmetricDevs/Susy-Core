@@ -4,13 +4,13 @@ import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.hiddenG
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -58,9 +58,9 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
                 .aisle("CCCCCCCCC", "WBBB#BBBS", "C#F#C#F#C", "IBFBCBFBO", "C#F#C#F#C", " FGF FGF ")
                 .aisle("CCCCCCCCC", "W#B###B#S", "C###C###C", "I#B#C#B#O", "C###C###C", " F F F F ")
                 .aisle(" CCC CCC ", " CXCCCCC ", " CCCCCCC ", " CCCCCCC ", " CCC CCC ", " F F F F ")
-                .where('C', states(getAbrasionResistantCasingState()).or(autoAbilities(
-                        true, true, false,
-                        false, false, false, false)))
+                .where('C',
+                        states(getAbrasionResistantCasingState())
+                                .or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('I',
                         abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
                                 .or(states(getAbrasionResistantCasingState())))
@@ -75,13 +75,9 @@ public class MetaTileEntityAttritionScrubber extends RecipeMapMultiblockControll
                                 .or(states(getAbrasionResistantCasingState())))
                 .where('G', states(getGearboxState()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF)))
-                .where('F', frames(Materials.Iron))
-                .where('X', selfPredicate())
-                .where('#', air())
-                .where(' ', any())
+                .where('F', frames(Materials.Iron)).where('X', selfPredicate()).where('#', air()).where(' ', any())
                 .where('M', hiddenGearTooth(
-                        RelativeDirection.UP.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
-                                .getAxis()))
+                        RelativeDirection.UP.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false).getAxis()))
                 .build();
     }
 

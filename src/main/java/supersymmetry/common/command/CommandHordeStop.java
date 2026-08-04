@@ -15,14 +15,12 @@ import supersymmetry.common.event.MobHordeWorldData;
 
 public class CommandHordeStop extends CommandBase {
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getName() {
         return "stop";
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getUsage(@NotNull ICommandSender sender) {
         return "susy.command.horde.stop.usage";
     }
@@ -32,8 +30,7 @@ public class CommandHordeStop extends CommandBase {
         if (sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
 
-            MobHordePlayerData playerData = MobHordeWorldData.get(player.world)
-                    .getPlayerData(player.getPersistentID());
+            MobHordePlayerData playerData = MobHordeWorldData.get(player.world).getPlayerData(player.getPersistentID());
 
             if (!playerData.hasActiveInvasion) {
                 ITextComponent textComponent = new TextComponentTranslation(

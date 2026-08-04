@@ -36,8 +36,8 @@ public class ElytraFlyingUtils {
 
     public static boolean isFlying(@NotNull EntityLivingBase entity, ItemStack itemstack) {
         if (itemstack.hasCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null)) {
-            return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(
-                    entity, itemstack,
+            return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(entity,
+                    itemstack,
                     entity.onGround ||
                             entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isFlying ||
                             entity.isRiding() || entity.isInWater() || isInLavaSafe(entity));
@@ -52,9 +52,7 @@ public class ElytraFlyingUtils {
 
     // non-chunkloading copy of Entity.isInLava()
     private static boolean isInLavaSafe(@NotNull Entity entity) {
-        return isMaterialInBBSafe(entity.world,
-                entity.getEntityBoundingBox().expand(-0.1, -0.4, -0.1),
-                Material.LAVA);
+        return isMaterialInBBSafe(entity.world, entity.getEntityBoundingBox().expand(-0.1, -0.4, -0.1), Material.LAVA);
     }
 
     // non-chunkloading copy of World.isMaterialInBB()
@@ -72,8 +70,7 @@ public class ElytraFlyingUtils {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
                     pos.setPos(k1, l1, i2);
-                    if (world.isBlockLoaded(pos, false) &&
-                            world.getBlockState(pos).getMaterial() == materialIn) {
+                    if (world.isBlockLoaded(pos, false) && world.getBlockState(pos).getMaterial() == materialIn) {
                         pos.release();
                         return true;
                     }

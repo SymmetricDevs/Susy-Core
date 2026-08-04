@@ -1,105 +1,74 @@
 package supersymmetry.common.rocketry;
 
-import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
-import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.world.SuSyDimensions;
-import supersymmetry.common.world.WorldProviderPlanet;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 
 public class SuccessCalculation {
 
-    private final AbstractRocketBlueprint blueprint;
-    private double augmentation = 0;
+    public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
+    public static final double AUGMENTATION_CONSTANT = 768000;
+    // A 50% success blueprint takes just under 5 hours at this rate to bring to 80%
+    // for a starting-tier AFS
 
-    public SuccessCalculation(AbstractRocketBlueprint blueprint) {
-        this.blueprint = blueprint;
-    }
-
-    // lobotomized version of the function bellow to only take in the blueprint
-    public double calculateInitialSuccess(double gravity) {
-        double success = 1;
-        double weight = blueprint.getMass();
-        double thrust = blueprint.getThrust(null, gravity / 9.81, "engine");
-        double thrustToWeightRatio = thrust / weight;
-        if (thrustToWeightRatio < 1) return 0d;
-
-        success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
-        double oblateness = blueprint.getHeight() / blueprint.getMaxRadius();
-        success *= (1 - (0.1 * Math.exp(-oblateness)));
-        success *= Math.pow(0.995, blueprint.getComponentCount("engine"));
-        success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
-
-        double smallThrust = blueprint.getThrust(null, gravity / 9.81, "small_engine");
-        if (smallThrust == 0) {
-            return 0;
-        }
-        if (thrust / smallThrust > 10) {
-            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
-        } else if (thrust / smallThrust < 3) {
-            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
-        }
-
-        success = augmentSuccess(success);
-        return success;
-    }
-
-    public LaunchResult calculateSuccess(EntityAbstractRocket rocket) {
-        double success = 1;
-        // Thrust to weight ratio
-        double gravMult = 1;
-        if (rocket.world.provider instanceof WorldProviderPlanet) {
-            gravMult = SuSyDimensions.PLANETS.get(rocket.world.provider.getDimension()).gravity;
-        }
-        double weight = (blueprint.getMass() + rocket.getCargoMass()) * gravMult;
-        double thrust = blueprint.getThrust(null, gravMult, "engine");
-        double thrustToWeightRatio = thrust / weight;
-
-        if (thrustToWeightRatio < 1) {
-            return LaunchResult.DOES_NOT_LAUNCH;
-        } else {
-            success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
-        }
-
-        // Oblateness (height / radius)
-        double oblateness = blueprint.getHeight() / blueprint.getMaxRadius();
-        success *= (1 - (0.1 * Math.exp(-oblateness)));
-
-        // Number of engines, radius mismatch
-        success *= Math.pow(0.995, blueprint.getComponentCount("engine"));
-        success *= (1 - (0.5 * Math.exp(blueprint.getTotalRadiusMismatch() / 10)));
-
-        // Small engines shouldn't have that much throughput
-        double smallThrust = blueprint.getThrust(null, gravMult, "small_engine");
-        if (smallThrust == 0) {
-            return LaunchResult.CRASHES;
-        }
-        if (thrust / smallThrust > 10) {
-            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
-        } else if (thrust / smallThrust < 3) {
-            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
-        }
-
-        // TODO: Guidance computer
-
-        success = augmentSuccess(success);
-
-        if (Math.random() < success) {
-            return LaunchResult.LAUNCHES;
-        } else {
-            return LaunchResult.DOES_NOT_LAUNCH;
-        }
-    }
-
-    private double augmentSuccess(double success) {
-        success = Math.min(0.0001, success);
+    public static double augmentSuccess(double success, long augmentation) {
+        success = Math.max(0.0001, success);
         double inverseSigmoid = Math.log(success / (1 - success));
-        inverseSigmoid += success * augmentation;
+        inverseSigmoid += success * Math.log(augmentation / AUGMENTATION_CONSTANT + 1);
         return 1 / (1 + Math.exp(-inverseSigmoid));
     }
 
     public enum LaunchResult {
-        DOES_NOT_LAUNCH,
         LAUNCHES,
         CRASHES,
-        TROLLS
+        EXPLODES
+    }
+
+    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
+                           double cargoCapacity, double radialInstability, double thrust, double oblateness) {
+
+        public static AFSStats none() {
+            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
+        public boolean isNone() {
+            return this.success == -1;
+        }
+
+        public NBTTagCompound serializeNBT() {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setDouble("success", success);
+            tag.setDouble("mass", mass);
+            tag.setDouble("fuelMass", mass);
+            tag.setDouble("deltaV", deltaV);
+            tag.setDouble("escapeVelocity", escapeVelocity);
+            tag.setDouble("cargoCapacity", cargoCapacity);
+            tag.setDouble("radialInstability", radialInstability);
+            tag.setDouble("thrust", thrust);
+            tag.setDouble("oblateness", oblateness);
+            return tag;
+        }
+
+        public static AFSStats deserializeNBT(NBTTagCompound nbt) {
+            return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
+                    nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"), nbt.getDouble("cargoCapacity"),
+                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
+        }
+
+        public void writeToBuffer(PacketBuffer buf) {
+            buf.writeDouble(success);
+            buf.writeDouble(mass);
+            buf.writeDouble(fuelMass);
+            buf.writeDouble(deltaV);
+            buf.writeDouble(escapeVelocity);
+            buf.writeDouble(cargoCapacity);
+            buf.writeDouble(radialInstability);
+            buf.writeDouble(thrust);
+            buf.writeDouble(oblateness);
+        }
+
+        public static AFSStats readFromBuffer(PacketBuffer buf) {
+            return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+        }
     }
 }

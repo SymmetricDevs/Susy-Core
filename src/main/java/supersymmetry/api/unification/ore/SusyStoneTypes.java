@@ -57,12 +57,10 @@ public class SusyStoneTypes {
                 () -> gtStoneState(SusyStoneVariantBlock.StoneType.SOAPSTONE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.SOAPSTONE), false);
         KIMBERLITE = new StoneType(20, "kimberlite", SoundType.STONE, SusyOrePrefix.oreKimberlite,
-                SusyMaterials.Kimberlite,
-                () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
+                SusyMaterials.Kimberlite, () -> gtStoneState(SusyStoneVariantBlock.StoneType.KIMBERLITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.KIMBERLITE), false);
         ANORTHOSITE = new StoneType(21, "anorthosite", SoundType.STONE, SusyOrePrefix.oreAnorthosite,
-                SusyMaterials.Anorthosite,
-                () -> gtStoneState(SusyStoneVariantBlock.StoneType.ANORTHOSITE),
+                SusyMaterials.Anorthosite, () -> gtStoneState(SusyStoneVariantBlock.StoneType.ANORTHOSITE),
                 state -> gtStonePredicate(state, SusyStoneVariantBlock.StoneType.ANORTHOSITE), false);
 
         if (ConfigHolder.worldgen.allUniqueStoneTypes) {

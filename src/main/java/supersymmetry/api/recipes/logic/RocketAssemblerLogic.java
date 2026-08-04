@@ -1,101 +1,194 @@
 package supersymmetry.api.recipes.logic;
 
+import static gregtech.api.GTValues.LuV;
+import static gregtech.api.GTValues.VA;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
+import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.common.entities.EntityTransporterErector;
-import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
+import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
-    public RocketAssemblerLogic(MetaTileEntityRocketAssembler assembler) {
-        super(assembler);
-    }
+    private List<Integer> electrodeSlotCache = new ArrayList<>();
+    public boolean hasEnoughElectrodes = true;
 
-    public Recipe getComponentRecipe() {
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
-        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return null;
-        List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(
-                        x -> {
-                            return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, 2 << 15).stream();
-                        })
-                .collect(Collectors.toList());
-        return assembler.recipeMap
-                .recipeBuilder()
-                .inputIngredients(collapse(flatExpandedInput))
-                .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
-                .build()
-                .getResult();
+    private final IRocketAssemblyController assembler;
+
+    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
+        super(assembler);
+        this.assembler = assembler;
     }
 
     public void setInputsValid() {
         this.invalidInputsForRecipes = false;
     }
 
-    @Override
-    protected @Nullable Recipe findRecipe(
-                                          long maxVoltage, IItemHandlerModifiable inputs,
-                                          IMultipleTankHandler fluidInputs) {
-        EntityTransporterErector erector = ((MetaTileEntityRocketAssembler) this.metaTileEntity)
-                .findTransporterErector();
-        if (erector != null) return null;
-        Recipe r = super.findRecipe(maxVoltage, inputs, fluidInputs);
-        if (r != null) return r; // unlikely for this thing
-        MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
-        if (!assembler.isWorking) return null; // assume that it doesnt have a blueprint inside i guess
+    public Recipe getRecipe(long maxVoltage) {
+        if (!assembler.isAssemblyWorking())
+            return null;
+
+        if (assembler.getComponentCount() == assembler.getComponentIndex()) {
+            return null;
+        }
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null) return null;
+        if (targetComponent == null)
+            return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(
-                        x -> {
-                            return x.expandRecipe(RecipeMaps.ASSEMBLER_RECIPES, maxVoltage).stream();
-                        })
-                .collect(Collectors.toList());
-        Recipe recipe = assembler.recipeMap
-                .recipeBuilder()
-                .inputIngredients(collapse(flatExpandedInput))
-                .EUt(2 << 15) // LuV amp. this means that you need 8 4A EV energy hatches :goog:
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20))
-                .build()
-                .getResult();
+                .flatMap(x -> x.expandRecipe().stream()).collect(Collectors.toList());
+        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV]) // Almost
+                                                                                                                  // 1
+                                                                                                                  // LuV
+                                                                                                                  // amp
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20)).build().getResult();
         return recipe;
     }
 
-    // mental illness n6: this runs when a recipe with nothing in it (findrecipe returns null) is
+    @Override
+    protected @Nullable Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs,
+                                          IMultipleTankHandler fluidInputs) {
+        if (!assembler.isAssemblySiteAvailable())
+            return null;
+        return getRecipe(maxVoltage);
+    }
+
+    // mental illness n6: this runs when a recipe with nothing in it (findrecipe
+    // returns null) is
     // "complete" too!
     @Override
     protected void completeRecipe() {
-        // SusyLog.logger.info(
-        // "progressTime:{} maxprogresstime:{}", this.progressTime, this.maxProgressTime);
-
         if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
-            MetaTileEntityRocketAssembler assembler = (MetaTileEntityRocketAssembler) this.metaTileEntity;
             assembler.nextComponent();
         }
         super.completeRecipe();
+    }
+
+    // The lists are null
+    @Override
+    protected void outputRecipeOutputs() {}
+
+    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch
+    // amperage draws
+    @Override
+    protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+        return getEnergyStored() >= ((long) recipeEUt << 1);
     }
 
     // doesnt work for this multi
     @Override
     protected boolean checkPreviousRecipe() {
         return false;
+    }
+
+    @Override
+    protected void trySearchNewRecipe() {
+        hasEnoughElectrodes = true;
+        super.trySearchNewRecipe();
+    }
+
+    @Override
+    public void updateWorkable() {
+        super.updateWorkable();
+        World world = getMetaTileEntity().getWorld();
+        if (world != null && !world.isRemote) {
+            if (workingEnabled && progressTime == 0) {
+                // check the assembler to see if it can finish
+                if (assembler.isAssemblyWorking() && assembler.getComponentIndex() == assembler.getComponentCount()) {
+                    if (assembler.isAssemblySiteReady()) {
+                        assembler.finishAssembly();
+                    }
+                }
+            }
+        }
+    }
+
+    // mostly taken from the ball mill logic
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe) {
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null)
+            return false;
+        int requiredDamage = getRequiredDamage(recipe, targetComponent);
+        electrodeSlotCache.clear();
+        int totalUses = 0;
+        for (int i = 0; i < getInputInventory().getSlots(); i++) {
+            ItemStack stack = getInputInventory().getStackInSlot(i);
+            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
+                continue;
+            }
+            int remaining = ElectrodeDurabilityManager.getRemainingUses(stack);
+            if (remaining > 0) {
+                electrodeSlotCache.add(i);
+                totalUses += remaining;
+            }
+        }
+        if (totalUses < requiredDamage) {
+            hasEnoughElectrodes = false;
+            return false;
+        }
+
+        return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
+    }
+
+    // mostly taken from the ball mill logic
+    @Override
+    protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
+                                                  @NotNull IItemHandlerModifiable importInventory,
+                                                  @NotNull IMultipleTankHandler importFluids) {
+        if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+            return false;
+        }
+        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (targetComponent == null)
+            return false;
+        int requiredDamage = getRequiredDamage(recipe, targetComponent);
+        for (int slot : electrodeSlotCache) {
+            if (requiredDamage <= 0)
+                break;
+            ItemStack stack = importInventory.getStackInSlot(slot);
+            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack))
+                continue;
+            int canTake = Math.min(ElectrodeDurabilityManager.getRemainingUses(stack), requiredDamage);
+            if (ElectrodeDurabilityManager.getRemainingUses(stack) == canTake) {
+                importInventory.setStackInSlot(slot, ItemStack.EMPTY);
+            } else {
+                ElectrodeDurabilityManager.setElectrodeDamage(stack,
+                        ElectrodeDurabilityManager.getElectrodeDamage(stack) + canTake);
+            }
+            requiredDamage -= canTake;
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void setupRecipe(Recipe recipe) {
+        super.setupRecipe(recipe);
+
+        assembler.onComponentSetup();
+    }
+
+    // maybe this is a little too much
+    private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AbstractComponent<?> component) {
+        return (int) ((double) recipe.getInputs().size() * (component.getAssemblyDuration() + component.getRadius()));
     }
 
     private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
@@ -109,13 +202,8 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
                 }
             }
         }
-        return counts.entrySet().stream()
-                .map(
-                        x -> {
-                            // x.getKey().setCount(x.getValue());
-                            // return x.getKey();
-                            return new GTRecipeItemInput(x.getKey(), x.getValue());
-                        })
-                .collect(Collectors.toList());
+        return counts.entrySet().stream().map(x -> {
+            return new GTRecipeItemInput(x.getKey(), x.getValue());
+        }).collect(Collectors.toList());
     }
 }

@@ -1,20 +1,19 @@
 package supersymmetry.api.rocketry.fuels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fluids.Fluid;
 
-import gregtech.api.unification.material.Material;
+import org.jetbrains.annotations.NotNull;
 
 public class RocketFuelEntry {
 
     public static class RocketFuelEntryBuilder {
 
         private String registryName;
-        private ArrayList<Tuple<Material, Integer>> composition;
-        private double density;
+        private ArrayList<Tuple<Fluid, Integer>> composition;
+        private double density = 1;
         private double sIVacuum;
         private double sIPerPressure;
 
@@ -23,8 +22,11 @@ public class RocketFuelEntry {
             this.composition = new ArrayList<>();
         }
 
-        public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
+        public RocketFuelEntryBuilder addComponent(Fluid mat, int proportion) {
             composition.add(new Tuple<>(mat, proportion));
+            if (composition.size() > 3) {
+                throw new IllegalStateException("too many fuel components");
+            }
             return this;
         }
 
@@ -59,18 +61,20 @@ public class RocketFuelEntry {
     }
 
     public static RocketFuelEntry getCopyOf(String name) {
-        try {
-            return RocketFuelEntry.getFuelRegistry().get(name).clone();
-        } catch (Exception e) {
-            return null;
+        if (name != null) {
+            RocketFuelEntry entry = FUEL_REGISTRY.get(name);
+            if (entry != null) {
+                return entry.clone();
+            }
         }
+        return null;
     }
 
     public static void registerFuel(RocketFuelEntry rfe) {
         FUEL_REGISTRY.put(rfe.registryName, rfe);
     }
 
-    private ArrayList<Tuple<Material, Integer>> composition; // any extra required materials, their proportions
+    private ArrayList<Tuple<Fluid, Integer>> composition; // any extra required materials, their proportions
 
     private String registryName;
 
@@ -80,12 +84,8 @@ public class RocketFuelEntry {
 
     private double sIPerPressure;
 
-    public RocketFuelEntry(
-                           String registryName,
-                           ArrayList<Tuple<Material, Integer>> composition,
-                           double density,
-                           double sIVacuum,
-                           double sIPerPressure) {
+    public RocketFuelEntry(String registryName, ArrayList<Tuple<Fluid, Integer>> composition, double density,
+                           double sIVacuum, double sIPerPressure) {
         this.registryName = registryName;
         this.composition = composition;
         this.density = density;
@@ -96,7 +96,7 @@ public class RocketFuelEntry {
     @SuppressWarnings("unchecked")
     public RocketFuelEntry(RocketFuelEntry copy) {
         this.density = copy.density;
-        this.composition = (ArrayList<Tuple<Material, Integer>>) copy.composition.clone();
+        this.composition = (ArrayList<Tuple<Fluid, Integer>>) copy.composition.clone();
         this.sIVacuum = copy.sIVacuum;
         this.registryName = copy.registryName;
     }
@@ -109,7 +109,7 @@ public class RocketFuelEntry {
         return sIPerPressure;
     }
 
-    public ArrayList<Tuple<Material, Integer>> getComposition() {
+    public ArrayList<Tuple<Fluid, Integer>> getComposition() {
         return composition;
     }
 
@@ -131,5 +131,15 @@ public class RocketFuelEntry {
 
     public double getSIVariation() {
         return this.sIPerPressure;
+    }
+
+    public static @NotNull Optional<RocketFuelEntry> search(List<Fluid> userFluids) {
+        for (RocketFuelEntry entry : RocketFuelEntry.getFuelRegistry().values()) {
+            boolean matches = entry.getComposition().stream().map(Tuple::getFirst).allMatch(userFluids::contains);
+            if (matches) {
+                return Optional.of(entry);
+            }
+        }
+        return Optional.empty();
     }
 }

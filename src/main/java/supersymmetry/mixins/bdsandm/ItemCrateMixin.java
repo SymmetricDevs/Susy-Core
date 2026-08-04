@@ -1,13 +1,12 @@
 package supersymmetry.mixins.bdsandm;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -24,7 +23,8 @@ public class ItemCrateMixin extends ItemBlock {
 
     /**
      * @author Bruberu
-     * @reason It was literally using an assert in client-side logic, causing crashes in servers.
+     * @reason It was literally using an assert in client-side logic, causing
+     *         crashes in servers.
      */
     @Overwrite
     public NBTTagCompound getNBTShareTag(ItemStack stack) {
@@ -37,7 +37,8 @@ public class ItemCrateMixin extends ItemBlock {
 
     /**
      * @author Bruberu
-     * @reason It was literally using an assert in client-side logic, causing crashes in servers.
+     * @reason It was literally using an assert in client-side logic, causing
+     *         crashes in servers.
      */
     @Overwrite
     public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound nbt) {

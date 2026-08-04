@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -38,8 +36,7 @@ public class BlockSolarPanel extends VariantBlock<BlockSolarPanel.SolarPanelType
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -56,8 +53,7 @@ public class BlockSolarPanel extends VariantBlock<BlockSolarPanel.SolarPanelType
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NotNull public String getName() {
             return this.name;
         }
 

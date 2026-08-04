@@ -70,9 +70,11 @@ public class SpeakerCodec implements ICodec {
 
     @Override
     public SoundBuffer read() {
-        if (data == null) return null;
+        if (data == null)
+            return null;
         var buf = data.buffers.poll();
-        if (buf == null) return null;
+        if (buf == null)
+            return null;
         return new SoundBuffer(buf, data.format);
     }
 
@@ -98,7 +100,8 @@ public class SpeakerCodec implements ICodec {
     }
 
     private static String extractId(URL url) {
-        if (url == null || url.getPath() == null) return "";
+        if (url == null || url.getPath() == null)
+            return "";
         var file = url.getPath().replaceFirst("^.*/", "");
         return file.replaceFirst("\\.speaker$", "").replaceFirst("^speaker_", "");
     }

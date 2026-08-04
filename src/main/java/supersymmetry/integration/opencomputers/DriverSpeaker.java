@@ -16,7 +16,8 @@ public class DriverSpeaker implements HostAware {
 
     @Override
     public boolean worksWith(ItemStack stack) {
-        if (stack.isEmpty()) return false;
+        if (stack.isEmpty())
+            return false;
         Item item = stack.getItem();
         if (item instanceof VariantItemBlock) {
             Block block = ((VariantItemBlock) item).getBlock();
@@ -34,13 +35,15 @@ public class DriverSpeaker implements HostAware {
 
     @Override
     public ManagedEnvironment createEnvironment(ItemStack stack, EnvironmentHost host) {
-        if (host.world() == null || host.world().isRemote) return null;
+        if (host.world() == null || host.world().isRemote)
+            return null;
 
         Block block = ((VariantItemBlock) stack.getItem()).getBlock();
         BlockSpeaker speakerBlock = (BlockSpeaker) block;
         BlockSpeaker.BlockSpeakerType type = speakerBlock.getState(stack);
 
-        if (type != BlockSpeaker.BlockSpeakerType.SINGLE) return null;
+        if (type != BlockSpeaker.BlockSpeakerType.SINGLE)
+            return null;
 
         return new ComponentSpeaker(host, "speaker_single", type.getRadius());
     }

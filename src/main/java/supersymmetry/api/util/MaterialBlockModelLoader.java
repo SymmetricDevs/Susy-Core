@@ -9,9 +9,6 @@ package supersymmetry.api.util;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -28,6 +25,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -47,28 +47,23 @@ public class MaterialBlockModelLoader {
 
     private static final Object2ObjectOpenHashMap<Entry, ModelResourceLocation> ENTRIES = new Object2ObjectOpenHashMap<>();
 
-    @Nonnull
-    public static ModelResourceLocation loadBlockModel(@Nonnull MaterialIconType iconType,
-                                                       @Nonnull MaterialIconSet iconSet) {
+    @NonNull public static ModelResourceLocation loadBlockModel(@NonNull MaterialIconType iconType,
+                                                       @NonNull MaterialIconSet iconSet) {
         return loadBlockModel(iconType, iconSet, null);
     }
 
-    @Nonnull
-    public static ModelResourceLocation loadBlockModel(@Nonnull MaterialIconType iconType,
-                                                       @Nonnull MaterialIconSet iconSet,
-                                                       @Nullable String variant) {
+    @NonNull public static ModelResourceLocation loadBlockModel(@NonNull MaterialIconType iconType,
+                                                       @NonNull MaterialIconSet iconSet, @Nullable String variant) {
         return ENTRIES.computeIfAbsent(new Entry(iconType, iconSet, variant == null ? "" : variant),
                 entry -> createModelId(entry, "normal"));
     }
 
-    @Nonnull
-    public static ModelResourceLocation loadItemModel(@Nonnull MaterialIconType iconType,
-                                                      @Nonnull MaterialIconSet iconSet) {
-        return ENTRIES.computeIfAbsent(new Entry(iconType, iconSet, null),
-                entry -> createModelId(entry, "inventory"));
+    @NonNull public static ModelResourceLocation loadItemModel(@NonNull MaterialIconType iconType,
+                                                      @NonNull MaterialIconSet iconSet) {
+        return ENTRIES.computeIfAbsent(new Entry(iconType, iconSet, null), entry -> createModelId(entry, "inventory"));
     }
 
-    private static ModelResourceLocation createModelId(@Nonnull Entry entry, @Nonnull String variant) {
+    private static ModelResourceLocation createModelId(@NonNull Entry entry, @NonNull String variant) {
         StringBuilder stb = new StringBuilder();
         stb.append("material_").append(entry.iconType.name).append("_").append(entry.iconSet.name);
         if (entry.variant != null && !entry.variant.equals("") && !entry.variant.equals("normal")) {
@@ -84,8 +79,7 @@ public class MaterialBlockModelLoader {
         }
     }
 
-    @Nullable
-    private static IModel loadModel(TextureStitchEvent.Pre event, Entry entry) {
+    @Nullable private static IModel loadModel(TextureStitchEvent.Pre event, Entry entry) {
         IModel model;
         try {
             model = ModelLoaderRegistry.getModel(entry.getModelLocation());
@@ -103,20 +97,19 @@ public class MaterialBlockModelLoader {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
         Map<ModelResourceLocation, IModel> stateModels = Loader.isModLoaded(GTValues.MODID_CTM) ?
-                ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "stateModels", null) :
-                null;
+                ReflectionHelper.getPrivateValue(ModelLoader.class, event.getModelLoader(), "stateModels", null) : null;
 
         for (var e : ENTRIES.entrySet()) {
             bakeAndRegister(event.getModelRegistry(), e.getKey().modelCache, e.getValue(), stateModels);
         }
     }
 
-    private static void bakeAndRegister(@Nonnull IRegistry<ModelResourceLocation, IBakedModel> registry,
-                                        @Nullable IModel model,
-                                        @Nonnull ModelResourceLocation modelId,
+    private static void bakeAndRegister(@NonNull IRegistry<ModelResourceLocation, IBakedModel> registry,
+                                        @Nullable IModel model, @NonNull ModelResourceLocation modelId,
                                         @Nullable Map<ModelResourceLocation, IModel> stateModels) {
         if (model == null) {
-            // insert missing model to prevent cluttering logs with useless model loading error messages
+            // insert missing model to prevent cluttering logs with useless model loading
+            // error messages
             registry.putObject(modelId, bake(ModelLoaderRegistry.getMissingModel()));
             return;
         }
@@ -128,9 +121,7 @@ public class MaterialBlockModelLoader {
     }
 
     private static IBakedModel bake(IModel model) {
-        return model.bake(
-                model.getDefaultState(),
-                DefaultVertexFormats.ITEM,
+        return model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM,
                 t -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(t.toString()));
     }
 
@@ -140,12 +131,9 @@ public class MaterialBlockModelLoader {
         private final MaterialIconSet iconSet;
         private final String variant;
 
-        @Nullable
-        private IModel modelCache;
+        @Nullable private IModel modelCache;
 
-        private Entry(@Nonnull MaterialIconType iconType,
-                      @Nonnull MaterialIconSet iconSet,
-                      @Nullable String variant) {
+        private Entry(@NonNull MaterialIconType iconType, @NonNull MaterialIconSet iconSet, @Nullable String variant) {
             this.iconType = iconType;
             this.iconSet = iconSet;
             this.variant = variant;
@@ -163,8 +151,10 @@ public class MaterialBlockModelLoader {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
             Entry entry = (Entry) o;
             return Objects.equals(variant, entry.variant) && iconType.equals(entry.iconType) &&
                     iconSet.equals(entry.iconSet);
@@ -177,11 +167,7 @@ public class MaterialBlockModelLoader {
 
         @Override
         public String toString() {
-            return "Entry{" +
-                    "iconType=" + iconType +
-                    ", iconSet=" + iconSet +
-                    ", variant=" + variant +
-                    '}';
+            return "Entry{" + "iconType=" + iconType + ", iconSet=" + iconSet + ", variant=" + variant + '}';
         }
     }
 }

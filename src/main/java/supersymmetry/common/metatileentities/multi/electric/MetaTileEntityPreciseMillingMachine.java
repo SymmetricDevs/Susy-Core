@@ -1,6 +1,7 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockDrillBit;
@@ -34,32 +36,26 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
         return new MetaTileEntityPreciseMillingMachine(this.metaTileEntityId);
     }
 
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("BBBBBB", "CCCCCC", "CGGGGC", "CCCCCC")
-                .aisle("BBBBBB", "C    C", "CDDDDC", "CCCCCC")
-                .aisle("BBBBBB", "C    C", "C    C", "CCCCCC")
-                .aisle("BBBBBB", "CWWWWS", "CWWWWC", "CCCCCC")
-                .where('S', selfPredicate())
-                .where('B', states(getBaseCasingState()).setMinGlobalLimited(18)
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(1)
-                                .setMinGlobalLimited(1).setMaxGlobalLimited(2)
-                                .addTooltip("susy.multiblock.pattern.error.milling.lower"))
-                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
-                                .setExactLimit(1)
-                                .addTooltip("susy.multiblock.pattern.error.milling.lower")))
-                .where('C', states(getUpperCasingState()).setMinGlobalLimited(35)
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
-                                .setMinGlobalLimited(1)
-                                .addTooltip("susy.multiblock.pattern.error.milling.upper"))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1)
-                                .setMinGlobalLimited(1)
-                                .addTooltip("susy.multiblock.pattern.error.milling.upper")))
-                .where('D', states(getDrillBitState()))
-                .where('G', states(getGearBoxState()))
-                .where('W', states(getGlassState()))
-                .build();
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start().aisle("BBBBBB", "CCCCCC", "CGGGGC", "CCCCCC")
+                .aisle("BBBBBB", "C    C", "CDDDDC", "CCCCCC").aisle("BBBBBB", "C    C", "C    C", "CCCCCC")
+                .aisle("BBBBBB", "CWWWWS", "CWWWWC", "CCCCCC").where('S', selfPredicate())
+                .where('B',
+                        states(getBaseCasingState()).setMinGlobalLimited(18)
+                                .or(autoAbilities(true, true, false, false, false, false, false)
+                                        .addTooltip("susy.multiblock.pattern.error.milling.lower")))
+                .where('C',
+                        states(getUpperCasingState()).setMinGlobalLimited(35)
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMinGlobalLimited(1)
+                                        .addTooltip("susy.multiblock.pattern.error.milling.upper"))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(1).setMinGlobalLimited(1)
+                                        .addTooltip("susy.multiblock.pattern.error.milling.upper")))
+                .where('D', states(
+                        getDrillBitState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH),
+                        getDrillBitState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH),
+                        getDrillBitState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST),
+                        getDrillBitState().withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST)))
+                .where('G', states(getGearBoxState())).where('W', states(getGlassState())).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -98,8 +94,7 @@ public class MetaTileEntityPreciseMillingMachine extends RecipeMapMultiblockCont
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.MILLING_OVERLAY;
     }

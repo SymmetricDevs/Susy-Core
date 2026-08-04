@@ -16,8 +16,7 @@ import supersymmetry.api.gui.SusyGuiTextures;
 @ApiStatus.ScheduledForRemoval(inVersion = "Next CEu update")
 public class Mui2Utils {
 
-    @NotNull
-    public static UITexture getLogo() {
+    @NotNull public static UITexture getLogo() {
         return GTValues.XMAS.get() ? SusyGuiTextures.GREGTECH_LOGO_XMAS : SusyGuiTextures.GREGTECH_LOGO;
     }
 
@@ -37,8 +36,7 @@ public class Mui2Utils {
         return createPopupPanel(name, width, height, false, false);
     }
 
-    public static ModularPanel createPopupPanel(
-                                                String name, int width, int height, boolean disableBelow,
+    public static ModularPanel createPopupPanel(String name, int width, int height, boolean disableBelow,
                                                 boolean closeOnOutsideClick) {
         return new PopupPanel(name, width, height, disableBelow, closeOnOutsideClick);
     }
@@ -55,14 +53,13 @@ public class Mui2Utils {
             super(name);
             size(width, height).align(Alignment.Center);
             background(SusyGuiTextures.BACKGROUND_POPUP);
-            child(ButtonWidget.panelCloseButton().top(5).right(5)
-                    .onMousePressed(mouseButton -> {
-                        if (mouseButton == 0 || mouseButton == 1) {
-                            this.closeIfOpen();
-                            return true;
-                        }
-                        return false;
-                    }));
+            child(ButtonWidget.panelCloseButton().top(5).right(5).onMousePressed(mouseButton -> {
+                if (mouseButton == 0 || mouseButton == 1) {
+                    this.closeIfOpen();
+                    return true;
+                }
+                return false;
+            }));
             this.disableBelow = disableBelow;
             this.closeOnOutsideClick = closeOnOutsideClick;
         }

@@ -35,8 +35,7 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
         this(metaTileEntityId, recipeMap, false);
     }
 
-    @NotNull
-    public DistillationTowerLogicHandler createHandler() {
+    @NotNull public DistillationTowerLogicHandler createHandler() {
         return new DistillationTowerLogicHandler(this);
     }
 
@@ -53,8 +52,9 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
      * Used if MultiblockPart Abilities need to be sorted a certain way, like
      * Distillation Tower and Assembly Line. <br>
      * <br>
-     * There will be <i>consequences</i> if this is changed. Make sure to set the logic handler to one with
-     * a properly overriden {@link DistillationTowerLogicHandler#determineOrderedFluidOutputs()}
+     * There will be <i>consequences</i> if this is changed. Make sure to set the
+     * logic handler to one with a properly overriden
+     * {@link DistillationTowerLogicHandler#determineOrderedFluidOutputs()}
      */
     @Override
     protected Function<BlockPos, Integer> multiblockPartSorter() {
@@ -64,7 +64,8 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        if (this.handler == null || this.structurePattern == null) return;
+        if (this.handler == null || this.structurePattern == null)
+            return;
         handler.determineLayerCount(this.structurePattern);
         handler.determineOrderedFluidOutputs();
     }
@@ -72,13 +73,16 @@ public abstract class MetaTileEntityOrderedDT extends RecipeMapMultiblockControl
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        if (this.handler != null) handler.invalidate();
+        if (this.handler != null)
+            handler.invalidate();
     }
 
     @Override
     public int getFluidOutputLimit() {
-        if (this.handler != null) return this.handler.getLayerCount();
-        else return super.getFluidOutputLimit();
+        if (this.handler != null)
+            return this.handler.getLayerCount();
+        else
+            return super.getFluidOutputLimit();
     }
 
     @Override

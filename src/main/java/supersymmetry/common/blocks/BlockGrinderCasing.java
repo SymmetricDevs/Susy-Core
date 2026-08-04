@@ -28,10 +28,7 @@ public class BlockGrinderCasing extends VariantBlock<BlockGrinderCasing.Type> {
     }
 
     @Override
-    public boolean canCreatureSpawn(
-                                    @NotNull IBlockState state,
-                                    @NotNull IBlockAccess world,
-                                    @NotNull BlockPos pos,
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
                                     @NotNull SpawnPlacementType type) {
         return false;
     }
@@ -66,11 +63,13 @@ public class BlockGrinderCasing extends VariantBlock<BlockGrinderCasing.Type> {
     public enum Type implements IStringSerializable {
 
         ABRASION_RESISTANT_CASING("abrasion_resistant_casing"),
-        HYDRAULIC_MECHANICAL_GEARBOX("hydraulic_mechanical_gearbox"),
-        WEAR_RESISTANT_LINED_MILL_SHELL("wear_resistant_lined_mill_shell"),
-        WEAR_RESISTANT_LINED_SHELL_HEAD("wear_resistant_lined_shell_head"),
-        INTERMEDIATE_DIAPHRAGM("intermediate_diaphragm"),
-        ;
+        HYDRAULIC_MECHANICAL_GEARBOX(
+                "hydraulic_mechanical_gearbox"),
+        WEAR_RESISTANT_LINED_MILL_SHELL(
+                "wear_resistant_lined_mill_shell"),
+        WEAR_RESISTANT_LINED_SHELL_HEAD(
+                "wear_resistant_lined_shell_head"),
+        INTERMEDIATE_DIAPHRAGM("intermediate_diaphragm"),;
 
         private final String name;
 
@@ -78,8 +77,7 @@ public class BlockGrinderCasing extends VariantBlock<BlockGrinderCasing.Type> {
             this.name = name;
         }
 
-        @NotNull
-        public String getName() {
+        @NotNull public String getName() {
             return name;
         }
     }

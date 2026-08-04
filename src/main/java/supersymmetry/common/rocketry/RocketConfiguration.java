@@ -13,6 +13,13 @@ import supersymmetry.api.space.Planetoid;
 
 public class RocketConfiguration {
 
+    /**
+     * The delta-v budget every launch site currently programs with.
+     */
+    // TODO: derive this from the rocket's tier instead of assuming everything is a
+    // Soyuz
+    public static final int DEFAULT_BUDGET = 2;
+
     public enum MissionType {
         Manned,
         UnmannedCargo,
@@ -33,9 +40,7 @@ public class RocketConfiguration {
 
         public MissionConfiguration(NBTTagCompound landing) {
             this.dimension = landing.getInteger("dimension");
-            this.landingPos = new BlockPos(
-                    landing.getInteger("landing_x"),
-                    landing.getInteger("landing_y"),
+            this.landingPos = new BlockPos(landing.getInteger("landing_x"), landing.getInteger("landing_y"),
                     landing.getInteger("landing_z"));
             this.missionType = MissionType.values()[landing.getInteger("mission_type")];
             this.destinationType = DestinationType.values()[landing.getInteger("destination_type")];
@@ -55,6 +60,11 @@ public class RocketConfiguration {
         public int getDimension() {
             return this.dimension;
         }
+
+        public boolean isDefault() {
+            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
+                    this.missionType == MissionType.Manned && this.destinationType == DestinationType.Landing;
+        }
     }
 
     private final List<MissionConfiguration> missions = new ArrayList<>();
@@ -62,8 +72,10 @@ public class RocketConfiguration {
     public RocketConfiguration(NBTTagCompound tag) {
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
-            if (!missionTag.isEmpty() && missionTag.getInteger("landing_y") != 0) {
-                missions.add(new MissionConfiguration(missionTag));
+            if (!missionTag.isEmpty()) {
+                MissionConfiguration config = new MissionConfiguration(missionTag);
+                if (i == 0 || !config.isDefault())
+                    missions.add(new MissionConfiguration(missionTag));
             }
         }
     }
@@ -77,7 +89,8 @@ public class RocketConfiguration {
     }
 
     public boolean setBudget(int startingDim, int budget) {
-        // To go between two bodies within the same planetary system requires a budget of 1
+        // To go between two bodies within the same planetary system requires a budget
+        // of 1
         // And to go between two bodies in the same solar system requires a budget of 3
 
         // Get all dimensions in a row
@@ -111,5 +124,9 @@ public class RocketConfiguration {
 
     public MissionConfiguration popFront() {
         return this.missions.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return this.missions.isEmpty();
     }
 }

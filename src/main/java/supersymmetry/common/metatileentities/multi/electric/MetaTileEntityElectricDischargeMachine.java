@@ -43,32 +43,22 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
         return new MetaTileEntityElectricDischargeMachine(this.metaTileEntityId);
     }
 
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ")
-                .aisle("CCCCC", "C   C", "C   C", "C   C", " CCC ")
-                .aisle(" CSC ", " GGG ", " GGG ", " CCC ", "     ")
-                .where('S', selfPredicate())
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start().aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ").aisle("CCCCC", "C   C", "C   C", "C   C", " CCC ")
+                .aisle(" CSC ", " GGG ", " GGG ", " CCC ", "     ").where('S', selfPredicate())
                 .where('C',
                         states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                                 .getState(BlockLargeMultiblockCasing.CasingType.NONCONDUCTING_CASING))
-                                        .setMinGlobalLimited(45)
-                                        .or(abilities(MultiblockAbility.INPUT_ENERGY)
-                                                .setMinGlobalLimited(1).setMaxGlobalLimited(2))
-                                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
-                                                .setExactLimit(1))
-                                        .or(abilities(MultiblockAbility.IMPORT_ITEMS)
-                                                .setMinGlobalLimited(1))
-                                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)
-                                                .setMinGlobalLimited(1))
-                                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS)
-                                                .setMinGlobalLimited(1))
-                                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS)))
-                .where('E', states(getElectrodeState()))
-                .where('G', states(getGlassState()))
-                .build();
+                                .setMinGlobalLimited(45)
+                                .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                        .setMaxGlobalLimited(2))
+                                .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
+                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS)))
+                .where('E', states(getElectrodeState())).where('G', states(getGlassState())).build();
     }
 
     @Override
@@ -76,23 +66,17 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
                 .where('S', SuSyMetaTileEntities.ELECTRIC_DISCHARGE_MACHINE, EnumFacing.SOUTH)
-                .where('C', getCasingState())
-                .where('E', getElectrodeState())
-                .where('G', getGlassState())
+                .where('C', getCasingState()).where('E', getElectrodeState()).where('G', getGlassState())
                 .where('F', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.SOUTH)
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
-                .where('N', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.HV], EnumFacing.SOUTH)
-                .where('M',
+                .where('N', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.HV], EnumFacing.SOUTH).where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
                                 getCasingState(),
                         EnumFacing.SOUTH);
-        shapeInfo.add(baseBuilder.shallowCopy()
-                .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ")
-                .aisle("MCCCN", "F   C", "C   C", "C   C", " CCC ")
-                .aisle(" ISO ", " GGG ", " GGG ", " CCC ", "     ")
-                .build());
+        shapeInfo.add(baseBuilder.shallowCopy().aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ").aisle("MCCCN", "F   C", "C   C", "C   C", " CCC ")
+                .aisle(" ISO ", " GGG ", " GGG ", " CCC ", "     ").build());
         return shapeInfo;
     }
 
@@ -121,8 +105,7 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.EDM_OVERLAY;
     }

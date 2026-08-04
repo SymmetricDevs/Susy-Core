@@ -47,36 +47,33 @@ public class MetaTileEntityAdvancedLargeTurbine extends MetaTileEntitySUSYLargeT
                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
-        return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G   A   A   O")
+        return FactoryBlockPattern.start().aisle("GAAAAAAAAAAAO", "GAAAAAAAAAAAO", "G   A   A   O")
                 .aisle("GAAAAAAAAAAAO", "GHHHPLLLLCCCF", "GAAAAAAAAAAAO")
-                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G   A   A   O")
-                .where('S', selfPredicate())
-                .where('A', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, false, false))
-                        .or(maintenance))
-                .where('O', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, true, false))
-                        .or(maintenance))
-                .where('C', coilOrientation())
-                .where('L', rotorOrientation())
-                .where('H', rotorOrientation2())
+                .aisle("GAAAAAAAAAAAO", "GSAAAAAAAAAAO", "G   A   A   O").where('S', selfPredicate())
+                .where('A',
+                        casingPredicate.or(autoAbilities(false, false, false, false, false, false, false))
+                                .or(maintenance))
+                .where('O',
+                        casingPredicate.or(autoAbilities(false, false, false, false, false, true, false))
+                                .or(maintenance))
+                .where('C', coilOrientation()).where('L', rotorOrientation()).where('H', rotorOrientation2())
                 .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
-                .where('G', casingPredicate
-                        .or(autoAbilities(false, false, false, false, true, false, false))
-                        .or(maintenance))
+                .where('G',
+                        casingPredicate.or(autoAbilities(false, false, false, false, true, false, false))
+                                .or(maintenance))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     protected TraceabilityPredicate rotorOrientation2() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         EnumFacing leftFacing = RelativeDirection.RIGHT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
                 isFlipped());
 
         // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block from horizontal directional into
+        // this is needed for the following update which converts this rotatable block
+        // from horizontal directional into
         // axial directional.
         EnumFacing axialFacing = leftFacing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
@@ -84,7 +81,8 @@ public class MetaTileEntityAdvancedLargeTurbine extends MetaTileEntitySUSYLargeT
                 new BlockInfo(this.rotorState2().withProperty(FACING, axialFacing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             IBlockState state = blockWorldState.getBlockState();
-            if (state.getBlock() != this.rotorState2().getBlock()) return false;
+            if (state.getBlock() != this.rotorState2().getBlock())
+                return false;
 
             // auto-correct rotor orientation
             if (state != this.rotorState2().withProperty(FACING, axialFacing))

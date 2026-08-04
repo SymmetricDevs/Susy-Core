@@ -2,6 +2,9 @@ package supersymmetry.client.renderer.textures;
 
 import net.minecraft.item.EnumDyeColor;
 
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
@@ -138,6 +141,8 @@ public class SusyTextures {
             "machines/multiblocks/radiator");
     public static final OrientedOverlayRenderer RAILROAD_ENGINEERING_STATION_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/railroad_engineering_station");
+    public static final OrientedOverlayRenderer LARGE_RES = new OrientedOverlayRenderer(
+            "machines/multiblocks/railroad_engineering_station");
     public static final OrientedOverlayRenderer ROTARY_KILN_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/rotary_kiln");
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer(
@@ -180,10 +185,20 @@ public class SusyTextures {
             "machines/multiblocks/attrition_scrubber");
     public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/screen_printer");
-    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer(
-            "machines/multiblocks/edm");
+    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
+
+    public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/launch_pad");
+    public static final OrientedOverlayRenderer ROCKET_PROGRAMMER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/rocket_programmer");
+    public static final OrientedOverlayRenderer AFS_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/aerospace_flight_simulator");
+    public static final OrientedOverlayRenderer BLUEPRINT_ASSEMBLER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/blueprint_assembler");
+    public static final @NotNull ICubeRenderer LAYUP_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/layup");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(

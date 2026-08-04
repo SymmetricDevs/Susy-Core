@@ -121,20 +121,12 @@ public class SusyOreRecipeHandler {
         ItemStack crushedStack = OreDictUnifier.get(OrePrefix.crushed, material);
         ItemStack dustImpureStack = OreDictUnifier.get(OrePrefix.dustImpure, material);
 
-        SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER.recipeBuilder()
-                .input(orePrefix, material).outputs(
-                        GTUtility.copy((int) Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack))
-                .chancedOutput(byproductStack, 1400, 850)
-                .chancedOutput(byproductStack, 1400, 850)
-                .duration(50)
-                .EUt(24)
+        SuSyRecipeMaps.ECCENTRIC_ROLL_CRUSHER.recipeBuilder().input(orePrefix, material)
+                .outputs(GTUtility.copy((int) Math.round(amountOfCrushedOre) * 2 * oreTypeMultiplier, crushedStack))
+                .chancedOutput(byproductStack, 1400, 850).chancedOutput(byproductStack, 1400, 850).duration(50).EUt(24)
                 .buildAndRegister();
-        SuSyRecipeMaps.BALL_MILL.recipeBuilder()
-                .input(OrePrefix.crushed, material).outputs(dustImpureStack)
-                .chancedOutput(byproductStack, 1400, 850)
-                .chancedOutput(byproductStack, 1400, 850)
-                .duration(50)
-                .EUt(16)
+        SuSyRecipeMaps.BALL_MILL.recipeBuilder().input(OrePrefix.crushed, material).outputs(dustImpureStack)
+                .chancedOutput(byproductStack, 1400, 850).chancedOutput(byproductStack, 1400, 850).duration(50).EUt(16)
                 .buildAndRegister();
     }
 

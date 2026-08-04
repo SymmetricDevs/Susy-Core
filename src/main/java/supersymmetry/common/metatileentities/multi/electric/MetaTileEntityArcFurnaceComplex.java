@@ -2,9 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
@@ -106,18 +105,16 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
                 .where('D',
                         states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                                 .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING))
-                                        .setMinGlobalLimited(8)
-                                        .or(autoAbilities(true, false, false, false, false, false, false)))
+                                .setMinGlobalLimited(8)
+                                .or(autoAbilities(true, false, false, false, false, false, false)))
                 .where('E', states(GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)))
                 .where('F', frames(Materials.Steel))
                 .where('H',
                         states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                                 .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING))
-                                        .setMinGlobalLimited(6)
-                                        .or(autoAbilities(false, true, true, true, true, true, false)))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                                .setMinGlobalLimited(6)
+                                .or(autoAbilities(false, true, true, true, true, true, false)))
+                .where(' ', any()).where('#', air()).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -129,8 +126,7 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
         tooltip.add(I18n.format("susy.machine.parallel_pure", 256));
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ARC_FURNACE_OVERLAY;
     }

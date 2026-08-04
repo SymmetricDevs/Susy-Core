@@ -29,14 +29,8 @@ public class ContinuousRecipeLogic extends CatalystRecipeLogic {
                 this.metaTileEntity.getFluidOutputLimit());
 
         calculateOverclockLimit(recipe);
-        recipe = findParallelRecipe(
-                recipe,
-                getInputInventory(),
-                getInputTank(),
-                getOutputInventory(),
-                getOutputTank(),
-                getMaxParallelVoltage(),
-                getParallelLimit());
+        recipe = findParallelRecipe(recipe, getInputInventory(), getInputTank(), getOutputInventory(), getOutputTank(),
+                getMaxParallelVoltage(), getParallelLimit());
 
         if (recipe != null && this.setupAndConsumeRecipeInputs(recipe, this.getInputInventory())) {
             this.setupRecipe(recipe);
@@ -54,37 +48,30 @@ public class ContinuousRecipeLogic extends CatalystRecipeLogic {
 
     protected double[] runContinuousOverclockingLogic(int recipeEUt, long maxVoltage, int duration, int amountOC) {
         if (requiredCatalystTier != CatalystInfo.NO_TIER && catalystInfo != null) {
-            return SuSyOverclockingLogic.continuousCatalystOverclockingLogic(
-                    recipeEUt,
-                    maxVoltage,
-                    duration,
-                    amountOC,
-                    catalystInfo,
-                    requiredCatalystTier,
-                    getOverclockingDurationDivisor(),
+            return SuSyOverclockingLogic.continuousCatalystOverclockingLogic(recipeEUt, maxVoltage, duration, amountOC,
+                    catalystInfo, requiredCatalystTier, getOverclockingDurationDivisor(),
                     getOverclockingVoltageMultiplier());
         } else {
-            return SuSyOverclockingLogic.continuousOverclockingLogic(
-                    recipeEUt,
-                    maxVoltage,
-                    duration,
-                    amountOC,
-                    this.getOverclockingDurationDivisor(),
-                    this.getOverclockingVoltageMultiplier());
+            return SuSyOverclockingLogic.continuousOverclockingLogic(recipeEUt, maxVoltage, duration, amountOC,
+                    this.getOverclockingDurationDivisor(), this.getOverclockingVoltageMultiplier());
         }
     }
 
     protected void calculateOverclockLimit(Recipe recipe) {
-        if (!isAllowOverclocking()) return;
+        if (!isAllowOverclocking())
+            return;
 
         int recipeTier = GTUtility.getTierByVoltage(recipeEUt);
         int maximumTier = getOverclockForTier(getMaximumOverclockVoltage());
-        if (maximumTier <= GTValues.LV) return;
+        if (maximumTier <= GTValues.LV)
+            return;
 
-        // The maximum number of overclocks is determined by the difference between the tier the recipe is running at,
+        // The maximum number of overclocks is determined by the difference between the
+        // tier the recipe is running at,
         // and the maximum tier that the machine can overclock to.
         int numberOfOCs = maximumTier - recipeTier;
-        if (recipeTier == ULV) numberOfOCs--; // no ULV overclocking
+        if (recipeTier == ULV)
+            numberOfOCs--; // no ULV overclocking
 
         double parallelLimitDouble = 1 / runContinuousOverclockingLogic(recipe.getEUt(), getMaximumOverclockVoltage(),
                 recipe.getDuration(), numberOfOCs)[1];

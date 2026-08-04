@@ -53,14 +53,22 @@ public class BlocksHardened1 extends VariantBlock<BlocksHardened1.HardenedBlockT
     public enum HardenedBlockType implements IStringSerializable, IStateHarvestLevel {
 
         INDUSTRIAL_CONCRETE_HARDENED("industrial_concrete_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(
-                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)), 1, 9)),
-        MILITARY_CONCRETE_COBBLESTONE_HARDENED("military_concrete_cobblestone_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(
-                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.COBBLE)), 1, 10)),
-        MILITARY_CONCRETE_HARDENED("military_concrete_hardened", 4,
-                () -> new ItemStack(Item.getItemFromBlock(
-                        SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)), 1, 10));
+                () -> new ItemStack(
+                        Item.getItemFromBlock(
+                                SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.BRICKS)),
+                        1, 9)),
+        MILITARY_CONCRETE_COBBLESTONE_HARDENED(
+                "military_concrete_cobblestone_hardened", 4,
+                () -> new ItemStack(
+                        Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS
+                                .get(SusyStoneVariantBlock.StoneVariant.COBBLE)),
+                        1, 10)),
+        MILITARY_CONCRETE_HARDENED(
+                "military_concrete_hardened", 4,
+                () -> new ItemStack(
+                        Item.getItemFromBlock(SuSyBlocks.SUSY_STONE_BLOCKS
+                                .get(SusyStoneVariantBlock.StoneVariant.SMOOTH)),
+                        1, 10));
 
         private final String name;
         private final int harvestLevel;

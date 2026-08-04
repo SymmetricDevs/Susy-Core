@@ -45,90 +45,26 @@ public class MetaTileEntityTurningZone extends MetaTileEntityStrandShaper {
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
-                .aisle("ABBBA",
-                        "ABBBA",
-                        "ABBBA",
-                        "ABBBA",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "F F F")
-                .aisle("  O  ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "ABBBA",
-                        "     ",
-                        "     ",
-                        "F S F")
-                .aisle("ABBBA",
-                        "ABBBA",
-                        "ABBBA",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "     ",
-                        "F F F")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "ABBBA",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "F F F")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "     ",
-                        "ABBBA",
-                        "F F F")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "     ",
-                        "     ",
-                        "ABBBA")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "     ",
-                        "ABBBA")
-                .aisle("     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "     ",
-                        "ABBBA",
-                        "  I  ",
-                        "ABBBA")
+                .aisle("ABBBA", "ABBBA", "ABBBA", "ABBBA", "     ", "     ", "     ", "     ", "F F F")
+                .aisle("  O  ", "     ", "     ", "     ", "ABBBA", "ABBBA", "     ", "     ", "F S F")
+                .aisle("ABBBA", "ABBBA", "ABBBA", "     ", "     ", "     ", "ABBBA", "     ", "F F F")
+                .aisle("     ", "     ", "     ", "ABBBA", "ABBBA", "     ", "     ", "ABBBA", "F F F")
+                .aisle("     ", "     ", "     ", "     ", "     ", "ABBBA", "     ", "ABBBA", "F F F")
+                .aisle("     ", "     ", "     ", "     ", "     ", "ABBBA", "     ", "     ", "ABBBA")
+                .aisle("     ", "     ", "     ", "     ", "     ", "     ", "ABBBA", "     ", "ABBBA")
+                .aisle("     ", "     ", "     ", "     ", "     ", "     ", "ABBBA", "  I  ", "ABBBA")
                 .where('B', rollOrientation(RelativeDirection.RIGHT))
                 .where('A',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
-                .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
-                .where('S', selfPredicate())
-                .where('F', states(SuSyMetaBlocks.SHEETED_FRAMES.get(Materials.Steel).getBlock(Materials.Steel)
-                        .withProperty(BlockSheetedFrame.SHEETED_FRAME_AXIS, BlockSheetedFrame.FrameEnumAxis
-                                .fromFacingAxis(getRelativeFacing(RelativeDirection.UP).getAxis())))
-                                        .or(autoAbilities(true, true, false)))
-                .where(' ', any())
-                .build();
+                .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT)).where('S', selfPredicate())
+                .where('F',
+                        states(SuSyMetaBlocks.SHEETED_FRAMES.get(Materials.Steel).getBlock(Materials.Steel)
+                                .withProperty(BlockSheetedFrame.SHEETED_FRAME_AXIS,
+                                        BlockSheetedFrame.FrameEnumAxis
+                                                .fromFacingAxis(getRelativeFacing(RelativeDirection.UP).getAxis())))
+                                .or(autoAbilities(true, true, false)))
+                .where(' ', any()).build();
     }
 
     @Override

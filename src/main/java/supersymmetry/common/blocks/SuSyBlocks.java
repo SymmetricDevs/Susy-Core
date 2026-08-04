@@ -4,10 +4,6 @@ import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -69,6 +65,7 @@ public class SuSyBlocks {
     public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
+    public static BlocksS2BMRF S2BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockSpeaker SPEAKER;
     public static BlockCrucible CRUCIBLE;
@@ -90,12 +87,19 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockRobotArm ROBOT_ARM;
+    public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
+    public static BlockVehicleTrack VEHICLE_TRACK;
+    public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
     public static BlockSolarPanel SOLAR_PANEL;
     public static BlockPaddleShaft PADDLE_SHAFT;
+    public static BlockSolarFurnaceMirror SOLAR_FURNACE_MIRROR;
+    public static BlockHeliostat HELIOSTAT;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 
@@ -109,7 +113,8 @@ public class SuSyBlocks {
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
-                // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
+                // Try block is necessary in case getDeclaredConstructor does not exist (though
+                // it should)
                 try {
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
@@ -140,8 +145,10 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
-            if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
-            else registerItemModel(b);
+            if (b instanceof VariantActiveBlock)
+                ((VariantActiveBlock<?>) b).onModelRegister();
+            else
+                registerItemModel(b);
         });
         registerItemModel(REGOLITH);
     }
@@ -149,10 +156,8 @@ public class SuSyBlocks {
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(state.getProperties())));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(state.getProperties())));
         }
     }
 
@@ -160,8 +165,7 @@ public class SuSyBlocks {
         StringBuilder stringbuilder = new StringBuilder();
 
         List<Map.Entry<IProperty<?>, Comparable<?>>> entries = properties.entrySet().stream()
-                .sorted(Comparator.comparing(c -> c.getKey().getName()))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(c -> c.getKey().getName())).collect(Collectors.toList());
 
         for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {

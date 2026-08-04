@@ -1,8 +1,10 @@
 package supersymmetry.api.space;
 
+import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
+
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -10,11 +12,12 @@ public class CelestialObject {
 
     private String translationKey;
 
-    private double mass;
+    private double mass; // Normalized by Earth's mass
     private double posT;
     private double posX;
     private double posY;
     private double posZ;
+    private double radius = 1; // Normalized by Earth's radius
 
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
@@ -37,28 +40,39 @@ public class CelestialObject {
         }
     }
 
-    double getMass() {
+    public double getMass() {
         return mass;
     }
 
-    double getPosT() {
+    public double getPosT() {
         return posT;
     }
 
-    double getPosX() {
+    public double getPosX() {
         return posX;
     }
 
-    double getPosY() {
+    public double getPosY() {
         return posY;
     }
 
-    double getPosZ() {
+    public double getPosZ() {
         return posZ;
     }
 
-    @Nullable
-    public CelestialObject getParentBody() {
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getEscapeVelocity() {
+        return ESCAPE_VELOCITY_CONSTANT * Math.sqrt(mass / radius);
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    @Nullable public CelestialObject getParentBody() {
         return parentBody;
     }
 

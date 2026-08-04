@@ -1,5 +1,7 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.stream.Stream;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,12 +9,15 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
-public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type> {
+public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
+                                       implements
+                                       WeightedBlock<BlockSpacecraftInstrument.Type> {
 
     public BlockSpacecraftInstrument() {
         super(Material.IRON);
@@ -20,21 +25,37 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setDefaultState(getState(Type.FLIGHT_COMPUTER));
+        setDefaultState(getState(Type.SENSOR_ARRAY));
         setHarvestLevel("wrench", 4);
+    }
+
+    @Override
+    public double getMass(Type type) {
+        return switch (type) {
+            case SENSOR_ARRAY -> 150;
+            case COLLECTOR -> 200;
+            case CAMERA -> 40;
+            case SOLAR_PANEL -> 100;
+            case BATTERY -> 100;
+            case ARM -> 800;
+            case LANDER -> 800;
+        };
     }
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
 
         SENSOR_ARRAY("sensors", 4),
         COLLECTOR("collector", 4),
-        CAMERA("position", 4),
-        FLIGHT_COMPUTER("computer", 4),
-        ENGINE("engine", 4),
-        SOLAR_PANEL("solar_panel", 4),
-        BATTERY("battery", 4),
+        CAMERA("camera", 4),
+        SOLAR_PANEL("solar_panel",
+                4),
+        BATTERY("battery",
+                4),
         ARM("arm", 4, new InstrumentRobotArm()),
-        LANDER("lander", 4, new InstrumentLander()); // will have variable purposes
+        LANDER("lander", 4, new InstrumentLander()); // will
+                                                     // have
+                                                     // variable
+                                                     // purposes
 
         public String name;
         public int h;
@@ -66,7 +87,12 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         }
 
         public void act(int count, EntityAbstractRocket rocket) {
-            if (instrument != null) instrument.act(count, rocket);
+            if (instrument != null)
+                instrument.act(count, rocket);
+        }
+
+        public static Type getInstrument(String name) {
+            return Stream.of(values()).filter(type -> type.name.equals(name)).findFirst().orElse(null);
         }
     }
 }

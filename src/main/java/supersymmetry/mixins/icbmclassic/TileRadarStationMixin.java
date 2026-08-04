@@ -28,8 +28,7 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
     @Shadow
     private int detectionRange;
 
-    @Unique
-    private final List<EntityDropPod> susy$incomingDropPods = new ArrayList<>();
+    @Unique private final List<EntityDropPod> susy$incomingDropPods = new ArrayList<>();
 
     @Override
     public List<EntityDropPod> susy$getIncomingDropPods() {
@@ -43,18 +42,20 @@ public abstract class TileRadarStationMixin implements IDropPodRadar {
         TileEntity self = (TileEntity) (Object) this;
         BlockPos pos = self.getPos();
         net.minecraft.world.World world = self.getWorld();
-        if (world == null) return;
+        if (world == null)
+            return;
 
         Vec3d radarPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 
-        AxisAlignedBB area = new AxisAlignedBB(
-                pos.getX() - detectionRange, pos.getY() - detectionRange, pos.getZ() - detectionRange,
-                pos.getX() + detectionRange, pos.getY() + detectionRange, pos.getZ() + detectionRange);
+        AxisAlignedBB area = new AxisAlignedBB(pos.getX() - detectionRange, pos.getY() - detectionRange,
+                pos.getZ() - detectionRange, pos.getX() + detectionRange, pos.getY() + detectionRange,
+                pos.getZ() + detectionRange);
 
         List<EntityDropPod> pods = world.getEntitiesWithinAABB(EntityDropPod.class, area);
 
         for (EntityDropPod pod : pods) {
-            if (!pod.isEntityAlive()) continue;
+            if (!pod.isEntityAlive())
+                continue;
             Vec3d podPos = pod.getPositionVector();
             double currentDistance = podPos.distanceTo(radarPos);
             double nextDistance = podPos.add(pod.motionX, pod.motionY, pod.motionZ).distanceTo(radarPos);

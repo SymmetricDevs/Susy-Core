@@ -24,7 +24,8 @@ public class ExtendedDTLogicHandler extends DistillationTowerLogicHandler {
     // This have to be an anonymous class. Just blame ceu.
     protected static final FakeTank BLACK_HOLE = new FakeTank() {};
 
-    // Y offset from the controller to the first layer that output hatch can be placed on
+    // Y offset from the controller to the first layer that output hatch can be
+    // placed on
     // As a function since monsters like LP Cryo DT exist
     protected final Function<Integer, Integer> offsetCounter;
     // The index of the extendable aisle repetition
@@ -46,11 +47,10 @@ public class ExtendedDTLogicHandler extends DistillationTowerLogicHandler {
     public void determineOrderedFluidOutputs() {
         // noinspection SimplifyStreamApiCallChains
         List<MetaTileEntityMultiblockPart> fluidExportParts = tower.getMultiblockParts().stream()
-                .filter(iMultiblockPart -> iMultiblockPart instanceof IMultiblockAbilityPart<?>abilityPart &&
+                .filter(iMultiblockPart -> iMultiblockPart instanceof IMultiblockAbilityPart<?> abilityPart &&
                         abilityPart.getAbility() == MultiblockAbility.EXPORT_FLUIDS &&
                         abilityPart instanceof MetaTileEntityMultiblockPart)
-                .map(iMultiblockPart -> (MetaTileEntityMultiblockPart) iMultiblockPart)
-                .collect(Collectors.toList());
+                .map(iMultiblockPart -> (MetaTileEntityMultiblockPart) iMultiblockPart).collect(Collectors.toList());
         // the fluidExportParts should come sorted in smallest Y first, largest Y last.
         List<IFluidHandler> orderedHandlerList = new ObjectArrayList<>();
         List<IFluidTank> tankList = new ObjectArrayList<>();

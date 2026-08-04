@@ -13,8 +13,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.integration.theoneprobe.provider.*;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_TOP,
+@GregTechModule(moduleID = SuSyModules.MODULE_TOP,
                 containerID = Supersymmetry.MODID,
                 modDependencies = Mods.Names.THE_ONE_PROBE,
                 name = "SuSy TheOneProbe Integration",

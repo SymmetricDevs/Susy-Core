@@ -27,37 +27,30 @@ public class SuSyIRLoader {
         // Actually you didn't do anything wrong, you just need to put null as input
         // when you're getting object from field because it's a static field -- Surreal
         /*
-         * try {
-         * Field jsonLoadersField = DefinitionManager.class.getDeclaredField("stockLoaders");
-         * jsonLoadersField.setAccessible(true);
-         * ↓ this should be null
-         * Map<String, StockLoader> stockLoaders = (Map<String, StockLoader>)
+         * try { Field jsonLoadersField =
+         * DefinitionManager.class.getDeclaredField("stockLoaders");
+         * jsonLoadersField.setAccessible(true); ↓ this should be null Map<String,
+         * StockLoader> stockLoaders = (Map<String, StockLoader>)
          * jsonLoadersField.get(DefinitionManager.class);
-         * stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new);
-         * } catch (NoSuchFieldException e) {
+         * stockLoaders.put("tunnel_bore", TunnelBoreDefinition::new); } catch
+         * (NoSuchFieldException e) {
          * SusyLog.logger.error("Failed to reflect definition manager json loaders", e);
          * } catch (IllegalAccessException e) {
          * SusyLog.logger.error("Failed to access definition manager json loaders", e);
          * }
          */
         /*
-         * try {
-         * Class<?> definitionManagerClass = Class.forName("cam72cam.immersiverailroading.registry.DefinitionManager");
-         * Method addStockLoaderMethod = definitionManagerClass.getMethod("addStockLoader", String.class,
-         * StockLoader.class);
-         * String loaderName = "tunnel_bore";
-         * StockLoader loader = TunnelBoreDefinition::new;
-         * try {
-         * addStockLoaderMethod.invoke(null, loaderName, loader);
-         * } catch (java.lang.reflect.InvocationTargetException e) {
-         * // Print the actual exception that occurred within addStockLoader method
+         * try { Class<?> definitionManagerClass =
+         * Class.forName("cam72cam.immersiverailroading.registry.DefinitionManager");
+         * Method addStockLoaderMethod =
+         * definitionManagerClass.getMethod("addStockLoader", String.class,
+         * StockLoader.class); String loaderName = "tunnel_bore"; StockLoader loader =
+         * TunnelBoreDefinition::new; try { addStockLoaderMethod.invoke(null,
+         * loaderName, loader); } catch (java.lang.reflect.InvocationTargetException e)
+         * { // Print the actual exception that occurred within addStockLoader method
          * Throwable actualException = e.getTargetException();
-         * actualException.printStackTrace();
-         * }
-         * }
-         * catch (Exception e) {
-         * e.printStackTrace();
-         * }
+         * actualException.printStackTrace(); } } catch (Exception e) {
+         * e.printStackTrace(); }
          */
 
         try {

@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -14,6 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
 
 import gregtech.api.block.VariantBlock;
+import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
@@ -29,20 +33,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     public double fuelThroughput;
 
     public ComponentVernierEngine() {
-        super(
-                "vernier_engine",
-                "engine_small",
-                candidate -> candidate.getSecond().stream()
-                        .anyMatch(
-                                pos -> candidate
-                                        .getFirst().world
-                                                .getBlockState(pos)
-                                                .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
-                                                        BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
-        this.setComponentSlotValidator(
-                x -> x.equals(this.getName()) || x.equals(this.getType()) ||
-                        (x.equals(this.getType() + "_small") && this.radius < 2) ||
-                        (x.equals(this.getName() + "_small") && this.radius < 2));
+        super("vernier_engine", "engine_small", candidate -> candidate.getSecond().stream()
+                .anyMatch(pos -> candidate.getFirst().world.getBlockState(pos).equals(
+                        SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT))));
+        this.setComponentSlotValidator(x -> x.equals(this.getName()) || x.equals(this.getType()));
     }
 
     @Override
@@ -59,13 +53,17 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
             return Optional.empty();
         }
         ComponentVernierEngine engine = new ComponentVernierEngine();
-        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
-        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        compound
-                .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST))
+            return Optional.empty();
+        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
         engine.areaRatio = compound.getDouble("area_ratio");
@@ -115,14 +113,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         int fin = initial;
 
         /*
-         * for (int a : areas) {
-         * if (fin <= a) {
-         * fin = a;
-         * } else {
-         * analysis.status = BuildStat.NOT_LAVAL;
-         * return Optional.empty();
-         * }
-         * }
+         * for (int a : areas) { if (fin <= a) { fin = a; } else { analysis.status =
+         * BuildStat.NOT_LAVAL; return Optional.empty(); } }
          */
         float computedAreaRatio = ((float) fin) / initial;
         if (computedAreaRatio < 1) {
@@ -140,8 +132,7 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         // Below the chamber: Open space
         BlockPos cChamber = cChambers.get(0);
         Set<BlockPos> pumps = analysis
-                .getOfBlockType(
-                        analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
+                .getOfBlockType(analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
                 .collect(Collectors.toSet());
         if (nozzleBB.contains(new Vec3d(cChamber))) {
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
@@ -154,8 +145,14 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         // Analyze turbopumps
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
-                .getState(chamberState)))
-                        .getMinPumps();
+                .getState(chamberState))).getMinPumps();
+
+        if (!((VariantBlock<?>) chamberState.getBlock()).getState(chamberState)
+                .equals(BlockCombustionChamber.CombustionType.MONOPROPELLANT)) {
+            analysis.status = BuildStat.WRONG_CHAMBER_TYPE;
+            return Optional.empty();
+        }
+
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();
@@ -167,12 +164,25 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                 return analysis.errorPos(pumpPos);
             }
         }
+
+        // Analyzes match
+        Set<BlockPos> stickBlocks = analysis.getOfMaterial(blocks, Materials.Wood).collect(Collectors.toSet());
+        if (!stickBlocks.isEmpty()) {
+            for (BlockPos stickPos : stickBlocks) {
+                if (!nozzleBB.contains(new Vec3d(stickPos))) {
+                    analysis.status = BuildStat.MATCH_WRONG;
+                    return Optional.empty();
+                }
+            }
+        }
+
         // Creates engine
         Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
         engineBlocks.addAll(pumps);
         engineBlocks.add(cChamber);
-        engineBlocks.addAll(
-                analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
+        engineBlocks.addAll(analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
+        engineBlocks.addAll(stickBlocks);
+
         if (engineBlocks.size() < blocks.size()) {
             analysis.status = BuildStat.EXTRANEOUS_BLOCKS;
             return Optional.empty();
@@ -183,8 +193,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         tag.setDouble("area_ratio", computedAreaRatio);
         this.areaRatio = computedAreaRatio;
         // Not the default; more of an inner radius
-        this.radius = analysis.getRadius(
-                blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
+        this.radius = analysis
+                .getRadius(blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
         tag.setDouble("radius", radius);
 
         collectInfo(analysis, blocks, tag);
@@ -199,6 +209,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         this.fuelThroughput = throughput;
         tag.setDouble("throughput", fuelThroughput);
 
+        tag.setBoolean("has_match", !stickBlocks.isEmpty());
+
         writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
@@ -206,5 +218,28 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     @Override
     public double getFuelThroughput() {
         return fuelThroughput;
+    }
+
+    @Override
+    public boolean configureDefaults() {
+        this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
+
+        this.radius = 1.0;
+        this.areaRatio = 1.0;
+        this.fuelThroughput = 50.0;
+        this.mass = 550.0;
+        return true;
+    }
+
+    @Override
+    public List<String> getTooltipLines(NBTTagCompound tag) {
+        List<String> lines = super.getTooltipLines(tag);
+        if (tag.hasKey("area_ratio")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.area_ratio", tag.getDouble("area_ratio")));
+        }
+        if (tag.hasKey("throughput")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+        }
+        return lines;
     }
 }

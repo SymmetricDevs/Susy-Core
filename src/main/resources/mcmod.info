@@ -1,10 +1,10 @@
 [
   {
-    "modid" : "${modid}",
-    "name" : "${modname}",
+    "modid" : "${mod_id}",
+    "name" : "${mod_name}",
     "description" : "The coremod for Supersymmetry",
-    "version" : "${version}",
-    "mcversion" : "${mcversion}",
+    "version" : "${mod_version}",
+    "mcversion" : "${mc_version}",
     "url" : "",
     "updateUrl" : "",
     "authorList" : [

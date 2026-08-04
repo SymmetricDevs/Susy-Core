@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube_all",
+  "textures" : {
+    "north" : "gregtech:blocks/rocketry/struct/gasgenerator.top",
+    "south" : "gregtech:blocks/rocketry/struct/gasgenerator.top",
+    "east" : "gregtech:blocks/rocketry/struct/gasgenerator.side",
+    "west" : "gregtech:blocks/rocketry/struct/gasgenerator.side",
+    "up" : "gregtech:blocks/rocketry/struct/gasgenerator.top",
+    "down" : "gregtech:blocks/rocketry/struct/gasgenerator.top"
+  }
+}

@@ -28,17 +28,15 @@ public class TileEntitySpeaker extends TileEntity implements Environment, Enviro
                     "data length must be even for AL_FORMAT_MONO16 (you need 16 bit chunks of audio, you are probably reading the .wav wrong)");
         }
         if (data.length > getMaxAudioSize()) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
-                            SusyConfig.speakerMaxDuration, SusyConfig.speakerMaxRate));
+            throw new IllegalArgumentException(String.format(
+                    "too much data for a single audio packet (max %.1fs of MONO16 at %dHz), split your sound into multiple chunks and play them sequentially",
+                    SusyConfig.speakerMaxDuration, SusyConfig.speakerMaxRate));
         }
         int maxSize = (int) (rate * SusyConfig.speakerMaxDuration * 2);
         if (data.length > maxSize) {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
-                            SusyConfig.speakerMaxDuration, rate));
+            throw new IllegalArgumentException(String.format(
+                    "too much data (max %.1fs of MONO16), split your sound into multiple chunks and play them sequentially",
+                    SusyConfig.speakerMaxDuration, rate));
         }
         int minSize = Math.max(32, (int) (rate * SusyConfig.speakerMinDuration * 2));
         if (data.length < minSize) {

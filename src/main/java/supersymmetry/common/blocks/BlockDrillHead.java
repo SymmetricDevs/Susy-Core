@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -34,15 +33,15 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
     }
 
     // TODO: MAKE THIS CREATE MINING PARTICLES WHEN MINING DRILL IS ACTIVE
-    // TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR PLAYERS WHO COME NEAR THE MINING
+    // TODO: MAKE THIS PLAY A LOUD MINING NOISE, PERHAPS HAVE STATUS EFFECTS FOR
+    // PLAYERS WHO COME NEAR THE MINING
 
     @Override
     public boolean isOpaqueCube(@NotNull IBlockState state) {
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -59,8 +58,7 @@ public class BlockDrillHead extends VariantBlock<BlockDrillHead.DrillHeadType> {
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.store.FluidStorageKeys;
@@ -31,6 +30,8 @@ public class SusyMaterials {
     public static Material Slate;
     public static Material Kimberlite;
     public static Material Anorthosite;
+    public static Material Leucobasalt;
+    public static Material KreepBasalt;
     public static Material Latex;
     public static Material Mud;
     public static Material Seawater;
@@ -43,6 +44,7 @@ public class SusyMaterials {
     public static Material MetallizedBoPET;
     public static Material AluminiumAlloy6061;
     public static Material AluminiumAlloy7075;
+    public static Material AluminiumAlloyMg6;
 
     public static Material RefractoryGunningMixture;
 
@@ -67,8 +69,8 @@ public class SusyMaterials {
     public static Material RP_1;
 
     // Fluorinated Ketones
-    public static Material Perfluoro2Methyl3Pentanone;
-    public static Material WarmPerfluoro2Methyl3Pentanone;
+    public static Material FC75;
+    public static Material WarmFC75;
 
     // Fuels
     public static Material LOX;

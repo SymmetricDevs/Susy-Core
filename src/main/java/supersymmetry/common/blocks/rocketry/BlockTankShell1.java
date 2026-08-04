@@ -1,18 +1,27 @@
 package supersymmetry.common.blocks.rocketry;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
-import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankShell1.TankCoverType>
-                             implements WeightedBlock {
+public class BlockTankShell1 extends VariantDirectionalRotatableBlock<BlockTankShell1.TankCoverType>
+                             implements
+                             WeightedBlock<BlockTankShell1.TankCoverType> {
 
     public BlockTankShell1() {
         super(net.minecraft.block.material.Material.IRON);
@@ -22,7 +31,6 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(BlockTankShell1.TankCoverType.CARBON_COMPOSITE));
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
     }
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
@@ -53,7 +61,14 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
     }
 
     @Override
-    public double getMass(IBlockState state) {
-        return 25 + 50 * 3;
+    public double getMass(TankCoverType type) {
+        // Again, using a 4.7mm thickness
+        return 7.9;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               @NotNull ITooltipFlag advanced) {
+        tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
     }
 }

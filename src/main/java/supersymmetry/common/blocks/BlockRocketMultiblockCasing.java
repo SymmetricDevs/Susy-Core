@@ -1,12 +1,11 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -14,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -30,8 +30,8 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
@@ -42,9 +42,24 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public @NotNull BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return this.getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) ||
+                this.getState(state).equals(CasingType.VINYL_CEILING_TILE) ||
+                super.shouldSideBeRendered(state, blockAccess, pos, side);
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(@NotNull IBlockState state) {
-        return super.isOpaqueCube(state);
+        return !(getState(state).equals(CasingType.CEILING_GRID_FILTER_UNIT) ||
+                getState(state).equals(CasingType.VINYL_CEILING_TILE));
     }
 
     @Override
@@ -56,8 +71,10 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     public enum CasingType implements IStringSerializable {
 
         VINYL_CEILING_TILE("vinyl_ceiling_tile"),
-        CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
-        VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),
+        CEILING_GRID_FILTER_UNIT(
+                "ceiling_grid_filter_unit"),
+        VINYL_COMPOSITE_FLOORING(
+                "vinyl_composite_flooring"),
         AEROSPACE_GASKET("aerospace_gasket");
 
         private final String name;
@@ -66,8 +83,7 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
             this.name = name;
         }
 
-        @Nonnull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

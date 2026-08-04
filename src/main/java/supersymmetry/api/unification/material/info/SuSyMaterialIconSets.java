@@ -19,5 +19,6 @@ public class SuSyMaterialIconSets {
     public static final MaterialIconSet UXV = new MaterialIconSet("uxv", MaterialIconSet.DULL);
     public static final MaterialIconSet OpV = new MaterialIconSet("opv", MaterialIconSet.DULL);
     public static final MaterialIconSet[] TIERS = new MaterialIconSet[] { ULV, LV, MV, HV, EV, IV, LuV, ZPM, UV, UHV,
-            UEV, UIV, UXV, OpV };
+            UEV,
+            UIV, UXV, OpV };
 }
