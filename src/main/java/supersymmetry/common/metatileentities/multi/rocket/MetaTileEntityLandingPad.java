@@ -197,9 +197,9 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
                 .where('S', selfPredicate())
                 .where('C',
                         states(getCasingState()).setMinGlobalLimited(6)
-                                .or(abilities(MultiblockAbility.IMPORT_ITEMS, MultiblockAbility.EXPORT_ITEMS,
-                                        MultiblockAbility.INPUT_ENERGY))
-                                .or(autoAbilities()))
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS)).setPreviewCount(1)
+                                .or(abilities(MultiblockAbility.EXPORT_ITEMS)).setPreviewCount(1)
+                                .or(abilities(MultiblockAbility.INPUT_ENERGY)).setPreviewCount(1))
                 .where('P', states(getPadState())).build();
     }
 
