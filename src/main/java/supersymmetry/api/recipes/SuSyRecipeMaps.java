@@ -470,13 +470,13 @@ public class SuSyRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> INDUCTION_FURNACE = new RecipeMap<>(
             "induction_furnace", 9, 3, 3, 3, new SimpleRecipeBuilder(), false)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
-                    .setSound(GTSoundEvents.ARC);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<ResistanceFurnaceRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>(
             "resistance_furnace",
             6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
-                    .setSound(GTSoundEvents.FURNACE);
+            .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
             new NoEnergyRecipeBuilder(), false)
