@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -44,8 +42,7 @@ public class BlockCrucible extends VariantBlock<BlockCrucible.CrucibleType> {
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

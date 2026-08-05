@@ -17,7 +17,14 @@ configurations.compileOnly {
 }
 
 dependencies {
-    implementation(variantOf(libs.jvmdowngrader.javaApi) { classifier("downgraded-8") })
+    // Not `implementation`: that leaks the API jar (and its ASM 9.x transitives) onto the Minecraft
+    // run classpath, which makes `xyz.wagyourtail.jvmdg.j11.NestMembers` resolvable. Mixin merges
+    // that RUNTIME-retention annotation from downgraded mixins onto their targets, and its Class[]
+    // members point at mixin classes that cannot be loaded -- annotation parsing on the target then
+    // dies with ArrayStoreException. Run tasks use the shaded run jar, which has its own stubs.
+    compileOnly(variantOf(libs.jvmdowngrader.javaApi) { classifier("downgraded-8") })
+    // The downgraded test outputs reference the unshaded stubs, so tests still need them at runtime.
+    testRuntimeOnly(variantOf(libs.jvmdowngrader.javaApi) { classifier("downgraded-8") })
 }
 
 jvmdg.apply {

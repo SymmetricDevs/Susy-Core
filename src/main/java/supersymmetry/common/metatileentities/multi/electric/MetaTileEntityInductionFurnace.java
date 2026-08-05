@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.gui.GuiTextures;
@@ -210,8 +209,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     }
 
     @SideOnly(Side.CLIENT)
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;
     }

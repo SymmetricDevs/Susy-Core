@@ -94,7 +94,7 @@ dependencies {
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
     // OpenComputers
-    compileOnly(deps.openComputers.deobf())
+    implementation(deps.openComputers.deobf())
 
     // Multistorage
     compileOnly(deps.shetiphianCore.deobf())
