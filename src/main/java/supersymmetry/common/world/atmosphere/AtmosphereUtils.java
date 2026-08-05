@@ -3,6 +3,7 @@ package supersymmetry.common.world.atmosphere;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
 public class AtmosphereUtils {
@@ -16,6 +17,7 @@ public class AtmosphereUtils {
     }
 
     public static boolean isPosOxygenated(BlockPos pos, World world) {
-        return !DimensionBreathabilityHandler.isInDepressurizationHazard(world) || AtmosphereWorldData.get(world).getGraph().getOxygenation(pos) >= 0.1;
+        return !DimensionBreathabilityHandler.isInDepressurizationHazard(world) ||
+                AtmosphereWorldData.get(world).getGraph().getOxygenation(pos) >= 0.1;
     }
 }

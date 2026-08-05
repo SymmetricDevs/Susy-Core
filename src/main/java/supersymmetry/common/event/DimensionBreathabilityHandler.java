@@ -10,8 +10,8 @@ import java.util.Map;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-
 import net.minecraft.world.World;
+
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.item.SuSyArmorItem;
