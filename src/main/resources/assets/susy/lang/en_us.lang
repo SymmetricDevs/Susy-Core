@@ -184,6 +184,8 @@ tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
 
 
 
+tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -563,7 +565,8 @@ susy.machine.reverberatory_furnace.name=Reverberatory Furnace
 susy.machine.blender.name=Blender
 susy.machine.sieve_distillation_tower.name=Sieve Distillation Tower
 susy.machine.induction_furnace.name=Induction Furnace
-
+susy.machine.induction_furnace.explosion_tooltip=Will explode without cooling or if provided water while overheated
+gregtech.multiblock.induction_furnace.description=The Induction Furnace is a multiblock structure used for melting metals and creating alloys. The furnace generates heat while operating, requiring a steady supply of cooling water. Excessive temperatures can damage the induction coils, while introducing cooling water to an overheated furnace will cause a steam explosion.
 susy.machine.curtain_coater.name=Curtain Coater
 susy.multiblock.pattern.error.conveyor=§cAll conveyor belts must be the same§r
 
@@ -1121,6 +1124,11 @@ susy.multiblock.rotation_generator.lubricant_amount=Lubricant: %s | Consumption:
 susy.multiblock.rotation_generator.tooltip=Max Rotation Speed: %s RPM, Spin-Up: %s RPM/t, Spin-Down: %s RPM/t.
 susy.multiblock.rotation_generator.fuel_needed=Consuming %s (Max %s) per %s ticks
 
+susy.multiblock.cooling.heating_up=Temperature will rise
+susy.multiblock.cooling.dangerous_heat=Too Hot!
+susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
+susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
+
 # Sputtering Machine
 susy.machine.sputter_deposition=Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
@@ -1377,6 +1385,7 @@ metaitem.oxygen_sensor.oxygen_level.high=Oxygen Level: §aHigh
 metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
 metaitem.shape.mold.target.name=Sputtering Target Mold
 metaitem.rocket_configurer.name=Rocket Configuration Tool
+metaitem.clay_graphite_crucible.name=Clay-Graphite Crucible
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)

@@ -52,5 +52,13 @@ public class SuSyMaterialFlags {
     public static final MaterialFlag GENERATE_SPUTTERING_TARGET = (new MaterialFlag.Builder(
             "GENERATE_SPUTTERING_TARGET")).requireProps(PropertyKey.DUST).build();
 
+    public static final MaterialFlag INDUCTION_MELT = (new MaterialFlag.Builder("induction_melt"))
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
+            .build();
+
+    public static final MaterialFlag RESISTANCE_MELT = (new MaterialFlag.Builder("resistance_melt"))
+            .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
+            .build();
+
     public SuSyMaterialFlags() {}
 }

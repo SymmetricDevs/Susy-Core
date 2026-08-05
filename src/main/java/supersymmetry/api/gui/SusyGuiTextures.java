@@ -79,6 +79,8 @@ public class SusyGuiTextures {
             .fullImage("textures/gui/widget/hazard.png");
     public static final TextureArea ROCKET_ASSEMBLER_BUTTON_START = TextureArea
             .fullImage("textures/gui/widget/suspicious_button.png");
+    public static final TextureArea PROGRESS_BAR_HEAT = TextureArea
+            .fullImage("textures/gui/progress_bar/progress_bar_heat.png");
 
     public static final TextureArea PROGRESS_BAR_ROCKET_ASSEMBLER_COMPONENT = TextureArea
             .fullImage("textures/gui/progress_bar/rocket_assembler_component.png");

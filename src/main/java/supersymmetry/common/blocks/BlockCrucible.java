@@ -1,5 +1,7 @@
 package supersymmetry.common.blocks;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -8,21 +10,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 
-public class BlockInductionCoilAssembly extends VariantBlock<BlockInductionCoilAssembly.InductionCoilAssemblyType> {
+public class BlockCrucible extends VariantBlock<BlockCrucible.CrucibleType> {
 
-    public BlockInductionCoilAssembly() {
+    public BlockCrucible() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("induction_coil_assembly");
-        setHardness(3.0f);
+        setTranslationKey("crucible");
+        setHardness(5.0f);
         setResistance(0.1f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(InductionCoilAssemblyType.COPPER));
+        setDefaultState(getState(CrucibleType.SILICON_CARBIDE));
     }
 
     @Override
@@ -31,19 +32,20 @@ public class BlockInductionCoilAssembly extends VariantBlock<BlockInductionCoilA
         return false;
     }
 
-    public enum InductionCoilAssemblyType implements IStringSerializable, IStateHarvestLevel {
+    public enum CrucibleType implements IStringSerializable, IStateHarvestLevel {
 
-        COPPER("copper", 1);
+        SILICON_CARBIDE("silicon_carbide", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        InductionCoilAssemblyType(String name, int harvestLevel) {
+        CrucibleType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
 
-        @NonNull @Override
+        @Nonnull
+        @Override
         public String getName() {
             return this.name;
         }
