@@ -2,6 +2,8 @@ package supersymmetry.api.recipes;
 
 import static gregtech.api.GTValues.*;
 import static gregtech.api.recipes.RecipeMaps.MIXER_RECIPES;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.ore.OrePrefix.spring;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -632,5 +634,48 @@ public class SuSyRecipeMaps {
         SuSyRecipeMaps.FROTH_FLOTATION.onRecipeBuild(requireAtmosphere);
         SuSyRecipeMaps.NATURAL_DRAFT_COOLING_TOWER.onRecipeBuild(requireAtmosphere);
         SuSyRecipeMaps.COKING_RECIPES.onRecipeBuild(requireAtmosphere);
+
+        SuSyRecipeMaps.RESISTANCE_FURNACE.onRecipeBuild(recipeBuilder -> {
+            recipeBuilder.invalidateBuildAction();
+            int temperature = recipeBuilder.getTemperature();
+
+            if (temperature != 0) {
+                int baseDuration = recipeBuilder.getDuration();
+
+                if (baseDuration == 0) {
+                    baseDuration = temperature / 6;
+                }
+
+                if (temperature <= 1473) {
+                    recipeBuilder.copy().notConsumable(spring, Nichrome).duration(baseDuration).buildAndRegister();
+
+                    recipeBuilder.copy().notConsumable(spring, Cupronickel)
+                            .duration(Math.round(baseDuration * 1.25f)).buildAndRegister();
+                }
+                recipeBuilder.notConsumable(spring, Kanthal).duration((int) (recipeBuilder.getDuration() * 0.75));
+
+                recipeBuilder.notConsumable(spring, Kanthal).duration(Math.round(baseDuration * 0.75f));
+            }
+        });
+
+        SuSyRecipeMaps.INDUCTION_FURNACE.onRecipeBuild(recipeBuilder -> {
+
+            int fluidInput = 0;
+            if (!recipeBuilder.getFluidInputs().isEmpty()) {
+                fluidInput = recipeBuilder.getFluidInputs().getFirst().getInputFluidStack().amount;
+            }
+
+            if (fluidInput != 0 && recipeBuilder.getDuration() == 0) {
+                int fluidOutput = 0;
+
+                if (!recipeBuilder.getFluidOutputs().isEmpty()) {
+                    fluidOutput = recipeBuilder.getFluidOutputs().getFirst().amount;
+                }
+
+                int netFluid = fluidOutput - fluidInput;
+
+                recipeBuilder.duration(netFluid / 144 * 40);
+            }
+        });
     }
 }
