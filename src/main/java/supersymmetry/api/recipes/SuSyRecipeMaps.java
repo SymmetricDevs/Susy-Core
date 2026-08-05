@@ -652,8 +652,6 @@ public class SuSyRecipeMaps {
                     recipeBuilder.copy().notConsumable(spring, Cupronickel)
                             .duration(Math.round(baseDuration * 1.25f)).buildAndRegister();
                 }
-                recipeBuilder.notConsumable(spring, Kanthal).duration((int) (recipeBuilder.getDuration() * 0.75));
-
                 recipeBuilder.notConsumable(spring, Kanthal).duration(Math.round(baseDuration * 0.75f));
             }
         });
