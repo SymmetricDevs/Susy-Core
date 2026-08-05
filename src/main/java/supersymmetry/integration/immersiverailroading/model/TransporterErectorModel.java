@@ -3,9 +3,9 @@ package supersymmetry.integration.immersiverailroading.model;
 import java.nio.DoubleBuffer;
 
 import net.minecraft.client.Minecraft;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
