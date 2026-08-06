@@ -1619,3 +1619,14 @@ tile.flammable_air.flammableair.name=Flammable Air
 
 #Mercury
 tile.fluid_placer.mercury_fluid.name=Mercury Placer
+
+#Intel Card
+item.susy.intel_chip.blank=Unbound intel card
+item.susy.intel_chip.faction=Faction: %s
+item.susy.intel_chip.kills=Kills: %d out of %d
+
+item.susy.intel_chip_full.faction=Faction: %s
+item.susy.intel_chip_full.no_faction=No faction data
+
+metaitem.intel_chip.name=Intelligence gathering chip
+metaitem.intel_chip_full.name=Intelligence gathering chip
