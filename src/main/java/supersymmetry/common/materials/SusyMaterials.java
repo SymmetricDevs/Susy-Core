@@ -1,6 +1,7 @@
 package supersymmetry.common.materials;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
+import supercritical.api.unification.material.SCMaterials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 
@@ -235,6 +237,79 @@ public class SusyMaterials {
         }
         if (set != null) {
             set.remove(flag);
+        }
+    }
+
+    private static final Map<Material, Integer> MOLTEN_TEMPERATURES = new HashMap<>();
+
+    static {
+        MOLTEN_TEMPERATURES.put(Materials.Aluminium, 933);
+        MOLTEN_TEMPERATURES.put(Materials.Bismuth, 545);
+        MOLTEN_TEMPERATURES.put(Materials.Cobalt, 1768);
+        MOLTEN_TEMPERATURES.put(Materials.Copper, 1357);
+        MOLTEN_TEMPERATURES.put(Materials.Gold, 1337);
+        MOLTEN_TEMPERATURES.put(Materials.Indium, 430);
+        MOLTEN_TEMPERATURES.put(Materials.Iron, 1420);
+        MOLTEN_TEMPERATURES.put(Materials.Lead, 601);
+        MOLTEN_TEMPERATURES.put(Materials.Manganese, 1519);
+        MOLTEN_TEMPERATURES.put(Materials.Nickel, 1728);
+        MOLTEN_TEMPERATURES.put(Materials.Palladium, 1828);
+        MOLTEN_TEMPERATURES.put(Materials.Platinum, 2041);
+        MOLTEN_TEMPERATURES.put(Materials.Rhodium, 2237);
+        MOLTEN_TEMPERATURES.put(Materials.Silver, 1235);
+        MOLTEN_TEMPERATURES.put(Materials.Tin, 505);
+        MOLTEN_TEMPERATURES.put(Materials.Zinc, 693);
+
+        MOLTEN_TEMPERATURES.put(Materials.WroughtIron, 1811);
+        MOLTEN_TEMPERATURES.put(Materials.AnnealedCopper, 1357);
+        MOLTEN_TEMPERATURES.put(SusyMaterials.AluminiumAlloy6061, 925);
+        MOLTEN_TEMPERATURES.put(SusyMaterials.AluminiumAlloy7075, 900);
+
+        MOLTEN_TEMPERATURES.put(Materials.Brass, 1223);
+        MOLTEN_TEMPERATURES.put(Materials.Bronze, 1263);
+        MOLTEN_TEMPERATURES.put(Materials.Cupronickel, 1423);
+        MOLTEN_TEMPERATURES.put(Materials.Magnalium, 890);
+        MOLTEN_TEMPERATURES.put(Materials.SolderingAlloy, 456);
+        MOLTEN_TEMPERATURES.put(Materials.Invar, 1700);
+        MOLTEN_TEMPERATURES.put(Materials.Kanthal, 1773);
+        MOLTEN_TEMPERATURES.put(Materials.Nichrome, 1673);
+        MOLTEN_TEMPERATURES.put(Materials.Steel, 1790);
+        MOLTEN_TEMPERATURES.put(Materials.StainlessSteel, 1723);
+        MOLTEN_TEMPERATURES.put(Materials.Ultimet, 1650);
+        MOLTEN_TEMPERATURES.put(SCMaterials.Inconel, 1600);
+
+        MOLTEN_TEMPERATURES.put(Materials.VanadiumSteel, 1800);
+        MOLTEN_TEMPERATURES.put(Materials.TungstenSteel, 2000);
+        MOLTEN_TEMPERATURES.put(Materials.HSSG, 1700);
+        MOLTEN_TEMPERATURES.put(Materials.HSSE, 1715);
+        MOLTEN_TEMPERATURES.put(Materials.HSSS, 1730);
+
+        MOLTEN_TEMPERATURES.put(Materials.RedAlloy, 1357);
+    }
+
+    public static void addFlags() {
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
+
+            IngotProperty ingotProperty = material.getProperty(PropertyKey.INGOT);
+            if (ingotProperty != null) {
+
+                FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
+                PolymerProperty polymerProperty = material.getProperty(PropertyKey.POLYMER);
+                if (fluidProperty != null && polymerProperty == null) {
+
+                    FluidBuilder builder = fluidProperty.getQueuedBuilder(FluidStorageKeys.LIQUID);
+                    Integer temp = MOLTEN_TEMPERATURES.get(material);
+
+                    if (builder != null && temp != null) {
+                        builder.temperature(temp);
+                        material.addFlags(SuSyMaterialFlags.INDUCTION_MELT);
+
+                        if (temp <= 1673) {
+                            material.addFlags(SuSyMaterialFlags.RESISTANCE_MELT);
+                        }
+                    }
+                }
+            }
         }
     }
 }

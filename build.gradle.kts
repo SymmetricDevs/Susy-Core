@@ -26,6 +26,10 @@ dependencies {
         rfg.deobf("${it.module.group}:${it.module.name}:${it.versionConstraint.requiredVersion}")
     }
 
+    // Mixinbooter 11.x breaks runtime (mixins with type-parameters, FMLDeobfuscatingRemapper)
+    // So we use Mixinbooter 10.x here, which contains the mixin annotation processor.
+    annotationProcessor(libs.mixinbooter)
+
     compileOnlyApi(deps.jspecify)
     compileOnlyApi(deps.annotations)
 
@@ -94,7 +98,7 @@ dependencies {
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
     // OpenComputers
-    compileOnly(deps.openComputers.deobf())
+    implementation(deps.openComputers.deobf())
 
     // Multistorage
     compileOnly(deps.shetiphianCore.deobf())

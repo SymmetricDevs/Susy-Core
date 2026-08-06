@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=silicon_carbide" : {
+      "model" : "susy:crucible/silicon_carbide"
+    }
+  }
+}
+
+

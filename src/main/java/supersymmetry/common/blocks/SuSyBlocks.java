@@ -68,6 +68,7 @@ public class SuSyBlocks {
     public static BlocksS2BMRF S2BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockSpeaker SPEAKER;
+    public static BlockCrucible CRUCIBLE;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
     public static BlockProcessorCluster PROCESSOR_CLUSTER;

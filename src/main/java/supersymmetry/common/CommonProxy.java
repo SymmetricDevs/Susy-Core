@@ -194,6 +194,7 @@ public class CommonProxy {
         SusyGeneratedFluidHandler.init();
 
         // SusyMaterials.removeFlags();
+        SusyMaterials.addFlags();
     }
 
     @SubscribeEvent

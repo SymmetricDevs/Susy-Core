@@ -55,6 +55,7 @@ public class SuSyMetaItems {
     public static MetaValueItem ADVANCED_CARGO_DRONE;
     public static MetaValueItem LOCATION_CARD;
     public static MetaValueItem ELITE_CARGO_DRONE;
+    public static MetaValueItem CLAY_GRAPHITE_CRUCIBLE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -183,6 +184,8 @@ public class SuSyMetaItems {
         AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
 
         OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1);
+
+        CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
     }
 
     private static void addExtraBehaviours() {

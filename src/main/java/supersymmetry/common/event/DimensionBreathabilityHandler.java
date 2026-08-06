@@ -10,6 +10,7 @@ import java.util.Map;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
@@ -84,6 +85,17 @@ public final class DimensionBreathabilityHandler {
 
     public static boolean isInDepressurizationHazard(EntityPlayer player) {
         List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(player.dimension);
+        if (infos == null)
+            return false;
+        for (BreathabilityInfo info : infos) {
+            if (info.damageType == SuSyDamageSources.DEPRESSURIZATION)
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isInDepressurizationHazard(World world) {
+        List<BreathabilityInfo> infos = dimensionBreathabilityMap.get(world.provider.getDimension());
         if (infos == null)
             return false;
         for (BreathabilityInfo info : infos) {

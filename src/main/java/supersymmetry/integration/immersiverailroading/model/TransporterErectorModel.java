@@ -30,9 +30,6 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
     public Rocket rocket;
     public TransporterLifter lifter;
 
-    // Reused buffer for the clip-plane equation, to avoid per-frame allocation.
-    private final DoubleBuffer clipPlane = BufferUtils.createDoubleBuffer(4);
-
     public TransporterErectorModel(TransporterErectorDefinition def) throws Exception {
         super(def);
     }
@@ -119,7 +116,7 @@ public class TransporterErectorModel extends FreightModel<EntityTransporterErect
             d = -threshold;
         }
 
-        clipPlane.clear();
+        DoubleBuffer clipPlane = BufferUtils.createDoubleBuffer(4);
         clipPlane.put(a).put(0.0).put(0.0).put(d);
         clipPlane.flip();
         GL11.glClipPlane(GL11.GL_CLIP_PLANE0, clipPlane);

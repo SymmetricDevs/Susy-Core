@@ -1,5 +1,3 @@
-import gradle.kotlin.dsl.accessors._011ecd5265c2c0a72bb455ba6acdb7ef.packageMcLauncher
-import gradle.kotlin.dsl.accessors._011ecd5265c2c0a72bb455ba6acdb7ef.packagePatchedMc
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 

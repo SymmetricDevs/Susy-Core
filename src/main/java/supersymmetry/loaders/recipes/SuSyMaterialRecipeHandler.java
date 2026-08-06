@@ -66,6 +66,12 @@ public class SuSyMaterialRecipeHandler {
         SusyOrePrefix.millBall.addProcessingHandler(SuSyPropertyKey.MILL_BALL,
                 SuSyMaterialRecipeHandler::processMillBall);
         SusyOrePrefix.target.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processTarget);
+        SusyOrePrefix.target.addProcessingHandler(PropertyKey.DUST,
+                SuSyMaterialRecipeHandler::processTarget);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.INDUCTION_MELT,
+                SuSyMaterialRecipeHandler::processInductionMelt);
+        addProcessingHandler(PropertyKey.DUST, OrePrefix.dust, SuSyMaterialFlags.RESISTANCE_MELT,
+                SuSyMaterialRecipeHandler::processResistanceMelt);
     }
 
     public static <T extends IMaterialProperty> void addProcessingHandler(PropertyKey<T> propertyKey, OrePrefix prefix,
@@ -165,6 +171,52 @@ public class SuSyMaterialRecipeHandler {
         if (material.hasProperty(PropertyKey.WIRE)) {
             WIREMILL_RECIPES.recipeBuilder().input(stick, material).circuitMeta(1).output(wireGtSingle, material, 1)
                     .duration((int) material.getMass() / 4).EUt(getVoltageMultiplier(material)).buildAndRegister();
+        }
+    }
+
+    public static void processInductionMelt(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        int temp = material.getFluid().getTemperature();
+
+        SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
+                .circuitMeta(1)
+                .input(ingot, material)
+                .fluidOutputs(material.getFluid(144))
+                .duration(Math.round((float) temp / 32))
+                .EUt(30)
+                .buildAndRegister();
+
+        SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
+                .circuitMeta(1)
+                .input(dust, material)
+                .fluidOutputs(material.getFluid(144))
+                .duration(Math.round((float) temp / 32))
+                .EUt(30)
+                .buildAndRegister();
+    }
+
+    public static void processResistanceMelt(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
+        int temp = material.getFluid().getTemperature();
+
+        if (temp > 1673) {
+            throw new IllegalArgumentException("Melting point too high for resistance furnace");
+        } else {
+            SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .input(ingot, material)
+                    .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
+                    .fluidOutputs(material.getFluid(144))
+                    .temperature(temp)
+                    .duration(Math.round((float) temp / 8))
+                    .EUt(7)
+                    .buildAndRegister();
+
+            SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .input(dust, material)
+                    .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
+                    .fluidOutputs(material.getFluid(144))
+                    .temperature(temp)
+                    .duration(Math.round((float) temp / 8))
+                    .EUt(7)
+                    .buildAndRegister();
         }
     }
 
