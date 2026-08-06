@@ -39,6 +39,8 @@ import supersymmetry.mixins.gregtech.MetaTileEntityCrateAccessor;
 
 public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
 
+    public static int BREACH_DURABILITY = 8;
+
     public MetaTileEntityLockedCrate(ResourceLocation metaTileEntityId, Material material, int inventorySize) {
         super(metaTileEntityId, material, inventorySize);
         ((MetaTileEntityCrateAccessor) this).setTaped(true);
@@ -90,18 +92,20 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
                                 CuboidRayTraceResult hitResult) {
         if (!playerIn.isSneaking()) {
             ItemStack heldStack = playerIn.getHeldItem(hand);
-            if (heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm())) {
+            if (heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER_DEV.getStackForm())) {
                 if (getWorld() != null && !getWorld().isRemote) {
                     MetaTileEntityUIFactory.INSTANCE.openUI(getHolder(), (EntityPlayerMP) playerIn);
                 }
                 return true;
+            } else if (heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm())) {
+                if (getWorld() != null && !getWorld().isRemote) {
+                    unlockCrate(playerIn, hand);
+                }
+                return true;
             } else {
                 if (getWorld() != null && !getWorld().isRemote) {
-                    // Send status message
                     playerIn.sendStatusMessage(new TextComponentTranslation("chat.susy.crate.requires_code_breacher"),
                             true);
-
-                    // Play failure sound effect
                     BlockPos pos = getPos();
                     getWorld().playSound(
                             null,
@@ -113,8 +117,67 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
                 }
             }
         }
-        // Fall back to the super method to handle other interactions
         return super.onRightClick(playerIn, hand, facing, hitResult);
+    }
+
+    private void unlockCrate(EntityPlayer playerIn, EnumHand hand) {
+        World world = getWorld();
+        BlockPos pos = getPos();
+
+        NBTTagCompound inventoryData = inventory.serializeNBT();
+
+        String path = metaTileEntityId.getPath().replace("locked_", "");
+        MetaTileEntity unlockedPrototype = null;
+        for (String namespace : new String[]{"gregtech", "susy"}) {
+            unlockedPrototype = gregtech.api.GregTechAPI.MTE_REGISTRY.getObject(
+                    new ResourceLocation(namespace, path));
+            if (unlockedPrototype != null) break;
+        }
+
+        if (unlockedPrototype == null) {
+            return;
+        }
+
+        net.minecraft.tileentity.TileEntity te = world.getTileEntity(pos);
+        if (!(te instanceof IGregTechTileEntity)) {
+            return;
+        }
+
+        NBTTagCompound holderNBT = te.writeToNBT(new NBTTagCompound());
+        holderNBT.setString("MetaId", unlockedPrototype.metaTileEntityId.toString());
+        if (holderNBT.hasKey("MetaTileEntity")) {
+            NBTTagCompound mteNBT = holderNBT.getCompoundTag("MetaTileEntity");
+            mteNBT.setTag("Inventory", inventoryData);
+            mteNBT.removeTag("Taped");
+            holderNBT.setTag("MetaTileEntity", mteNBT);
+        }
+
+        // replace the crate with a unlocked one and move over inventory
+
+        IGregTechTileEntity gtHolder = (IGregTechTileEntity) te;
+        MetaTileEntity newMTE = unlockedPrototype.createMetaTileEntity(gtHolder);
+        gtHolder.setMetaTileEntity(newMTE);
+        te.readFromNBT(holderNBT);
+        te.markDirty();
+        newMTE.writeCustomData(0, buf -> newMTE.writeInitialSyncData(buf));
+        net.minecraft.block.state.IBlockState blockState = world.getBlockState(pos);
+        world.notifyBlockUpdate(pos, blockState, blockState, 3);
+
+        ItemStack held = playerIn.getHeldItem(hand);
+        net.minecraft.nbt.NBTTagCompound tag = held.hasTagCompound() ? held.getTagCompound() : new net.minecraft.nbt.NBTTagCompound();
+        int uses = tag.getInteger("Uses") + 1;
+        if (uses >= BREACH_DURABILITY) {
+            held.shrink(1);
+            playerIn.setHeldItem(hand, held);
+        } else {
+            tag.setInteger("Uses", uses);
+            held.setTagCompound(tag);
+            playerIn.setHeldItem(hand, held);
+        }
+
+        playerIn.sendStatusMessage(
+                new TextComponentTranslation("chat.susy.crate.unlocked"), true);
+        world.playSound(null, pos, SusySounds.LOCKED_CRATE, SoundCategory.BLOCKS, 0.5F, 1.5F);
     }
 
     @Override

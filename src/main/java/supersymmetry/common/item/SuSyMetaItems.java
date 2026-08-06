@@ -1,11 +1,13 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -50,6 +52,7 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+    public static MetaValueItem CODE_BREACHER_DEV;
     public static MetaValueItem SHAPE_MOLD_TARGET;
     public static MetaValueItem ENTITY_TAGGER;
     public static MetaValueItem FACTION_RADIO;
@@ -144,7 +147,13 @@ public class SuSyMetaItems {
         RESTRICTIVE_FILTER = initOneItem("restrictive_filter");
         EARTH_ORBITAL_SCRAP = initOneItem("orbital.scrap.earth").setMaxStackSize(8);
 
-        CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1);
+        CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1).addComponents(
+                (IItemDurabilityManager) itemStack -> {
+                    int uses = itemStack.hasTagCompound() ? itemStack.getTagCompound().getInteger("Uses") : 0;
+                    return (double) (BREACH_DURABILITY - uses) / BREACH_DURABILITY;
+                }
+        );
+        CODE_BREACHER_DEV = initOneItem("code_breacher_dev").setMaxStackSize(1);
 
         ENTITY_TAGGER = initOneItem("entity_tagger").setMaxStackSize(1);
 

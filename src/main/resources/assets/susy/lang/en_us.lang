@@ -1159,6 +1159,7 @@ metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.code_breacher_dev.name=Creative Code Breacher
 metaitem.shape.mold.target=Sputtering Target Mold
 
 # Catalysts
@@ -1414,6 +1415,7 @@ supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
 
 # Locked Crates
 chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+chat.susy.crate.unlocked=Crate unlocked!
 susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
 susy.machine.locked_crate.wood.name=Wooden Crate
 susy.machine.locked_crate.bronze.name=Bronze Crate
