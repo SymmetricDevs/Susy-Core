@@ -78,6 +78,9 @@ public class SuSyRecipeLoader {
             SuSyRecipeMaps.SALVAGING_RECIPES.recipeBuilder()
                     .inputs(Planetoid.PLANETOIDS.inverse().get(0).getDisplayItem()).output(Items.BEEF).duration(1000)
                     .buildAndRegister();
+            SuSyRecipeMaps.COKING_RECIPES.recipeBuilder().input(ingot, Materials.Iron).output(Items.BEEF)
+                    .duration(800).EUt(2).buildAndRegister();
+
         }
     }
 
