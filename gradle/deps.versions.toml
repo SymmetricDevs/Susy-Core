@@ -11,7 +11,7 @@ gregtech = "2.8.10-beta"
 gregicalityMultiblocks = "1.2.11"
 craftTweaker2 = "1.12-4.1.20.700"
 ae2Uel = "v0.56.7"
-ctm = "2915363"
+ctm = "MC1.12.2-1.0.2.31"
 supercritical = "7864560"
 gregtechFoodOption = "7449314"
 groovyScript = "1.4.3"
@@ -65,7 +65,7 @@ gregtech = { module = "gregtech:gregtech", version.ref = "gregtech" }
 gregicalityMultiblocks = { module = "gregicality:GregicalityMultiblocks", version.ref = "gregicalityMultiblocks" }
 craftTweaker2 = { module = "CraftTweaker2:CraftTweaker2-MC1120-Main", version.ref = "craftTweaker2" }
 ae2Uel = { module = "appeng:ae2-uel", version.ref = "ae2Uel" }
-ctm = { module = "curse.maven:ctm-267602", version.ref = "ctm" }
+ctm = { module = "team.chisel.ctm:CTM", version.ref = "ctm" }
 supercritical = { module = "curse.maven:supercritical-1185871", version.ref = "supercritical" }
 gregtechFoodOption = { module = "curse.maven:gregtech-food-option-477021", version.ref = "gregtechFoodOption" }
 groovyScript = { module = "com.cleanroommc:groovyscript", version.ref = "groovyScript" }
