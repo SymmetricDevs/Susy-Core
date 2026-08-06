@@ -94,18 +94,22 @@ public class SuSyMaterialRecipeHandler {
         Item susyMetaItem = Item.getByNameOrId("gregtech:meta_item_2");
         if (susyMetaItem != null) {
             mapMolds.put(OrePrefix.stickLong, new ItemStack(susyMetaItem, 1, 111));
-            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
-                    .notConsumable(new ItemStack(susyMetaItem, 1, 112)).fluidInputs(Argon.getFluid(100))
-                    .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
-            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
-                    .notConsumable(new ItemStack(susyMetaItem, 1, 112)).fluidInputs(Nitrogen.getFluid(200))
-                    .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
-            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
-                    .notConsumable(new ItemStack(susyMetaItem, 1, 106)).fluidInputs(Argon.getFluid(100))
-                    .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
-            SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
-                    .notConsumable(new ItemStack(susyMetaItem, 1, 106)).fluidInputs(Nitrogen.getFluid(200))
-                    .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
+            if (!OreDictUnifier.get(ring, material, 1).isEmpty()) {
+                SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
+                        .notConsumable(new ItemStack(susyMetaItem, 1, 112)).fluidInputs(Argon.getFluid(100))
+                        .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
+                SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
+                        .notConsumable(new ItemStack(susyMetaItem, 1, 112)).fluidInputs(Nitrogen.getFluid(200))
+                        .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
+            }
+            if (!OreDictUnifier.get(stick, material, 1).isEmpty()) {
+                SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
+                        .notConsumable(new ItemStack(susyMetaItem, 1, 106)).fluidInputs(Argon.getFluid(100))
+                        .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
+                SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
+                        .notConsumable(new ItemStack(susyMetaItem, 1, 106)).fluidInputs(Nitrogen.getFluid(200))
+                        .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
+            }
         }
         for (Map.Entry<OrePrefix, ItemStack> entry : mapMolds.entrySet()) {
             if (OreDictUnifier.get(entry.getKey(), material, 1).isEmpty()) {
