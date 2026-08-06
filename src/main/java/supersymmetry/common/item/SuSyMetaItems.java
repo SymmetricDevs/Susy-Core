@@ -148,7 +148,7 @@ public class SuSyMetaItems {
 
         ENTITY_TAGGER = initOneItem("entity_tagger").setMaxStackSize(1);
 
-        FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1);
+        FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1).addComponents(FactionRadioBehaviour.INSTANCE);
 
         INTEL_CHIP = initOneItem("intel_chip").setMaxStackSize(1).addComponents(IntelChipBehaviour.INSTANCE);
 
