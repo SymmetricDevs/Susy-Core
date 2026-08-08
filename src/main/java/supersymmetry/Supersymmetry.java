@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
 import supercritical.common.SCConfigHolder;
+import supersymmetry.api.blocks.SuSyHeatingCoils;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.shaders.ShaderManager;
@@ -70,6 +71,7 @@ public class Supersymmetry {
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+        SuSyHeatingCoils.init();
 
         SusySounds.registerSounds();
 

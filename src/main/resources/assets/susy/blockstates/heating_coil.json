@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "active=false,variant=molybdenum_disilicate": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/coils/machine_coil_molybdenum_disilicide"
+      }
+    },
+
+    "active=true,variant=molybdenum_disilicate": {
+      "model": "gregtech:cube_2_layer_all",
+      "textures": {
+        "bot_all": "gregtech:blocks/casings/coils/machine_coil_molybdenum_disilicide",
+        "top_all": "gregtech:blocks/casings/coils/machine_coil_molybdenum_disilicide_bloom"
+      }
+    },
+
+    "active=false,variant=tungsten": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/coils/machine_coil_naquadah"
+      }
+    },
+
+    "active=true,variant=tungsten": {
+      "model": "gregtech:cube_2_layer_all",
+      "textures": {
+        "bot_all": "gregtech:blocks/casings/coils/machine_coil_naquadah",
+        "top_all": "gregtech:blocks/casings/coils/machine_coil_naquadah_bloom"
+      }
+    }
+  }
+}
