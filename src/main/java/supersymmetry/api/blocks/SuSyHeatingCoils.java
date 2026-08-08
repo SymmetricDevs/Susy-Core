@@ -32,8 +32,8 @@ public final class SuSyHeatingCoils {
                 SuSyCoilType.KANTHAL);
 
         GregTechAPI.HEATING_COILS.put(
-                SuSyBlocks.HEATING_COIL.getState(BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICATE),
-                BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICATE);
+                SuSyBlocks.HEATING_COIL.getState(BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICIDE),
+                BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICIDE);
 
         GregTechAPI.HEATING_COILS.put(
                 SuSyBlocks.HEATING_COIL.getState(BlockHeatingCoil.CoilType.TUNGSTEN),

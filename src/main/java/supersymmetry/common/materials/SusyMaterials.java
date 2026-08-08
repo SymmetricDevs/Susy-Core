@@ -22,7 +22,7 @@ public class SusyMaterials {
     public static Material ManganeseIronArsenicPhosphide;
     public static Material PraseodymiumNickel;
     public static Material GadoliniumSiliconGermanium;
-    public static Material MolybdenumDisilicate;
+    public static Material MolybdenumDisilicide;
     public static Material Gabbro;
     public static Material Gneiss;
     public static Material Limestone;

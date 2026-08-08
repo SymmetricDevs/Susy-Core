@@ -37,12 +37,12 @@ public class BlockHeatingCoil
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel(ToolClasses.WRENCH, 2);
-        setDefaultState(getState(CoilType.MOLYBDENUM_DISILICATE));
+        setDefaultState(getState(CoilType.MOLYBDENUM_DISILICIDE));
     }
 
     public enum CoilType implements IStringSerializable, IHeatingCoilBlockStats {
 
-        MOLYBDENUM_DISILICATE("molybdenum_disilicate", 2100, 4, 2, 3, SusyMaterials.MolybdenumDisilicate),
+        MOLYBDENUM_DISILICIDE("molybdenum_disilicide", 2100, 4, 2, 3, SusyMaterials.MolybdenumDisilicide),
         TUNGSTEN("tungsten", 3000, 4, 4, 4, Materials.Tungsten);
 
         private final String name;
