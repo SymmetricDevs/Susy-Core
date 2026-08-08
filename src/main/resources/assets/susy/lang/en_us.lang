@@ -443,6 +443,8 @@ susy.machine.drum.uhmwpe.name=Ultra High Molecular Weight Polyethylene (UHMWPE) 
 
 susy.machine.crate.pe.name=Hermetically Sealed Crate
 
+susy.machine.fluid_samples_storage.name=Fluids Samples Storage
+
 susy.machine.polymerization_tank.name=Polymerization Tank
 susy.machine.fluidized_bed_reactor.name=Fluidized Bed Reactor
 
