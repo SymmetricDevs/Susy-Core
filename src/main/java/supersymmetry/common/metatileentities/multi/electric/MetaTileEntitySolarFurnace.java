@@ -1,14 +1,20 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.metatileentity.MetaTileEntityHolder.TRACKED_TICKS;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.heliostats;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.heliostat;
 
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.util.TextComponentUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-
-import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -23,21 +29,37 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.SolarFurnaceMinPowerProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockSolarFurnaceMirror;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.*;
+import supersymmetry.common.util.RecipeCheckUtils;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
 
-    public static final int MAX_HELIOSTAT_DISTANCE = 21;
-    private int timer = Math.round(getOffsetTimer());
+    public static final int WATTS_PER_HELIOSTAT = 2000;
+    public int numValidHeliostats = 0;
+    public int currentPower = 0;
+    public boolean hasEnoughPower = false;
+
+    private final int[] recipeSpeedStats = new int[TRACKED_TICKS];
+    private int statsIndex = 0;
 
     public MetaTileEntitySolarFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SOLAR_FURNACE_RECIPES);
-        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
+        this.recipeMapWorkable = new SolarFurnaceRecipeLogic(this);
     }
 
     @Override
@@ -45,8 +67,9 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
         return new MetaTileEntitySolarFurnace(metaTileEntityId);
     }
 
+    @NotNull
     @Override
-    protected BlockPattern createStructurePattern() {
+    protected  BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("      FFF      ", "       F       ", "               ", "               ", "               ",
                         "               ", "               ", "               ", "               ", "               ",
@@ -87,7 +110,7 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
                 .aisle("####### #######", "#######I#######", "###############", "###############", "###############",
                         "###############", "###############", " ############# ", " ############# ", "  ###########  ",
                         "    #######    ")
-                .aisle("#####I   I#####", "######I I######", "#######I#######", "#######C#######", "###############",
+                .aisle("#####I   I#####", "######I I######", "#######U#######", "#######X#######", "###############",
                         "###############", "###############", " ############# ", " ############# ", "  ###########  ",
                         "    #######    ")
                 .aisle("##### # # #####", "###### I ######", "####### #######", "####### #######", "###############",
@@ -153,11 +176,50 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
                 .aisle("               ", "               ", "               ", "               ", "               ",
                         "               ", "               ", "               ", "               ", "  H#H#H#H#H#H  ",
                         "    #######    ")
-                .where('S', selfPredicate()).where('F', frames(Materials.Aluminium))
+                .where('S', selfPredicate())
+                .where('F', frames(Materials.Aluminium))
                 .where('I', frames(Materials.Aluminium).or(autoAbilities(false, true, true, true, true, true, false)))
-                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.TUNGSTENSTEEL_ROBUST)))
                 .where('M', epoxyMirrorOrientation().or(steelMirrorOrientation()))
-                .where('H', heliostats(RelativeDirection.LEFT)).where('#', air()).where(' ', any()).build();
+                .where('H', heliostat(this.getFrontFacing().getOpposite()).or(air()))
+                .where('#', air())
+                .where('X', redirectingMirrorOrientation())
+                .where('U', states(SuSyBlocks.SOLAR_FURNACE_CRUCIBLE.getState(BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType.DEFAULT)))
+                .where(' ', any())
+                .build();
+    }
+
+    public static enum EnumMirrorSides implements IStringSerializable {
+
+        TOP_LEFT("top_left"),
+        TOP_RIGHT("top_right"),
+        BOTTOM_LEFT("bottom_left"),
+        BOTTOM_RIGHT("bottom_right");
+
+        public static EnumMirrorSides fromInteger(int number) {
+            switch (number) {
+                case 1:
+                    return TOP_RIGHT;
+                case 2:
+                    return BOTTOM_LEFT;
+                case 3:
+                    return BOTTOM_RIGHT;
+                default:
+                    return TOP_LEFT;
+            }
+        }
+        private final String name;
+
+        private EnumMirrorSides(String name) {
+            this.name = name;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
     @Override
@@ -165,17 +227,25 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
         return Textures.FROST_PROOF_CASING;
     }
 
-    @NonNull @Override
+    @NotNull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HEAT_EXCHANGER_OVERLAY;
     }
 
+    protected List<BlockPos> heliostats;
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        this.heliostats = context.getOrDefault("HeliostatPositions", new LinkedList<>());
+        super.formStructure(context);
+    }
     protected IBlockState epoxyMirrorState() {
         return SuSyBlocks.SOLAR_FURNACE_MIRROR.getState(BlockSolarFurnaceMirror.SolarFurnaceMirrorType.EPOXY);
     }
 
     protected TraceabilityPredicate epoxyMirrorOrientation() {
-        return SuSyPredicates.horizontalOrientation(this, epoxyMirrorState(), RelativeDirection.FRONT, FACING);
+        return SuSyPredicates.orientation(this, epoxyMirrorState(), RelativeDirection.FRONT, FACING);
     }
 
     protected IBlockState steelMirrorState() {
@@ -183,7 +253,15 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
     }
 
     protected TraceabilityPredicate steelMirrorOrientation() {
-        return SuSyPredicates.horizontalOrientation(this, steelMirrorState(), RelativeDirection.FRONT, FACING);
+        return SuSyPredicates.orientation(this, steelMirrorState(), RelativeDirection.FRONT, FACING);
+    }
+
+    protected IBlockState redirectingMirrorState() {
+        return SuSyBlocks.SOLAR_FURNACE_REDIRECTING_MIRROR.getState(BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType.DEFAULT);
+    }
+
+    protected TraceabilityPredicate redirectingMirrorOrientation() {
+        return SuSyPredicates.orientation(this, redirectingMirrorState(), RelativeDirection.BACK, FACING);
     }
 
     @Override
@@ -194,109 +272,186 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
     @Override
     public void update() {
         super.update();
-        timer = timer % 200;
-        timer++;
-        if (timer >= 200) {
-
+        if (getOffsetTimer() % 100 == 0) {
+            numValidHeliostats = getNumOfValidHeliostats();
         }
+        currentPower = WATTS_PER_HELIOSTAT * numValidHeliostats;
+
     }
 
-    public BlockPos findHeliostat(BlockPos currentBlock, EnumFacing checkDir) {
-        for (int i = 0; i < MAX_HELIOSTAT_DISTANCE; i++) {
-            if (getWorld().getBlockState(currentBlock).getBlock() == SuSyBlocks.HELIOSTAT) {
-                return currentBlock;
+    public int getNumOfValidHeliostats() {
+        World world = this.getWorld();
+        int i = 0;
+        if (heliostats != null && !heliostats.isEmpty()) {
+            for (BlockPos pos : heliostats) {
+                if (world.getBlockState(pos).getBlock() == SuSyBlocks.HELIOSTAT && getWorld().canSeeSky(pos)) {
+                    i++;
+                }
             }
-            currentBlock.offset(checkDir);
         }
-        return null;
+        return i;
     }
 
-    public boolean checkHeliostatValidity(BlockPos checkPos) {
-        return false;
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        textList.add(new TextComponentTranslation("HELIOSTAT NUMBER: " + numValidHeliostats));
+        textList.add(new TextComponentTranslation("CURRENT POWER: " + currentPower));
+        textList.add(new TextComponentTranslation("AVG SPEED: " + getAverageSpeed()));
     }
-    /*
-     * public class SolarFurnaceRecipeLogic extends MultiblockRecipeLogic {
-     * 
-     * private int recipeJt; private int heatBuffer = 0; private boolean isHeating =
-     * false; private boolean isHalted;
-     * 
-     * public SolarFurnaceRecipeLogic(RecipeMapMultiblockController tileEntity) {
-     * super(tileEntity); }
-     * 
-     * @Override public boolean checkRecipe(@NotNull Recipe recipe) { return
-     * super.checkRecipe(recipe) &&
-     * recipe.hasProperty(EvaporationEnergyProperty.getInstance()); }
-     * 
-     * @Override protected void setupRecipe(Recipe recipe) {
-     * super.setupRecipe(recipe); this.recipeJt =
-     * recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is
-     * this correct? this.heatBuffer = 0; }
-     * 
-     * /// Do not overclock
-     * 
-     * @Override protected int @NotNull [] calculateOverclock(@NotNull Recipe
-     * recipe) { return new int[] { recipe.getEUt(), recipe.getDuration() }; }
-     * 
-     * @Override protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
-     * return true; }
-     * 
-     * @Override protected void updateRecipeProgress() { if (this.canRecipeProgress)
-     * { int baseHeat = getHeatFromSunlight() + heatBuffer; int coilHeat = 0; int
-     * maxEnergy2Draw = (int) Math.min(Math.min(getEnergyStored(),
-     * getMaxEnergyInput()), getMaxHeatFromCoils() / SuSyUtility.JOULES_PER_EU); if
-     * (drawEnergy(maxEnergy2Draw, true)) { drawEnergy(maxEnergy2Draw, false);
-     * coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU; }
-     * 
-     * int totalHeat = (baseHeat + coilHeat); int remainingHeat = totalHeat %
-     * getRecipeJt(); int maxProgress = totalHeat / getRecipeJt();
-     * 
-     * updateSpeedStats(maxProgress);
-     * 
-     * boolean halted = maxProgress == 0; if (this.isHalted != halted) {
-     * this.isHalted = halted; writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf
-     * -> buf.writeBoolean(halted)); } this.isHeating = coilHeat > 0;
-     * 
-     * this.progressTime += maxProgress; this.heatBuffer = remainingHeat; if
-     * (this.progressTime > this.maxProgressTime) { this.completeRecipe(); } } }
-     * 
-     * /// Workaround for backwards compat /// Random fallback number IDK
-     * 
-     * @Deprecated protected int getRecipeJt() { return recipeJt != 0 ? recipeJt :
-     * 500; }
-     * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter
-     * that much protected int getHeatFromSunlight() { return exposedBlocks *
-     * JT_PER_BLOCK; }
-     * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter
-     * that much protected long getMaxEnergyInput() { IEnergyContainer
-     * energyContainer = getEnergyContainer(); /// This seems to be correct as far
-     * as I've tested return energyContainer.getInputVoltage() *
-     * energyContainer.getInputAmperage(); }
-     * 
-     * @Override protected void completeRecipe() { super.completeRecipe();
-     * this.recipeJt = 0; this.heatBuffer = 0; }
-     * 
-     * @Override public void receiveCustomData(int dataId, @NotNull PacketBuffer
-     * buf) { super.receiveCustomData(dataId, buf); if (dataId ==
-     * SuSyDataCodes.UPDATE_WORK_HALTED) { this.isHalted = buf.readBoolean(); } }
-     * 
-     * @Override public void writeInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.writeInitialSyncData(buf); buf.writeBoolean(this.isHalted); }
-     * 
-     * @Override public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.receiveInitialSyncData(buf); this.isHalted = buf.readBoolean(); }
-     * 
-     * @NotNull
-     * 
-     * @Override public NBTTagCompound serializeNBT() { NBTTagCompound compound =
-     * super.serializeNBT(); if (this.progressTime > 0) {
-     * compound.setInteger("RecipeJt", recipeJt); } compound.setBoolean("IsHalted",
-     * this.isHalted); return compound; }
-     * 
-     * @Override public void deserializeNBT(@NotNull NBTTagCompound compound) {
-     * super.deserializeNBT(compound); if (this.progressTime > 0) { recipeJt =
-     * compound.getInteger("RecipeJt"); } this.isHalted =
-     * compound.getBoolean("IsHalted"); } }
-     */
+
+    @Override
+    protected void addWarningText(List<ITextComponent> textList) {
+        super.addWarningText(textList);
+        if (isStructureFormed() && this.isActive() && !hasEnoughPower) {
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                        "susy.multiblock.solar_furnace.low_power"));
+        }
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.numValidHeliostats = 0;
+        this.currentPower = 0;
+        this.hasEnoughPower = false;
+    }
+
+    private void updateSpeedStats(int progress) {
+        recipeSpeedStats[statsIndex] = progress;
+        statsIndex = (statsIndex + 1) % TRACKED_TICKS;
+    }
+
+    public float getAverageSpeed() {
+        return ((float) Arrays.stream(recipeSpeedStats).sum()) / TRACKED_TICKS;
+    }
+
+    public class SolarFurnaceRecipeLogic extends MultiblockRecipeLogic {
+
+        private int recipePower;
+        private int heatBuffer = 0;
+        private boolean isHalted;
+
+        public SolarFurnaceRecipeLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return super.checkRecipe(recipe) && RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity) &&
+                    recipe.hasProperty(SolarFurnaceMinPowerProperty.getInstance()) && recipe.getProperty(SolarFurnaceMinPowerProperty.getInstance(), 2147483647) <= currentPower;
+        }
+
+        @Override
+        protected void setupRecipe(Recipe recipe) {
+            super.setupRecipe(recipe);
+            this.recipePower = recipe.getProperty(SolarFurnaceMinPowerProperty.getInstance(), 0);
+            this.heatBuffer = 0;
+        }
+
+        /// Do not overclock
+        @Override
+        protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
+            return new int[] { recipe.getEUt(), recipe.getDuration() };
+        }
+
+        @Override
+        protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+            return true;
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (this.canRecipeProgress) {
+
+                int totalHeat = currentPower + heatBuffer;
+
+                int remainingHeat = 0;
+                int maxProgress;
+                if (currentPower >= getRecipePower()) {
+                    remainingHeat = totalHeat % getRecipePower();
+                    maxProgress = totalHeat / getRecipePower();
+                    hasEnoughPower = true;
+                } else {
+                    maxProgress = (currentPower - getRecipePower()) / 2000; //regress if not enough power
+                    hasEnoughPower = false;
+                }
+
+                SusyLog.logger.debug("ASDFGH CURRENT POWER: {}", currentPower);
+                SusyLog.logger.debug("ASDFGH TOTAL HEAT: {}", totalHeat);
+                SusyLog.logger.debug("ASDFGH REMAINING HEAT: {}", remainingHeat);
+                SusyLog.logger.debug("ASDFGH MAX PROGRESS: {}", maxProgress);
+                SusyLog.logger.debug("ASDFGH RECIPE POWER: {}", getRecipePower());
+                updateSpeedStats(maxProgress);
+
+                boolean halted = maxProgress == 0;
+                if (this.isHalted != halted) {
+                    this.isHalted = halted;
+                    writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf -> buf.writeBoolean(halted));
+                }
+
+
+                this.progressTime += maxProgress;
+                this.heatBuffer = remainingHeat;
+                if (this.progressTime > this.maxProgressTime) {
+                    this.completeRecipe();
+                }
+            }
+            if (getOffsetTimer() % 100 == 0) {
+                numValidHeliostats = getNumOfValidHeliostats();
+            }
+            currentPower = WATTS_PER_HELIOSTAT * numValidHeliostats;
+        }
+
+        @Deprecated
+        protected int getRecipePower() {
+            return recipePower != 0 ? recipePower : 12000; //copied from evap pool idk what this does exactly
+        }
+
+        @Override
+        protected void completeRecipe() {
+            super.completeRecipe();
+            this.recipePower = 0;
+            this.heatBuffer = 0;
+        }
+
+        @Override
+        public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
+            super.receiveCustomData(dataId, buf);
+            if (dataId == SuSyDataCodes.UPDATE_WORK_HALTED) {
+                this.isHalted = buf.readBoolean();
+            }
+        }
+
+        @Override
+        public void writeInitialSyncData(@NotNull PacketBuffer buf) {
+            super.writeInitialSyncData(buf);
+            buf.writeBoolean(this.isHalted);
+        }
+
+        @Override
+        public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
+            super.receiveInitialSyncData(buf);
+            this.isHalted = buf.readBoolean();
+        }
+
+        @NotNull @Override
+        public NBTTagCompound serializeNBT() {
+            NBTTagCompound compound = super.serializeNBT();
+            if (this.progressTime > 0) {
+                compound.setInteger("RecipePower", recipePower);
+            }
+            compound.setBoolean("IsHalted", this.isHalted);
+            return compound;
+        }
+
+        @Override
+        public void deserializeNBT(@NotNull NBTTagCompound compound) {
+            super.deserializeNBT(compound);
+            if (this.progressTime > 0) {
+                recipePower = compound.getInteger("RecipePower");
+            }
+            this.isHalted = compound.getBoolean("IsHalted");
+        }
+    }
 }

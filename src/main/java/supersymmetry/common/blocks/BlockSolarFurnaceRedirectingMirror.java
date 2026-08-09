@@ -1,8 +1,6 @@
 package supersymmetry.common.blocks;
 
-//import javax.annotation.Nonnull;
-
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,24 +8,19 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
 import org.jetbrains.annotations.NotNull;
-
-import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
+public class BlockSolarFurnaceRedirectingMirror extends VariantHorizontalRotatableBlock<BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType> {
 
-public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliostat.HeliostatType> {
-
-    public BlockHeliostat() {
+    public BlockSolarFurnaceRedirectingMirror() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("heliostat");
+        setTranslationKey("solar_furnace_redirecting_mirror");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(HeliostatType.DEFAULT));
+        setDefaultState(getState(SolarFurnaceRedirectingMirrorType.DEFAULT));
     }
 
     @Override
@@ -47,14 +40,14 @@ public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliost
         return BlockRenderLayer.CUTOUT;
     }
 
-    public enum HeliostatType implements IStringSerializable, IStateHarvestLevel {
+    public enum SolarFurnaceRedirectingMirrorType implements IStringSerializable, IStateHarvestLevel {
 
         DEFAULT("default", 2);
 
         private final String name;
         private final int harvestLevel;
 
-        HeliostatType(String name, int harvestLevel) {
+        SolarFurnaceRedirectingMirrorType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

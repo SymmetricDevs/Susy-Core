@@ -1,8 +1,7 @@
 package supersymmetry.common.blocks;
 
-//import javax.annotation.Nonnull;
-
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,24 +9,19 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.block.IStateHarvestLevel;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
+public class BlockSolarFurnaceCrucible extends VariantBlock<BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType> {
 
-public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliostat.HeliostatType> {
-
-    public BlockHeliostat() {
+    public BlockSolarFurnaceCrucible() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("heliostat");
+        setTranslationKey("solar_furnace_crucible");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(HeliostatType.DEFAULT));
+        setDefaultState(getState(SolarFurnaceCrucibleType.DEFAULT));
     }
 
     @Override
@@ -41,36 +35,31 @@ public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliost
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
-    public enum HeliostatType implements IStringSerializable, IStateHarvestLevel {
+    public enum SolarFurnaceCrucibleType implements IStringSerializable, IStateHarvestLevel {
 
-        DEFAULT("default", 2);
+        DEFAULT("default", 3);
 
         private final String name;
         private final int harvestLevel;
 
-        HeliostatType(String name, int harvestLevel) {
+        SolarFurnaceCrucibleType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
 
-        @NotNull
-        @Override
-        public String getName() {
+        @NotNull public String getName() {
             return this.name;
         }
 
-        @Override
         public int getHarvestLevel(IBlockState state) {
             return this.harvestLevel;
         }
 
-        @Override
         public String getHarvestTool(IBlockState state) {
             return "wrench";
         }
