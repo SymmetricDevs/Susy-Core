@@ -123,5 +123,15 @@ public class SuSyFirstDegreeMaterials {
                 .liquid(new FluidBuilder().temperature(960)).color(0xAceAf1)
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST, GENERATE_PLATE)
                 .components(Aluminium, 934, Magnesium, 60, Manganese, 6).build();
+
+        // Coil Materials
+
+        MolybdenumDisilicide = new Material.Builder(8792, SuSyUtility.susyId("molybdenum_disilicide"))
+                .dust()
+                .liquid(new FluidBuilder().temperature(2300))
+                .flags(GENERATE_ROD, DISABLE_DECOMPOSITION)
+                .components(Molybdenum, 1, Silicon, 2)
+                .color(0x967BB6)
+                .build();
     }
 }
