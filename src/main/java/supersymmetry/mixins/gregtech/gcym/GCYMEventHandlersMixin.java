@@ -38,7 +38,7 @@ public abstract class GCYMEventHandlersMixin {
     private static void susy$forceMolten(String name) {
         Material material = GregTechAPI.materialManager.getMaterial("susy:" + name);
         if (material == null) {
-            throw new IllegalStateException("Unable to find SuSy material: " + name);
+            return;
         }
         AlloyBlastProperty property = material.getProperty(GCYMPropertyKey.ALLOY_BLAST);
         if (property == null) {
