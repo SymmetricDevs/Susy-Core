@@ -1885,6 +1885,42 @@ tile.s2bmrf_blocks.s2bmrf14.name=BMRF-30
 tile.s2bmrf_blocks.s2bmrf15.name=BMRF-31
 tile.s2bmrf_blocks.s2bmrf16.name=BMRF-32
 
+#S3BMRF blocks
+tile.s3bmrf_blocks.s3bmrf1.name=BMRF-33
+tile.s3bmrf_blocks.s3bmrf2.name=BMRF-34
+tile.s3bmrf_blocks.s3bmrf3.name=BMRF-35
+tile.s3bmrf_blocks.s3bmrf4.name=BMRF-36
+tile.s3bmrf_blocks.s3bmrf5.name=BMRF-37
+tile.s3bmrf_blocks.s3bmrf6.name=BMRF-38
+tile.s3bmrf_blocks.s3bmrf7.name=BMRF-39
+tile.s3bmrf_blocks.s3bmrf8.name=BMRF-40
+tile.s3bmrf_blocks.s3bmrf9.name=BMRF-41
+tile.s3bmrf_blocks.s3bmrf10.name=BMRF-42
+tile.s3bmrf_blocks.s3bmrf11.name=BMRF-43
+tile.s3bmrf_blocks.s3bmrf12.name=BMRF-44
+tile.s3bmrf_blocks.s3bmrf13.name=BMRF-45
+tile.s3bmrf_blocks.s3bmrf14.name=BMRF-46
+tile.s3bmrf_blocks.s3bmrf15.name=BMRF-47
+tile.s3bmrf_blocks.s3bmrf16.name=BMRF-48
+
+#S4BMRF blocks
+tile.s4bmrf_blocks.s4bmrf1.name=BMRF-49
+tile.s4bmrf_blocks.s4bmrf2.name=BMRF-50
+tile.s4bmrf_blocks.s4bmrf3.name=BMRF-51
+tile.s4bmrf_blocks.s4bmrf4.name=BMRF-52
+tile.s4bmrf_blocks.s4bmrf5.name=BMRF-53
+tile.s4bmrf_blocks.s4bmrf6.name=BMRF-54
+tile.s4bmrf_blocks.s4bmrf7.name=BMRF-55
+tile.s4bmrf_blocks.s4bmrf8.name=BMRF-56
+tile.s4bmrf_blocks.s4bmrf9.name=BMRF-57
+tile.s4bmrf_blocks.s4bmrf10.name=BMRF-58
+tile.s4bmrf_blocks.s4bmrf11.name=BMRF-59
+tile.s4bmrf_blocks.s4bmrf12.name=BMRF-60
+tile.s4bmrf_blocks.s4bmrf13.name=BMRF-61
+tile.s4bmrf_blocks.s4bmrf14.name=BMRF-62
+tile.s4bmrf_blocks.s4bmrf15.name=BMRF-63
+tile.s4bmrf_blocks.s4bmrf16.name=BMRF-64
+
 ##Factions
 #Items
 metaitem.entity_tagger.name=Factions Dev Tool
