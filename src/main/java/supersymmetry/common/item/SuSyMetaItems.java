@@ -58,6 +58,7 @@ public class SuSyMetaItems {
     public static MetaValueItem FACTION_RADIO;
     public static MetaValueItem INTEL_CHIP;
     public static MetaValueItem INTEL_CHIP_FULL;
+    public static MetaValueItem ENTITY_PROMOTER;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -156,6 +157,8 @@ public class SuSyMetaItems {
         CODE_BREACHER_DEV = initOneItem("code_breacher_dev").setMaxStackSize(1);
 
         ENTITY_TAGGER = initOneItem("entity_tagger").setMaxStackSize(1);
+
+        ENTITY_PROMOTER = initOneItem("entity_promoter").setMaxStackSize(1);
 
         FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1).addComponents(FactionRadioBehaviour.INSTANCE);
 
