@@ -48,7 +48,6 @@ public class IntelChipBehaviour implements IItemBehaviour {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        System.out.println("enters tag giver");
         if (event.getEntity().world.isRemote) return;
 
         EntityLivingBase dead = (EntityLivingBase) event.getEntity();
