@@ -32,6 +32,14 @@ public final class SuSyHeatingCoils {
                 SuSyCoilType.KANTHAL);
 
         GregTechAPI.HEATING_COILS.put(
+                MetaBlocks.WIRE_COIL.getState(CoilType.RTM_ALLOY),
+                SuSyCoilType.RTM_ALLOY);
+
+        GregTechAPI.HEATING_COILS.put(
+                MetaBlocks.WIRE_COIL.getState(CoilType.HSS_G),
+                SuSyCoilType.HSS_G);
+
+        GregTechAPI.HEATING_COILS.put(
                 SuSyBlocks.HEATING_COIL.getState(BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICIDE),
                 BlockHeatingCoil.CoilType.MOLYBDENUM_DISILICIDE);
 
@@ -44,7 +52,11 @@ public final class SuSyHeatingCoils {
 
         CUPRONICKEL("cupronickel", 800, 1, 1, 0, Materials.Cupronickel),
         NICHROME("nichrome", 1400, 2, 1, 1, Materials.Nichrome),
-        KANTHAL("kanthal", 1700, 2, 2, 2, Materials.Kanthal);
+        KANTHAL("kanthal", 1700, 2, 2, 2, Materials.Kanthal),
+
+        // Deprecated but will still function
+        RTM_ALLOY("rtm_alloy", 2100, 4, 2, 3, Materials.RTMAlloy),
+        HSS_G("hss_g", 3000, 4, 4, 4, Materials.HSSG);
 
         private final String name;
         private final int coilTemperature;
