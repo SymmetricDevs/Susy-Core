@@ -46,8 +46,7 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         float[] planetPos = new float[] { dx * 100f, dy * 100f, dz * 100f };
 
         float spinAngle = (float) data.source.getRotationAngle(data.worldTime);
-        Vec3d spinAxis = cubemap.getRotationAxis();
-        if (spinAxis == null) spinAxis = data.source.getRotationAxis();
+        Vec3d spinAxis = data.source.getRotationAxis();
         float[] rot = buildCubemapRotation(dx, dy, dz, spinAxis, spinAngle);
 
         float[] sunDir;

@@ -1,16 +1,10 @@
 package supersymmetry.common.world;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.DimensionManager;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.space.Orbit;
 import supersymmetry.api.space.dimension.SpaceDimension;
 import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.common.blocks.BlockRegolith;
@@ -22,13 +16,6 @@ public class SuSyDimensions {
 
     public static DimensionType planetType;
     public static DimensionType spaceType;
-
-    public static List<Biome> BIOMES = new ArrayList<>();
-    public static Map<Integer, PlanetoidHandler> PLANETS = new Int2ObjectArrayMap<>();
-
-    public static Map<Integer, SpaceDimension> SPACE = new Int2ObjectArrayMap<>();
-
-    static long leoOrbitTicks = 110_400L;
 
     public static void init() {
         int id = -2;
@@ -58,16 +45,11 @@ public class SuSyDimensions {
                 .load();
 
         new SpaceDimension(802, "low_earth_orbit")
+                .setOrbit(CelestialObjects.EARTH, new Orbit(
+                        0.000045, 0.0, Math.toRadians(51.6), 0.0, 0.0, 0.0, 0L, 110_400L))
                 .setRenderer(CelestialObjects.RENDERER)
                 .setGravity(0.0f)
-                .setAmbientLight(0.02f)
                 .setVacuum(true)
-                .setDayCycle(leoOrbitTicks, 1.53f, 0.0f)
                 .load();
-
-        if (!DimensionManager.isDimensionRegistered(802)) {
-            DimensionManager.registerDimension(802, spaceType);
-            SusyLog.logger.info("Registered Low Earth Orbit space dimension at id 802");
-        }
     }
 }

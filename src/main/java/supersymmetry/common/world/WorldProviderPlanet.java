@@ -2,8 +2,6 @@ package supersymmetry.common.world;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -16,10 +14,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import supersymmetry.api.space.CelestialObject;
 import supersymmetry.api.space.Orbit;
 import supersymmetry.api.space.Planetoid;
-import supersymmetry.api.space.Star;
 
 public class WorldProviderPlanet extends WorldProvider {
 
@@ -34,7 +30,7 @@ public class WorldProviderPlanet extends WorldProvider {
         biomeProvider = new PlanetBiomeProvider(world);
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
-            PlanetoidHandler planet = SuSyDimensions.PLANETS.get(this.getDimension());
+            PlanetoidHandler planet = PlanetoidHandler.get(this.getDimension());
             if (planet != null) {
                 IRenderHandler renderer = planet.getSkyRenderer();
                 if (renderer != null) {
@@ -66,7 +62,7 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public @Nullable IRenderHandler getSkyRenderer() {
-        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(getDimension());
+        PlanetoidHandler planet = PlanetoidHandler.get(getDimension());
         if (planet != null) {
             return planet.getSkyRenderer();
         }
@@ -94,80 +90,11 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     public PlanetoidHandler getPlanet() {
-        return SuSyDimensions.PLANETS.get(getDimension());
+        return PlanetoidHandler.get(getDimension());
     }
 
     private Planetoid getGroundPlanet() {
         return Planetoid.PLANETOIDS.inverse().get(getDimension());
-    }
-
-    public Vec3d getLocalUp(Planetoid ground, double x, double z, double worldTime) {
-        return tidalUp(ground, x, z, worldTime);
-    }
-
-    public Vec3d getLocalUpForPlayer(Planetoid ground, EntityPlayer player, double worldTime) {
-        return tidalUp(ground, player.posX, player.posZ, worldTime);
-    }
-
-    private Vec3d tidalUp(Planetoid ground, double x, double z, double worldTime) {
-        Vec3d up = Orbit.surfacePointToLocalUp(x, z, ground.getRadius());
-        Vec3d axis = ground.getRotationAxis();
-        if (axis == null) return up;
-        return Orbit.rotateAboutAxis(up, axis, -ground.getRotationAngle(worldTime));
-    }
-
-    public boolean isEclipse(float partialTicks) {
-        double worldTime = world.getWorldTime() + partialTicks;
-        Planetoid ground = getGroundPlanet();
-        if (ground == null) return false;
-
-        CelestialObject sun = ground.findPrimaryStar();
-        if (sun == null) return false;
-
-        Vec3d sunPos = Orbit.computeAbsolutePosition(sun, worldTime);
-        Vec3d groundPos = Orbit.computeAbsolutePosition(ground, worldTime);
-        Vec3d toSun = sunPos.subtract(groundPos);
-        double distToSun = toSun.length();
-        if (distToSun < 1e-15) return false;
-        Vec3d toSunDir = toSun.normalize();
-        double angularRadiusSun = sun.getRadiusAU() / distToSun;
-
-        for (CelestialObject child : ground.getChildBodies()) {
-            if (isOccluding(child, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
-                return true;
-        }
-
-        CelestialObject parent = ground.getParentBody();
-        if (parent != null && !(parent instanceof Star)) {
-            if (isOccluding(parent, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
-                return true;
-        }
-
-        return false;
-    }
-
-    private boolean isOccluding(
-                                CelestialObject occluder,
-                                Vec3d observerPos,
-                                Vec3d toSunDir,
-                                double distToSun,
-                                double angularRadiusSun,
-                                double worldTime) {
-        Vec3d oPos = Orbit.computeAbsolutePosition(occluder, worldTime);
-        Vec3d toOccluder = oPos.subtract(observerPos);
-        double distToOccluder = toOccluder.length();
-        if (distToOccluder < 1e-15) return false;
-
-        double projDist = toOccluder.dotProduct(toSunDir);
-        if (projDist <= 0 || projDist >= distToSun) return false;
-
-        Vec3d perp = toOccluder.subtract(toSunDir.scale(projDist));
-        double distPerp = perp.length();
-
-        double angularRadiusOccluder = occluder.getRadiusAU() / distToOccluder;
-        double angularSeparation = distPerp / distToOccluder;
-
-        return angularSeparation < angularRadiusOccluder + angularRadiusSun;
     }
 
     @Override
@@ -186,26 +113,22 @@ public class WorldProviderPlanet extends WorldProvider {
 
     @Override
     public float getSunBrightness(float partialTicks) {
-        if (world.isRemote) {
-            var mc = Minecraft.getMinecraft();
-            if (mc.player != null) {
-                Planetoid ground = getGroundPlanet();
-                if (ground != null) {
-                    double worldTime = world.getWorldTime() + partialTicks;
-                    Vec3d localUp = getLocalUpForPlayer(ground, mc.player, worldTime);
-                    double solarAltitude = Orbit.computeSolarAltitude(
-                            ground, localUp, worldTime);
-                    if (!Double.isNaN(solarAltitude))
-                        return (float) MathHelper.clamp(solarAltitude * 4.0, 0.0, 1.0);
-                }
-            }
-        }
-        return 0.0f;
+        if (!world.isRemote) return 0.0f;
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.player == null) return 0.0f;
+        Planetoid ground = getGroundPlanet();
+        if (ground == null) return 0.0f;
+        double worldTime = world.getWorldTime() + partialTicks;
+        Vec3d localUp = Orbit.getLocalUp(ground, mc.player.posX, mc.player.posZ, worldTime);
+        return Orbit.getSunBrightness(ground, localUp, worldTime);
     }
 
     @Override
     public float getStarBrightness(float partialTicks) {
-        if (isEclipse(partialTicks)) return 1.0f;
+        Planetoid ground = getGroundPlanet();
+        if (ground == null) return 0.0f;
+        double worldTime = world.getWorldTime() + partialTicks;
+        if (Orbit.isEclipse(ground, worldTime)) return 1.0f;
         return 1.0F - getSunBrightness(partialTicks);
     }
 

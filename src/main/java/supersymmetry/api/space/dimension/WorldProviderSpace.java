@@ -1,5 +1,6 @@
 package supersymmetry.api.space.dimension;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -8,9 +9,8 @@ import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 
-import supersymmetry.api.SusyLog;
-import supersymmetry.api.space.CelestialObjects;
-import supersymmetry.api.space.CelestialOrbitRegistry;
+import supersymmetry.api.space.CelestialObject;
+import supersymmetry.api.space.Orbit;
 import supersymmetry.common.world.ChunkGeneratorVoid;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
@@ -22,17 +22,13 @@ public class WorldProviderSpace extends WorldProvider {
     @Override
     protected void init() {
         int dimId = this.getDimension();
-        this.config = SuSyDimensions.SPACE.get(dimId);
+        this.config = SpaceDimension.get(dimId);
 
         if (this.config == null) {
             throw new IllegalStateException(
-                    "No SpaceDimension registered for id " + dimId + ". SPACE map has: " +
-                            SuSyDimensions.SPACE.keySet());
+                    String.format("No SpaceDimension registered for id %d. SPACE map has: %s", dimId,
+                            SpaceDimension.getRegisteredIds()));
         }
-
-        SusyLog.logger.info(
-                "[Space] WorldProviderSpace.init() dimId=" + dimId + " name=" + config.name + " renderer=" +
-                        config.renderer);
 
         this.biomeProvider = new BiomeProviderSingle(SuSyBiomes.VOID);
         this.hasSkyLight = true;
@@ -55,7 +51,7 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     public String getSaveFolder() {
-        return "SuSy_Space_" + config.name;
+        return "space_" + config.name;
     }
 
     public String getDimensionName() {
@@ -99,8 +95,11 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
-        double fraction = ((worldTime % config.ticksPerDay) + config.timeOffset) / (double) config.ticksPerDay;
-        return (float) fraction;
+        Orbit orbit = config.orbit;
+        if (orbit == null) return 0.0F;
+        double m = orbit.meanAnomalyAtEpochRad + 2.0 * Math.PI * (worldTime - orbit.epochTicks) / orbit.periodTicks;
+        m = (m % (2.0 * Math.PI) + 2.0 * Math.PI) % (2.0 * Math.PI);
+        return (float) (m / (2.0 * Math.PI));
     }
 
     @Override
@@ -115,17 +114,25 @@ public class WorldProviderSpace extends WorldProvider {
 
     @Override
     public float getSunBrightness(float partialTicks) {
-        long worldTime = world.getWorldTime();
-        Vec3d earthPos = CelestialOrbitRegistry.get(CelestialObjects.EARTH)
-                .computeAbsolutePosition(CelestialObjects.EARTH, worldTime + partialTicks);
-        Vec3d sunDir = earthPos.normalize().scale(-1);
-        float orbitalPhase = world.getCelestialAngle(partialTicks);
-        float playerAngle = orbitalPhase * ((float) Math.PI * 2F);
+        if (!world.isRemote) return 0.0F;
+        var mc = Minecraft.getMinecraft();
+        if (mc.player == null) return 0.0F;
+        Orbit orbit = config.orbit;
+        CelestialObject center = config.centeredOn;
+        if (orbit == null || center == null) return 0.0F;
 
-        Vec3d playerDir = new Vec3d(MathHelper.cos(playerAngle), 0, MathHelper.sin(playerAngle));
+        double worldTime = world.getWorldTime() + partialTicks;
+        Vec3d centerPos = Orbit.computeAbsolutePosition(center, worldTime);
+        Vec3d stationPos = centerPos.add(orbit.computeRelativePosition(worldTime));
+        Vec3d up = stationPos.subtract(centerPos);
+        if (up.lengthSquared() < 1e-15) return 0.0F;
+        up = up.normalize();
 
-        float dot = (float) playerDir.dotProduct(sunDir);
-        return MathHelper.clamp(dot, 0.0F, 1.0F);
+        CelestialObject sun = center.findPrimaryStar();
+        if (sun == null) return 0.0F;
+
+        Vec3d sunDir = Orbit.computeAbsolutePosition(sun, worldTime).subtract(stationPos).normalize();
+        return MathHelper.clamp((float) sunDir.dotProduct(up), 0.0F, 1.0F);
     }
 
     @Override

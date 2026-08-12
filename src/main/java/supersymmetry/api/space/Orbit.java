@@ -1,5 +1,6 @@
 package supersymmetry.api.space;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class Orbit {
@@ -113,23 +114,6 @@ public class Orbit {
         return rotateToLocalFrame(v, localUp).normalize();
     }
 
-    public static Vec3d inverseRotateToLocalFrame(Vec3d v, Vec3d localUp) {
-        Vec3d target = new Vec3d(0, 1, 0);
-        double cosA = localUp.dotProduct(target);
-        double sinA = Math.sqrt(Math.max(0.0, 1.0 - cosA * cosA));
-        if (sinA < 1e-12) {
-            if (cosA < 0) return new Vec3d(-v.x, -v.y, -v.z);
-            return v;
-        }
-        Vec3d axis = localUp.crossProduct(target);
-        axis = axis.scale(1.0 / (axis.length() + 1e-30));
-        double kDotV = v.dotProduct(axis);
-        Vec3d kCrossV = axis.crossProduct(v);
-        return v.scale(cosA)
-                .subtract(kCrossV.scale(sinA))
-                .add(axis.scale(kDotV * (1.0 - cosA)));
-    }
-
     public static Vec3d surfacePointToLocalUp(double posX, double posZ, double planetRadius) {
         double scale = 400000.0 * planetRadius;
         double phi = posX * Math.PI / scale;
@@ -142,7 +126,7 @@ public class Orbit {
                 Math.sin(theta) * Math.sin(phi));
     }
 
-    public static double computeSolarAltitude(Planetoid ground, Vec3d localUp, double worldTime) {
+    public static double computeSolarAltitude(CelestialObject ground, Vec3d localUp, double worldTime) {
         Star sun = ground.findPrimaryStar();
         if (sun == null) return Double.NaN;
         Vec3d sunPos = computeAbsolutePosition(sun, worldTime);
@@ -153,8 +137,66 @@ public class Orbit {
         return relative.dotProduct(localUp) / distAU;
     }
 
-    public static boolean isSunAboveHorizon(Planetoid ground, Vec3d localUp, double worldTime) {
-        double alt = computeSolarAltitude(ground, localUp, worldTime);
-        return !Double.isNaN(alt) && alt > 0;
+    public static Vec3d getLocalUp(CelestialObject ground, double x, double z, double worldTime) {
+        Vec3d up = surfacePointToLocalUp(x, z, ground.getRadius());
+        Vec3d axis = ground.getRotationAxis();
+        if (axis == null) return up;
+        return rotateAboutAxis(up, axis, -ground.getRotationAngle(worldTime));
+    }
+
+    public static float getSunBrightness(CelestialObject ground, Vec3d localUp, double worldTime) {
+        double solarAltitude = computeSolarAltitude(ground, localUp, worldTime);
+        if (Double.isNaN(solarAltitude)) return 0.0f;
+        return (float) MathHelper.clamp(solarAltitude * 4.0, 0.0, 1.0);
+    }
+
+    public static boolean isEclipse(CelestialObject ground, double worldTime) {
+        CelestialObject sun = ground.findPrimaryStar();
+        if (sun == null) return false;
+
+        Vec3d sunPos = computeAbsolutePosition(sun, worldTime);
+        Vec3d groundPos = computeAbsolutePosition(ground, worldTime);
+        Vec3d toSun = sunPos.subtract(groundPos);
+        double distToSun = toSun.length();
+        if (distToSun < 1e-15) return false;
+        Vec3d toSunDir = toSun.normalize();
+        double angularRadiusSun = sun.getRadiusAU() / distToSun;
+
+        for (CelestialObject child : ground.getChildBodies()) {
+            if (isOccluding(child, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
+                return true;
+        }
+
+        CelestialObject parent = ground.getParentBody();
+        if (parent != null && !(parent instanceof Star)) {
+            if (isOccluding(parent, groundPos, toSunDir, distToSun, angularRadiusSun, worldTime))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isOccluding(
+                                       CelestialObject occluder,
+                                       Vec3d observerPos,
+                                       Vec3d toSunDir,
+                                       double distToSun,
+                                       double angularRadiusSun,
+                                       double worldTime) {
+        Vec3d oPos = computeAbsolutePosition(occluder, worldTime);
+        Vec3d toOccluder = oPos.subtract(observerPos);
+        double distToOccluder = toOccluder.length();
+        if (distToOccluder < 1e-15) return false;
+
+        double projDist = toOccluder.dotProduct(toSunDir);
+        if (projDist <= 0 || projDist >= distToSun) return false;
+
+        Vec3d perp = toOccluder.subtract(toSunDir.scale(projDist));
+        double distPerp = perp.length();
+
+        double angularRadiusOccluder = occluder.getRadiusAU() / distToOccluder;
+        double angularSeparation = distPerp / distToOccluder;
+
+        return angularSeparation < angularRadiusOccluder + angularRadiusSun;
     }
 }

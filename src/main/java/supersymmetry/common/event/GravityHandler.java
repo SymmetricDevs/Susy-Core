@@ -11,7 +11,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.world.World;
 
-import supersymmetry.common.world.SuSyDimensions;
+import supersymmetry.common.world.PlanetoidHandler;
 import supersymmetry.common.world.WorldProviderPlanet;
 
 // My endless gratitude to the AdvancedRocketry team for the gravity code
@@ -47,7 +47,7 @@ public class GravityHandler {
                 entity.motionY += multiplier;
 
             } else if (entity.world.provider instanceof WorldProviderPlanet) {
-                double gravMult = SuSyDimensions.PLANETS.get(entity.world.provider.getDimension()).gravity;
+                double gravMult = PlanetoidHandler.get(entity.world.provider.getDimension()).gravity;
 
                 if (entity instanceof EntityItem)
                     entity.motionY -= (gravMult * OTHER_OFFSET - OTHER_OFFSET);
@@ -69,7 +69,7 @@ public class GravityHandler {
                     // X = (motionY - 0.08) * 0.98
                     // motionY = X / 0.98 + 0.08
 
-                    double drag = SuSyDimensions.PLANETS.get(entity.world.provider.getDimension()).dragMultiplier;
+                    double drag = PlanetoidHandler.get(entity.world.provider.getDimension()).dragMultiplier;
                     double intended = (entity.motionY - (gravMult * 0.08)) * drag;
                     entity.motionY = intended / 0.98 + 0.08;
                 }
@@ -85,7 +85,7 @@ public class GravityHandler {
 
     public static double getGravityMultiplier(World world) {
         if (world.provider instanceof WorldProviderPlanet) {
-            return SuSyDimensions.PLANETS.get(world.provider.getDimension()).gravity;
+            return PlanetoidHandler.get(world.provider.getDimension()).gravity;
         }
         return 1;
     }

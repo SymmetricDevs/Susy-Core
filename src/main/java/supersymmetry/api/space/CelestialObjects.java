@@ -33,7 +33,6 @@ public class CelestialObjects {
     public static Cubemap EARTH_CUBEMAP;
     public static Cubemap MOON_CUBEMAP;
 
-    // Renderers
     public static CelestialRenderer RENDERER;
 
     public static void init() {
