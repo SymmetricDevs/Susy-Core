@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
 import net.minecraft.util.math.Vec3d;
+
+import org.jspecify.annotations.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -85,8 +85,7 @@ public class CelestialObject {
         return radius * Orbit.EARTH_RADIUS_AU;
     }
 
-    @Nullable
-    public CelestialObject getParentBody() {
+    @Nullable public CelestialObject getParentBody() {
         return parentBody;
     }
 

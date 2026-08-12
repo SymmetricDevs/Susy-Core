@@ -139,7 +139,8 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
     }
 
     @Override
-    public List<MultiblockShapeInfo> getMatchingShapes() { // FIXME: the rotations are all wrong no matter what is set here
+    public List<MultiblockShapeInfo> getMatchingShapes() { // FIXME: the rotations are all wrong no matter what is set
+                                                           // here
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>(); // the alternator coils were for testing, the
                                                                       // issue seems to only happen with blocks that are
                                                                       // part of the structure already?

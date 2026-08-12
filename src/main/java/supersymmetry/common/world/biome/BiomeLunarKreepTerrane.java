@@ -3,9 +3,9 @@ package supersymmetry.common.world.biome;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.EnumCreatureType;
+
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.BlockResource1;
