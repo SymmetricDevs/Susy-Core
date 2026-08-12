@@ -1,5 +1,9 @@
 package supersymmetry.api.recipes.builders;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.recipeproperties.PrimitiveProperty;
@@ -8,14 +12,9 @@ import gregtech.api.util.ValidationResult;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.properties.DimensionProperty;
-import supersymmetry.api.recipes.properties.EvaporationEnergyProperty;
 import supersymmetry.api.recipes.properties.SolarFurnaceMinPowerProperty;
-import supersymmetry.api.util.SuSyUtility;
-
-import java.util.List;
 
 public class SolarFurnaceRecipeBuilder extends RecipeBuilder<SolarFurnaceRecipeBuilder> {
 
@@ -82,7 +81,7 @@ public class SolarFurnaceRecipeBuilder extends RecipeBuilder<SolarFurnaceRecipeB
     public ValidationResult<Recipe> build() {
         if (this.recipePropertyStorage == null ||
                 !this.recipePropertyStorage.hasRecipeProperty(SolarFurnaceMinPowerProperty.getInstance())) {
-                this.power(eutStorage);
+            this.power(eutStorage);
         }
 
         this.EUt(-1);

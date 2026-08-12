@@ -98,8 +98,8 @@ public class SuSyBlocks {
     public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
     public static BlockSolarPanel SOLAR_PANEL;
     public static BlockPaddleShaft PADDLE_SHAFT;
-    public static BlockSolarFurnaceMirror SOLAR_FURNACE_MIRROR;
     public static BlockEpoxySolarFurnaceMirror EPOXY_SOLAR_FURNACE_MIRROR;
+    public static BlockSteelSolarFurnaceMirror STEEL_SOLAR_FURNACE_MIRROR;
     public static BlockHeliostat HELIOSTAT;
     public static BlockSolarFurnaceRedirectingMirror SOLAR_FURNACE_REDIRECTING_MIRROR;
     public static BlockSolarFurnaceCrucible SOLAR_FURNACE_CRUCIBLE;

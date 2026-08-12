@@ -526,7 +526,8 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> LUNAR_BUCKET_WHEEL_EXCAVATOR = new RecipeMap<>("lunar_bwe", 1, 3,
             0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.DRILL_TOOL);
 
-    public static final RecipeMap<SolarFurnaceRecipeBuilder> SOLAR_FURNACE_RECIPES = new RecipeMap<>("solar_furnace", 4, 6, 2,
+    public static final RecipeMap<SolarFurnaceRecipeBuilder> SOLAR_FURNACE_RECIPES = new RecipeMap<>("solar_furnace", 4,
+            6, 2,
             2, new SolarFurnaceRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);

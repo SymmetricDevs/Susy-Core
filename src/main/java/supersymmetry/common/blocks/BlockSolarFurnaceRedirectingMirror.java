@@ -1,6 +1,5 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -8,10 +7,14 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockSolarFurnaceRedirectingMirror extends VariantHorizontalRotatableBlock<BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType> {
+public class BlockSolarFurnaceRedirectingMirror extends
+                                                VariantHorizontalRotatableBlock<BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType> {
 
     public BlockSolarFurnaceRedirectingMirror() {
         super(net.minecraft.block.material.Material.IRON);
@@ -34,8 +37,7 @@ public class BlockSolarFurnaceRedirectingMirror extends VariantHorizontalRotatab
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -52,8 +54,7 @@ public class BlockSolarFurnaceRedirectingMirror extends VariantHorizontalRotatab
             this.harvestLevel = harvestLevel;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

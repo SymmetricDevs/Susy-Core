@@ -188,6 +188,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
+    public static final OrientedOverlayRenderer SOLAR_FURNACE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/solar_furnace");
 
     public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/launch_pad");

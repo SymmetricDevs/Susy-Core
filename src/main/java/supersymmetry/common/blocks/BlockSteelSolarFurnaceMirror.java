@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
 import static net.minecraft.block.BlockDirectional.FACING;
+import static supersymmetry.common.blocks.BlockEpoxySolarFurnaceMirror.MIRROR_SIDES;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
@@ -22,16 +23,16 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySolarFurnace;
 
-public class BlockEpoxySolarFurnaceMirror extends VariantBlock<BlockEpoxySolarFurnaceMirror.EpoxyMirrorType> {
+public class BlockSteelSolarFurnaceMirror extends VariantBlock<BlockSteelSolarFurnaceMirror.SteelMirrorType> {
 
-    public static final PropertyEnum<MetaTileEntitySolarFurnace.EnumMirrorSides> MIRROR_SIDES = PropertyEnum.create(
-            "mirror_sides",
-            MetaTileEntitySolarFurnace.EnumMirrorSides.class);
+    // public static final PropertyEnum<MetaTileEntitySolarFurnace.EnumMirrorSides> MIRROR_SIDES =
+    // PropertyEnum.create("mirror_sides",
+    // MetaTileEntitySolarFurnace.EnumMirrorSides.class);
     // 0 - top + left, 1 - top + right, 2 - bottom + left, 3 - bottom + right
 
-    public BlockEpoxySolarFurnaceMirror() {
+    public BlockSteelSolarFurnaceMirror() {
         super(net.minecraft.block.material.Material.IRON);
-        setTranslationKey("epoxy_solar_furnace_mirror");
+        setTranslationKey("steel_solar_furnace_mirror");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
@@ -39,7 +40,6 @@ public class BlockEpoxySolarFurnaceMirror extends VariantBlock<BlockEpoxySolarFu
         setDefaultState(blockState.getBaseState()
                 .withProperty(MIRROR_SIDES, MetaTileEntitySolarFurnace.EnumMirrorSides.TOP_LEFT)
                 .withProperty(FACING, EnumFacing.NORTH));
-        // CustomBlockRotations.registerCustomRotation(this, BLOCK_HORIZONTAL_BEHAVIOR);
     }
 
     @NonNull @Override
@@ -54,7 +54,7 @@ public class BlockEpoxySolarFurnaceMirror extends VariantBlock<BlockEpoxySolarFu
 
     @NonNull @Override
     public BlockStateContainer createBlockState() {
-        Class<EpoxyMirrorType> enumClass = EpoxyMirrorType.class;
+        Class<SteelMirrorType> enumClass = SteelMirrorType.class;
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
         return new BlockStateContainer(this, VARIANT, FACING, MIRROR_SIDES);
@@ -89,14 +89,14 @@ public class BlockEpoxySolarFurnaceMirror extends VariantBlock<BlockEpoxySolarFu
         return this.getItemVariant(state.getValue(VARIANT), 1);
     }
 
-    public enum EpoxyMirrorType implements IStringSerializable, IStateHarvestLevel {
+    public enum SteelMirrorType implements IStringSerializable, IStateHarvestLevel {
 
-        EPOXY("epoxy", 1);
+        STEEL("steel", 1);
 
         private final String name;
         private final int harvestLevel;
 
-        EpoxyMirrorType(String name, int harvestLevel) {
+        SteelMirrorType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }

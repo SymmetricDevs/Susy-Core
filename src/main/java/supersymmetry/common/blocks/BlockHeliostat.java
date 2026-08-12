@@ -1,8 +1,7 @@
 package supersymmetry.common.blocks;
 
-//import javax.annotation.Nonnull;
+// import javax.annotation.Nonnull;
 
-import gregtech.common.items.tool.rotation.CustomBlockRotations;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -15,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
-
-import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIRECTIONAL_BEHAVIOR;
 
 public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliostat.HeliostatType> {
 
@@ -41,8 +38,7 @@ public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliost
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -59,8 +55,7 @@ public class BlockHeliostat extends VariantHorizontalRotatableBlock<BlockHeliost
             this.harvestLevel = harvestLevel;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

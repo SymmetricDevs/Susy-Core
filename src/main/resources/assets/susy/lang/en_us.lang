@@ -182,6 +182,11 @@ tile.susy_multiblock_casing.hardened_titanium_casing.name=Hardened Titanium Casi
 tile.vehicle_track.default.name=Heavy-Duty Vehicle Track
 tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
 
+tile.solar_furnace_crucible.default.name=Solar Furnace Crucible
+tile.solar_furnace_redirecting_mirror.default.name=Solar Furnace Redirecting Mirror
+tile.epoxy_solar_furnace_mirror.epoxy.name=Lightweight Epoxy Solar Furnace Mirror
+tile.steel_solar_furnace_mirror.steel.name=Steel Solar Furnace Mirror
+tile.heliostat.default.name=Heliostat
 
 
 tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
@@ -626,6 +631,9 @@ susy.machine.lunar_bucket_wheel_excavator.tooltip=World-Eater 9000
 
 susy.machine.cargo_drone_pad.name=Cargo Drone Pad
 susy.machine.cargo_drone_pad.tooltip=MarvNET v0.1
+
+susy.machine.solar_furnace.name=Solar Furnace
+susy.machine.solar_furnace.tooltip=The power of the sun in the palm of my hand! (my hand is large)
 
 # Properties
 susy.recipe.plasma_requirement=Requires plasma: %s
@@ -1273,6 +1281,7 @@ recipemap.attrition_scrubber.name=Attrition Scrubbing
 recipemap.edm.name=Electric Discharge Machining (EDM)
 recipemap.layup=Layup
 recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
+recipemap.solar_furnace.name=Solar Furnace
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1474,6 +1483,14 @@ susy.cargo_drone_pad.initiated=§2Depositing item...§2
 susy.cargo_drone_pad.deposited=§aReturning...§a
 susy.cargo_drone_pad.progress=§b%s%%§b
 
+susy.multiblock.solar_furnace.num_heliostats=§6Currently Active Heliostats: §6%s
+susy.multiblock.solar_furnace.current_power=§cCurrent Power: §c%s §ckW§c
+susy.multiblock.solar_furnace.average_speed=§bAverage Speed over the last second:§b %sx
+susy.multiblock.solar_furnace.low_power=Insufficient power! You must construct additional heliostats.
+susy.top.solar_furnace.num_heliostats=Currently Active Heliostats:
+susy.top.solar_furnace.current_power=Current Power:
+susy.top.solar_furnace.average_speed=Average Speed:
+
 susy.location_card.tooltip.coords=§bStored coordinates: §b
 susy.location_card.tooltip.no_coords=No coordinates stored. Shift-right-click a Drone Deposit Basket to link
 chat.susy.location_card.encode=§aSuccessfully stored target basket's position§a
@@ -1546,6 +1563,7 @@ susy.recipe.biomeTypes=BiomeTypes: %s
 susy.recipe.biomeTypes_blocked=Blocked BiomeTypes: %s
 susy.recipe.atmosphere=Only functions in an atmosphere
 susy.recipe.vacuum=Only functions in a vacuum
+susy.recipe.solar_furnace_min_power=Minimum power to run recipe: %s W
 
 # Commands
 susy.command.horde.usage=/mobHorde <start/stop/status>
