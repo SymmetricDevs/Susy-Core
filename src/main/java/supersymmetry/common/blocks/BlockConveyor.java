@@ -29,13 +29,16 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
 
         @Override
         public boolean customRotate(IBlockState state, World world, BlockPos pos, RayTraceResult hitResult) {
-            // Prohibit rotate other than up/down faces, as base GT does not support non-square faces
+            // Prohibit rotate other than up/down faces, as base GT does not support
+            // non-square faces
             if (hitResult.sideHit != EnumFacing.UP && hitResult.sideHit != EnumFacing.DOWN)
                 return false;
             // The rest is the same with BLOCK_HORIZONTAL_BEHAVIOR
             EnumFacing gridSide = CoverRayTracer.determineGridSideHit(hitResult);
-            if (gridSide == null) return false;
-            if (gridSide.getAxis() == EnumFacing.Axis.Y) return false;
+            if (gridSide == null)
+                return false;
+            if (gridSide.getAxis() == EnumFacing.Axis.Y)
+                return false;
 
             if (gridSide != state.getValue(BlockHorizontal.FACING)) {
                 state = state.withProperty(BlockHorizontal.FACING, gridSide);
@@ -69,8 +72,7 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
     }
 
     @Override
-    @NotNull
-    @SuppressWarnings("deprecation")
+    @NotNull @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return AABB_BOTTOM_HALF;
     }
@@ -97,14 +99,12 @@ public class BlockConveyor extends VariantHorizontalRotatableBlock<BlockConveyor
             this.name = name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String toString() {
             return getName();
         }

@@ -65,7 +65,10 @@ public class SuSyBlocks {
     public static BlocksActiveCasing ACTIVE_CASING;
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
+    public static BlocksS2BMRF S2BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
+    public static BlockSpeaker SPEAKER;
+    public static BlockCrucible CRUCIBLE;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
     public static BlockProcessorCluster PROCESSOR_CLUSTER;
@@ -89,6 +92,17 @@ public class SuSyBlocks {
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockRobotArm ROBOT_ARM;
+    public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
+    public static BlockVehicleTrack VEHICLE_TRACK;
+    public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
+    public static BlockSolarPanel SOLAR_PANEL;
+    public static BlockPaddleShaft PADDLE_SHAFT;
+    public static BlockEpoxySolarFurnaceMirror EPOXY_SOLAR_FURNACE_MIRROR;
+    public static BlockSteelSolarFurnaceMirror STEEL_SOLAR_FURNACE_MIRROR;
+    public static BlockHeliostat HELIOSTAT;
+    public static BlockSolarFurnaceRedirectingMirror SOLAR_FURNACE_REDIRECTING_MIRROR;
+    public static BlockSolarFurnaceCrucible SOLAR_FURNACE_CRUCIBLE;
 
     public static BlockLunarConcrete LUNAR_CONCRETE;
 
@@ -102,7 +116,8 @@ public class SuSyBlocks {
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
-                // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
+                // Try block is necessary in case getDeclaredConstructor does not exist (though
+                // it should)
                 try {
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
@@ -133,8 +148,10 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
-            if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
-            else registerItemModel(b);
+            if (b instanceof VariantActiveBlock)
+                ((VariantActiveBlock<?>) b).onModelRegister();
+            else
+                registerItemModel(b);
         });
         registerItemModel(REGOLITH);
     }
@@ -142,10 +159,8 @@ public class SuSyBlocks {
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(state.getProperties())));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(state.getProperties())));
         }
     }
 
@@ -153,8 +168,7 @@ public class SuSyBlocks {
         StringBuilder stringbuilder = new StringBuilder();
 
         List<Map.Entry<IProperty<?>, Comparable<?>>> entries = properties.entrySet().stream()
-                .sorted(Comparator.comparing(c -> c.getKey().getName()))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(c -> c.getKey().getName())).collect(Collectors.toList());
 
         for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {
@@ -181,12 +195,34 @@ public class SuSyBlocks {
             for (IBlockState state : block.getBlockState().getValidStates())
                 BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
         }
+
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
         for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
         }
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            IBlockState state = block.getState(SusyStoneVariantBlock.StoneType.INDUSTRIAL_CONCRETE);
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
+            if (isDottedPanel(state)) {
+                continue;
+            }
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+    }
+
+    private static boolean isDottedPanel(IBlockState state) {
+        BlockRandomConcrete.BlockRandomConcreteType type = RANDOM_CONCRETE.getState(state);
+        return type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_BORDER ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_COMB ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_GRID;
     }
 
     @SuppressWarnings("unchecked")

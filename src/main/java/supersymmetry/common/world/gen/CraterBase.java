@@ -19,6 +19,7 @@ public abstract class CraterBase extends MapGenBase {
 
     public static final Block CRATER_DEPOSIT = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.LUNAR_CRATER)
             .getBlock();
+    public static final IBlockState WATER_ICE_DEPOSIT = DEPOSIT_BLOCK.getState(BlockDeposit.DepositBlockType.ICE_CAP);
     protected static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
     protected final IBlockState stone;
@@ -49,8 +50,8 @@ public abstract class CraterBase extends MapGenBase {
 
         for (int cx = chunkX - searchRadius; cx <= chunkX + searchRadius; cx++) {
             for (int cz = chunkZ - searchRadius; cz <= chunkZ + searchRadius; cz++) {
-                Random craterRand = new Random(worldIn.getSeed() + seedSalt +
-                        (long) cx * 341873128712L + (long) cz * 132897987541L);
+                Random craterRand = new Random(
+                        worldIn.getSeed() + seedSalt + (long) cx * 341873128712L + (long) cz * 132897987541L);
 
                 if (craterRand.nextDouble() < getCraterProbability()) {
                     int centerX = cx * 16 + craterRand.nextInt(16);
@@ -63,32 +64,33 @@ public abstract class CraterBase extends MapGenBase {
         }
     }
 
-    protected void applyCraterToChunk(ChunkPrimer primer, int chunkX, int chunkZ,
-                                      int craterCenterX, int craterCenterZ,
+    protected void applyCraterToChunk(ChunkPrimer primer, int chunkX, int chunkZ, int craterCenterX, int craterCenterZ,
                                       int diameter, Random craterRand) {
         int radius = diameter / 2;
         int depth = computeDepth(radius);
-        if (depth < 2) depth = 2;
+        if (depth < 2)
+            depth = 2;
 
         int chunkStartX = chunkX * 16;
         int chunkStartZ = chunkZ * 16;
-
+        boolean generateIce = craterRand.nextInt(3) == 0;
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int worldX = chunkStartX + x;
                 int worldZ = chunkStartZ + z;
 
-                double distance = Math.sqrt(
-                        (worldX - craterCenterX) * (worldX - craterCenterX) +
-                                (worldZ - craterCenterZ) * (worldZ - craterCenterZ));
+                double distance = Math.sqrt((worldX - craterCenterX) * (worldX - craterCenterX) +
+                        (worldZ - craterCenterZ) * (worldZ - craterCenterZ));
 
                 int surfaceY = findSurfaceY(primer, x, z);
-                if (surfaceY < 0) continue;
+                if (surfaceY < 0)
+                    continue;
 
                 IBlockState biomeEjecta = getBiomeEjecta(x, z);
 
                 if (distance <= radius) {
-                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, craterRand, biomeEjecta);
+                    excavateCrater(primer, x, z, surfaceY, distance, radius, depth, craterRand, biomeEjecta,
+                            generateIce);
                 } else if (distance < radius * 2) {
                     applyEjectaBlanket(primer, x, z, surfaceY, distance, radius, biomeEjecta);
                 }
@@ -106,9 +108,8 @@ public abstract class CraterBase extends MapGenBase {
      */
     protected abstract int computeFloorDepth(int maxDepth, double normalizedDist);
 
-    protected void excavateCrater(ChunkPrimer primer, int x, int z, int surfaceY,
-                                  double distance, int radius, int depth,
-                                  Random rand, IBlockState biomeEjecta) {
+    protected void excavateCrater(ChunkPrimer primer, int x, int z, int surfaceY, double distance, int radius,
+                                  int depth, Random rand, IBlockState biomeEjecta, boolean generateIce) {
         double normalizedDist = distance / radius;
         int craterDepth = Math.max(1, computeFloorDepth(depth, normalizedDist));
         int floorY = Math.max(3, surfaceY - craterDepth);
@@ -116,9 +117,7 @@ public abstract class CraterBase extends MapGenBase {
         for (int y = surfaceY; y > floorY; y--) {
             primer.setBlockState(x, y, z, AIR);
         }
-
         primer.setBlockState(x, floorY, z, biomeEjecta);
-
         IBlockState subsurfaceMaterial;
         int subsurfaceDepth;
 
@@ -146,10 +145,16 @@ public abstract class CraterBase extends MapGenBase {
                 }
             }
         }
+
+        if (generateIce && craterDepth > 14) {
+            for (int y = floorY; y > floorY - 3; y--) {
+                primer.setBlockState(x, y, z, WATER_ICE_DEPOSIT);
+            }
+        }
     }
 
-    protected void applyEjectaBlanket(ChunkPrimer primer, int x, int z, int surfaceY,
-                                      double distance, int radius, IBlockState biomeEjecta) {
+    protected void applyEjectaBlanket(ChunkPrimer primer, int x, int z, int surfaceY, double distance, int radius,
+                                      IBlockState biomeEjecta) {
         int ejectaBlocks = (int) ((radius * 2 - distance) / radius * 3);
         for (int y = 0; y < ejectaBlocks && surfaceY + y < 255; y++) {
             primer.setBlockState(x, surfaceY + y + 1, z, biomeEjecta);
@@ -172,7 +177,8 @@ public abstract class CraterBase extends MapGenBase {
     protected int findSurfaceY(ChunkPrimer primer, int x, int z) {
         for (int y = 255; y >= 0; y--) {
             IBlockState state = primer.getBlockState(x, y, z);
-            if (state != AIR && state != null) return y;
+            if (state != AIR && state != null)
+                return y;
         }
         return -1;
     }

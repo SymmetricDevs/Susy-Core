@@ -21,9 +21,11 @@ public class PlanetSurfaceRenderer {
                        int[] faceTexIds) {
         // 6 GL texture IDs: +X,-X,+Y,-Y,+Z,-Z
 
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
         int prog = ShaderManager.getRawProgram("planet_surface.vert", "planet_surface.frag");
-        if (prog <= 0) return;
+        if (prog <= 0)
+            return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -31,9 +33,7 @@ public class PlanetSurfaceRenderer {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glViewport(0, 0,
-                Minecraft.getMinecraft().displayWidth,
-                Minecraft.getMinecraft().displayHeight);
+        GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
         GL11.glDisable(GL11.GL_BLEND); // opaque surface layer
 
         // Bind 6 cubemap face textures on units 0-5

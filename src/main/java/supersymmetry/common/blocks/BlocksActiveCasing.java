@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantActiveBlock;
 
@@ -32,8 +31,7 @@ public class BlocksActiveCasing extends VariantActiveBlock<BlocksActiveCasing.Ac
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }
@@ -53,8 +51,7 @@ public class BlocksActiveCasing extends VariantActiveBlock<BlocksActiveCasing.Ac
             this.name = name;
         }
 
-        @Nonnull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

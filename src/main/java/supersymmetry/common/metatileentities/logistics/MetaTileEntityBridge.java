@@ -38,8 +38,7 @@ public class MetaTileEntityBridge extends MetaTileEntityDelegator {
     }
 
     @Override
-    @Nullable
-    public EnumFacing getDelegatingFacing(EnumFacing facing) {
+    @Nullable public EnumFacing getDelegatingFacing(EnumFacing facing) {
         return facing == null ? null : facing.getOpposite();
     }
 

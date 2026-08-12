@@ -25,12 +25,13 @@ public class SusyGeneratedFluidHandler {
 
     public static void createMoltenFluid(@NotNull Material material) {
         FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
-        if (fluidProperty == null) return;
+        if (fluidProperty == null)
+            return;
 
         if (material.hasFlag(SuSyMaterialFlags.CONTINUOUSLY_CAST)) {
             CAST_MATERIALS.add(material);
-            fluidProperty.enqueueRegistration(GCYMFluidStorageKeys.MOLTEN, new FluidBuilder()
-                    .temperature(material.getBlastTemperature() + 1000));
+            fluidProperty.enqueueRegistration(GCYMFluidStorageKeys.MOLTEN,
+                    new FluidBuilder().temperature(material.getBlastTemperature() + 1000));
         }
     }
 }

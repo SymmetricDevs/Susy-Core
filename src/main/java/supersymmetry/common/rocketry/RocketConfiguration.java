@@ -13,6 +13,13 @@ import supersymmetry.api.space.Planetoid;
 
 public class RocketConfiguration {
 
+    /**
+     * The delta-v budget every launch site currently programs with.
+     */
+    // TODO: derive this from the rocket's tier instead of assuming everything is a
+    // Soyuz
+    public static final int DEFAULT_BUDGET = 2;
+
     public enum MissionType {
         Manned,
         UnmannedCargo,
@@ -33,9 +40,7 @@ public class RocketConfiguration {
 
         public MissionConfiguration(NBTTagCompound landing) {
             this.dimension = landing.getInteger("dimension");
-            this.landingPos = new BlockPos(
-                    landing.getInteger("landing_x"),
-                    landing.getInteger("landing_y"),
+            this.landingPos = new BlockPos(landing.getInteger("landing_x"), landing.getInteger("landing_y"),
                     landing.getInteger("landing_z"));
             this.missionType = MissionType.values()[landing.getInteger("mission_type")];
             this.destinationType = DestinationType.values()[landing.getInteger("destination_type")];
@@ -84,7 +89,8 @@ public class RocketConfiguration {
     }
 
     public boolean setBudget(int startingDim, int budget) {
-        // To go between two bodies within the same planetary system requires a budget of 1
+        // To go between two bodies within the same planetary system requires a budget
+        // of 1
         // And to go between two bodies in the same solar system requires a budget of 3
 
         // Get all dimensions in a row

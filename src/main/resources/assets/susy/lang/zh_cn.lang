@@ -157,7 +157,7 @@ tile.susy_stone_smooth.soapstone.name=皂石
 tile.susy_stone_smooth.kimberlite.name=金伯利岩
 tile.susy_stone_smooth.anorthosite.name=斜长岩
 tile.susy_stone_smooth.industrial_concrete.name=工业混凝土
-tile.susy_stone_smooth.minitary_concrete.name=军工混凝土
+tile.susy_stone_smooth.military_concrete.name=军工混凝土
 
 tile.susy_stone_cobble.gabbro.name=辉长岩圆石
 tile.susy_stone_cobble.gneiss.name=片麻岩圆石
@@ -172,7 +172,7 @@ tile.susy_stone_cobble.soapstone.name=皂石圆石
 tile.susy_stone_cobble.kimberlite.name=金伯利岩圆石
 tile.susy_stone_cobble.anorthosite.name=斜长岩圆石
 tile.susy_stone_cobble.industrial_concrete.name=工业混凝土圆石
-tile.susy_stone_cobble.minitary_concrete.name=军工混凝土圆石
+tile.susy_stone_cobble.military_concrete.name=军工混凝土圆石
 
 tile.susy_stone_bricks.gabbro.name=辉长岩砖
 tile.susy_stone_bricks.gneiss.name=片麻岩砖
@@ -187,7 +187,7 @@ tile.susy_stone_bricks.soapstone.name=皂石砖
 tile.susy_stone_bricks.kimberlite.name=金伯利岩砖
 tile.susy_stone_bricks.anorthosite.name=斜长岩砖
 tile.susy_stone_bricks.industrial_concrete.name=工业混凝土砖
-tile.susy_stone_bricks.minitary_concrete.name=军工混凝土砖
+tile.susy_stone_bricks.military_concrete.name=军工混凝土砖
 
 # Materials
 susy.material.manganese_iron_arsenic_phosphide=锰铁砷磷合金
@@ -265,6 +265,9 @@ item.material.oreprefix.target=%s溅射靶
 susy.fluid.supercritical=超临界%s
 susy.fluid.impure_slurry=含杂%s浆液
 susy.fluid.slurry=%s浆液
+
+susy.fluid.type_base.tooltip=§6碱性物质！轻拿轻放！
+susy.fluid_pipe.base_proof=§6可传输碱性物质
 
 # Tooltip Warnings
 susy.machine.steam_extractor_cannot_melt_items.warning=蒸汽提取机不能熔化物品！

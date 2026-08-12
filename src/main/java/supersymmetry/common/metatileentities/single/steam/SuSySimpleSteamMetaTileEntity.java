@@ -3,8 +3,6 @@ package supersymmetry.common.metatileentities.single.steam;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,6 +17,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.IGhostSlotConfigurable;
 import gregtech.api.capability.impl.*;
@@ -42,21 +42,22 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     protected SuSySteamProgressIndicator progressIndicator;
     protected boolean isBrickedCasing;
     protected boolean ulvOnly;
-    @Nullable
-    protected GhostCircuitItemStackHandler circuitInventory;
+    @Nullable protected GhostCircuitItemStackHandler circuitInventory;
     protected IItemHandler outputItemInventory;
     protected IFluidHandler outputFluidInventory;
     private IItemHandlerModifiable actualImportItems;
 
     public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
                                          SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
-                                         boolean isBrickedCasing, boolean isHighPressure) {
+                                         boolean isBrickedCasing,
+                                         boolean isHighPressure) {
         this(metaTileEntityId, recipeMap, progressIndicator, renderer, isBrickedCasing, isHighPressure, false);
     }
 
     public SuSySimpleSteamMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
                                          SuSySteamProgressIndicator progressIndicator, ICubeRenderer renderer,
-                                         boolean isBrickedCasing, boolean isHighPressure, boolean ulvOnly) {
+                                         boolean isBrickedCasing,
+                                         boolean isHighPressure, boolean ulvOnly) {
         super(metaTileEntityId, recipeMap, renderer, isHighPressure);
         this.progressIndicator = progressIndicator;
         this.isBrickedCasing = isBrickedCasing;
@@ -111,38 +112,45 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
 
     @Override
     public IItemHandlerModifiable getImportItems() {
-        if (actualImportItems == null) this.actualImportItems = circuitInventory == null ? super.getImportItems() :
-                new ItemHandlerList(Arrays.asList(super.getImportItems(), this.circuitInventory));
+        if (actualImportItems == null)
+            this.actualImportItems = circuitInventory == null ? super.getImportItems() :
+                    new ItemHandlerList(Arrays.asList(super.getImportItems(), this.circuitInventory));
         return this.actualImportItems;
     }
 
     @Override
     protected IItemHandlerModifiable createImportItemHandler() {
-        if (workableHandler == null) return new ItemStackHandler(0);
+        if (workableHandler == null)
+            return new ItemStackHandler(0);
         return new NotifiableItemStackHandler(this, workableHandler.getRecipeMap().getMaxInputs(), this, false);
     }
 
     @Override
     protected IItemHandlerModifiable createExportItemHandler() {
-        if (workableHandler == null) return new ItemStackHandler(0);
+        if (workableHandler == null)
+            return new ItemStackHandler(0);
         return new NotifiableItemStackHandler(this, workableHandler.getRecipeMap().getMaxOutputs(), this, true);
     }
 
     @Override
     public FluidTankList createImportFluidHandler() {
         super.createImportFluidHandler();
-        if (workableHandler == null) return new FluidTankList(false, new IFluidTank[] { this.steamFluidTank });
+        if (workableHandler == null)
+            return new FluidTankList(false, new IFluidTank[] { this.steamFluidTank });
         IFluidTank[] fluidImports = new IFluidTank[workableHandler.getRecipeMap().getMaxFluidInputs() + 1];
         fluidImports[0] = this.steamFluidTank;
-        for (int i = 1; i < fluidImports.length; i++) fluidImports[i] = new NotifiableFluidTank(8000, this, false);
+        for (int i = 1; i < fluidImports.length; i++)
+            fluidImports[i] = new NotifiableFluidTank(8000, this, false);
         return new FluidTankList(false, fluidImports);
     }
 
     @Override
     protected FluidTankList createExportFluidHandler() {
-        if (workableHandler == null) return new FluidTankList(false);
+        if (workableHandler == null)
+            return new FluidTankList(false);
         FluidTank[] fluidExports = new FluidTank[workableHandler.getRecipeMap().getMaxFluidOutputs()];
-        for (int i = 0; i < fluidExports.length; i++) fluidExports[i] = new NotifiableFluidTank(8000, this, true);
+        for (int i = 0; i < fluidExports.length; i++)
+            fluidExports[i] = new NotifiableFluidTank(8000, this, true);
         return new FluidTankList(false, fluidExports);
     }
 
@@ -159,7 +167,8 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        if (circuitInventory != null) this.circuitInventory.write(data);
+        if (circuitInventory != null)
+            this.circuitInventory.write(data);
         return data;
     }
 
@@ -171,7 +180,8 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
                 ItemStackHandler legacyCircuitInventory = new ItemStackHandler();
                 for (int i = 0; i < legacyCircuitInventory.getSlots(); i++) {
                     ItemStack stack = legacyCircuitInventory.getStackInSlot(i);
-                    if (stack.isEmpty()) continue;
+                    if (stack.isEmpty())
+                        continue;
                     stack = GTTransferUtils.insertItem(this.importItems, stack, false);
                     this.circuitInventory.setCircuitValueFromStack(stack);
                 }
@@ -197,18 +207,18 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
                 builder.widget(circuitSlot.setConsumer(this::getCircuitSlotTooltip))
                         .widget(new ClickButtonWidget(115, 62 + yOffset, 9, 9, "",
                                 click -> circuitInventory.addCircuitValue(click.isShiftClick ? 5 : 1))
-                                        .setShouldClientCallback(true)
-                                        .setButtonTexture(
-                                                SusyGuiTextures.BUTTON_INT_CIRCUIT_PLUS_STEAM.get(isHighPressure))
-                                        .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
-                                                circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
+                                .setShouldClientCallback(true)
+                                .setButtonTexture(
+                                        SusyGuiTextures.BUTTON_INT_CIRCUIT_PLUS_STEAM.get(isHighPressure))
+                                .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
+                                        circuitInventory.getCircuitValue() < IntCircuitIngredient.CIRCUIT_MAX))
                         .widget(new ClickButtonWidget(115, 71 + yOffset, 9, 9, "",
                                 click -> circuitInventory.addCircuitValue(click.isShiftClick ? -5 : -1))
-                                        .setShouldClientCallback(true)
-                                        .setButtonTexture(
-                                                SusyGuiTextures.BUTTON_INT_CIRCUIT_MINUS_STEAM.get(isHighPressure))
-                                        .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
-                                                circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
+                                .setShouldClientCallback(true)
+                                .setButtonTexture(
+                                        SusyGuiTextures.BUTTON_INT_CIRCUIT_MINUS_STEAM.get(isHighPressure))
+                                .setDisplayFunction(() -> circuitInventory.hasCircuitValue() &&
+                                        circuitInventory.getCircuitValue() > IntCircuitIngredient.CIRCUIT_MIN));
             }
         }
 
@@ -256,14 +266,16 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
         int itemsSlotsLeft = inputSlotGrid[0];
         int itemsSlotsDown = inputSlotGrid[1];
 
-        // if height of item slots > fluid slots AND primary[item] slot (can be item or fluid) don't take full length of
+        // if height of item slots > fluid slots AND primary[item] slot (can be item or
+        // fluid) don't take full length of
         // 3
         boolean isVerticalFluid = itemsSlotsDown >= fluidSlotsCount && itemsSlotsLeft < 3;
         int fluidGridHeight = ((fluidSlotsCount / 3 == 0) ? 1 : fluidSlotsCount / 3); // fit into at most 3 wide by x
         // tall
 
         int fullGridHeight = itemsSlotsDown + (isVerticalFluid ? 0 : fluidGridHeight);
-        if (fullGridHeight >= 3) yOffset += 4;
+        if (fullGridHeight >= 3)
+            yOffset += 4;
 
         int startInputsX = isOutputs ? 89 + progressIndicator.width / 2 + 9 :
                 89 - (progressIndicator.width / 2 + 9 + itemsSlotsLeft * 18);
@@ -271,25 +283,30 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
                 (isVerticalFluid ? 42 - ((itemsSlotsDown * 18) / 2) : 42 - (((fluidSlotsCount - 1) / 3 + 1) * 18));
 
         boolean wasGroup = itemHandler.getSlots() + fluidHandler.getTanks() == 12;
-        if (wasGroup) startInputsY -= 9;
-        else if (itemHandler.getSlots() >= 6 && fluidHandler.getTanks() >= 2 && !isOutputs) startInputsY -= 9;
+        if (wasGroup)
+            startInputsY -= 9;
+        else if (itemHandler.getSlots() >= 6 && fluidHandler.getTanks() >= 2 && !isOutputs)
+            startInputsY -= 9;
 
         for (int i = 0; i < itemsSlotsDown; i++) {
             for (int j = 0; j < itemsSlotsLeft; j++) {
                 int slotIndex = i * itemsSlotsLeft + j;
-                if (slotIndex >= itemsSlotsCount) break;
+                if (slotIndex >= itemsSlotsCount)
+                    break;
                 int x = startInputsX + 18 * j;
                 int y = startInputsY + 18 * i;
                 addSlot(builder, x, y, slotIndex, itemHandler, fluidHandler, invertFluids, isOutputs);
             }
         }
 
-        if (wasGroup) startInputsY += 2;
+        if (wasGroup)
+            startInputsY += 2;
         if (fluidSlotsCount > 0 || invertFluids) {
             if (isVerticalFluid) {
                 int startSpecX = isOutputs ? startInputsX + itemsSlotsLeft * 18 : startInputsX - 18;
-                for (int i = 0; i < fluidSlotsCount; i++) addSlot(builder, startSpecX, startInputsY + 18 * i, i,
-                        itemHandler, fluidHandler, !invertFluids, isOutputs);
+                for (int i = 0; i < fluidSlotsCount; i++)
+                    addSlot(builder, startSpecX, startInputsY + 18 * i, i, itemHandler, fluidHandler, !invertFluids,
+                            isOutputs);
             } else {
                 int startSpecY = startInputsY + itemsSlotsDown * 18;
                 for (int i = 0; i < fluidSlotsCount; i++) {
@@ -304,12 +321,14 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
 
     protected void addSlot(ModularUI.Builder builder, int x, int y, int slotIndex, IItemHandlerModifiable itemHandler,
                            FluidTankList fluidHandler, boolean isFluid, boolean isOutputs) {
-        if (!isOutputs && isFluid) slotIndex++; // Skip steam slot
-        if (!isFluid) builder.widget(new SlotWidget(itemHandler, slotIndex, x, y, true, !isOutputs)
-                .setBackgroundTexture(getOverlaysForSlot(isOutputs, false)));
-        else builder.widget(new TankWidget(fluidHandler.getTankAt(slotIndex), x, y, 18, 18).setAlwaysShowFull(true)
-                .setBackgroundTexture(getOverlaysForSlot(isOutputs, true))
-                .setContainerClicking(true, !isOutputs));
+        if (!isOutputs && isFluid)
+            slotIndex++; // Skip steam slot
+        if (!isFluid)
+            builder.widget(new SlotWidget(itemHandler, slotIndex, x, y, true, !isOutputs)
+                    .setBackgroundTexture(getOverlaysForSlot(isOutputs, false)));
+        else
+            builder.widget(new TankWidget(fluidHandler.getTankAt(slotIndex), x, y, 18, 18).setAlwaysShowFull(true)
+                    .setBackgroundTexture(getOverlaysForSlot(isOutputs, true)).setContainerClicking(true, !isOutputs));
     }
 
     protected TextureArea[] getOverlaysForSlot(boolean isOutputs, boolean isFluid) {
@@ -318,7 +337,8 @@ public class SuSySimpleSteamMetaTileEntity extends SteamMetaTileEntity implement
     }
 
     protected static int[] determineSlotsGrid(int itemInputsCounts) {
-        if (itemInputsCounts == 3) return new int[] { 3, 1 };
+        if (itemInputsCounts == 3)
+            return new int[] { 3, 1 };
         int slotsLeft = (int) Math.ceil(Math.sqrt(itemInputsCounts));
         int slotsDown = (int) Math.ceil(itemInputsCounts / (double) slotsLeft);
         return new int[] { slotsLeft, slotsDown };

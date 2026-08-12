@@ -64,20 +64,24 @@ public class ShaderUtils {
         inv[15] = m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] +
                 m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
         float det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-        if (Math.abs(det) < 1e-10f) return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+        if (Math.abs(det) < 1e-10f)
+            return new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
         float id = 1f / det;
-        for (int i = 0; i < 16; i++) inv[i] *= id;
+        for (int i = 0; i < 16; i++)
+            inv[i] *= id;
         return inv;
     }
 
     public static void setUniform1f(int prog, String name, float v) {
         int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc >= 0) GL20.glUniform1f(loc, v);
+        if (loc >= 0)
+            GL20.glUniform1f(loc, v);
     }
 
     public static void setUniform3f(int prog, String name, float x, float y, float z) {
         int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc >= 0) GL20.glUniform3f(loc, x, y, z);
+        if (loc >= 0)
+            GL20.glUniform3f(loc, x, y, z);
     }
 
     public static void setUniformMat4(int prog, String name, float[] m) {
@@ -90,27 +94,32 @@ public class ShaderUtils {
 
     public static void setUniform2f(int prog, String name, float x, float y) {
         int loc = GL20.glGetUniformLocation(prog, name);
-        if (loc >= 0) GL20.glUniform2f(loc, x, y);
+        if (loc >= 0)
+            GL20.glUniform2f(loc, x, y);
     }
 
     public static void set1f(int p, String n, float v) {
         int l = GL20.glGetUniformLocation(p, n);
-        if (l >= 0) GL20.glUniform1f(l, v);
+        if (l >= 0)
+            GL20.glUniform1f(l, v);
     }
 
     public static void set1i(int p, String n, int v) {
         int l = GL20.glGetUniformLocation(p, n);
-        if (l >= 0) GL20.glUniform1i(l, v);
+        if (l >= 0)
+            GL20.glUniform1i(l, v);
     }
 
     public static void set2f(int p, String n, float x, float y) {
         int l = GL20.glGetUniformLocation(p, n);
-        if (l >= 0) GL20.glUniform2f(l, x, y);
+        if (l >= 0)
+            GL20.glUniform2f(l, x, y);
     }
 
     public static void set3f(int p, String n, float[] v) {
         int l = GL20.glGetUniformLocation(p, n);
-        if (l >= 0) GL20.glUniform3f(l, v[0], v[1], v[2]);
+        if (l >= 0)
+            GL20.glUniform3f(l, v[0], v[1], v[2]);
     }
 
     public static void setMat4(int p, String n, float[] m) {

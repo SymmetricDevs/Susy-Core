@@ -34,14 +34,16 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
         Strand orig = this.input.take();
-        if (orig == null) return false;
+        if (orig == null)
+            return false;
         this.progress = 10;
         return true;
     }
 
     @Override
     protected Strand resultingStrand() {
-        if (this.input.getStrand() == null) return null;
+        if (this.input.getStrand() == null)
+            return null;
         Strand str = new Strand(this.input.getStrand());
         str.isCut = true;
         return str;
@@ -49,26 +51,21 @@ public class MetaTileEntityFlyingShear extends MetaTileEntityStrandShaper {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCCCCCCCC", "FFFFGFFFF", "    F    ", "    G    ")
+        return FactoryBlockPattern.start().aisle("CCCCCCCCC", "FFFFGFFFF", "    F    ", "    G    ")
                 .aisle("CRRRRRRRC", "F   A   F", "    X    ", "    F    ")
                 .aisle("CRRRRRRRC", "I   A   O", "    X    ", "    F    ")
                 .aisle("CRRRRRRRC", "F   A   F", "    X    ", "    F    ")
-                .aisle("CCCCSCCCC", "FFFFGFFFF", "    F    ", "    G    ")
-                .where('S', this.selfPredicate())
-                .where('A', air())
-                .where('C', states(getCasingState()).or(autoAbilities()))
+                .aisle("CCCCSCCCC", "FFFFGFFFF", "    F    ", "    G    ").where('S', this.selfPredicate())
+                .where('A', air()).where('C', states(getCasingState()).or(autoAbilities()))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
                 .where('X',
                         SuSyPredicates.orientation(this, getSawbladeState(), RelativeDirection.RIGHT,
                                 VariantHorizontalRotatableBlock.FACING))
-                .where('F', frames(Materials.Steel))
-                .where('R', rollOrientation(RelativeDirection.FRONT))
+                .where('F', frames(Materials.Steel)).where('R', rollOrientation(RelativeDirection.FRONT))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     private IBlockState getSawbladeState() {

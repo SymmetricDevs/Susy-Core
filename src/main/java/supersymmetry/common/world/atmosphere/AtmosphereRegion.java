@@ -2,6 +2,7 @@ package supersymmetry.common.world.atmosphere;
 
 import java.util.*;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -9,13 +10,13 @@ import net.minecraft.world.World;
  * A pressurized volume of oxygenated blocks, stored in an Octree.
  *
  * <p>
- * The region is built by flood-filling outward from a source position
- * (the disperser). Filling can be budgeted so only N blocks are processed
- * per call, making it safe for incremental/tick-based expansion.
+ * The region is built by flood-filling outward from a source position (the
+ * disperser). Filling can be budgeted so only N blocks are processed per call,
+ * making it safe for incremental/tick-based expansion.
  *
  * <p>
- * Pressure is tracked as a separate value (0.0–1.0). The octree represents
- * the room shape; pressure determines whether the oxygen is active.
+ * Pressure is tracked as a separate value (0.0–1.0). The octree represents the
+ * room shape; pressure determines whether the oxygen is active.
  * Depressurization decreases pressure without removing octree positions,
  * eliminating "lost block" edge cases.
  */
@@ -40,7 +41,8 @@ public class AtmosphereRegion {
     private long lastOxygenSupplyTick = 0;
     private int oxygensSupplied = 0;
 
-    // Active breach positions (wall blocks that were broken, exposing the region to vacuum)
+    // Active breach positions (wall blocks that were broken, exposing the region to
+    // vacuum)
     private final Set<BlockPos> breachPoints = new HashSet<>();
 
     /**
@@ -69,10 +71,10 @@ public class AtmosphereRegion {
     /**
      * Create a sourceless region from an existing set of positions.
      */
-    public AtmosphereRegion(Set<BlockPos> positions, double pressure,
-                            int octreeOriginX, int octreeOriginY, int octreeOriginZ, int octreeSize) {
-        this(positions.iterator().next(), positions, pressure, Collections.emptySet(),
-                octreeOriginX, octreeOriginY, octreeOriginZ, octreeSize);
+    public AtmosphereRegion(Set<BlockPos> positions, double pressure, int octreeOriginX, int octreeOriginY,
+                            int octreeOriginZ, int octreeSize) {
+        this(positions.iterator().next(), positions, pressure, Collections.emptySet(), octreeOriginX, octreeOriginY,
+                octreeOriginZ, octreeSize);
     }
 
     /**
@@ -133,8 +135,8 @@ public class AtmosphereRegion {
     }
 
     /**
-     * Returns the positions to start flood fills / revalidation from.
-     * Uses all disperser positions if any exist, otherwise falls back to the primary source.
+     * Returns the positions to start flood fills / revalidation from. Uses all
+     * disperser positions if any exist, otherwise falls back to the primary source.
      */
     public Collection<BlockPos> getFloodSources() {
         return dispersers.isEmpty() ? Collections.singleton(source) : dispersers;
@@ -148,15 +150,18 @@ public class AtmosphereRegion {
      * @return true if the flood fill is now complete (frontier exhausted)
      */
     public boolean floodFill(World world, int budget) {
-        if (fillComplete) return true;
-        if (fillFailed) return true;
+        if (fillComplete)
+            return true;
+        if (fillFailed)
+            return true;
 
         int processed = 0;
         while (!frontier.isEmpty() && processed < budget) {
             BlockPos pos = frontier.poll();
             processed++;
 
-            if (world.isBlockFullCube(pos)) continue;
+            if (world.isBlockFullCube(pos))
+                continue;
 
             // If this position can see the sky, the room is unsealed
             if (world.canSeeSky(pos)) {
@@ -173,7 +178,7 @@ public class AtmosphereRegion {
 
             octree.insert(pos);
 
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
+            for (BlockPos nb : AtmosphereUtils.neighbors(pos)) {
                 if (!visited.contains(nb) && !world.isBlockFullCube(nb)) {
                     visited.add(nb);
                     frontier.add(nb);
@@ -208,9 +213,9 @@ public class AtmosphereRegion {
     }
 
     /**
-     * Restart the flood-fill from all sources WITHOUT clearing the octree.
-     * Existing positions are kept (no oxygen loss). The fill will
-     * re-derive connectivity and expand into any newly accessible space.
+     * Restart the flood-fill from all sources WITHOUT clearing the octree. Existing
+     * positions are kept (no oxygen loss). The fill will re-derive connectivity and
+     * expand into any newly accessible space.
      */
     public void continueFill() {
         frontier.clear();
@@ -254,7 +259,11 @@ public class AtmosphereRegion {
      * Remove any breach points that are no longer passable (block placed there).
      */
     public void validateBreaches(World world) {
-        breachPoints.removeIf(world::isBlockFullCube);
+        breachPoints.removeIf(breach -> isValidSeal(world, breach));
+    }
+
+    public static boolean isValidSeal(World world, BlockPos pos) {
+        return world.isBlockFullCube(pos) && world.getBlockState(pos).getMaterial() != Material.SAND;
     }
 
     // ---- Queries ----

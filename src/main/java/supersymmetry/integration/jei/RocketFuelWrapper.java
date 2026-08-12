@@ -25,8 +25,7 @@ public class RocketFuelWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.FLUID, entry.getComposition().stream()
-                .map((t) -> new FluidStack(t.getFirst(), t.getSecond()))
-                .collect(Collectors.toList()));
+                .map((t) -> new FluidStack(t.getFirst(), t.getSecond())).collect(Collectors.toList()));
     }
 
     @Override

@@ -20,7 +20,8 @@ public class SuSyDimensions {
     public static void init() {
         int id = -2;
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() < id) id = type.getId();
+            if (type.getId() < id)
+                id = type.getId();
         }
         id--;
 

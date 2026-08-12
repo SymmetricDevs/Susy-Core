@@ -2,13 +2,12 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import static gregtech.api.util.RelativeDirection.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.DistillationTowerLogicHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -32,10 +31,10 @@ import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 
 public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTileEntityOrderedDT
-                                                                 implements ICryogenicProvider {
+                                                                 implements
+                                                                 ICryogenicProvider {
 
-    @Nullable
-    private ICryogenicReceiver receiver;
+    @Nullable private ICryogenicReceiver receiver;
 
     public MetaTileEntityLowPressureCryogenicDistillationPlant(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.LOW_PRESSURE_CRYOGENIC_DISTILLATION);
@@ -47,20 +46,14 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
     }
 
     @Override
-    @NotNull
-    public DistillationTowerLogicHandler createHandler() {
+    @NotNull public DistillationTowerLogicHandler createHandler() {
         return new ExtendedDTLogicHandler(this, 2, i -> 1);
     }
 
     @Override
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle("DDD", "DDD", "DDD")
-                .aisle("CSC", "CFC", "CCC")
-                .aisle("XXX", "XFX", "XXX").setRepeatable(1, 16)
-                .aisle("DED", "EZE", "DED")
-                .aisle("DDD", "DDD", "DDD")
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP).aisle("DDD", "DDD", "DDD").aisle("CSC", "CFC", "CCC")
+                .aisle("XXX", "XFX", "XXX").setRepeatable(1, 16).aisle("DED", "EZE", "DED").aisle("DDD", "DDD", "DDD")
                 .where('S', this.selfPredicate())
                 .where('C', states(getCasingState())
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
@@ -69,21 +62,17 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
                 .where('F',
                         states(SuSyBlocks.MULTIBLOCK_CASING
                                 .getState(BlockSuSyMultiblockCasing.CasingType.STRUCTURAL_PACKING)))
-                .where('X', states(getCasingState())
-                        .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
-                                .toArray(MetaTileEntity[]::new))
-                                        .setMaxLayerLimited(1))
-                        .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS).stream()
-                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
-                                .toArray(MetaTileEntity[]::new))
-                                        .setMaxLayerLimited(4)))
+                .where('X',
+                        states(getCasingState())
+                                .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS)
+                                        .stream().filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                                        .toArray(MetaTileEntity[]::new)).setMaxLayerLimited(1))
+                                .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.IMPORT_FLUIDS)
+                                        .stream().filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                                        .toArray(MetaTileEntity[]::new)).setMaxLayerLimited(4)))
                 .where('D', states(getCasingState()))
-                .where('E', states(getCasingState())
-                        .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
-                .where('#', air())
-                .where('Z', cryogenicRecieverPredicate())
-                .build();
+                .where('E', states(getCasingState()).or(abilities(MultiblockAbility.PASSTHROUGH_HATCH)))
+                .where('#', air()).where('Z', cryogenicRecieverPredicate()).build();
     }
 
     @Override
@@ -104,8 +93,7 @@ public class MetaTileEntityLowPressureCryogenicDistillationPlant extends MetaTil
         return Textures.FROST_PROOF_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LPCDT_OVERLAY;
     }

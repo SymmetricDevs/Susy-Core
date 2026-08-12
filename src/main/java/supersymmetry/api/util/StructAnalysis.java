@@ -1,5 +1,6 @@
 package supersymmetry.api.util;
 
+import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.blocks;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 import static supersymmetry.api.util.Welzl.computeMinimalRadius;
 
@@ -23,10 +24,10 @@ import net.minecraft.world.World;
 
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.common.blocks.BlockLamp;
-import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 
 public class StructAnalysis {
@@ -38,37 +39,62 @@ public class StructAnalysis {
         SUCCESS("build_success"),
         SCANNING("scanning"),
         UNSCANNED("unscanned"),
-        DISCONNECTED("blocks_disconnected"),
+        DISCONNECTED(
+                "blocks_disconnected"),
         EMPTY("no_blocks"),
         HULL_WEAK("hull_weak"),
         HULL_FULL("hull_full"),
-        NO_NOZZLE("no_nozzle"),
+        NO_NOZZLE(
+                "no_nozzle"),
         NOZZLE_MALFORMED("nozzle_invalid"),
         ERROR("unknown_error"),
-        WRONG_NUM_C_CHAMBERS("wrong_num_c_chambers"),
+        WRONG_NUM_C_CHAMBERS(
+                "wrong_num_c_chambers"),
         WRONG_NUM_PUMPS("wrong_num_pumps"),
-        WEIRD_PUMP("weird_pump"),
+        WEIRD_PUMP(
+                "weird_pump"),
         C_CHAMBER_INSIDE("chamber_wrong_place"),
-        INVALID_AIRLIKE("invalid_transparent"),
+        INVALID_AIRLIKE(
+                "invalid_transparent"),
         EXTRANEOUS_BLOCKS("extraneous_blocks"),
-        UNCLEAN("cleanroom_not_clean"),
-        NOT_LAVAL("nozzle_not_laval"),
-        MISSING_TILE("tile_missing"),
-        INTERSTAGE_NOT_CYLINDRICAL("interstage_not_cylindrical"),
-        WEIRD_FAIRING("fairing_weird"),
-        NO_CARD("no_card"),
-        UNRECOGNIZED("part_unrecognized"),
-        SPACECRAFT_HOLLOW("spacecraft_hollow"),
-        WEIRD_PADDING("weird_padding"),
-        TOO_SHORT("too_short"),
-        CONN_UNALIGNED("conn_unaligned"),
-        CONN_WRONG_DIR("conn_wrong_dir"),
-        WRONG_TILE("wrong_tile"),
-        NO_GUIDANCE("no_guidance"),
-        TOO_MUCH_GUIDANCE("too_much_guidance"),
-        WRONG_CHAMBER_TYPE("wrong_chamber_type"),
-        MATCH_WRONG("match_wrong"),
-        NOZZLE_TOO_SHORT("nozzle_too_short");
+        UNCLEAN(
+                "cleanroom_not_clean"),
+        NOT_LAVAL(
+                "nozzle_not_laval"),
+        MISSING_TILE(
+                "tile_missing"),
+        INTERSTAGE_NOT_CYLINDRICAL(
+                "interstage_not_cylindrical"),
+        WEIRD_FAIRING(
+                "fairing_weird"),
+        NO_CARD(
+                "no_card"),
+        UNRECOGNIZED(
+                "part_unrecognized"),
+        SPACECRAFT_HOLLOW(
+                "spacecraft_hollow"),
+        WEIRD_PADDING(
+                "weird_padding"),
+        TOO_SHORT(
+                "too_short"),
+        CONN_UNALIGNED(
+                "conn_unaligned"),
+        CONN_WRONG_DIR(
+                "conn_wrong_dir"),
+        WRONG_TILE(
+                "wrong_tile"),
+        NO_GUIDANCE(
+                "no_guidance"),
+        TOO_MUCH_GUIDANCE(
+                "too_much_guidance"),
+        WRONG_CHAMBER_TYPE(
+                "wrong_chamber_type"),
+        MATCH_WRONG(
+                "match_wrong"),
+        NOZZLE_TOO_SHORT(
+                "nozzle_too_short"),
+        NOT_INTERSTAGE(
+                "not_interstage");
 
         String code;
 
@@ -89,21 +115,12 @@ public class StructAnalysis {
 
     public static Vec3i[] layerVecs = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 0, 1) };
     public static Vec3i[] orthVecs = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(0, 1, 0), new Vec3i(0, 0, 1) };
-    public static Vec3i[] neighborVecs = new Vec3i[] {
-            new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0),
-            new Vec3i(0, 1, 0), new Vec3i(0, -1, 0),
-            new Vec3i(0, 0, 1), new Vec3i(0, 0, -1),
-            new Vec3i(1, 1, 0), new Vec3i(-1, -1, 0),
-            new Vec3i(1, 0, 1), new Vec3i(-1, 0, -1),
-            new Vec3i(0, 1, 1), new Vec3i(0, -1, -1),
-            new Vec3i(1, 1, 1), new Vec3i(-1, -1, -1),
-            new Vec3i(1, 0, -1), new Vec3i(-1, 0, 1),
-            new Vec3i(1, -1, 0), new Vec3i(-1, 1, 0),
-            new Vec3i(0, 1, -1), new Vec3i(0, -1, 1),
-            new Vec3i(1, 1, -1), new Vec3i(-1, -1, 1),
-            new Vec3i(-1, 1, 1), new Vec3i(1, -1, -1),
-            new Vec3i(1, -1, 1), new Vec3i(-1, 1, -1)
-    };
+    public static Vec3i[] neighborVecs = new Vec3i[] { new Vec3i(1, 0, 0), new Vec3i(-1, 0, 0), new Vec3i(0, 1, 0),
+            new Vec3i(0, -1, 0), new Vec3i(0, 0, 1), new Vec3i(0, 0, -1), new Vec3i(1, 1, 0), new Vec3i(-1, -1, 0),
+            new Vec3i(1, 0, 1), new Vec3i(-1, 0, -1), new Vec3i(0, 1, 1), new Vec3i(0, -1, -1), new Vec3i(1, 1, 1),
+            new Vec3i(-1, -1, -1), new Vec3i(1, 0, -1), new Vec3i(-1, 0, 1), new Vec3i(1, -1, 0), new Vec3i(-1, 1, 0),
+            new Vec3i(0, 1, -1), new Vec3i(0, -1, 1), new Vec3i(1, 1, -1), new Vec3i(-1, -1, 1), new Vec3i(-1, 1, 1),
+            new Vec3i(1, -1, -1), new Vec3i(1, -1, 1), new Vec3i(-1, 1, -1) };
     private static final AxisAlignedBB MAX_BB = new AxisAlignedBB(-3.0E7, 0, -3.0E7, 3.0E7, 255, 3.0E7);
 
     public boolean isEffectiveAir(BlockPos pos) {
@@ -112,9 +129,8 @@ public class StructAnalysis {
     }
 
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
-        AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX), Math.round(faaBB.minY),
-                Math.round(faaBB.minZ), Math.round(faaBB.maxX),
-                Math.round(faaBB.maxY), Math.round(faaBB.maxZ));
+        AxisAlignedBB aaBB = new AxisAlignedBB(Math.round(faaBB.minX), Math.round(faaBB.minY), Math.round(faaBB.minZ),
+                Math.round(faaBB.maxX), Math.round(faaBB.maxY), Math.round(faaBB.maxZ));
         ArrayList<BlockPos> ret = new ArrayList<>();
         for (int x = (int) aaBB.minX; x < aaBB.maxX; x++) {
             for (int y = (int) aaBB.minY; y < aaBB.maxY; y++) {
@@ -154,8 +170,9 @@ public class StructAnalysis {
 
     public record HullData(Set<BlockPos> exterior, Set<BlockPos> interior) {}
 
-    public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks,
-                              boolean testStrength) {
+    public static TraceabilityPredicate rocketHullBlocks = blocks();
+
+    public HullData checkHull(AxisAlignedBB aaBB, Set<BlockPos> actualBlocks, boolean testStrength) {
         AxisAlignedBB floodBB = aaBB.grow(1);// initializes flood fill box
         BlockPos bottom = new BlockPos(floodBB.minX, floodBB.minY, floodBB.minZ); // initializes flood fill start
         Queue<BlockPos> uncheckedBlocks = new ArrayDeque<>();
@@ -167,16 +184,16 @@ public class StructAnalysis {
             pos = uncheckedBlocks.remove();
             if (actualBlocks.contains(pos)) {
                 BlockWorldState bws = new BlockWorldState(); // this is awful but I guess it works?
-                bws.update(world, pos, pmc, null, null, SuSyValues.rocketHullBlocks);
-                if (testStrength && !SuSyValues.rocketHullBlocks.test(bws)) {
+                bws.update(world, pos, pmc, null, null, rocketHullBlocks);
+                if (testStrength && !rocketHullBlocks.test(bws)) {
                     status = BuildStat.HULL_WEAK;
                     return null;
                 }
                 hullBlocks.add(pos);
             } else {
                 airBlocks.add(pos);
-                uncheckedBlocks.addAll(getBlockNeighbors(pos, floodBB, orthVecs).stream().filter(
-                        p -> floodBB.grow(1).contains(new Vec3d(p)) &&
+                uncheckedBlocks.addAll(getBlockNeighbors(pos, floodBB, orthVecs).stream()
+                        .filter(p -> floodBB.grow(1).contains(new Vec3d(p)) &&
                                 !(airBlocks.contains(p) || uncheckedBlocks.contains(p)))
                         .collect(Collectors.toSet()));
             }
@@ -220,22 +237,25 @@ public class StructAnalysis {
     }
 
     /**
-     * Checks if a block is within an axis aligned bounding box
-     * This must be used, since just testing new Vec3d(bp) doesn't work
+     * Checks if a block is within an axis aligned bounding box This must be used,
+     * since just testing new Vec3d(bp) doesn't work
      * 
-     * @param bb the bounding box
-     * @param bp the block position
+     * @param bb
+     *           the bounding box
+     * @param bp
+     *           the block position
      * @return If the block is inside or not
      */
     public static boolean blockCont(AxisAlignedBB bb, BlockPos bp) {
-        return bb.minX <= bp.getX() && bb.minY <= bp.getY() && bb.minZ <= bp.getZ() &&
-                bb.maxX > bp.getX() && bb.maxY > bp.getY() && bb.maxZ > bp.getZ();
+        return bb.minX <= bp.getX() && bb.minY <= bp.getY() && bb.minZ <= bp.getZ() && bb.maxX > bp.getX() &&
+                bb.maxY > bp.getY() && bb.maxZ > bp.getZ();
     }
 
     /**
      * Creates a hash set of all block positions within an AABB
      * 
-     * @param bb the AABB to find all blocks fitting inside
+     * @param bb
+     *           the AABB to find all blocks fitting inside
      * @return A hash set
      */
     public HashSet<BlockPos> getBlocks(AxisAlignedBB bb) {
@@ -327,7 +347,8 @@ public class StructAnalysis {
         // the one-argument getBlocks doesn't care about air blocks (again)
 
         List<HashSet<BlockPos>> partitions = getPartitions(sect);
-        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
+        // This looks cursed, but the idea is to ensure that the system is a ring of
+        // blocks surrounding a patch of air
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
             return null;
@@ -354,7 +375,8 @@ public class StructAnalysis {
         // the one-argument getBlocks doesn't care about air blocks (again)
 
         List<HashSet<BlockPos>> partitions = getPartitionsBy(sect, isNotObstacle);
-        // This looks cursed, but the idea is to ensure that the system is a ring of blocks surrounding a patch of air
+        // This looks cursed, but the idea is to ensure that the system is a ring of
+        // blocks surrounding a patch of air
         if (partitions.size() != 2) {
             status = BuildStat.NOZZLE_MALFORMED;
             return null;
@@ -373,10 +395,13 @@ public class StructAnalysis {
     }
 
     /**
-     * Gets all blocks bordering a collection of BlockPoses given a certain neighborhood
+     * Gets all blocks bordering a collection of BlockPoses given a certain
+     * neighborhood
      * 
-     * @param blocks The blocks to find those around.
-     * @param vecs   The offsets of blocks considered in a neighborhood
+     * @param blocks
+     *               The blocks to find those around.
+     * @param vecs
+     *               The offsets of blocks considered in a neighborhood
      * @return A set containing the border, not any of blocks.
      */
     public Set<BlockPos> getPerimeter(Collection<BlockPos> blocks, Vec3i[] vecs) {
@@ -410,8 +435,7 @@ public class StructAnalysis {
         }
 
         List<Welzl.Point2D> points = blocks.stream()
-                .map(blockPos -> new Welzl.Point2D(blockPos.getX(), blockPos.getZ()))
-                .collect(Collectors.toList());
+                .map(blockPos -> new Welzl.Point2D(blockPos.getX(), blockPos.getZ())).collect(Collectors.toList());
 
         return computeMinimalRadius(points);
     }
@@ -431,13 +455,14 @@ public class StructAnalysis {
             }
         }
 
-        return max - min;
+        return max - min + 1;
     }
 
     /**
      * Gets the lowest layer of a set of blocks
      * 
-     * @param set A set of blocks
+     * @param set
+     *            A set of blocks
      * @return All blocks in set with the minimum Y value
      */
     public Set<BlockPos> getLowestLayer(Set<BlockPos> set) {
@@ -445,8 +470,7 @@ public class StructAnalysis {
             return new HashSet<>();
         }
         int minY = set.stream().map(Vec3i::getY).min(Integer::compare).get();
-        return set.stream().filter(bp -> bp.getY() == minY)
-                .collect(Collectors.toSet());
+        return set.stream().filter(bp -> bp.getY() == minY).collect(Collectors.toSet());
     }
 
     // Used to analyze fairing connectors
@@ -487,16 +511,16 @@ public class StructAnalysis {
     }
 
     public Stream<BlockPos> getOfBlockType(Collection<BlockPos> bp, Block block) {
-        return bp.stream()
-                .filter(p -> world.getBlockState(p).getBlock().equals(block));
+        return bp.stream().filter(p -> world.getBlockState(p).getBlock().equals(block));
     }
 
     public Stream<BlockPos> getOfMaterial(Collection<BlockPos> bp, Material mat) {
         return bp.stream()
-                .filter(p -> Objects.nonNull(OreDictUnifier.getMaterial(
-                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))))
-                .filter(p -> OreDictUnifier.getMaterial(
-                        new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock()))).material.equals(mat));
+                .filter(p -> Objects.nonNull(OreDictUnifier
+                        .getMaterial(new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock())))))
+                .filter(p -> OreDictUnifier
+                        .getMaterial(new ItemStack(Item.getItemFromBlock(world.getBlockState(p).getBlock()))).material
+                        .equals(mat));
     }
 
     public int getCoordOfAxis(BlockPos bp) {

@@ -11,7 +11,8 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnerg
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class SusyMetaTileEntityEnergyHatch extends MetaTileEntityEnergyHatch
-                                           implements IMultiblockAbilityPart<IEnergyContainer> {
+                                           implements
+                                           IMultiblockAbilityPart<IEnergyContainer> {
 
     public SusyMetaTileEntityEnergyHatch(ResourceLocation metaTileEntityId, int tier, int amperage,
                                          boolean isExportHatch) {
@@ -21,10 +22,12 @@ public class SusyMetaTileEntityEnergyHatch extends MetaTileEntityEnergyHatch
     @Override
     public void getSubItems(CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_ENERGY_OUTPUT_HATCH_4A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
         for (MetaTileEntityEnergyHatch hatch : SuSyMetaTileEntities.NEW_ENERGY_OUTPUT_HATCH_16A) {
-            if (hatch != null) subItems.add(hatch.getStackForm());
+            if (hatch != null)
+                subItems.add(hatch.getStackForm());
         }
     }
 }

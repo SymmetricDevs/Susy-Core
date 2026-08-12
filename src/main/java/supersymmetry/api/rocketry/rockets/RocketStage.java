@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.RocketEngine;
@@ -24,7 +25,8 @@ public class RocketStage implements Cloneable {
         SUCCESS("success"),
         INVALID_CARD("invalid_card"),
         VALIDATION_FAILURE("validation_failure"),
-        INVALID_AMOUNT("invalid_amount"),
+        INVALID_AMOUNT(
+                "invalid_amount"),
         INCOMPATIBLE_CARD("incompatible_card"),
         UNKNOWN("unknown");
 
@@ -71,21 +73,16 @@ public class RocketStage implements Cloneable {
         }
 
         public RocketStage build() {
-            return new RocketStage(
-                    compLimit.entrySet().stream()
-                            .collect(
-                                    Collectors.toMap(
-                                            Map.Entry::getKey,
-                                            e -> e.getValue().stream().mapToInt(Integer::intValue).toArray(),
-                                            (a, b) -> a,
-                                            TreeMap::new)),
+            return new RocketStage(compLimit.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                    e -> e.getValue().stream().mapToInt(Integer::intValue).toArray(), (a, b) -> a, TreeMap::new)),
                     name);
         }
     }
 
     public Map<String, List<AbstractComponent<?>>> components = new TreeMap<>();
 
-    // allows you to make it so it needs different types of engines for example. ensures compatibility
+    // allows you to make it so it needs different types of engines for example.
+    // ensures compatibility
     // between components of the same type
     public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationFunction = x -> {
         return ComponentValidationResult.SUCCESS;
@@ -94,7 +91,8 @@ public class RocketStage implements Cloneable {
     // limits on how many of each component it can have
     public Map<String, int[]> componentLimits = new TreeMap<>();
 
-    // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
+    // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name
+    // string>
     public String name;
 
     public RocketStage(final Map<String, int[]> limits, String name) {
@@ -119,59 +117,42 @@ public class RocketStage implements Cloneable {
     }
 
     public double getMass() {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getMass)
-                .sum();
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getMass).sum();
     }
 
     public double getFuelCapacity() {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals("tank"))
-                .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume)
-                .sum() * 1000; // 1000 L per m^3 by definition
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("tank"))
+                .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume).sum() * 1000; // 1000 L per m^3 by definition
     }
 
     // In kg/s
     public double getFuelThroughput(String componentType) {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals(componentType))
-                .mapToDouble(engine -> ((RocketEngine) engine).getFuelThroughput())
-                .sum();
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .mapToDouble(engine -> ((RocketEngine) engine).getFuelThroughput()).sum();
     }
 
     public int getComponentCount(String componentType) {
-        return (int) components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals(componentType))
+        return (int) components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
                 .count();
     }
 
-    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry, double gravity) {
-        return rocketFuelEntry.getSpecificImpulse() * gravity;
+    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry) {
+        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity, String componentType) {
-        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry, gravity);
+    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType) {
+        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry);
     }
 
     public double getRadius() {
         // Max radius, in meters
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getRadius)
-                .max()
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getRadius).max()
                 .orElse(0);
     }
 
     public double getHeight() {
         // Height (again max), in meters
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getHeight)
-                .max()
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getHeight).max()
                 .orElse(0);
     }
 
@@ -190,8 +171,7 @@ public class RocketStage implements Cloneable {
         this.name = name;
     }
 
-    public RocketStage.ComponentValidationResult setComponentListEntry(
-                                                                       String name,
+    public RocketStage.ComponentValidationResult setComponentListEntry(String name,
                                                                        List<AbstractComponent<?>> componentList) {
         if (componentList.stream().anyMatch(x -> x.materials.isEmpty())) {
             SusyLog.logger.info("empty material list in entry {}", name);
@@ -200,9 +180,10 @@ public class RocketStage implements Cloneable {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is
             // invalid
         }
-        ComponentValidationResult validation_result = componentValidationFunction.apply(
-                new Tuple<>(name, componentList));
-        if (validation_result != ComponentValidationResult.SUCCESS) return validation_result;
+        ComponentValidationResult validation_result = componentValidationFunction
+                .apply(new Tuple<>(name, componentList));
+        if (validation_result != ComponentValidationResult.SUCCESS)
+            return validation_result;
         components.put(name, componentList);
         return ComponentValidationResult.SUCCESS;
     }
@@ -236,16 +217,14 @@ public class RocketStage implements Cloneable {
             String componentKey = component.getKey();
             List<Integer> pos = new ArrayList<>();
 
-            component.getValue().stream()
-                    .forEach(
-                            x -> {
-                                NBTTagCompound innerTag = new NBTTagCompound();
-                                x.writeToNBT(innerTag);
-                                if (!tags.containsKey(innerTag)) {
-                                    tags.put(innerTag, tags.size());
-                                }
-                                pos.add(tags.get(innerTag));
-                            });
+            component.getValue().stream().forEach(x -> {
+                NBTTagCompound innerTag = new NBTTagCompound();
+                x.writeToNBT(innerTag);
+                if (!tags.containsKey(innerTag)) {
+                    tags.put(innerTag, tags.size());
+                }
+                pos.add(tags.get(innerTag));
+            });
 
             componentsListCompound.setTag(componentKey, new NBTTagIntArray(pos));
         }
@@ -266,10 +245,14 @@ public class RocketStage implements Cloneable {
     }
 
     public boolean readFromNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
-        if (!tag.hasKey("components", NBT.TAG_COMPOUND)) return false;
-        if (!tag.hasKey("allowedCounts", NBT.TAG_COMPOUND)) return false;
-        if (!tag.hasKey("componentValues", NBT.TAG_COMPOUND)) return false;
+        if (!tag.hasKey("name", NBT.TAG_STRING))
+            return false;
+        if (!tag.hasKey("components", NBT.TAG_COMPOUND))
+            return false;
+        if (!tag.hasKey("allowedCounts", NBT.TAG_COMPOUND))
+            return false;
+        if (!tag.hasKey("componentValues", NBT.TAG_COMPOUND))
+            return false;
 
         this.componentLimits.clear();
         this.components.clear();
@@ -287,13 +270,12 @@ public class RocketStage implements Cloneable {
                 NBTTagCompound componentTag = (NBTTagCompound) lookup
                         .getTag(Integer.valueOf(componentIndexes[i]).toString());
                 Optional<? extends AbstractComponent<?>> extractedComponent = AbstractComponent
-                        .getComponentFromName(componentTag.getString("name"))
-                        .readFromNBT(componentTag);
+                        .getComponentFromName(componentTag.getString("name")).readFromNBT(componentTag);
                 if (extractedComponent.isPresent()) {
                     realComponents.add(extractedComponent.get());
                 } else {
-                    SusyLog.logger.error(
-                            "failed to read a component somehow, index: {} nbt at index: {}", i, componentTag);
+                    SusyLog.logger.error("failed to read a component somehow, index: {} nbt at index: {}", i,
+                            componentTag);
                 }
             }
             this.setComponentListEntry(key, realComponents);

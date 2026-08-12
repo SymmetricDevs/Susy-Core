@@ -3,31 +3,26 @@ package supersymmetry.common.world.biome;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.EnumCreatureType;
 
-import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.StoneVariantBlock;
+import org.jspecify.annotations.NonNull;
+
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.SusyStoneVariantBlock;
 
 public class BiomeLunarMaria extends PlanetaryBiome {
 
     public BiomeLunarMaria(BiomeProperties properties) {
-        super(new BiomeProperties("lunar maria")
-                .setTemperature(0.0f) // fuck you
-                .setRainfall(0.0f)
-                .setRainDisabled());
+        super(properties);
 
         this.topBlock = SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND);
-        this.fillerBlock = MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
-                .getState(StoneVariantBlock.StoneType.BASALT);
+        this.fillerBlock = SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
+                .getState(SusyStoneVariantBlock.StoneType.LEUCOBASALT);
     }
 
     @Override
-    @Nonnull
-    public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
+    @NonNull public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
         return new LinkedList<>();
     }
 

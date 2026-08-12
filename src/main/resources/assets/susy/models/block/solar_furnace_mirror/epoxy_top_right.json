@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/top",
+    "up": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/front",
+    "north": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/front",
+    "east": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/front",
+    "south": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/back",
+    "west": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/side",
+    "particle": "gregtech:blocks/casings/solar_furnace_mirror/epoxy/front"
+  }
+}

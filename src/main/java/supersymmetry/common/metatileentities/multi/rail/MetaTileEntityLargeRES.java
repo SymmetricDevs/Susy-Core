@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +25,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import cam72cam.immersiverailroading.IRItems;
 import cam72cam.immersiverailroading.entity.EntityBuildableRollingStock;
@@ -502,11 +501,10 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA",
                         "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAA")
                 .where('A', any())
-                .where('B', states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
-                        .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where('C', selfPredicate())
-                .where('D', SuSyPredicates.rails())
-                .where('F', frames(Materials.Steel))
+                .where('B',
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
+                .where('C', selfPredicate()).where('D', SuSyPredicates.rails()).where('F', frames(Materials.Steel))
                 .where('G', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))) // Meta: 4)
                 .where('H',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX))) // Meta:
@@ -515,8 +513,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                 .where('Y', abilities(MultiblockAbility.IMPORT_FLUIDS)) // input hatch
                 .where('M', abilities(MultiblockAbility.MAINTENANCE_HATCH))
                 .where('Z', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where('T', abilities(MultiblockAbility.INPUT_ENERGY))
-                .build();
+                .where('T', abilities(MultiblockAbility.INPUT_ENERGY)).build();
     }
 
     @Override
@@ -531,8 +528,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.RAILROAD_ENGINEERING_STATION_OVERLAY;
     }
@@ -568,8 +564,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                         if (rollingStock.getUUID().equals(this.previousEntityUUID)) {
                             this.spawnedRollingStock = rollingStock;
                             this.spawnedRollingStackComponentsSorted = rollingStock.getDefinition().getItemComponents()
-                                    .stream()
-                                    .sorted(Comparator.comparingInt(i -> i.ordinal()))
+                                    .stream().sorted(Comparator.comparingInt(i -> i.ordinal()))
                                     .collect(Collectors.toList());
                             break;
                         }
@@ -605,9 +600,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                 if (!this.rollingStocks.isEmpty()) {
                     this.setSelectedEntity(this.rollingStocks.get(0));
                 } else {
-                    this.trainInputSlot.setStackInSlot(
-                            0,
-                            net.minecraft.item.ItemStack.EMPTY);
+                    this.trainInputSlot.setStackInSlot(0, net.minecraft.item.ItemStack.EMPTY);
                     this.selectedRollingStock = null;
                 }
             }
@@ -634,7 +627,8 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     }
 
     private net.minecraft.item.ItemStack getTrainItemStack(EntityRollingStock rollingStock) {
-        // What the actual fucking shit is wrong with the shit fucking stupid fucking IR codebase I fucking cant
+        // What the actual fucking shit is wrong with the shit fucking stupid fucking IR
+        // codebase I fucking cant
         // why the fuck is there no fuckingapi what the fuck
         // what hte fuck is an Itemstack.internal why the fuck would you do this
         // I will fucjing stab you to death with your stupid giant fucking wrench
@@ -650,9 +644,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
     private void setSelectedEntity(EntityRollingStock rollingStock) {
         this.selectedRollingStock = rollingStock;
-        this.trainInputSlot.setStackInSlot(
-                0,
-                this.getTrainItemStackFromCache(this.selectedRollingStock));
+        this.trainInputSlot.setStackInSlot(0, this.getTrainItemStackFromCache(this.selectedRollingStock));
     }
 
     public float getTrainSpawnAngle() {
@@ -681,10 +673,9 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
             World irWorld = World.get(getWorld());
             BlockPos railPos = railPositions.isEmpty() ? getRailPos() : railPositions.get(railPositions.size() / 2);
 
-            TickPos tp = new TickPos(
-                    0, Speed.ZERO,
-                    new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5),
-                    0, 0, 0, 0.0F, false);
+            TickPos tp = new TickPos(0, Speed.ZERO,
+                    new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5), 0, 0, 0, 0.0F,
+                    false);
 
             EntityRollingStock stock = def.spawn(irWorld, tp.position, this.getTrainSpawnAngle(), gauge, data.texture);
 
@@ -695,8 +686,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
             if (stock instanceof EntityBuildableRollingStock) {
                 this.spawnedRollingStackComponentsSorted = def.getItemComponents().stream()
-                        .sorted(Comparator.comparingInt(ItemComponentType::ordinal))
-                        .collect(Collectors.toList());
+                        .sorted(Comparator.comparingInt(ItemComponentType::ordinal)).collect(Collectors.toList());
                 this.spawnedRollingStockAddedToWorld = false; // not yet in world
             } else {
                 this.setStockInWorld(stock);
@@ -807,15 +797,13 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
     public void setStructureAABB() {
         BlockPos pos = this.getPos();
         // Convert your relative coordinates to absolute world coordinates
-        this.structureAABB = new AxisAlignedBB(
-                pos.getX() - 3, pos.getY() - 24, pos.getZ() - 1,
-                pos.getX() + 22, pos.getY() + 42, pos.getZ() + 17);
+        this.structureAABB = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 24, pos.getZ() - 1, pos.getX() + 22,
+                pos.getY() + 42, pos.getZ() + 17);
     }
 
     @SideOnly(Side.CLIENT)
     public void spawnWorkingParticles() {
-        SusyParticleFlame spark = new SusyParticleFlame(
-                this.getWorld(),
+        SusyParticleFlame spark = new SusyParticleFlame(this.getWorld(),
                 this.getPos().getX() + this.getFrontFacing().getOpposite().getDirectionVec().getX() * 5 +
                         (1 - this.getFrontFacing().getOpposite().getDirectionVec().getX()) * 3 *
                                 (GTValues.RNG.nextFloat() - 0.5),
@@ -823,8 +811,7 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
                 this.getPos().getZ() + this.getFrontFacing().getOpposite().getDirectionVec().getZ() * 5 +
                         (1 - this.getFrontFacing().getOpposite().getDirectionVec().getZ()) * 3 *
                                 (GTValues.RNG.nextFloat() - 0.5),
-                (GTValues.RNG.nextFloat() - 0.5) * 1.2F,
-                GTValues.RNG.nextFloat() * 1.5F,
+                (GTValues.RNG.nextFloat() - 0.5) * 1.2F, GTValues.RNG.nextFloat() * 1.5F,
                 (GTValues.RNG.nextFloat() - 0.5) * 1.2F);
         Minecraft.getMinecraft().effectRenderer.addEffect(spark);
     }
@@ -850,7 +837,8 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         protected IItemHandlerModifiable getInputInventory() {
             IItemHandlerModifiable inputs = super.getInputInventory();
             List<IItemHandlerModifiable> inputList = new ArrayList<>();
-            if (inputs != null) inputList.add(inputs);
+            if (inputs != null)
+                inputList.add(inputs);
             inputList.add(trainInput);
             return new ItemHandlerList(inputList);
         }

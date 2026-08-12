@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/top",
+    "up": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/top",
+    "north": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/front",
+    "east": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/side",
+    "south": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/front",
+    "west": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/side",
+    "particle": "gregtech:blocks/casings/bucket_wheel_excavator/vehicle_track/side"
+  }
+}

@@ -27,8 +27,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ArmorBaubleBehavior;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_BAUBLES,
+@GregTechModule(moduleID = SuSyModules.MODULE_BAUBLES,
                 containerID = Supersymmetry.MODID,
                 modDependencies = "baubles",
                 name = "SuSy Baubles Integration",
@@ -45,8 +44,7 @@ public class BaublesModule extends IntegrationSubmodule {
         SuSyMetaItems.OXYGEN_SENSOR.addComponents(new ArmorBaubleBehavior(BaubleType.BODY));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public List<Class<?>> getEventBusSubscribers() {
         return Collections.singletonList(BaublesModule.class);
     }

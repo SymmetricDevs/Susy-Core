@@ -29,8 +29,7 @@ public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, R
     public RocketFuelCategory(IGuiHelper guiHelper) {
         super("rocket_fuel", "rocket_fuel.name", guiHelper.createBlankDrawable(176, 90), guiHelper);
         for (int i = 0; i < slots.length; i++) {
-            slots[i] = guiHelper.drawableBuilder(GuiTextures.SLOT.imageLocation, 0, 0, 18, 18)
-                    .setTextureSize(18, 18)
+            slots[i] = guiHelper.drawableBuilder(GuiTextures.SLOT.imageLocation, 0, 0, 18, 18).setTextureSize(18, 18)
                     .build();
         }
     }
@@ -55,14 +54,8 @@ public class RocketFuelCategory extends BasicRecipeCategory<RocketFuelWrapper, R
             FluidStack shifted = stacks[i].copy();
             shifted.amount = 1000; // Proper display
 
-            fluidStackGroup.init(i, true,
-                    new FluidStackTextRenderer(0, false,
-                            16,
-                            16, null),
-                    56 + i * 25,
-                    10,
-                    16,
-                    16, 0, 0);
+            fluidStackGroup.init(i, true, new FluidStackTextRenderer(0, false, 16, 16, null), 56 + i * 25, 10, 16, 16,
+                    0, 0);
             fluidStackGroup.set(i, stacks[i]);
         }
     }

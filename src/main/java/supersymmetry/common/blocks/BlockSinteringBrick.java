@@ -24,8 +24,7 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
         setDefaultState(getState(SinteringBrickType.BRICK));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }
@@ -39,7 +38,11 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
     public enum SinteringBrickType implements IStringSerializable {
 
         BRICK("sintering_block_brick", false),
-        MAGNETOPLATED("sintering_block_magnetoplated", true);
+        MAGNETOPLATED("sintering_block_magnetoplated", true),
+        BRICK_BLOOM(
+                "sintering_block_brick_bloom_deco",
+                false),
+        MAGNETOPLATED_BLOOM("sintering_block_magnetoplated_bloom_deco", true);
 
         public final String name;
         public final boolean canResistPlasma;
@@ -49,8 +52,7 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
             this.canResistPlasma = canResistPlasma;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

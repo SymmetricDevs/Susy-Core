@@ -52,16 +52,20 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
     @Override
     public void update() {
         World world = getWorld();
-        if (world.isRemote || getOffsetTimer() % 20 != 0) return;
+        if (world.isRemote || getOffsetTimer() % 20 != 0)
+            return;
 
         TileEntity tileEntity = getTileEntityHere();
-        if (tileEntity == null) return;
+        if (tileEntity == null)
+            return;
 
         IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
                 getAttachedSide());
-        if (fluidHandler == null) return;
+        if (fluidHandler == null)
+            return;
 
-        if (!(world.provider instanceof WorldProviderPlanet)) return;
+        if (!(world.provider instanceof WorldProviderPlanet))
+            return;
 
         BlockPos frontPos = getPos().offset(getAttachedSide());
         AtmosphereWorldData data = AtmosphereWorldData.get(world);
@@ -75,7 +79,8 @@ public class CoverAirDisperser extends CoverBase implements ITickable {
 
         // Only consume oxygen if the region needs it (pressure < 1.0 or still filling)
         AtmosphereRegion region = graph.getRegionAt(frontPos);
-        if (region != null && region.getPressure() >= 1.0 && region.isFillComplete()) return;
+        if (region != null && region.getPressure() >= 1.0 && region.isFillComplete())
+            return;
 
         FluidStack oxygenStack = new FluidStack(Materials.Oxygen.getFluid(), oxygenPerSecond);
         FluidStack drained = fluidHandler.drain(oxygenStack, false);

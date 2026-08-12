@@ -1,18 +1,27 @@
 package supersymmetry.api.items;
 
+import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.GTValues;
+import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
@@ -56,7 +65,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        if (nbt == null || nbt.tagMap.size() == 0) return;
+        if (nbt == null || nbt.tagMap.size() == 0)
+            return;
         this.maxVolume = nbt.getInteger("maxVolume");
         this.maxWeight = nbt.getInteger("maxWeight");
         this.currentVolume = nbt.getInteger("currentVolume");
@@ -141,7 +151,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     @Override
     public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        if (!SuSyUtility.isAllowedItemForSpace(stack)) return stack;
+        if (!SuSyUtility.isAllowedItemForSpace(stack))
+            return stack;
         int mass = getMassPerItem(stack);
         List<ItemStack> bucket = getBucketForItem(stack);
         int remainingWeight = maxWeight - currentWeight;
@@ -189,17 +200,42 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     public static int getMassPerItem(ItemStack item) {
         // GTCEu mass info
         ItemMaterialInfo info = OreDictUnifier.getMaterialInfo(item);
+        int currentMass = 0;
         if (info != null) {
-            return (int) (info.getMaterials().stream().mapToLong((stack) -> stack.material.getMass() * stack.amount)
-                    .sum() /
-                    (GTValues.M / 36));
+            currentMass += (int) (info.getMaterials().stream()
+                    .mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() / (GTValues.M / 36));
+        } else {
+            currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
         }
-        return 98 * 36 * 4; // default mass times 36 times another fudge factor
+        NBTTagCompound tag = item.getTagCompound();
+        IFluidHandlerItem fluidHandlerItem = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+                null);
+        if (fluidHandlerItem != null) {
+            for (IFluidTankProperties t : fluidHandlerItem.getTankProperties()) {
+                FluidStack fluid = t.getContents();
+                currentMass += getFluidMass(fluid);
+            }
+        } else if (tag != null && tag.hasKey(FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND)) {
+            FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
+            currentMass += getFluidMass(fluid);
+        }
+        return currentMass;
+    }
+
+    private static int getFluidMass(FluidStack fluid) {
+        if (fluid == null || fluid.amount == 0)
+            return 0;
+        Material mat = FluidUnifier.getMaterialFromFluid(fluid.getFluid());
+        if (mat == null) {
+            return (fluid.amount * 98 * 4) / 144;
+        }
+        return (int) (mat.getMass() * fluid.amount / 144);
     }
 
     @Override
     public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (cargo.isEmpty()) return ItemStack.EMPTY;
+        if (cargo.isEmpty())
+            return ItemStack.EMPTY;
         // Get just any item
         List<ItemStack> bucket = cargo.iterator().next();
         ItemStack last = bucket.getLast();
@@ -222,10 +258,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     /**
-     * Overwrites this handler's contents with a snapshot received from the server via
-     * {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}. Client-side only: it collapses
-     * the real multi-bucket cargo down to whatever is visible in the GUI, since the client only needs to
-     * render the exposed stack, not track every distinct item type on board.
+     * Overwrites this handler's contents with a snapshot received from the server
+     * via {@link supersymmetry.common.entities.EntityLander.CargoSyncHandler}.
+     * Client-side only: it collapses the real multi-bucket cargo down to whatever
+     * is visible in the GUI, since the client only needs to render the exposed
+     * stack, not track every distinct item type on board.
      */
     public void applyClientSync(ItemStack exposedStack, int currentVolume, int currentWeight) {
         this.cargo.clear();
@@ -239,7 +276,8 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     public ItemStack getExposedStack() {
-        if (cargo.isEmpty()) return ItemStack.EMPTY;
+        if (cargo.isEmpty())
+            return ItemStack.EMPTY;
         // Apparently the ItemStack is modified in place
         List<ItemStack> bucket = cargo.iterator().next();
         if (bucket.isEmpty()) {

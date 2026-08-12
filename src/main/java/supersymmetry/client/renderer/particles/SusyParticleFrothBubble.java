@@ -15,9 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.Supersymmetry;
 
 /**
- * Froth bubble particle mostly copied from the standard minecraft bubble particle.
- * Allows for using custom colors and doesn't despawn outside of water allowing it to be used in the Froth Flotation
- * Tank
+ * Froth bubble particle mostly copied from the standard minecraft bubble
+ * particle. Allows for using custom colors and doesn't despawn outside of water
+ * allowing it to be used in the Froth Flotation Tank
  * 
  * @author h3tR
  */
@@ -63,7 +63,8 @@ public class SusyParticleFrothBubble extends Particle {
     @Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
                                float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        // Ripped straight from the standard particle code, with some texture registration simplification.
+        // Ripped straight from the standard particle code, with some texture
+        // registration simplification.
 
         renderer.bindTexture(BUBBLE_TEXTURE);
         float f4 = 0.1F * this.particleScale;

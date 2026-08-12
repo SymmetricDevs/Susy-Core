@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -18,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -32,7 +31,7 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
         setBlockUnbreakable();
     }
 
-    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+    public void onEntityCollision(@NonNull World worldIn, @NonNull BlockPos pos, @NonNull IBlockState state,
                                   Entity entityIn) {
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
@@ -51,10 +50,7 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
     }
 
     @Override
-    public boolean canCreatureSpawn(
-                                    @NotNull IBlockState state,
-                                    @NotNull IBlockAccess world,
-                                    @NotNull BlockPos pos,
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
                                     @NotNull EntityLiving.SpawnPlacementType type) {
         return false;
     }
@@ -101,14 +97,12 @@ public class BlockSupport extends VariantBlock<BlockSupport.SupportType> {
             this.name = name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String toString() {
             return getName();
         }

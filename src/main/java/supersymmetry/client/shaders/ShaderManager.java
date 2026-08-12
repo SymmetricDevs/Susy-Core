@@ -80,7 +80,8 @@ public class ShaderManager {
                                                    Framebuffer fbo,
                                                    ShaderObject frag,
                                                    Consumer<ShaderProgram.UniformCache> uniformCache) {
-        if (fbo == null || frag == null || !shadersAllowed()) return fbo;
+        if (fbo == null || frag == null || !shadersAllowed())
+            return fbo;
 
         fbo.bindFramebuffer(true);
 
@@ -93,7 +94,8 @@ public class ShaderManager {
 
         program.useShader(cache -> {
             cache.glUniform2F("u_resolution", fbo.framebufferWidth, fbo.framebufferHeight);
-            if (uniformCache != null) uniformCache.accept(cache);
+            if (uniformCache != null)
+                uniformCache.accept(cache);
         });
 
         Tessellator tess = Tessellator.getInstance();

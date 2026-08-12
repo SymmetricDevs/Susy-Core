@@ -30,34 +30,33 @@ public class BlueprintRowState {
     }
 
     /**
-     * Returns null on INVALID_CARD; empty list is a legitimate "no components" result.
+     * Returns null on INVALID_CARD; empty list is a legitimate "no components"
+     * result.
      */
     public List<AbstractComponent<?>> materializeComponents() {
         if (shortView) {
             ItemStack firstItem = slots.isEmpty() ? ItemStack.EMPTY : slots.get(0).getStackInSlot(0);
             NBTTagCompound firstnbt = firstItem.hasTagCompound() ? firstItem.getTagCompound() : null;
-            if (firstnbt == null || !firstnbt.hasKey("name")) return null;
+            if (firstnbt == null || !firstnbt.hasKey("name"))
+                return null;
             AbstractComponent<?> proto = AbstractComponent.getComponentFromName(firstnbt.getString("name"));
-            if (proto == null) return null;
+            if (proto == null)
+                return null;
             Optional<?> templateOpt = proto.readFromNBT(firstnbt);
-            if (!templateOpt.isPresent()) return null;
+            if (!templateOpt.isPresent())
+                return null;
             @SuppressWarnings("unchecked")
             AbstractComponent<?> template = (AbstractComponent<?>) templateOpt.get();
             int count = validMultiplierValues[multiplierIndex];
             return Stream.generate(() -> template).limit(count).collect(Collectors.toList());
         } else {
-            return slots.stream()
-                    .map(s -> s.getStackInSlot(0))
-                    .filter(ItemStack::hasTagCompound)
-                    .map(ItemStack::getTagCompound)
-                    .filter(t -> t.hasKey("name"))
-                    .map(t -> {
+            return slots.stream().map(s -> s.getStackInSlot(0)).filter(ItemStack::hasTagCompound)
+                    .map(ItemStack::getTagCompound).filter(t -> t.hasKey("name")).map(t -> {
                         AbstractComponent<?> proto = AbstractComponent.getComponentFromName(t.getString("name"));
-                        if (proto == null) return Optional.<AbstractComponent<?>>empty();
+                        if (proto == null)
+                            return Optional.<AbstractComponent<?>>empty();
                         return proto.readFromNBT(t);
-                    })
-                    .filter(Optional::isPresent)
-                    .map(opt -> (AbstractComponent<?>) opt.get())
+                    }).filter(Optional::isPresent).map(opt -> (AbstractComponent<?>) opt.get())
                     .collect(Collectors.toList());
         }
     }

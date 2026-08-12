@@ -2,9 +2,6 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import com.cleanroommc.modularui.api.GuiAxis;
 import com.cleanroommc.modularui.api.drawable.IKey;
@@ -64,18 +62,13 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("controller_panel",
-                (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager),
-                true);
+                (panelSyncManager, syncHandler) -> createPopupPanel(panelSyncManager), true);
 
         ModularPanel mainPanel = super.buildUI(guiData, syncManager, settings);
         mainPanel.height(186);
         Flow flow = (Flow) mainPanel.getChildren().get(4);
-        flow.child(Flow.row()
-                .coverChildrenHeight()
-                .marginBottom(2)
-                .widthRel(1f)
-                .child(new ButtonWidget<>()
-                        .overlay(SusyGuiTextures.BUTTON_SETTINGS.asIcon().size(16))
+        flow.child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
+                .child(new ButtonWidget<>().overlay(SusyGuiTextures.BUTTON_SETTINGS.asIcon().size(16))
                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.button.controller_setting.tooltip"))
                         .onMousePressed(mouseButton -> {
                             if (!panel.isPanelOpen()) {
@@ -104,85 +97,44 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         DoubleSyncValue inactiveThrottle = new DoubleSyncValue(() -> this.inactiveThrottle,
                 x -> this.inactiveThrottle = (float) x);
 
-        return Mui2Utils.createPopupPanel("controller_settings", 81, 150)
-                .padding(4)
-                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting")
-                        .asWidget()
-                        .pos(5, 5))
-                .child(Flow.row()
-                        .top(18)
-                        .coverChildren()
-                        .child(Flow.column()
-                                .coverChildren()
-                                .child(new ToggleButton()
-                                        .value(controlActive)
-                                        .invertSelected(true)
-                                        .size(24, 8)
-                                        .addTooltipLine(
-                                                IKey.lang(
-                                                        "susy.gui.stock_interactor.controller_setting.button.control_active.tooltip"))
-                                        .marginBottom(2))
-                                .child(Flow.row()
-                                        .setEnabledIf(widget -> controlActive.getValue())
-                                        .coverChildrenWidth()
-                                        .height(116)
-                                        .child(createSliderColumn(
-                                                "active_brake", SusyGuiTextures.BRAKE_ACTIVE, activeBrake, 0, 1))
-                                        .child(createSliderColumn(
-                                                "active_throttle",
-                                                SusyGuiTextures.THROTTLE_ACTIVE,
-                                                activeThrottle,
-                                                -1,
-                                                1))))
-                        .child(new Rectangle()
-                                .setColor(0xFF555555)
-                                .asWidget()
-                                .width(1)
-                                .height(124)
-                                .margin(4, 0))
-                        .child(Flow.column()
-                                .coverChildrenWidth()
-                                .coverChildrenHeight()
-                                .child(new ToggleButton()
-                                        .value(controlInactive)
-                                        .invertSelected(true)
-                                        .size(24, 8)
-                                        .addTooltipLine(
-                                                IKey.lang(
-                                                        "susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip"))
-                                        .marginBottom(2))
-                                .child(Flow.row()
-                                        .setEnabledIf(widget -> controlInactive.getValue())
-                                        .coverChildrenWidth()
-                                        .height(116)
-                                        .child(createSliderColumn(
-                                                "inactive_brake", SusyGuiTextures.BRAKE_INACTIVE, inactiveBrake, 0, 1))
-                                        .child(createSliderColumn(
-                                                "inactive_throttle",
-                                                SusyGuiTextures.THROTTLE_INACTIVE,
-                                                inactiveThrottle,
-                                                -1,
-                                                1)))));
+        return Mui2Utils.createPopupPanel("controller_settings", 81, 150).padding(4)
+                .child(IKey.lang("susy.gui.stock_interactor.title.controller_setting").asWidget().pos(5, 5))
+                .child(Flow.row().top(18).coverChildren().child(Flow
+                        .column().coverChildren()
+                        .child(new ToggleButton().value(controlActive).invertSelected(true).size(24, 8)
+                                .addTooltipLine(IKey.lang(
+                                        "susy.gui.stock_interactor.controller_setting.button.control_active.tooltip"))
+                                .marginBottom(2))
+                        .child(Flow.row().setEnabledIf(widget -> controlActive.getValue()).coverChildrenWidth()
+                                .height(116)
+                                .child(createSliderColumn("active_brake", SusyGuiTextures.BRAKE_ACTIVE, activeBrake, 0,
+                                        1))
+                                .child(createSliderColumn("active_throttle", SusyGuiTextures.THROTTLE_ACTIVE,
+                                        activeThrottle, -1, 1))))
+                        .child(new Rectangle().setColor(0xFF555555).asWidget().width(1).height(124).margin(4, 0))
+                        .child(Flow.column().coverChildrenWidth().coverChildrenHeight().child(new ToggleButton()
+                                .value(controlInactive).invertSelected(true).size(24, 8)
+                                .addTooltipLine(IKey.lang(
+                                        "susy.gui.stock_interactor.controller_setting.button.control_inactive.tooltip"))
+                                .marginBottom(2))
+                                .child(Flow.row().setEnabledIf(widget -> controlInactive.getValue())
+                                        .coverChildrenWidth().height(116)
+                                        .child(createSliderColumn("inactive_brake", SusyGuiTextures.BRAKE_INACTIVE,
+                                                inactiveBrake, 0, 1))
+                                        .child(createSliderColumn("inactive_throttle",
+                                                SusyGuiTextures.THROTTLE_INACTIVE, inactiveThrottle, -1, 1)))));
     }
 
     @SuppressWarnings("SameParameterValue")
-    @ParametersAreNonnullByDefault
     protected Widget<?> createSliderColumn(String name, UITexture texture, DoubleSyncValue value, double min,
                                            double max) {
-        return Flow.column()
-                .width(16)
-                .child(texture.asWidget()
-                        .size(12, 12)
+        return Flow.column().width(16)
+                .child(texture.asWidget().size(12, 12)
                         .addTooltipLine(IKey.lang("susy.gui.stock_interactor.controller_setting." + name + ".tooltip"))
                         .marginBottom(2))
-                .child(new SliderWidget()
-                        .background(GuiTextures.SLOT_FLUID)
-                        .setAxis(GuiAxis.Y)
-                        .size(8, 100)
-                        .sliderSize(8, 6)
-                        .value(value)
-                        .bounds(min, max)
-                        .tooltipAutoUpdate(true) // TODO: ↓ this might be kinda buggy idk.
+                .child(new SliderWidget().background(GuiTextures.SLOT_FLUID).setAxis(GuiAxis.Y).size(8, 100)
+                        .sliderSize(8, 6).value(value).bounds(min, max).tooltipAutoUpdate(true) // TODO: ↓ this might be
+                                                                                                // kinda buggy idk.
                         .tooltipDynamic(tooltip -> tooltip.add(String.format("%.2f", value.getValue()))));
     }
 
@@ -217,7 +169,8 @@ public class MetaTileEntityLocomotiveController extends MetaTileEntityStockInter
         tooltip.add(I18n.format("susy.stock_interfaces.locomotive_controller.description"));
     }
 
-    // #fix# does detected need to be saved or just refreshed on load? does ticks-alive need to be saved to prevent
+    // #fix# does detected need to be saved or just refreshed on load? does
+    // ticks-alive need to be saved to prevent
     // every one ticking at once?
     // update system based on chunk and global time instead of ticks alive?
     // should detection area be changeable and saved?

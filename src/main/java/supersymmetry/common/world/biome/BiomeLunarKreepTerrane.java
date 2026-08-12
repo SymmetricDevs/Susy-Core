@@ -14,17 +14,13 @@ import supersymmetry.common.blocks.SuSyBlocks;
 public class BiomeLunarKreepTerrane extends PlanetaryBiome {
 
     public BiomeLunarKreepTerrane(BiomeProperties properties) {
-        super(new BiomeProperties("lunar kreep terrane")
-                .setTemperature(0.0f) // fuck you
-                .setRainfall(0.0f)
-                .setRainDisabled());
+        super(properties);
         this.topBlock = SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP);
         this.fillerBlock = SuSyBlocks.RESOURCE_BLOCK_1.getState(BlockResource1.ResourceBlockType.KREEP);
     }
 
     @Override
-    @Nonnull
-    public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
+    @NonNull public List<SpawnListEntry> getSpawnableList(EnumCreatureType type) {
         return new LinkedList<>();
     }
 

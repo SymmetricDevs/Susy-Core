@@ -2,7 +2,7 @@ package supersymmetry.api.recipes.builders;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
@@ -12,6 +12,7 @@ import gregtech.api.util.ValidationResult;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
+import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 
 public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> {
@@ -38,7 +39,7 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
     }
 
     @Override
-    public boolean applyProperty(@Nonnull String key, Object value) {
+    public boolean applyProperty(@NonNull String key, Object value) {
         if (key.equals(DimensionProperty.KEY)) {
             if (value instanceof Integer) {
                 this.dimension((Integer) value);
@@ -72,5 +73,15 @@ public class NoEnergyRecipeBuilder extends RecipeBuilder<NoEnergyRecipeBuilder> 
         return this.recipePropertyStorage == null ? IntLists.EMPTY_LIST :
                 this.recipePropertyStorage.getRecipePropertyValue(DimensionProperty.getInstance(),
                         IntLists.EMPTY_LIST);
+    }
+
+    public NoEnergyRecipeBuilder requireAtmosphere() {
+        this.applyProperty(AtmosphereProperty.getInstance(), true);
+        return this;
+    }
+
+    public NoEnergyRecipeBuilder requireVacuum() {
+        this.applyProperty(AtmosphereProperty.getInstance(), false);
+        return this;
     }
 }

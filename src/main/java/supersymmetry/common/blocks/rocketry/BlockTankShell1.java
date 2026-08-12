@@ -20,7 +20,8 @@ import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockTankShell1 extends VariantDirectionalRotatableBlock<BlockTankShell1.TankCoverType>
-                             implements WeightedBlock<BlockTankShell1.TankCoverType> {
+                             implements
+                             WeightedBlock<BlockTankShell1.TankCoverType> {
 
     public BlockTankShell1() {
         super(net.minecraft.block.material.Material.IRON);

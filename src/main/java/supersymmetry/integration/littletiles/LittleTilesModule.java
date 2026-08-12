@@ -29,8 +29,7 @@ import supersymmetry.api.capability.impl.InaccessibleHandlerDelegate;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_LITTLETILES,
+@GregTechModule(moduleID = SuSyModules.MODULE_LITTLETILES,
                 containerID = Supersymmetry.MODID,
                 modDependencies = "littletiles",
                 name = "SuSy LittleTiles Integration",
@@ -44,8 +43,7 @@ public class LittleTilesModule extends IntegrationSubmodule {
         }
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public List<Class<?>> getEventBusSubscribers() {
         return Collections.singletonList(LittleTilesModule.class);
     }

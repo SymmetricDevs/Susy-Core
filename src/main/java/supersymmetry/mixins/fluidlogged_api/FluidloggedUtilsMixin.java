@@ -25,8 +25,8 @@ public class FluidloggedUtilsMixin {
                                               CallbackInfoReturnable<Boolean> cir) {
         if ((blockFlags & 64) != 0) {
             // Makes sure the server knows there is no fluid
-            cir.setReturnValue(FluidloggedUtils.setFluidState(world, pos, here, FluidState.EMPTY, checkVaporize,
-                    blockFlags - 64));
+            cir.setReturnValue(
+                    FluidloggedUtils.setFluidState(world, pos, here, FluidState.EMPTY, checkVaporize, blockFlags - 64));
             // Makes sure the client knows there is no fluid
             GregTechAPI.networkHandler.sendToDimension(new SPacketRemoveFluidState(pos), world.provider.getDimension());
         }

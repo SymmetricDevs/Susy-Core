@@ -21,7 +21,8 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> extends TileEntitySpecialRenderer<T>
-                                           implements IGeoRenderer<T> {
+                                           implements
+                                           IGeoRenderer<T> {
 
     private final AnimatedGeoModel<T> modelProvider;
 

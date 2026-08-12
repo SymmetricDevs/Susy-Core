@@ -21,7 +21,8 @@ import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShapeType>
-                               implements WeightedBlock<BlockRocketNozzle.NozzleShapeType> {
+                               implements
+                               WeightedBlock<BlockRocketNozzle.NozzleShapeType> {
 
     public BlockRocketNozzle() {
         super(Material.IRON);

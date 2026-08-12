@@ -65,7 +65,8 @@ public class AtmosphereRegionGraph {
     // ---- Disperser management ----
 
     public void addDisperser(BlockPos pos) {
-        if (dispersers.contains(pos)) return;
+        if (dispersers.contains(pos))
+            return;
         dispersers.add(pos);
 
         // Check if this position is inside an existing region
@@ -112,11 +113,11 @@ public class AtmosphereRegionGraph {
     // ---- Event handlers ----
 
     /**
-     * Called when a block is broken. BreakEvent fires BEFORE block removal,
-     * so the position is still solid in the world.
+     * Called when a block is broken. BreakEvent fires BEFORE block removal, so the
+     * position is still solid in the world.
      */
     public void onBlockBreak(World world, BlockPos pos) {
-        BlockPos[] neighbors = BlockPosUtil.neighbors(pos);
+        BlockPos[] neighbors = AtmosphereUtils.neighbors(pos);
         AtmosphereRegion expandingRegion = null;
 
         for (AtmosphereRegion region : new ArrayList<>(regions)) {
@@ -127,7 +128,8 @@ public class AtmosphereRegionGraph {
                     break;
                 }
             }
-            if (!adjacentToRegion) continue;
+            if (!adjacentToRegion)
+                continue;
 
             if (isExposedToVacuum(world, pos, pos)) {
                 region.addBreach(pos);
@@ -145,7 +147,8 @@ public class AtmosphereRegionGraph {
         // Absorb adjacent sourceless regions into the non-sourceless region
         if (expandingRegion != null) {
             for (AtmosphereRegion region : new ArrayList<>(regions)) {
-                if (region == expandingRegion || !region.isSourceless()) continue;
+                if (region == expandingRegion || !region.isSourceless())
+                    continue;
                 boolean adjacent = false;
                 for (BlockPos nb : neighbors) {
                     if (region.contains(nb)) {
@@ -188,9 +191,9 @@ public class AtmosphereRegionGraph {
     }
 
     /**
-     * Re-check whether each breach point in a region still leads to vacuum.
-     * A breach might become sealed by building a wall nearby rather than
-     * plugging the exact hole.
+     * Re-check whether each breach point in a region still leads to vacuum. A
+     * breach might become sealed by building a wall nearby rather than plugging the
+     * exact hole.
      */
     private void recheckBreaches(World world, AtmosphereRegion region) {
         Iterator<BlockPos> it = region.getBreachPoints().iterator();
@@ -223,7 +226,8 @@ public class AtmosphereRegionGraph {
 
     public AtmosphereRegion getRegionAt(BlockPos pos) {
         for (AtmosphereRegion region : regions) {
-            if (region.contains(pos)) return region;
+            if (region.contains(pos))
+                return region;
         }
         return null;
     }
@@ -244,8 +248,7 @@ public class AtmosphereRegionGraph {
         revalidator.tick(world, (region, disconnected) -> {
             if (!disconnected.isEmpty()) {
                 Octree srcOctree = region.getOctree();
-                AtmosphereRegion newRegion = new AtmosphereRegion(
-                        disconnected, region.getPressure(),
+                AtmosphereRegion newRegion = new AtmosphereRegion(disconnected, region.getPressure(),
                         srcOctree.getOriginX(), srcOctree.getOriginY(), srcOctree.getOriginZ(),
                         srcOctree.getTreeSize());
 
@@ -254,7 +257,7 @@ public class AtmosphereRegionGraph {
                 while (breachIt.hasNext()) {
                     BlockPos bp = breachIt.next();
                     boolean adjacentToNew = false;
-                    for (BlockPos nb : BlockPosUtil.neighbors(bp)) {
+                    for (BlockPos nb : AtmosphereUtils.neighbors(bp)) {
                         if (disconnected.contains(nb)) {
                             adjacentToNew = true;
                             break;
@@ -265,7 +268,7 @@ public class AtmosphereRegionGraph {
                     }
                     // Remove from original if no longer adjacent to any of its remaining positions
                     boolean adjacentToOriginal = false;
-                    for (BlockPos nb : BlockPosUtil.neighbors(bp)) {
+                    for (BlockPos nb : AtmosphereUtils.neighbors(bp)) {
                         if (region.contains(nb)) {
                             adjacentToOriginal = true;
                             break;
@@ -287,15 +290,18 @@ public class AtmosphereRegionGraph {
     }
 
     /**
-     * Periodic scan: for each filled, pressurized region, check if the source
-     * can reach vacuum. This catches breaches regardless of how they were
-     * created (block events, pistons, other mods, etc.).
+     * Periodic scan: for each filled, pressurized region, check if the source can
+     * reach vacuum. This catches breaches regardless of how they were created
+     * (block events, pistons, other mods, etc.).
      */
     private void scanForBreaches(World world) {
         for (AtmosphereRegion region : regions) {
-            if (region.getVolume() == 0) continue;
-            if (region.getPressure() <= 0.0) continue;
-            if (!region.isFillComplete() || region.isFillFailed()) continue;
+            if (region.getVolume() == 0)
+                continue;
+            if (region.getPressure() <= 0.0)
+                continue;
+            if (!region.isFillComplete() || region.isFillFailed())
+                continue;
 
             boolean anyExposed = false;
             BlockPos exposedSource = null;
@@ -329,7 +335,8 @@ public class AtmosphereRegionGraph {
             region.validateBreaches(world);
 
             int volume = region.getVolume();
-            if (volume == 0) continue;
+            if (volume == 0)
+                continue;
 
             if (region.hasBreaches()) {
                 // Depressurize: rate scales with number of breaches, inversely with volume
@@ -361,7 +368,8 @@ public class AtmosphereRegionGraph {
 
         for (AtmosphereRegion region : fillingRegions) {
             // Don't fill while breached — the room is actively losing pressure
-            if (region.hasBreaches()) continue;
+            if (region.hasBreaches())
+                continue;
 
             boolean done = region.floodFill(world, FILL_BUDGET_PER_TICK);
             if (done) {
@@ -371,23 +379,29 @@ public class AtmosphereRegionGraph {
 
         fillingRegions.removeAll(completed);
 
-        // Safety net: absorb sourceless regions whose primary position is now inside a completed non-sourceless fill
+        // Safety net: absorb sourceless regions whose primary position is now inside a
+        // completed non-sourceless fill
         for (AtmosphereRegion filled : completed) {
-            if (filled.isSourceless()) continue;
+            if (filled.isSourceless())
+                continue;
             regions.removeIf(r -> r != filled && r.isSourceless() && filled.contains(r.getSource()));
         }
     }
 
     /**
-     * Re-start fill for regions whose source is in a sealed environment.
-     * Handles recovery after full depressurization + breach repair.
+     * Re-start fill for regions whose source is in a sealed environment. Handles
+     * recovery after full depressurization + breach repair.
      */
     private void reRefillRegions(World world) {
         for (AtmosphereRegion region : regions) {
-            if (region.isSourceless()) continue;
-            if (region.hasBreaches()) continue;
-            if (region.isFillComplete() && !region.isFillFailed() && region.getVolume() > 0) continue;
-            if (fillingRegions.contains(region)) continue;
+            if (region.isSourceless())
+                continue;
+            if (region.hasBreaches())
+                continue;
+            if (region.isFillComplete() && !region.isFillFailed() && region.getVolume() > 0)
+                continue;
+            if (fillingRegions.contains(region))
+                continue;
 
             // Check if any disperser is in a viable (passable, sealed) position
             boolean anyViable = false;
@@ -397,7 +411,8 @@ public class AtmosphereRegionGraph {
                     break;
                 }
             }
-            if (!anyViable) continue;
+            if (!anyViable)
+                continue;
 
             if (region.getVolume() == 0 || region.isFillFailed()) {
                 region.resetFill();
@@ -416,12 +431,14 @@ public class AtmosphereRegionGraph {
 
     /**
      * Check if a position can reach sky (vacuum) via passable blocks.
-     * {@code treatedAsPassable} is an extra position considered passable even if
-     * it is currently solid (used for BreakEvent, which fires before removal).
+     * {@code treatedAsPassable} is an extra position considered passable even if it
+     * is currently solid (used for BreakEvent, which fires before removal).
      */
     private boolean isExposedToVacuum(World world, BlockPos start, BlockPos treatedAsPassable) {
-        if (!start.equals(treatedAsPassable) && world.isBlockFullCube(start)) return false;
-        if (world.canSeeSky(start)) return true;
+        if (!start.equals(treatedAsPassable) && world.isBlockFullCube(start))
+            return false;
+        if (world.canSeeSky(start))
+            return true;
 
         Set<BlockPos> visited = new HashSet<>();
         Deque<BlockPos> queue = new ArrayDeque<>();
@@ -436,10 +453,13 @@ public class AtmosphereRegionGraph {
 
             BlockPos pos = queue.poll();
 
-            for (BlockPos nb : BlockPosUtil.neighbors(pos)) {
-                if (visited.contains(nb)) continue;
-                if (!nb.equals(treatedAsPassable) && world.isBlockFullCube(nb)) continue;
-                if (world.canSeeSky(nb)) return true;
+            for (BlockPos nb : AtmosphereUtils.neighbors(pos)) {
+                if (visited.contains(nb))
+                    continue;
+                if (!nb.equals(treatedAsPassable) && world.isBlockFullCube(nb))
+                    continue;
+                if (world.canSeeSky(nb))
+                    return true;
                 visited.add(nb);
                 queue.add(nb);
             }
@@ -487,9 +507,7 @@ public class AtmosphereRegionGraph {
         NBTTagList regionList = nbt.getTagList("regions", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < regionList.tagCount(); i++) {
             NBTTagCompound regionTag = regionList.getCompoundTagAt(i);
-            BlockPos src = new BlockPos(
-                    regionTag.getInteger("srcX"),
-                    regionTag.getInteger("srcY"),
+            BlockPos src = new BlockPos(regionTag.getInteger("srcX"), regionTag.getInteger("srcY"),
                     regionTag.getInteger("srcZ"));
             double pressure = regionTag.getDouble("pressure");
             int octreeOriginX = regionTag.getInteger("octreeOriginX");
@@ -512,7 +530,8 @@ public class AtmosphereRegionGraph {
 
             byte[] octreeData = regionTag.getByteArray("octreeData");
             Octree octree = Octree.deserialize(octreeOriginX, octreeOriginY, octreeOriginZ, octreeSize, octreeData);
-            if (octree.isEmpty()) continue;
+            if (octree.isEmpty())
+                continue;
             AtmosphereRegion region = new AtmosphereRegion(src, octree, pressure, regionDispersers);
 
             regions.add(region);

@@ -2,14 +2,14 @@ package supersymmetry.common.blocks;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.unification.material.Material;
 import gregtech.common.ConfigHolder;
@@ -34,18 +34,18 @@ public class SheetedFrameItemBlock extends ItemBlock {
         return frameBlock.getStateFromMeta(getMetadata(stack.getItemDamage()));
     }
 
-    @Nonnull
-    @Override
-    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+    @NonNull @Override
+    public String getItemStackDisplayName(@NonNull ItemStack stack) {
         Material material = getBlockState(stack).getValue(frameBlock.variantProperty);
-        // String localizedPartialName = net.minecraft.client.resources.I18n.format("tile.sheeted_frame");
+        // String localizedPartialName =
+        // net.minecraft.client.resources.I18n.format("tile.sheeted_frame");
         // return String.format(localizedPartialName, material.getLocalizedName());
         return SusyOrePrefix.sheetedFrame.getLocalNameForItem(material);
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
-                               @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NonNull ItemStack stack, @Nullable World worldIn, @NonNull List<String> tooltip,
+                               @NonNull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (ConfigHolder.misc.debug) {
             tooltip.add(

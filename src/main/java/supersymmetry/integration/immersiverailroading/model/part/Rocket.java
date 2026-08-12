@@ -12,14 +12,17 @@ public class Rocket {
 
     public Rocket(ComponentProvider provider, ModelState state) {
         this.rocket = ModelHelper.parseCustomComponent(provider, ROCKET_COMPONENT_REGEX);
-        // The rocket is never drawn through the base pipeline: it can only ever be shown
-        // whole, and we need a per-face partial sweep instead. TransporterErectorModel#postRender
-        // draws a length-sorted prefix of the rocket geometry itself, so here we simply hide the
+        // The rocket is never drawn through the base pipeline: it can only ever be
+        // shown
+        // whole, and we need a per-face partial sweep instead.
+        // TransporterErectorModel#postRender
+        // draws a length-sorted prefix of the rocket geometry itself, so here we simply
+        // hide the
         // rocket groups from the standard group draw.
-        state.push(settings -> settings
-                .add((ModelState.GroupVisibility) (stock,
-                                                   string) -> rocket != null && rocket.modelIDs.contains(string) ?
-                                                           Boolean.FALSE : null))
+        state.push(settings -> settings.add((ModelState.GroupVisibility) (stock,
+                                                                          string) -> rocket != null &&
+                                                                                  rocket.modelIDs.contains(string) ?
+                                                                                          Boolean.FALSE : null))
                 .include(rocket);
     }
 

@@ -2,9 +2,6 @@ package supersymmetry.common.blocks;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
@@ -31,6 +28,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.recipes.ModHandler;
@@ -57,19 +56,19 @@ public class BlockSheetedFrame extends Block {
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH_MATERIALS);
         this.variantProperty = PropertyMaterial.create("variant", materials);
         BlockStateContainer stateContainer = this.createStateContainer();
-        // I have literally no clue what this does, but shit breaks if you remove it apparently
+        // I have literally no clue what this does, but shit breaks if you remove it
+        // apparently
         ObfuscationReflectionHelper.setPrivateValue(Block.class, this, stateContainer, 21); // this.stateContainer
         // setDefaultState(stateContainer.getBaseState());
         this.setDefaultState(stateContainer.getBaseState().withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.Y));
     }
 
     /**
-     * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
-     * IBlockstate
+     * Called by ItemBlocks just before a block is actually set in the world, to
+     * allow for adjustments to the IBlockstate
      */
     @Override
-    @NotNull
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+    @NotNull public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY,
                                             float hitZ, int meta, EntityLivingBase placer) {
         return this.getStateFromMeta(meta).withProperty(SHEETED_FRAME_AXIS,
                 FrameEnumAxis.fromFacingAxis(facing.getAxis()));
@@ -80,17 +79,16 @@ public class BlockSheetedFrame extends Block {
     }
 
     @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
+    @NonNull protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this);
     }
 
     /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
+     * Returns the blockstate with the given rotation from the passed blockstate. If
+     * inapplicable, returns the passed blockstate.
      * 
-     * @deprecated call via {@link IBlockState#withRotation(Rotation)} whenever possible. Implementing/overriding is
-     *             fine.
+     * @deprecated call via {@link IBlockState#withRotation(Rotation)} whenever
+     *             possible. Implementing/overriding is fine.
      */
     @Override
     @Deprecated
@@ -160,22 +158,24 @@ public class BlockSheetedFrame extends Block {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
-    public int damageDropped(@Nonnull IBlockState state) {
+    public int damageDropped(@NonNull IBlockState state) {
         return (this.getMetaFromState(state) & 0b0011) + 4;
     }
 
-    @Nonnull
-    public IBlockState getStateFromMeta(int meta) {
-        if (meta > 15) meta = 0;
+    @NonNull public IBlockState getStateFromMeta(int meta) {
+        if (meta > 15)
+            meta = 0;
 
-        // axis of block is related two 2 most significant bits in first four bits; indexing with (meta % 16) /4
+        // axis of block is related two 2 most significant bits in first four bits;
+        // indexing with (meta % 16) /4
         return this.getDefaultState()
                 .withProperty(this.variantProperty, this.variantProperty.getAllowedValues().get(meta & 3))
                 .withProperty(SHEETED_FRAME_AXIS, FrameEnumAxis.values()[(meta & 15) >>> 2]);
     }
 
     public int getMetaFromState(IBlockState state) {
-        // place axis value in top two bits of first four bits of meta (X: 00, Y: 01, Z: 10, NONE: 11)
+        // place axis value in top two bits of first four bits of meta (X: 00, Y: 01, Z:
+        // 10, NONE: 11)
         int meta = (state.getValue(SHEETED_FRAME_AXIS).ordinal() << 2);
 
         // place result in lowest two bits
@@ -189,26 +189,25 @@ public class BlockSheetedFrame extends Block {
         return ModHandler.isMaterialWood(material) ? "axe" : "wrench";
     }
 
-    @Nonnull
-    public SoundType getSoundType(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos,
+    @NonNull public SoundType getSoundType(IBlockState state, @NonNull World world, @NonNull BlockPos pos,
                                   @Nullable Entity entity) {
         Material material = state.getValue(this.variantProperty);
         return ModHandler.isMaterialWood(material) ? SoundType.WOOD : SoundType.METAL;
     }
 
-    public int getHarvestLevel(@Nonnull IBlockState state) {
+    public int getHarvestLevel(@NonNull IBlockState state) {
         return 1;
     }
 
-    @Nonnull
-    public net.minecraft.block.material.Material getMaterial(IBlockState state) {
+    @NotNull public net.minecraft.block.material.Material getMaterial(IBlockState state) {
         Material material = state.getValue(this.variantProperty);
         return ModHandler.isMaterialWood(material) ? net.minecraft.block.material.Material.WOOD :
                 super.getMaterial(state);
     }
 
-    public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        // bit shift down returned 4 bits from meta to look at axis, only display y-aligned
+    public void getSubBlocks(@NonNull CreativeTabs tab, @NonNull NonNullList<ItemStack> list) {
+        // bit shift down returned 4 bits from meta to look at axis, only display
+        // y-aligned
         blockState.getValidStates().stream()
                 .filter(blockState -> blockState.getValue(variantProperty) != Materials.NULL &&
                         getMetaFromState(blockState) >>> 2 == 1)
@@ -238,116 +237,85 @@ public class BlockSheetedFrame extends Block {
         return this.getGtMaterial(this.getMetaFromState(state));
     }
 
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
     /*
-     * public boolean replaceWithFramedPipe(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-     * ItemStack stackInHand, EnumFacing facing) {
-     * BlockPipe<?, ?, ?> blockPipe = (BlockPipe)((ItemBlockPipe)stackInHand.getItem()).getBlock();
-     * if (((IPipeType)blockPipe.getItemPipeType(stackInHand)).getThickness() < 1.0F) {
-     * ItemBlock itemBlock = (ItemBlock)stackInHand.getItem();
-     * IBlockState pipeState = blockPipe.getDefaultState();
-     * itemBlock.placeBlockAt(stackInHand, playerIn, worldIn, pos, facing, 0.0F, 0.0F, 0.0F, pipeState);
-     * IPipeTile<?, ?> pipeTile = blockPipe.getPipeTileEntity(worldIn, pos);
-     * if (pipeTile instanceof TileEntityPipeBase) {
-     * ((TileEntityPipeBase)pipeTile).setFrameMaterial(this.getGtMaterial(this.getMetaFromState(state)));
-     * SoundType type = blockPipe.getSoundType(state, worldIn, pos, playerIn);
-     * worldIn.playSound(playerIn, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F,
-     * type.getPitch() * 0.8F);
-     * if (!playerIn.capabilities.isCreativeMode) {
-     * stackInHand.shrink(1);
-     * }
+     * public boolean replaceWithFramedPipe(World worldIn, BlockPos pos, IBlockState
+     * state, EntityPlayer playerIn, ItemStack stackInHand, EnumFacing facing) {
+     * BlockPipe<?, ?, ?> blockPipe =
+     * (BlockPipe)((ItemBlockPipe)stackInHand.getItem()).getBlock(); if
+     * (((IPipeType)blockPipe.getItemPipeType(stackInHand)).getThickness() < 1.0F) {
+     * ItemBlock itemBlock = (ItemBlock)stackInHand.getItem(); IBlockState pipeState
+     * = blockPipe.getDefaultState(); itemBlock.placeBlockAt(stackInHand, playerIn,
+     * worldIn, pos, facing, 0.0F, 0.0F, 0.0F, pipeState); IPipeTile<?, ?> pipeTile
+     * = blockPipe.getPipeTileEntity(worldIn, pos); if (pipeTile instanceof
+     * TileEntityPipeBase) {
+     * ((TileEntityPipeBase)pipeTile).setFrameMaterial(this.getGtMaterial(this.
+     * getMetaFromState(state))); SoundType type = blockPipe.getSoundType(state,
+     * worldIn, pos, playerIn); worldIn.playSound(playerIn, pos,
+     * type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F,
+     * type.getPitch() * 0.8F); if (!playerIn.capabilities.isCreativeMode) {
+     * stackInHand.shrink(1); }
      * 
-     * return true;
-     * } else {
-     * GTLog.logger.error("Pipe was not placed!");
-     * return false;
-     * }
-     * } else {
-     * return false;
-     * }
-     * }
+     * return true; } else { GTLog.logger.error("Pipe was not placed!"); return
+     * false; } } else { return false; } }
      * 
-     * public boolean removeFrame(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-     * TileEntity te = world.getTileEntity(pos);
-     * if (te instanceof TileEntityPipeBase && ((IPipeTile)te).getFrameMaterial() != null) {
-     * TileEntityPipeBase<?, ?> pipeTile = (TileEntityPipeBase)te;
-     * Material frameMaterial = pipeTile.getFrameMaterial();
-     * pipeTile.setFrameMaterial((Material)null);
-     * Block.spawnAsEntity(world, pos, this.getItem(frameMaterial));
-     * ToolHelper.damageItem(stack, player);
-     * ToolHelper.playToolSound(stack, player);
-     * return true;
-     * } else {
-     * return false;
-     * }
-     * }
+     * public boolean removeFrame(World world, BlockPos pos, EntityPlayer player,
+     * ItemStack stack) { TileEntity te = world.getTileEntity(pos); if (te
+     * instanceof TileEntityPipeBase && ((IPipeTile)te).getFrameMaterial() != null)
+     * { TileEntityPipeBase<?, ?> pipeTile = (TileEntityPipeBase)te; Material
+     * frameMaterial = pipeTile.getFrameMaterial();
+     * pipeTile.setFrameMaterial((Material)null); Block.spawnAsEntity(world, pos,
+     * this.getItem(frameMaterial)); ToolHelper.damageItem(stack, player);
+     * ToolHelper.playToolSound(stack, player); return true; } else { return false;
+     * } }
      * 
-     * public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
-     * EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-     * ItemStack stackInHand = playerIn.getHeldItem(hand);
-     * if (stackInHand.isEmpty()) {
-     * return false;
-     * } else if (stackInHand.getItem() instanceof ItemBlockPipe) {
-     * return this.replaceWithFramedPipe(worldIn, pos, state, playerIn, stackInHand, facing);
-     * } else if (stackInHand.getItem().getToolClasses(stackInHand).contains("crowbar")) {
-     * return this.removeFrame(worldIn, pos, playerIn, stackInHand);
-     * } else if (!(stackInHand.getItem() instanceof FrameItemBlock)) {
-     * return false;
-     * } else {
-     * BlockPos.PooledMutableBlockPos blockPos = BlockPos.PooledMutableBlockPos.retain();
-     * blockPos.setPos(pos);
+     * public boolean onBlockActivated(@NonNull World worldIn, @NonNull BlockPos
+     * pos, @NonNull IBlockState state, EntityPlayer playerIn, @NonNull EnumHand
+     * hand, @NonNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+     * ItemStack stackInHand = playerIn.getHeldItem(hand); if
+     * (stackInHand.isEmpty()) { return false; } else if (stackInHand.getItem()
+     * instanceof ItemBlockPipe) { return this.replaceWithFramedPipe(worldIn, pos,
+     * state, playerIn, stackInHand, facing); } else if
+     * (stackInHand.getItem().getToolClasses(stackInHand).contains("crowbar")) {
+     * return this.removeFrame(worldIn, pos, playerIn, stackInHand); } else if
+     * (!(stackInHand.getItem() instanceof FrameItemBlock)) { return false; } else {
+     * BlockPos.PooledMutableBlockPos blockPos =
+     * BlockPos.PooledMutableBlockPos.retain(); blockPos.setPos(pos);
      * 
-     * for(int i = 0; i < 32; ++i) {
-     * if (worldIn.getBlockState(blockPos).getBlock() instanceof BlockFrame) {
-     * blockPos.move(EnumFacing.UP);
-     * } else {
-     * TileEntity te = worldIn.getTileEntity(blockPos);
-     * if (!(te instanceof IPipeTile) || ((IPipeTile)te).getFrameMaterial() == null) {
-     * if (this.canPlaceBlockAt(worldIn, blockPos)) {
-     * worldIn.setBlockState(blockPos, ((FrameItemBlock)stackInHand.getItem()).getBlockState(stackInHand));
+     * for(int i = 0; i < 32; ++i) { if (worldIn.getBlockState(blockPos).getBlock()
+     * instanceof BlockFrame) { blockPos.move(EnumFacing.UP); } else { TileEntity te
+     * = worldIn.getTileEntity(blockPos); if (!(te instanceof IPipeTile) ||
+     * ((IPipeTile)te).getFrameMaterial() == null) { if
+     * (this.canPlaceBlockAt(worldIn, blockPos)) { worldIn.setBlockState(blockPos,
+     * ((FrameItemBlock)stackInHand.getItem()).getBlockState(stackInHand));
      * SoundType type = this.getSoundType(stackInHand);
-     * worldIn.playSound((EntityPlayer)null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F)
-     * / 2.0F, type.getPitch() * 0.8F);
-     * if (!playerIn.capabilities.isCreativeMode) {
-     * stackInHand.shrink(1);
+     * worldIn.playSound((EntityPlayer)null, pos, type.getPlaceSound(),
+     * SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() *
+     * 0.8F); if (!playerIn.capabilities.isCreativeMode) { stackInHand.shrink(1); }
+     * 
+     * blockPos.release(); return true; } else if (te instanceof TileEntityPipeBase
+     * && ((TileEntityPipeBase)te).getFrameMaterial() == null) { Material material =
+     * ((BlockFrame)((FrameItemBlock)stackInHand.getItem()).getBlock()).
+     * getGtMaterial(stackInHand.getMetadata());
+     * ((TileEntityPipeBase)te).setFrameMaterial(material); SoundType type =
+     * this.getSoundType(stackInHand); worldIn.playSound((EntityPlayer)null, pos,
+     * type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F,
+     * type.getPitch() * 0.8F); if (!playerIn.capabilities.isCreativeMode) {
+     * stackInHand.shrink(1); }
+     * 
+     * blockPos.release(); return true; } else { blockPos.release(); return false; }
      * }
      * 
-     * blockPos.release();
-     * return true;
-     * } else if (te instanceof TileEntityPipeBase && ((TileEntityPipeBase)te).getFrameMaterial() == null) {
-     * Material material =
-     * ((BlockFrame)((FrameItemBlock)stackInHand.getItem()).getBlock()).getGtMaterial(stackInHand.getMetadata());
-     * ((TileEntityPipeBase)te).setFrameMaterial(material);
-     * SoundType type = this.getSoundType(stackInHand);
-     * worldIn.playSound((EntityPlayer)null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F)
-     * / 2.0F, type.getPitch() * 0.8F);
-     * if (!playerIn.capabilities.isCreativeMode) {
-     * stackInHand.shrink(1);
-     * }
+     * blockPos.move(EnumFacing.UP); } }
      * 
-     * blockPos.release();
-     * return true;
-     * } else {
-     * blockPos.release();
-     * return false;
-     * }
-     * }
-     * 
-     * blockPos.move(EnumFacing.UP);
-     * }
-     * }
-     * 
-     * blockPos.release();
-     * return false;
-     * }
-     * }
+     * blockPos.release(); return false; } }
      */
 
-    public void onEntityCollision(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+    public void onEntityCollision(@NonNull World worldIn, @NonNull BlockPos pos, @NonNull IBlockState state,
                                   Entity entityIn) {
         entityIn.motionX = MathHelper.clamp(entityIn.motionX, -0.15, 0.15);
         entityIn.motionZ = MathHelper.clamp(entityIn.motionZ, -0.15, 0.15);
@@ -365,45 +333,42 @@ public class BlockSheetedFrame extends Block {
         }
     }
 
-    @Nonnull
-    public EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+    @NonNull public EnumPushReaction getPushReaction(@NonNull IBlockState state) {
         return EnumPushReaction.NORMAL;
     }
 
-    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn,
-                                                 @Nonnull BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(@NonNull IBlockState blockState, @NonNull IBlockAccess worldIn,
+                                                 @NonNull BlockPos pos) {
         AxisAlignedBB boundingBox = switch (this.getMetaFromState(blockState) >>> 2) {
             // x
             case (0) -> new AxisAlignedBB(0.05, 0.0, 0.00, 0.95, 1.0, 1.00);
             // z
             case (2) -> new AxisAlignedBB(0.00, 0.0, 0.05, 1.0, 1.0, 0.95);
-            // NONE (all sided) or y [1] as the climbable axis would be on the top of the block
+            // NONE (all sided) or y [1] as the climbable axis would be on the top of the
+            // block
             default -> new AxisAlignedBB(0.00, 0.0, 0.00, 1.0, 1.0, 1.0);
         };
         return boundingBox;
     }
 
-    @Nonnull
-    public BlockFaceShape getBlockFaceShape(@Nonnull IBlockAccess worldIn, @Nonnull IBlockState state,
-                                            @Nonnull BlockPos pos, @Nonnull EnumFacing face) {
+    @NonNull public BlockFaceShape getBlockFaceShape(@NonNull IBlockAccess worldIn, @NonNull IBlockState state,
+                                            @NonNull BlockPos pos, @NonNull EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 
     /*
-     * @SideOnly(Side.CLIENT)
-     * public void onModelRegister() {
+     * @SideOnly(Side.CLIENT) public void onModelRegister() {
      * ModelLoader.setCustomStateMapper(this, new MaterialStateMapper(
-     * SuSyMaterialIconType.sheetedFrame, s -> s.getValue(this.variantProperty).getMaterialIconSet()));
+     * SuSyMaterialIconType.sheetedFrame, s ->
+     * s.getValue(this.variantProperty).getMaterialIconSet()));
      * 
-     * for (IBlockState state : this.getBlockState().getValidStates()) {
-     * //hopefully stop null materials from getting to register
-     * if (state.getValue(variantProperty) == Materials.NULL) continue;
-     * ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), this.getMetaFromState(state),
-     * MaterialBlockModelLoader.registerItemModel(
+     * for (IBlockState state : this.getBlockState().getValidStates()) { //hopefully
+     * stop null materials from getting to register if
+     * (state.getValue(variantProperty) == Materials.NULL) continue;
+     * ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this),
+     * this.getMetaFromState(state), MaterialBlockModelLoader.registerItemModel(
      * SuSyMaterialIconType.sheetedFrame,
-     * state.getValue(this.variantProperty).getMaterialIconSet()));
-     * }
-     * }
+     * state.getValue(this.variantProperty).getMaterialIconSet())); } }
      */
 
     // function adapted by me from tictem's original implementation
@@ -414,11 +379,9 @@ public class BlockSheetedFrame extends Block {
             Material material = getGtMaterial(state);
             map.put(state,
                     supersymmetry.api.util.MaterialBlockModelLoader.loadBlockModel(SuSyMaterialIconType.sheetedFrame,
-                            material.getMaterialIconSet(),
-                            "axis=" + state.getValue(SHEETED_FRAME_AXIS).getName()));
+                            material.getMaterialIconSet(), "axis=" + state.getValue(SHEETED_FRAME_AXIS).getName()));
 
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this),
-                    this.getMetaFromState(state),
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), this.getMetaFromState(state),
                     supersymmetry.api.util.MaterialBlockModelLoader.loadItemModel(SuSyMaterialIconType.sheetedFrame,
                             material.getMaterialIconSet()));
         }

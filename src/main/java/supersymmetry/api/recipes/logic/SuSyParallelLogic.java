@@ -17,14 +17,16 @@ import gregtech.api.recipes.RecipeMap;
 public class SuSyParallelLogic {
 
     /**
-     * Similar to default parallel logic, but it neither multiplies the EUt nor the duration.
+     * Similar to default parallel logic, but it neither multiplies the EUt nor the
+     * duration.
      */
     public static RecipeBuilder<?> pureParallelRecipe(@NotNull Recipe currentRecipe, @NotNull RecipeMap<?> recipeMap,
                                                       @NotNull IItemHandlerModifiable importInventory,
                                                       @NotNull IMultipleTankHandler importFluids,
                                                       @NotNull IItemHandlerModifiable exportInventory,
-                                                      @NotNull IMultipleTankHandler exportFluids, int parallelAmount,
-                                                      long maxVoltage, @NotNull IVoidable voidable) {
+                                                      @NotNull IMultipleTankHandler exportFluids,
+                                                      int parallelAmount, long maxVoltage,
+                                                      @NotNull IVoidable voidable) {
         int multiplierByInputs = getMaxRecipeMultiplier(currentRecipe, importInventory, importFluids, parallelAmount);
         if (multiplierByInputs == 0) {
             return null;
@@ -32,17 +34,17 @@ public class SuSyParallelLogic {
             RecipeBuilder<?> recipeBuilder = recipeMap.recipeBuilder().EUt(0);
             boolean voidItems = voidable.canVoidRecipeItemOutputs();
             boolean voidFluids = voidable.canVoidRecipeFluidOutputs();
-            // Three parameters: the output bus room, the number of outputs, and the max parallel modifier
-            int parallelizable = Math.min(
-                    limitByOutputMerging(currentRecipe, exportInventory, exportFluids, multiplierByInputs, voidItems,
-                            voidFluids),
-                    limitByOutputSize(currentRecipe, parallelAmount));
+            // Three parameters: the output bus room, the number of outputs, and the max
+            // parallel modifier
+            int parallelizable = Math.min(limitByOutputMerging(currentRecipe, exportInventory, exportFluids,
+                    multiplierByInputs, voidItems, voidFluids), limitByOutputSize(currentRecipe, parallelAmount));
             parallelizable = Math.min(parallelizable, parallelAmount);
             int recipeEUt = currentRecipe.getEUt();
             if (recipeEUt != 0) {
                 if (parallelizable != 0) {
                     recipeBuilder.append(currentRecipe, Math.min(parallelizable, multiplierByInputs), false);
-                    // The change: the recipeEUt is reset to the original value, along with a loss of checks to prevent
+                    // The change: the recipeEUt is reset to the original value, along with a loss
+                    // of checks to prevent
                     // the EUt from getting too high
                     recipeBuilder.EUt(currentRecipe.getEUt());
                 }

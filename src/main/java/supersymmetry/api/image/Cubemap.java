@@ -20,8 +20,7 @@ public class Cubemap {
     private final ResourceLocation cross;
     protected boolean loaded = false;
 
-    public Cubemap(ResourceLocation px, ResourceLocation nx,
-                   ResourceLocation py, ResourceLocation ny,
+    public Cubemap(ResourceLocation px, ResourceLocation nx, ResourceLocation py, ResourceLocation ny,
                    ResourceLocation pz, ResourceLocation nz) {
         this.faces = new ResourceLocation[] { px, nx, py, ny, pz, nz };
         this.cross = null;
@@ -33,7 +32,8 @@ public class Cubemap {
     }
 
     public void loadAll() throws IOException {
-        if (loaded) return;
+        if (loaded)
+            return;
         loaded = true;
 
         BufferedImage[] imgs = loadFaceImages();
@@ -79,8 +79,7 @@ public class Cubemap {
 
         java.nio.ByteBuffer buf = org.lwjgl.BufferUtils.createByteBuffer(data.length);
         buf.put(data).flip();
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0,
-                GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
         return id;
     }
 

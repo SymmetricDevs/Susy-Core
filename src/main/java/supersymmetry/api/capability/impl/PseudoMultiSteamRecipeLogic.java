@@ -23,11 +23,12 @@ public class PseudoMultiSteamRecipeLogic extends RecipeLogicSteam {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        if (pmsMTE.getTargetBlockState() == null) return false; // if world was remote or null
+        if (pmsMTE.getTargetBlockState() == null)
+            return false; // if world was remote or null
         // if no property was given don't check if state matches
         return !recipe.hasProperty(PseudoMultiProperty.getInstance()) ||
-                recipe.getProperty(PseudoMultiProperty.getInstance(), null)
-                        .getValidBlockStates().contains(pmsMTE.getTargetBlockState()) && super.checkRecipe(recipe);
+                recipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
+                        .contains(pmsMTE.getTargetBlockState()) && super.checkRecipe(recipe);
     }
 
     @Override

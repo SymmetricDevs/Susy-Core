@@ -3,8 +3,6 @@ package supersymmetry.common.world;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
@@ -18,6 +16,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.world.gen.ComplexCrater;
@@ -109,8 +108,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         worldIn.setSeaLevel(this.seaLevel);
 
         net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld ctx = new net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld(
-                minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise,
-                scaleNoise, depthNoise, forestNoise);
+                minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise,
+                forestNoise);
         ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(worldIn, this.rand, ctx);
         this.minLimitPerlinNoise = ctx.getLPerlin1();
         this.maxLimitPerlinNoise = ctx.getLPerlin2();
@@ -198,10 +197,11 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     }
 
     public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn) {
-        if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.world)) return;
+        if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.world))
+            return;
         double d0 = 0.03125D;
-        this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, x * 16, z * 16, 16, 16,
-                0.0625D, 0.0625D, 1.0D);
+        this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, x * 16, z * 16, 16, 16, 0.0625D, 0.0625D,
+                1.0D);
 
         // Loop through each x row.
         for (int iX = 0; iX < 16; ++iX) {
@@ -224,8 +224,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.generateTerrain(x, z, chunkprimer);
-        this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration,
-                x * 16, z * 16, 16, 16);
+        this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16,
+                16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
         this.caveGenerator.generate(this.world, x, z, chunkprimer);
@@ -252,10 +252,10 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, xOffset, yOffset,
                 zOffset, 5, 33, 5, coordF / this.mainNoiseScaleX, heightF / this.mainNoiseScaleY,
                 coordF / this.mainNoiseScaleZ);
-        this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, xOffset,
-                yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
-        this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, xOffset,
-                yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
+        this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, xOffset, yOffset,
+                zOffset, 5, 33, 5, coordF, heightF, coordF);
+        this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, xOffset, yOffset,
+                zOffset, 5, 33, 5, coordF, heightF, coordF);
         int heightMapPosition = 0;
         int depthRegionPosition = 0;
 
@@ -371,8 +371,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
     private void generatePitEntrances(int chunkX, int chunkZ, BlockPos chunkPos) {
         // Use chunk-based random with world seed
-        Random pitRand = new Random(world.getSeed() +
-                (long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
+        Random pitRand = new Random(world.getSeed() + (long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
 
         // Low probability of pit entrance per chunk (adjust as needed)
         if (pitRand.nextDouble() < 0.02) { // 2% chance per chunk
@@ -408,21 +407,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         return false;
     }
 
-    @Nullable
-    public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position,
+    @Nullable public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position,
                                            boolean findUnexplored) {
         return null;
     }
 
     public void recreateStructures(Chunk chunkIn, int x, int z) {}
 
-    @NotNull
-    public SimpleCrater getSimpleCraterGenerator() {
+    @NotNull public SimpleCrater getSimpleCraterGenerator() {
         return this.simpleCraterGenerator;
     }
 
-    @NotNull
-    public ComplexCrater getComplexCraterGenerator() {
+    @NotNull public ComplexCrater getComplexCraterGenerator() {
         return this.complexCraterGenerator;
     }
 }

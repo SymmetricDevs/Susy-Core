@@ -88,15 +88,12 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         return textureRL().toString();
     }
 
-    @Nullable
-    @SideOnly(Side.CLIENT)
+    @Nullable @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
-                                    EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-        return GeoMetaArmorRenderer.INSTANCE
-                .setCurrentItem(entityLiving, itemStack, armorSlot)
-                .applyEntityStats(defaultModel)
-                .applySlot(armorSlot);
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+                                    ModelBiped defaultModel) {
+        return GeoMetaArmorRenderer.INSTANCE.setCurrentItem(entityLiving, itemStack, armorSlot)
+                .applyEntityStats(defaultModel).applySlot(armorSlot);
     }
 
     @Override
@@ -378,8 +375,8 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
-                                                       DamageSource source,
-                                                       double damage, EntityEquipmentSlot equipmentSlot) {
+                                                       DamageSource source, double damage,
+                                                       EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable())
             return prop;

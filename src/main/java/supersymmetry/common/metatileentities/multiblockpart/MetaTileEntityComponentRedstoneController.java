@@ -41,21 +41,20 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMultiblockPart {
 
     public static TraceabilityPredicate controllerPredicate() {
-        return (new TraceabilityPredicate(
-                (blockWorldState -> {
-                    TileEntity tile = blockWorldState.getTileEntity();
-                    if (tile instanceof MetaTileEntityHolder) {
-                        MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tile).getMetaTileEntity();
-                        if (metaTileEntity instanceof MetaTileEntityComponentRedstoneController) {
-                            Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext()
-                                    .getOrCreate("MultiblockParts", HashSet::new);
-                            partsFound.add((IMultiblockPart) metaTileEntity);
+        return (new TraceabilityPredicate((blockWorldState -> {
+            TileEntity tile = blockWorldState.getTileEntity();
+            if (tile instanceof MetaTileEntityHolder) {
+                MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tile).getMetaTileEntity();
+                if (metaTileEntity instanceof MetaTileEntityComponentRedstoneController) {
+                    Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext().getOrCreate("MultiblockParts",
+                            HashSet::new);
+                    partsFound.add((IMultiblockPart) metaTileEntity);
 
-                            return true;
-                        }
-                    }
-                    return false;
-                })));
+                    return true;
+                }
+            }
+            return false;
+        })));
     }
 
     public int signal = 0;
@@ -71,12 +70,10 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
             int newsig = Math.floorMod(this.signal + delta, controllable.getSignalCeiling() + 1);
             if (newsig != this.signal && newsig >= 0) {
-                this.writeCustomData(
-                        UPDATE_REDSTONE_SIGNAL,
-                        (buf) -> {
-                            buf.writeInt(newsig);
-                            this.signal = newsig;
-                        });
+                this.writeCustomData(UPDATE_REDSTONE_SIGNAL, (buf) -> {
+                    buf.writeInt(newsig);
+                    this.signal = newsig;
+                });
             }
         }
     }
@@ -92,8 +89,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     }
 
     @Override
-    public void renderMetaTileEntity(
-                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         getOverlay().renderSided(getFrontFacing(), renderState, translation, pipeline);
     }
@@ -137,11 +133,9 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                 pulse();
             }
             pulledUp = val != 0;
-            writeCustomData(
-                    UPDATE_REDSTONE_ACTIVATION,
-                    buf -> {
-                        buf.writeBoolean(pulledUp);
-                    });
+            writeCustomData(UPDATE_REDSTONE_ACTIVATION, buf -> {
+                buf.writeBoolean(pulledUp);
+            });
         }
     }
 
@@ -165,38 +159,23 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
             IncrementButtonWidget up = new IncrementButtonWidget(7, 7, 20, 20, 1, 4, 16, 64, this::changeSignal);
             IncrementButtonWidget down = new IncrementButtonWidget(163, 7, 20, 20, -1, -4, -16, -64,
                     this::changeSignal);
-            DynamicLabelWidget sig = new DynamicLabelWidget(
-                    27,
-                    11,
-                    () -> {
-                        return I18n.format(
-                                this.getMetaName() + ".signal_label",
-                                Integer.toString(signal),
-                                Integer.toString(limit));
-                    },
-                    0xffffff);
+            DynamicLabelWidget sig = new DynamicLabelWidget(27, 11, () -> {
+                return I18n.format(this.getMetaName() + ".signal_label", Integer.toString(signal),
+                        Integer.toString(limit));
+            }, 0xffffff);
 
-            DynamicLabelWidget name = new DynamicLabelWidget(
-                    8,
-                    27,
-                    () -> {
-                        int n = 34;
-                        String s = I18n.format(
-                                this.getMetaName() + ".signal_desc",
-                                I18n.format(receiver.getSignalTranslationKey(this.signal)));
+            DynamicLabelWidget name = new DynamicLabelWidget(8, 27, () -> {
+                int n = 34;
+                String s = I18n.format(this.getMetaName() + ".signal_desc",
+                        I18n.format(receiver.getSignalTranslationKey(this.signal)));
 
-                        return IntStream.range(0, (s.length() + n - 1) / n)
-                                .mapToObj(i -> s.substring(i * n, Math.min(s.length(), (i + 1) * n)))
-                                .collect(Collectors.joining("\n"));
-                    },
-                    0xffffff);
-            DynamicLabelWidget status = new DynamicLabelWidget(
-                    8,
-                    110,
-                    () -> {
-                        return I18n.format(
-                                this.getMetaName() + ".pulled." + Boolean.toString(this.pulledUp));
-                    });
+                return IntStream.range(0, (s.length() + n - 1) / n)
+                        .mapToObj(i -> s.substring(i * n, Math.min(s.length(), (i + 1) * n)))
+                        .collect(Collectors.joining("\n"));
+            }, 0xffffff);
+            DynamicLabelWidget status = new DynamicLabelWidget(8, 110, () -> {
+                return I18n.format(this.getMetaName() + ".pulled." + Boolean.toString(this.pulledUp));
+            });
             builder.widget(screen);
             builder.widget(sig);
             builder.widget(up);

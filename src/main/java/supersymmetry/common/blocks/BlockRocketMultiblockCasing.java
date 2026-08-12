@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -31,8 +30,8 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
@@ -72,8 +71,10 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
     public enum CasingType implements IStringSerializable {
 
         VINYL_CEILING_TILE("vinyl_ceiling_tile"),
-        CEILING_GRID_FILTER_UNIT("ceiling_grid_filter_unit"),
-        VINYL_COMPOSITE_FLOORING("vinyl_composite_flooring"),
+        CEILING_GRID_FILTER_UNIT(
+                "ceiling_grid_filter_unit"),
+        VINYL_COMPOSITE_FLOORING(
+                "vinyl_composite_flooring"),
         AEROSPACE_GASKET("aerospace_gasket");
 
         private final String name;
@@ -82,8 +83,7 @@ public class BlockRocketMultiblockCasing extends VariantBlock<BlockRocketMultibl
             this.name = name;
         }
 
-        @Nonnull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

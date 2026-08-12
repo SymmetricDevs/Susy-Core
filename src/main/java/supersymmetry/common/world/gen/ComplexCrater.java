@@ -3,8 +3,8 @@ package supersymmetry.common.world.gen;
 import net.minecraft.block.state.IBlockState;
 
 /**
- * A complex (large) impact crater with a flat floor and raised central peak region.
- * Diameter is typically 80 blocks or more.
+ * A complex (large) impact crater with a flat floor and raised central peak
+ * region. Diameter is typically 80 blocks or more.
  */
 public class ComplexCrater extends CraterBase {
 
@@ -20,8 +20,8 @@ public class ComplexCrater extends CraterBase {
     }
 
     /**
-     * Flat-floored profile: fully excavated within the inner zone,
-     * then shallowing toward the rim.
+     * Flat-floored profile: fully excavated within the inner zone, then shallowing
+     * toward the rim.
      */
     @Override
     protected int computeFloorDepth(int maxDepth, double normalizedDist) {

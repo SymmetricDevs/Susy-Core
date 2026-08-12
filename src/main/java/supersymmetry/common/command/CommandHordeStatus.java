@@ -2,8 +2,6 @@ package supersymmetry.common.command;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -12,6 +10,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
@@ -43,8 +43,7 @@ public class CommandHordeStatus extends CommandBase {
                 player = this.getPlayer(server, player, name);
             }
 
-            MobHordePlayerData playerData = MobHordeWorldData.get(player.world)
-                    .getPlayerData(player.getPersistentID());
+            MobHordePlayerData playerData = MobHordeWorldData.get(player.world).getPlayerData(player.getPersistentID());
 
             if (playerData.hasActiveInvasion) {
                 ITextComponent textComponent = new TextComponentTranslation(

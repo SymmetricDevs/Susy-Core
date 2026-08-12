@@ -36,9 +36,7 @@ public abstract class MetaTileEntityHolderMixin extends TileEntity {
             at = @At(value = "INVOKE",
                      target = "Lorg/apache/logging/log4j/Logger;error(Ljava/lang/String;)V",
                      remap = false))
-    private void checkSuSy(
-                           NBTTagCompound compound,
-                           CallbackInfo ci,
+    private void checkSuSy(NBTTagCompound compound, CallbackInfo ci,
                            @Local(name = "metaTileEntityIdRaw") String metaTileEntityIdRaw,
                            @Local(name = "metaTileEntityData") NBTTagCompound metaTileEntityData) {
         if (metaTileEntityIdRaw.startsWith("gregtech:")) {

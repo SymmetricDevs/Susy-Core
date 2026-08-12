@@ -20,21 +20,24 @@ public class SuSyBiomes {
     private static final Map<Biome, SuSyBiomeEntry> BIOME_ENTRIES = new HashMap<>();
 
     /**
-     * Sets the crater/regolith block for a specific biome.
-     * This block will be used for crater ejecta and surface material in that biome.
+     * Sets the crater/regolith block for a specific biome. This block will be used
+     * for crater ejecta and surface material in that biome.
      *
-     * @param biome The biome to configure
-     * @param block The regolith block state to use
+     * @param biome
+     *              The biome to configure
+     * @param block
+     *              The regolith block state to use
      */
     public static void setCraterBlock(Biome biome, IBlockState block) {
         BIOME_CRATER_BLOCKS.put(biome, block);
     }
 
     /**
-     * Gets the crater block for a specific biome.
-     * Returns default regolith if no custom block is set.
+     * Gets the crater block for a specific biome. Returns default regolith if no
+     * custom block is set.
      *
-     * @param biome The biome to query
+     * @param biome
+     *              The biome to query
      * @return The IBlockState for crater material in this biome
      */
     public static IBlockState getCraterBlock(Biome biome) {
@@ -44,7 +47,8 @@ public class SuSyBiomes {
     /**
      * Checks if a biome has a custom crater block configured.
      *
-     * @param biome The biome to check
+     * @param biome
+     *              The biome to check
      * @return true if custom crater block is set, false otherwise
      */
     public static boolean hasCraterBlock(Biome biome) {

@@ -11,55 +11,31 @@ import supersymmetry.api.util.SuSyUtility;
 public class SuSyUnknownCompositionMaterials {
 
     public static void init() {
-        Latex = new Material.Builder(27050, SuSyUtility.susyId("latex"))
-                .dust().fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(293))
-                .color(0xFFFADA)
-                .build();
+        Latex = new Material.Builder(27050, SuSyUtility.susyId("latex")).dust()
+                .fluid(FluidStorageKeys.LIQUID, new FluidBuilder().temperature(293)).color(0xFFFADA).build();
 
-        Mud = new Material.Builder(27051, SuSyUtility.susyId("mud"))
-                .liquid()
-                .color(0x211b14)
-                .build();
+        Mud = new Material.Builder(27051, SuSyUtility.susyId("mud")).liquid().color(0x211b14).build();
 
-        Seawater = new Material.Builder(27052, SuSyUtility.susyId("sea_water"))
-                .liquid()
-                .color(0x3c5bc2)
-                .build();
+        Seawater = new Material.Builder(27052, SuSyUtility.susyId("sea_water")).liquid().color(0x3c5bc2).build();
 
         RefractoryGunningMixture = new Material.Builder(27053, SuSyUtility.susyId("refractory_gunning_mixture"))
-                .liquid()
-                .color(0x9c775c)
+                .liquid().color(0x9c775c).build();
+
+        MidgradeLubricant = new Material.Builder(27054, SuSyUtility.susyId("midgrade_lubricant")).liquid()
+                .color(0xc7aa2a).build();
+
+        PremiumLubricant = new Material.Builder(27055, SuSyUtility.susyId("premium_lubricant")).liquid().color(0xba831c)
                 .build();
 
-        MidgradeLubricant = new Material.Builder(27054, SuSyUtility.susyId("midgrade_lubricant"))
-                .liquid()
-                .color(0xc7aa2a)
+        SupremeLubricant = new Material.Builder(27056, SuSyUtility.susyId("supreme_lubricant")).liquid().color(0xad5f10)
                 .build();
 
-        PremiumLubricant = new Material.Builder(27055, SuSyUtility.susyId("premium_lubricant"))
-                .liquid()
-                .color(0xba831c)
+        Coolant = new Material.Builder(27057, SuSyUtility.susyId("coolant")).liquid().color(0x46dde8).build();
+
+        AdvancedCoolant = new Material.Builder(27058, SuSyUtility.susyId("advanced_coolant")).liquid().color(0x33f5ee)
                 .build();
 
-        SupremeLubricant = new Material.Builder(27056, SuSyUtility.susyId("supreme_lubricant"))
-                .liquid()
-                .color(0xad5f10)
-                .build();
-
-        Coolant = new Material.Builder(27057, SuSyUtility.susyId("coolant"))
-                .liquid()
-                .color(0x46dde8)
-                .build();
-
-        AdvancedCoolant = new Material.Builder(27058, SuSyUtility.susyId("advanced_coolant"))
-                .liquid()
-                .color(0x33f5ee)
-                .build();
-
-        LubricatingOil = new Material.Builder(27059, SuSyUtility.susyId("lubricating_oil"))
-                .liquid()
-                .color(0x858146)
-                .flags(FLAMMABLE)
-                .build();
+        LubricatingOil = new Material.Builder(27059, SuSyUtility.susyId("lubricating_oil")).liquid().color(0x858146)
+                .flags(FLAMMABLE).build();
     }
 }

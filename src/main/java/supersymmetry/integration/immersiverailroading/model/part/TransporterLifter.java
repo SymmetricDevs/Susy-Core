@@ -18,11 +18,11 @@ public class TransporterLifter {
     public TransporterLifter(ComponentProvider provider, ModelState state,
                              Function<EntityTransporterErector, Float> lifterAngle) {
         this.lifter = ModelHelper.parseCustomComponent(provider, LIFTER_COMPONENT_REGEX);
-        state.push(settings -> settings.add((ModelState.Animator) (stock, partialTicks) -> new Matrix4()
-                .translate(-7, 1.1, 0)
-                .rotate(stock instanceof EntityTransporterErector transporterErector ?
-                        lifterAngle.apply(transporterErector) : 0,
-                        0, 0, 1)
-                .translate(+7, -1.1, 0))).include(lifter);
+        state.push(settings -> settings
+                .add((ModelState.Animator) (stock, partialTicks) -> new Matrix4().translate(-7, 1.1, 0)
+                        .rotate(stock instanceof EntityTransporterErector transporterErector ?
+                                lifterAngle.apply(transporterErector) : 0, 0, 0, 1)
+                        .translate(+7, -1.1, 0)))
+                .include(lifter);
     }
 }

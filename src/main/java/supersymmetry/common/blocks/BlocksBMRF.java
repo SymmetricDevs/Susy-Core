@@ -25,10 +25,20 @@ public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
         BMRF3("bmrf3", 2),
         BMRF4("bmrf4", 2),
         BMRF5("bmrf5", 2),
-        BMRF6("bmrf6", 2),
+        BMRF6("bmrf6",
+                2),
         BMRF7("bmrf7", 2),
         BMRF8("bmrf8", 2),
-        BMRF9("bmrf9", 2);
+        BMRF9("bmrf9", 2),
+        BMRF10("bmrf10", 2),
+        BMRF11("bmrf11",
+                2),
+        BMRF12("bmrf12",
+                2),
+        BMRF13("bmrf13", 2),
+        BMRF14("bmrf14", 2),
+        BMRF15("bmrf15", 2),
+        BMRF16("bmrf16", 2);
 
         private final String name;
         private final int harvestLevel;

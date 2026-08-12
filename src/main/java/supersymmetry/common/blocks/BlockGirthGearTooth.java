@@ -25,10 +25,7 @@ public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGe
     }
 
     @Override
-    public boolean canCreatureSpawn(
-                                    @NotNull IBlockState state,
-                                    @NotNull IBlockAccess world,
-                                    @NotNull BlockPos pos,
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
                                     @NotNull SpawnPlacementType type) {
         return false;
     }
@@ -45,8 +42,7 @@ public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGe
 
     public enum Type implements IStringSerializable {
 
-        STEEL("steel"),
-        ;
+        STEEL("steel"),;
 
         private final String name;
 
@@ -54,8 +50,7 @@ public class BlockGirthGearTooth extends VariantAxialRotatableBlock<BlockGirthGe
             this.name = name;
         }
 
-        @NotNull
-        public String getName() {
+        @NotNull public String getName() {
             return name;
         }
     }

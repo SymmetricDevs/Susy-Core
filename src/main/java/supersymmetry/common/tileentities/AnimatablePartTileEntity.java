@@ -27,15 +27,14 @@ public class AnimatablePartTileEntity extends TileEntity implements IAnimatable 
 
     private <E extends TileEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().transitionLengthTicks = 0.0;
-        event.getController().setAnimation((new AnimationBuilder())
-                .addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController()
+                .setAnimation((new AnimationBuilder()).addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this,
-                "controller", 0.0F, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 0.0F, this::predicate));
     }
 
     @Override

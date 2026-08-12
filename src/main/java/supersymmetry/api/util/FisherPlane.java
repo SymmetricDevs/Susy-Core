@@ -5,7 +5,8 @@ import net.minecraft.util.math.Vec3d;
 public class FisherPlane {
 
     /**
-     * @param grid 3D grid with two classes of points.
+     * @param grid
+     *             3D grid with two classes of points.
      * @return Fisher discriminant normal vector (pointing from 0s to 1s)
      */
     public static Vec3d fisherNormal(boolean[][][] grid, boolean normalize) {

@@ -38,7 +38,8 @@ public class PlanetBiomeProvider extends BiomeProvider {
         biomeSize = planet.getBiomeSize();
         biomesToSpawnIn = biomeList.stream().map(entry -> entry.biome).collect(Collectors.toList());
 
-        // We need to modify the generators to use the biome list due to the annoying superclass
+        // We need to modify the generators to use the biome list due to the annoying
+        // superclass
         modifyGenerators(world.getSeed());
 
         cache = new BiomeCache(this);
@@ -54,10 +55,7 @@ public class PlanetBiomeProvider extends BiomeProvider {
         biomeList = new ArrayList<>();
         GenLayer biomes = new PlanetGenLayerBiomes(seed, null).setBiomeList(biomeList);
 
-        return new GenLayer[] {
-                biomes,
-                null
-        };
+        return new GenLayer[] { biomes, null };
     }
 
     private void modifyGenerators(long seed) {

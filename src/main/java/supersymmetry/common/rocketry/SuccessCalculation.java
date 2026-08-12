@@ -7,7 +7,8 @@ public class SuccessCalculation {
 
     public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
     public static final double AUGMENTATION_CONSTANT = 768000;
-    // A 50% success blueprint takes just under 5 hours at this rate to bring to 80% for a starting-tier AFS
+    // A 50% success blueprint takes just under 5 hours at this rate to bring to 80%
+    // for a starting-tier AFS
 
     public static double augmentSuccess(double success, long augmentation) {
         success = Math.max(0.0001, success);
@@ -22,9 +23,8 @@ public class SuccessCalculation {
         EXPLODES
     }
 
-    public record AFSStats(double success,
-                           double mass, double fuelMass, double deltaV, double escapeVelocity, double cargoCapacity,
-                           double radialInstability, double thrust, double oblateness) {
+    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
+                           double cargoCapacity, double radialInstability, double thrust, double oblateness) {
 
         public static AFSStats none() {
             return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -50,9 +50,8 @@ public class SuccessCalculation {
 
         public static AFSStats deserializeNBT(NBTTagCompound nbt) {
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
-                    nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"),
-                    nbt.getDouble("cargoCapacity"), nbt.getDouble("radialInstability"),
-                    nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
+                    nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"), nbt.getDouble("cargoCapacity"),
+                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
         }
 
         public void writeToBuffer(PacketBuffer buf) {
@@ -68,9 +67,8 @@ public class SuccessCalculation {
         }
 
         public static AFSStats readFromBuffer(PacketBuffer buf) {
-            return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble());
+            return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
         }
     }
 }

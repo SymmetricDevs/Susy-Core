@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,6 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import cam72cam.mod.entity.ModdedEntity;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
@@ -52,6 +51,7 @@ import gregtech.common.blocks.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
+import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
@@ -67,20 +67,21 @@ import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
-                                           implements IProgressBarMultiblock, IRedstoneControllable {
+                                           implements
+                                           IProgressBarMultiblock,
+                                           IRedstoneControllable,
+                                           IRocketAssemblyController {
 
-    public DataStorageLoader blueprintSlot = new DataStorageLoader(
-            this,
-            x -> {
-                if (x.hasTagCompound()) {
-                    NBTTagCompound tag = x.getTagCompound();
-                    AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-                    if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
-                        return true;
-                    }
-                }
-                return false;
-            });
+    public DataStorageLoader blueprintSlot = new DataStorageLoader(this, x -> {
+        if (x.hasTagCompound()) {
+            NBTTagCompound tag = x.getTagCompound();
+            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+            if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
+                return true;
+            }
+        }
+        return false;
+    });
 
     // list of every component that has to be constructed.
     public List<AbstractComponent<?>> componentList = new ArrayList<>();
@@ -90,16 +91,14 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-        signalActions.add(
-                () -> {
-                    if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
-                        this.startAssembly(this.getCurrentBlueprint());
-                    }
-                });
-        signalActions.add(
-                () -> {
-                    this.abortAssembly();
-                });
+        signalActions.add(() -> {
+            if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
+                this.startAssembly(this.getCurrentBlueprint());
+            }
+        });
+        signalActions.add(() -> {
+            this.abortAssembly();
+        });
         this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
     }
 
@@ -145,7 +144,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public AbstractRocketBlueprint getCurrentBlueprint() {
-        if (blueprintSlot.isEmpty()) return null;
+        if (blueprintSlot.isEmpty())
+            return null;
         NBTTagCompound tag = blueprintSlot.getStackInSlot(0).getTagCompound();
         AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
         if (bp.readFromNBT(tag)) {
@@ -174,6 +174,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.recipeMapWorkable.invalidate(); // this can break some things
     }
 
+    @Override
     public void finishAssembly() {
         this.blueprintSlot.setLocked(false);
         this.isAssemblyWorking = false;
@@ -212,13 +213,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.componentIndex = 0;
 
         this.isAssemblyWorking = true;
-        this.componentList = bp.getStages().stream()
-                .flatMap(x -> x.getComponents().values().stream())
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        this.componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
+                .flatMap(List::stream).collect(Collectors.toList());
         this.blueprintSlot.setLocked(true);
     }
 
+    @Override
     public AbstractComponent<?> getCurrentCraftTarget() {
         if (isAssemblyWorking && componentList.size() >= componentIndex + 1) {
             return this.componentList.get(this.componentIndex);
@@ -230,9 +230,41 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     // meant to be called after a recipe is done
+    @Override
     public void nextComponent() {
-        if (!isAssemblyWorking) return;
+        if (!isAssemblyWorking)
+            return;
         this.componentIndex++;
+    }
+
+    @Override
+    public boolean isAssemblyWorking() {
+        return this.isAssemblyWorking;
+    }
+
+    @Override
+    public int getComponentIndex() {
+        return this.componentIndex;
+    }
+
+    @Override
+    public int getComponentCount() {
+        return this.componentList.size();
+    }
+
+    @Override
+    public boolean isAssemblySiteAvailable() {
+        return findTransporterErector() != null;
+    }
+
+    @Override
+    public boolean isAssemblySiteReady() {
+        return hasSuitableErector();
+    }
+
+    @Override
+    public void onComponentSetup() {
+        displayAssemblerProgress();
     }
 
     public boolean hasSuitableErector() {
@@ -247,13 +279,13 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void displayAssemblerProgress() {
-        // Reveal the rocket up to the components built so far on the erector. This is synced to the client
+        // Reveal the rocket up to the components built so far on the erector. This is
+        // synced to the client
         // by the T/E itself.
         EntityTransporterErector erector = findTransporterErector();
         if (erector != null && !this.componentList.isEmpty()) {
             erector.setAssemblyProgress((float) this.componentIndex / this.componentList.size(),
-                    (float) (this.componentIndex + 1) / this.componentList.size(),
-                    this.getWorld().getTotalWorldTime(),
+                    (float) (this.componentIndex + 1) / this.componentList.size(), this.getWorld().getTotalWorldTime(),
                     this.getWorld().getTotalWorldTime() + this.getRecipeLogic().getMaxProgress());
         }
     }
@@ -293,7 +325,8 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     @Override
     public double getFillPercentage(int index) {
-        if (!isStructureFormed()) return 0;
+        if (!isStructureFormed())
+            return 0;
         if (index == 1 && isAssemblyWorking && this.componentList.size() != 0) {
             return (float) (this.componentIndex + 1) / (float) this.componentList.size();
         }
@@ -313,8 +346,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         return false;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.AFS_OVERLAY;
     }
@@ -334,96 +366,55 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     protected ModularUI.Builder createUITemplate(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 198, 216);
         builder.image(4, 4, 190, 117, GuiTextures.DISPLAY)
-                .widget(new ProgressWidget(
-                        () -> this.getFillPercentage(0),
-                        4, 123, 94, 7,
-                        this.getProgressBarTexture(0),
-                        ProgressWidget.MoveType.HORIZONTAL))
-                .widget(new ProgressWidget(
-                        () -> this.getFillPercentage(1),
-                        100, 123, 94, 7,
-                        this.getProgressBarTexture(1),
-                        ProgressWidget.MoveType.HORIZONTAL)
-                                .setHoverTextConsumer(this::addBarHoverText));
-        builder.widget(
-                new IndicatorImageWidget(174, 101, 17, 17, getLogo())
-                        .setWarningStatus(getWarningLogo(), this::addWarningText)
-                        .setErrorStatus(getErrorLogo(), this::addErrorText));
+                .widget(new ProgressWidget(() -> this.getFillPercentage(0), 4, 123, 94, 7,
+                        this.getProgressBarTexture(0), ProgressWidget.MoveType.HORIZONTAL))
+                .widget(new ProgressWidget(() -> this.getFillPercentage(1), 100, 123, 94, 7,
+                        this.getProgressBarTexture(1), ProgressWidget.MoveType.HORIZONTAL)
+                        .setHoverTextConsumer(this::addBarHoverText));
+        builder.widget(new IndicatorImageWidget(174, 101, 17, 17, getLogo())
+                .setWarningStatus(getWarningLogo(), this::addWarningText)
+                .setErrorStatus(getErrorLogo(), this::addErrorText));
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
         // TODO make this take less space so that the ItemCostWidget has more space
-        builder.widget(
-                new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
-                        .setMaxWidthLimit(181)
-                        .setClickHandler(this::handleDisplayClick));
+        builder.widget(new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF).setMaxWidthLimit(181)
+                .setClickHandler(this::handleDisplayClick));
 
         // Power Button
         IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
         if (controllable != null) {
-            builder.widget(
-                    new ImageCycleButtonWidget(
-                            173,
-                            191,
-                            18,
-                            18,
-                            GuiTextures.BUTTON_POWER,
-                            controllable::isWorkingEnabled,
-                            controllable::setWorkingEnabled));
+            builder.widget(new ImageCycleButtonWidget(173, 191, 18, 18, GuiTextures.BUTTON_POWER,
+                    controllable::isWorkingEnabled, controllable::setWorkingEnabled));
             builder.widget(new ImageWidget(173, 209, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
         }
 
         // start button
-        builder.widget(
-                new ClickButtonWidget(
-                        173,
-                        151,
-                        18,
-                        18,
-                        "",
-                        (clickData -> {
-                            if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
-                                this.startAssembly(this.getCurrentBlueprint());
-                            }
-                        }))
-                                .setTooltipText("susy.machine.rocket_assembler.gui.start")
-                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
+        builder.widget(new ClickButtonWidget(173, 151, 18, 18, "", (clickData -> {
+            if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
+                this.startAssembly(this.getCurrentBlueprint());
+            }
+        })).setTooltipText("susy.machine.rocket_assembler.gui.start")
+                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_START));
         // stop button
-        builder.widget(
-                new ClickButtonWidget(
-                        173,
-                        133,
-                        18,
-                        18,
-                        "",
-                        (clickData1 -> {
-                            this.abortAssembly();
-                        }))
-                                .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
-                                .setTooltipText("susy.machine.rocket_assembler.gui.stop"));
-        builder.dynamicLabel(
-                40,
-                79,
-                () -> {
-                    return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
-                },
-                0x404040);
+        builder.widget(new ClickButtonWidget(173, 133, 18, 18, "", (clickData1 -> {
+            this.abortAssembly();
+        })).setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                .setTooltipText("susy.machine.rocket_assembler.gui.stop"));
+        builder.dynamicLabel(40, 79, () -> {
+            return !blueprintSlot.isEmpty() ? "" : I18n.format(this.getMetaName() + ".blueprint_slot.name");
+        }, 0x404040);
         SlotWidgetMentallyStable blueprintslot = new SlotWidgetMentallyStable(this.blueprintSlot, 0, 173, 79);
         blueprintslot.setBackgroundTexture(GuiTextures.SLOT_DARK);
-        blueprintslot.setChangeListener(
-                () -> {
-                    if (blueprintSlot.isEmpty()) {
-                        this.abortAssembly();
-                    }
-                });
+        blueprintslot.setChangeListener(() -> {
+            if (blueprintSlot.isEmpty()) {
+                this.abortAssembly();
+            }
+        });
         builder.widget(blueprintslot);
-        builder.widget(
-                new ItemCostWidget(
-                        new Size(158, 50),
-                        new Position(9, 70),
-                        this::getCurrentRecipe,
-                        // TODO less stupid predicate thats synced to the client
-                        // because isAssemblyWorking is not
-                        () -> this.blueprintSlot.isLocked()));
+        builder.widget(new ItemCostWidget(new Size(158, 50), new Position(9, 70), this::getCurrentRecipe,
+                // TODO less stupid predicate thats synced to the client
+                // because isAssemblyWorking is not
+                () -> this.blueprintSlot.isLocked()));
 
         builder.bindPlayerInventory(entityPlayer.inventory, 133);
         return builder;
@@ -455,24 +446,16 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
-        return new ClickButtonWidget(
-                x,
-                y,
-                width,
-                height,
-                "",
-                (clickData -> {
-                    this.abortAssembly();
-                }))
-                        .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
-                        .setTooltipText("susy.machine.rocket_assembler.gui.stop");
+        return new ClickButtonWidget(x, y, width, height, "", (clickData -> {
+            this.abortAssembly();
+        })).setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
@@ -489,224 +472,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
-                        " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "             VV VV           VV VV           VV VV             ",
-                        "              VGV             VGV             VGV              ",
-                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
-                        " P           PHHHP           PHHHP           PHHHP           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "             VV VV           VV VV           VV VV             ",
-                        "              VGV             VGV             VGV              ",
-                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
-                        " P           PHHHP           PHHHP           PHHHP           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        "                                                               ",
-                        " P           P   P           P   P           P   P           P ")
-                .aisle(
-                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
@@ -723,8 +489,211 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
                         " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
-                .aisle(
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "             VV VV           VV VV           VV VV             ",
+                        "              VGV             VGV             VGV              ",
+                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
+                        " P           PHHHP           PHHHP           PHHHP           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "             VV VV           VV VV           VV VV             ",
+                        "              VGV             VGV             VGV              ",
+                        "BBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBBGBBBBBBBBBBBBBBB",
+                        " P           PHHHP           PHHHP           PHHHP           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        "                                                               ",
+                        " P           P   P           P   P           P   P           P ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " P   P   P   P   P   P   P   P   P   P   P   P   P   P   P   P ",
+                        " PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP ")
+                .aisle("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
@@ -741,41 +710,27 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                         "                                                               ",
                         "                                                               ",
                         "                                                               ")
-                .where(' ', any())
-                .where('M', maintenancePredicate())
-                .where('S', selfPredicate())
-                .where(
-                        'F',
-                        states(
-                                MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
-                                        .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
-                .where(
-                        'C',
+                .where(' ', any()).where('M', maintenancePredicate()).where('S', selfPredicate())
+                .where('F',
+                        states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
+                                .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)))
+                .where('C',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT))
-                                        .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
-                                                .setMaxGlobalLimited(2))
-                                        .or(
-                                                abilities(MultiblockAbility.IMPORT_ITEMS)
-                                                        .setPreviewCount(1)
-                                                        .setMinGlobalLimited(1)
-                                                        .setMaxGlobalLimited(2))
-                                        .or(
-                                                abilities(MultiblockAbility.INPUT_ENERGY)
-                                                        .setMinGlobalLimited(8)
-                                                        .setMaxGlobalLimited(8)
-                                                        .setPreviewCount(8)))
+                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate()
+                                        .setMaxGlobalLimited(2))
+                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
+                                        .setMinGlobalLimited(1)
+                                        .setMaxGlobalLimited(2))
+                                .or(abilities(MultiblockAbility.INPUT_ENERGY)
+                                        .setMinGlobalLimited(8).setMaxGlobalLimited(8).setPreviewCount(8)))
                 .where('R', SuSyPredicates.rails())
-                .where(
-                        'P',
-                        states(
-                                SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
-                                        BlockRocketAssemblerCasing.RocketAssemblerCasingType.STRUCTURAL_FRAME)))
-                .where(
-                        'B',
-                        states(
-                                SuSyBlocks.ROCKET_ASSEMBLER_CASING.getState(
-                                        BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
+                .where('P',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.STRUCTURAL_FRAME)))
+                .where('B',
+                        states(SuSyBlocks.ROCKET_ASSEMBLER_CASING
+                                .getState(BlockRocketAssemblerCasing.RocketAssemblerCasingType.RAILS)))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('H', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
@@ -784,17 +739,10 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     protected @NotNull Widget getStopButton(int x, int y, int width, int height) {
-        return new ClickButtonWidget(
-                x,
-                y,
-                width,
-                height,
-                "",
-                (clickData -> {
-                    this.abortAssembly();
-                }))
-                        .setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
-                        .setTooltipText("susy.machine.rocket_assembler.gui.stop");
+        return new ClickButtonWidget(x, y, width, height, "", (clickData -> {
+            this.abortAssembly();
+        })).setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
+                .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 
     private AxisAlignedBB getInternalBB() {

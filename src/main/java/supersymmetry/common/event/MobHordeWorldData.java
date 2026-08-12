@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -14,10 +12,11 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 
+import org.jspecify.annotations.NonNull;
+
 import supersymmetry.Supersymmetry;
 
-public class MobHordeWorldData extends WorldSavedData
-                               implements Function<UUID, MobHordePlayerData> {
+public class MobHordeWorldData extends WorldSavedData implements Function<UUID, MobHordePlayerData> {
 
     private static final String DATA_NAME = Supersymmetry.MODID + "_InvasionData";
     private final Map<UUID, MobHordePlayerData> playerDataMap;
@@ -65,7 +64,7 @@ public class MobHordeWorldData extends WorldSavedData
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound tag) {
+    public void readFromNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = tag.getTagList("PlayerData", Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.tagCount(); i++) {
@@ -77,9 +76,8 @@ public class MobHordeWorldData extends WorldSavedData
         }
     }
 
-    @Nonnull
-    @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tag) {
+    @NonNull @Override
+    public NBTTagCompound writeToNBT(@NonNull NBTTagCompound tag) {
         NBTTagList tagList = new NBTTagList();
 
         for (Map.Entry<UUID, MobHordePlayerData> entry : this.playerDataMap.entrySet()) {

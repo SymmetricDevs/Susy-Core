@@ -35,24 +35,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     public double fuelThroughput;
 
     public ComponentLavalEngine() {
-        super(
-                "laval_engine",
-                "engine",
-                candidate -> candidate.getSecond().stream()
-                        .anyMatch(
-                                pos -> {
-                                    boolean a = candidate
-                                            .getFirst().world
-                                                    .getBlockState(pos)
-                                                    .getBlock()
-                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER);
-                                    boolean b = candidate
-                                            .getFirst().world
-                                                    .getBlockState(pos)
-                                                    .equals(SuSyBlocks.COMBUSTION_CHAMBER.getState(
-                                                            BlockCombustionChamber.CombustionType.MONOPROPELLANT));
-                                    return a && !b;
-                                }));
+        super("laval_engine", "engine", candidate -> candidate.getSecond().stream().anyMatch(pos -> {
+            boolean a = candidate.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.COMBUSTION_CHAMBER);
+            boolean b = candidate.getFirst().world.getBlockState(pos).equals(
+                    SuSyBlocks.COMBUSTION_CHAMBER.getState(BlockCombustionChamber.CombustionType.MONOPROPELLANT));
+            return a && !b;
+        }));
     }
 
     @Override
@@ -91,13 +79,17 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             return Optional.empty();
         }
         ComponentLavalEngine engine = new ComponentLavalEngine();
-        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST)) return Optional.empty();
-        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE)) return Optional.empty();
-        compound
-                .getTagList("materials", Constants.NBT.TAG_COMPOUND)
+        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST))
+            return Optional.empty();
+        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE))
+            return Optional.empty();
+        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
                 .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
         engine.areaRatio = compound.getDouble("area_ratio");
@@ -138,7 +130,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             areas.add(airLayer.size() + airPerimeter.size() / 2);
         }
 
-        // For all rocket nozzles, the air layer list should be increasing. 3 blocks should be a minimum
+        // For all rocket nozzles, the air layer list should be increasing. 3 blocks
+        // should be a minimum
         // length under that assumption.
         if (areas.size() < 3 || areas.get(0) > 5) {
             if (areas.size() < 3) {
@@ -176,8 +169,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         // Below the chamber: Open space
         BlockPos cChamber = cChambers.get(0);
         Set<BlockPos> pumps = analysis
-                .getOfBlockType(
-                        analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
+                .getOfBlockType(analysis.getBlockNeighbors(cChamber, StructAnalysis.orthVecs), SuSyBlocks.TURBOPUMP)
                 .collect(Collectors.toSet());
         if (nozzleBB.contains(new Vec3d(cChamber))) {
             analysis.status = BuildStat.C_CHAMBER_INSIDE;
@@ -191,8 +183,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         // Analyze turbopumps
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
         int pumpNum = ((BlockCombustionChamber.CombustionType) (((VariantBlock<?>) chamberState.getBlock())
-                .getState(chamberState)))
-                        .getMinPumps();
+                .getState(chamberState))).getMinPumps();
         if (pumps.size() < pumpNum) {
             analysis.status = BuildStat.WRONG_NUM_PUMPS;
             return Optional.empty();
@@ -220,8 +211,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         Set<BlockPos> engineBlocks = new HashSet<>(nozzle);
         engineBlocks.addAll(pumps);
         engineBlocks.add(cChamber);
-        engineBlocks.addAll(
-                analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
+        engineBlocks.addAll(analysis.getOfBlockType(blocks, SuSyBlocks.INTERSTAGE).collect(Collectors.toSet()));
         engineBlocks.addAll(stickBlocks);
 
         if (engineBlocks.size() < blocks.size()) {
@@ -234,8 +224,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         tag.setDouble("area_ratio", computedAreaRatio);
         this.areaRatio = computedAreaRatio;
         // Not the default; more of an inner radius
-        this.radius = analysis.getRadius(
-                blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
+        this.radius = analysis
+                .getRadius(blocks.stream().filter(bp -> bp.getY() == nozzleBB.maxY).collect(Collectors.toSet()));
         tag.setDouble("radius", radius);
 
         collectInfo(analysis, blocks, tag);

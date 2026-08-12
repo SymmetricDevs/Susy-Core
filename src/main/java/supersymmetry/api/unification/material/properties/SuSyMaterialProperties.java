@@ -6,6 +6,5 @@ import gregtech.api.unification.material.properties.PropertyKey;
 
 public class SuSyMaterialProperties {
 
-    private static final Set<PropertyKey<?>> baseTypes = new HashSet<>(Arrays.asList(
-            SuSyPropertyKey.FIBER));
+    private static final Set<PropertyKey<?>> baseTypes = new HashSet<>(Arrays.asList(SuSyPropertyKey.FIBER));
 }

@@ -33,8 +33,7 @@ import supersymmetry.integration.jei.ingredient.ParticleType;
 import supersymmetry.modules.SuSyModules;
 
 @JEIPlugin
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_JEI,
+@GregTechModule(moduleID = SuSyModules.MODULE_JEI,
                 containerID = Supersymmetry.MODID,
                 modDependencies = Mods.Names.JUST_ENOUGH_ITEMS,
                 name = "SuSy JEI Integration",
@@ -71,6 +70,12 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
+        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+                .collect(Collectors.toList()), RocketFuelCategory.UID);
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
+        String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
+        registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
+
         String strandCastingId = GTValues.MODID + ":strand_casting";
         registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
@@ -80,16 +85,11 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.SLAB_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.BILLET_MOLD.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STRAND_COOLER.getStackForm(), strandCastingId);
-
-        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
-                .collect(Collectors.toList()), RocketFuelCategory.UID);
-        registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
-        String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES.getUnlocalizedName();
-        registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
     }
 
     @Override
-    public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
+    public void registerCategories(IRecipeCategoryRegistration registry) {
+        registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
     }

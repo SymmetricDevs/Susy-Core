@@ -64,7 +64,10 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 
 @SuppressWarnings("deprecation")
 public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
-                                                    implements IMui2Holder, IStockInteractor, IFastRenderMetaTileEntity,
+                                                    implements
+                                                    IMui2Holder,
+                                                    IStockInteractor,
+                                                    IFastRenderMetaTileEntity,
                                                     IControllable {
 
     AxisAlignedBB interactionBoundingBox;
@@ -74,8 +77,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
     // This defines which stock classes can be interacted with
     protected StockFilter stockFilter;
 
-    @Nullable
-    protected EntityRollingStock stock;
+    @Nullable protected EntityRollingStock stock;
     protected boolean workingEnabled = true;
     // Rendering
     protected final ICubeRenderer renderer;
@@ -158,8 +160,7 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
     @Override
     public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
         PanelSyncHandler panel = (PanelSyncHandler) syncManager.panel("filter_panel",
-                (panelSyncManager, syncHandler) -> stockFilter.createPopupPanel(panelSyncManager),
-                true);
+                (panelSyncManager, syncHandler) -> stockFilter.createPopupPanel(panelSyncManager), true);
 
         BooleanSyncValue workingStateValue = new BooleanSyncValue(() -> workingEnabled, this::setWorkingEnabled);
         BooleanSyncValue renderBoundingBoxValue = new BooleanSyncValue(() -> renderBoundingBox,
@@ -167,61 +168,30 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
         BooleanSyncValue highlightSelectedStockValue = new BooleanSyncValue(() -> highlightSelectedStock,
                 val -> highlightSelectedStock = val);
 
-        return Mui2Utils.defaultPanel(this)
-                .child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
+        return Mui2Utils.defaultPanel(this).child(IKey.lang(getMetaFullName()).asWidget().pos(5, 5))
                 .child(SlotGroupWidget.playerInventory(true).left(7).bottom(7))
                 .child(Mui2Utils.getLogo().asWidget().size(17).right(7).bottom(88))
-                .child(new CycleButtonWidget()
-                        .left(7)
-                        .bottom(90)
-                        .background(GuiTextures.BUTTON_CLEAN)
-                        .hoverBackground(GuiTextures.BUTTON_CLEAN)
-                        .stateCount(2)
-                        .stateOverlay(SusyGuiTextures.BUTTON_POWER)
-                        .value(workingStateValue))
-                .child(Flow.column()
-                        .top(18)
-                        .margin(7, 0)
-                        .widthRel(1f)
-                        .coverChildrenHeight()
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
-                                .child(new ToggleButton()
-                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA
-                                                .asIcon()
-                                                .size(16))
-                                        .addTooltipLine(IKey.lang(
-                                                "susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
-                                        .value(renderBoundingBoxValue))
-                                .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box")
-                                        .asWidget()
-                                        .align(Alignment.CenterRight)
-                                        .height(18)))
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
-                                .child(new ToggleButton()
-                                        .overlay(SusyGuiTextures.BUTTON_RENDER_AREA
-                                                .asIcon()
-                                                .size(16))
+                .child(new CycleButtonWidget().left(7).bottom(90).background(GuiTextures.BUTTON_CLEAN)
+                        .hoverBackground(GuiTextures.BUTTON_CLEAN).stateCount(2)
+                        .stateOverlay(SusyGuiTextures.BUTTON_POWER).value(workingStateValue))
+                .child(Flow.column().top(18).margin(7, 0).widthRel(1f).coverChildrenHeight().child(Flow.row()
+                        .coverChildrenHeight().marginBottom(2).widthRel(1f)
+                        .child(new ToggleButton().overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
+                                .addTooltipLine(
+                                        IKey.lang("susy.gui.stock_interactor.button.render_bounding_box.tooltip"))
+                                .value(renderBoundingBoxValue))
+                        .child(IKey.lang("susy.gui.stock_interactor.title.render_bounding_box").asWidget()
+                                .align(Alignment.CenterRight).height(18)))
+                        .child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
+                                .child(new ToggleButton().overlay(SusyGuiTextures.BUTTON_RENDER_AREA.asIcon().size(16))
                                         .addTooltipLine(IKey.lang(
                                                 "susy.gui.stock_interactor.button.highlight_selected_stock.tooltip"))
                                         .value(highlightSelectedStockValue))
-                                .child(IKey.lang("susy.gui.stock_interactor.title.highlight_selected_stock")
-                                        .asWidget()
-                                        .align(Alignment.CenterRight)
-                                        .height(18)))
-                        .child(Flow.row()
-                                .coverChildrenHeight()
-                                .marginBottom(2)
-                                .widthRel(1f)
+                                .child(IKey.lang("susy.gui.stock_interactor.title.highlight_selected_stock").asWidget()
+                                        .align(Alignment.CenterRight).height(18)))
+                        .child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
                                 .child(new ButtonWidget<>()
-                                        .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER
-                                                .asIcon()
-                                                .size(16))
+                                        .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
                                         .addTooltipLine(
                                                 IKey.lang("susy.gui.stock_interactor.button.stock_filter.tooltip"))
                                         .onMousePressed(mouseButton -> {
@@ -232,10 +202,8 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
                                             }
                                             return true;
                                         }))
-                                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter")
-                                        .asWidget()
-                                        .align(Alignment.CenterRight)
-                                        .height(18))));
+                                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget()
+                                        .align(Alignment.CenterRight).height(18))));
     }
 
     @Override
@@ -400,8 +368,10 @@ public abstract class MetaTileEntityStockInteractor extends MetaTileEntity
 
     @Override
     public AxisAlignedBB getInteractionBoundingBox() {
-        return interactionBoundingBox == null ? interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(),
-                this.getFrontFacing(), this.getInteractionWidth(), this.getInteractionDepth()) : interactionBoundingBox;
+        return interactionBoundingBox == null ?
+                interactionBoundingBox = StockHelperFunctions.getBox(this.getPos(), this.getFrontFacing(),
+                        this.getInteractionWidth(), this.getInteractionDepth()) :
+                interactionBoundingBox;
     }
 
     public void recalculateBoundingBox() {

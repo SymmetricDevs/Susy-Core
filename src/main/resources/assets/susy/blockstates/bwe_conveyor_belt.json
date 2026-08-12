@@ -1,0 +1,20 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=default" : {
+      "model" : "susy:bwe_conveyor_belt/default"
+    },
+    "facing=south,variant=default" : {
+      "model" : "susy:bwe_conveyor_belt/default",
+      "y" : 180
+    },
+    "facing=west,variant=default" : {
+      "model" : "susy:bwe_conveyor_belt/default",
+      "y" : 270
+    },
+    "facing=east,variant=default" : {
+      "model" : "susy:bwe_conveyor_belt/default",
+      "y" : 90
+    }
+  }
+}

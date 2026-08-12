@@ -83,19 +83,28 @@ public class CommandRecipemapDump extends CommandBase {
                 ja.add(nbtToJson(list.get(i)));
             }
             return ja;
-        } else if (nbt instanceof NBTTagByte) return new JsonPrimitive(((NBTTagByte) nbt).getByte());
-        else if (nbt instanceof NBTTagShort) return new JsonPrimitive(((NBTTagShort) nbt).getShort());
-        else if (nbt instanceof NBTTagInt) return new JsonPrimitive(((NBTTagInt) nbt).getInt());
-        else if (nbt instanceof NBTTagLong) return new JsonPrimitive(((NBTTagLong) nbt).getLong());
-        else if (nbt instanceof NBTTagFloat) return new JsonPrimitive(((NBTTagFloat) nbt).getFloat());
+        } else if (nbt instanceof NBTTagByte)
+            return new JsonPrimitive(((NBTTagByte) nbt).getByte());
+        else if (nbt instanceof NBTTagShort)
+            return new JsonPrimitive(((NBTTagShort) nbt).getShort());
+        else if (nbt instanceof NBTTagInt)
+            return new JsonPrimitive(((NBTTagInt) nbt).getInt());
+        else if (nbt instanceof NBTTagLong)
+            return new JsonPrimitive(((NBTTagLong) nbt).getLong());
+        else if (nbt instanceof NBTTagFloat)
+            return new JsonPrimitive(((NBTTagFloat) nbt).getFloat());
         else if (nbt instanceof NBTTagDouble)
             return new JsonPrimitive(((NBTTagDouble) nbt).getDouble());
-        else if (nbt instanceof NBTTagByteArray) return new JsonPrimitive(nbt.toString());
+        else if (nbt instanceof NBTTagByteArray)
+            return new JsonPrimitive(nbt.toString());
         else if (nbt instanceof NBTTagString)
             return new JsonPrimitive(((NBTTagString) nbt).getString());
-        else if (nbt instanceof NBTTagIntArray) return new JsonPrimitive(nbt.toString());
-        else if (nbt instanceof NBTTagLongArray) return new JsonPrimitive(nbt.toString());
-        else throw new IllegalArgumentException("weird nbt class" + nbt.getClass());
+        else if (nbt instanceof NBTTagIntArray)
+            return new JsonPrimitive(nbt.toString());
+        else if (nbt instanceof NBTTagLongArray)
+            return new JsonPrimitive(nbt.toString());
+        else
+            throw new IllegalArgumentException("weird nbt class" + nbt.getClass());
     }
 
     @Override
@@ -109,20 +118,14 @@ public class CommandRecipemapDump extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args)
-                                                                                      throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         itemStorage.clear();
         fluidStorage.clear();
 
-        Map<String, Supplier<JsonElement>> fns = Map.of(
-                "items", () -> this.dumpItems(),
-                "fluids", () -> this.dumpFluids(),
-                "oreDict", () -> this.dumpOreDict(),
-                "recipemaps", () -> this.gtRecipeMaps(),
-                "smelting", () -> this.dumpSmeltingRecipes(),
-                "crafting", () -> this.dumpCraftingRecipes(),
-                "gtMTEs", () -> this.dumpMachines(),
-                "materials", () -> this.dumpMaterials());
+        Map<String, Supplier<JsonElement>> fns = Map.of("items", () -> this.dumpItems(), "fluids",
+                () -> this.dumpFluids(), "oreDict", () -> this.dumpOreDict(), "recipemaps", () -> this.gtRecipeMaps(),
+                "smelting", () -> this.dumpSmeltingRecipes(), "crafting", () -> this.dumpCraftingRecipes(), "gtMTEs",
+                () -> this.dumpMachines(), "materials", () -> this.dumpMaterials());
         if (args.length == 0) {
             this.runAll(sender, fns);
             return;
@@ -202,8 +205,7 @@ public class CommandRecipemapDump extends CommandBase {
         if (mat.hasProperty(PropertyKey.TOOL)) {
             JsonObject toolProps = new JsonObject();
             ToolProperty prop = mat.getProperty(PropertyKey.TOOL);
-            toolProps.addProperty(
-                    "durability", prop.getToolDurability() * prop.getDurabilityMultiplier());
+            toolProps.addProperty("durability", prop.getToolDurability() * prop.getDurabilityMultiplier());
             toolProps.addProperty("miningSpeed", prop.getToolSpeed());
             toolProps.addProperty("attackDamage", prop.getToolAttackDamage());
             toolProps.addProperty("attackSpeed", prop.getToolAttackSpeed());
@@ -475,7 +477,8 @@ public class CommandRecipemapDump extends CommandBase {
 
     public JsonObject stackToJson(ItemStack stack) {
         JsonObject stackObj = new JsonObject();
-        if (stack == null || stack.getItem() == null) return stackObj;
+        if (stack == null || stack.getItem() == null)
+            return stackObj;
 
         stackObj.addProperty("resource", stack.getItem().getRegistryName().toString());
         stackObj.addProperty("count", stack.getCount());
@@ -488,7 +491,8 @@ public class CommandRecipemapDump extends CommandBase {
 
     public JsonObject fullStackInformation(ItemStack stack) {
         JsonObject stackObj = new JsonObject();
-        if (stack == null || stack.getItem() == null) return stackObj;
+        if (stack == null || stack.getItem() == null)
+            return stackObj;
 
         stackObj.addProperty("displayName", stack.getDisplayName());
         stackObj.addProperty("translationKey", stack.getTranslationKey());
@@ -517,7 +521,8 @@ public class CommandRecipemapDump extends CommandBase {
 
     public JsonElement fullFluidInformation(Fluid fluid) {
         JsonObject fluidObj = new JsonObject();
-        if (fluid == null) return JsonNull.INSTANCE;
+        if (fluid == null)
+            return JsonNull.INSTANCE;
         fluidObj.addProperty("fluidName", fluid.getName());
         fluidObj.addProperty("unlocalizedName", fluid.getUnlocalizedName());
         fluidObj.addProperty("localizedName", fluid.getLocalizedName(new FluidStack(fluid, 1)));
@@ -540,8 +545,10 @@ public class CommandRecipemapDump extends CommandBase {
 
     public JsonObject fluidStackToJson(FluidStack fluidStack) {
         JsonObject stackObj = new JsonObject();
-        if (fluidStack == null) return stackObj;
-        if (fluidStack.getFluid() == null) return stackObj;
+        if (fluidStack == null)
+            return stackObj;
+        if (fluidStack.getFluid() == null)
+            return stackObj;
         stackObj.addProperty("type", "FluidStack");
         stackObj.addProperty("unlocalizedName", fluidStack.getUnlocalizedName());
         stackObj.addProperty("specificLocalizedName", fluidStack.getLocalizedName());
@@ -570,7 +577,8 @@ public class CommandRecipemapDump extends CommandBase {
         for (var cr : ForgeRegistries.RECIPES.getValuesCollection()) {
             JsonObject recipeobj = new JsonObject();
             var id = cr.getRegistryName();
-            if (id == null) continue;
+            if (id == null)
+                continue;
             recipeobj.addProperty("id", id.toString());
             recipeobj.addProperty("isDynamic", cr.isDynamic());
             recipeobj.addProperty("class", cr.getClass().toString());
@@ -606,7 +614,8 @@ public class CommandRecipemapDump extends CommandBase {
 
         for (ItemStack input : smeltMap.keySet()) {
             ItemStack output = smeltMap.get(input);
-            if (output == null) continue; // just in case
+            if (output == null)
+                continue; // just in case
             JsonObject smeltJson = new JsonObject();
             smeltJson.add("input", stackToJson(input));
             smeltJson.add("output", stackToJson(output));
@@ -625,12 +634,11 @@ public class CommandRecipemapDump extends CommandBase {
             machineObj.addProperty("isController", machine instanceof MultiblockControllerBase);
             if (machine instanceof WorkableTieredMetaTileEntity tiered) {
                 machineObj.addProperty("tier", tiered.getTier());
-                machineObj.addProperty(
-                        "recipemapName",
-                        tiered.getRecipeMap().getUnlocalizedName()); // the recipe maps are dumped
+                machineObj.addProperty("recipemapName", tiered.getRecipeMap().getUnlocalizedName()); // the recipe maps
+                                                                                                     // are dumped
                 machineObj.addProperty("workable", tiered.getRecipeLogic().getName());
-                machineObj.addProperty(
-                        "workableParallelLogicType", tiered.getRecipeLogic().getParallelLogicType().toString());
+                machineObj.addProperty("workableParallelLogicType",
+                        tiered.getRecipeLogic().getParallelLogicType().toString());
             }
             root.add(key.toString(), machineObj);
         }
@@ -669,7 +677,8 @@ public class CommandRecipemapDump extends CommandBase {
         var keymap = new JsonObject();
         for (var e : keyMap.entrySet()) {
             keymap.add(String.valueOf(e.getValue()), ingredientToJson(e.getKey()));
-            // results in something like keymap : { "A": { class:"..." validInputs: [ {stack1},{stack2}]}}
+            // results in something like keymap : { "A": { class:"..." validInputs: [
+            // {stack1},{stack2}]}}
         }
         var shape = new JsonArray();
         for (String line : patternBuilder.toString().split("\n")) {

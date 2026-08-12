@@ -33,7 +33,8 @@ public class BloomRenderer {
     private BloomRenderer() {}
 
     public void beginEmissivePass() {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         Minecraft mc = Minecraft.getMinecraft();
         ensureFBOs(mc.displayWidth, mc.displayHeight);
@@ -48,7 +49,8 @@ public class BloomRenderer {
     }
 
     public void endEmissivePass() {
-        if (!ShaderManager.shadersAllowed()) return;
+        if (!ShaderManager.shadersAllowed())
+            return;
 
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();

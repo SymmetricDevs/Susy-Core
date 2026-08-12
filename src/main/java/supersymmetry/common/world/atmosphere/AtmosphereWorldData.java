@@ -1,11 +1,11 @@
 package supersymmetry.common.world.atmosphere;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
+
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.Supersymmetry;
 
@@ -49,7 +49,7 @@ public class AtmosphereWorldData extends WorldSavedData {
     }
 
     @Override
-    public void readFromNBT(@Nonnull NBTTagCompound nbt) {
+    public void readFromNBT(@NonNull NBTTagCompound nbt) {
         if (graph != null) {
             graph.readFromNBT(nbt);
         } else {
@@ -57,9 +57,8 @@ public class AtmosphereWorldData extends WorldSavedData {
         }
     }
 
-    @Nonnull
-    @Override
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound nbt) {
+    @NonNull @Override
+    public NBTTagCompound writeToNBT(@NonNull NBTTagCompound nbt) {
         if (graph != null) {
             graph.writeToNBT(nbt);
         }
