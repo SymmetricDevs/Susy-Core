@@ -110,10 +110,10 @@ public class WorldProviderPlanet extends WorldProvider {
     }
 
     private Vec3d tidalUp(Planetoid ground, double x, double z, double worldTime) {
-        Vec3d up = CelestialObject.surfacePointToLocalUp(x, z, ground.getRadius());
-        Vec3d axis = ground.getRotationAxisEcl();
+        Vec3d up = Orbit.surfacePointToLocalUp(x, z, ground.getRadius());
+        Vec3d axis = ground.getRotationAxis();
         if (axis == null) return up;
-        return Orbit.rotateAboutAxis(up, axis, ground.getRotationAngle(worldTime));
+        return Orbit.rotateAboutAxis(up, axis, -ground.getRotationAngle(worldTime));
     }
 
     public boolean isEclipse(float partialTicks) {
@@ -121,7 +121,7 @@ public class WorldProviderPlanet extends WorldProvider {
         Planetoid ground = getGroundPlanet();
         if (ground == null) return false;
 
-        CelestialObject sun = CelestialObject.findPrimaryStar(ground);
+        CelestialObject sun = ground.findPrimaryStar();
         if (sun == null) return false;
 
         Vec3d sunPos = Orbit.computeAbsolutePosition(sun, worldTime);
@@ -193,7 +193,7 @@ public class WorldProviderPlanet extends WorldProvider {
                 if (ground != null) {
                     double worldTime = world.getWorldTime() + partialTicks;
                     Vec3d localUp = getLocalUpForPlayer(ground, mc.player, worldTime);
-                    double solarAltitude = CelestialObject.computeSolarAltitude(
+                    double solarAltitude = Orbit.computeSolarAltitude(
                             ground, localUp, worldTime);
                     if (!Double.isNaN(solarAltitude))
                         return (float) MathHelper.clamp(solarAltitude * 4.0, 0.0, 1.0);

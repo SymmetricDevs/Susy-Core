@@ -2,6 +2,7 @@ package supersymmetry.api.space;
 
 import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -26,10 +27,11 @@ public class CelestialObject {
     private CelestialObject parentBody;
     private CelestialBodyType celestialBodyType;
 
-    private Vec3d rotationAxisEcl;
+    private Vec3d rotationAxis;
     private double rotationPeriodTicks;
 
     private List<CelestialObject> childBodies = new ObjectArrayList<>();
+    private List<CelestialFeature> features = new ArrayList<>();
 
     public CelestialObject(String translationKey, double posT, double posX, double posY, double posZ, double mass,
                            CelestialBodyType celestialBodyType, @Nullable CelestialObject parentBody) {
@@ -100,6 +102,14 @@ public class CelestialObject {
         return childBodies;
     }
 
+    public void addFeature(CelestialFeature feature) {
+        features.add(feature);
+    }
+
+    public List<CelestialFeature> getFeatures() {
+        return features;
+    }
+
     public String getTranslationKey() {
         return "susy." + translationKey;
     }
@@ -122,32 +132,20 @@ public class CelestialObject {
         return null;
     }
 
-    public static Star findPrimaryStar(CelestialObject body) {
-        return Stream.iterate(body, Objects::nonNull, CelestialObject::getParentBody)
+    public Star findPrimaryStar() {
+        return Stream.iterate(this, Objects::nonNull, CelestialObject::getParentBody)
                 .filter(Star.class::isInstance)
                 .map(Star.class::cast)
                 .findFirst()
                 .orElse(null);
     }
 
-    public static Vec3d surfacePointToLocalUp(double posX, double posZ, double planetRadius) {
-        double scale = 400000.0 * planetRadius;
-        double phi = posX * Math.PI / scale;
-        double lat = posZ * Math.PI / scale;
-        double theta = Math.PI / 2.0 - lat;
-
-        return new Vec3d(
-                Math.sin(theta) * Math.cos(phi),
-                Math.sin(theta) * Math.sin(phi),
-                Math.cos(theta));
+    public Vec3d getRotationAxis() {
+        return rotationAxis;
     }
 
-    public Vec3d getRotationAxisEcl() {
-        return rotationAxisEcl;
-    }
-
-    public CelestialObject setRotationAxisEcl(Vec3d rotationAxisEcl) {
-        this.rotationAxisEcl = rotationAxisEcl;
+    public CelestialObject setRotationAxis(Vec3d rotationAxis) {
+        this.rotationAxis = rotationAxis;
         return this;
     }
 
@@ -164,21 +162,5 @@ public class CelestialObject {
         if (rotationPeriodTicks <= 0) return 0;
         double phase = worldTime % rotationPeriodTicks;
         return phase / rotationPeriodTicks * Math.PI * 2.0;
-    }
-
-    public static double computeSolarAltitude(Planetoid ground, Vec3d localUp, double worldTime) {
-        Star sun = findPrimaryStar(ground);
-        if (sun == null) return Double.NaN;
-        Vec3d sunPos = Orbit.computeAbsolutePosition(sun, worldTime);
-        Vec3d groundPos = Orbit.computeAbsolutePosition(ground, worldTime);
-        Vec3d relativeEcl = sunPos.subtract(groundPos);
-        double distAU = relativeEcl.length();
-        if (distAU < 1e-15) return Double.NaN;
-        return relativeEcl.dotProduct(localUp) / distAU;
-    }
-
-    public static boolean isSunAboveHorizon(Planetoid ground, Vec3d localUp, double worldTime) {
-        double alt = computeSolarAltitude(ground, localUp, worldTime);
-        return !Double.isNaN(alt) && alt > 0;
     }
 }

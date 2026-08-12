@@ -80,9 +80,9 @@ void main() {
 
     float cosTheta = dot(normal, u_sunDir);
 
-    float light = smoothstep(-0.08, 0.08, cosTheta);
+    float light = smoothstep(-0.1, 0.1, cosTheta);
 
-    float ambient = 0.02;
+    float ambient = 0.0;
     vec3 illumination = ambient + (1.0 - ambient) * light * u_sunColor;
 
     vec3 color = surfaceColor.rgb * illumination;

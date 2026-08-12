@@ -26,6 +26,7 @@ public class CelestialObjects {
     public static Planetoid EARTH;
     public static Planetoid MOON;
     public static Planetoid MARS;
+    public static Planetoid SATURN;
 
     // Cubemaps
     public static Cubemap SUN_CUBEMAP;
@@ -64,9 +65,9 @@ public class CelestialObjects {
                 0.00257, 0.0549, Math.toRadians(5.145), Math.toRadians(125.08),
                 Math.toRadians(318.06), Math.toRadians(38.34), 0L, 655720L));
 
-        MOON.setRotationAxisEcl(CelestialOrbitRegistry.get(MOON).computeOrbitalNormal())
+        MOON.setRotationAxis(CelestialOrbitRegistry.get(MOON).computeOrbitalNormal())
                 .setRotationPeriodTicks(655720L);
-        EARTH.setRotationAxisEcl(new Vec3d(0, 0, 1))
+        EARTH.setRotationAxis(new Vec3d(0, 1, 0))
                 .setRotationPeriodTicks(23934L);
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -74,6 +75,9 @@ public class CelestialObjects {
             RENDERER.registerRenderer(SUN, new SunGlowRenderer());
             RENDERER.registerRenderer(EARTH, new CubemapPlanetRenderer(EARTH_CUBEMAP));
             RENDERER.registerRenderer(MOON, new CubemapPlanetRenderer(MOON_CUBEMAP));
+
+            // EARTH.addFeature(new RingFeatureRenderer(1.5, 3.5, 0.1, new Vec3d(0.85, 0.75, 0.6)));
+            // EARTH.addFeature(new RingFeatureRenderer(4.0, 6.0, 0.1, new Vec3d(0.7, 0.6, 0.5)));
         }
     }
 }

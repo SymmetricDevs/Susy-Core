@@ -43,12 +43,12 @@ public class CelestialRenderer extends IRenderHandler {
         Planetoid ground = Planetoid.PLANETOIDS.inverse().get(dimId);
         if (ground == null) return;
 
-        Star primary = CelestialObject.findPrimaryStar(ground);
+        Star primary = ground.findPrimaryStar();
         if (primary == null) return;
 
         List<Star> allStars = findAllStars(primary);
-
-        double worldTime = (world.getWorldTime() + partialTicks);
+        // multiply this to make stuff move around faster :3
+        double worldTime = (world.getWorldTime() + partialTicks) * 100.0;
 
         List<CelestialObject> candidates = collectBodies(ground, primary, allStars);
         if (candidates.isEmpty()) return;
@@ -56,8 +56,8 @@ public class CelestialRenderer extends IRenderHandler {
         Map<CelestialObject, Vec3d> positions = computeAllPositions(candidates, ground, worldTime);
         Vec3d groundCenter = positions.get(ground);
 
-        Vec3d localUpEcl = computeLocalUp(mc, ground);
-        Vec3d spinAxis = ground.getRotationAxisEcl();
+        Vec3d localUp = computeLocalUp(mc, ground);
+        Vec3d spinAxis = ground.getRotationAxis();
         double spinAngle = ground.getRotationAngle(worldTime);
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -82,28 +82,60 @@ public class CelestialRenderer extends IRenderHandler {
             if (renderer == null) continue;
 
             Vec3d bodyPos = positions.get(body);
-            Vec3d relativeEcl = bodyPos.subtract(groundCenter);
-            double distAU = relativeEcl.length();
+            Vec3d relative = bodyPos.subtract(groundCenter);
+            double distAU = relative.length();
             if (distAU < 1e-15) continue;
 
-            if (spinAxis != null) relativeEcl = Orbit.rotateAboutAxis(relativeEcl, spinAxis, -spinAngle);
-            Vec3d frameRotated = rotateToLocalFrame(relativeEcl, localUpEcl);
-            Vec3d mcDir = new Vec3d(frameRotated.x, frameRotated.z, frameRotated.y).normalize();
+            if (spinAxis != null) relative = Orbit.rotateAboutAxis(relative, spinAxis, spinAngle);
+            Vec3d mcDir = rotateToLocalFrame(relative, localUp).normalize();
 
             Vec3d lookVec = mc.player.getLook(partialTicks);
             if (mcDir.dotProduct(lookVec) < -0.1) continue;
-            if (isOccludedBySphere(groundCenter, relativeEcl, body, positions, candidates)) continue;
+            if (isOccludedBySphere(groundCenter, relative, body, positions, candidates)) continue;
 
             double bodyRadiusAU = body.getRadiusAU();
             double angularSizeDeg = Math.toDegrees(2.0 * Math.atan(bodyRadiusAU / distAU));
 
-            List<StarLight> lights = computeLights(allStars, body, bodyPos, positions, localUpEcl, spinAxis,
+            List<StarLight> lights = computeLights(allStars, body, bodyPos, positions, localUp, spinAxis,
                     spinAngle);
 
             BodyRenderData data = new BodyRenderData(worldTime, body, mcDir, distAU, angularSizeDeg,
                     bodyRadiusAU, body == primary, false, lights, viewMat, projMat);
 
             renderer.render(data);
+
+            if (!body.getFeatures().isEmpty()) {
+                Vec3d hostCenterRender = new Vec3d(mcDir.x * 100.0, mcDir.y * 100.0, mcDir.z * 100.0);
+                float hostRadiusRender = (float) (100.0 * Math.tan(Math.toRadians(angularSizeDeg / 2.0)));
+                for (CelestialFeature feature : body.getFeatures()) {
+                    feature.render(data, hostCenterRender, hostRadiusRender, false, localUp);
+                }
+            }
+        }
+
+        if (!ground.getFeatures().isEmpty()) {
+            Vec3d surfaceLocalUp = Orbit.rotateAboutAxis(
+                    Orbit.surfacePointToLocalUp(mc.player.posX, mc.player.posZ, ground.getRadius()),
+                    ground.getRotationAxis(), -ground.getRotationAngle(worldTime));
+
+            Vec3d sunRel = Orbit.computeAbsolutePosition(primary, worldTime)
+                    .subtract(Orbit.computeAbsolutePosition(ground, worldTime));
+            double sunDist = sunRel.length();
+            Vec3d sunDirView = Orbit.toViewDir(sunRel.normalize(), surfaceLocalUp);
+            Vec3d sunColorVec = primary.getColor();
+            float intensity = (float) Math.min(1.0, primary.getMass() / (sunDist * sunDist));
+            List<StarLight> groundLights = new ArrayList<>();
+            groundLights.add(new StarLight(sunDirView, sunColorVec, intensity));
+
+            BodyRenderData surfaceData = new BodyRenderData(worldTime, ground, new Vec3d(0, 1, 0), 0.0,
+                    180.0, ground.getRadiusAU(), false, true, groundLights, viewMat, projMat);
+
+            float planetRadiusView = 1000.0f;
+            Vec3d hostCenterRender = new Vec3d(0, -planetRadiusView, 0);
+
+            for (CelestialFeature feature : ground.getFeatures()) {
+                feature.render(surfaceData, hostCenterRender, planetRadiusView, true, surfaceLocalUp);
+            }
         }
 
         GlStateManager.disableBlend();
@@ -169,20 +201,19 @@ public class CelestialRenderer extends IRenderHandler {
 
     private List<StarLight> computeLights(List<Star> allStars, CelestialObject target,
                                           Vec3d targetPos, Map<CelestialObject, Vec3d> positions,
-                                          Vec3d localUpEcl, Vec3d spinAxis, double spinAngle) {
+                                          Vec3d localUp, Vec3d spinAxis, double spinAngle) {
         List<StarLight> lights = new ArrayList<>();
         for (Star star : allStars) {
             if (star == target) continue;
             Vec3d starPos = positions.get(star);
             if (starPos == null) continue;
 
-            Vec3d starRelEcl = starPos.subtract(targetPos);
-            double dist = starRelEcl.length();
+            Vec3d starRel = starPos.subtract(targetPos);
+            double dist = starRel.length();
             if (dist < 1e-15) continue;
 
-            if (spinAxis != null) starRelEcl = Orbit.rotateAboutAxis(starRelEcl, spinAxis, -spinAngle);
-            Vec3d frameRotated = rotateToLocalFrame(starRelEcl, localUpEcl);
-            Vec3d lightDir = new Vec3d(frameRotated.x, frameRotated.z, frameRotated.y).normalize();
+            if (spinAxis != null) starRel = Orbit.rotateAboutAxis(starRel, spinAxis, spinAngle);
+            Vec3d lightDir = rotateToLocalFrame(starRel, localUp).normalize();
             float intensity = (float) Math.min(1.0, star.getMass() / (dist * dist));
 
             lights.add(new StarLight(lightDir, star.getColor(), intensity));
@@ -257,27 +288,12 @@ public class CelestialRenderer extends IRenderHandler {
     }
 
     private Vec3d computeLocalUp(Minecraft mc, Planetoid ground) {
-        if (mc.player == null) return new Vec3d(0, 0, 1);
-        return CelestialObject.surfacePointToLocalUp(mc.player.posX, mc.player.posZ, ground.getRadius());
+        if (mc.player == null) return new Vec3d(0, 1, 0);
+        return Orbit.surfacePointToLocalUp(mc.player.posX, mc.player.posZ, ground.getRadius());
     }
 
     private static Vec3d rotateToLocalFrame(Vec3d v, Vec3d localUp) {
-        Vec3d target = new Vec3d(0, 0, 1);
-        double cosA = localUp.dotProduct(target);
-        double sinA = Math.sqrt(Math.max(0.0, 1.0 - cosA * cosA));
-        if (sinA < 1e-12) {
-            if (cosA < 0) return new Vec3d(-v.x, -v.y, -v.z);
-            return v;
-        }
-        Vec3d axis = localUp.crossProduct(target);
-        axis = axis.scale(1.0 / (axis.length() + 1e-30));
-
-        double kDotV = v.dotProduct(axis);
-        Vec3d kCrossV = axis.crossProduct(v);
-
-        return v.scale(cosA)
-                .add(kCrossV.scale(sinA))
-                .add(axis.scale(kDotV * (1.0 - cosA)));
+        return Orbit.rotateToLocalFrame(v, localUp);
     }
 
     private static void addDescendants(CelestialObject node, List<CelestialObject> result) {

@@ -52,8 +52,8 @@ public class Orbit {
         double sinI = Math.sin(inclinationRad);
 
         double x = r * (cosO * cosWnu - sinO * sinWnu * cosI);
-        double y = r * (sinO * cosWnu + cosO * sinWnu * cosI);
-        double z = r * sinWnu * sinI;
+        double z = r * (sinO * cosWnu + cosO * sinWnu * cosI);
+        double y = r * sinWnu * sinI;
 
         return new Vec3d(x, y, z);
     }
@@ -80,7 +80,7 @@ public class Orbit {
         double sinO = Math.sin(longitudeOfAscendingNodeRad);
         double cosI = Math.cos(inclinationRad);
         double sinI = Math.sin(inclinationRad);
-        return new Vec3d(sinO * sinI, -cosO * sinI, cosI);
+        return new Vec3d(sinO * sinI, cosI, -cosO * sinI);
     }
 
     public static Vec3d rotateAboutAxis(Vec3d v, Vec3d axis, double angle) {
@@ -90,5 +90,71 @@ public class Orbit {
         return v.scale(c)
                 .add(k.crossProduct(v).scale(s))
                 .add(k.scale(k.dotProduct(v) * (1.0 - c)));
+    }
+
+    public static Vec3d rotateToLocalFrame(Vec3d v, Vec3d localUp) {
+        Vec3d target = new Vec3d(0, 1, 0);
+        double cosA = localUp.dotProduct(target);
+        double sinA = Math.sqrt(Math.max(0.0, 1.0 - cosA * cosA));
+        if (sinA < 1e-12) {
+            if (cosA < 0) return new Vec3d(-v.x, -v.y, -v.z);
+            return v;
+        }
+        Vec3d axis = localUp.crossProduct(target);
+        axis = axis.scale(1.0 / (axis.length() + 1e-30));
+        double kDotV = v.dotProduct(axis);
+        Vec3d kCrossV = axis.crossProduct(v);
+        return v.scale(cosA)
+                .add(kCrossV.scale(sinA))
+                .add(axis.scale(kDotV * (1.0 - cosA)));
+    }
+
+    public static Vec3d toViewDir(Vec3d v, Vec3d localUp) {
+        return rotateToLocalFrame(v, localUp).normalize();
+    }
+
+    public static Vec3d inverseRotateToLocalFrame(Vec3d v, Vec3d localUp) {
+        Vec3d target = new Vec3d(0, 1, 0);
+        double cosA = localUp.dotProduct(target);
+        double sinA = Math.sqrt(Math.max(0.0, 1.0 - cosA * cosA));
+        if (sinA < 1e-12) {
+            if (cosA < 0) return new Vec3d(-v.x, -v.y, -v.z);
+            return v;
+        }
+        Vec3d axis = localUp.crossProduct(target);
+        axis = axis.scale(1.0 / (axis.length() + 1e-30));
+        double kDotV = v.dotProduct(axis);
+        Vec3d kCrossV = axis.crossProduct(v);
+        return v.scale(cosA)
+                .subtract(kCrossV.scale(sinA))
+                .add(axis.scale(kDotV * (1.0 - cosA)));
+    }
+
+    public static Vec3d surfacePointToLocalUp(double posX, double posZ, double planetRadius) {
+        double scale = 400000.0 * planetRadius;
+        double phi = posX * Math.PI / scale;
+        double lat = posZ * Math.PI / scale;
+        double theta = Math.PI / 2.0 - lat;
+
+        return new Vec3d(
+                Math.sin(theta) * Math.cos(phi),
+                Math.cos(theta),
+                Math.sin(theta) * Math.sin(phi));
+    }
+
+    public static double computeSolarAltitude(Planetoid ground, Vec3d localUp, double worldTime) {
+        Star sun = ground.findPrimaryStar();
+        if (sun == null) return Double.NaN;
+        Vec3d sunPos = computeAbsolutePosition(sun, worldTime);
+        Vec3d groundPos = computeAbsolutePosition(ground, worldTime);
+        Vec3d relative = sunPos.subtract(groundPos);
+        double distAU = relative.length();
+        if (distAU < 1e-15) return Double.NaN;
+        return relative.dotProduct(localUp) / distAU;
+    }
+
+    public static boolean isSunAboveHorizon(Planetoid ground, Vec3d localUp, double worldTime) {
+        double alt = computeSolarAltitude(ground, localUp, worldTime);
+        return !Double.isNaN(alt) && alt > 0;
     }
 }

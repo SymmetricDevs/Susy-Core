@@ -122,7 +122,7 @@ public class WorldProviderSpace extends WorldProvider {
         float orbitalPhase = world.getCelestialAngle(partialTicks);
         float playerAngle = orbitalPhase * ((float) Math.PI * 2F);
 
-        Vec3d playerDir = new Vec3d(MathHelper.cos(playerAngle), MathHelper.sin(playerAngle), 0);
+        Vec3d playerDir = new Vec3d(MathHelper.cos(playerAngle), 0, MathHelper.sin(playerAngle));
 
         float dot = (float) playerDir.dotProduct(sunDir);
         return MathHelper.clamp(dot, 0.0F, 1.0F);
