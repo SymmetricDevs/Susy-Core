@@ -111,14 +111,19 @@ public class Orbit {
     }
 
     public static Vec3d toViewDir(Vec3d v, Vec3d localUp) {
-        return rotateToLocalFrame(v, localUp).normalize();
+        return normalizeSafe(rotateToLocalFrame(v, localUp));
+    }
+    //Vec3d normalize returns 0 when .length is < 0.001, even tho f64 precision is ~15 digits
+    public static Vec3d normalizeSafe(Vec3d v) {
+        double len = v.length();
+        if (len < 1e-40) return Vec3d.ZERO;
+        return v.scale(1.0 / len);
     }
 
     public static Vec3d surfacePointToLocalUp(double posX, double posZ, double planetRadius) {
         double scale = 400000.0 * planetRadius;
         double phi = posX * Math.PI / scale;
-        double lat = posZ * Math.PI / scale;
-        double theta = Math.PI / 2.0 - lat;
+        double theta = posZ * Math.PI / scale;
 
         return new Vec3d(
                 Math.sin(theta) * Math.cos(phi),

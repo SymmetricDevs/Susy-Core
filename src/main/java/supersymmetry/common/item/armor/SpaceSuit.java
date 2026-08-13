@@ -22,11 +22,13 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,10 +52,11 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     private static final double DEFAULT_ABSORPTION = 0;
     // TODO balancing
     private static final double LEAK_PER_PUNCTURE = 0.3;
-    private static final int MAX_VISUAL_PUNCTURES = 15;
+    public static final int MAX_PUNCTURES = 16;
 
+    // TODO someone with a brain please make it less bad looking
     private static float[] getHoleData(int count) {
-        int max = Math.min(count, MAX_VISUAL_PUNCTURES);
+        int max = Math.min(count, MAX_PUNCTURES);
         float[] data = new float[max * 3];
         for (int i = 0; i < max; i++) {
             Random rng = new Random(i * 0x9e3779b9 ^ 0x12312312);
@@ -68,8 +71,11 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     }
 
     private final double hoursOfLife;
+
     private final String name;
+
     private final int tier;
+
     private final double relativeAbsorption;
 
     private AnimationFactory factory;
@@ -81,6 +87,54 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         this.name = name;
         this.tier = tier;
         this.relativeAbsorption = relativeAbsorption;
+    }
+
+    @Override
+    public int getPunctures(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null ? tag.getInteger("punctures") : 0;
+    }
+
+    @Override
+    public void setPunctures(ItemStack stack, int count) {
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        stack.getTagCompound().setInteger("punctures", Math.max(0, count));
+    }
+
+    @Override
+    public int getTapedHoles(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null ? Long.bitCount(tag.getLong("tapedMask")) : 0;
+    }
+
+    @Override
+    public long getTapedMask(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null ? tag.getLong("tapedMask") : 0L;
+    }
+
+    @Override
+    public boolean isTaped(ItemStack stack, int index) {
+        if (index < 0 || index >= MAX_PUNCTURES) return false;
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null && (tag.getLong("tapedMask") & (1L << index)) != 0;
+    }
+
+    @Override
+    public void tapeHole(ItemStack stack) {
+        int total = getPunctures(stack);
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        long mask = stack.getTagCompound().getLong("tapedMask");
+        for (int i = 0; i < total && i < MAX_PUNCTURES; i++) {
+            if ((mask & (1L << i)) == 0) {
+                stack.getTagCompound().setLong("tapedMask", mask | (1L << i));
+                return;
+            }
+        }
     }
 
     @Override
@@ -134,8 +188,12 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage,
                             EntityEquipmentSlot slot) {
         super.damageArmor(entity, stack, source, damage, slot);
-        if (SLOT == CHEST && isPunctureDamage(source) && getMaxFlowRate(stack) > 0) {
-            setPunctures(stack, getPunctures(stack) + 1);
+        if (SLOT == HEAD && isPunctureDamage(source)) {
+            int total = getPunctures(stack) + 1;
+            setPunctures(stack, total);
+            if (total > MAX_PUNCTURES) {
+                explodeHelmet(entity, stack);
+            }
         }
     }
 
@@ -152,7 +210,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
         double maxFlow = tank.getMaxFlowRate(chest);
         double baseDrain = 0.05;
-        int effectivePunctures = Math.max(0, tank.getPunctures(chest) - tank.getTapedHoles(chest));
+        int effectivePunctures = Math.max(0, getPunctures(stack) - getTapedHoles(stack));
         double leakRate = effectivePunctures * LEAK_PER_PUNCTURE;
         double totalDemand = baseDrain + leakRate;
         double effectiveDrain = Math.min(maxFlow, totalDemand);
@@ -163,20 +221,11 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     @Override
     public void renderHelmetOverlay(ItemStack stack, EntityPlayer player,
                                     ScaledResolution resolution, float partialTicks) {
-        ItemStack chest = player.getItemStackFromSlot(CHEST);
-        int punctures = 0;
-        int tapedHoles = 0;
+        int punctures = getPunctures(stack);
+        int tapedHoles = getTapedHoles(stack);
         float[] holeData = null;
-        BreathingApparatus tank = null;
-        if (chest.getItem() instanceof SuSyArmorItem item) {
-            if (item.getItem(chest).getArmorLogic() instanceof BreathingApparatus t) {
-                tank = t;
-                punctures = t.getPunctures(chest);
-                tapedHoles = t.getTapedHoles(chest);
-                if (punctures > 0) {
-                    holeData = getHoleData(punctures);
-                }
-            }
+        if (punctures > 0) {
+            holeData = getHoleData(punctures);
         }
 
         glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -191,7 +240,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         int fbH = resolution.getScaledHeight() * sf;
 
         if (holeData != null && tapedHoles > 0) {
-            int totalPositions = Math.min(punctures, MAX_VISUAL_PUNCTURES);
+            int totalPositions = Math.min(punctures, MAX_PUNCTURES);
 
             GlStateManager.matrixMode(GL_PROJECTION);
             GlStateManager.pushMatrix();
@@ -212,7 +261,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             buf.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
             for (int i = 0; i < totalPositions; i++) {
-                if (!tank.isTaped(chest, i)) continue;
+                if (!isTaped(stack, i)) continue;
                 float u = holeData[i * 3];
                 float v = holeData[i * 3 + 1];
                 float px = u * fbW;
@@ -252,7 +301,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
         if (program > 0) {
             GL20.glUseProgram(program);
             GL20.glUniform2f(GL20.glGetUniformLocation(program, "u_resolution"), fbW, fbH);
-            int holeCount = holeData != null ? Math.min(punctures, MAX_VISUAL_PUNCTURES) : 0;
+            int holeCount = holeData != null ? Math.min(punctures, MAX_PUNCTURES) : 0;
             GL20.glUniform1i(GL20.glGetUniformLocation(program, "u_holeCount"), holeCount);
 
             glActiveTexture(GL_TEXTURE0);
@@ -334,7 +383,13 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
 
                 double maxFlow = tank.getMaxFlowRate(chest);
                 if (maxFlow > 0) {
-                    double p = Math.max(0, tank.getPunctures(chest) - tank.getTapedHoles(chest));
+                    ItemStack helmet = player.getItemStackFromSlot(HEAD);
+                    double p = 0;
+                    if (helmet.getItem() instanceof SuSyArmorItem helmetItem) {
+                        if (helmetItem.getItem(helmet).getArmorLogic() instanceof SpaceSuit suit) {
+                            p = Math.max(0, suit.getPunctures(helmet) - suit.getTapedHoles(helmet));
+                        }
+                    }
                     double baseDrain = 0.05;
                     double totalDemand = baseDrain + p * LEAK_PER_PUNCTURE;
                     double effective = Math.min(maxFlow, totalDemand);
@@ -426,6 +481,20 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
             case LEGS -> 0.3F;
             default -> 0.0F;
         };
+    }
+
+    private void explodeHelmet(EntityLivingBase entity, ItemStack stack) {
+        if (!entity.world.isRemote) {
+            entity.world.playSound(null, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ,
+                    SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.6F, 1.0F);
+        }
+        if (entity instanceof EntityPlayer player) {
+            player.renderBrokenItemStack(stack);
+            stack.shrink(1);
+            player.setItemStackToSlot(HEAD, ItemStack.EMPTY);
+        } else {
+            stack.shrink(1);
+        }
     }
 
     private double getDamage(ItemStack stack) {

@@ -93,6 +93,11 @@ public class WorldProviderPlanet extends WorldProvider {
         return PlanetoidHandler.get(getDimension());
     }
 
+    @Override
+    public float calculateCelestialAngle(long worldTime, float partialTicks) {
+        return 0.5F;
+    }
+
     private Planetoid getGroundPlanet() {
         return Planetoid.PLANETOIDS.inverse().get(getDimension());
     }

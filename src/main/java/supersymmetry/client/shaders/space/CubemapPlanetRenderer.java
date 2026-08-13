@@ -9,6 +9,7 @@ import supersymmetry.api.space.StarLight;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.planet.PlanetSurfaceRenderer;
 
+// godless class
 public class CubemapPlanetRenderer implements BodyRenderer {
 
     private final Cubemap cubemap;
@@ -46,7 +47,7 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         float[] planetPos = new float[] { dx * 100f, dy * 100f, dz * 100f };
 
         float spinAngle = (float) data.source.getRotationAngle(data.worldTime);
-        Vec3d spinAxis = data.source.getRotationAxis();
+        Vec3d spinAxis = data.spinAxis;
         float[] rot = buildCubemapRotation(dx, dy, dz, spinAxis, spinAngle);
 
         float[] sunDir;
@@ -118,6 +119,50 @@ public class CubemapPlanetRenderer implements BodyRenderer {
                 sx = (float) (spinAxis.x / slen);
                 sy = (float) (spinAxis.y / slen);
                 sz = (float) (spinAxis.z / slen);
+
+                float e2x = dx - sx * (sx * dx + sy * dy + sz * dz);
+                float e2y = dy - sy * (sx * dx + sy * dy + sz * dz);
+                float e2z = dz - sz * (sx * dx + sy * dy + sz * dz);
+                float e2len = (float) Math.sqrt(e2x * e2x + e2y * e2y + e2z * e2z);
+                if (e2len > 1e-6f) {
+                    float sPerp = (float) Math.sqrt(sx * sx + sz * sz);
+                    if (sPerp > 1e-6f) {
+                        float qx = -sx * sy / sPerp;
+                        float qy = sPerp;
+                        float qz = -sz * sy / sPerp;
+                        float vx = sy * qz - sz * qy;
+                        float vy = sz * qx - sx * qz;
+                        float vz = sx * qy - sy * qx;
+                        float b0x = (sx * qx - sz * vx) / sPerp;
+                        float b0y = (sx * qy - sz * vy) / sPerp;
+                        float b0z = (sx * qz - sz * vz) / sPerp;
+                        float b2x = (sz * qx + sx * vx) / sPerp;
+                        float b2y = (sz * qy + sx * vy) / sPerp;
+                        float b2z = (sz * qz + sx * vz) / sPerp;
+                        rx = -b0x;
+                        ry = -b0y;
+                        rz = -b0z;
+                        upx = sx;
+                        upy = sy;
+                        upz = sz;
+                        dx = b2x;
+                        dy = b2y;
+                        dz = b2z;
+                    } else {
+                        float b2x = e2x / e2len;
+                        float b2y = e2y / e2len;
+                        float b2z = e2z / e2len;
+                        rx = sy * b2z - sz * b2y;
+                        ry = sz * b2x - sx * b2z;
+                        rz = sx * b2y - sy * b2x;
+                        upx = sx;
+                        upy = sy;
+                        upz = sz;
+                        dx = b2x;
+                        dy = b2y;
+                        dz = b2z;
+                    }
+                }
             }
         }
 
@@ -135,22 +180,22 @@ public class CubemapPlanetRenderer implements BodyRenderer {
         float r2y = sy * sz * t + sx * sinA;
         float r2z = cosA + sz * sz * t;
 
-        float m0x = r0x * -rx + r0y * upx + r0z * dx;
-        float m0y = r0x * -ry + r0y * upy + r0z * dy;
-        float m0z = r0x * -rz + r0y * upz + r0z * dz;
+        float m0x = -rx * r0x + upx * r1x + dx * r2x;
+        float m0y = -ry * r0x + upy * r1x + dy * r2x;
+        float m0z = -rz * r0x + upz * r1x + dz * r2x;
 
-        float m1x = r1x * -rx + r1y * upx + r1z * dx;
-        float m1y = r1x * -ry + r1y * upy + r1z * dy;
-        float m1z = r1x * -rz + r1y * upz + r1z * dz;
+        float m1x = -rx * r0y + upx * r1y + dx * r2y;
+        float m1y = -ry * r0y + upy * r1y + dy * r2y;
+        float m1z = -rz * r0y + upz * r1y + dz * r2y;
 
-        float m2x = r2x * -rx + r2y * upx + r2z * dx;
-        float m2y = r2x * -ry + r2y * upy + r2z * dy;
-        float m2z = r2x * -rz + r2y * upz + r2z * dz;
+        float m2x = -rx * r0z + upx * r1z + dx * r2z;
+        float m2y = -ry * r0z + upy * r1z + dy * r2z;
+        float m2z = -rz * r0z + upz * r1z + dz * r2z;
 
         return new float[] {
-                m0x, m0y, m0z, 0f,
-                m1x, m1y, m1z, 0f,
-                m2x, m2y, m2z, 0f,
+                m0x, m0y, -m0z, 0f,
+                m1x, m1y, -m1z, 0f,
+                m2x, m2y, -m2z, 0f,
                 0f, 0f, 0f, 1f
         };
     }

@@ -126,7 +126,7 @@ public class WorldProviderSpace extends WorldProvider {
         Vec3d stationPos = centerPos.add(orbit.computeRelativePosition(worldTime));
         Vec3d up = stationPos.subtract(centerPos);
         if (up.lengthSquared() < 1e-15) return 0.0F;
-        up = up.normalize();
+        up = Orbit.normalizeSafe(up);
 
         CelestialObject sun = center.findPrimaryStar();
         if (sun == null) return 0.0F;

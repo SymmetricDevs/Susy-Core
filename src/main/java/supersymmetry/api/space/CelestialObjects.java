@@ -66,7 +66,13 @@ public class CelestialObjects {
 
         MOON.setRotationAxis(CelestialOrbitRegistry.get(MOON).computeOrbitalNormal())
                 .setRotationPeriodTicks(655720L);
-        EARTH.setRotationAxis(new Vec3d(0, 1, 0))
+        Vec3d moonNormal = CelestialOrbitRegistry.get(MOON).computeOrbitalNormal();
+        double obliquity = Math.toRadians(23.44);
+        double tiltAzimuth = Math.atan2(moonNormal.z, moonNormal.x) + Math.PI;
+        EARTH.setRotationAxis(new Vec3d(
+                Math.sin(obliquity) * Math.cos(tiltAzimuth),
+                Math.cos(obliquity),
+                Math.sin(obliquity) * Math.sin(tiltAzimuth)))
                 .setRotationPeriodTicks(23934L);
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {

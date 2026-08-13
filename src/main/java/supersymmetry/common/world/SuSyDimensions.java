@@ -47,7 +47,7 @@ public class SuSyDimensions {
 
         new SpaceDimension(802, "low_earth_orbit")
                 .setOrbit(CelestialObjects.EARTH, new Orbit(
-                        0.000045, 0.0, Math.toRadians(51.6), 0.0, 0.0, 0.0, 0L, 110_400L))
+                        0.00007, 0.0, Math.toRadians(51.6), 0.0, 0.0, 0.0, 0L, 110_400L))
                 .setRenderer(CelestialObjects.RENDERER)
                 .setGravity(0.0f)
                 .setVacuum(true)

@@ -1,6 +1,6 @@
 package supersymmetry.common.item.behavior;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
+import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.common.item.SuSyArmorItem;
-import supersymmetry.common.item.armor.SpaceSuitTank;
+import supersymmetry.common.item.armor.SpaceSuit;
 
 public class TapeRepairBehavior implements IItemBehaviour {
 
@@ -22,12 +22,12 @@ public class TapeRepairBehavior implements IItemBehaviour {
         }
 
         ItemStack held = player.getHeldItem(hand);
-        ItemStack chest = player.getItemStackFromSlot(CHEST);
-        if (chest.getItem() instanceof SuSyArmorItem item) {
-            if (item.getItem(chest).getArmorLogic() instanceof SpaceSuitTank tank) {
-                if (tank.getTapedHoles(chest) < tank.getPunctures(chest)) {
+        ItemStack helmet = player.getItemStackFromSlot(HEAD);
+        if (helmet.getItem() instanceof SuSyArmorItem item) {
+            if (item.getItem(helmet).getArmorLogic() instanceof SpaceSuit suit) {
+                if (suit.getTapedHoles(helmet) < suit.getPunctures(helmet)) {
                     if (!world.isRemote) {
-                        tank.tapeHole(chest);
+                        suit.tapeHole(helmet);
                         held.shrink(1);
                     }
                     return ActionResult.newResult(EnumActionResult.SUCCESS, held);
