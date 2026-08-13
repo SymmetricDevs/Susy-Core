@@ -375,11 +375,11 @@ public class SuSyPredicates {
                 .toArray(BlockInfo[]::new));
     }
 
-    @NotNull public static TraceabilityPredicate heliostat(EnumFacing facing) {
+    @NotNull public static TraceabilityPredicate heliostat(MultiblockControllerBase controller) {
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
             if (state.getBlock() instanceof BlockHeliostat) {
-
+                EnumFacing facing = controller.getFrontFacing().getOpposite();
                 if (state.getValue(FACING) != facing) {
                     World world = bws.getWorld();
                     BlockPos pos = bws.getPos();
@@ -391,14 +391,15 @@ public class SuSyPredicates {
             return false;
 
         }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.HELIOSTAT.getDefaultState()
-                .withProperty(FACING, facing)) });
+                .withProperty(FACING, controller.getFrontFacing().getOpposite())) });
     }
 
-    @NotNull public static TraceabilityPredicate epoxyMirror(EnumFacing facing,
+    @NotNull public static TraceabilityPredicate epoxyMirror(MultiblockControllerBase controller,
                                                     MetaTileEntitySolarFurnace.EnumMirrorSides mirrorSides) {
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
             if (state.getBlock() instanceof BlockEpoxySolarFurnaceMirror) {
+                EnumFacing facing = controller.getFrontFacing();
 
                 if (state.getValue(MIRROR_SIDES) != mirrorSides || state.getValue(BlockDirectional.FACING) != facing) {
                     World world = bws.getWorld();
@@ -411,14 +412,16 @@ public class SuSyPredicates {
             return false;
 
         }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR.getDefaultState()
-                .withProperty(BlockDirectional.FACING, facing).withProperty(MIRROR_SIDES, mirrorSides)) });
+                .withProperty(BlockDirectional.FACING, controller.getFrontFacing())
+                .withProperty(MIRROR_SIDES, mirrorSides)) });
     }
 
-    @NotNull public static TraceabilityPredicate steelMirror(EnumFacing facing,
+    @NotNull public static TraceabilityPredicate steelMirror(MultiblockControllerBase controller,
                                                     MetaTileEntitySolarFurnace.EnumMirrorSides mirrorSides) {
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
             if (state.getBlock() instanceof BlockSteelSolarFurnaceMirror) {
+                EnumFacing facing = controller.getFrontFacing();
 
                 if (state.getValue(MIRROR_SIDES) != mirrorSides || state.getValue(BlockDirectional.FACING) != facing) {
                     World world = bws.getWorld();
@@ -431,6 +434,7 @@ public class SuSyPredicates {
             return false;
 
         }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR.getDefaultState()
-                .withProperty(BlockDirectional.FACING, facing).withProperty(MIRROR_SIDES, mirrorSides)) });
+                .withProperty(BlockDirectional.FACING, controller.getFrontFacing())
+                .withProperty(MIRROR_SIDES, mirrorSides)) });
     }
 }

@@ -41,7 +41,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -120,74 +119,75 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
                         .or(states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
                         .or(autoAbilities(false, true, true,
                                 true, true, true, false)))
-                .where('H', heliostat(this.getFrontFacing().getOpposite()).or(air()))
+                .where('H', heliostat(this).or(air()))
                 .where('#', air())
                 .where('X', redirectingMirrorOrientation())
                 .where('U',
                         states(SuSyBlocks.SOLAR_FURNACE_CRUCIBLE
                                 .getState(BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType.DEFAULT)))
                 .where(' ', any())
-                .where('A', epoxyMirror(this.getFrontFacing(), EnumMirrorSides.TOP_RIGHT)
-                        .or(steelMirror(this.getFrontFacing(), EnumMirrorSides.TOP_RIGHT)))
-                .where('B', epoxyMirror(this.getFrontFacing(), EnumMirrorSides.TOP_LEFT)
-                        .or(steelMirror(this.getFrontFacing(), EnumMirrorSides.TOP_LEFT)))
-                .where('C', epoxyMirror(this.getFrontFacing(), EnumMirrorSides.BOTTOM_RIGHT)
-                        .or(steelMirror(this.getFrontFacing(), EnumMirrorSides.BOTTOM_RIGHT)))
-                .where('D', epoxyMirror(this.getFrontFacing(), EnumMirrorSides.BOTTOM_LEFT)
-                        .or(steelMirror(this.getFrontFacing(), EnumMirrorSides.BOTTOM_LEFT)))
+                .where('A', epoxyMirror(this, EnumMirrorSides.TOP_RIGHT)
+                        .or(steelMirror(this, EnumMirrorSides.TOP_RIGHT)))
+                .where('B', epoxyMirror(this, EnumMirrorSides.TOP_LEFT)
+                        .or(steelMirror(this, EnumMirrorSides.TOP_LEFT)))
+                .where('C', epoxyMirror(this, EnumMirrorSides.BOTTOM_RIGHT)
+                        .or(steelMirror(this, EnumMirrorSides.BOTTOM_RIGHT)))
+                .where('D', epoxyMirror(this, EnumMirrorSides.BOTTOM_LEFT)
+                        .or(steelMirror(this, EnumMirrorSides.BOTTOM_LEFT)))
                 .build();
     }
 
     @Override
-    public List<MultiblockShapeInfo> getMatchingShapes() { // FIXME: the rotations are all wrong no matter what is set here
+    public List<MultiblockShapeInfo> getMatchingShapes() { // FIXME: the rotations are all wrong no matter what is set
+                                                           // here
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>(); // the alternator coils were for testing, the
                                                                       // issue seems to only happen with blocks that are
                                                                       // part of the structure already?
         MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
                 .where('S', SuSyMetaTileEntities.SOLAR_FURNACE, EnumFacing.SOUTH)
-                .where('>', SuSyBlocks.ALTERNATOR_COIL.getDefaultState().withProperty(FACING, EnumFacing.WEST))
+                .where('>', SuSyBlocks.HELIOSTAT.getDefaultState().withProperty(FACING, EnumFacing.NORTH))
                 .where('X', SuSyBlocks.SOLAR_FURNACE_REDIRECTING_MIRROR.getState(
                         BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType.DEFAULT, EnumFacing.SOUTH))
                 .where('A',
                         SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
                                 .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_RIGHT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('B',
                         SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
                                 .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_LEFT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('C',
                         SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
                                 .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_RIGHT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('D',
                         SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
                                 .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_LEFT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('a',
                         SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
                                 .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_RIGHT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('b',
                         SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
                                 .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_LEFT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('c',
                         SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
                                 .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_RIGHT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('d',
                         SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
                                 .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
                                 .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_LEFT)
-                                .withProperty(BlockDirectional.FACING, EnumFacing.NORTH))
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
                 .where('U',
                         SuSyBlocks.SOLAR_FURNACE_CRUCIBLE
                                 .getState(BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType.DEFAULT))
@@ -364,7 +364,6 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
                 }
             }
         }
-        SusyLog.logger.debug("ASDFGH HELIOSTAT CHECK");
         return i;
     }
 
