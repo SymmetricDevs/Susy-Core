@@ -17,6 +17,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -37,6 +38,7 @@ import gregtechfoodoption.item.GTFOMetaItem;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -119,6 +121,13 @@ public class EventHandlers {
         // Tick atmosphere system for planet dimensions
         if (world.provider instanceof WorldProviderPlanet) {
             AtmosphereWorldData.get(world).getGraph().tick(world);
+        }
+        if (world.provider instanceof WorldProviderSpace) {
+            WorldInfo info = world.getWorldInfo();
+            info.setRaining(false);
+            info.setThundering(false);
+            info.setRainTime(1);
+            info.setThunderTime(1);
         }
         // Process lander spawn queue for all dimensions
         processLanderSpawnQueue(server);

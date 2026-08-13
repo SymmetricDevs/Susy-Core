@@ -114,6 +114,7 @@ public class Orbit {
         return normalizeSafe(rotateToLocalFrame(v, localUp));
     }
     //Vec3d normalize returns 0 when .length is < 0.001, even tho f64 precision is ~15 digits
+    //this took 4 hours to debug
     public static Vec3d normalizeSafe(Vec3d v) {
         double len = v.length();
         if (len < 1e-40) return Vec3d.ZERO;

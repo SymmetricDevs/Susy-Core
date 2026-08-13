@@ -188,7 +188,7 @@ public class SpaceSuit extends BreathingApparatus implements IGeoMetaArmor {
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage,
                             EntityEquipmentSlot slot) {
         super.damageArmor(entity, stack, source, damage, slot);
-        if (SLOT == HEAD && isPunctureDamage(source)) {
+        if (slot == HEAD && isPunctureDamage(source)) {
             int total = getPunctures(stack) + 1;
             setPunctures(stack, total);
             if (total > MAX_PUNCTURES) {

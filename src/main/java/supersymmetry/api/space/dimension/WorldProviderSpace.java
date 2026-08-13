@@ -1,5 +1,9 @@
 package supersymmetry.api.space.dimension;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -8,7 +12,9 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.common.DimensionManager;
 
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObject;
 import supersymmetry.api.space.Orbit;
 import supersymmetry.common.world.ChunkGeneratorVoid;
@@ -17,17 +23,31 @@ import supersymmetry.common.world.SuSyDimensions;
 
 public class WorldProviderSpace extends WorldProvider {
 
-    private SpaceDimension config;
+    private static final Map<Integer, SpaceConfig> SPACE_CONFIGS = new HashMap<>();
+
+    private SpaceConfig config;
+
+    public static SpaceConfig create(int dimId, String name) {
+        return new SpaceConfig(dimId, name);
+    }
+
+    public static SpaceConfig get(int dimId) {
+        return SPACE_CONFIGS.get(dimId);
+    }
+
+    public static Set<Integer> getRegisteredIds() {
+        return SPACE_CONFIGS.keySet();
+    }
 
     @Override
     protected void init() {
         int dimId = this.getDimension();
-        this.config = SpaceDimension.get(dimId);
+        this.config = get(dimId);
 
         if (this.config == null) {
             throw new IllegalStateException(
-                    String.format("No SpaceDimension registered for id %d. SPACE map has: %s", dimId,
-                            SpaceDimension.getRegisteredIds()));
+                    String.format("No space dimension configuration registered for id %d. Registered: %s", dimId,
+                            getRegisteredIds()));
         }
 
         this.biomeProvider = new BiomeProviderSingle(SuSyBiomes.VOID);
@@ -150,12 +170,55 @@ public class WorldProviderSpace extends WorldProvider {
     }
 
     @Override
-    public int getAverageGroundLevel() {
-        return 0;
+    public boolean canDoLightning(net.minecraft.world.chunk.Chunk chunk) {
+        return false;
     }
 
-    @Override
-    public boolean canRespawnHere() {
-        return false;
+    /**
+     * Static configuration for a space (non-planetoid) dimension. Instances are
+     * created via {@link WorldProviderSpace#create} and stored in a static
+     * registry so that provider instances can look up their own configuration
+     * during init.
+     */
+    public static final class SpaceConfig {
+
+        public final int id;
+        public final String name;
+
+        public float gravity = 0.0f;
+        public IRenderHandler renderer;
+        public CelestialObject centeredOn;
+        public Orbit orbit;
+
+        private SpaceConfig(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public SpaceConfig setRenderer(IRenderHandler renderer) {
+            this.renderer = renderer;
+            return this;
+        }
+
+        public SpaceConfig setGravity(float g) {
+            this.gravity = g;
+            return this;
+        }
+
+        public SpaceConfig setOrbit(CelestialObject centeredOn, Orbit orbit) {
+            this.centeredOn = centeredOn;
+            this.orbit = orbit;
+            return this;
+        }
+
+        public void register() {
+            SPACE_CONFIGS.put(id, this);
+
+            // Register with Forge so the dimension actually exists
+            if (!DimensionManager.isDimensionRegistered(id)) {
+                DimensionManager.registerDimension(id, SuSyDimensions.spaceType);
+                SusyLog.logger.info(String.format("Registered space dimension '%s' at id %d", name, id));
+            }
+        }
     }
 }

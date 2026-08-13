@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
-import supersymmetry.api.space.dimension.SpaceDimension;
+import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.util.ShaderUtils;
 
@@ -40,7 +40,8 @@ public class CelestialRenderer extends IRenderHandler {
 
         renderSkyBackground();
 
-        // multiply this to make stuff move around faster :3
+        // multiply this to make stuff move around faster 
+        // note that the dimension brightness doesnt depend on this value
         double worldTime = (world.getWorldTime() + partialTicks);// * 500.0;
 
         int dimId = world.provider.getDimension();
@@ -59,7 +60,7 @@ public class CelestialRenderer extends IRenderHandler {
             spinAxis = ground.getRotationAxis();
             spinAngle = ground.getRotationAngle(worldTime);
         } else {
-            SpaceDimension spacedim = SpaceDimension.get(dimId);
+            WorldProviderSpace.SpaceConfig spacedim = WorldProviderSpace.get(dimId);
             if (spacedim == null || spacedim.centeredOn == null || spacedim.orbit == null) return;
             viewerBody = spacedim.centeredOn;
             Vec3d centerPos = Orbit.computeAbsolutePosition(viewerBody, worldTime);
@@ -67,8 +68,7 @@ public class CelestialRenderer extends IRenderHandler {
             Vec3d up = viewerPos.subtract(centerPos);
             if (up.lengthSquared() < 1e-15) return;
             localUp = Orbit.normalizeSafe(up);
-            spinAxis = new Vec3d(0.0, 1.0, 0.0);
-
+            spinAxis = null;
             spinAngle = 0.0;
         }
 

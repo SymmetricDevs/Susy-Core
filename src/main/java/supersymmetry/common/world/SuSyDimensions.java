@@ -5,7 +5,6 @@ import net.minecraft.world.DimensionType;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.space.Orbit;
-import supersymmetry.api.space.dimension.SpaceDimension;
 import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -45,12 +44,11 @@ public class SuSyDimensions {
                 .setBiomeSize(7)
                 .load();
 
-        new SpaceDimension(802, "low_earth_orbit")
+        WorldProviderSpace.create(802, "low_earth_orbit")
                 .setOrbit(CelestialObjects.EARTH, new Orbit(
                         0.00007, 0.0, Math.toRadians(51.6), 0.0, 0.0, 0.0, 0L, 110_400L))
                 .setRenderer(CelestialObjects.RENDERER)
                 .setGravity(0.0f)
-                .setVacuum(true)
-                .load();
+                .register();
     }
 }
