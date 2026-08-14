@@ -100,7 +100,8 @@ public class SuSyMaterialRecipeHandler {
                         .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
                 SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
                         .notConsumable(new ItemStack(susyMetaItem, 1, 112)).fluidInputs(Nitrogen.getFluid(200))
-                        .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
+                        .output(ring, material, 4).EUt(VA[HV]).duration((int) material.getMass() * 2)
+                        .buildAndRegister();
             }
             if (!OreDictUnifier.get(stick, material, 1).isEmpty()) {
                 SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
@@ -108,7 +109,8 @@ public class SuSyMaterialRecipeHandler {
                         .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass()).buildAndRegister();
                 SuSyRecipeMaps.HOT_ISOSTATIC_PRESS.recipeBuilder().input(dust, material)
                         .notConsumable(new ItemStack(susyMetaItem, 1, 106)).fluidInputs(Nitrogen.getFluid(200))
-                        .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass() * 2).buildAndRegister();
+                        .output(stick, material, 2).EUt(VA[HV]).duration((int) material.getMass() * 2)
+                        .buildAndRegister();
             }
         }
         for (Map.Entry<OrePrefix, ItemStack> entry : mapMolds.entrySet()) {
