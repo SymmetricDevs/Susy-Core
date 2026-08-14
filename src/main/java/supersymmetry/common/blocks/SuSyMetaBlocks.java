@@ -28,18 +28,38 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
+import gregtech.client.model.SimpleStateMapper;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.val;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
+import supersymmetry.common.pipelike.tanklessfluid.BlockTanklessFluidPipe;
+import supersymmetry.common.pipelike.tanklessfluid.TanklessFluidPipeType;
 
 public class SuSyMetaBlocks {
 
     public static final Map<Material, BlockSheetedFrame> SHEETED_FRAMES = new HashMap<>();
     public static final List<BlockSheetedFrame> SHEETED_FRAME_BLOCKS = new ArrayList<>();
+    public static final Map<String, BlockTanklessFluidPipe[]> TANKLESS_FLUID_PIPES = new Object2ObjectOpenHashMap<>();
 
     public SuSyMetaBlocks() {}
 
     public static void init() {
         createGeneratedBlock(m -> m.hasProperty(PropertyKey.DUST) && m.hasFlag(GENERATE_FRAME),
                 SuSyMetaBlocks::createSheetedFrameBlock);
+        createTanklessFluidPipes();
+    }
+
+    private static void createTanklessFluidPipes() {
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            val modid = registry.getModid();
+            val pipes = new BlockTanklessFluidPipe[TanklessFluidPipeType.VALUES.length];
+            for (val type : TanklessFluidPipeType.VALUES) {
+                pipes[type.ordinal()] = new BlockTanklessFluidPipe(type, registry);
+                pipes[type.ordinal()].setRegistryName(modid, String.format("tankless_fluid_pipe_%s", type.name));
+            }
+            TANKLESS_FLUID_PIPES.put(modid, pipes);
+        }
     }
 
     public static void createSheetedFrameBlock(Material[] materials, int index) {
@@ -82,6 +102,14 @@ public class SuSyMetaBlocks {
         // registers blockstates with associated models properly by calling sheeted
         // frame's model register recipes
         SHEETED_FRAMES.values().stream().distinct().forEach(BlockSheetedFrame::onModelRegister);
+
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            val normalStateMapper = new SimpleStateMapper(TanklessFluidPipeRenderer.INSTANCE.getModelLocation());
+            for (val pipe : TANKLESS_FLUID_PIPES.get(registry.getModid())) {
+                pipe.onModelRegister();
+                ModelLoader.setCustomStateMapper(pipe, normalStateMapper);
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -137,6 +165,15 @@ public class SuSyMetaBlocks {
             ItemStack itemStack = block.getItem(material);
             OreDictUnifier.registerOre(itemStack, SusyOrePrefix.sheetedFrame, material);
             OreDictUnifier.registerOre(itemStack, new ItemMaterialInfo(new MaterialStack(material, 1)));
+        }
+
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            for (val pipe : TANKLESS_FLUID_PIPES.get(registry.getModid())) {
+                for (val pipeMaterial : pipe.getEnabledMaterials()) {
+                    val itemStack = pipe.getItem(pipeMaterial);
+                    OreDictUnifier.registerOre(itemStack, pipe.getPrefix(), pipeMaterial);
+                }
+            }
         }
     }
 

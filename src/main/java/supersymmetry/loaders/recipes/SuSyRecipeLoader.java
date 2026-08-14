@@ -39,6 +39,7 @@ public class SuSyRecipeLoader {
         VulcanizationRecipes.init();
         SusyOreRecipeHandler.init();
         SuSyMaterialRecipeHandler.init();
+        SuSyTanklessFluidPipeRecipeHandler.init();
         registerStoneRecipes();
         removeLongDistanceItemPipeRecipes();
 

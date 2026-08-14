@@ -1,9 +1,11 @@
 package supersymmetry.common;
 
-import static net.minecraftforge.common.BiomeDictionary.*;
+import static net.minecraftforge.common.BiomeDictionary.Type;
+import static net.minecraftforge.common.BiomeDictionary.addTypes;
 import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
 import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+import static supersymmetry.common.blocks.SuSyMetaBlocks.TANKLESS_FLUID_PIPES;
 
 import java.io.File;
 import java.util.Objects;
@@ -30,6 +32,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
@@ -40,6 +43,7 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+import lombok.val;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
@@ -48,6 +52,7 @@ import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -56,6 +61,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.pipelike.tanklessfluid.ItemBlockTanklessFluidPipe;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
@@ -155,6 +161,20 @@ public class CommonProxy {
         registry.register(REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val material : materialRegistry) {
+                if (material.hasProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE)) {
+                    for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                        if (!pipe.getItemPipeType(pipe.getItem(material)).getOrePrefix().isIgnored(material)) {
+                            pipe.addPipeMaterial(material, material.getProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE));
+                        }
+                    }
+                }
+            }
+
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) registry.register(pipe);
+        }
     }
 
     @SubscribeEvent
@@ -168,6 +188,14 @@ public class CommonProxy {
         registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
         SHEETED_FRAMES.values().stream().distinct().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                if (!pipe.getEnabledMaterials().isEmpty()) {
+                    registry.register(createItemBlock(pipe, ItemBlockTanklessFluidPipe::new));
+                }
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
