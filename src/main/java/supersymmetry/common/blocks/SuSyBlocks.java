@@ -88,6 +88,8 @@ public class SuSyBlocks {
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
     public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
+    public static BlockIgniter BLOCK_IGNITER;
+
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
@@ -107,6 +109,7 @@ public class SuSyBlocks {
     public static BlockLunarConcrete LUNAR_CONCRETE;
 
     public static ArrayList<VariantBlock<?>> susyBlocks;
+
 
     public static void init() {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {

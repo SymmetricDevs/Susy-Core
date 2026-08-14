@@ -26,6 +26,7 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentInterstage());
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
+        AbstractComponent.registerComponent(new ComponentSolidFuelTank());
         AbstractComponent.lockRegistry();
 
         new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
