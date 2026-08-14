@@ -68,6 +68,8 @@ public class SuSyBlocks {
     public static BlocksS2BMRF S2BMRF;
     public static BlocksS3BMRF S3BMRF;
     public static BlocksS4BMRF S4BMRF;
+    public static BlocksS5BMRF S5BMRF;
+    public static BlocksS6BMRF S6BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockSpeaker SPEAKER;
     public static BlockCrucible CRUCIBLE;

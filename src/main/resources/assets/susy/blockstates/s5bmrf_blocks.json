@@ -1,0 +1,109 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_1",
+      "top": "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_1",
+      "side": "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_1"
+    }
+  },
+  "variants" : {
+    "variant=s5bmrf1" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_1"
+      }
+    },
+    "variant=s5bmrf2" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_2"
+      }
+    },
+    "variant=s5bmrf3" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_3"
+      }
+    },
+    "variant=s5bmrf4" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_4"
+      }
+    },
+    "variant=s5bmrf5" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_5"
+      }
+    },
+    "variant=s5bmrf6" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_6"
+      }
+    },
+    "variant=s5bmrf7" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_7"
+      }
+    },
+    "variant=s5bmrf8" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_8"
+      }
+    },
+    "variant=s5bmrf9" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_9"
+      }
+    },
+    "variant=s5bmrf10" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_10"
+      }
+    },
+    "variant=s5bmrf11" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_11"
+      }
+    },
+    "variant=s5bmrf12" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_12"
+      }
+    },
+    "variant=s5bmrf13" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_13"
+      }
+    },
+    "variant=s5bmrf14" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_14"
+      }
+    },
+    "variant=s5bmrf15" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_15"
+      }
+    },
+    "variant=s5bmrf16" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/s5bmrf_blocks/s5bmrf_block_16"
+      }
+    }
+  }
+}
