@@ -41,6 +41,7 @@ public class CelestialObjects {
         SOLAR_SYSTEM = new StarSystem("solar_system", 1., 0., 0., 0., 0., MILKY_WAY);
 
         SUN = new Star("sun", 1., 0., 0., 0., 0., SOLAR_SYSTEM, StarType.G);
+        SUN.setRadius(109.2);
 
         EARTH = new Planetoid("earth", 1., 0., 0., 0., 0., SUN, PlanetType.TERRESTRIAL)
                 .setDimension(0);

@@ -11,7 +11,8 @@
     "EntityMinecartMixin",
     "EntityMixin",
     "EntityPlayerMixin",
-    "EntityTNTPrimedMixin"
+    "EntityTNTPrimedMixin",
+    "WorldProviderSurfaceMixin"
   ],
   "client" : [
     "BlockModelRendererMixin",

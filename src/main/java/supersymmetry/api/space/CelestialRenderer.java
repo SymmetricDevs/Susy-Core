@@ -117,7 +117,8 @@ public class CelestialRenderer extends IRenderHandler {
             if (isOccludedBySphere(viewerPos, relative, body, positions, candidates)) continue;
 
             double bodyRadiusAU = body.getRadiusAU();
-            double angularSizeDeg = Math.toDegrees(2.0 * Math.atan(bodyRadiusAU / distAU));
+            double angularRatio = Math.min(1.0, bodyRadiusAU / distAU);
+            double angularSizeDeg = Math.toDegrees(2.0 * Math.asin(angularRatio));
 
             Vec3d bodySpinAxis = body.getRotationAxis();
             if (bodySpinAxis != null) {

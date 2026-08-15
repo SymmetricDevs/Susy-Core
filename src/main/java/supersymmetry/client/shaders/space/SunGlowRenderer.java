@@ -16,7 +16,6 @@ import supersymmetry.client.shaders.util.ShaderUtils;
 
 public class SunGlowRenderer implements BodyRenderer {
 
-    public float sunAngularRadius = 0.00935f;
     public float[] sunColor = { 1.0f, 0.95f, 0.8f };
     public float diskIntensity = 20.0f;
     public float limbDarkening = 0.85f;
@@ -43,6 +42,9 @@ public class SunGlowRenderer implements BodyRenderer {
                 (float) data.direction.z
         };
 
+        float angularRadius = (float) (Math.toRadians(data.angularSizeDeg) / 2.0);
+        if (angularRadius <= 1e-7f) angularRadius = 0.00465f;
+
         Minecraft mc = Minecraft.getMinecraft();
         float time = (float) (data.worldTime / 20f);
 
@@ -58,7 +60,7 @@ public class SunGlowRenderer implements BodyRenderer {
 
         GL20.glUseProgram(progId);
         ShaderUtils.setUniform3f(progId, "u_sunDir", sunDir[0], sunDir[1], sunDir[2]);
-        ShaderUtils.setUniform1f(progId, "u_angularRadius", sunAngularRadius);
+        ShaderUtils.setUniform1f(progId, "u_angularRadius", angularRadius);
         ShaderUtils.setUniform3f(progId, "u_sunColor", sunColor[0], sunColor[1], sunColor[2]);
         ShaderUtils.setUniform1f(progId, "u_diskIntensity", diskIntensity);
         ShaderUtils.setUniform1f(progId, "u_time", time);
