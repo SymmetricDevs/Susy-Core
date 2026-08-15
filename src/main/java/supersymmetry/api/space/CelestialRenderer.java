@@ -40,7 +40,7 @@ public class CelestialRenderer extends IRenderHandler {
 
         renderSkyBackground();
 
-        // multiply this to make stuff move around faster 
+        // multiply this to make stuff move around faster
         // note that the dimension brightness doesnt depend on this value
         double worldTime = (world.getWorldTime() + partialTicks);// * 500.0;
 
@@ -109,7 +109,7 @@ public class CelestialRenderer extends IRenderHandler {
             if (distAU < 1e-15) continue;
 
             if (spinAxis != null) relative = Orbit.rotateAboutAxis(relative, spinAxis, spinAngle);
-            Vec3d mcDir = Orbit.normalizeSafe(rotateToLocalFrame(relative, localUp));
+            Vec3d mcDir = Orbit.normalizeSafe(Orbit.rotateToLocalFrame(relative, localUp));
             if (mcDir.lengthSquared() < 1e-12) continue;
 
             Vec3d lookVec = mc.player.getLook(partialTicks);
@@ -242,7 +242,7 @@ public class CelestialRenderer extends IRenderHandler {
             if (dist < 1e-15) continue;
 
             if (spinAxis != null) starRel = Orbit.rotateAboutAxis(starRel, spinAxis, spinAngle);
-            Vec3d lightDir = Orbit.normalizeSafe(rotateToLocalFrame(starRel, localUp));
+            Vec3d lightDir = Orbit.normalizeSafe(Orbit.rotateToLocalFrame(starRel, localUp));
             float intensity = (float) Math.min(1.0, star.getMass() / (dist * dist));
 
             lights.add(new StarLight(lightDir, star.getColor(), intensity));
@@ -322,10 +322,6 @@ public class CelestialRenderer extends IRenderHandler {
     private Vec3d computeLocalUp(Minecraft mc, Planetoid ground) {
         if (mc.player == null) return new Vec3d(0, 1, 0);
         return Orbit.surfacePointToLocalUp(mc.player.posX, mc.player.posZ, ground.getRadius());
-    }
-
-    private static Vec3d rotateToLocalFrame(Vec3d v, Vec3d localUp) {
-        return Orbit.rotateToLocalFrame(v, localUp);
     }
 
     private static void addDescendants(CelestialObject node, List<CelestialObject> result) {

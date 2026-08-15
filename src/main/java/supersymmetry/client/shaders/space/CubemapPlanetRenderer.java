@@ -6,6 +6,7 @@ import supersymmetry.api.image.Cubemap;
 import supersymmetry.api.space.BodyRenderData;
 import supersymmetry.api.space.BodyRenderer;
 import supersymmetry.api.space.StarLight;
+import supersymmetry.api.util.Quaternion;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.client.shaders.space.planet.PlanetSurfaceRenderer;
 
@@ -166,19 +167,16 @@ public class CubemapPlanetRenderer implements BodyRenderer {
             }
         }
 
-        float cosA = (float) Math.cos(spinAngle);
-        float sinA = (float) Math.sin(spinAngle);
-        float t = 1f - cosA;
-
-        float r0x = cosA + sx * sx * t;
-        float r0y = sy * sx * t - sz * sinA;
-        float r0z = sz * sx * t + sy * sinA;
-        float r1x = sx * sy * t + sz * sinA;
-        float r1y = cosA + sy * sy * t;
-        float r1z = sz * sy * t - sx * sinA;
-        float r2x = sx * sz * t - sy * sinA;
-        float r2y = sy * sz * t + sx * sinA;
-        float r2z = cosA + sz * sz * t;
+        double[] quatMat = Quaternion.fromAxisAngle(new Vec3d(sx, sy, sz), spinAngle).toMatrix3x3Flat();
+        float r0x = (float) quatMat[0];
+        float r0y = (float) quatMat[1];
+        float r0z = (float) quatMat[2];
+        float r1x = (float) quatMat[3];
+        float r1y = (float) quatMat[4];
+        float r1z = (float) quatMat[5];
+        float r2x = (float) quatMat[6];
+        float r2y = (float) quatMat[7];
+        float r2z = (float) quatMat[8];
 
         float m0x = -rx * r0x + upx * r1x + dx * r2x;
         float m0y = -ry * r0x + upy * r1x + dy * r2x;

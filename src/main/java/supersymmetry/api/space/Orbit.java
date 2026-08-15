@@ -3,6 +3,8 @@ package supersymmetry.api.space;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+import supersymmetry.api.util.Quaternion;
+
 public class Orbit {
 
     public static final double EARTH_RADIUS_AU = 0.0000425;
@@ -85,12 +87,7 @@ public class Orbit {
     }
 
     public static Vec3d rotateAboutAxis(Vec3d v, Vec3d axis, double angle) {
-        Vec3d k = axis.normalize();
-        double c = Math.cos(angle);
-        double s = Math.sin(angle);
-        return v.scale(c)
-                .add(k.crossProduct(v).scale(s))
-                .add(k.scale(k.dotProduct(v) * (1.0 - c)));
+        return Quaternion.fromAxisAngle(axis, angle).rotatePoint(v);
     }
 
     public static Vec3d rotateToLocalFrame(Vec3d v, Vec3d localUp) {
@@ -101,20 +98,15 @@ public class Orbit {
             if (cosA < 0) return new Vec3d(-v.x, -v.y, -v.z);
             return v;
         }
-        Vec3d axis = localUp.crossProduct(target);
-        axis = axis.scale(1.0 / (axis.length() + 1e-30));
-        double kDotV = v.dotProduct(axis);
-        Vec3d kCrossV = axis.crossProduct(v);
-        return v.scale(cosA)
-                .add(kCrossV.scale(sinA))
-                .add(axis.scale(kDotV * (1.0 - cosA)));
+        return Quaternion.fromAxisAngle(localUp.crossProduct(target), Math.acos(cosA)).rotatePoint(v);
     }
 
     public static Vec3d toViewDir(Vec3d v, Vec3d localUp) {
         return normalizeSafe(rotateToLocalFrame(v, localUp));
     }
-    //Vec3d normalize returns 0 when .length is < 0.001, even tho f64 precision is ~15 digits
-    //this took 4 hours to debug
+
+    // Vec3d normalize returns 0 when .length is < 0.001, even tho f64 precision is ~15 digits
+    // this took 4 hours to debug
     public static Vec3d normalizeSafe(Vec3d v) {
         double len = v.length();
         if (len < 1e-40) return Vec3d.ZERO;
