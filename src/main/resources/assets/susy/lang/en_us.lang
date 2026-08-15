@@ -272,6 +272,7 @@ susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
+susy.material.metallized_bopet=Metallized BoPET
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -1282,6 +1283,7 @@ recipemap.edm.name=Electric Discharge Machining (EDM)
 recipemap.layup=Layup
 recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
 recipemap.solar_furnace.name=Solar Furnace
+recipemap.evaporation_deposition.name=Evaporation Deposition
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
