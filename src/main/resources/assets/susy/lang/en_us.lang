@@ -1942,6 +1942,7 @@ susy.landing_pad.inserting=Inserting items into lander...
 susy.general.requires_atmosphere=§6Only works on breathable planets
 
 # Tankless Fluid Pipes
+susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
 item.material.oreprefix.pipeTinyTanklessFluid=%s Tiny Direct Fluid Pipe
 item.material.oreprefix.pipeSmallTanklessFluid=%s Small Direct Fluid Pipe
 item.material.oreprefix.pipeNormalTanklessFluid=%s Direct Fluid Pipe
