@@ -18,11 +18,12 @@ import org.jetbrains.annotations.Nullable;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.ore.OrePrefix;
+import supersymmetry.api.blocks.VariantCoverableBlock;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
-public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankShell.TankCoverType>
+public class BlockTankShell extends VariantCoverableBlock<BlockTankShell.TankCoverType>
                             implements WeightedBlock<BlockTankShell.TankCoverType> {
 
     public BlockTankShell() {
@@ -39,8 +40,7 @@ public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankSh
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
 
-        TANK_SHELL("al_2219", 2),
-        STEEL_SHELL("steel", 3);
+        TANK_SHELL("al_2219", 2);
 
         private String name;
         private int harvestLevel;
@@ -70,7 +70,6 @@ public class BlockTankShell extends VariantDirectionalCoverableBlock<BlockTankSh
         // Using a 4.7mm thickness
         return switch (type) {
             case TANK_SHELL -> 12.2;
-            case STEEL_SHELL -> 36.9;
         };
     }
 

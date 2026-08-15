@@ -5,6 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import cam72cam.mod.entity.boundingbox.DefaultBoundingBox;
+import cam72cam.mod.entity.boundingbox.IBoundingBox;
+import cam72cam.mod.math.Vec3d;
+import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
+import gregtech.client.utils.RenderBufferHelper;
+import gregtech.client.utils.RenderUtil;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +29,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import codechicken.lib.render.CCRenderState;
@@ -39,6 +51,8 @@ import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
+import org.lwjgl.opengl.GL11;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
@@ -50,6 +64,7 @@ import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityBuilding
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                                             implements
                                             ICleanroomReceiver,
+                                            IFastRenderMetaTileEntity,
                                             IWorkable {
 
     private final ScannerLogic scannerLogic;
@@ -57,6 +72,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     private MetaTileEntityBuildingCleanroom linkedCleanroom;
     private BuildStat shownStatus;
     private BlockPos errorPos = null;
+
+    // If the current bounding box should be rendered
+    protected boolean renderBoundingBox = false;
+    protected boolean highlightSelectedStock = false;
 
     public StructAnalysis struct;
 
@@ -113,36 +132,18 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
+        struct.status = BuildStat.SCANNING;
 
         if (blocksConnected.size() != blockList.size()) {
             this.struct.status = BuildStat.DISCONNECTED;
             return;
         }
-        struct.status = BuildStat.SCANNING;
 
         detectComponents(blockList);
-
+        // if it wasnt changed after scanning, nothing matched
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
-            /* if it wasnt changed after scanning, nothing matched */
         }
-
-        /*
-         * Plan from here on out: 1. Gather block statistics 2. Check for unallowed
-         * TileEntities (we can't have as many if it's all being modelized) 3. Identify
-         * component purpose: a. Payload fairing - Distinguishable by material type -
-         * Attachments along a fissure plane and circling the bottom - Holds port -
-         * Bottom opening is not filled - No through-holes: - All partial holes are
-         * counted (if two blocks have a midpoint not in a block, there is a partial
-         * hole) - All air blocks in the hole are counted - There is no more than one
-         * contiguous set of air blocks not inside the hole that has access to the hole!
-         * b. Life compartment - Contains interior space - Contains life support TEs -
-         * Allows for containers c. Fuel tank - Contains interior space - Contains
-         * structural blocks - Has a port - Contains exterior blocks d. Engine -
-         * Specialized blocks for ignition containment e. Hull cover - Connection blocks
-         * (skirts) - Particular surface blocks - Support blocks f. Control room - Port
-         * - Guidance computer (not a tile entity) - Seat
-         */
     }
 
     public void detectComponents(ArrayList<BlockPos> blockList) {
@@ -151,7 +152,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
                     if (scanResult.get().hasKey("errorPos")) {
-                        errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
+                        this.errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
                         continue;
                     }
                     getInventory().setNBT(t -> {
@@ -160,16 +161,17 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                         component.writeToNBT(tag);
                         return tag;
                     });
-                    errorPos = null;
+                    updateErrorPos(null);
                     break;
                 } else {
-                    errorPos = null;
+                    updateErrorPos(null);
                 }
             }
         }
     }
 
     public void handleScan(Widget.ClickData click) {
+        updateErrorPos(null);
         if (linkedCleanroom == null || !linkedCleanroom.isClean()) {
             struct.status = BuildStat.UNCLEAN;
         }
@@ -184,6 +186,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
             getInventory().setLocked(true);
             struct.status = BuildStat.SCANNING;
+            shownStatus = struct.status;
             scanPart();
             if (struct.status != BuildStat.SUCCESS) {
                 getInventory().clearNBT();
@@ -195,11 +198,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     public @Nullable ICleanroomProvider getCleanroom() {
         return linkedCleanroom;
     }
-
-    // @Override
-    // public @Nullable MultiblockControllerBase getController() {
-    // return linkedCleanroom;
-    // }
 
     @Override
     public void setCleanroom(ICleanroomProvider iCleanroomProvider) {
@@ -245,6 +243,12 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         if (dataId == GregtechDataCodes.WORKABLE_ACTIVE) {
             scannerLogic.setActive(buf.readBoolean());
         }
+        if (dataId == SuSyDataCodes.UPDATE_HIGHLIGHT_POS) {
+            this.errorPos = buf.readBlockPos();
+        }
+        if (dataId == SuSyDataCodes.REMOVE_HIGHLIGHT_POS) {
+            this.errorPos = null;
+        }
     }
 
     @Override
@@ -258,10 +262,44 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(),
                 this.isActive(), this.isWorkingEnabled());
+
+    }
+
+    public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
+        if (this.errorPos != null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.disableDepth();
+            GlStateManager.enableBlend();
+            GlStateManager.disableLighting();
+            GlStateManager.disableTexture2D();
+            GlStateManager.blendFunc(770, 771);
+            GlStateManager.glLineWidth(15);
+
+            RenderUtil.moveToFace(x, y, z, getFrontFacing());
+            GlStateManager.translate(0, 0, 0);
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+            RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX()-getPos().getX()-0.5, errorPos.getY()-getPos().getY()-0.5,
+                    errorPos.getZ()-getPos().getZ()-1,
+                    errorPos.getX()-getPos().getX()+0.5, errorPos.getY()-getPos().getY()+0.5,
+                    errorPos.getZ()-getPos().getZ(), 1, 0, 0, 0.6F);
+            tessellator.draw();
+
+            GlStateManager.disableBlend();
+            GlStateManager.enableDepth();
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+
+            GlStateManager.popMatrix();
+        }
     }
 
     @Override
@@ -282,6 +320,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         if (struct.status == BuildStat.SUCCESS) {
             getInventory().setImageType(SuSyMetaItems.DATA_CARD_ACTIVE.metaValue); // is this cursed? yes
         }
+        updateErrorPos(this.errorPos);
         getInventory().setLocked(false);
         shownStatus = struct.status;
     }
@@ -385,5 +424,19 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                 struct.status != BuildStat.UNSCANNED) {
             iTextComponents.add(new TextComponentTranslation(BuildStat.UNSCANNED.getCode()));
         }
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return new AxisAlignedBB(getPos()).grow(32);
+    }
+
+    protected void updateErrorPos(BlockPos bp) {
+        this.errorPos = bp;
+        if (bp != null)
+            writeCustomData(SuSyDataCodes.UPDATE_HIGHLIGHT_POS, packetBuffer -> packetBuffer.writeBlockPos(errorPos));
+        else
+            writeCustomData(SuSyDataCodes.REMOVE_HIGHLIGHT_POS, packetBuffer -> {});
+        scheduleRenderUpdate();
     }
 }

@@ -1,5 +1,6 @@
 package supersymmetry.common.rocketry.components;
 
+import static java.lang.Math.pow;
 import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
 
 import java.util.*;
@@ -105,7 +106,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
     @Override
     public Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb) {
-        Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).get(0));
+        Set<BlockPos> blocks = analysis.getBlockConn(aabb, analysis.getBlocks(analysis.world, aabb, true).getFirst());
         Set<BlockPos> nozzle = analysis.getOfBlockType(blocks, SuSyBlocks.ROCKET_NOZZLE).collect(Collectors.toSet());
         if (nozzle.isEmpty()) {
             analysis.status = BuildStat.NO_NOZZLE;
@@ -121,13 +122,16 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 analysis.status = BuildStat.NOZZLE_MALFORMED;
                 return Optional.empty();
             }
-            Set<BlockPos> airPerimeter = analysis.getPerimeter(airLayer, StructAnalysis.layerVecs);
-            if ((double) airPerimeter.size() < 3 * Math.sqrt((double) airLayer.size())) { // Establishes a roughly
+            double welzlRadius = analysis.getRadius(airLayer);
+            if (pow(welzlRadius, 2) * Math.PI - 1.5 > airLayer.size()) {
                 // circular pattern
-                analysis.status = BuildStat.NOZZLE_MALFORMED;
-                return Optional.empty();
+                analysis.status = StructAnalysis.BuildStat.NOZZLE_MALFORMED;
+                int finalI = i;
+                // works because the airLayer is not null and the structure is connected
+                return analysis.errorPos(nozzle.stream().filter(b -> b.getY() == finalI)
+                        .toList().getFirst());
             }
-            areas.add(airLayer.size() + airPerimeter.size() / 2);
+            areas.add((int)(airLayer.size() + welzlRadius * Math.PI));
         }
 
         // For all rocket nozzles, the air layer list should be increasing. 3 blocks
@@ -161,7 +165,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         // One combustion chamber is, I think, reasonable
         List<BlockPos> cChambers = analysis.getOfBlockType(blocks, SuSyBlocks.COMBUSTION_CHAMBER)
-                .collect(Collectors.toList());
+                .toList();
         if (cChambers.size() != 1) {
             analysis.status = BuildStat.WRONG_NUM_C_CHAMBERS;
             return Optional.empty();

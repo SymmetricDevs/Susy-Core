@@ -85,6 +85,8 @@ tile.rocket_turbopump.basic.name=Basic Rocket Turbopump
 tile.rocket_control.basic.name=Basic Rocket Control System
 tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
 tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
+tile.rocket_tank_shell1.steel.name=Steel Tank Shell
+tile.solid_rocket_igniter.default.name=Solid-Fuel Rocket Igniter
 tile.rocket_interstage.al_7075.name=Al-7075 Rocket Interstage
 tile.rocket_fairing.al_7075.name=Al-7075 Payload Fairing Panel
 tile.rocket_nozzle.bell_basic.name=Bell Rocket Nozzle Shell
@@ -99,6 +101,7 @@ tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
 tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
 tile.guidance_system.soyuz.name=Soyuz 7K Guidance System
 tile.rocket_engine_gas_generator.open_cycle.name=Open Cycle Gas Generator
+
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
 tile.deposit_block.metamorphic.name=Metamorphic Deposit Block
@@ -1833,6 +1836,7 @@ susy.msg.rocket_component.not_interstage=An block was used that is not an inters
 susy.msg.rocket_component.wrong_chamber_type=A different chamber should be used.
 susy.msg.rocket_component.match_wrong=The match is not within the nozzle.
 susy.msg.rocket_component.nozzle_too_short=The nozzle is not long enough!
+susy.msg.rocket_component.igniter_wrong=There is not exactly one igniter, or the igniter is not placed directly above the tank.
 
 entity.Rocket.name=Soyuz FG Rocket
 entity.Lander.name=Moon Lander

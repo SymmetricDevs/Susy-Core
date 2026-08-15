@@ -23,6 +23,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.tileentities.TileEntityCoverable;
 
 /**
  * componentLiquidFuelTank
@@ -107,17 +108,9 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 analysis.status = BuildStat.ERROR;
                 return analysis.errorPos(block);
             }
-            EnumFacing facingFromBlock = analysis.world.getBlockState(block).getValue(FACING);
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos neighbor = block.add(facing.getDirectionVec());
-                if (interiorAir.contains(neighbor)) {
-                    Vec3i difference = analysis.diff(neighbor, block);
-                    if (!difference.equals(facingFromBlock.getOpposite().getDirectionVec())) {
-                        // honeycombs
-                        analysis.status = BuildStat.HULL_WEAK;
-                        return analysis.errorPos(block);
-                    }
-                } else if (!interiorAir.contains(neighbor) &&
+                if (!interiorAir.contains(neighbor) &&
                         (analysis.world.isAirBlock(neighbor) ||
                                 !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
                                     if (!blockTiles.isCovered(facing)) {
@@ -129,7 +122,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                         analysis.status = BuildStat.WRONG_TILE;
                         return analysis.errorPos(block);
                     }
-
             }
         }
 

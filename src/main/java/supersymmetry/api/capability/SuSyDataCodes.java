@@ -18,4 +18,6 @@ public class SuSyDataCodes {
     public static final int SYNC_FLUIDS = assignId();
     public static final int SYNC_AFS = assignId();
     public static final int UPDATE_INSERT_EXTRACT = assignId();
+    public static final int UPDATE_HIGHLIGHT_POS = assignId();
+    public static final int REMOVE_HIGHLIGHT_POS = assignId();
 }

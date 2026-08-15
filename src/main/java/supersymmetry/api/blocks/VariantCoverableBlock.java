@@ -1,9 +1,11 @@
 package supersymmetry.api.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.raytracer.RayTracer;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -18,43 +20,37 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import codechicken.lib.raytracer.IndexedCuboid6;
-import codechicken.lib.raytracer.RayTracer;
-import gregtech.api.cover.CoverRayTracer;
-import gregtech.api.metatileentity.MetaTileEntity;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
-public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSerializable>
-                                             extends
-                                             VariantDirectionalRotatableBlock<T>
-                                             implements
-                                             ITileEntityProvider {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
-    public VariantDirectionalCoverableBlock(Material materialIn) {
+public class VariantCoverableBlock<T extends Enum<T> & IStringSerializable>
+                                    extends VariantBlock<T>
+                                    implements ITileEntityProvider {
+    public VariantCoverableBlock(Material materialIn)
+    {
         super(materialIn);
     }
-
     public Predicate<ItemStack> validCover;
 
-    @NonNull @Override
+    @NonNull
+    @Override
     public BlockStateContainer createBlockState() {
-        Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalCoverableBlock.class);
+        Class<T> enumClass = getActualTypeParameter(getClass(), VariantCoverableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
-        return new BlockStateContainer(this, VARIANT, FACING);
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
-        // worldIn.getTileEntity(pos).invalidate();
     }
 
     @Override
@@ -99,7 +95,8 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
         return ret;
     }
 
-    @Nullable public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nullable
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityCoverable();
     }
 

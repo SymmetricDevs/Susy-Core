@@ -7,12 +7,12 @@
     }
   },
   "variants": 	{
-    "normal,variant=carbon": { "model": "susy:rocket_struct/rockethulltile" },
-    "facing=north,variant=carbon": { "model": "susy:rocket_struct/rockethulltile", "x": 90 },
-    "facing=south,variant=carbon": {  "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 180 },
-    "facing=west,variant=carbon":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 270 },
-    "facing=east,variant=carbon":  { "model": "susy:rocket_struct/rockethulltile", "x": 90, "y": 90 },
-    "facing=up,variant=carbon":  { "model": "susy:rocket_struct/rockethulltile" },
-    "facing=down,variant=carbon":  { "model": "susy:rocket_struct/rockethulltile", "x": 180  }
+    "variant=carbon": { "model": "susy:rocket_struct/rockethulltile" },
+    "variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    }
   }
 }

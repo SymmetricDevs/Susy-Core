@@ -2,6 +2,7 @@ package supersymmetry.common.blocks.rocketry;
 
 import java.util.List;
 
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -20,9 +21,10 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankShell1.TankCoverType>
+public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
                              implements WeightedBlock<BlockTankShell1.TankCoverType> {
 
     public BlockTankShell1() {
@@ -33,12 +35,11 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(BlockTankShell1.TankCoverType.CARBON_COMPOSITE));
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
     }
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
-
-        CARBON_COMPOSITE("carbon", 2);
+        CARBON_COMPOSITE("carbon", 2),
+        STEEL_SHELL("steel", 3);
 
         private String name;
         private int harvestLevel;
@@ -66,7 +67,10 @@ public class BlockTankShell1 extends VariantDirectionalCoverableBlock<BlockTankS
     @Override
     public double getMass(TankCoverType type) {
         // Again, using a 4.7mm thickness
-        return 7.9;
+        return switch (type) {
+            case STEEL_SHELL -> 36.9;
+            case CARBON_COMPOSITE -> 7.9;
+        };
     }
 
     @SideOnly(Side.CLIENT)
