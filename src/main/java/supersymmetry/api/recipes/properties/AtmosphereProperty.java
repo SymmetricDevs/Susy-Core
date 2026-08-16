@@ -24,7 +24,7 @@ public class AtmosphereProperty extends RecipeProperty<Boolean> {
     @Override
     public int getInfoHeight(Object value) {
         Boolean casted = castValue(value);
-        if (casted != null && casted) {
+        if (casted != null) {
             return super.getInfoHeight(value);
         }
         return 0;
