@@ -33,7 +33,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import software.bernie.geckolib3.core.PlayState;
@@ -244,7 +243,7 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                         "                        FCCCCC                      ",
                         "                        F    F                      ",
                         "                                                    ")
-                 .aisle("                                                W   ",
+                .aisle("                                                W   ",
                         "                         CCCCCCCCC            W W W ",
                         "                           CCCCC               WWW  ",
                         "                 IIIIIICCCCCCCCCCC           WWWWWWW",

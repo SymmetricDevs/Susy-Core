@@ -1,16 +1,15 @@
 package supersymmetry.common.blocks.rocketry;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
-import supersymmetry.common.materials.SusyMaterials;
+
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
 
 public class BlockIgniter extends VariantBlock<BlockIgniter.BlockIgniterType> implements IStringSerializable {
+
     public BlockIgniter() {
         super(Material.IRON);
         setTranslationKey("solid_rocket_igniter");

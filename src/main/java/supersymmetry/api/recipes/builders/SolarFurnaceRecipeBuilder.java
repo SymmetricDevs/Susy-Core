@@ -115,5 +115,4 @@ public class SolarFurnaceRecipeBuilder extends RecipeBuilder<SolarFurnaceRecipeB
         this.applyProperty(AtmosphereProperty.getInstance(), false);
         return this;
     }
-
 }

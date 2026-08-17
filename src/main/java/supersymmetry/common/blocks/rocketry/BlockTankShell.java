@@ -19,7 +19,6 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantCoverableBlock;
-import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.common.materials.SusyMaterials;
 

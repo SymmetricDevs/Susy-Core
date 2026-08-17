@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import cam72cam.mod.entity.boundingbox.DefaultBoundingBox;
-import cam72cam.mod.entity.boundingbox.IBoundingBox;
-import cam72cam.mod.math.Vec3d;
-import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
-import gregtech.client.utils.RenderBufferHelper;
-import gregtech.client.utils.RenderUtil;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -28,10 +22,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -41,6 +36,7 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.*;
+import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.ICleanroomProvider;
@@ -50,8 +46,9 @@ import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.RenderBufferHelper;
+import gregtech.client.utils.RenderUtil;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
-import org.lwjgl.opengl.GL11;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.capability.impl.ScannerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -267,7 +264,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         super.renderMetaTileEntity(renderState, translation, pipeline);
         this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(),
                 this.isActive(), this.isWorkingEnabled());
-
     }
 
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
@@ -287,10 +283,11 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             BufferBuilder buffer = tessellator.getBuffer();
             buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
-            RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX()-getPos().getX()-0.5, errorPos.getY()-getPos().getY()-0.5,
-                    errorPos.getZ()-getPos().getZ()-1,
-                    errorPos.getX()-getPos().getX()+0.5, errorPos.getY()-getPos().getY()+0.5,
-                    errorPos.getZ()-getPos().getZ(), 1, 0, 0, 0.6F);
+            RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX() - getPos().getX() - 0.5,
+                    errorPos.getY() - getPos().getY() - 0.5,
+                    errorPos.getZ() - getPos().getZ() - 1,
+                    errorPos.getX() - getPos().getX() + 0.5, errorPos.getY() - getPos().getY() + 0.5,
+                    errorPos.getZ() - getPos().getZ(), 1, 0, 0, 0.6F);
             tessellator.draw();
 
             GlStateManager.disableBlend();

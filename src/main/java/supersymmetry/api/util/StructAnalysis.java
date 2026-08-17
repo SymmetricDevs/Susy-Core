@@ -97,6 +97,7 @@ public class StructAnalysis {
                 "not_interstage"),
         IGNITER_WRONG(
                 "igniter_wrong");
+
         String code;
 
         BuildStat(String code) {
@@ -416,9 +417,8 @@ public class StructAnalysis {
 
     // Obtains the bounding box of all blocks in the collection blocks
     public AxisAlignedBB getBB(Collection<BlockPos> blocks) {
-        if (blocks.isEmpty())
-        {
-            return new AxisAlignedBB(0,0,0,0,0,0);
+        if (blocks.isEmpty()) {
+            return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         int minX = (int) 3.0E7, minY = (int) 3.0E7, minZ = (int) 3.0E7, maxX = (int) -3.0E7, maxY = (int) -3.0E7,
                 maxZ = (int) -3.0E7;

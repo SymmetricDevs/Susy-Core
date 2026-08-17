@@ -2,7 +2,6 @@ package supersymmetry.common.blocks.rocketry;
 
 import java.util.List;
 
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -17,11 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Materials;
-import gregtech.api.unification.ore.OrePrefix;
-import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
@@ -38,6 +33,7 @@ public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
     }
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
+
         CARBON_COMPOSITE("carbon", 2),
         STEEL_SHELL("steel", 3);
 

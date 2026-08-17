@@ -1,7 +1,5 @@
 package supersymmetry.common.rocketry.components;
 
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.util.Constants;
 
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -113,11 +110,11 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
                 if (!interiorAir.contains(neighbor) &&
                         (analysis.world.isAirBlock(neighbor) ||
                                 !StructAnalysis.blockCont(aabb, neighbor))) { // this means it should be exterior air
-                                    if (!blockTiles.isCovered(facing)) {
-                                        analysis.status = BuildStat.MISSING_TILE;
-                                        return analysis.errorPos(block);
-                                    }
-                                } else
+                    if (!blockTiles.isCovered(facing)) {
+                        analysis.status = BuildStat.MISSING_TILE;
+                        return analysis.errorPos(block);
+                    }
+                } else
                     if (hullBlocks.contains(neighbor) && blockTiles.isCovered(facing)) {
                         analysis.status = BuildStat.WRONG_TILE;
                         return analysis.errorPos(block);

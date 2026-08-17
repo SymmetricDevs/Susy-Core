@@ -1,35 +1,30 @@
 package supersymmetry.common.rocketry.components;
 
-import gregtech.api.block.VariantBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.common.util.Constants;
-import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.components.MaterialCost;
-import supersymmetry.api.util.StructAnalysis;
-import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
-import supersymmetry.common.blocks.rocketry.BlockTankShell;
-import supersymmetry.common.blocks.rocketry.BlockTankShell1;
+import static java.lang.Math.pow;
 
-import java.sql.Struct;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.pow;
-import static supersymmetry.api.blocks.VariantDirectionalRotatableBlock.FACING;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
+
+import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.MaterialCost;
+import supersymmetry.api.util.StructAnalysis;
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockTankShell1;
 
 public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuelTank> {
+
     public int volume;
 
     public ComponentSolidFuelTank() {
@@ -90,13 +85,13 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         }
 
         Set<BlockPos> tankBlocks = analysis.getOfBlockType(blocks, SuSyBlocks.TANK_SHELL1).collect(Collectors.toSet());
-        Set<BlockPos> nozzleBlocks = analysis.getOfBlockType(blocks, SuSyBlocks.ROCKET_NOZZLE).collect(Collectors.toSet());
+        Set<BlockPos> nozzleBlocks = analysis.getOfBlockType(blocks, SuSyBlocks.ROCKET_NOZZLE)
+                .collect(Collectors.toSet());
         List<BlockPos> igniterBlocks = analysis.getOfBlockType(blocks, SuSyBlocks.BLOCK_IGNITER).toList();
         ArrayList<Integer> tankAreas = new ArrayList<>();
         AxisAlignedBB tankBB = analysis.getBB(tankBlocks);
 
-        if (igniterBlocks.size() != 1)
-        {
+        if (igniterBlocks.size() != 1) {
             analysis.status = StructAnalysis.BuildStat.IGNITER_WRONG;
             if (igniterBlocks.isEmpty())
                 return Optional.empty();
@@ -119,8 +114,8 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
                 return analysis.errorPos(nozzleBlocks.stream().filter(b -> b.getY() == finalI)
                         .toList().getFirst());
             }
-            if (i == (int)tankBB.maxY - 1) {
-                if (!airLayer.contains(igniterBlocks.getFirst().add(0,-1,0))) {
+            if (i == (int) tankBB.maxY - 1) {
+                if (!airLayer.contains(igniterBlocks.getFirst().add(0, -1, 0))) {
                     analysis.status = StructAnalysis.BuildStat.IGNITER_WRONG;
                     return analysis.errorPos(igniterBlocks.getFirst());
                 }
@@ -145,7 +140,8 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
             if (!candidate.equals(SuSyBlocks.TANK_SHELL1)) {
                 return false;
             }
-            BlockTankShell1.TankCoverType blockType = ((BlockTankShell1.TankCoverType) (((VariantBlock<?>) blockState.getBlock())
+            BlockTankShell1.TankCoverType blockType = ((BlockTankShell1.TankCoverType) (((VariantBlock<?>) blockState
+                    .getBlock())
                     .getState(blockState)));
             return blockType.equals(BlockTankShell1.TankCoverType.STEEL_SHELL);
         };
@@ -174,7 +170,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
                 return analysis.errorPos(nozzleBlocks.stream().filter(b -> b.getY() == finalI)
                         .toList().getFirst());
             }
-            nozzleAreas.add((int)(airLayer.size() + welzlRadius * Math.PI));
+            nozzleAreas.add((int) (airLayer.size() + welzlRadius * Math.PI));
         }
 
         int initial = nozzleAreas.get(0);
@@ -205,7 +201,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         // The scan is successful by this point
         analysis.status = StructAnalysis.BuildStat.SUCCESS;
         // The center column of the rocket shouldn't be counted
-        this.volume = interiorAir - (int)(analysis.getBB(tankBlocks).maxZ - analysis.getBB(tankBlocks).minZ);
+        this.volume = interiorAir - (int) (analysis.getBB(tankBlocks).maxZ - analysis.getBB(tankBlocks).minZ);
         tag.setInteger("volume", this.volume);
         tag.setDouble("area_ratio", computedAreaRatio);
 

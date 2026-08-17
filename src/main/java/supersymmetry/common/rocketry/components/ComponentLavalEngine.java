@@ -131,7 +131,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 return analysis.errorPos(nozzle.stream().filter(b -> b.getY() == finalI)
                         .toList().getFirst());
             }
-            areas.add((int)(airLayer.size() + welzlRadius * Math.PI));
+            areas.add((int) (airLayer.size() + welzlRadius * Math.PI));
         }
 
         // For all rocket nozzles, the air layer list should be increasing. 3 blocks
