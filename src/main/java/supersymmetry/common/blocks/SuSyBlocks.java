@@ -105,8 +105,9 @@ public class SuSyBlocks {
     public static BlockHeliostat HELIOSTAT;
     public static BlockSolarFurnaceRedirectingMirror SOLAR_FURNACE_REDIRECTING_MIRROR;
     public static BlockSolarFurnaceCrucible SOLAR_FURNACE_CRUCIBLE;
-
     public static BlockLunarConcrete LUNAR_CONCRETE;
+    public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
+
 
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
