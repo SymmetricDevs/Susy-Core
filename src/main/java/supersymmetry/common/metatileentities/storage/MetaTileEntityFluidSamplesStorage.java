@@ -63,19 +63,14 @@ public class MetaTileEntityFluidSamplesStorage extends MetaTileEntity {
 
     @Override
     protected void initializeInventory() {
-        // super(ResourceLocation) calls this before our constructor body runs; fluidTankList
-        // is still null at that point. Swallow that premature call and let the explicit
-        // second call (after tanks are built) do the real work.
+        // Stop the super from continuing
         if (this.fluidTankList == null) return;
         this.importItems = createImportItemHandler();
         this.exportItems = createExportItemHandler();
         this.itemInventory = new ItemHandlerProxy(importItems, exportItems);
         this.importFluids = createImportFluidHandler();
         this.exportFluids = createExportFluidHandler();
-        // Not calling super.initializeInventory() here: it would wrap importFluids/exportFluids
-        // in a FluidHandlerProxy, which concatenates both sides' getTankProperties() - since both
-        // are the SAME fluidTankList here, that would double every tank in any capability-based
-        // listing (pipe filter UIs, probe mod overlays, etc.). Expose the list itself instead.
+        // Don't double the fluid inventory
         this.fluidInventory = this.fluidTankList;
     }
 
@@ -90,21 +85,8 @@ public class MetaTileEntityFluidSamplesStorage extends MetaTileEntity {
     }
 
     @Override
-    public boolean hasFrontFacing() {
-        // purely cosmetic - lets the overlay icon face a chosen direction and be wrenchable
-        // like a normal machine; all 32 tanks are still reachable from every side regardless.
-        return true;
-    }
-
-    @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing side) {
-        // Some probe-info mods (e.g. TOP Addons' generic fluid-tank display) query
-        // getCapability(FLUID_HANDLER_CAPABILITY, null) directly and dump every tank's contents
-        // into the hover tooltip, which is unreadable at 32 tanks and isn't gated by any
-        // documented per-block opt-out API. Pipes/covers always query with a specific EnumFacing
-        // (never null), and the GUI reads fluidTankList directly rather than through this
-        // capability, so refusing only the null-side query is safe: automation keeps working,
-        // only generic capability-dump probes are blocked.
+        // Prevent TOP from showing all 32 tanks
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && side == null) {
             return null;
         }
