@@ -1943,3 +1943,6 @@ susy.landing_pad.extracting=Extracting items from lander...
 susy.landing_pad.inserting=Inserting items into lander...
 
 susy.general.requires_atmosphere=§6Only works on breathable planets
+
+tile.wire_coil.kanthal.name=Nichrome Coil Block
+tile.wire_coil.nichrome.name=Kanthal Coil Block

@@ -24,11 +24,11 @@ public final class SuSyHeatingCoils {
                 SuSyCoilType.CUPRONICKEL);
 
         GregTechAPI.HEATING_COILS.put(
-                MetaBlocks.WIRE_COIL.getState(CoilType.NICHROME),
+                MetaBlocks.WIRE_COIL.getState(CoilType.KANTHAL),
                 SuSyCoilType.NICHROME);
 
         GregTechAPI.HEATING_COILS.put(
-                MetaBlocks.WIRE_COIL.getState(CoilType.KANTHAL),
+                MetaBlocks.WIRE_COIL.getState(CoilType.NICHROME),
                 SuSyCoilType.KANTHAL);
 
         GregTechAPI.HEATING_COILS.put(
