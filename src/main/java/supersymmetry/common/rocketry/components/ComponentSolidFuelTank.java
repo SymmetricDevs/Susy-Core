@@ -33,7 +33,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
     public int volume;
 
     public ComponentSolidFuelTank() {
-        super("solid_tank", "tank", candidate -> candidate.getSecond().stream().anyMatch(
+        super("solid_tank", "solid_tank", candidate -> candidate.getSecond().stream().anyMatch(
                 pos -> candidate.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.BLOCK_IGNITER)));
     }
 
