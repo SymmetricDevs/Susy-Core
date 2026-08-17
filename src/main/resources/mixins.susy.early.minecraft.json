@@ -11,13 +11,13 @@
     "EntityMinecartMixin",
     "EntityMixin",
     "EntityPlayerMixin",
-    "EntityTNTPrimedMixin",
-    "WorldProviderSurfaceMixin"
+    "EntityTNTPrimedMixin"
   ],
   "client" : [
     "BlockModelRendererMixin",
     "RenderChunkMixin",
     "TileEntityRendererDispatcherMixin",
-    "RenderGlobalMixin"
+    "RenderGlobalMixin",
+    "WorldProviderSurfaceMixin"
   ]
 }
