@@ -1,26 +1,22 @@
 package supersymmetry.common.item.armor;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.CHEST;
-import static supersymmetry.common.event.DimensionBreathabilityHandler.isInHazardousEnvironment;
-
 import java.util.List;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class SpaceSuitTank extends SpaceSuit {
 
     public final static double INFINITE_OXYGEN = -1;
     public final double maxOxygen;
+    private final double maxFlowRate;
 
     public SpaceSuitTank(int maxDurability, double hoursOfLife, String name, int tier, double relativeAbsorption,
-                         double maxOxygen) {
+                         double maxOxygen, double maxFlowRate) {
         super(EntityEquipmentSlot.CHEST, maxDurability, hoursOfLife, name, tier, relativeAbsorption);
         this.maxOxygen = maxOxygen;
+        this.maxFlowRate = maxFlowRate;
     }
 
     @Override
@@ -55,15 +51,7 @@ public class SpaceSuitTank extends SpaceSuit {
     }
 
     @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (player.isInsideOfMaterial(Material.WATER)) {
-            if (getOxygen(player.getItemStackFromSlot(CHEST)) > 0) {
-                player.setAir(300);
-                if (!isInHazardousEnvironment(player)) {
-                    changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
-                    // assuming that if its hazardous the player is already breathing with the suit
-                }
-            }
-        }
+    public double getMaxFlowRate(ItemStack stack) {
+        return maxFlowRate;
     }
 }

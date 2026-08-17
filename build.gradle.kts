@@ -6,6 +6,7 @@ plugins {
     alias(conventions.plugins.shadow)
     alias(conventions.plugins.jvmdg)
     alias(conventions.plugins.idea)
+    eclipse
     alias(conventions.plugins.test)
     alias(conventions.plugins.jvm)
 }

@@ -2,8 +2,8 @@
 
 layout(location = 0) in vec2 aPos;
 
-uniform mat4 u_invProjection;
 uniform mat4 u_invView;
+uniform mat4 u_invProjection;
 
 out vec3 v_rayDir;
 

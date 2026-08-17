@@ -45,7 +45,7 @@ public class SuSyMetaArmor extends SuSyArmorItem {
         ASTRONAUT_HELMET = addItem(18, "astronaut_helmet")
                 .setArmorLogic(new SpaceSuit(HEAD, 100, 0, "astronaut", 1, 0.6));
         ASTRONAUT_CHESTPLATE = addItem(19, "astronaut_chestplate")
-                .setArmorLogic(new SpaceSuitTank(200, 0, "astronaut", 1, 0.6, 3600));
+                .setArmorLogic(new SpaceSuitTank(200, 0, "astronaut", 1, 0.6, 3600, 6.0));
         ASTRONAUT_LEGGINGS = addItem(20, "astronaut_leggings")
                 .setArmorLogic(new SpaceSuit(LEGS, 175, 0, "astronaut", 1, 0.6));
         ASTRONAUT_BOOTS = addItem(21, "astronaut_boots")

@@ -31,6 +31,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
@@ -109,6 +110,6 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        return this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false));
+        return RecipeCheckUtils.checkAtmosphere(recipe, this) && (this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false)));
     }
 }
