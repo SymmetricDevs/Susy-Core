@@ -377,6 +377,7 @@ susy.machine.blueprint_assembler.build_button=Build
 susy.machine.blueprint_assembler.compiling=Compiling: %s%%
 susy.machine.blueprint_assembler.no_energy_build=Insufficient energy (MV minimum required)
 susy.machine.blueprint_assembler.no_coolant_build=Insufficient FC-75 coolant flow
+susy.machine.blueprint_assembler.no_coolant=No FC-75 coolant
 
 
 susy.rocketry.components.engine.name=Engine(s)
