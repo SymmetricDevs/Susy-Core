@@ -30,7 +30,6 @@ import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.common.metatileentities.multi.rail.LargeRESRecipeMap;
 
 public class SuSyRecipeMaps {
 
@@ -488,7 +487,11 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<PrimitiveRecipeBuilder> CUPOLA_FURNACE = new RecipeMap<>("cupola_furnace", 4, 1, 0, 0,
             new PrimitiveRecipeBuilder(), false).setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<?> LARGE_RES = LargeRESRecipeMap.RES_RECIPES;
+    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RES_RECIPES = new RecipeMap<>(
+            "large_railroad_engineering_station", 25, 1, 3, 0, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.SLOT).setSlotOverlay(true, false, GuiTextures.SLOT)
+            .setSound(GTSoundEvents.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL);
 
     public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 4, 1,
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
