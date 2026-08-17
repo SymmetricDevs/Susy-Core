@@ -69,7 +69,7 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
     }
 
     protected static IBlockState getCasingState() {
-        return MetaBlocks.METAL_CASING.getState(MetalCasingType.STAINLESS_CLEAN);
+        return SuSyBlocks.MULTIBLOCK_CASING_2.getState(BlockSuSyMultiblockCasing2.CasingType.LIGHT_STAINLESS_CASING);
     }
 
     private static IBlockState getWheelCasingState() {
@@ -209,8 +209,8 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                 .aisle("                                                    ",
                         "                         CCCCCCCCC                  ",
                         "                           CCCCC                    ",
-                        "                 CCCCCCCCCCCCCCCCC            CCG   ",
-                        "                 CCCCCC       G CC         CCCCCC   ",
+                        "                 IIIIIICCCCCCCCCCC            CCG   ",
+                        "                 IIIIII       G CC         CCCCCC   ",
                         "                              C  C      CCCCCC      ",
                         " CCCCCC                       C  C   CCCCCC         ",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC  CCCCCC            ",
@@ -228,11 +228,11 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                 .aisle("                                                    ",
                         "                          CCCCCCC                   ",
                         "                           CCCCC                    ",
-                        "                 CCCCCCCCCCCCCCCCC         CCCBBBC  ",
-                        "                 CCCCCC      GGG C      CCCBBB   C  ",
-                        " OCCC                        CCC C   CCCBBB   FFF   ",
-                        " CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB CCCCBBB   FFF      ",
-                        " C                              CCBBB   FFF         ",
+                        "                 IIIIIICCCCCCCCCCC         CCCBBBC  ",
+                        "                 IIIIII      GGG C      CCCBBB   C  ",
+                        " CCCC                        CCC C   CCCBBB   FFF   ",
+                        " OBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB CCCCBBB   FFF      ",
+                        " O                              CCBBB   FFF         ",
                         " FFFFFFFFFFFFFFFFFFFFFFF FCCCC BBB   FFF            ",
                         "                          C CC    FFF               ",
                         "                          C C FFFF                  ",
@@ -244,12 +244,12 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                         "                        FCCCCC                      ",
                         "                        F    F                      ",
                         "                                                    ")
-                .aisle("                                                W   ",
-                        "                         CCCCCCCCC            WWWWW ",
-                        "                           CCCCC              WWWWW ",
-                        "                 CCCCCCCCCCCCCCCCC           WWWWWWW",
-                        "                 CCCCCC       G CC         CCCWWWWW ",
-                        "                              C  C      CCCCCCWWWWW ",
+                 .aisle("                                                W   ",
+                        "                         CCCCCCCCC            W W W ",
+                        "                           CCCCC               WWW  ",
+                        "                 IIIIIICCCCCCCCCCC           WWWWWWW",
+                        "                 IIIIII       G CC         CCC WWW  ",
+                        "                              C  C      CCCCC W W W ",
                         " CCCCCC                       C  C   CCCCCC     W   ",
                         "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC  CCCCCC            ",
                         " FFFF                    FCCCF CCCCCC               ",
@@ -365,7 +365,8 @@ public class MetaTileEntityLunarBucketWheelExcavator extends RecipeMapMultiblock
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('O', casingPredicate.or(autoAbilities(false, false, false, true, false, false, false)))
-                .where('C', casingPredicate.or(autoAbilities(true, false, true, false, false, false, false)))
+                .where('C', casingPredicate)
+                .where('I', casingPredicate.or(autoAbilities(true, false, true, false, false, false, false)))
                 .where('H', casingPredicate.or(autoAbilities(false, true, false, false, false, false, false)))
                 .where('S', selfPredicate())
                 .where('B', conveyorOrientation().or(conveyorOrientation2()))

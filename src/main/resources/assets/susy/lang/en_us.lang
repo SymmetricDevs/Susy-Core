@@ -182,6 +182,7 @@ tile.robot_arm.grabber.name=Robotic Arm
 tile.robot_arm_layup.layup.name=Layup Machine Robotic Arm
 
 tile.susy_multiblock_casing.hardened_titanium_casing.name=Hardened Titanium Casing
+tile.susy_multiblock_casing2.light_stainless_casing.name=Light Lunar Stainless Steel Casing
 tile.vehicle_track.default.name=Heavy-Duty Vehicle Track
 tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
 
