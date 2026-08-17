@@ -110,6 +110,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        return RecipeCheckUtils.checkAtmosphere(recipe, this) && (this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false)));
+        return RecipeCheckUtils.checkAtmosphere(recipe, this) &&
+                (this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false)));
     }
 }

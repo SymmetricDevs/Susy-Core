@@ -108,9 +108,7 @@ public class SuSyBlocks {
     public static BlockLunarConcrete LUNAR_CONCRETE;
     public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
 
-
     public static ArrayList<VariantBlock<?>> susyBlocks;
-
 
     public static void init() {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
