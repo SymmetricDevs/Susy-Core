@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.api.recipes.properties.SolarFurnaceMinPowerProperty;
 
@@ -104,4 +105,15 @@ public class SolarFurnaceRecipeBuilder extends RecipeBuilder<SolarFurnaceRecipeB
                 this.recipePropertyStorage.getRecipePropertyValue(DimensionProperty.getInstance(),
                         IntLists.EMPTY_LIST);
     }
+
+    public SolarFurnaceRecipeBuilder requireAtmosphere() {
+        this.applyProperty(AtmosphereProperty.getInstance(), true);
+        return this;
+    }
+
+    public SolarFurnaceRecipeBuilder requireVacuum() {
+        this.applyProperty(AtmosphereProperty.getInstance(), false);
+        return this;
+    }
+
 }
