@@ -2029,4 +2029,4 @@ item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=Restrictive %s Direct
 item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Large Restrictive %s Direct Fluid Pipe
 item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Huge Restrictive %s Direct Fluid Pipe
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
-susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
+susy.tankless_fluid_pipe.resistance=§9Resistance: §f%,d
