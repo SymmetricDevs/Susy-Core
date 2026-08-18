@@ -20,4 +20,11 @@ public class SuSyMaterialIconType {
     public static final MaterialIconType millBall = new MaterialIconType("millBall");
     public static final MaterialIconType pin = new MaterialIconType("pin");
     public static final MaterialIconType target = new MaterialIconType("target");
+
+    public static final MaterialIconType pipeTinyTanklessFluid = new MaterialIconType("pipeTinyTanklessFluid");
+    public static final MaterialIconType pipeSmallTanklessFluid = new MaterialIconType("pipeSmallTanklessFluid");
+    public static final MaterialIconType pipeNormalTanklessFluid = new MaterialIconType("pipeNormalTanklessFluid");
+    public static final MaterialIconType pipeLargeTanklessFluid = new MaterialIconType("pipeLargeTanklessFluid");
+    public static final MaterialIconType pipeHugeTanklessFluid = new MaterialIconType("pipeHugeTanklessFluid");
+    public static final MaterialIconType pipeSideTanklessFluid = new MaterialIconType("pipeSideTanklessFluid");
 }

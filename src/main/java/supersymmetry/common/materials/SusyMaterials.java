@@ -16,6 +16,8 @@ import gregtech.api.unification.material.properties.*;
 import supercritical.api.unification.material.SCMaterials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 
 public class SusyMaterials {
 
@@ -310,6 +312,12 @@ public class SusyMaterials {
                         }
                     }
                 }
+            }
+
+            if (material.hasProperty(PropertyKey.FLUID_PIPE) &&
+                    !material.hasProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE)) {
+                material.getProperties().setProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE,
+                        TanklessFluidPipeProperties.from(material.getProperty(PropertyKey.FLUID_PIPE)));
             }
         }
     }

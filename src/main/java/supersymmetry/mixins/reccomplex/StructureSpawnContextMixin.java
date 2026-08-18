@@ -11,7 +11,7 @@ public class StructureSpawnContextMixin {
 
     // Adds a flag to the setBlockState method that force-replaces the fluid state
     // from FluidloggedAPI
-    @ModifyVariable(method = "setBlock", name = "arg3", at = @At("HEAD"), argsOnly = true, remap = false, require = 1)
+    @ModifyVariable(method = "setBlock", name = "flag", at = @At("HEAD"), argsOnly = true, remap = false, require = 1)
     public int setBlock(int flag) {
         return flag | 64;
     }

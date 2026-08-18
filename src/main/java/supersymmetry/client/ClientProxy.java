@@ -67,6 +67,7 @@ import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -98,6 +99,7 @@ public class ClientProxy extends CommonProxy {
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
+        TanklessFluidPipeRenderer.INSTANCE.preInit();
     }
 
     @Override
