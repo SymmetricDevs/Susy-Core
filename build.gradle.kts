@@ -26,6 +26,12 @@ dependencies {
         rfg.deobf("${it.module.group}:${it.module.name}:${it.versionConstraint.requiredVersion}")
     }
 
+    // Lombok
+    compileOnly(deps.lombok)
+    annotationProcessor(deps.lombok)
+    testCompileOnly(deps.lombok)
+    testAnnotationProcessor(deps.lombok)
+
     // Mixinbooter 11.x breaks runtime (mixins with type-parameters, FMLDeobfuscatingRemapper)
     // So we use Mixinbooter 10.x here, which contains the mixin annotation processor.
     annotationProcessor(libs.mixinbooter)

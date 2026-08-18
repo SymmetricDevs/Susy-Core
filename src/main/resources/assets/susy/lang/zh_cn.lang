@@ -1490,3 +1490,18 @@ susy.command.faction.get=current HATE for %s: %s
 susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+# Tankless Fluid Pipes
+susy.jei.group.tankless_fluid_pipes=路由流体管道
+item.material.oreprefix.pipeTinyTanklessFluid=%s微型路由流体管道
+item.material.oreprefix.pipeSmallTanklessFluid=%s小型路由流体管道
+item.material.oreprefix.pipeNormalTanklessFluid=%s路由流体管道
+item.material.oreprefix.pipeLargeTanklessFluid=%s大型路由流体管道
+item.material.oreprefix.pipeHugeTanklessFluid=%s巨型路由流体管道
+item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=微型加固%s路由流体管道
+item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=小型加固%s路由流体管道
+item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=加固%s路由流体管道
+item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=大型加固%s路由流体管道
+item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=巨型加固%s路由流体管道
+susy.tankless_fluid_pipe.tooltip=§4无法运输不兼容流体！
+susy.tankless_fluid_pipe.tooltip.resistance=§9阻力：§f%,d

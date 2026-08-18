@@ -12,6 +12,32 @@ import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
 public class SusyOrePrefix {
 
+    public static final OrePrefix pipeTinyTanklessFluid = new OrePrefix("pipeTinyTanklessFluid", GTValues.M / 2, null,
+            null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeSmallTanklessFluid = new OrePrefix("pipeSmallTanklessFluid", GTValues.M, null,
+            null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeNormalTanklessFluid = new OrePrefix("pipeNormalTanklessFluid", GTValues.M * 3,
+            null, null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeLargeTanklessFluid = new OrePrefix("pipeLargeTanklessFluid", GTValues.M * 6,
+            null, null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeHugeTanklessFluid = new OrePrefix("pipeHugeTanklessFluid", GTValues.M * 12,
+            null, null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+
+    // Restrictive variants: high resistance, so routing prefers them last
+    public static final OrePrefix pipeTinyRestrictiveTanklessFluid = new OrePrefix("pipeTinyRestrictiveTanklessFluid",
+            GTValues.M / 2, null, null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeSmallRestrictiveTanklessFluid = new OrePrefix(
+            "pipeSmallRestrictiveTanklessFluid", GTValues.M, null, null, OrePrefix.Flags.ENABLE_UNIFICATION, null);
+    public static final OrePrefix pipeNormalRestrictiveTanklessFluid = new OrePrefix(
+            "pipeNormalRestrictiveTanklessFluid", GTValues.M * 3, null, null, OrePrefix.Flags.ENABLE_UNIFICATION,
+            null);
+    public static final OrePrefix pipeLargeRestrictiveTanklessFluid = new OrePrefix(
+            "pipeLargeRestrictiveTanklessFluid", GTValues.M * 6, null, null, OrePrefix.Flags.ENABLE_UNIFICATION,
+            null);
+    public static final OrePrefix pipeHugeRestrictiveTanklessFluid = new OrePrefix(
+            "pipeHugeRestrictiveTanklessFluid", GTValues.M * 12, null, null, OrePrefix.Flags.ENABLE_UNIFICATION,
+            null);
+
     public static final OrePrefix oreGabbro = new OrePrefix("oreGabbro", -1L, null, MaterialIconType.ore,
             OrePrefix.Flags.ENABLE_UNIFICATION, OrePrefix.Conditions.hasOreProperty);
     public static final OrePrefix oreGneiss = new OrePrefix("oreGneiss", -1L, null, MaterialIconType.ore,

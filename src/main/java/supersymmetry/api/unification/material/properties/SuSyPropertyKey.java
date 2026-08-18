@@ -7,4 +7,6 @@ public class SuSyPropertyKey {
     public static final PropertyKey<FiberProperty> FIBER = new PropertyKey<>("fiber", FiberProperty.class);
     public static final PropertyKey<MillBallProperty> MILL_BALL = new PropertyKey<>("mill_ball",
             MillBallProperty.class);
+    public static final PropertyKey<TanklessFluidPipeProperties> TANKLESS_FLUID_PIPE = new PropertyKey<>(
+            "tankless_fluid_pipe", TanklessFluidPipeProperties.class);
 }
