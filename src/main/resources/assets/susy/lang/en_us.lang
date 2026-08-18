@@ -1382,7 +1382,6 @@ metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
 metaitem.air_disperser.name=Air Disperser
 metaitem.air_disperser.tooltip=Disperses Oxygen to Breathe (uses 100mB/s while filling)
-metaitem.shape.mold.target.name=Sputtering Target Mold
 metaitem.location_card.name=Location Card
 metaitem.cargo_drone.basic.name=Basic Cargo Drone
 metaitem.cargo_drone.basic.tooltip=Max range: §61000 blocks§7, speed: §b2.5 blocks/second§b
@@ -1402,6 +1401,11 @@ metaitem.tungsten_electrode.name=Thoriated Tungsten Electrode
 metaitem.shape.mold.target.name=Sputtering Target Mold
 metaitem.rocket_configurer.name=Rocket Configuration Tool
 metaitem.clay_graphite_crucible.name=Clay-Graphite Crucible
+metaitem.astronaut_helmet.name=Astronaut Helmet
+metaitem.astronaut_chestplate.name=Astronaut Chestplate
+metaitem.astronaut_leggings.name=Astronaut Leggings
+metaitem.astronaut_boots.name=Astronaut Boots
+
 
 # Catalysts
 susy.universal.catalysts.tooltip.tier=§eMax Voltage: §f%,d EU/t (%s§f)
