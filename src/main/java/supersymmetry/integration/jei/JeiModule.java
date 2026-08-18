@@ -85,7 +85,7 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LARGE_RES.getStackForm(), largeRESMapId);
 
         String strandCastingId = GTValues.MODID + ":strand_casting";
-        registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).toList(), strandCastingId);
+        registry.addRecipes(CAST_MATERIALS.stream().map(StrandInfo::new).collect(Collectors.toList()), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.TURNING_ZONE.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.ROLLING_MILL.getStackForm(), strandCastingId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.CLUSTER_MILL.getStackForm(), strandCastingId);

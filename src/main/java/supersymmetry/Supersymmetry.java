@@ -16,6 +16,7 @@ import li.cil.oc.api.Driver;
 import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
+import supersymmetry.api.blocks.SuSyHeatingCoils;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
 import supersymmetry.client.shaders.ShaderManager;
@@ -75,6 +76,7 @@ public class Supersymmetry {
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+        SuSyHeatingCoils.init();
 
         SusySounds.registerSounds();
 

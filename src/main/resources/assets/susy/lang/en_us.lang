@@ -6,6 +6,8 @@ tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Manganese Iron Arsenic P
 tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
 tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
+tile.heating_coil.molybdenum_disilicide.name=Molybdenum Disilicide Coil Block
+tile.heating_coil.tungsten.name=Tungsten Coil Block
 tile.wire_coil.tooltip_evaporation=§8Evaporation Pool
 tile.wire_coil.tooltip_energy_evaporating=  §cHeat Generation: §f%,d kJ/t
 
@@ -267,6 +269,7 @@ susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
+susy.material.molybdenum_disilicide=Molybdenum Disilicide
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
@@ -2015,6 +2018,9 @@ susy.landing_pad.extracting=Extracting items from lander...
 susy.landing_pad.inserting=Inserting items into lander...
 
 susy.general.requires_atmosphere=§6Only works on breathable planets
+
+tile.wire_coil.kanthal.name=Nichrome Coil Block
+tile.wire_coil.nichrome.name=Kanthal Coil Block
 
 # Tankless Fluid Pipes
 susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
