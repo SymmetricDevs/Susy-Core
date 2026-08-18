@@ -8,13 +8,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lombok.val;
-import mezz.jei.api.*;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import cam72cam.immersiverailroading.IRItems;
 import gregtech.api.GTValues;
@@ -22,10 +23,10 @@ import gregtech.api.modules.GregTechModule;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.util.Mods;
 import gregtech.integration.IntegrationSubmodule;
+import lombok.val;
+import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.NullMarked;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -114,7 +115,6 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         }
         addGroup(registry, "tankless_fluid_pipes", stacks);
     }
-
 
     @NullMarked
     private static void addSubBlocks(List<ItemStack> out, Block block) {
