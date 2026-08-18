@@ -65,8 +65,8 @@ import supersymmetry.common.metatileentities.single.steam.MetaTileEntitySteamLat
 import supersymmetry.common.metatileentities.single.steam.SuSyCoalBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
-import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositBasket;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
