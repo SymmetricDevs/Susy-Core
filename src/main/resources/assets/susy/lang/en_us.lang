@@ -2024,15 +2024,16 @@ tile.wire_coil.nichrome.name=Kanthal Coil Block
 
 # Tankless Fluid Pipes
 susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
-item.material.oreprefix.pipeTinyTanklessFluid=%s Tiny Direct Fluid Pipe
-item.material.oreprefix.pipeSmallTanklessFluid=%s Small Direct Fluid Pipe
+item.material.oreprefix.pipeTinyTanklessFluid=Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallTanklessFluid=Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalTanklessFluid=%s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeTanklessFluid=%s Large Direct Fluid Pipe
-item.material.oreprefix.pipeHugeTanklessFluid=%s Huge Direct Fluid Pipe
-item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Tiny Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Small Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeTanklessFluid=Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeTanklessFluid=Huge %s Direct Fluid Pipe
+item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Restrictive Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Restrictive Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Large Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Huge Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Restrictive Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Restrictive Huge %s Direct Fluid Pipe
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
-susy.tankless_fluid_pipe.resistance=§9Resistance: §f%,d
+susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
+susy.tool_action.hammer.toggle_flange=§8Use hammer to toggle flanges
