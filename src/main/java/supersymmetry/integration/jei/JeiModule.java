@@ -22,7 +22,7 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.integration.jei.category.StrandCategory;
 import supersymmetry.integration.jei.category.StrandInfo;
@@ -70,7 +70,7 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_BRONZE.getStackForm(), solidMapId);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.STEAM_BOILER_COAL_STEEL.getStackForm(), solidMapId);
 
-        registry.addRecipes(RocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
+        registry.addRecipes(LiquidRocketFuelEntry.getFuelRegistry().values().stream().map(RocketFuelWrapper::new)
                 .collect(Collectors.toList()), RocketFuelCategory.UID);
         registry.addRecipeCatalyst(SuSyMetaTileEntities.LAUNCH_PAD.getStackForm(), RocketFuelCategory.UID);
         String largeRESMapId = GTValues.MODID + ":" + SuSyRecipeMaps.LARGE_RES_RECIPES.getUnlocalizedName();

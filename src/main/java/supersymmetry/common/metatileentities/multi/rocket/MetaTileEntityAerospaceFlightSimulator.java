@@ -7,6 +7,8 @@ import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -26,6 +28,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,9 +63,11 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -118,6 +123,31 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     public RocketFuelEntry fuel;
     public final List<FluidStack> fuelList = new ArrayList<>();
 
+    // phantom slot backing the solid fuel selector; only dusts of a material with a
+    // SolidRocketFuelProperty get in
+    public final ItemStackHandler solidFuelSlot = new ItemStackHandler(1) {
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return SolidRocketFuelProperty.search(stack) != null;
+        }
+
+        @Override
+        public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+            // phantom slots write straight through setStackInSlot, which skips isItemValid
+            if (!stack.isEmpty() && !isItemValid(slot, stack)) {
+                return;
+            }
+            super.setStackInSlot(slot, stack);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            setFuelFromData();
+            markDirty();
+        }
+    };
+
     private double gravity = SuSyValues.G0;
     private AFSStats stats = AFSStats.none();
 
@@ -145,10 +175,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             this.progress = data.getLong("progress");
         }
         this.gravity = data.getDouble("gravity");
-
-        if (data.hasKey("fuelRegistryName")) {
-            this.fuel = RocketFuelEntry.getCopyOf(data.getString("fuelRegistryName"));
-        }
         this.fuelList.clear();
         if (data.hasKey("fuelListSize")) {
             for (int i = 0; i < data.getInteger("fuelListSize"); i++) {
@@ -160,6 +186,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 }
             }
         }
+        this.solidFuelSlot.deserializeNBT(data.getCompoundTag("solidFuelSlot"));
         if (data.hasKey("AFSStats")) {
             this.stats = AFSStats.deserializeNBT(data.getCompoundTag("AFSStats"));
         }
@@ -169,6 +196,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             ItemStack blueprintStack = new ItemStack(blueprintTag);
             this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
         }
+        // after the blueprint, since which of the two inputs is read depends on it
+        setFuelFromData();
         this.computationPerTick = data.getInteger("computation");
         this.coolantPerTick = data.getInteger("coolant");
         this.energyPerTick = data.getInteger("energy");
@@ -182,9 +211,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             tag.setLong("progress", this.progress);
         tag.setDouble("gravity", this.gravity);
 
-        if (this.fuel != null) {
-            tag.setString("fuelRegistryName", this.fuel.getRegistryName());
-        }
         tag.setInteger("fuelListSize", this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (fuelList.get(i) == null) {
@@ -193,6 +219,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 tag.setTag("fuelList" + i, this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
             }
         }
+        tag.setTag("solidFuelSlot", this.solidFuelSlot.serializeNBT());
 
         if (!rocketBlueprintSlot.isEmpty()) {
             var bp = rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound());
@@ -208,12 +235,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         buf.writeBoolean(this.isWorkingEnabled);
         buf.writeLong(this.progress);
         buf.writeDouble(this.gravity);
-        if (this.fuel != null) {
-            buf.writeBoolean(true);
-            buf.writeString(this.fuel.getRegistryName());
-        } else {
-            buf.writeBoolean(false);
-        }
         buf.writeInt(this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (this.fuelList.get(i) == null) {
@@ -223,6 +244,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 buf.writeCompoundTag(this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
             }
         }
+        buf.writeItemStack(this.solidFuelSlot.getStackInSlot(0));
 
         if (hasBlueprint()) {
             buf.writeBoolean(true);
@@ -245,9 +267,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readLong();
         this.gravity = buf.readDouble();
-        if (buf.readBoolean()) {
-            this.fuel = RocketFuelEntry.getCopyOf(buf.readString(32767));
-        }
+
         this.fuelList.clear();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -261,7 +281,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 this.fuelList.add(null);
             }
         }
-
+        try {
+            this.solidFuelSlot.setStackInSlot(0, buf.readItemStack());
+        } catch (IOException e) {
+            // goognt
+        }
         if (buf.readBoolean()) {
             try {
                 ItemStack blueprintStack = buf.readItemStack();
@@ -270,6 +294,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 // goognt
             }
         }
+        // after the blueprint, since which of the two inputs is read depends on it
+        setFuelFromData();
         this.stats.readFromBuffer(buf);
         if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
@@ -277,6 +303,26 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.computationPerTick = buf.readInt();
         this.coolantPerTick = buf.readInt();
         this.energyPerTick = buf.readInt();
+    }
+
+    // the fuel is derived state; fuelList and solidFuelSlot are what persists, and
+    // the blueprint decides which of the two is read
+    public void setFuelFromData() {
+        if (isSolidBlueprint()) {
+            this.fuel = SolidRocketFuelProperty.search(this.solidFuelSlot.getStackInSlot(0));
+            return;
+        }
+
+        List<Fluid> userFluids = this.fuelList.stream().filter(x -> x != null).map(FluidStack::getFluid)
+                .collect(Collectors.toList());
+
+        Optional<LiquidRocketFuelEntry> entry = LiquidRocketFuelEntry.search(userFluids);
+        this.fuel = entry.orElse(null);
+    }
+
+    public boolean isSolidBlueprint() {
+        AbstractRocketBlueprint bp = getBlueprint();
+        return bp != null && bp.isSolidRocket();
     }
 
     @Override
@@ -423,8 +469,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     // wipe the progress when there is not enough power/coolant to prevent the
-    // player from having too
-    // much fun
+    // player from having too much fun
     public void crash() {
         setWorkingEnabledInternal(false);
         this.rocketBlueprintSlot.setLocked(false);
@@ -655,9 +700,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // Fuel selector
         menuGroup.addWidget(
                 new LabelWidget(10, 45, this.getMetaName() + ".gui.fuel_selector_label", 0xffffff));
-        menuGroup.addWidget(new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> {
-            this.fuel = fuel;
-        }));
+        // liquid and solid blueprints each get their own selector; the hidden one keeps
+        // its contents so switching blueprints back restores the old selection
+        menuGroup.addWidgetWithTest(
+                new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> setFuelFromData()),
+                () -> !this.isSolidBlueprint());
+        menuGroup.addWidgetWithTest(
+                new PhantomSlotWidget(this.solidFuelSlot, 0, 10, 54)
+                        .setClearSlotOnRightClick(true)
+                        .setBackgroundTexture(GuiTextures.SLOT_DARK),
+                this::isSolidBlueprint);
         // Gravity selector
         menuGroup.addWidget(
                 new LabelWidget(10, 80, this.getMetaName() + ".gui.gravity_selector_label", 0xffffff));
@@ -686,9 +738,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // multi information
         // these should probably be visible at all times in some different corner
         menuGroup.addWidget(new LabelWidget(width - 130, 9,
-                getMetaName() + ".gui.computation_power", 0xffffff, this.getCompute()));
+                getMetaName() + ".gui.computation_power", 0xffffff, new Object[] { this.getCompute() }));
         menuGroup.addWidget(new LabelWidget(width - 130, 20,
-                getMetaName() + ".gui.coolant_flow", 0xffffff, this.getCoolantToConsume() * 20));
+                getMetaName() + ".gui.coolant_flow", 0xffffff, new Object[] { this.getCoolantToConsume() * 20 }));
         menuGroup.addWidget(new DynamicLabelWidget(width - 130, 31,
                 () -> I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()), 0xffffff));
         menuGroup.addWidget(new LabelWidget(9, 9, getMetaFullName(), 0xffffff));

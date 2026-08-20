@@ -16,7 +16,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
+import supersymmetry.common.rocketry.components.IComponentTank;
 
 public class RocketStage implements Cloneable {
 
@@ -122,7 +122,7 @@ public class RocketStage implements Cloneable {
 
     public double getFuelCapacity() {
         return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("tank"))
-                .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume).sum() * 1000; // 1000 L per m^3 by definition
+                .mapToInt(tank -> ((IComponentTank) tank).getVolume()).sum() * 1000; // 1000 L per m^3 by definition
     }
 
     // In kg/s

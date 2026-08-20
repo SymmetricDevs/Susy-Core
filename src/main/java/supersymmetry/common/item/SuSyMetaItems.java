@@ -154,7 +154,7 @@ public class SuSyMetaItems {
 
         DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),
-                        Arrays.asList("type")));
+                        Arrays.asList("name")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));

@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -167,4 +168,6 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
                                                                         long augmentation);
 
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
+
+    public abstract boolean isSolidRocket();
 }

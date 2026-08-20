@@ -23,12 +23,12 @@ import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockTankShell1;
 
-public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuelTank> {
+public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuelTank> implements IComponentTank {
 
     public int volume;
 
     public ComponentSolidFuelTank() {
-        super("solid_tank", "solid_tank", candidate -> candidate.getSecond().stream().anyMatch(
+        super("solid_tank", "tank", candidate -> candidate.getSecond().stream().anyMatch(
                 pos -> candidate.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.BLOCK_IGNITER)));
     }
 
@@ -226,5 +226,10 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
             lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getInteger("volume")));
         }
         return lines;
+    }
+
+    @Override
+    public int getVolume() {
+        return volume;
     }
 }

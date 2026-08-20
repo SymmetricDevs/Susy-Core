@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.SuSyValues;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
@@ -29,6 +30,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         ResourceLocation location;
         int stageCount = 0;
         public List<RocketStage> stages = new ArrayList<>();
+        boolean solidRocket = false;
 
         public Builder(String name) {
             this.name = name;
@@ -48,15 +50,26 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             return this;
         }
 
+        public Builder solidRocket() {
+            this.solidRocket = true;
+            return this;
+        }
+
         public SimpleStagedRocketBlueprint build() {
             SimpleStagedRocketBlueprint blueprint = new SimpleStagedRocketBlueprint(name, location);
             blueprint.setStages(stages);
+            blueprint.solidRocket(solidRocket);
             assert blueprint.isFullBlueprint() : "full blueprint produced by the builder, thats not meant to happen :C";
             return blueprint;
         }
     }
 
+    private void solidRocket(boolean solidRocket) {
+        this.solidRocket = solidRocket;
+    }
+
     public long AFSimprovement = 0;
+    public boolean solidRocket = false;
 
     public SimpleStagedRocketBlueprint(String name, ResourceLocation entity) {
         super(name, entity);
@@ -89,6 +102,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         NBTTagCompound instrumentList = new NBTTagCompound();
         this.getInstruments().forEach(instrumentList::setInteger);
         tag.setTag("instruments", instrumentList);
+        tag.setBoolean("solidRocket", solidRocket);
 
         return tag;
     }
@@ -119,6 +133,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         }
         this.setName(tag.getString("name"));
         this.AFSimprovement = tag.getLong("AFSimprovement");
+        this.solidRocket = tag.getBoolean("solidRocket");
+
         return true;
     }
 
@@ -286,5 +302,10 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
                     SuccessCalculation.LaunchResult.CRASHES;
         }
+    }
+
+    @Override
+    public boolean isSolidRocket() {
+        return solidRocket;
     }
 }

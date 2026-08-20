@@ -67,9 +67,11 @@ import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockLunarConcrete;
@@ -385,31 +387,97 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     }
 
     /**
-     * Moves everything in the import buses that is not an assembly consumable into
-     * the rocket, then tops up its fuel.
+     * Tops up the rocket's fuel, then moves everything in the import buses that is
+     * not an assembly consumable into it. Fuel goes first because a solid rocket
+     * takes its fuel out of the same buses the cargo sweep empties — anything left
+     * over once the tank is full still flies as payload.
      *
      * @return true once the rocket is fully fuelled
      */
     private boolean loadCargo() {
+        boolean fuelled = loadRocketFuel();
         loadRocketCargo();
+        return fuelled;
+    }
+
+    private boolean loadRocketFuel() {
         if (this.fuelingProgress >= this.selectedRocket.getFuelVolume()) {
             return true;
         }
         RocketFuelEntry fuelEntry = this.selectedRocket.getFuel();
-
         if (fuelEntry == null) {
-            List<Fluid> fluids = getInputFluidInventory().getFluidTanks().stream()
-                    .map(tank -> tank.getFluid() == null ? null : tank.getFluid().getFluid()).distinct()
-                    .filter(Objects::nonNull).collect(Collectors.toList());
-
-            Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
-            if (possibleEntry.isEmpty()) {
+            fuelEntry = selectFuel();
+            if (fuelEntry == null) {
                 return false;
             }
-            fuelEntry = possibleEntry.get();
             this.selectedRocket.setFuel(fuelEntry);
         }
+        if (fuelEntry instanceof SolidRocketFuelProperty solid) {
+            return fuelSolid(solid);
+        }
+        if (fuelEntry instanceof LiquidRocketFuelEntry liquid) {
+            return fuelLiquid(liquid);
+        }
+        return false;
+    }
 
+    /**
+     * Picks a fuel out of whatever is loaded, of the kind the blueprint calls for.
+     * Only runs until a fuel sticks to the rocket, so the blueprint is not reparsed
+     * every tick.
+     */
+    private RocketFuelEntry selectFuel() {
+        AbstractRocketBlueprint blueprint = this.selectedRocket.getBlueprint();
+        if (blueprint != null && blueprint.isSolidRocket()) {
+            IItemHandlerModifiable imports = getInputInventory();
+            for (int i = 0; i < imports.getSlots(); i++) {
+                SolidRocketFuelProperty solid = SolidRocketFuelProperty.search(imports.getStackInSlot(i));
+                if (solid != null) {
+                    return solid;
+                }
+            }
+            return null;
+        }
+        List<Fluid> fluids = getInputFluidInventory().getFluidTanks().stream()
+                .map(tank -> tank.getFluid() == null ? null : tank.getFluid().getFluid()).distinct()
+                .filter(Objects::nonNull).collect(Collectors.toList());
+
+        return LiquidRocketFuelEntry.search(fluids).orElse(null);
+    }
+
+    /**
+     * Eats dusts of the chosen fuel out of the import buses, each one filling its
+     * own volume of tank.
+     */
+    private boolean fuelSolid(SolidRocketFuelProperty fuel) {
+        IItemHandlerModifiable imports = getInputInventory();
+        double litersPerDust = fuel.getVolume();
+        int remaining = this.selectedRocket.getFuelVolume() - this.fuelingProgress;
+        // Round up so the last, partial dust still finishes the tank off.
+        int dustsWanted = (int) Math.min(Math.ceil(remaining / litersPerDust),
+                Math.max(1, MAX_FUELING_SPEED / litersPerDust));
+
+        int loaded = 0;
+        for (int i = 0; i < imports.getSlots() && loaded < dustsWanted; i++) {
+            ItemStack stack = imports.getStackInSlot(i);
+            // search hands back the material's own property instance, so identity here is
+            // "a dust of the fuel we are already burning"
+            if (SolidRocketFuelProperty.search(stack) != fuel) {
+                continue;
+            }
+            int taken = Math.min(stack.getCount(), dustsWanted - loaded);
+            ItemStack left = stack.copy();
+            left.shrink(taken);
+            imports.setStackInSlot(i, left.isEmpty() ? ItemStack.EMPTY : left);
+            loaded += taken;
+        }
+        if (loaded > 0) {
+            setFuelingProgress(this.fuelingProgress + (int) Math.ceil(loaded * litersPerDust));
+        }
+        return this.fuelingProgress >= this.selectedRocket.getFuelVolume();
+    }
+
+    private boolean fuelLiquid(LiquidRocketFuelEntry fuelEntry) {
         var composition = fuelEntry.getComposition();
         int totalMBPerUnit = composition.stream().mapToInt(Tuple::getSecond).sum();
         if (totalMBPerUnit <= 0)

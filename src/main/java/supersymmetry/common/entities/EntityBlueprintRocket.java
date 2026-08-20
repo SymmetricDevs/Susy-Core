@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GregTechAPI;
 import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
@@ -306,12 +308,25 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     public void setFuel(RocketFuelEntry fuelEntry) {
-        this.dataManager.set(FUEL, fuelEntry.getRegistryName());
+        this.dataManager.set(FUEL, fuelEntry.getFuelKey());
     }
 
     @Override
     public RocketFuelEntry getFuel() {
-        return RocketFuelEntry.getCopyOf(this.dataManager.get(FUEL));
+        return RocketFuelEntry.fromFuelKey(this.dataManager.get(FUEL));
+    }
+
+    /**
+     * The blueprint this rocket was built from, or null if it was spawned without
+     * one.
+     */
+    public @Nullable AbstractRocketBlueprint getBlueprint() {
+        if (!this.getEntityData().hasKey("rocket")) {
+            return null;
+        }
+        NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
+        AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
+        return blueprint != null && blueprint.readFromNBT(rocketNBT) ? blueprint : null;
     }
 
     @Override
@@ -357,6 +372,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
+        // the datawatcher only syncs, so without this a fuelled rocket comes back from a
+        // reload unfuelled and silently aborts its own countdown
+        this.dataManager.set(FUEL, compound.getString("Fuel"));
     }
 
     @Override
@@ -369,6 +387,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
+        compound.setString("Fuel", this.dataManager.get(FUEL));
     }
 
     @Override

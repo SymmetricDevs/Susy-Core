@@ -9,15 +9,15 @@ import net.minecraftforge.fluids.FluidStack;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 
 public class RocketFuelWrapper implements IRecipeWrapper {
 
-    private final RocketFuelEntry entry;
+    private final LiquidRocketFuelEntry entry;
 
     private final String specificImpulse;
 
-    public RocketFuelWrapper(RocketFuelEntry entry) {
+    public RocketFuelWrapper(LiquidRocketFuelEntry entry) {
         this.entry = entry;
         this.specificImpulse = I18n.format("susy.tooltip.specific_impulse", entry.getSpecificImpulse());
     }

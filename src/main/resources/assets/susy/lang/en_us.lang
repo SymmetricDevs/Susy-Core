@@ -389,13 +389,16 @@ susy.machine.blueprint_assembler.no_energy_build=Insufficient energy (MV minimum
 susy.machine.blueprint_assembler.no_coolant_build=Insufficient FC-75 coolant flow
 susy.machine.blueprint_assembler.no_coolant=No FC-75 coolant
 
+susy.machine.aerospace_flight_simulator.obstructed=No FC-75 coolant
+susy.machine.aerospace_flight_simulator.obstructed.desc=The AFS must be fully filled with coolant to begin normal operation.
 
 susy.rocketry.components.engine.name=Engine(s)
 susy.rocketry.components.engine_small.name=Vernier engine(s)
-susy.rocketry.components.tank.name=Tank(s)
+susy.rocketry.components.tank.name=Liquid tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
 susy.rocketry.components.interstage.name=Interstage
+susy.rocketry.components.solid_tank.name=Solid fuel tank
 
 # Component tooltips
 susy.rocketry.tooltip.mass=Mass: %.1f kg
@@ -1474,11 +1477,12 @@ metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build t
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
 metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.master_blueprint.tag.lunar=§6Lunar-sized Rocket
-metaitem.data_card.active.tag.engine=§6Engine
-metaitem.data_card.active.tag.engine_small=§6Vernier Engine
-metaitem.data_card.active.tag.fairing=§6Fairing
+metaitem.data_card.active.tag.laval_engine=§6Laval Engine
+metaitem.data_card.active.tag.vernier_engine=§6Vernier Engine
+metaitem.data_card.active.tag.alu_fairing=§6Fairing
 metaitem.data_card.active.tag.spacecraft=§6Spacecraft
-metaitem.data_card.active.tag.tank=§6Tank
+metaitem.data_card.active.tag.fluid_tank=§6Liquid Fuel Tank
+metaitem.data_card.active.tag.solid_tank=§6Solid Fuel Tank
 metaitem.data_card.active.tag.interstage=§6Interstage
 
 # Machine Translations

@@ -25,7 +25,7 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 /**
  * componentLiquidFuelTank
  */
-public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> {
+public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFuelTank> implements IComponentTank {
 
     public int volume;
 
@@ -155,5 +155,10 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
             lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getInteger("volume")));
         }
         return lines;
+    }
+
+    @Override
+    public int getVolume() {
+        return this.volume;
     }
 }

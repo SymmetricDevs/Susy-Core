@@ -429,7 +429,9 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
             return true;
         }
-        LiquidRocketFuelEntry fuelEntry = selectedRocket.getFuel();
+        // the Soyuz is liquid-fuelled, and nothing here ever puts a solid fuel on it
+        LiquidRocketFuelEntry fuelEntry = selectedRocket.getFuel() instanceof LiquidRocketFuelEntry liquid ? liquid :
+                null;
 
         if (fuelEntry == null) {
             List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()

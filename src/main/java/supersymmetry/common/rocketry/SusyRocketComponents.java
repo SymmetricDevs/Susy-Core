@@ -7,7 +7,7 @@ import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
@@ -29,14 +29,14 @@ public class SusyRocketComponents {
         AbstractComponent.registerComponent(new ComponentSolidFuelTank());
         AbstractComponent.lockRegistry();
 
-        new RocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
+        new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
                 .addComponent(Materials.Methane.getFluid(FluidStorageKeys.LIQUID) != null ?
                         Materials.Methane.getFluid(FluidStorageKeys.LIQUID) : Materials.Methane.getFluid(), 100)
                 .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355).density(0.983).sIVacuum(330)
                 .sIPerPressure(240).register();
 
         if (GregTechAPI.materialManager.getMaterial("rp_one") != null) {
-            new RocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
                     .addComponent(GregTechAPI.materialManager.getMaterial("rp_one").getFluid(), 100)
                     .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 256).density(0.915).sIVacuum(350)
                     .sIPerPressure(290).register();
@@ -44,7 +44,7 @@ public class SusyRocketComponents {
 
         if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
                 (GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide") != null)) {
-            new RocketFuelEntry.RocketFuelEntryBuilder("MMH-N2O4")
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-N2O4")
                     .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
                     .addComponent(GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide").getFluid(), 216)
                     .density(1.2).sIVacuum(410).sIPerPressure(350).register();
@@ -72,8 +72,8 @@ public class SusyRocketComponents {
                         .build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic")).build();
 
-        ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar")
-                .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(4).build())
+        ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar").solidRocket()
+                .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
                         .type("engine_small").limit(3).type("tank").limit(1).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar")).build();
