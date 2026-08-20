@@ -1,4 +1,4 @@
-package supersymmetry.mixins.gregtech.gcym;
+package supersymmetry.mixins.gcym;
 
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
