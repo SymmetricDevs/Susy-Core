@@ -36,12 +36,13 @@ public class ItemBlockTanklessFluidPipe
         tooltip.add(I18n.format("susy.tankless_fluid_pipe.tooltip"));
         tooltip.add(I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", pipeProperties.getThroughput()));
         tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", pipeProperties.getMaxFluidTemperature()));
-        tooltip.add(I18n.format("susy.tankless_fluid_pipe.resistance", pipeProperties.getResistance()));
+        tooltip.add(I18n.format("susy.tankless_fluid_pipe.tooltip.resistance", pipeProperties.getResistance()));
 
         pipeProperties.appendTooltips(tooltip, false, false);
 
         if (TooltipHelper.isShiftDown()) {
             tooltip.add(I18n.format("gregtech.tool_action.wrench.connect_and_block"));
+            tooltip.add(I18n.format("susy.tool_action.hammer.toggle_flange"));
             tooltip.add(I18n.format("gregtech.tool_action.screwdriver.access_covers"));
             tooltip.add(I18n.format("gregtech.tool_action.crowbar"));
         }
