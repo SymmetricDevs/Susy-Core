@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +31,7 @@ import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.IMaintenanceHatch;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -40,7 +40,6 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -56,6 +55,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -67,7 +67,7 @@ import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.mixin.RenderDistanceMTE;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
@@ -429,14 +429,14 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
             return true;
         }
-        RocketFuelEntry fuelEntry = selectedRocket.getFuel();
+        LiquidRocketFuelEntry fuelEntry = selectedRocket.getFuel();
 
         if (fuelEntry == null) {
             List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()
                     .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid()).distinct()
                     .filter(Objects::nonNull).collect(Collectors.toList());
 
-            Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
+            Optional<LiquidRocketFuelEntry> possibleEntry = LiquidRocketFuelEntry.search(fluids);
             if (possibleEntry.isEmpty()) {
                 return false;
             }
@@ -683,11 +683,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public enum LaunchPadState {
         INITIALIZING, // The launch pad is literally just checking for existing entities.
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the
-               // launch pad.
+        // launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting
-                 // process.
+        // process.
         LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter
-                // through physical rocket
+        // through physical rocket
         // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
     }
@@ -763,12 +763,27 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     // stupid annoying issue with part checking on chunk reloads
     @Override
     public void checkStructurePattern() {
-        TileEntity te = this.getWorld().getTileEntity(getPos());
-        if (te != this.getHolder()) {
-            if (te instanceof MetaTileEntityHolder holder &&
-                    holder.getMetaTileEntity() instanceof MetaTileEntityLaunchPad launchPad) {
-                launchPad.invalidateStructure();
+        if (structurePattern == null) return;
+        PatternMatchContext context = structurePattern.checkPatternFastAt(getWorld(), getPos(),
+                getFrontFacing().getOpposite(), getUpwardsFacing(), allowsFlip());
+        if (context != null && !this.isStructureFormed()) {
+            Set<IMultiblockPart> rawPartsSet = context.getOrCreate("MultiblockParts", HashSet::new);
+            ArrayList<IMultiblockPart> parts = new ArrayList<>(rawPartsSet);
+            for (IMultiblockPart part : parts) {
+                if (part.isAttachedToMultiBlock()) {
+                    if (part instanceof IMaintenanceHatch && part instanceof MetaTileEntityMultiblockPart mpart) {
+                        if (mpart.getController().getPos().equals(this.getPos())) {
+                            mpart.removeFromMultiBlock(this);
+                        }
+                    }
+                }
             }
+        }
+        if (context == null) {
+            if (isStructureFormed()) {
+                invalidateStructure();
+            }
+            return; // don't redo the check
         }
         super.checkStructurePattern();
     }
