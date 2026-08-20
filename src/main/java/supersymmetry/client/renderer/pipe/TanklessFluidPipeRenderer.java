@@ -96,8 +96,6 @@ public final class TanklessFluidPipeRenderer extends PipeRenderer implements Ico
     protected void renderPipeCube(CCRenderState renderState, PipeRenderContext renderContext, EnumFacing side) {
         super.renderPipeCube(renderState, renderContext, side);
         if ((((RenderContext) renderContext).flangeVisibility() & (1 << side.getIndex())) == 0) return;
-        // if the neighbor pipe is smaller, the connection is closed, so no flange is rendered
-        if ((renderContext.getConnections() & 1 << (6 + side.getIndex())) > 0) return;
         renderFlange(renderState, renderContext, side);
     }
 
