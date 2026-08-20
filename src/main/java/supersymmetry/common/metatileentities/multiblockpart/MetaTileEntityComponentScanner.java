@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -268,26 +270,27 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (this.errorPos != null) {
+            BlockPos realPos = this.getHolder().pos();
+            float resultDist = (float) new Vec3d(errorPos).distanceTo(Minecraft.getMinecraft().player.getPositionEyes(partialTicks));
             GlStateManager.pushMatrix();
             GlStateManager.disableDepth();
             GlStateManager.enableBlend();
             GlStateManager.disableLighting();
             GlStateManager.disableTexture2D();
             GlStateManager.blendFunc(770, 771);
-            GlStateManager.glLineWidth(15);
+            GlStateManager.glLineWidth(10/resultDist);
 
-            RenderUtil.moveToFace(x, y, z, getFrontFacing());
-            GlStateManager.translate(0, 0, 0);
+            GlStateManager.translate(x, y, z);
 
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
             buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
-            RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX() - getPos().getX() - 0.5,
-                    errorPos.getY() - getPos().getY() - 0.5,
-                    errorPos.getZ() - getPos().getZ() - 1,
-                    errorPos.getX() - getPos().getX() + 0.5, errorPos.getY() - getPos().getY() + 0.5,
-                    errorPos.getZ() - getPos().getZ(), 1, 0, 0, 0.6F);
+            RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX() - realPos.getX(),
+                    errorPos.getY() - realPos.getY(),
+                    errorPos.getZ() - realPos.getZ(),
+                    errorPos.getX() - realPos.getX()+1, errorPos.getY()-realPos.getY()+1,
+                    errorPos.getZ()-realPos.getZ()+1, 1, 0, 0, 0.8F);
             tessellator.draw();
 
             GlStateManager.disableBlend();
