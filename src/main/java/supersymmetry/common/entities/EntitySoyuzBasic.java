@@ -102,14 +102,10 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
 
     public void launchRocket() {
         if (this.getFuel() == null) {
-            setLaunchTime(-1);
             setCountdownStarted(false);
             return;
         }
-        if (world.isRemote) {
-            setupRocketSound();
-            soundRocket.startPlaying();
-        } else {
+        if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
                 AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
@@ -166,17 +162,29 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_z2);
     }
 
+
+
     @Override
     public void onUpdate() {
         super.onUpdate();
+        long age = this.world.getTotalWorldTime();
+        int launchTime = this.getLaunchTime();
 
-        if (isCountdownStarted()) {
-            int age = this.getAge();
-            int launchTime = this.getLaunchTime();
+        if (isCountdownStarted() && world.isRemote) {
+            if (launchTime - age > 50 && soundRocket == null) {
+                setupRocketSound();
+                soundRocket.startPlaying();
+            }
             if (age % 2 == 0) {
                 if (launchTime - age < 60 && launchTime - age > 0) {
                     this.spawnLaunchParticles(0.025 * (age - launchTime + 60));
-                } else if (launchTime - age > -100 && launchTime - age < 0) {
+                }
+            }
+
+        }
+        if (isLaunched() && world.isRemote) {
+            if (age % 2 == 0) {
+                if (launchTime - age > -100 && launchTime - age < 0) {
                     this.spawnLaunchParticles(1.5);
                 } else if (launchTime - age > -150 && launchTime - age < -100) {
                     this.spawnLaunchParticles(-0.03 * (age - launchTime + 150));

@@ -226,8 +226,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double smallThrust = this.getThrust(fuel, "engine_small", ambientPressure);
         success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
 
-        if (thrust / smallThrust > 10) {
-            success *= (1 - (0.05 * ((thrust / smallThrust) - 10)));
+        if (thrust / smallThrust > 50) {
+            success *= (1 - (0.005 * ((thrust / smallThrust) - 50)));
         } else if (thrust / smallThrust < 3) {
             success *= (1 - (0.5 * (3 - (thrust / smallThrust))));
         }
