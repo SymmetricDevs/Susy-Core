@@ -49,8 +49,9 @@ public class LiquidRocketFuelEntry implements RocketFuelEntry {
             if (this.composition.isEmpty()) {
                 throw new IllegalStateException("empty list of fuel component entries");
             }
-            LiquidRocketFuelEntry.registerFuel(new LiquidRocketFuelEntry(this.registryName, this.composition, this.density,
-                    this.sIVacuum, this.sIPerPressure));
+            LiquidRocketFuelEntry
+                    .registerFuel(new LiquidRocketFuelEntry(this.registryName, this.composition, this.density,
+                            this.sIVacuum, this.sIPerPressure));
         }
     }
 

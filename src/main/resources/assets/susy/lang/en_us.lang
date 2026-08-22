@@ -1480,6 +1480,7 @@ metaitem.data_card.active.tooltip.1=Load this into a Rocket Assembler to build t
 metaitem.data_card.master_blueprint.name=Rocket Blueprint
 metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.master_blueprint.tag.lunar=§6Lunar-sized Rocket
+chat.susy.rocket_blueprint.item_list=§bTotal item cost for this rocket:§b
 metaitem.data_card.active.tag.laval_engine=§6Laval Engine
 metaitem.data_card.active.tag.vernier_engine=§6Vernier Engine
 metaitem.data_card.active.tag.alu_fairing=§6Fairing

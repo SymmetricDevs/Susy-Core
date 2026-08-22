@@ -49,7 +49,6 @@ import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.RenderBufferHelper;
-import gregtech.client.utils.RenderUtil;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.capability.impl.ScannerLogic;
@@ -271,14 +270,15 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (this.errorPos != null) {
             BlockPos realPos = this.getHolder().pos();
-            float resultDist = (float) new Vec3d(errorPos).distanceTo(Minecraft.getMinecraft().player.getPositionEyes(partialTicks));
+            float resultDist = (float) new Vec3d(errorPos)
+                    .distanceTo(Minecraft.getMinecraft().player.getPositionEyes(partialTicks));
             GlStateManager.pushMatrix();
             GlStateManager.disableDepth();
             GlStateManager.enableBlend();
             GlStateManager.disableLighting();
             GlStateManager.disableTexture2D();
             GlStateManager.blendFunc(770, 771);
-            GlStateManager.glLineWidth(10/resultDist);
+            GlStateManager.glLineWidth(10 / resultDist);
 
             GlStateManager.translate(x, y, z);
 
@@ -289,8 +289,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             RenderBufferHelper.renderCubeFrame(buffer, errorPos.getX() - realPos.getX(),
                     errorPos.getY() - realPos.getY(),
                     errorPos.getZ() - realPos.getZ(),
-                    errorPos.getX() - realPos.getX()+1, errorPos.getY()-realPos.getY()+1,
-                    errorPos.getZ()-realPos.getZ()+1, 1, 0, 0, 0.8F);
+                    errorPos.getX() - realPos.getX() + 1, errorPos.getY() - realPos.getY() + 1,
+                    errorPos.getZ() - realPos.getZ() + 1, 1, 0, 0, 0.8F);
             tessellator.draw();
 
             GlStateManager.disableBlend();

@@ -7,7 +7,7 @@ package supersymmetry.api.rocketry;
  * engine can swallow is set by the throat area and the chamber pressure alone:
  *
  * <pre>
- * mdot = A_t * p_0 * sqrt(gamma / (R_specific * T_0)) * (2 / (gamma + 1))^((gamma + 1) / (2 * (gamma - 1)))
+ * mdot = A_t * p_0 * sqrt(gamma / (R_specific * T_0)) * (2 / (gamma + 1)) ^ ((gamma + 1) / (2 * (gamma - 1)))
  * </pre>
  *
  * which is usually written {@code mdot = A_t * p_0 / c*}, with the
@@ -231,9 +231,9 @@ public final class NozzleFlow {
     /**
      * The chamber pressure at which the pumps and the throat agree, in Pa.
      *
-     * @param throatArea      throat area in m^2
-     * @param pumpThroughput  summed rated mass flow of the attached turbopumps, in
-     *                        kg/s
+     * @param throatArea     throat area in m^2
+     * @param pumpThroughput summed rated mass flow of the attached turbopumps, in
+     *                       kg/s
      */
     public static double equilibriumChamberPressure(double throatArea, double pumpThroughput) {
         return Math.sqrt(INJECTOR_RECOVERY * pumpThroughput * PUMP_RATED_PRESSURE * CHARACTERISTIC_VELOCITY /
