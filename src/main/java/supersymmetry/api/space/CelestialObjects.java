@@ -44,7 +44,8 @@ public class CelestialObjects {
         SUN.setRadius(109.2);
 
         EARTH = new Planetoid("earth", 1., 0., 0., 0., 0., SUN, PlanetType.TERRESTRIAL)
-                .setDimension(0);
+                .setDimension(0)
+                .setSurfacePressure(101325.);
 
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
                 .setDimension(800);

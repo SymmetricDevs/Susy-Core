@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.Constants;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.rocketry.NozzleFlow;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.components.RocketEngine;
@@ -31,6 +32,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
 
     public double areaRatio;
     public double fuelThroughput;
+    public double chamberPressure;
+    public double exitHalfAngle;
+    public double wettedAreaRatio;
+    public double contourTurning;
 
     public ComponentVernierEngine() {
         super("vernier_engine", "engine_small", candidate -> candidate.getSecond().stream()
@@ -45,6 +50,10 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         tag.setDouble("radius", this.radius);
         tag.setDouble("area_ratio", this.areaRatio);
         tag.setDouble("throughput", this.fuelThroughput);
+        tag.setDouble("chamber_pressure", this.chamberPressure);
+        tag.setDouble("exit_angle", this.exitHalfAngle);
+        tag.setDouble("wetted_ratio", this.wettedAreaRatio);
+        tag.setDouble("turning", this.contourTurning);
     }
 
     @Override
@@ -70,6 +79,15 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
         engine.fuelThroughput = compound.getDouble("throughput");
+        // not required: cards written before the nozzle got a flow model have none, and
+        // read back as a nozzle that is neither rewarded nor punished for its shape
+        engine.chamberPressure = compound.getDouble("chamber_pressure");
+        engine.exitHalfAngle = compound.hasKey("exit_angle", Constants.NBT.TAG_DOUBLE) ?
+                compound.getDouble("exit_angle") : NozzleFlow.REFERENCE_EXIT_HALF_ANGLE;
+        engine.wettedAreaRatio = compound.hasKey("wetted_ratio", Constants.NBT.TAG_DOUBLE) ?
+                compound.getDouble("wetted_ratio") : NozzleFlow.REFERENCE_WETTED_AREA_RATIO;
+        engine.contourTurning = compound.hasKey("turning", Constants.NBT.TAG_DOUBLE) ?
+                compound.getDouble("turning") : NozzleFlow.REFERENCE_CONTOUR_TURNING;
 
         if (engine.materials.isEmpty()) {
             SusyLog.logger.warn("No materials were found in {}!", compound);
@@ -86,6 +104,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
             return Optional.empty();
         }
         ArrayList<Integer> areas = new ArrayList<>();
+        ArrayList<Double> wallRadii = new ArrayList<>();
+        double throatRadius = 0;
         AxisAlignedBB nozzleBB = analysis.getBB(nozzle);
         for (int i = (int) nozzleBB.maxY - 1; i >= (int) nozzleBB.minY; i--) {
             Set<BlockPos> airLayer = analysis.getLayerAir(nozzleBB, i);
@@ -99,6 +119,12 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
                 analysis.status = BuildStat.NOZZLE_MALFORMED;
                 return Optional.empty();
             }
+            double welzlRadius = analysis.getRadius(airLayer);
+            if (areas.isEmpty()) {
+                // topmost layer, right under the chamber: the throat that chokes the flow
+                throatRadius = welzlRadius;
+            }
+            wallRadii.add(NozzleFlow.wallRadius(welzlRadius));
             areas.add(airLayer.size() + airPerimeter.size() / 2);
         }
 
@@ -199,15 +225,28 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
 
         collectInfo(analysis, blocks, tag);
 
-        double throughput = 0;
+        double pumpThroughput = 0;
 
         for (BlockPos pumpPos : pumps) {
             IBlockState pump = analysis.world.getBlockState(pumpPos);
-            throughput += (SuSyBlocks.TURBOPUMP.getState(pump)).getThroughput();
+            pumpThroughput += (SuSyBlocks.TURBOPUMP.getState(pump)).getThroughput();
         }
 
-        this.fuelThroughput = throughput;
+        double throatArea = NozzleFlow.crossSectionArea(throatRadius);
+        this.chamberPressure = NozzleFlow.equilibriumChamberPressure(throatArea, pumpThroughput);
+        this.fuelThroughput = NozzleFlow.chokedMassFlow(throatArea, this.chamberPressure);
         tag.setDouble("throughput", fuelThroughput);
+        tag.setDouble("chamber_pressure", chamberPressure);
+
+        // the contour itself is thrown away here; only what the thrust calculation
+        // needs later survives the scan
+        double[] contour = wallRadii.stream().mapToDouble(Double::doubleValue).toArray();
+        this.exitHalfAngle = NozzleFlow.contourExitHalfAngle(contour);
+        this.wettedAreaRatio = NozzleFlow.wettedAreaRatio(contour, throatArea);
+        this.contourTurning = NozzleFlow.contourTurning(contour);
+        tag.setDouble("exit_angle", exitHalfAngle);
+        tag.setDouble("wetted_ratio", wettedAreaRatio);
+        tag.setDouble("turning", contourTurning);
 
         tag.setBoolean("has_match", !stickBlocks.isEmpty());
 
@@ -221,12 +260,41 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     }
 
     @Override
+    public double getAreaRatio() {
+        return areaRatio;
+    }
+
+    @Override
+    public double getChamberPressure() {
+        return chamberPressure;
+    }
+
+    @Override
+    public double getExitHalfAngle() {
+        return exitHalfAngle;
+    }
+
+    @Override
+    public double getWettedAreaRatio() {
+        return wettedAreaRatio;
+    }
+
+    @Override
+    public double getContourTurning() {
+        return contourTurning;
+    }
+
+    @Override
     public boolean configureDefaults() {
         this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
 
         this.radius = 1.0;
         this.areaRatio = 1.0;
         this.fuelThroughput = 50.0;
+        this.chamberPressure = NozzleFlow.chamberPressureFor(NozzleFlow.crossSectionArea(0), this.fuelThroughput);
+        this.exitHalfAngle = NozzleFlow.REFERENCE_EXIT_HALF_ANGLE;
+        this.wettedAreaRatio = NozzleFlow.REFERENCE_WETTED_AREA_RATIO;
+        this.contourTurning = NozzleFlow.REFERENCE_CONTOUR_TURNING;
         this.mass = 550.0;
         return true;
     }
@@ -239,6 +307,17 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         }
         if (tag.hasKey("throughput")) {
             lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+        }
+        if (tag.hasKey("chamber_pressure")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.chamber_pressure",
+                    tag.getDouble("chamber_pressure") / 1.0e6));
+        }
+        if (tag.hasKey("exit_angle") && tag.hasKey("wetted_ratio") && tag.hasKey("turning")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.exit_angle",
+                    Math.toDegrees(tag.getDouble("exit_angle"))));
+            lines.add(I18n.format("susy.rocketry.tooltip.contour_efficiency",
+                    100 * NozzleFlow.contourEfficiency(tag.getDouble("exit_angle"),
+                            tag.getDouble("wetted_ratio"), tag.getDouble("turning"))));
         }
         return lines;
     }

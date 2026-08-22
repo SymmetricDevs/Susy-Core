@@ -14,6 +14,8 @@ public class Planetoid extends CelestialObject {
 
     private PlanetType planetType;
     private int dimension;
+    /** Ambient pressure at the surface, in Pa. Zero, an airless body, unless said otherwise. */
+    private double surfacePressure;
     public static BiMap<Planetoid, Integer> PLANETOIDS = HashBiMap.create();
 
     public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ,
@@ -40,6 +42,15 @@ public class Planetoid extends CelestialObject {
 
     public int getDimension() {
         return dimension;
+    }
+
+    public Planetoid setSurfacePressure(double surfacePressure) {
+        this.surfacePressure = surfacePressure;
+        return this;
+    }
+
+    public double getSurfacePressure() {
+        return surfacePressure;
     }
 
     public ItemStack getDisplayItem() {

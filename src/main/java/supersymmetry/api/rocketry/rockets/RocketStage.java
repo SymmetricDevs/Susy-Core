@@ -136,12 +136,47 @@ public class RocketStage implements Cloneable {
                 .count();
     }
 
+    /**
+     * Vacuum exhaust velocity, averaged over every engine on the stage in
+     * proportion to how much propellant each one is actually pushing. Delta-v is
+     * spent almost entirely out of the atmosphere, so the bells get judged against
+     * vacuum here even though liftoff thrust is not.
+     */
     public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry) {
-        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
+        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0 * getNozzleEfficiency(0);
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType) {
-        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry);
+    /**
+     * Flow-weighted nozzle efficiency across the stage's engines, or 1 if the stage
+     * has none to speak for it.
+     */
+    public double getNozzleEfficiency(double ambientPressure) {
+        double flow = 0;
+        double weighted = 0;
+        for (List<AbstractComponent<?>> componentList : components.values()) {
+            for (AbstractComponent<?> component : componentList) {
+                if (component instanceof RocketEngine engine) {
+                    double throughput = engine.getFuelThroughput();
+                    flow += throughput;
+                    weighted += throughput * engine.getNozzleEfficiency(ambientPressure);
+                }
+            }
+        }
+        return flow > 0 ? weighted / flow : 1;
+    }
+
+    /**
+     * Thrust from one class of engine, in N. Summed per engine rather than off the
+     * stage total, since every nozzle answers to its own expansion ratio.
+     */
+    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType, double ambientPressure) {
+        double exhaustVelocity = rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .mapToDouble(component -> {
+                    RocketEngine engine = (RocketEngine) component;
+                    return engine.getFuelThroughput() * exhaustVelocity *
+                            engine.getNozzleEfficiency(ambientPressure);
+                }).sum();
     }
 
     public double getRadius() {

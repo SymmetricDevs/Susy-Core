@@ -67,6 +67,7 @@ import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -623,7 +624,10 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             crash();
         }
         if (getOffsetTimer() % 20 == 0) {
-            this.stats = this.getBlueprint().calculateInitialSuccess(gravity, this.fuel, this.progress);
+            // the bench sizes designs for an Earth launch; gravity is the only thing the
+            // operator gets to dial in so far
+            this.stats = this.getBlueprint().calculateInitialSuccess(gravity,
+                    CelestialObjects.EARTH.getSurfacePressure(), this.fuel, this.progress);
 
             sendComputationInfoToClient();
         }

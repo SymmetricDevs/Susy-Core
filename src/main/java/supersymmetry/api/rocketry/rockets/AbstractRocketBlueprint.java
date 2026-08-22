@@ -97,8 +97,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         return this.getStages().stream().mapToDouble(RocketStage::getHeight).sum();
     }
 
-    public double getThrust(RocketFuelEntry entry, String componentType) {
-        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, componentType)).sum();
+    public double getThrust(RocketFuelEntry entry, String componentType, double ambientPressure) {
+        return this.getStages().stream()
+                .mapToDouble((stage) -> stage.getThrust(entry, componentType, ambientPressure)).sum();
     }
 
     public double getFuelVolume() {
@@ -164,8 +165,8 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         }
     }
 
-    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, RocketFuelEntry fuel,
-                                                                        long augmentation);
+    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, double ambientPressure,
+                                                                        RocketFuelEntry fuel, long augmentation);
 
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
 

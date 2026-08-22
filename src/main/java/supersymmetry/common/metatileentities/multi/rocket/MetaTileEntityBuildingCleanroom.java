@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,11 +39,12 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.RelativeDirection;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.electric.MetaTileEntityCleanroom;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockMetallurgy2;
 import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
@@ -306,29 +309,15 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
             // Polystyrene wall with NORTH/SOUTH facing (for left/right walls perpendicular
             // to X-axis)
-            TraceabilityPredicate polystyreneNSPredicate = new TraceabilityPredicate((blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() != SuSyBlocks.METALLURGY_2)
-                    return false;
-                EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
-
-                return SuSyBlocks.METALLURGY_2.getState(state) ==
-                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                        (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH);
-            }));
+            TraceabilityPredicate polystyreneNSPredicate = SuSyPredicates.horizontalOrientation(this,
+                    SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
+                    RelativeDirection.FRONT, FACING);
 
             // Polystyrene wall with EAST/WEST facing (for front/back walls perpendicular to
             // Z-axis)
-            TraceabilityPredicate polystyreneEWPredicate = new TraceabilityPredicate((blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() != SuSyBlocks.METALLURGY_2)
-                    return false;
-                EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
-
-                return SuSyBlocks.METALLURGY_2.getState(state) ==
-                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                        (facing == EnumFacing.EAST || facing == EnumFacing.WEST);
-            }));
+            TraceabilityPredicate polystyreneEWPredicate = SuSyPredicates.horizontalOrientation(this,
+                    SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
+                    RelativeDirection.RIGHT, FACING);
 
             // Scanner predicate to catch both sides
             TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1)
@@ -428,17 +417,17 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
                 // Polystyrene walls - left/right (EAST/WEST facing)
                 .where('W',
                         SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                                .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.EAST))
+                                .withProperty(FACING, EnumFacing.EAST))
                 .where('X',
                         SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                                .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.WEST))
+                                .withProperty(FACING, EnumFacing.WEST))
                 // Polystyrene walls - back/front (NORTH/SOUTH facing)
                 .where('Y',
                         SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                                .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.NORTH))
+                                .withProperty(FACING, EnumFacing.NORTH))
                 .where('Z',
                         SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL)
-                                .withProperty(VariantHorizontalRotatableBlock.FACING, EnumFacing.SOUTH))
+                                .withProperty(FACING, EnumFacing.SOUTH))
                 // Controller
                 .where('S', SuSyMetaTileEntities.BUILDING_CLEANROOM, EnumFacing.SOUTH)
                 // Air
