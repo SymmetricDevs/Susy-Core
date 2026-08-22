@@ -28,6 +28,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
 
@@ -67,19 +68,19 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     public List<String> getTooltipLines(NBTTagCompound tag) {
         List<String> lines = super.getTooltipLines(tag);
         if (tag.hasKey("area_ratio")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.area_ratio", tag.getDouble("area_ratio")));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.area_ratio", "%.2f", tag.getDouble("area_ratio")));
         }
         if (tag.hasKey("throughput")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.throughput", tag.getDouble("throughput")));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.throughput", "%.2f", tag.getDouble("throughput")));
         }
         if (tag.hasKey("chamber_pressure")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.chamber_pressure",
-                    tag.getDouble("chamber_pressure") / 1.0e6));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.chamber_pressure", "%.2f",
+                    tag.getDouble("chamber_pressure") / 1e6));
         }
         if (tag.hasKey("exit_angle") && tag.hasKey("wetted_ratio") && tag.hasKey("turning")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.exit_angle",
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.exit_angle", "%.2f",
                     Math.toDegrees(tag.getDouble("exit_angle"))));
-            lines.add(I18n.format("susy.rocketry.tooltip.contour_efficiency",
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.contour_efficiency", "%.2f",
                     100 * NozzleFlow.contourEfficiency(tag.getDouble("exit_angle"),
                             tag.getDouble("wetted_ratio"), tag.getDouble("turning"))));
         }
