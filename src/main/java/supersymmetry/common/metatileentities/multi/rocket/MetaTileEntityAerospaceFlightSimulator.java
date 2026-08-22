@@ -650,7 +650,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
+                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(1, 1))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(2).setMinGlobalLimited(1, 1)
                                 .or(states(getCasingState()))
                                 .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))

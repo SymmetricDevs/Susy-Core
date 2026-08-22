@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.SuSyValues;
-import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
@@ -228,9 +227,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
 
         if (thrust / smallThrust > 10) {
-            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
+            success *= (1 - (0.05 * ((thrust / smallThrust) - 10)));
         } else if (thrust / smallThrust < 3) {
-            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
+            success *= (1 - (0.5 * (3 - (thrust / smallThrust))));
         }
         success *= this.getGuidanceMultiplier();
         success = Math.max(0, success);
