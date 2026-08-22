@@ -817,6 +817,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 String.format("%.2f", this.stats.radialInstability())),
                         0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+
         workingGroup.addWidgetWithTest(
                 new DynamicLabelWidget(width - 140, 63,
                         () -> I18n.format(getMetaName() + ".gui.oblateness",
@@ -827,7 +828,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 new DynamicLabelWidget(width - 140, 74,
                         () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-
+        workingGroup
+                .addWidgetWithTest(
+                        new DynamicLabelWidget(10, 85,
+                                () -> I18n.format(getMetaName() + ".gui.vernier_thrust",
+                                        String.format("%.2f", this.stats.vernierThrust())),
+                                0xffffff),
+                        () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         return builder;
     }
 

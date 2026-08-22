@@ -238,7 +238,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         return new SuccessCalculation.AFSStats(success, weight, fuel.getDensity() * this.getFuelVolume(),
                 velocitySpeedup, escapeVelocity, getMaximumCargoMass(fuel, escapeVelocity), radialInstability, thrust,
-                oblateness);
+                oblateness, smallThrust);
     }
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {

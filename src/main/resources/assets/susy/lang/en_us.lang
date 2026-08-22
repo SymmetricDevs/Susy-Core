@@ -356,6 +356,7 @@ susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%%: 
 susy.machine.aerospace_flight_simulator.gui.cargo_capacity=Cargo capacity: %s kg
 susy.machine.aerospace_flight_simulator.gui.radial_instability=Radial mismatch: %s blocks
 susy.machine.aerospace_flight_simulator.gui.thrust=Thrust: %s N
+susy.machine.aerospace_flight_simulator.gui.vernier_thrust=Vernier thrust: %s N
 susy.machine.aerospace_flight_simulator.gui.oblateness=Oblateness: %s
 susy.machine.aerospace_flight_simulator.gui.improvement=%s FLOPPAs applied
 

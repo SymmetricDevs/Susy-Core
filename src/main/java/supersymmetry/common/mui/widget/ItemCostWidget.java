@@ -20,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.IRenderContext;
 import gregtech.api.gui.Widget;
-import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
