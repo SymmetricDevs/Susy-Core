@@ -162,8 +162,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         Minecraft.getMinecraft().effectRenderer.addEffect(smoke_z2);
     }
 
-
-
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -178,6 +176,7 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
             if (age % 2 == 0) {
                 if (launchTime - age < 60 && launchTime - age > 0) {
                     this.spawnLaunchParticles(0.025 * (age - launchTime + 60));
+                    this.spawnLaunchParticles(0.025 * (age - launchTime + 60));
                 }
             }
 
@@ -186,7 +185,9 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
             if (age % 2 == 0) {
                 if (launchTime - age > -100 && launchTime - age < 0) {
                     this.spawnLaunchParticles(1.5);
+                    this.spawnLaunchParticles(1.5);
                 } else if (launchTime - age > -150 && launchTime - age < -100) {
+                    this.spawnLaunchParticles(-0.03 * (age - launchTime + 150));
                     this.spawnLaunchParticles(-0.03 * (age - launchTime + 150));
                 }
             }

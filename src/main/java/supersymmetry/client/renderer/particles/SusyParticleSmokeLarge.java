@@ -26,4 +26,11 @@ public class SusyParticleSmokeLarge extends ParticleSmokeNormal {
             return new SusyParticleSmokeLarge(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         }
     }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        this.particleScale *= 1.02F;
+        this.particleAlpha = 1 - ((float) this.particleAge / this.particleMaxAge);
+    }
 }
