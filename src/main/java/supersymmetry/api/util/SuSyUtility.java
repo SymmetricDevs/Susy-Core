@@ -12,6 +12,8 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GTValues;
 import gregtech.api.block.machines.MachineItemBlock;
@@ -19,8 +21,6 @@ import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.material.Material;
 import gregtech.api.util.GTUtility;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
 
@@ -159,7 +159,7 @@ public class SuSyUtility {
     }
 
     @SideOnly(Side.CLIENT)
-    public static String formatDouble(String key, String doubleFormat, double... d) {
-        return I18n.format(key, String.format(doubleFormat, (Object) d));
+    public static String formatDouble(String key, String doubleFormat, Object... d) {
+        return I18n.format(key, Arrays.stream(d).map(dou -> String.format(doubleFormat, dou)).toArray());
     }
 }

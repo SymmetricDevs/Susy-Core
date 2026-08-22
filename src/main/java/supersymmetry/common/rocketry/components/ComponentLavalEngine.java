@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -68,10 +67,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     public List<String> getTooltipLines(NBTTagCompound tag) {
         List<String> lines = super.getTooltipLines(tag);
         if (tag.hasKey("area_ratio")) {
-            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.area_ratio", "%.2f", tag.getDouble("area_ratio")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.area_ratio", "%.2f", tag.getDouble("area_ratio")));
         }
         if (tag.hasKey("throughput")) {
-            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.throughput", "%.2f", tag.getDouble("throughput")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.throughput", "%.2f", tag.getDouble("throughput")));
         }
         if (tag.hasKey("chamber_pressure")) {
             lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.chamber_pressure", "%.2f",

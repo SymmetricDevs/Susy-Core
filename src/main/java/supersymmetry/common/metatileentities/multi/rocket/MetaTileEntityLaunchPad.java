@@ -635,7 +635,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
         if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
                 event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().setAnimation(new AnimationBuilder().playOnce("retract").playAndHold("protract"));
+            event.getController().setAnimation(new AnimationBuilder().playAndHold("cycle"));
             return PlayState.CONTINUE;
         }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
