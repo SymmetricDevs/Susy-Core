@@ -195,7 +195,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     public SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, double ambientPressure,
                                                                RocketFuelEntry fuel, long augmentation) {
         double success = 1;
-        double weight = this.getMass() * gravity;
+        double gravMult = gravity / SuSyValues.G0;
+        double weight = this.getMass() * gravMult;
         double thrust = this.getThrust(fuel, "engine", ambientPressure);
         double thrustToWeightRatio = thrust / weight;
         if (thrustToWeightRatio < 1)
@@ -253,7 +254,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             escapeVelocity = launchSite.getEscapeVelocity();
             ambientPressure = launchSite.getSurfacePressure();
         }
-        double weight = (this.getMass() + rocket.getCargoMass()) * gravity;
+        double gravMult = gravity / SuSyValues.G0;
+
+        double weight = (this.getMass() + rocket.getCargoMass()) * gravMult;
         double thrust = this.getThrust(rocket.getFuel(), "engine", ambientPressure);
         double thrustToWeightRatio = thrust / weight;
 
