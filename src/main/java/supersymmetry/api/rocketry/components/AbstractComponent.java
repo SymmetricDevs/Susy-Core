@@ -235,6 +235,8 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         tag.setString("name", this.getName());
         tag.setString("type", this.getType());
         tag.setDouble("mass", this.getMass());
+        tag.setInteger("height", this.height);
+        tag.setDouble("radius", this.radius);
         NBTTagList list = new NBTTagList();
         for (MaterialCost material : this.getMaterials()) {
             list.appendTag(material.toNBT());

@@ -123,6 +123,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
         engine.fuelThroughput = compound.getDouble("throughput");
+        engine.height = compound.getInteger("height");
+
         // not required: cards written before the nozzle got a flow model have none, and
         // read back as a nozzle that is neither rewarded nor punished for its shape
         engine.chamberPressure = compound.getDouble("chamber_pressure");

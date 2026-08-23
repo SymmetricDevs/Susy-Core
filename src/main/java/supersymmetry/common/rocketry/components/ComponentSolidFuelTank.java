@@ -67,6 +67,8 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         tank.volume = compound.getInteger("volume");
         tank.radius = compound.getDouble("radius");
         tank.mass = compound.getDouble("mass");
+        tank.height = compound.getInteger("height");
+
         return Optional.of(tank);
     }
 

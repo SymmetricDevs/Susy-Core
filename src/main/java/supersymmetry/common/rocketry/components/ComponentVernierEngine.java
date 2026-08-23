@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,6 +79,8 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
         engine.radius = compound.getDouble("radius");
         engine.mass = compound.getDouble("mass");
         engine.fuelThroughput = compound.getDouble("throughput");
+        engine.height = compound.getInteger("height");
+
         // not required: cards written before the nozzle got a flow model have none, and
         // read back as a nozzle that is neither rewarded nor punished for its shape
         engine.chamberPressure = compound.getDouble("chamber_pressure");
@@ -304,10 +305,12 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     public List<String> getTooltipLines(NBTTagCompound tag) {
         List<String> lines = super.getTooltipLines(tag);
         if (tag.hasKey("area_ratio")) {
-            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.area_ratio", "%.2f", tag.getDouble("area_ratio")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.area_ratio", "%.2f", tag.getDouble("area_ratio")));
         }
         if (tag.hasKey("throughput")) {
-            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.throughput", "%.2f", tag.getDouble("throughput")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.throughput", "%.2f", tag.getDouble("throughput")));
         }
         if (tag.hasKey("chamber_pressure")) {
             lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.chamber_pressure", "%.2f",
