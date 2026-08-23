@@ -391,6 +391,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
+                updateSelectedErector();
+                if (checkErector()) {
+                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
+                }
                 if (this.getOffsetTimer() % 4 == 0) {
                     setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
                 }
@@ -399,10 +403,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
             case LAUNCHING:
-                updateSelectedErector();
-                if (checkErector()) {
-                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
-                }
                 if (!checkRocket()) {
                     findRocket();
                     if (!checkRocket()) {
