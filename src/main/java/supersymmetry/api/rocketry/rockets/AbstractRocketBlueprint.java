@@ -87,7 +87,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         // Sum of the absolute differences between consecutive stages.
         double mismatch = 0;
         for (int i = 0; i < this.getStages().size() - 1; i++) {
-            mismatch += Math.abs(this.getStages().get(i).getRadius() - this.getStages().get(i + 1).getRadius());
+            double interstageRadius = this.getStages().get(i).getInterstageRadius();
+            mismatch += Math.abs(this.getStages().get(i).getRadius() - interstageRadius) +
+                    Math.abs(interstageRadius - this.getStages().get(i + 1).getRadius());
         }
         return mismatch;
     }

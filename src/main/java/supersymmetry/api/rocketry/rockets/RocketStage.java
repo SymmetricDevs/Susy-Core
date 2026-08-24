@@ -185,6 +185,12 @@ public class RocketStage implements Cloneable {
                 .orElse(0);
     }
 
+    public double getInterstageRadius() {
+        // Max radius, in meters
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("interstage"))
+                .mapToDouble(AbstractComponent::getRadius).findFirst().orElse(getRadius());
+    }
+
     public double getHeight() {
         // Height (again max), in meters
         return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getHeight).max()
