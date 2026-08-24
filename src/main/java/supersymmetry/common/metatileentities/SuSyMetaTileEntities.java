@@ -56,6 +56,7 @@ import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLarge
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLogWasher;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityFluidActiveCasing;
 import supersymmetry.common.metatileentities.single.electric.*;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityRocketProgrammer;
@@ -105,6 +106,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityCrate HERMETICALLY_SEALED_CRATE;
 
     public static MetaTileEntityFluidSamplesStorage FLUID_SAMPLES_STORAGE;
+
+    public static MetaTileEntityActiveMuffler ACTIVE_MUFFLER;
+    public static MetaTileEntityFluidActiveCasing ACTIVE_CLARIFIER_VAT;
 
     // Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -838,6 +842,13 @@ public class SuSyMetaTileEntities {
 
         FLUID_SAMPLES_STORAGE = registerMetaTileEntity(18525,
                 new MetaTileEntityFluidSamplesStorage(susyId("fluid_samples_storage")));
+
+        ACTIVE_MUFFLER = registerMetaTileEntity(18526,
+                new MetaTileEntityActiveMuffler(susyId("muffler_active")));
+
+        ACTIVE_CLARIFIER_VAT = registerMetaTileEntity(18527, new MetaTileEntityFluidActiveCasing(
+                susyId("active_clarifier_vat"), SusyTextures.CLARIFIER_VAT_RENDERER,
+                MetaTileEntityFluidActiveCasing.EffectMode.CLARIFIER, 1));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

@@ -27,8 +27,28 @@ public class SuSyBlocks {
 
     public static BlockSpacecraftInstrument SPACE_INSTRUMENT;
     public static BlockCoolingCoil COOLING_COIL;
+    public static BlockActiveCoolingCoil ACTIVE_COOLING_COIL;
+    public static BlockInvertedActiveCoolingCoil INVERTED_ACTIVE_COOLING_COIL;
     public static BlockHeatingCoil HEATING_COIL;
+    public static BlockActiveHeatingCoil ACTIVE_HEATING_COIL;
+    public static BlockInvertedActiveHeatingCoil INVERTED_ACTIVE_HEATING_COIL;
+    public static BlockActiveWireCoil ACTIVE_WIRE_COIL;
+    public static BlockInvertedActiveWireCoil INVERTED_ACTIVE_WIRE_COIL;
+    public static BlockActiveFirebox ACTIVE_FIREBOX;
+    public static BlockInvertedActiveFirebox INVERTED_ACTIVE_FIREBOX;
+    public static BlockActiveEngineIntake ACTIVE_ENGINE_INTAKE;
+    public static BlockInvertedActiveEngineIntake INVERTED_ACTIVE_ENGINE_INTAKE;
+    public static BlockActiveAssemblyLine ACTIVE_ASSEMBLY_LINE;
+    public static BlockInvertedActiveAssemblyLine INVERTED_ACTIVE_ASSEMBLY_LINE;
+    public static BlockActiveFusionCasing ACTIVE_FUSION_CASING;
+    public static BlockInvertedActiveFusionCasing INVERTED_ACTIVE_FUSION_CASING;
+    public static BlockActiveHeatVent ACTIVE_HEAT_VENT;
+    public static BlockInvertedActiveHeatVent INVERTED_ACTIVE_HEAT_VENT;
+    public static BlockActiveMolybdenumDisilicideCoil ACTIVE_MOLYBDENUM_DISILICIDE_COIL;
+    public static BlockInvertedActiveMolybdenumDisilicideCoil INVERTED_ACTIVE_MOLYBDENUM_DISILICIDE_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
+    public static BlockActiveSinteringBrick ACTIVE_SINTERING_BRICK;
+    public static BlockInvertedActiveSinteringBrick INVERTED_ACTIVE_SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(
             SusyStoneVariantBlock.StoneVariant.class);
@@ -45,9 +65,15 @@ public class SuSyBlocks {
     public static BlockHome HOME;
     public static BlockMultiblockTank MULTIBLOCK_TANK;
     public static BlockEvaporationBed EVAPORATION_BED;
+    public static BlockActiveEvaporationBed ACTIVE_EVAPORATION_BED;
+    public static BlockInvertedActiveEvaporationBed INVERTED_ACTIVE_EVAPORATION_BED;
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
+    public static BlockActiveElectrodeAssembly ACTIVE_ELECTRODE_ASSEMBLY;
+    public static BlockInvertedActiveElectrodeAssembly INVERTED_ACTIVE_ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+    public static BlockActiveSerpentine ACTIVE_SERPENTINE;
+    public static BlockInvertedActiveSerpentine INVERTED_ACTIVE_SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
@@ -64,6 +90,8 @@ public class SuSyBlocks {
     public static BlockEngineCasing ENGINE_CASING;
     public static BlockEngineCasing2 ENGINE_CASING_2;
     public static BlocksActiveCasing ACTIVE_CASING;
+    public static BlockActiveBasicIntakeCasing ACTIVE_BASIC_INTAKE_CASING;
+    public static BlockInvertedActiveBasicIntakeCasing INVERTED_ACTIVE_BASIC_INTAKE_CASING;
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
     public static BlocksS2BMRF S2BMRF;
