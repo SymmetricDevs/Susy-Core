@@ -32,6 +32,7 @@ import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
@@ -329,11 +330,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
         AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
         return blueprint != null && blueprint.readFromNBT(rocketNBT) ? blueprint : null;
-    }
-
-    @Override
-    protected boolean canFitPassenger(Entity passenger) {
-        return this.getPassengers().size() < 4;
     }
 
     public void launchRocket() {
