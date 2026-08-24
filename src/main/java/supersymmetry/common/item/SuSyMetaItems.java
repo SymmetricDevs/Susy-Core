@@ -147,7 +147,7 @@ public class SuSyMetaItems {
         CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
         ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
-        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1).addComponents(new FactionRadioBehaviour());
 
         DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));

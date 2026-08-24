@@ -8,26 +8,24 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.metaitem.stats.ISubItemHandler;
 import gregtech.api.util.GTUtility;
-import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.common.item.SuSyMetaItems;
 
-@Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
 
     private final Consumer<List<String>> lines;
@@ -92,59 +90,51 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
         return fullID.toUpperCase();
     }
 
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        EntityPlayer player = event.getEntityPlayer();
-        ItemStack stack = event.getItemStack();
-
-        if (stack.isEmpty())
-            return;
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
 
         if (player.world.isRemote)
-            return;
+            return IItemBehaviour.super.onItemRightClick(world, player, hand);
 
-        if (stack.hasTagCompound()) {
-            NBTTagCompound tag = stack.getTagCompound();
-            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-            if (!bp.readFromNBT(tag)) {
-                bp = null;
-            }
-            List<AbstractComponent<?>> componentList;
+        if (!stack.hasTagCompound()) {
+            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+        }
+        NBTTagCompound tag = stack.getTagCompound();
+        AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+        if (!bp.readFromNBT(tag)) {
+            bp = null;
+        }
+        List<AbstractComponent<?>> componentList;
 
-            componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
-                    .flatMap(List::stream).toList();
-            HashMap<String, Integer> totalItemList = new HashMap<>();
-            for (AbstractComponent<?> currentComponent : componentList) {
-                List<MaterialCost> ingredientList = currentComponent.getMaterials();
-                for (MaterialCost materialCost : ingredientList) {
-                    String itemType = materialCost.getStack().getDisplayName(); // this is incredibly stupid, but for
-                                                                                // some reason storing itemstacks just
-                                                                                // didn't work
-                    if (totalItemList.containsKey(itemType)) {
-                        totalItemList.replace(itemType, totalItemList.get(itemType) + materialCost.getCount());
-                    } else {
-                        totalItemList.put(itemType, materialCost.getCount());
-                    }
+        componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
+                .flatMap(List::stream).toList();
+        HashMap<String, Integer> totalItemList = new HashMap<>();
+        for (AbstractComponent<?> currentComponent : componentList) {
+            List<MaterialCost> ingredientList = currentComponent.getMaterials();
+            for (MaterialCost materialCost : ingredientList) {
+                String itemType = materialCost.getStack().getDisplayName(); // this is incredibly stupid, but for
+                // some reason storing itemstacks just
+                // didn't work
+                if (totalItemList.containsKey(itemType)) {
+                    totalItemList.replace(itemType, totalItemList.get(itemType) + materialCost.getCount());
+                } else {
+                    totalItemList.put(itemType, materialCost.getCount());
                 }
             }
-
-            if (totalItemList.isEmpty()) {
-                event.setCanceled(true);
-                return;
-            }
-
-            player.sendStatusMessage(new TextComponentTranslation("chat.susy.rocket_blueprint.item_list"), false);
-
-            for (Map.Entry<String, Integer> entry : totalItemList.entrySet()) {
-                player.sendStatusMessage(new TextComponentTranslation(
-                        entry.getKey() + " x" + entry.getValue()), false);
-            }
-
-            event.setCanceled(true);
-
-            event.setCancellationResult(EnumActionResult.SUCCESS);
-            event.setCanceled(true);
         }
-        event.setCanceled(true);
+
+        if (totalItemList.isEmpty()) {
+            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+        }
+
+        player.sendStatusMessage(new TextComponentTranslation("chat.susy.rocket_blueprint.item_list"), false);
+
+        for (Map.Entry<String, Integer> entry : totalItemList.entrySet()) {
+            player.sendStatusMessage(new TextComponentTranslation(
+                    entry.getKey() + " x" + entry.getValue()), false);
+        }
+
+        return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 }

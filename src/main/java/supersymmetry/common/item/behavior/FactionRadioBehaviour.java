@@ -3,52 +3,41 @@ package supersymmetry.common.item.behavior;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.world.World;
 
-import supersymmetry.Supersymmetry;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.common.faction.FactionHateManager;
-import supersymmetry.common.item.SuSyMetaItems;
 
-@Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
-public class FactionRadioBehaviour {
+public class FactionRadioBehaviour implements IItemBehaviour {
 
     private static final String TAG_ROOT = "susy";
     private static final String TAG_FACTION = "faction";
 
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        EntityPlayer player = event.getEntityPlayer();
-        ItemStack stack = event.getItemStack();
-
-        if (stack.isEmpty())
-            return;
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        ActionResult<ItemStack> result = ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 
         if (player.world.isRemote)
-            return;
-
-        // Only our faction radio item
-        if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.FACTION_RADIO.metaValue)
-            return;
+            return result;
 
         // Read faction from item NBT
         NBTTagCompound tag = stack.getSubCompound(TAG_ROOT);
 
         if (tag == null) {
             player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.no_tag"), true);
-            event.setCanceled(true);
-            return;
+            return result;
         }
 
         String faction = tag.getString(TAG_FACTION);
 
         if (faction.isEmpty()) {
             player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.no_faction"), true);
-            event.setCanceled(true);
-            return;
+            return result;
         }
 
         // Get hate value (SERVER SIDE SAFE)
@@ -57,9 +46,6 @@ public class FactionRadioBehaviour {
         // Send to player (action bar)
         player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.get_hate", hate), true);
 
-        event.setCanceled(true);
-
-        event.setCancellationResult(EnumActionResult.SUCCESS);
-        event.setCanceled(true);
+        return result;
     }
 }
