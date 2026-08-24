@@ -284,8 +284,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public void setAABBs() {
         // Had to make it overshoot a little :(
-        BlockPos offsetBottomLeft = new BlockPos(6, 5, 12);
-        BlockPos offsetTopRight = new BlockPos(-6, 20, 14);
+        BlockPos offsetBottomLeft = new BlockPos(6, 5, 0);
+        BlockPos offsetTopRight = new BlockPos(-6, 20, 4.5);
 
         switch (this.getFrontFacing()) {
             case EAST:
@@ -309,18 +309,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public Vec3d getLaunchPosition() {
         Vec3d offset = new Vec3d(0.5, 1, 7.5);
-        switch (this.getFrontFacing()) {
-            case EAST:
-                offset.rotateYaw((float) (-Math.PI / 2));
-                break;
-            case SOUTH:
-                offset.rotateYaw((float) Math.PI);
-                break;
-            case WEST:
-                offset.rotateYaw((float) (Math.PI / 2));
-                break;
-            default:
-                break;
+        if (this.getFrontFacing() == EnumFacing.EAST) {
+            offset = new Vec3d(-6.5, 1, 0.5);
+        } else if (this.getFrontFacing() == EnumFacing.SOUTH) {
+            offset = new Vec3d(0.5, 1, -6.5);
+        } else if (this.getFrontFacing() == EnumFacing.WEST) {
+            offset = new Vec3d(7.5, 1, 0.5);
         }
         return new Vec3d(this.getPos()).add(offset);
     }
@@ -392,7 +386,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                     }
                 }
                 updateSelectedErector();
-                if (checkErector()) {
+                if (checkErector() && this.selectedErector.getLifterAngle() >= Math.PI / 2) {
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
                 }
                 if (this.getOffsetTimer() % 4 == 0) {
