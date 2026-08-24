@@ -81,7 +81,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                 .child(new ButtonWidget<>().size(12).onMousePressed((w) -> {
                     pageNum++;
                     return true;
-                }).setEnabledIf((w) -> pageNum <= MAX_PAGES - 1).overlay(ICON_RIGHT)));
+                }).setEnabledIf((w) -> pageNum < MAX_PAGES - 1).overlay(ICON_RIGHT)));
         Flow overallFlow = new Flow(GuiAxis.Y);
 
         Flow rowFlow = new Column().coverChildren().padding(10, 10, 30, 10)
