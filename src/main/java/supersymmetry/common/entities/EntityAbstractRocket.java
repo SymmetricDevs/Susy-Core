@@ -149,7 +149,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         for (String key : instruments.getKeySet()) {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
             int count = instruments.getInteger(key);
-            instrument.act(count, this);
+            if (instrument != null) {
+                instrument.act(count, this);
+            }
         }
         for (Entity passenger : this.getPassengers()) {
             if (!EventHandlers.isEntityTravelling(passenger)) {
