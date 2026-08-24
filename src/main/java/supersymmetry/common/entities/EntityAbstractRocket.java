@@ -4,6 +4,7 @@ import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENT
 
 import java.util.Arrays;
 
+import gregtech.modules.ModuleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,12 +21,16 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
 public abstract class EntityAbstractRocket extends EntityLivingBase {
 
@@ -178,7 +183,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {}
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+    }
 
     @Override
     public EnumHandSide getPrimaryHand() {
@@ -236,6 +242,12 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
             player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.launch",
                     (getLaunchTime() - this.world.getTotalWorldTime()) / 20), true);
         }
+        if (hasDisallowedItem(passenger)) {
+            removePassenger(passenger);
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.inventory"), true);
+            }
+        }
     }
 
     @Override
@@ -252,5 +264,40 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public CargoItemStackHandler getInventory() {
         return this.cargo;
+    }
+
+    @Override
+    protected boolean canFitPassenger(Entity passenger) {
+        if (hasDisallowedItem(passenger) && passenger instanceof EntityPlayer player) {
+            player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.inventory"), true);
+            return false;
+        }
+        return this.getPassengers().size() < 4;
+    }
+
+    protected static boolean hasDisallowedItem(Entity passenger) {
+        if (passenger instanceof EntityPlayer player) {
+            for (ItemStack stack : player.inventory.mainInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            for (ItemStack stack : player.inventory.armorInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            for (ItemStack stack : player.inventory.offHandInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
+                if (!BaublesModule.areBaublesAllowed(player)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
