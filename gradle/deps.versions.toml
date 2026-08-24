@@ -52,6 +52,8 @@ flare = "6598523"
 openComputers = "6608365"
 shetiphianCore = "2661618"
 multiStorage = "2710024"
+cd4017beLib = "3004631"
+dimStack = "2937031"
 
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
@@ -101,6 +103,8 @@ icbm = { module = "curse.maven:icbm-244451", version.ref = "icbm" }
 openComputers = { module = "curse.maven:opencomputers-223008", version.ref = "openComputers" }
 shetiphianCore = { module = "curse.maven:shetiphiancore-71738", version.ref = "shetiphianCore" }
 multiStorage = { module = "curse.maven:multistorage-244864", version.ref = "multiStorage" }
+cd4017beLib = { module = "curse.maven:cd4017be-library-229208", version.ref = "cd4017beLib" }
+dimStack = { module = "curse.maven:vertically-stacked-dimensions-310992", version.ref = "dimStack" }
 theBeneath = { module = "curse.maven:the-beneath-254629", version.ref = "theBeneath" }
 realisticTerrainGenerationUnofficial = { module = "curse.maven:realistic-terrain-generation-unofficial-648514", version.ref = "realisticTerrainGenerationUnofficial" }
 worldEdit = { module = "curse.maven:worldedit-225608", version.ref = "worldEdit" }
