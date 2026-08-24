@@ -2,6 +2,8 @@ package supersymmetry.mixins.dimstack;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.GregtechTileCapabilities;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -12,6 +14,7 @@ import cd4017be.dimstack.tileentity.DimensionalPipe;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Slice;
+import supersymmetry.api.metatileentity.logistics.DefaultCapabilities;
 
 @Mixin(value = DimensionalPipe.class, remap = false)
 public abstract class DimensionalPipeMixin {
@@ -26,7 +29,7 @@ public abstract class DimensionalPipeMixin {
                     @At(value = "RETURN", ordinal = 3),
             })
     private boolean alwaysHasItemAndFluidCapability(boolean original, @Local(argsOnly = true) Capability<?> cap) {
-        return original || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+        return original || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || cap == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER;
     }
 
     @SuppressWarnings("unchecked")
@@ -39,6 +42,7 @@ public abstract class DimensionalPipeMixin {
         if (original != null) return original;
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return (T) NULL_CAPS[1];
         if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) return (T) NULL_CAPS[2];
+        if (cap == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER) return (T) DefaultCapabilities.getCapability(cap);
         return null;
     }
 }
