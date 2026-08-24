@@ -43,11 +43,8 @@ public class InstrumentLander implements Instrument {
             return null;
         }
         RocketConfiguration.MissionConfiguration next = config.popFront();
-        while (!config.isEmpty() && next.missionType == RocketConfiguration.MissionType.UnmannedCollection) {
+        while (!config.isEmpty() && next.destinationType != RocketConfiguration.DestinationType.Landing) {
             next = config.popFront();
-        }
-        if (next.missionType == RocketConfiguration.MissionType.UnmannedCollection) {
-            return null;
         }
         return next;
     }

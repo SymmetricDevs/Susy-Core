@@ -28,8 +28,7 @@ public class InstrumentRobotArm implements Instrument {
         // Check if an unmanned collection mission is next in the configuration
         RocketConfiguration config = rocket.getRocketConfiguration();
         MissionConfiguration mission = config.popFront();
-        if (!(mission.missionType == MissionType.UnmannedCollection &&
-                mission.destinationType == DestinationType.Orbit)) {
+        if (!(mission.destinationType == DestinationType.Orbit)) {
             return;
         }
 

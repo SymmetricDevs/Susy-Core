@@ -20,11 +20,6 @@ public class RocketConfiguration {
     // Soyuz
     public static final int DEFAULT_BUDGET = 2;
 
-    public enum MissionType {
-        Manned,
-        UnmannedCargo,
-        UnmannedCollection
-    }
 
     public enum DestinationType {
         Landing,
@@ -35,14 +30,12 @@ public class RocketConfiguration {
 
         public final int dimension;
         public final BlockPos landingPos;
-        public final MissionType missionType;
         public final DestinationType destinationType;
 
         public MissionConfiguration(NBTTagCompound landing) {
             this.dimension = landing.getInteger("dimension");
             this.landingPos = new BlockPos(landing.getInteger("landing_x"), landing.getInteger("landing_y"),
                     landing.getInteger("landing_z"));
-            this.missionType = MissionType.values()[landing.getInteger("mission_type")];
             this.destinationType = DestinationType.values()[landing.getInteger("destination_type")];
         }
 
@@ -52,7 +45,6 @@ public class RocketConfiguration {
             tag.setInteger("landing_x", landingPos.getX());
             tag.setInteger("landing_y", landingPos.getY());
             tag.setInteger("landing_z", landingPos.getZ());
-            tag.setInteger("mission_type", missionType.ordinal());
             tag.setInteger("destination_type", destinationType.ordinal());
             return tag;
         }
@@ -62,8 +54,8 @@ public class RocketConfiguration {
         }
 
         public boolean isDefault() {
-            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
-                    this.missionType == MissionType.Manned && this.destinationType == DestinationType.Landing;
+            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0
+                     && this.destinationType == DestinationType.Landing;
         }
     }
 
