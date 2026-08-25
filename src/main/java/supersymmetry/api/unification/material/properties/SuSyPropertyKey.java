@@ -9,4 +9,6 @@ public class SuSyPropertyKey {
             MillBallProperty.class);
     public static final PropertyKey<SolidRocketFuelProperty> SOLID_ROCKET_FUEL = new PropertyKey<>(
             "solid_rocket_fuel", SolidRocketFuelProperty.class);
+    public static final PropertyKey<TanklessFluidPipeProperties> TANKLESS_FLUID_PIPE = new PropertyKey<>(
+            "tankless_fluid_pipe", TanklessFluidPipeProperties.class);
 }

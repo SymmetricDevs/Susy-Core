@@ -16,12 +16,15 @@ import gregtech.api.unification.material.properties.*;
 import supercritical.api.unification.material.SCMaterials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
+import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 
 public class SusyMaterials {
 
     public static Material ManganeseIronArsenicPhosphide;
     public static Material PraseodymiumNickel;
     public static Material GadoliniumSiliconGermanium;
+    public static Material MolybdenumDisilicide;
     public static Material Gabbro;
     public static Material Gneiss;
     public static Material Limestone;
@@ -309,6 +312,12 @@ public class SusyMaterials {
                         }
                     }
                 }
+            }
+
+            if (material.hasProperty(PropertyKey.FLUID_PIPE) &&
+                    !material.hasProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE)) {
+                material.getProperties().setProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE,
+                        TanklessFluidPipeProperties.from(material.getProperty(PropertyKey.FLUID_PIPE)));
             }
         }
     }

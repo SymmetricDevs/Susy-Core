@@ -66,6 +66,7 @@ import supersymmetry.common.metatileentities.single.steam.SuSyCoalBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSyLiquidBoiler;
 import supersymmetry.common.metatileentities.single.steam.SuSySimpleSteamMetaTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositBasket;
+import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
@@ -102,6 +103,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityPlasticCan UHMWPE_CAN;
 
     public static MetaTileEntityCrate HERMETICALLY_SEALED_CRATE;
+
+    public static MetaTileEntityFluidSamplesStorage FLUID_SAMPLES_STORAGE;
 
     // Machines for chem overhaul
     public static ContinuousMachineMetaTileEntity[] CONTINUOUS_STIRRED_TANK_REACTOR;
@@ -832,6 +835,9 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityLunarLaunchComplex(susyId("lunar_launch_complex")));
 
         SOLAR_FURNACE = registerMetaTileEntity(18524, new MetaTileEntitySolarFurnace(susyId("solar_furnace")));
+
+        FLUID_SAMPLES_STORAGE = registerMetaTileEntity(18525,
+                new MetaTileEntityFluidSamplesStorage(susyId("fluid_samples_storage")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

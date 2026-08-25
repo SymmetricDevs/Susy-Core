@@ -1,6 +1,7 @@
 [versions]
 annotations = "26.1.0"
 jspecify = "1.0.0"
+lombok = "1.18.46"
 
 hei = "4.32.0"
 theOneProbe = "1.12-1.4.28"
@@ -55,6 +56,7 @@ multiStorage = "2710024"
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 hei = { module = "mezz:jei", version.ref = "hei" }
 theOneProbe = { module = "maven.modrinth:the-one-probe", version.ref = "theOneProbe" }

@@ -1,15 +1,18 @@
 package supersymmetry.common;
 
-import static net.minecraftforge.common.BiomeDictionary.*;
+import static net.minecraftforge.common.BiomeDictionary.Type;
+import static net.minecraftforge.common.BiomeDictionary.addTypes;
 import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
 import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+import static supersymmetry.common.blocks.SuSyMetaBlocks.TANKLESS_FLUID_PIPES;
 
 import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
@@ -30,6 +33,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
@@ -40,6 +45,7 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+import lombok.val;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
@@ -48,6 +54,7 @@ import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -56,6 +63,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.pipelike.tanklessfluid.ItemBlockTanklessFluidPipe;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
@@ -155,6 +163,20 @@ public class CommonProxy {
         registry.register(REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val material : materialRegistry) {
+                if (material.hasProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE)) {
+                    for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                        if (!pipe.getItemPipeType(pipe.getItem(material)).getOrePrefix().isIgnored(material)) {
+                            pipe.addPipeMaterial(material, material.getProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE));
+                        }
+                    }
+                }
+            }
+
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) registry.register(pipe);
+        }
     }
 
     @SubscribeEvent
@@ -168,6 +190,14 @@ public class CommonProxy {
         registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
         SHEETED_FRAMES.values().stream().distinct().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                if (!pipe.getEnabledMaterials().isEmpty()) {
+                    registry.register(createItemBlock(pipe, ItemBlockTanklessFluidPipe::new));
+                }
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -207,17 +237,40 @@ public class CommonProxy {
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
-        Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if (block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
-            ItemStack itemStack = event.getItemStack();
-            Item item = itemStack.getItem();
+        ItemStack itemStack = event.getItemStack();
+        if (!(itemStack.getItem() instanceof VariantItemBlock)) {
+            return;
+        }
+        VariantItemBlock itemBlock = (VariantItemBlock) itemStack.getItem();
+        IBlockState state = itemBlock.getBlockState(itemStack);
+        IHeatingCoilBlockStats coilStats = GregTechAPI.HEATING_COILS.get(state);
+        if (coilStats == null) {
+            return;
+        }
+        Block block = Block.getBlockFromItem(itemStack.getItem());
+        if (block instanceof BlockWireCoil) {
             BlockWireCoil wireCoilBlock = (BlockWireCoil) block;
-            VariantItemBlock itemBlock = (VariantItemBlock) item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType) wireCoilBlock
-                    .getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating",
-                    new Object[] { coilType.getCoilTemperature() / 1000 }));
+            BlockWireCoil.CoilType originalStats = wireCoilBlock.getState(state);
+            String oldTemperature = I18n.format(
+                    "tile.wire_coil.tooltip_heat",
+                    originalStats.getCoilTemperature());
+            String newTemperature = I18n.format(
+                    "tile.wire_coil.tooltip_heat",
+                    coilStats.getCoilTemperature());
+            int index = event.getToolTip().indexOf(oldTemperature);
+            if (index >= 0) {
+                event.getToolTip().set(index, newTemperature);
+            }
+        }
+
+        if (TooltipHelper.isShiftDown()) {
+            event.getToolTip().add(
+                    I18n.format("tile.wire_coil.tooltip_evaporation"));
+
+            event.getToolTip().add(
+                    I18n.format(
+                            "tile.wire_coil.tooltip_energy_evaporating",
+                            coilStats.getCoilTemperature() / 1000));
         }
     }
 

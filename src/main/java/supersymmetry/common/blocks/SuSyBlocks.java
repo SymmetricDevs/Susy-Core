@@ -27,6 +27,7 @@ public class SuSyBlocks {
 
     public static BlockSpacecraftInstrument SPACE_INSTRUMENT;
     public static BlockCoolingCoil COOLING_COIL;
+    public static BlockHeatingCoil HEATING_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(

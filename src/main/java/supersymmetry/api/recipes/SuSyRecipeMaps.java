@@ -440,7 +440,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 3, 4, 2, 1,
             new SimpleRecipeBuilder().EUt(VA[LV]), false).setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
