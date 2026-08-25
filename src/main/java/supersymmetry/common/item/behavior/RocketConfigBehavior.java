@@ -59,7 +59,6 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
 
         ModularPanel panel = ModularPanel.defaultPanel("rocket_config", 221, 181);
         // This panel needs to set up an unbounded list of missions.
-        // Each mission can be one of three types.
 
         // Set up the sync values
         syncManager.syncValue("page_num", new IntSyncValue(() -> pageNum, v -> pageNum = v));
@@ -148,8 +147,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     }
 
     private int getDimension(int page, ItemStack stack) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         // We now assume that the page tag has been set.
         if (!pageTag.hasKey("dimension")) {
             pageTag.setInteger("dimension", 0);
@@ -158,15 +156,14 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     }
 
     private void setDimension(int page, ItemStack stack, int dimension) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         pageTag.setInteger("dimension", dimension);
     }
 
     private RocketConfiguration.DestinationType getDestinationType(int page, ItemStack stack) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         // We now assume that the page tag has been set.
+
         if (!pageTag.hasKey("destination_type")) {
             pageTag.setInteger("destination_type", 0);
         }
@@ -174,8 +171,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     }
 
     private void setDestinationType(int page, ItemStack stack, RocketConfiguration.DestinationType type) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         pageTag.setInteger("destination_type", type.ordinal());
     }
 
@@ -193,8 +189,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     }
 
     private int getLandingCoord(int page, ItemStack stack, EnumFacing.Axis axis) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         if (!pageTag.hasKey("landing_" + axis)) {
             pageTag.setInteger("landing_" + axis, 0);
         }
@@ -202,8 +197,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
     }
 
     private void setLandingCoord(int page, ItemStack stack, EnumFacing.Axis axis, int x) {
-        NBTTagCompound tag = stack.getTagCompound();
-        NBTTagCompound pageTag = tag.getCompoundTag("page_" + page);
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         pageTag.setInteger("landing_" + axis, x);
     }
 }
