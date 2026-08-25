@@ -226,6 +226,8 @@ tile.drill_bit.steel.name=Steel Precision Drill Bit Assembly
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
+tile.eccentric_roll_active.steel.name=Active Eccentric Crushing Wheel
+tile.eccentric_roll_active_inverted.steel.name=Inverted Active Eccentric Crushing Wheel
 tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
 tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
 tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mill Shell

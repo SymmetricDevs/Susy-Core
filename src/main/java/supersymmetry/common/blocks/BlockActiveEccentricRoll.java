@@ -4,9 +4,11 @@ import static gregtech.common.items.tool.rotation.CustomBlockRotations.BLOCK_DIR
 import static net.minecraft.block.BlockDirectional.FACING;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,23 +30,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import gregtech.api.block.VariantBlock;
 import gregtech.common.items.tool.rotation.CustomBlockRotations;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
+import supersymmetry.api.util.SuSyDamageSources;
 
-public class BlockActiveEccentricRoll extends VariantBlock<BlockEccentricRoll.RollType>
+public class BlockActiveEccentricRoll extends RedstoneActiveBlock<BlockEccentricRoll.RollType>
                                       implements IAnimatablePartBlock {
 
     public static final AxisAlignedBB COLLISION_BOX = new AxisAlignedBB(0.05, 0.05, 0.05, 0.95, 0.95, 0.95);
 
     public BlockActiveEccentricRoll() {
-        super(net.minecraft.block.material.Material.IRON);
+        this(false);
+    }
+
+    protected BlockActiveEccentricRoll(boolean inverted) {
+        super(net.minecraft.block.material.Material.IRON, inverted);
         setTranslationKey("eccentric_roll_active");
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(blockState.getBaseState().withProperty(ACTIVE, true));
+        setDefaultState(blockState.getBaseState()
+                .withProperty(FACING, EnumFacing.NORTH)
+                .withProperty(POWERED, false)
+                .withProperty(VARIANT, BlockEccentricRoll.RollType.STEEL));
         CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
@@ -74,37 +85,38 @@ public class BlockActiveEccentricRoll extends VariantBlock<BlockEccentricRoll.Ro
                                             float hitX, float hitY, float hitZ, int meta,
                                             @NotNull EntityLivingBase placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer)
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)).withProperty(ACTIVE, true);
+                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
+                .withProperty(POWERED, false);
     }
 
     @NonNull @Override
-    public BlockStateContainer createBlockState() {
+    protected BlockStateContainer createBlockState() {
         Class<BlockEccentricRoll.RollType> enumClass = BlockEccentricRoll.RollType.class;
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
-        return new BlockStateContainer(this, VARIANT, FACING, ACTIVE);
-    }
-
-    @Override
-    public int damageDropped(@NotNull IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
+        return new ExtendedBlockState(this,
+                new IProperty[]{ VARIANT, FACING, POWERED, ACTIVE_DEPRECATED },
+                new IUnlistedProperty[]{ gregtech.api.block.VariantActiveBlock.ACTIVE });
     }
 
     @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
-        // (InActive) North... -> 0...=5
-        // (Active) North... -> 6...=11
-        int facing = meta % 6;
-        boolean active = meta > 5;
-
+        int facing = meta & 0x7;
+        boolean powered = (meta & 0x8) != 0;
         EnumFacing enumfacing = EnumFacing.byIndex(facing);
-        return getDefaultState().withProperty(VARIANT, VALUES[meta / 12]).withProperty(FACING, enumfacing)
-                .withProperty(ACTIVE, active);
+        return getDefaultState().withProperty(FACING, enumfacing).withProperty(POWERED, powered);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).ordinal() + (state.getValue(ACTIVE) ? 6 : 0);
+    public int getMetaFromState(@NotNull IBlockState state) {
+        int meta = state.getValue(FACING).ordinal();
+        if (state.getValue(POWERED)) meta |= 0x8;
+        return meta;
+    }
+
+    @Override
+    public int damageDropped(@NotNull IBlockState state) {
+        return 0; // Only one variant: STEEL
     }
 
     @NonNull @Override
@@ -123,6 +135,15 @@ public class BlockActiveEccentricRoll extends VariantBlock<BlockEccentricRoll.Ro
     @SuppressWarnings("deprecation")
     public boolean isFullCube(@NotNull IBlockState state) {
         return false;
+    }
+
+    @Override
+    public void onEntityCollision(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                  @NotNull Entity entityIn) {
+        super.onEntityCollision(worldIn, pos, state, entityIn);
+        if (isEffectActive(state)) {
+            entityIn.attackEntityFrom(SuSyDamageSources.getCrusherDamage(), 2.0F);
+        }
     }
 
     @SuppressWarnings("deprecation")

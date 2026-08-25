@@ -304,7 +304,7 @@ public class SuSyPredicates {
     @NotNull public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
-            if (state.getBlock() instanceof BlockEccentricRoll) {
+            if (state.getBlock() instanceof BlockEccentricRoll || state.getBlock() instanceof BlockActiveEccentricRoll) {
 
                 // Corrects the direction of the eccentric roll, while ignoring the in/active
                 // state

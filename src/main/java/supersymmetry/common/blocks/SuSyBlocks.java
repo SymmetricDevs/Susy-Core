@@ -122,6 +122,8 @@ public class SuSyBlocks {
     public static BlockSpacecraftHull SPACECRAFT_HULL;
     public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
     public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockActiveEccentricRoll ACTIVE_ECCENTRIC_ROLL;
+    public static BlockInvertedActiveEccentricRoll INVERTED_ACTIVE_ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
     public static BlockEDMElectrode EDM_ELECTRODE;

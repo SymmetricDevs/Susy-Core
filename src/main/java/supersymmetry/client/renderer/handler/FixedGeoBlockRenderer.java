@@ -82,6 +82,12 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
     @SuppressWarnings("DuplicatedCode")
     public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(tile));
+
+        if (tile instanceof supersymmetry.common.tileentities.AnimatablePartTileEntity apte
+                && tile.getBlockType() instanceof supersymmetry.common.blocks.RedstoneActiveBlock) {
+            apte.restoreAnimationPhase(getUniqueID(tile), partialTicks);
+        }
+
         modelProvider.setLivingAnimations(tile, getUniqueID(tile));
         setupLight(tile.getWorld().getCombinedLight(tile.getPos(), 0));
 
