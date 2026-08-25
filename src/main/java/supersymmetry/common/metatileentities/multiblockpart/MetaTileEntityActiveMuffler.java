@@ -124,7 +124,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
     }
 
     @Nullable
-    private Block getStoredBlock() {
+    public Block getStoredBlock() {
         if (getWorld() != null && !getWorld().isRemote) {
             ItemStack stack = blockSlot.getStackInSlot(0);
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) return null;
@@ -133,7 +133,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
         return lastSyncedBlock;
     }
 
-    private int getStoredMeta() {
+    public int getStoredMeta() {
         if (getWorld() != null && !getWorld().isRemote) {
             ItemStack stack = blockSlot.getStackInSlot(0);
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) return 0;

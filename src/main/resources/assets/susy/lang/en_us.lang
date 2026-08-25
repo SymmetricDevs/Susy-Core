@@ -63,8 +63,6 @@ tile.fusion_casing_active_inverted.fusion_casing_mk2.name=Inverted Active Fusion
 tile.fusion_casing_active_inverted.fusion_casing_mk3.name=Inverted Active Fusion Machine Casing MK III (Decorative)
 tile.heat_vent_active.heat_vent.name=Active Heat Vent Casing (Decorative)
 tile.heat_vent_active_inverted.heat_vent.name=Inverted Active Heat Vent Casing (Decorative)
-tile.molybdenum_disilicide_coil_active.molybdenum_disilicide_coil.name=Active Molybdenum Disilicide Coil Block (Decorative)
-tile.molybdenum_disilicide_coil_active_inverted.molybdenum_disilicide_coil.name=Inverted Active Molybdenum Disilicide Coil Block (Decorative)
 
 susy.machine.muffler_active.name=Active Muffler Hatch (Decorative)
 susy.machine.muffler_active.tooltip=Place a block inside to change its appearance

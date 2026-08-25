@@ -44,8 +44,6 @@ public class SuSyBlocks {
     public static BlockInvertedActiveFusionCasing INVERTED_ACTIVE_FUSION_CASING;
     public static BlockActiveHeatVent ACTIVE_HEAT_VENT;
     public static BlockInvertedActiveHeatVent INVERTED_ACTIVE_HEAT_VENT;
-    public static BlockActiveMolybdenumDisilicideCoil ACTIVE_MOLYBDENUM_DISILICIDE_COIL;
-    public static BlockInvertedActiveMolybdenumDisilicideCoil INVERTED_ACTIVE_MOLYBDENUM_DISILICIDE_COIL;
     public static BlockSinteringBrick SINTERING_BRICK;
     public static BlockActiveSinteringBrick ACTIVE_SINTERING_BRICK;
     public static BlockInvertedActiveSinteringBrick INVERTED_ACTIVE_SINTERING_BRICK;

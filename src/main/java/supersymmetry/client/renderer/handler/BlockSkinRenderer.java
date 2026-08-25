@@ -39,7 +39,7 @@ public class BlockSkinRenderer {
         IBakedModel model = dispatcher.getModelForState(state);
 
         try {
-            IBlockState extState = state.getBlock().getExtendedState(state, world, pos);
+            IBlockState extState = state.getBlock().getExtendedState(state, new SkinBlockAccess(world, pos), pos);
             if (extState != null) state = extState;
         } catch (Exception ignored) {}
 

@@ -238,7 +238,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         }
     }
 
-    private Block getStoredBlock() {
+    public Block getStoredBlock() {
         if (getWorld() != null && !getWorld().isRemote) {
             if (blockSlot == null) return null;
             ItemStack stack = blockSlot.getStackInSlot(0);
@@ -248,7 +248,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         return lastSyncedBlock;
     }
 
-    private int getStoredMeta() {
+    public int getStoredMeta() {
         if (getWorld() != null && !getWorld().isRemote) {
             if (blockSlot == null) return 0;
             ItemStack stack = blockSlot.getStackInSlot(0);

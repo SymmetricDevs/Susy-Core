@@ -32,7 +32,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantActiveBlock;
+import gregtech.api.util.Mods;
 import gregtech.client.model.ActiveVariantBlockBakedModel;
+
+import team.chisel.ctm.client.state.CTMExtendedState;
 
 /**
  * A base class for decorative active blocks that respond to redstone, following the
@@ -174,8 +177,13 @@ public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializabl
     @Override
     public IExtendedBlockState getExtendedState(@NotNull IBlockState state, @NotNull IBlockAccess world,
                                                 @NotNull BlockPos pos) {
-        return ((IExtendedBlockState) state)
+        IExtendedBlockState ext = ((IExtendedBlockState) state)
                 .withProperty(ACTIVE, isEffectActive(state));
+
+        if (Mods.CTM.isModLoaded()) {
+            return new CTMExtendedState(ext, world, pos);
+        }
+        return ext;
     }
 
     @Override
