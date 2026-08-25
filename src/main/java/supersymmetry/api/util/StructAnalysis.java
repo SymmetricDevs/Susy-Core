@@ -73,8 +73,8 @@ public class StructAnalysis {
                 "part_unrecognized"),
         SPACECRAFT_HOLLOW(
                 "spacecraft_hollow"),
-        WEIRD_PADDING(
-                "weird_padding"),
+        WRONG_PADDING_CLOTH(
+                "wrong_padding_cloth"),
         TOO_SHORT(
                 "too_short"),
         CONN_UNALIGNED(
@@ -98,7 +98,15 @@ public class StructAnalysis {
         IGNITER_WRONG(
                 "igniter_wrong"),
         NOT_PADDED(
-                "not_padded");
+                "not_padded"),
+        NOT_ENOUGH_POWER(
+                "not_enough_power"),
+        NOT_ENOUGH_BATTERIES(
+                "not_enough_batteries"),
+        UNSHIELDED_REACTOR(
+                "unshielded_reactor"),
+        NO_LANDING_SYSTEM(
+                "no_landing_system");
 
         String code;
 
