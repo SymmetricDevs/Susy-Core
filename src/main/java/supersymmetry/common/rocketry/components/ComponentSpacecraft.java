@@ -184,6 +184,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
         tag.setDouble("guidanceMultiplier",
                 SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
+        int volume = interior.size();
+        tag.setInteger("volume", volume);
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
             if (!interior.isEmpty()) {
@@ -197,8 +199,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.HULL_FULL;
                 return Optional.empty();
             }
-            int volume = interior.size();
-            tag.setInteger("volume", volume);
             Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
             for (BlockPos bp : container) {
                 Block block = analysis.world.getBlockState(bp).getBlock();
