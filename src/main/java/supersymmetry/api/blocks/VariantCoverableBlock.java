@@ -87,14 +87,12 @@ public class VariantCoverableBlock<T extends Enum<T> & IStringSerializable>
 
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return TileEntityCoverable.RENDER_SWITCH || !((TileEntityCoverable) world.getTileEntity(pos)).isCovered(face);
+        return super.shouldSideBeRendered(state, world, pos, face) && ((TileEntityCoverable) world.getTileEntity(pos)).isCovered(face);
     }
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        EnumBlockRenderType ret = TileEntityCoverable.RENDER_SWITCH ? VariantCoverableBlockRenderer.BLOCK_RENDER_TYPE :
-                EnumBlockRenderType.MODEL;
-        return ret;
+        return VariantCoverableBlockRenderer.BLOCK_RENDER_TYPE;
     }
 
     @Nullable public TileEntity createNewTileEntity(World worldIn, int meta) {

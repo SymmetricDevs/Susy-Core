@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -54,10 +56,14 @@ public class VariantCoverableBlockRenderer implements ICCBlockRenderer {
         if (tileECoverable == null) {
             return false;
         }
-        TileEntityCoverable.RENDER_SWITCH = false;
-        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tileECoverable.getBlockState(), pos, world,
-                buffer);
-        TileEntityCoverable.RENDER_SWITCH = true;
+
+        BlockRendererDispatcher blockRendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        IBakedModel model = blockRendererDispatcher.getModelForState(state);
+        state = state.getBlock().getExtendedState(state, world, pos);
+
+        blockRendererDispatcher.getBlockModelRenderer().renderModel(world, model, state,
+                pos, buffer, true);
+
         CCRenderState renderState = CCRenderState.instance();
         renderState.reset();
         renderState.bind(buffer);
