@@ -1,5 +1,7 @@
 package supersymmetry.common.rocketry.components;
 
+import static supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument.*;
+
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -151,6 +153,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
         List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck)
                 .collect(Collectors.toList());
+        ArrayList<BlockSpacecraftInstrument.Type> componentList = new ArrayList<>();
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
@@ -169,9 +172,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     }
                 }
             } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) &&
-                    !analysis.world.getBlockState(bp).equals(SuSyBlocks.SPACE_INSTRUMENT // maybe worth adding a
-                            .getState(BlockSpacecraftInstrument.Type.BATTERY))) { // property of some kind to
-                includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments); // instruments?
+                    allowedOnHull(getTypeFromBlockstate(analysis.world.getBlockState(bp)))) {
+                        componentList.add(getTypeFromBlockstate(analysis.world.getBlockState(bp)));
+                        includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
                 return analysis.errorPos(bp);
@@ -181,12 +184,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         for (BlockPos bp : allInteriorBlocks) {
 
-            if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) && // check
-                                                                                                   // interior-only
-                                                                                                   // instruments like
-                                                                                                   // batteries
-                    (analysis.world.getBlockState(bp).equals(SuSyBlocks.SPACE_INSTRUMENT
-                            .getState(BlockSpacecraftInstrument.Type.BATTERY)))) {
+            if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) &&
+                    !allowedOnHull(getTypeFromBlockstate(analysis.world.getBlockState(bp)))) {
+                componentList.add(getTypeFromBlockstate(analysis.world.getBlockState(bp)));
                 includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
             }
         }
@@ -200,6 +200,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             analysis.status = BuildStat.TOO_MUCH_GUIDANCE;
             return Optional.empty();
         }
+
+        if (!componentList.contains(Type.EARTH_LANDING_SYSTEM)) { // FIXME: improve this once satellites that
+            analysis.status = BuildStat.NO_LANDING_SYSTEM;        // stay permanently in orbit or fly to
+            return Optional.empty();                              // another body and don't return are added
+        }
+
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
         tag.setString("guidance", SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).toString());
         this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
@@ -234,13 +240,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 if (block.equals(SuSyBlocks.ROOM_PADDING)) {
                     for (EnumFacing side : EnumFacing.VALUES) {
                         if (!te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
-                            analysis.status = BuildStat.WEIRD_PADDING;
+                            analysis.status = BuildStat.WRONG_PADDING_CLOTH;
                             return analysis.errorPos(bp);
                         }
                     }
                 }
             }
-            for (BlockPos air: interior) { //all air blocks must be enclosed by padding
+            for (BlockPos air : interior) { // all air blocks must be enclosed by padding
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     BlockPos checkPos = air.offset(facing);
                     if (analysis.world.getBlockState(checkPos).getBlock() != Blocks.AIR &&
@@ -250,9 +256,65 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     }
                 }
             }
+            if (componentList.contains(Type.NUCLEAR_REACTOR)) {
+                analysis.status = BuildStat.UNSHIELDED_REACTOR;
+                return Optional.empty();
+            }
+
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
         }
+
+        int powerConsumption = 0;
+        int powerGeneration = 0;
+        int batteriesRequired = 0;
+        int numBatteries = 0;
+        int numArms = 0;
+        int numSensors = 0;
+        int numThrusters = 0;
+        int numFuelCells = 0;
+
+        for (BlockSpacecraftInstrument.Type component : componentList) {
+            powerConsumption += getPowerConsumed(component);
+            powerGeneration += getPowerProduced(component);
+            batteriesRequired += getRequiredBatteries(component);
+            numBatteries += (component == Type.BATTERY ? 1 : 0);
+            numArms += (component == Type.ARM ? 1 : 0);
+            numSensors += (component == Type.SENSOR_ARRAY ? 1 : 0);
+            numThrusters += (component == Type.CHEMICAL_THRUSTER ? 1 : 0);
+            numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
+        }
+        powerConsumption += guidanceComputers.size() * 250; //FIXME: make powergen a more universal property
+        powerConsumption += (!lifeSupports.isEmpty() ? 1500 : 0); // only 1 lifesupport system is running at a time,
+                                                                  // the others are backups
+        if (powerGeneration < powerConsumption) {
+            analysis.status = BuildStat.NOT_ENOUGH_POWER;
+            return Optional.empty();
+        }
+
+        if (numBatteries < batteriesRequired) {
+            analysis.status = BuildStat.NOT_ENOUGH_BATTERIES;
+            return Optional.empty();
+        }
+
+        // FIXME: once more detailed satellites are implemented this should be done in a saner way
+        double collectionEfficiency = Math.clamp(numArms, 0, 2); // up to 2 arms
+        collectionEfficiency *= Math.clamp(
+                ((double) (powerGeneration - (numFuelCells * getPowerProduced(Type.FUEL_CELL))) / powerConsumption), 0,
+                2);
+        // more power = the arm moves faster = more scrap? idk don't ask, this is all (presumably) temporary
+        // fuel cells don't last very long so don't work well for extended orbital stays (yes the mission is instant
+        // shh)
+        collectionEfficiency *= Math.clamp(Math.cbrt(numSensors), 0, 1.5); // 0 sensors *= 0, 1 sensor *= 1, 2 sensors
+                                                                           // *= 1.26
+        collectionEfficiency = Math.clamp(collectionEfficiency, 0, 0.75 * numThrusters); // if you run out of fuel you
+                                                                                         // can't collect more scrap
+
+        double powerRedundancy = (double) powerGeneration / powerConsumption;
+        double batteryRedundancy = (double) numBatteries / batteriesRequired;
+        double lifesupportRedundancy = lifeSupports.size();
+        double redundancy = (powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3 - 1;
+
         this.radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point

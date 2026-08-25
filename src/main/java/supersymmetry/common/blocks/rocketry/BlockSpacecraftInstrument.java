@@ -11,6 +11,7 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.rocketry.components.Instrument;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
@@ -41,11 +42,68 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case LANDER -> 15200; // Apollo lander mass from wikipedia
             case NUCLEAR_REACTOR -> 1500;
             case CHEMICAL_THRUSTER -> 100;
-            case FUEL_CELL-> 100;
-            case EARTH_LANDING_SYSTEM -> 100;
+            case FUEL_CELL -> 120; // Apollo fuel cell was 111, rounded up
+            case EARTH_LANDING_SYSTEM -> 2000; // Apollo heat shield was 1400 + the parachutes and structural
+                                               // reinforcements
         };
     }
 
+    public static boolean allowedOnHull(Type type) {
+        if (type == null) {
+            return false;
+        }
+        return switch (type) {
+            case NUCLEAR_REACTOR -> false;
+            case BATTERY -> false;
+            case FUEL_CELL -> false;
+            default -> true;
+        };
+    }
+
+    public static int getPowerProduced(Type type) {
+        if (type == null) {
+            return 0;
+        }
+        return switch (type) {
+            case SOLAR_PANEL -> 500;
+            case NUCLEAR_REACTOR -> 5000;
+            case FUEL_CELL -> 1500;
+            default -> 0;
+        };
+    }
+
+    public static int getPowerConsumed(Type type) {
+        if (type == null) {
+            return 0;
+        }
+        return switch (type) {
+            case SENSOR_ARRAY -> 250;
+            case ARM -> 1000;
+            case LANDER -> 1500;
+            default -> 0;
+        }; // life support is 1500, guidance is 250
+    }
+
+    public static int getRequiredBatteries(Type type) {
+        if (type == null) {
+            return 0;
+        }
+        return switch (type) {
+            case SOLAR_PANEL -> 2;
+            case NUCLEAR_REACTOR -> 2; // used as backup power and to equalize loads
+            case FUEL_CELL -> 1; // same here
+            default -> 0;
+        };
+    }
+
+    public static Type getTypeFromBlockstate(IBlockState state) {
+        for (Type value : Type.values()) {
+            if (state.equals(SuSyBlocks.SPACE_INSTRUMENT.getState(value))) {
+                return value;
+            }
+        }
+        return null;
+    }
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
 
