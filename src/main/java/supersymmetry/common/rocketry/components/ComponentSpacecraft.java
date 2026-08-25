@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
@@ -154,6 +156,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
 
         for (BlockPos bp : exterior) {
+
             if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 for (EnumFacing side : EnumFacing.VALUES) {
@@ -165,12 +168,30 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                         return analysis.errorPos(bp);
                     }
                 }
-            } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT)) {
-                includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
+            } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) &&
+                    !analysis.world.getBlockState(bp).equals(SuSyBlocks.SPACE_INSTRUMENT // maybe worth adding a
+                            .getState(BlockSpacecraftInstrument.Type.BATTERY))) { // property of some kind to
+                includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments); // instruments?
             } else {
                 analysis.status = BuildStat.HULL_WEAK;
+                return analysis.errorPos(bp);
             }
         }
+        Set<BlockPos> allInteriorBlocks = Set.copyOf(interior);
+
+        for (BlockPos bp : allInteriorBlocks) {
+
+            if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) && // check
+                                                                                                   // interior-only
+                                                                                                   // instruments like
+                                                                                                   // batteries
+                    (analysis.world.getBlockState(bp).equals(SuSyBlocks.SPACE_INSTRUMENT
+                            .getState(BlockSpacecraftInstrument.Type.BATTERY)))) {
+                includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
+            }
+        }
+        interior.removeIf(interiorBlock -> !analysis.world.getBlockState(interiorBlock).getBlock()
+                .equals(Blocks.AIR)); // only air blocks count for a spacecraft being hollow
 
         if (guidanceComputers.isEmpty()) {
             analysis.status = BuildStat.NO_GUIDANCE;
@@ -212,10 +233,20 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 if (block.equals(SuSyBlocks.ROOM_PADDING)) {
                     for (EnumFacing side : EnumFacing.VALUES) {
-                        if (te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
+                        if (!te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
                             analysis.status = BuildStat.WEIRD_PADDING;
                             return analysis.errorPos(bp);
                         }
+                    }
+                }
+            }
+            for (BlockPos air: interior) { //all air blocks must be enclosed by padding
+                for (EnumFacing facing : EnumFacing.VALUES) {
+                    BlockPos checkPos = air.offset(facing);
+                    if (analysis.world.getBlockState(checkPos).getBlock() != Blocks.AIR &&
+                            analysis.world.getBlockState(checkPos).getBlock() != SuSyBlocks.ROOM_PADDING) {
+                        analysis.status = BuildStat.NOT_PADDED;
+                        return analysis.errorPos(checkPos);
                     }
                 }
             }

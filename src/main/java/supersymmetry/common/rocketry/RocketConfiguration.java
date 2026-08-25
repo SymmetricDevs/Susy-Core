@@ -20,7 +20,6 @@ public class RocketConfiguration {
     // Soyuz
     public static final int DEFAULT_BUDGET = 2;
 
-
     public enum DestinationType {
         Landing,
         Orbit
@@ -54,8 +53,8 @@ public class RocketConfiguration {
         }
 
         public boolean isDefault() {
-            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0
-                     && this.destinationType == DestinationType.Landing;
+            return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
+                    this.destinationType == DestinationType.Landing;
         }
     }
 

@@ -96,7 +96,9 @@ public class StructAnalysis {
         NOT_INTERSTAGE(
                 "not_interstage"),
         IGNITER_WRONG(
-                "igniter_wrong");
+                "igniter_wrong"),
+        NOT_PADDED(
+                "not_padded");
 
         String code;
 

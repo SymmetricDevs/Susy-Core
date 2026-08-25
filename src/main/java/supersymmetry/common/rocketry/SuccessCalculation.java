@@ -24,7 +24,8 @@ public class SuccessCalculation {
     }
 
     public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
-                           double cargoCapacity, double radialInstability, double thrust, double oblateness, double vernierThrust) {
+                           double cargoCapacity, double radialInstability, double thrust, double oblateness,
+                           double vernierThrust) {
 
         public static AFSStats none() {
             return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
