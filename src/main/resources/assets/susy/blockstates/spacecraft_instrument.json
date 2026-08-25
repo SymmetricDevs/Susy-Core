@@ -39,6 +39,26 @@
         "textures" : {
           "all" : "gregtech:blocks/rocketry/struct/lander"
         }
+      },
+      "nuclear_reactor" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/nuclear_reactor"
+        }
+      },
+      "chemical_thruster" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/chemical_thruster"
+        }
+      },
+      "fuel_cell" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/fuel_cell"
+        }
+      },
+      "earth_landing_system" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/earth_landing_system"
+        }
       }
     }
   }

@@ -176,6 +176,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.HULL_WEAK;
                 return analysis.errorPos(bp);
             }
+        }
         Set<BlockPos> allInteriorBlocks = Set.copyOf(interior);
 
         for (BlockPos bp : allInteriorBlocks) {
@@ -232,10 +233,20 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 if (block.equals(SuSyBlocks.ROOM_PADDING)) {
                     for (EnumFacing side : EnumFacing.VALUES) {
-                        if (te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
+                        if (!te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
                             analysis.status = BuildStat.WEIRD_PADDING;
                             return analysis.errorPos(bp);
                         }
+                    }
+                }
+            }
+            for (BlockPos air: interior) { //all air blocks must be enclosed by padding
+                for (EnumFacing facing : EnumFacing.VALUES) {
+                    BlockPos checkPos = air.offset(facing);
+                    if (analysis.world.getBlockState(checkPos).getBlock() != Blocks.AIR &&
+                            analysis.world.getBlockState(checkPos).getBlock() != SuSyBlocks.ROOM_PADDING) {
+                        analysis.status = BuildStat.NOT_PADDED;
+                        return analysis.errorPos(checkPos);
                     }
                 }
             }

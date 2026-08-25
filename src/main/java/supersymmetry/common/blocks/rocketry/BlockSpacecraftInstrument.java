@@ -39,8 +39,13 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case BATTERY -> 100;
             case ARM -> 800;
             case LANDER -> 15200; // Apollo lander mass from wikipedia
+            case NUCLEAR_REACTOR -> 1500;
+            case CHEMICAL_THRUSTER -> 100;
+            case FUEL_CELL-> 100;
+            case EARTH_LANDING_SYSTEM -> 100;
         };
     }
+
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
 
@@ -50,7 +55,11 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         SOLAR_PANEL("solar_panel", 4),
         BATTERY("battery", 4),
         ARM("arm", 4, new InstrumentRobotArm()),
-        LANDER("lander", 4, new InstrumentLander()); // will have variable purposes
+        LANDER("lander", 4, new InstrumentLander()), // will have variable purposes
+        NUCLEAR_REACTOR("nuclear_reactor", 4), // https://en.wikipedia.org/wiki/Kilopower
+        CHEMICAL_THRUSTER("chemical_thruster", 4),
+        FUEL_CELL("fuel_cell", 4),
+        EARTH_LANDING_SYSTEM("earth_landing_system", 4);
 
         public String name;
         public int h;

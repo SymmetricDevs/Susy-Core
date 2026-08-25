@@ -4,7 +4,6 @@ import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENT
 
 import java.util.Arrays;
 
-import gregtech.modules.ModuleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +20,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
@@ -183,8 +183,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
-    }
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {}
 
     @Override
     public EnumHandSide getPrimaryHand() {
