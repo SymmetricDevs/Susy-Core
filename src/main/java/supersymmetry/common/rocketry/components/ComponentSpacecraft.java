@@ -171,7 +171,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
         List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck)
                 .collect(Collectors.toList());
-        ArrayList<BlockSpacecraftInstrument.Type> componentList = new ArrayList<>();
+        ArrayList<Type> componentList = new ArrayList<>();
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
@@ -292,7 +292,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         int numThrusters = 0;
         int numFuelCells = 0;
 
-        for (BlockSpacecraftInstrument.Type component : componentList) {
+        for (Type component : componentList) {
             powerConsumption += getPowerConsumed(component);
             powerGeneration += getPowerProduced(component);
             batteriesRequired += getRequiredBatteries(component);
@@ -302,10 +302,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             numThrusters += (component == Type.CHEMICAL_THRUSTER ? 1 : 0);
             numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
         }
+
         powerConsumption += guidanceComputers.size() * 250; //FIXME: make powergen a more universal property
         powerConsumption += (!lifeSupports.isEmpty() ? 1500 : 0); // only 1 lifesupport system is running at a time,
-                                                                  // the others are backups
-        if (powerGeneration < powerConsumption) {
+        if (powerGeneration < powerConsumption) {                 // the others are backups
             analysis.status = BuildStat.NOT_ENOUGH_POWER;
             return Optional.empty();
         }
@@ -321,19 +321,28 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 ((double) (powerGeneration - (numFuelCells * getPowerProduced(Type.FUEL_CELL))) / powerConsumption), 0,
                 2);
         // more power = the arm moves faster = more scrap? idk don't ask, this is all (presumably) temporary
-        // fuel cells don't last very long so don't work well for extended orbital stays (yes the mission is instant
-        // shh)
+        // fuel cells don't last very long so don't work well for extended orbital stays
+        // (yes the mission is instant shh)
         collectionEfficiency *= Math.clamp(Math.cbrt(numSensors), 0, 1.5); // 0 sensors *= 0, 1 sensor *= 1, 2 sensors
                                                                            // *= 1.26
         collectionEfficiency = Math.clamp(collectionEfficiency, 0, 0.75 * numThrusters); // if you run out of fuel you
                                                                                          // can't collect more scrap
-        this.collectionEfficiency = collectionEfficiency; //theoretical maximum of 6
+        this.collectionEfficiency = Math.clamp(collectionEfficiency, 0, 4);
 
         double powerRedundancy = (double) powerGeneration / powerConsumption;
         double batteryRedundancy = (double) numBatteries / batteriesRequired;
         double lifesupportRedundancy = Math.max(lifeSupports.size(), 1);
 
-        this.redundancy = Math.round(100 * ((powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3 - 1)) / 100.0;
+        double redundancy = 0;
+        if (hasAir) { //the lowest redundancy has 2x weight
+            redundancy = (powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3.0;
+            redundancy = (redundancy + 2 * Math.min(powerRedundancy, Math.min(batteryRedundancy, lifesupportRedundancy))) / 3.0 - 1;
+        } else {
+            redundancy = (powerRedundancy + batteryRedundancy) / 2.0;
+            redundancy = (redundancy + 2 * Math.min(powerRedundancy, batteryRedundancy)) / 3.0 - 1;
+        }
+
+        this.redundancy = Math.round(100 * redundancy) / 100.0;
 
         this.radius = analysis.getRadius(blocksConnected);
 
