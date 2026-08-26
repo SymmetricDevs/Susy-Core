@@ -30,8 +30,11 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.ImageCycleButtonWidget;
 import gregtech.api.gui.widgets.PhantomSlotWidget;
 import gregtech.api.gui.widgets.SimpleTextWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
@@ -41,14 +44,16 @@ import gregtech.client.particle.VanillaParticleEffects;
 import gregtech.client.renderer.texture.Textures;
 import supersymmetry.client.renderer.handler.BlockSkinRenderer;
 
-public class MetaTileEntityActiveMuffler extends MetaTileEntity {
+public class MetaTileEntityActiveMuffler extends MetaTileEntity implements IControllable {
 
     public static final int UPDATE_STORED_BLOCK = GregtechDataCodes.assignId();
+    public static final int UPDATE_WORKING_ENABLED = GregtechDataCodes.assignId();
 
     private final GTItemStackHandler blockSlot;
 
     @Nullable private Block lastSyncedBlock;
     private int lastSyncedMeta;
+    private boolean isWorkingEnabled = true;
 
     public MetaTileEntityActiveMuffler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -72,6 +77,19 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
     }
 
     @Override
+    public boolean isWorkingEnabled() {
+        return isWorkingEnabled;
+    }
+
+    @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        this.isWorkingEnabled = isWorkingAllowed;
+        if (!getWorld().isRemote) {
+            writeCustomData(UPDATE_WORKING_ENABLED, buf -> buf.writeBoolean(isWorkingEnabled));
+        }
+    }
+
+    @Override
     protected IItemHandlerModifiable createImportItemHandler() {
         return blockSlot;
     }
@@ -83,7 +101,9 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
                 .widget(new PhantomSlotWidget(blockSlot, 0, 80, 40)
                         .setClearSlotOnRightClick(true)
                         .setBackgroundTexture(GuiTextures.SLOT))
-                .widget(new SimpleTextWidget(89, 72, "", () -> "Place block here"));
+                .widget(new SimpleTextWidget(89, 72, "", () -> "Place block here"))
+                .widget(new ImageCycleButtonWidget(152, 6, 18, 18, GuiTextures.BUTTON_POWER,
+                        this::isWorkingEnabled, this::setWorkingEnabled));
         builder.bindPlayerInventory(player.inventory, GuiTextures.SLOT, 7, 84);
         return builder.build(getHolder(), player);
     }
@@ -94,7 +114,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
         if (!getWorld().isRemote) {
             syncBlockSlot();
         }
-        if (getWorld().isRemote) {
+        if (getWorld().isRemote && isWorkingEnabled) {
             VanillaParticleEffects.mufflerEffect(this, EnumParticleTypes.SMOKE_LARGE);
         }
     }
@@ -181,6 +201,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
+        buf.writeBoolean(isWorkingEnabled);
         Block block = getStoredBlock();
         buf.writeBoolean(block != null);
         if (block != null) {
@@ -192,6 +213,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
+        this.isWorkingEnabled = buf.readBoolean();
         boolean hasBlock = buf.readBoolean();
         if (hasBlock) {
             this.lastSyncedBlock = Block.getBlockFromName(buf.readResourceLocation().toString());
@@ -215,18 +237,30 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity {
                 this.lastSyncedMeta = 0;
             }
             scheduleRenderUpdate();
+        } else if (dataId == UPDATE_WORKING_ENABLED) {
+            this.isWorkingEnabled = buf.readBoolean();
+            scheduleRenderUpdate();
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
+        data.setBoolean("WorkingEnabled", isWorkingEnabled);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
+        this.isWorkingEnabled = data.getBoolean("WorkingEnabled");
+    }
+
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, EnumFacing side) {
+        if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE)
+            return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
+        return super.getCapability(capability, side);
     }
 
     @Override
