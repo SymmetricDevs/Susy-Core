@@ -122,6 +122,16 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
     }
 
+    public double getRedundancy() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).redundancy;
+    }
+
+    public double getCollectionEfficiency() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).collectionEfficiency;
+    }
+
     public double getCargoVolume() {
         return this.getComponents("spacecraft").stream()
                 .mapToDouble(component -> ((ComponentSpacecraft) component).volume).sum();

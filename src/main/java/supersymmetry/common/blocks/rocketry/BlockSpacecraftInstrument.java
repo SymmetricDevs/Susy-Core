@@ -33,18 +33,17 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
     @Override
     public double getMass(Type type) {
         return switch (type) {
-            case SENSOR_ARRAY -> 150;
+            case SENSOR_ARRAY -> 70;
             case COLLECTOR -> 200;
             case CAMERA -> 40;
             case SOLAR_PANEL -> 100;
             case BATTERY -> 100;
-            case ARM -> 800;
+            case ARM -> 400;
             case LANDER -> 15200; // Apollo lander mass from wikipedia
             case NUCLEAR_REACTOR -> 1500;
-            case CHEMICAL_THRUSTER -> 100;
+            case CHEMICAL_THRUSTER -> 300;
             case FUEL_CELL -> 120; // Apollo fuel cell was 111, rounded up
-            case EARTH_LANDING_SYSTEM -> 2000; // Apollo heat shield was 1400 + the parachutes and structural
-                                               // reinforcements
+            case EARTH_LANDING_SYSTEM -> 1500; // Apollo heat shield was 1400 + the parachutes
         };
     }
 
@@ -89,7 +88,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             return 0;
         }
         return switch (type) {
-            case SOLAR_PANEL -> 2;
+            case SOLAR_PANEL -> 1;
             case NUCLEAR_REACTOR -> 2; // used as backup power and to equalize loads
             case FUEL_CELL -> 1; // same here
             default -> 0;

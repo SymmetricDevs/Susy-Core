@@ -35,6 +35,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     public boolean hasAir;
     public double volume;
     public double guidanceMultiplier;
+    public double redundancy;
+    public double collectionEfficiency;
 
     public ComponentSpacecraft() {
         super("spacecraft", "spacecraft", tuple -> tuple.getSecond().stream().anyMatch(
@@ -51,6 +53,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.hasAir = true;
         this.instruments.put("lander", 1);
         this.instruments.put("arm", 1);
+        this.redundancy = 0;
+        this.collectionEfficiency = 0;
         return true;
     }
 
@@ -65,6 +69,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         } else {
             lines.add(I18n.format("susy.rocketry.tooltip.life_not_supported"));
         }
+        if (tag.hasKey("collectionEfficiency")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
+        }
+        if (tag.hasKey("redundancy")) {
+            lines.add(I18n.format("susy.rocketry.tooltip.redundancy", tag.getDouble("redundancy")));
+        }
         // not sure what hasAir means here so no tooltip for that
         return lines;
     }
@@ -76,6 +86,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
         tag.setDouble("guidanceMultiplier", this.guidanceMultiplier);
+        tag.setDouble("collectionEfficiency", this.collectionEfficiency);
+        tag.setDouble("redundancy", this.redundancy);
         NBTTagCompound instrumentsTag = new NBTTagCompound();
         NBTTagCompound partsTag = new NBTTagCompound();
         for (Entry<String, Integer> part : this.parts.entrySet()) {
@@ -110,6 +122,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             return Optional.empty();
         if (!compound.hasKey("materials", NBT.TAG_LIST))
             return Optional.empty();
+        if (!compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE))
+            return Optional.empty();
+        if (!compound.hasKey("redundancy", NBT.TAG_DOUBLE))
+            return Optional.empty();
         compound.getTagList("materials", NBT.TAG_COMPOUND)
                 .forEach(x -> spacecraft.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
 
@@ -119,6 +135,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         spacecraft.hasAir = compound.getBoolean("hasAir");
         spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
         spacecraft.height = compound.getInteger("height");
+        spacecraft.collectionEfficiency = compound.getInteger("collectionEfficiency");
+        spacecraft.redundancy = compound.getInteger("redundancy");
 
         NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
@@ -153,7 +171,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         Set<BlockPos> lifeSupports = blocksConnected.stream().filter(lifeSupportCheck).collect(Collectors.toSet());
         List<BlockPos> guidanceComputers = blocksConnected.stream().filter(guidanceComputerCheck)
                 .collect(Collectors.toList());
-        ArrayList<BlockSpacecraftInstrument.Type> componentList = new ArrayList<>();
+        ArrayList<Type> componentList = new ArrayList<>();
         NBTTagCompound tag = new NBTTagCompound();
 
         lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
@@ -274,7 +292,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         int numThrusters = 0;
         int numFuelCells = 0;
 
-        for (BlockSpacecraftInstrument.Type component : componentList) {
+        for (Type component : componentList) {
             powerConsumption += getPowerConsumed(component);
             powerGeneration += getPowerProduced(component);
             batteriesRequired += getRequiredBatteries(component);
@@ -284,10 +302,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             numThrusters += (component == Type.CHEMICAL_THRUSTER ? 1 : 0);
             numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
         }
+
         powerConsumption += guidanceComputers.size() * 250; //FIXME: make powergen a more universal property
         powerConsumption += (!lifeSupports.isEmpty() ? 1500 : 0); // only 1 lifesupport system is running at a time,
-                                                                  // the others are backups
-        if (powerGeneration < powerConsumption) {
+        if (powerGeneration < powerConsumption) {                 // the others are backups
             analysis.status = BuildStat.NOT_ENOUGH_POWER;
             return Optional.empty();
         }
@@ -303,17 +321,28 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 ((double) (powerGeneration - (numFuelCells * getPowerProduced(Type.FUEL_CELL))) / powerConsumption), 0,
                 2);
         // more power = the arm moves faster = more scrap? idk don't ask, this is all (presumably) temporary
-        // fuel cells don't last very long so don't work well for extended orbital stays (yes the mission is instant
-        // shh)
+        // fuel cells don't last very long so don't work well for extended orbital stays
+        // (yes the mission is instant shh)
         collectionEfficiency *= Math.clamp(Math.cbrt(numSensors), 0, 1.5); // 0 sensors *= 0, 1 sensor *= 1, 2 sensors
                                                                            // *= 1.26
         collectionEfficiency = Math.clamp(collectionEfficiency, 0, 0.75 * numThrusters); // if you run out of fuel you
                                                                                          // can't collect more scrap
+        this.collectionEfficiency = Math.clamp(collectionEfficiency, 0, 4);
 
         double powerRedundancy = (double) powerGeneration / powerConsumption;
         double batteryRedundancy = (double) numBatteries / batteriesRequired;
-        double lifesupportRedundancy = lifeSupports.size();
-        double redundancy = (powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3 - 1;
+        double lifesupportRedundancy = Math.max(lifeSupports.size(), 1);
+
+        double redundancy = 0;
+        if (hasAir) { //the lowest redundancy has 2x weight
+            redundancy = (powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3.0;
+            redundancy = (redundancy + 2 * Math.min(powerRedundancy, Math.min(batteryRedundancy, lifesupportRedundancy))) / 3.0 - 1;
+        } else {
+            redundancy = (powerRedundancy + batteryRedundancy) / 2.0;
+            redundancy = (redundancy + 2 * Math.min(powerRedundancy, batteryRedundancy)) / 3.0 - 1;
+        }
+
+        this.redundancy = Math.round(100 * redundancy) / 100.0;
 
         this.radius = analysis.getRadius(blocksConnected);
 
@@ -325,6 +354,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         double mass = blocksConnected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
                 .sum();
         tag.setDouble("mass", mass);
+        tag.setDouble("collectionEfficiency", collectionEfficiency);
+        tag.setDouble("redundancy", redundancy);
         this.mass = mass;
         writeBlocksToNBT(blocksConnected, analysis.world);
         return Optional.of(tag);
