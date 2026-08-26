@@ -233,6 +233,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             success *= (1 - (0.5 * (3 - (thrust / smallThrust))));
         }
         success *= this.getGuidanceMultiplier();
+        double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);
+        success *= redundancyMult;
         success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
@@ -297,6 +299,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= this.getGuidanceMultiplier();
         success = Math.max(0, success);
 
+        double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);
+        success *= redundancyMult;
         success = augmentSuccess(success, augmentation);
 
         if (Math.random() < success) {

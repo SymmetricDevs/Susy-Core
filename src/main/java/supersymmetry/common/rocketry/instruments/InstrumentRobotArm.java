@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import gregtech.api.recipes.Recipe;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.rocketry.components.Instrument;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
@@ -28,6 +30,9 @@ public class InstrumentRobotArm implements Instrument {
         // Check if an unmanned collection mission is next in the configuration
         RocketConfiguration config = rocket.getRocketConfiguration();
         MissionConfiguration mission = config.popFront();
+        NBTTagCompound rocketNBT = rocket.getEntityData().getCompoundTag("rocket");
+        AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
+
         if (!(mission.destinationType == DestinationType.Orbit)) {
             return;
         }
@@ -48,6 +53,10 @@ public class InstrumentRobotArm implements Instrument {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         BlockPos landingPos = nextMission.landingPos;
         List<ItemStack> outputs = salvagingRecipe.getResultItemOutputs(0, 0, SuSyRecipeMaps.SALVAGING_RECIPES);
+        double collEff = (blueprint != null ? blueprint.getCollectionEfficiency() : 0);
+        for (ItemStack output : outputs) {
+            output.setCount((int) Math.round(output.getCount() * collEff));
+        }
         // Turn into non-null list
         NonNullList<ItemStack> nonNullList = NonNullList.from(ItemStack.EMPTY, outputs.toArray(new ItemStack[0]));
         LanderSpawnEntry entry = new LanderSpawnEntry(nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
