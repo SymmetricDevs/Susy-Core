@@ -90,7 +90,7 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         return super.shouldSideBeRendered(state, world, pos, face) &&
-                ((TileEntityCoverable) world.getTileEntity(pos)).isCovered(face);
+                !((TileEntityCoverable) world.getTileEntity(pos)).isCovered(face);
     }
 
     @Override

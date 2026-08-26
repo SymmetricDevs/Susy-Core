@@ -70,8 +70,9 @@ public class VariantCoverableBlockRenderer implements ICCBlockRenderer {
         Matrix4 translation = new Matrix4().translate(pos.getX(), pos.getY(), pos.getZ());
         BlockRenderLayer renderLayer = MinecraftForgeClient.getRenderLayer();
         boolean[] sideMask = new boolean[EnumFacing.VALUES.length];
+
         for (EnumFacing side : EnumFacing.VALUES) {
-            sideMask[side.getIndex()] = state.shouldSideBeRendered(world, pos, side);
+            sideMask[side.getIndex()] = tileECoverable.isCovered(side);
         }
         Textures.RENDER_STATE.set(new CubeRendererState(renderLayer, sideMask, world));
         renderState.lightMatrix.locate(world, pos);

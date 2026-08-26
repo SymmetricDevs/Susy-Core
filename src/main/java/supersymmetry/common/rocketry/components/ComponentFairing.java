@@ -36,7 +36,6 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
     // Note: the radius is the radius of the bottom of the fairing
-    public int height;
 
     public ComponentFairing() {
         super("alu_fairing", "fairing", t -> {
@@ -64,26 +63,20 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-        tag.setDouble("bottom_radius", radius);
-        tag.setInteger("height", height);
-    }
-
-    @Override
     public Optional<ComponentFairing> readFromNBT(NBTTagCompound compound) {
         ComponentFairing fairing = new ComponentFairing();
         if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty())
             return Optional.empty();
         if (!compound.hasKey("height", Constants.NBT.TAG_INT))
             return Optional.empty();
-        if (!compound.hasKey("bottom_radius", Constants.NBT.TAG_DOUBLE))
+        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
             return Optional.empty();
         if (!compound.hasKey("materials", NBT.TAG_LIST))
             return Optional.empty();
         compound.getTagList("materials", NBT.TAG_COMPOUND)
                 .forEach(x -> fairing.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-        fairing.radius = compound.getDouble("bottom_radius");
+        fairing.radius = compound.getDouble("radius");
+        fairing.mass = compound.getDouble("mass");
         fairing.height = compound.getInteger("height");
         return Optional.of(fairing);
     }
@@ -212,21 +205,23 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
                 }
             }
         }
-        this.radius = analysis.getRadius(blocksConnected);
-        int calculatedHeight = (int) (fairingBB.maxY - fairingBB.minY);
-        if (calculatedHeight > radius * 2) {
-            analysis.status = BuildStat.TOO_SHORT;
-        }
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("num_conns", connectorBlocks.size());
         tag.setInteger("volume", intPartition.size());
 
         // If it really is a semicircle, then the tightest radius has to be the same as
         // the semicircle's.
-        double bottomRadius = analysis.getRadius(analysis.getLowestLayer(blocksConnected));
-        tag.setDouble("bottom_radius", bottomRadius);
+        radius = analysis.getRadius(analysis.getLowestLayer(blocksConnected));
+        tag.setDouble("radius", radius);
 
+        // The radius collection here is skipped
         collectInfo(analysis, blocksConnected, tag);
+
+        if (height > radius * 2) {
+            analysis.status = BuildStat.TOO_SHORT;
+            return Optional.empty();
+        }
+
         analysis.status = BuildStat.SUCCESS;
         writeBlocksToNBT(blocksConnected, analysis.world);
 
