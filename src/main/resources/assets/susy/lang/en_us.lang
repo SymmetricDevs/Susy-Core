@@ -359,7 +359,6 @@ susy.machine.aerospace_flight_simulator.gui.velocity_percent=Escape velocity%%: 
 susy.machine.aerospace_flight_simulator.gui.cargo_capacity=Cargo capacity: %s kg
 susy.machine.aerospace_flight_simulator.gui.radial_instability=Radial mismatch: %s blocks
 susy.machine.aerospace_flight_simulator.gui.thrust=Thrust: %s N
-susy.machine.aerospace_flight_simulator.gui.vernier_thrust=Vernier thrust: %s N
 susy.machine.aerospace_flight_simulator.gui.oblateness=Oblateness: %s
 susy.machine.aerospace_flight_simulator.gui.improvement=%s FLOPPAs applied
 
@@ -397,7 +396,6 @@ susy.machine.aerospace_flight_simulator.obstructed=No FC-75 coolant
 susy.machine.aerospace_flight_simulator.obstructed.desc=The AFS must be fully filled with coolant to begin normal operation.
 
 susy.rocketry.components.engine.name=Engine(s)
-susy.rocketry.components.engine_small.name=Vernier engine(s)
 susy.rocketry.components.tank.name=Liquid tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
@@ -1491,7 +1489,6 @@ metaitem.data_card.master_blueprint.tag.soyuz=§6Soyuz
 metaitem.data_card.master_blueprint.tag.lunar=§6Lunar-sized Rocket
 chat.susy.rocket_blueprint.item_list=§bTotal item cost for this rocket:§b
 metaitem.data_card.active.tag.laval_engine=§6Laval Engine
-metaitem.data_card.active.tag.vernier_engine=§6Vernier Engine
 metaitem.data_card.active.tag.alu_fairing=§6Fairing
 metaitem.data_card.active.tag.spacecraft=§6Spacecraft
 metaitem.data_card.active.tag.fluid_tank=§6Liquid Fuel Tank

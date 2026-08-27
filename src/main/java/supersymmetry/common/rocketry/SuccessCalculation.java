@@ -24,11 +24,10 @@ public class SuccessCalculation {
     }
 
     public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
-                           double cargoCapacity, double radialInstability, double thrust, double oblateness,
-                           double vernierThrust) {
+                           double cargoCapacity, double radialInstability, double thrust, double oblateness) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public boolean isNone() {
@@ -46,15 +45,13 @@ public class SuccessCalculation {
             tag.setDouble("radialInstability", radialInstability);
             tag.setDouble("thrust", thrust);
             tag.setDouble("oblateness", oblateness);
-            tag.setDouble("vernierThrust", vernierThrust);
             return tag;
         }
 
         public static AFSStats deserializeNBT(NBTTagCompound nbt) {
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
                     nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"), nbt.getDouble("cargoCapacity"),
-                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"),
-                    nbt.getDouble("vernierThrust"));
+                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
         }
 
         public void writeToBuffer(PacketBuffer buf) {
@@ -67,13 +64,11 @@ public class SuccessCalculation {
             buf.writeDouble(radialInstability);
             buf.writeDouble(thrust);
             buf.writeDouble(oblateness);
-            buf.writeDouble(vernierThrust);
         }
 
         public static AFSStats readFromBuffer(PacketBuffer buf) {
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble());
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
         }
     }
 }

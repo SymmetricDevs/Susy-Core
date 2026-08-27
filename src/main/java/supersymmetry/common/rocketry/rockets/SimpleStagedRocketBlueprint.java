@@ -224,14 +224,6 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double radialInstability = this.getTotalRadiusMismatch();
         success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
 
-        double smallThrust = this.getThrust(fuel, "engine_small", ambientPressure);
-        success *= (1 - (0.2 * Math.exp(3 - smallThrust)));
-
-        if (thrust / smallThrust > 50) {
-            success *= (1 - (0.005 * ((thrust / smallThrust) - 50)));
-        } else if (thrust / smallThrust < 3) {
-            success *= (1 - (0.5 * (3 - (thrust / smallThrust))));
-        }
         success *= this.getGuidanceMultiplier();
         double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);
         success *= redundancyMult;
@@ -241,7 +233,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         return new SuccessCalculation.AFSStats(success, weight, fuel.getDensity() * this.getFuelVolume(),
                 velocitySpeedup, escapeVelocity, getMaximumCargoMass(fuel, escapeVelocity), radialInstability, thrust,
-                oblateness, smallThrust);
+                oblateness);
     }
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
@@ -284,19 +276,10 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double radialInstability = this.getTotalRadiusMismatch();
         success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
 
-        // Small engines shouldn't have that much throughput
-        double smallThrust = this.getThrust(rocket.getFuel(), "engine_small", ambientPressure);
-        double torqueNeeded = 1 + rocket.world.rainingStrength + rocket.world.thunderingStrength;
-        success *= (1 - (0.2 * Math.exp(torqueNeeded - smallThrust)));
+        // Guidance system;
+        double weatherChallenge = rocket.world.rainingStrength + rocket.world.thunderingStrength;
 
-        if (thrust / smallThrust > 10) {
-            success *= (1 - (0.2 * Math.exp((thrust / smallThrust) - 10)));
-        } else if (thrust / smallThrust < 3) {
-            success *= (1 - (0.5 * Math.exp(3 - (thrust / smallThrust))));
-        }
-
-        // Guidance system
-        success *= this.getGuidanceMultiplier();
+        success *= (this.getGuidanceMultiplier() - (weatherChallenge * (1 - this.getGuidanceMultiplier())));
         success = Math.max(0, success);
 
         double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);

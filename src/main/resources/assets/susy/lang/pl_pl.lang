@@ -304,7 +304,6 @@ susy.machine.blueprint_assembler.blueprint_request=Wstaw plan:
 
 
 susy.rocketry.components.engine.name=Silnik(i)
-susy.rocketry.components.engine_small.name=Silniki Verniera
 susy.rocketry.components.tank.name=Zbiornik(i)
 
 susy.rocketry.components.validation_codes.invalid_amount=Nieprawidłowa ilość składników

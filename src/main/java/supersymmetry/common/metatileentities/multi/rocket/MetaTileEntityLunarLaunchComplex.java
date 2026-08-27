@@ -191,8 +191,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
         this.componentIndex = 0;
         this.isAssemblyWorking = true;
-        this.componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
-                .flatMap(List::stream).collect(Collectors.toList());
+        this.componentList = bp.getAssemblySequence();
         this.blueprintSlot.setLocked(true);
         setComplexState(LaunchComplexState.ASSEMBLING);
     }
@@ -698,8 +697,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         if (this.isAssemblyWorking && !this.blueprintSlot.isEmpty()) {
             AbstractRocketBlueprint bp = getCurrentBlueprint();
             if (bp != null) {
-                this.componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
-                        .flatMap(List::stream).collect(Collectors.toList());
+                this.componentList = bp.getAssemblySequence();
             }
         }
     }

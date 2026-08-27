@@ -6,12 +6,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import lombok.Setter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import lombok.Setter;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -312,8 +312,12 @@ public class RocketStage implements Cloneable {
             for (int i = 0; i < componentIndexes.length; i++) {
                 NBTTagCompound componentTag = (NBTTagCompound) lookup
                         .getTag(Integer.valueOf(componentIndexes[i]).toString());
-                Optional<? extends AbstractComponent<?>> extractedComponent = AbstractComponent
-                        .getComponentFromName(componentTag.getString("name")).readFromNBT(componentTag);
+                AbstractComponent<?> prototype = AbstractComponent.getComponentFromName(componentTag.getString("name"));
+                if (prototype == null) {
+                    // component was removed from the mod since this blueprint was saved
+                    continue;
+                }
+                Optional<? extends AbstractComponent<?>> extractedComponent = prototype.readFromNBT(componentTag);
                 if (extractedComponent.isPresent()) {
                     realComponents.add(extractedComponent.get());
                 } else {

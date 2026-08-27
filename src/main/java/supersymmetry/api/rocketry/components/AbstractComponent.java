@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +24,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.Nullable;
+
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import supersymmetry.api.SusyLog;
@@ -62,7 +66,11 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         return nameToComponentRegistry.containsKey(name) && registry.stream().anyMatch(x -> x.getName().equals(name));
     }
 
-    public static AbstractComponent<?> getComponentFromName(String name) {
+    /**
+     * Does not throw an exception as to not completely obliterate old worlds.
+     * However, this does send back nulls now...
+     */
+    @Nullable public static AbstractComponent<?> getComponentFromName(String name) {
         if (nameToComponentRegistry.containsKey(name)) {
             try {
                 return nameToComponentRegistry.get(name).getDeclaredConstructor().newInstance();
@@ -71,7 +79,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
                         e.getMessage(), e.getStackTrace());
             }
         } else {
-            throw new IllegalStateException("tried to get a non existing component");
+            SusyLog.logger.warn("tried to get the unregistered component '{}'; it will be dropped", name);
         }
 
         return null;
@@ -158,6 +166,17 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     public List<MaterialCost> getMaterials() {
         return materials;
+    }
+
+    /**
+     * What the rocket assembler charges to build this component. Scanned
+     * components answer with the blocks they were made of; components whose cost
+     * is declared rather than measured — see
+     * {@link supersymmetry.common.rocketry.components.ComponentBlueprintOverhead} —
+     * override this, which is also how ore dictionary ingredients get in.
+     */
+    public List<GTRecipeInput> getRecipeInputs() {
+        return materials.stream().flatMap(m -> m.expandRecipe().stream()).collect(Collectors.toList());
     }
 
     public double getAssemblyDuration() {

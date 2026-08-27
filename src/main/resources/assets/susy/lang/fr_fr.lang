@@ -304,7 +304,6 @@ susy.machine.blueprint_assembler.blueprint_request=Insérer un plan :
 
 
 susy.rocketry.components.engine.name=Moteur(s)
-susy.rocketry.components.engine_small.name=Moteur(s) Vernier
 susy.rocketry.components.tank.name=Réservoir(s)
 
 susy.rocketry.components.validation_codes.invalid_amount=Quantité de composants invalide

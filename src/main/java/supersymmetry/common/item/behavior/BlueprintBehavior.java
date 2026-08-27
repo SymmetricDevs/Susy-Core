@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.metaitem.stats.ISubItemHandler;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.GTUtility;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.common.item.SuSyMetaItems;
 
@@ -102,25 +102,24 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
         }
         NBTTagCompound tag = stack.getTagCompound();
         AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-        if (!bp.readFromNBT(tag)) {
-            bp = null;
+        if (bp == null || !bp.readFromNBT(tag)) {
+            return IItemBehaviour.super.onItemRightClick(world, player, hand);
         }
-        List<AbstractComponent<?>> componentList;
 
-        componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
-                .flatMap(List::stream).toList();
+        // The assembly sequence, not just the stages: it carries the blueprint's fixed
+        // cost groups too, which are otherwise invisible until the assembler asks for
+        // them.
+        List<AbstractComponent<?>> componentList = bp.getAssemblySequence();
         HashMap<String, Integer> totalItemList = new HashMap<>();
         for (AbstractComponent<?> currentComponent : componentList) {
-            List<MaterialCost> ingredientList = currentComponent.getMaterials();
-            for (MaterialCost materialCost : ingredientList) {
-                String itemType = materialCost.getStack().getDisplayName(); // this is incredibly stupid, but for
+            for (GTRecipeInput ingredient : currentComponent.getRecipeInputs()) {
+                ItemStack[] matching = ingredient.getInputStacks();
+                if (matching.length == 0)
+                    continue;
+                String itemType = matching[0].getDisplayName(); // this is incredibly stupid, but for
                 // some reason storing itemstacks just
                 // didn't work
-                if (totalItemList.containsKey(itemType)) {
-                    totalItemList.replace(itemType, totalItemList.get(itemType) + materialCost.getCount());
-                } else {
-                    totalItemList.put(itemType, materialCost.getCount());
-                }
+                totalItemList.merge(itemType, ingredient.getAmount(), Integer::sum);
             }
         }
 

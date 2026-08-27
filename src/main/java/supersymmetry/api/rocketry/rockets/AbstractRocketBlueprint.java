@@ -12,9 +12,12 @@ import net.minecraft.util.ResourceLocation;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.costs.RocketBlueprintCosts;
+import supersymmetry.api.rocketry.costs.RocketCostGroup;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
+import supersymmetry.common.rocketry.components.ComponentBlueprintOverhead;
 import supersymmetry.common.rocketry.components.ComponentSpacecraft;
 
 public abstract class AbstractRocketBlueprint implements Cloneable {
@@ -109,6 +112,27 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
 
     public int getComponentCount(String componentType) {
         return this.getStages().stream().mapToInt((comp) -> comp.getComponentCount(componentType)).sum();
+    }
+
+    /**
+     * Everything the rocket assembler has to build, in order: this blueprint's
+     * fixed cost groups first, then the components the player actually specified.
+     * <p>
+     * The overhead leads so that a player who cannot afford the plumbing finds out
+     * before sinking twenty minutes into engines. Costs are resolved here, at
+     * assembly time, rather than baked into the blueprint — see
+     * {@link RocketBlueprintCosts}.
+     */
+    public List<AbstractComponent<?>> getAssemblySequence() {
+        List<AbstractComponent<?>> sequence = new ArrayList<>();
+        for (RocketCostGroup group : RocketBlueprintCosts.get(this.getName())) {
+            if (!group.isEmpty()) {
+                sequence.add(new ComponentBlueprintOverhead(group, this.getMaxRadius()));
+            }
+        }
+        this.getStages().stream().flatMap(stage -> stage.getComponents().values().stream()).flatMap(List::stream)
+                .forEach(sequence::add);
+        return sequence;
     }
 
     public List<AbstractComponent> getComponents(String componentType) {

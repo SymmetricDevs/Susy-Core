@@ -22,7 +22,6 @@ public class SusyRocketComponents {
     public static void init() {
         AbstractComponent.registerComponent(new ComponentFairing());
         AbstractComponent.registerComponent(new ComponentLavalEngine());
-        AbstractComponent.registerComponent(new ComponentVernierEngine());
         AbstractComponent.registerComponent(new ComponentInterstage());
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
@@ -51,14 +50,13 @@ public class SusyRocketComponents {
         }
 
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
-                .stage(new RocketStage.Builder("boosters").type("engine").range(1, 4).type("tank").limit(4)
-                        .type("engine_small").limit(12).build())
-                .stage(new RocketStage.Builder("block_A").type("engine").range(1, 4).type("engine_small").limit(4)
+                .stage(new RocketStage.Builder("boosters").type("engine").range(1, 4).type("tank").limit(4).build())
+                .stage(new RocketStage.Builder("block_A").type("engine").range(1, 4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
-                .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4).type("engine_small").limit(4)
+                .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
-                        .type("engine_small").limit(3).type("tank").limit(1).build())
+                        .type("tank").limit(1).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic")).build();
 
         // this was added for testing so that i dont have to fill out all components
@@ -75,7 +73,7 @@ public class SusyRocketComponents {
         ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar").solidRocket()
                 .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
-                        .type("engine_small").limit(3).type("tank").limit(1).build())
+                        .type("tank").limit(1).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar")).build();
 
         // AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
