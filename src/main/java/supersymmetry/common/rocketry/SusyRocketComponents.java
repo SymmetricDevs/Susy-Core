@@ -51,11 +51,11 @@ public class SusyRocketComponents {
         }
 
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
-                .stage(new RocketStage.Builder("boosters").type("engine").limit(4).type("tank").limit(4)
+                .stage(new RocketStage.Builder("boosters").type("engine").range(1, 4).type("tank").limit(4)
                         .type("engine_small").limit(12).build())
-                .stage(new RocketStage.Builder("block_A").type("engine").limit(4).type("engine_small").limit(4)
+                .stage(new RocketStage.Builder("block_A").type("engine").range(1, 4).type("engine_small").limit(4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
-                .stage(new RocketStage.Builder("block_F").type("engine").limit(4).type("engine_small").limit(4)
+                .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4).type("engine_small").limit(4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
                         .type("engine_small").limit(3).type("tank").limit(1).build())
