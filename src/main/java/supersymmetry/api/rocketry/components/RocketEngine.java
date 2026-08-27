@@ -25,6 +25,9 @@ public interface RocketEngine {
     /** Total wall slope change down the bell, the smoothness half of it. */
     double getContourTurning();
 
+    /** Other factors that multiply the final thrust without affecting throughput. */
+    double getEfficiency();
+
     /**
      * Fraction of the fuel's rated specific impulse this particular nozzle
      * delivers against the given ambient pressure: how far it expands, and how

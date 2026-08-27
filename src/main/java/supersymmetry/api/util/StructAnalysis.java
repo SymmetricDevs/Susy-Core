@@ -106,7 +106,13 @@ public class StructAnalysis {
         UNSHIELDED_REACTOR(
                 "unshielded_reactor"),
         NO_LANDING_SYSTEM(
-                "no_landing_system");
+                "no_landing_system"),
+        NO_GAS_GEN(
+                "no_gas_gen"),
+        TOO_MANY_GAS_GEN(
+                "too_many_gas_gen"),
+        DIFFERENT_PUMPS(
+                "different_pumps");
 
         String code;
 

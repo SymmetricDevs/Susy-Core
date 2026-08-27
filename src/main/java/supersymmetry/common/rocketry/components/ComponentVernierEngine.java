@@ -287,6 +287,11 @@ public class ComponentVernierEngine extends AbstractComponent<ComponentVernierEn
     }
 
     @Override
+    public double getEfficiency() {
+        return 1;
+    } // can be changed later if verniers are ever expanded upon
+
+    @Override
     public boolean configureDefaults() {
         this.materials.add(new MaterialCost(new ItemStack(Items.DIAMOND), MaterialCost.SourceType.ITEM, 1));
 

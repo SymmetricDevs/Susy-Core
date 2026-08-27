@@ -3,6 +3,10 @@
     "facing=north,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator" },
     "facing=east,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 90 },
     "facing=south,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 180 },
-    "facing=west,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 270 }
+    "facing=west,variant=open_cycle": { "model": "susy:rocket_struct/engine_gas_generator", "y": 270 },
+    "facing=north,variant=staged_combustion": { "model": "susy:rocket_struct/engine_gas_generator_staged" },
+    "facing=east,variant=staged_combustion": { "model": "susy:rocket_struct/engine_gas_generator_staged", "y": 90 },
+    "facing=south,variant=staged_combustion": { "model": "susy:rocket_struct/engine_gas_generator_staged", "y": 180 },
+    "facing=west,variant=staged_combustion": { "model": "susy:rocket_struct/engine_gas_generator_staged", "y": 270 }
   }
 }

@@ -1,11 +1,19 @@
 {
   "variants": {
-    "normal,variant=basic": { "model": "susy:rocket_struct/rocketturbopump" },
-    "facing=north,variant=basic": { "model": "susy:rocket_struct/rocketturbopump", "x": 90 },
-    "facing=south,variant=basic": {  "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 180 },
-    "facing=west,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 270 },
-    "facing=east,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 90, "y": 90 },
-    "facing=up,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump" },
-    "facing=down,variant=basic":  { "model": "susy:rocket_struct/rocketturbopump", "x": 180  }
+    "normal,variant=low_speed": { "model": "susy:rocket_struct/rocketturbopump_low" },
+    "facing=north,variant=low_speed": { "model": "susy:rocket_struct/rocketturbopump_low", "x": 90 },
+    "facing=south,variant=low_speed": {  "model": "susy:rocket_struct/rocketturbopump_low", "x": 90, "y": 180 },
+    "facing=west,variant=low_speed":  { "model": "susy:rocket_struct/rocketturbopump_low", "x": 90, "y": 270 },
+    "facing=east,variant=low_speed":  { "model": "susy:rocket_struct/rocketturbopump_low", "x": 90, "y": 90 },
+    "normal,variant=medium_speed": { "model": "susy:rocket_struct/rocketturbopump_medium" },
+    "facing=north,variant=medium_speed": { "model": "susy:rocket_struct/rocketturbopump_medium", "x": 90 },
+    "facing=south,variant=medium_speed": {  "model": "susy:rocket_struct/rocketturbopump_medium", "x": 90, "y": 180 },
+    "facing=west,variant=medium_speed":  { "model": "susy:rocket_struct/rocketturbopump_medium", "x": 90, "y": 270 },
+    "facing=east,variant=medium_speed":  { "model": "susy:rocket_struct/rocketturbopump_medium", "x": 90, "y": 90 },
+    "normal,variant=high_speed": { "model": "susy:rocket_struct/rocketturbopump_high" },
+    "facing=north,variant=high_speed": { "model": "susy:rocket_struct/rocketturbopump_high", "x": 90 },
+    "facing=south,variant=high_speed": {  "model": "susy:rocket_struct/rocketturbopump_high", "x": 90, "y": 180 },
+    "facing=west,variant=high_speed":  { "model": "susy:rocket_struct/rocketturbopump_high", "x": 90, "y": 270 },
+    "facing=east,variant=high_speed":  { "model": "susy:rocket_struct/rocketturbopump_high", "x": 90, "y": 90 }
   }
 }
