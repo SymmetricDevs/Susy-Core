@@ -19,8 +19,8 @@ import supersymmetry.api.rocketry.costs.RocketCostGroup;
  * Script-facing view of {@link RocketBlueprintCosts}.
  *
  * <pre>{@code
- * mods.susy.rocketCosts.add('soyuz', 'plumbing', 4)
- *         .input(ore('pipeSmallStainlessSteel'), 4)
+ * mods.susy.rocketCosts.add('soyuz', 'plumbing')
+ *         .input(ore('pipeSmallStainlessSteel'), 16)
  *         .input(item('minecraft:redstone'), 8)
  *         .duration(20)
  *         .register()
@@ -44,10 +44,6 @@ public class RocketCostRegistry extends VirtualizedRegistry<RocketCostRegistry.S
 
     public GroupBuilder add(String blueprintName, String groupName) {
         return new GroupBuilder(blueprintName, groupName);
-    }
-
-    public GroupBuilder add(String blueprintName, String groupName, int count) {
-        return new GroupBuilder(blueprintName, groupName).count(count);
     }
 
     /** Drops every cost group on one blueprint. */
@@ -80,18 +76,11 @@ public class RocketCostRegistry extends VirtualizedRegistry<RocketCostRegistry.S
         private final String blueprint;
         private final String groupName;
         private final List<RocketCostEntry> entries = new ArrayList<>();
-        private int count = 1;
         private double duration = RocketCostGroup.DEFAULT_ASSEMBLY_DURATION;
 
         GroupBuilder(String blueprint, String groupName) {
             this.blueprint = blueprint;
             this.groupName = groupName;
-        }
-
-        /** Unit multiplier: how many of this group the rocket needs. */
-        public GroupBuilder count(int count) {
-            this.count = count;
-            return this;
         }
 
         /** Seconds this group takes to assemble. */
@@ -124,13 +113,7 @@ public class RocketCostRegistry extends VirtualizedRegistry<RocketCostRegistry.S
                         .error().post();
                 return;
             }
-            if (count <= 0) {
-                GroovyLog.msg("Error adding SuSy rocket blueprint cost")
-                        .add("group '{}' on blueprint '{}' has a count of {}", groupName, blueprint, count)
-                        .error().post();
-                return;
-            }
-            RocketCostGroup group = new RocketCostGroup(groupName, entries, count, duration);
+            RocketCostGroup group = new RocketCostGroup(groupName, entries, duration);
             RocketBlueprintCosts.add(blueprint, group);
             addScripted(new ScriptedGroup(blueprint, group));
         }

@@ -76,8 +76,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     // The lists are null
     @Override
-    protected void outputRecipeOutputs() {
-    }
+    protected void outputRecipeOutputs() {}
 
     // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch
     // amperage draws

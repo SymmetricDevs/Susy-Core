@@ -42,13 +42,9 @@ public class RocketCostEntry {
         return count;
     }
 
-    /**
-     * @param multiplier the owning group's unit count
-     */
-    public GTRecipeInput toIngredient(int multiplier) {
-        int total = count * multiplier;
-        return oreDict != null ? new GTRecipeOreInput(oreDict, total) :
-                new GTRecipeItemInput(stack.copy(), total);
+    public GTRecipeInput toIngredient() {
+        return oreDict != null ? new GTRecipeOreInput(oreDict, count) :
+                new GTRecipeItemInput(stack.copy(), count);
     }
 
     @Override
