@@ -25,7 +25,6 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
-import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
@@ -70,7 +69,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             lines.add(I18n.format("susy.rocketry.tooltip.life_not_supported"));
         }
         if (tag.hasKey("collectionEfficiency")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
+            lines.add(
+                    I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
         }
         if (tag.hasKey("redundancy")) {
             lines.add(I18n.format("susy.rocketry.tooltip.redundancy", tag.getDouble("redundancy")));
@@ -193,10 +193,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     allowedOnHull(getTypeFromBlockstate(analysis.world.getBlockState(bp)))) {
                         componentList.add(getTypeFromBlockstate(analysis.world.getBlockState(bp)));
                         includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
-            } else {
-                analysis.status = BuildStat.HULL_WEAK;
-                return analysis.errorPos(bp);
-            }
+                    } else {
+                        analysis.status = BuildStat.HULL_WEAK;
+                        return analysis.errorPos(bp);
+                    }
         }
         Set<BlockPos> allInteriorBlocks = Set.copyOf(interior);
 
@@ -303,7 +303,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
         }
 
-        powerConsumption += guidanceComputers.size() * 250; //FIXME: make powergen a more universal property
+        powerConsumption += guidanceComputers.size() * 250; // FIXME: make powergen a more universal property
         powerConsumption += (!lifeSupports.isEmpty() ? 1500 : 0); // only 1 lifesupport system is running at a time,
         if (powerGeneration < powerConsumption) {                 // the others are backups
             analysis.status = BuildStat.NOT_ENOUGH_POWER;
@@ -334,9 +334,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         double lifesupportRedundancy = Math.max(lifeSupports.size(), 1);
 
         double redundancy = 0;
-        if (hasAir) { //the lowest redundancy has 2x weight
+        if (hasAir) { // the lowest redundancy has 2x weight
             redundancy = (powerRedundancy + batteryRedundancy + lifesupportRedundancy) / 3.0;
-            redundancy = (redundancy + 2 * Math.min(powerRedundancy, Math.min(batteryRedundancy, lifesupportRedundancy))) / 3.0 - 1;
+            redundancy = (redundancy +
+                    2 * Math.min(powerRedundancy, Math.min(batteryRedundancy, lifesupportRedundancy))) / 3.0 - 1;
         } else {
             redundancy = (powerRedundancy + batteryRedundancy) / 2.0;
             redundancy = (redundancy + 2 * Math.min(powerRedundancy, batteryRedundancy)) / 3.0 - 1;

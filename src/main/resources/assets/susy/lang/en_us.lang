@@ -418,6 +418,7 @@ susy.rocketry.tooltip.life_supported=§bLife support available
 susy.rocketry.tooltip.life_not_supported=§cLife support unavailable
 susy.rocketry.tooltip.redundancy=Redundancy: %.1f
 susy.rocketry.tooltip.collection_efficiency=Scrap collection efficiency: %.1f
+susy.rocketry.tooltip.engine_efficiency=Engine fuel usage efficiency: %.1f
 
 
 susy.rocketry.components.validation_codes.invalid_amount=Invalid amount of components

@@ -4,9 +4,9 @@
 	"parent": "block/cube_bottom_top",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "gregtech:blocks/rocketry/struct/pumptop",
-		"2": "gregtech:blocks/rocketry/struct/pumpcenter",
-		"particle": "gregtech:blocks/rocketry/struct/pumpcenter"
+		"1": "gregtech:blocks/rocketry/struct/pumptop_low",
+		"2": "gregtech:blocks/rocketry/struct/pumpcenter_low",
+		"particle": "gregtech:blocks/rocketry/struct/pumpcenter_low"
 	},
 	"elements": [
 		{

@@ -175,7 +175,7 @@ public class RocketStage implements Cloneable {
                 .mapToDouble(component -> {
                     RocketEngine engine = (RocketEngine) component;
                     return engine.getFuelThroughput() * exhaustVelocity *
-                            engine.getNozzleEfficiency(ambientPressure);
+                            engine.getNozzleEfficiency(ambientPressure) * engine.getEfficiency();
                 }).sum();
     }
 

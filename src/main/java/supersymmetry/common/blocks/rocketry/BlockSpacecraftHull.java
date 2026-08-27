@@ -12,7 +12,7 @@ import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
 public class BlockSpacecraftHull extends VariantDirectionalCoverableBlock<BlockSpacecraftHull.HullType> implements
-        WeightedBlock<BlockSpacecraftHull.HullType> {
+                                 WeightedBlock<BlockSpacecraftHull.HullType> {
 
     public BlockSpacecraftHull() {
         super(net.minecraft.block.material.Material.IRON);
