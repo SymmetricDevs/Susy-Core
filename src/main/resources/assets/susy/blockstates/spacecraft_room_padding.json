@@ -9,14 +9,6 @@
   "variants": {
     "variant": {
       "padding": {}
-    },
-    "facing": {
-      "north": {},
-      "south": {},
-      "west": {},
-      "east": {},
-      "up": {},
-      "down": {}
     }
   }
 }
