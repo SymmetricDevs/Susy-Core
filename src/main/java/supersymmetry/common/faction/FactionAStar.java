@@ -1,8 +1,10 @@
 package supersymmetry.common.faction;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
@@ -173,7 +175,8 @@ public class FactionAStar {
     }
 
     private boolean isDoor(BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof BlockDoor;
+        Block block = world.getBlockState(pos).getBlock();
+        return block instanceof BlockDoor && block != Blocks.IRON_DOOR;
     }
 
     private boolean isSolidAt(BlockPos pos) {
