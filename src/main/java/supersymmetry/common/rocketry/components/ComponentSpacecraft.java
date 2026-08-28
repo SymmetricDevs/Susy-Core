@@ -245,25 +245,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 return Optional.empty();
             }
             Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
-            for (BlockPos bp : container) {
-                Block block = analysis.world.getBlockState(bp).getBlock();
-                if (block.equals(SuSyBlocks.LIFE_SUPPORT)) {
-                    continue;
-                }
-                if (analysis.world.getTileEntity(bp) == null ||
-                        !(analysis.world.getTileEntity(bp) instanceof TileEntityCoverable)) {
-                    continue;
-                }
-                TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
-                if (block.equals(SuSyBlocks.ROOM_PADDING)) {
-                    for (EnumFacing side : EnumFacing.VALUES) {
-                        if (!te.isCovered(side) == interior.contains(bp.add(side.getDirectionVec()))) {
-                            analysis.status = BuildStat.WRONG_PADDING_CLOTH;
-                            return analysis.errorPos(bp);
-                        }
-                    }
-                }
-            }
             for (BlockPos air : interior) { // all air blocks must be enclosed by padding
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     BlockPos checkPos = air.offset(facing);

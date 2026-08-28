@@ -73,8 +73,6 @@ public class StructAnalysis {
                 "part_unrecognized"),
         SPACECRAFT_HOLLOW(
                 "spacecraft_hollow"),
-        WRONG_PADDING_CLOTH(
-                "wrong_padding_cloth"),
         TOO_SHORT(
                 "too_short"),
         CONN_UNALIGNED(

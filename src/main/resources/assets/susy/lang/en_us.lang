@@ -440,7 +440,6 @@ tile.spacecraft_instrument.arm.name=Spacecraft Arm
 tile.spacecraft_instrument.lander.name=Spacecraft Lander
 
 tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
-metaitem.padding_cloth.name=Padding Cloth
 
 susy.rocketry.soyuz.name=Soyuz FG
 susy.rocketry.lunar.name=Lunar-sized Rocket

@@ -61,7 +61,6 @@ public class SuSyMetaItems {
     public static MetaValueItem DATA_CARD_ACTIVE;
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
-    public static MetaValueItem PADDING_CLOTH;
 
     public static MetaValueItem AIR_DISPERSER;
     public static MetaValueItem OXYGEN_SENSOR;
@@ -166,7 +165,7 @@ public class SuSyMetaItems {
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
+        // Free ID
 
         SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
 
