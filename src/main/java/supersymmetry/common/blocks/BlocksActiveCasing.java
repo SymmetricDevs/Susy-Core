@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
@@ -18,14 +18,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantActiveBlock;
 import gregtech.client.model.ActiveVariantBlockBakedModel;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public class BlocksActiveCasing extends VariantActiveBlock<BlocksActiveCasing.ActiveBlockType> {
 

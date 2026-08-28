@@ -26,15 +26,13 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.VariantActiveBlock;
 import gregtech.api.util.Mods;
 import gregtech.client.model.ActiveVariantBlockBakedModel;
-
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import team.chisel.ctm.client.state.CTMExtendedState;
 
 /**
@@ -45,8 +43,8 @@ import team.chisel.ctm.client.state.CTMExtendedState;
  * The visual "active" state (which drives bloom rendering) is derived as
  * {@code powered == inverted}:
  * <ul>
- *   <li>Normal (inverted=false): active when NOT powered (bloom on by default, off when powered)</li>
- *   <li>Inverted (inverted=true): active when powered (bloom off by default, on when powered)</li>
+ * <li>Normal (inverted=false): active when NOT powered (bloom on by default, off when powered)</li>
+ * <li>Inverted (inverted=true): active when powered (bloom off by default, on when powered)</li>
  * </ul>
  * <p>
  * The unlisted {@link VariantActiveBlock#ACTIVE} property is set from the derived state
@@ -54,7 +52,7 @@ import team.chisel.ctm.client.state.CTMExtendedState;
  * picks the correct model to render.
  */
 public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializable>
-        extends VariantActiveBlock<T> {
+                                         extends VariantActiveBlock<T> {
 
     public static final PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -83,8 +81,8 @@ public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializabl
             if (genericSuper instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) genericSuper;
                 Type[] args = pt.getActualTypeArguments();
-                if (args.length > 0 && args[0] instanceof Class
-                        && VariantActiveBlock.class.isAssignableFrom((Class<?>) pt.getRawType())) {
+                if (args.length > 0 && args[0] instanceof Class &&
+                        VariantActiveBlock.class.isAssignableFrom((Class<?>) pt.getRawType())) {
                     return (Class<? extends Enum<?>>) args[0];
                 }
             }
@@ -93,17 +91,16 @@ public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializabl
         throw new IllegalStateException("Could not resolve enum class for " + getClass());
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockStateContainer createBlockState() {
         Class<? extends Enum<?>> enumClass = resolveEnumClass();
         createVariantProperty(enumClass);
         return new ExtendedBlockState(this,
-                new IProperty[]{ VARIANT, ACTIVE_DEPRECATED, POWERED },
-                new IUnlistedProperty[]{ ACTIVE });
+                new IProperty[] { VARIANT, ACTIVE_DEPRECATED, POWERED },
+                new IUnlistedProperty[] { ACTIVE });
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void createVariantProperty(Class<? extends Enum<?>> enumClass) {
         PropertyEnum prop = PropertyEnum.create("variant", (Class) enumClass);
         this.VARIANT = prop;
@@ -115,8 +112,7 @@ public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializabl
         return super.getState(variant).withProperty(POWERED, false);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public IBlockState getStateFromMeta(int meta) {
         // bit 3 = powered, bits 0-2 = variant
         return super.getStateFromMeta(meta & 0x7)
@@ -173,8 +169,7 @@ public abstract class RedstoneActiveBlock<T extends Enum<T> & IStringSerializabl
 
     // --- Rendering ---
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public IExtendedBlockState getExtendedState(@NotNull IBlockState state, @NotNull IBlockAccess world,
                                                 @NotNull BlockPos pos) {
         IExtendedBlockState ext = ((IExtendedBlockState) state)

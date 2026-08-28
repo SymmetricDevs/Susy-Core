@@ -13,8 +13,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -49,9 +49,9 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ClickButtonWidget;
 import gregtech.api.gui.widgets.ImageCycleButtonWidget;
-import gregtech.api.gui.widgets.SimpleTextWidget;
 import gregtech.api.gui.widgets.PhantomFluidWidget;
 import gregtech.api.gui.widgets.PhantomSlotWidget;
+import gregtech.api.gui.widgets.SimpleTextWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -209,7 +209,8 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
             syncBlockSlot();
         }
 
-        if (getWorld().isRemote && isActive && isWorkingEnabled && effectMode == EffectMode.FROTH_FLOTATION && renderFluid) {
+        if (getWorld().isRemote && isActive && isWorkingEnabled && effectMode == EffectMode.FROTH_FLOTATION &&
+                renderFluid) {
             renderParticles();
         }
     }
@@ -300,15 +301,14 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         renderCasing(renderState, translation, pipeline);
 
         BlockRenderLayer currentLayer = MinecraftForgeClient.getRenderLayer();
-        boolean shouldRenderFluid = renderFluid && fluidTexture != null
-                && currentLayer == BlockRenderLayer.TRANSLUCENT;
+        boolean shouldRenderFluid = renderFluid && fluidTexture != null && currentLayer == BlockRenderLayer.TRANSLUCENT;
         if (fluidDisplaySize > 0) {
             shouldRenderFluid = shouldRenderFluid && isActive && isWorkingEnabled;
         }
         if (shouldRenderFluid) {
             int fluidRGBA = GTUtility.convertRGBtoRGBA_CL(fluidColor & 0x00FFFFFF, 0xD0);
-            IVertexOperation[] fluidPipeline = new IVertexOperation[]{
-                    new ColourMultiplier(fluidRGBA)};
+            IVertexOperation[] fluidPipeline = new IVertexOperation[] {
+                    new ColourMultiplier(fluidRGBA) };
             Cuboid6 cuboid = getFluidRenderCuboid();
 
             CubeRendererState previousState = Textures.RENDER_STATE.get();
@@ -316,19 +316,23 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
                     BlockRenderLayer.TRANSLUCENT, CubeRendererState.PASS_MASK, previousState.world));
 
             if (fluidDisplaySize > 0) {
-                for (EnumFacing facing : new EnumFacing[]{EnumFacing.NORTH, EnumFacing.SOUTH,
-                        EnumFacing.EAST, EnumFacing.WEST}) {
+                for (EnumFacing facing : new EnumFacing[] { EnumFacing.NORTH, EnumFacing.SOUTH,
+                        EnumFacing.EAST, EnumFacing.WEST }) {
                     Cuboid6 clipped = getClippedCuboidForFace(facing, cuboid);
                     if (clipped != null) {
-                        renderFluidFace(renderState, translation.copy(), fluidPipeline, facing, clipped, fluidTexture, false);
-                        renderFluidFace(renderState, translation.copy(), fluidPipeline, facing, clipped, fluidTexture, true);
+                        renderFluidFace(renderState, translation.copy(), fluidPipeline, facing, clipped, fluidTexture,
+                                false);
+                        renderFluidFace(renderState, translation.copy(), fluidPipeline, facing, clipped, fluidTexture,
+                                true);
                     }
                 }
             }
             Cuboid6 clippedUp = isUpFaceCovered() ? null : cuboid;
             if (clippedUp != null) {
-                renderFluidFace(renderState, translation.copy(), fluidPipeline, EnumFacing.UP, clippedUp, fluidTexture, false);
-                renderFluidFace(renderState, translation.copy(), fluidPipeline, EnumFacing.UP, clippedUp, fluidTexture, true);
+                renderFluidFace(renderState, translation.copy(), fluidPipeline, EnumFacing.UP, clippedUp, fluidTexture,
+                        false);
+                renderFluidFace(renderState, translation.copy(), fluidPipeline, EnumFacing.UP, clippedUp, fluidTexture,
+                        true);
             }
 
             Textures.RENDER_STATE.set(previousState);
@@ -432,7 +436,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
 
     @SideOnly(Side.CLIENT)
     private void renderFluidFace(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline,
-                                  EnumFacing face, Cuboid6 cuboid, TextureAtlasSprite sprite, boolean reversed) {
+                                 EnumFacing face, Cuboid6 cuboid, TextureAtlasSprite sprite, boolean reversed) {
         int savedBrightness = renderState.brightness;
         renderState.brightness = 0xF000F0;
         if (face.getAxis() != EnumFacing.Axis.Y) {
@@ -541,9 +545,12 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
 
     private String getModeDisplayName() {
         switch (effectMode) {
-            case CLARIFIER: return "Clarifier";
-            case FROTH_FLOTATION: return "Froth Flot.";
-            default: return effectMode.getName();
+            case CLARIFIER:
+                return "Clarifier";
+            case FROTH_FLOTATION:
+                return "Froth Flot.";
+            default:
+                return effectMode.getName();
         }
     }
 

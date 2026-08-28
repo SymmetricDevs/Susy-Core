@@ -56,8 +56,8 @@ import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLarge
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLogWasher;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityFluidActiveCasing;
 import supersymmetry.common.metatileentities.single.electric.*;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityFluidActiveCasing;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityLocomotiveController;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityRocketProgrammer;
 import supersymmetry.common.metatileentities.single.railinterfaces.MetaTileEntityStockFluidExchanger;

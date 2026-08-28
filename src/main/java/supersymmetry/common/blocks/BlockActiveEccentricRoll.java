@@ -95,8 +95,8 @@ public class BlockActiveEccentricRoll extends RedstoneActiveBlock<BlockEccentric
         this.VARIANT = PropertyEnum.create("variant", enumClass);
         this.VALUES = enumClass.getEnumConstants();
         return new ExtendedBlockState(this,
-                new IProperty[]{ VARIANT, FACING, POWERED, ACTIVE_DEPRECATED },
-                new IUnlistedProperty[]{ gregtech.api.block.VariantActiveBlock.ACTIVE });
+                new IProperty[] { VARIANT, FACING, POWERED, ACTIVE_DEPRECATED },
+                new IUnlistedProperty[] { gregtech.api.block.VariantActiveBlock.ACTIVE });
     }
 
     @NonNull @Override

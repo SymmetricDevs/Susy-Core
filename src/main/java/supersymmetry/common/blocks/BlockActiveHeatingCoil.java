@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlockActiveHeatingCoil extends RedstoneActiveBlock<BlockActiveHeatingCoil.CoilType> {
 
     public enum CoilType implements IStringSerializable {
+
         MOLYBDENUM_DISILICIDE("molybdenum_disilicide"),
         TUNGSTEN("tungsten");
 

@@ -17,7 +17,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,6 +57,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity implements ICont
     public MetaTileEntityActiveMuffler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
         this.blockSlot = new GTItemStackHandler(this, 1) {
+
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 return !stack.isEmpty() && stack.getItem() instanceof ItemBlock;
@@ -143,8 +143,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity implements ICont
         }
     }
 
-    @Nullable
-    public Block getStoredBlock() {
+    @Nullable public Block getStoredBlock() {
         if (getWorld() != null && !getWorld().isRemote) {
             ItemStack stack = blockSlot.getStackInSlot(0);
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) return null;

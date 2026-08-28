@@ -35,8 +35,8 @@ public class AnimatablePartTileEntity extends TileEntity implements IAnimatable 
 
         if (getBlockType() instanceof IAnimatablePartBlock) {
             net.minecraft.block.state.IBlockState state = world.getBlockState(pos);
-            if (state.getProperties().containsKey(IAnimatablePartBlock.ACTIVE)
-                    && !state.getValue(IAnimatablePartBlock.ACTIVE)) {
+            if (state.getProperties().containsKey(IAnimatablePartBlock.ACTIVE) &&
+                    !state.getValue(IAnimatablePartBlock.ACTIVE)) {
                 return PlayState.STOP;
             }
             if (getBlockType() instanceof supersymmetry.common.blocks.RedstoneActiveBlock) {
