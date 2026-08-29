@@ -35,6 +35,15 @@ public class CelestialObjects {
 
     public static CelestialRenderer RENDERER;
 
+    // Earth values (since the other values are relative to it)
+    public static final double EARTH_MASS = 5.97217e24;
+    /// kg
+    public static final double EARTH_RADIUS = 6371000;
+    /// meters
+    public static final double EARTH_SIDEREAL_ROTATION_PERIOD = 86164.1;
+
+    /// seconds
+
     public static void init() {
         MILKY_WAY = new Galaxy("milky_way", 1., 0., 0., 0., 0., null, GalaxyType.SPIRAL);
 
@@ -45,10 +54,11 @@ public class CelestialObjects {
 
         EARTH = new Planetoid("earth", 1., 0., 0., 0., 0., SUN, PlanetType.TERRESTRIAL)
                 .setDimension(0)
-                .setSurfacePressure(101325.);
+                .setAtmosphereStats(101325., 0.02896968, 288.15, 1004.68506)
+                .setLowOrbitAltitude(300000).setRotationPeriod(1);
 
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
-                .setDimension(800);
+                .setDimension(800).setLowOrbitAltitude(100000).setRotationPeriod(27.321661);
         MOON.setRadius(0.2724);
 
         SUN_CUBEMAP = new Cubemap(

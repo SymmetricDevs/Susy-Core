@@ -6,8 +6,10 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockLifeSupport extends VariantBlock<BlockLifeSupport.Ability> {
+public class BlockLifeSupport extends VariantBlock<BlockLifeSupport.Ability>
+                              implements WeightedBlock<BlockLifeSupport.Ability> {
 
     public BlockLifeSupport() {
         super(net.minecraft.block.material.Material.IRON);
@@ -40,5 +42,12 @@ public class BlockLifeSupport extends VariantBlock<BlockLifeSupport.Ability> {
         public int getHarvestLevel(IBlockState iBlockState) {
             return harvest;
         }
+    }
+
+    @Override
+    public double getMass(BlockLifeSupport.Ability type) {
+        return switch (type) {
+            case OXYGEN_REGEN -> 1500;
+        };
     }
 }

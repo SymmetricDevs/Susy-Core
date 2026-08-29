@@ -37,8 +37,7 @@ public class BlockTurboPump extends VariantHorizontalRotatableBlock<BlockTurboPu
     public static HPPType getTypeFromBlockstate(IBlockState state) {
         for (HPPType value : HPPType.values()) {
             if (state.equals(SuSyBlocks.TURBOPUMP.getState(value, EnumFacing.NORTH)) || // this is so dumb but idk how
-                                                                                        // else to do it :(
-                    state.equals(SuSyBlocks.TURBOPUMP.getState(value, EnumFacing.SOUTH)) ||
+                    state.equals(SuSyBlocks.TURBOPUMP.getState(value, EnumFacing.SOUTH)) ||  // else to do it :(
                     state.equals(SuSyBlocks.TURBOPUMP.getState(value, EnumFacing.WEST)) ||
                     state.equals(SuSyBlocks.TURBOPUMP.getState(value, EnumFacing.EAST))) {
                 return value;
@@ -98,8 +97,8 @@ public class BlockTurboPump extends VariantHorizontalRotatableBlock<BlockTurboPu
     public double getMass(HPPType type) {
         return switch (type) {
             case LOW_SPEED -> 300;
-            case MEDIUM_SPEED -> 1000;
-            case HIGH_SPEED -> 3000;
+            case MEDIUM_SPEED -> 1100;
+            case HIGH_SPEED -> 3500;
         };
     }
 

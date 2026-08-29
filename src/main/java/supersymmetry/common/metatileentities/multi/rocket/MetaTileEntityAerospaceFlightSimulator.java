@@ -60,7 +60,6 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
@@ -149,7 +148,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         }
     };
 
-    private double gravity = SuSyValues.G0;
+    private double turnAltitude = 50;
     private AFSStats stats = AFSStats.none();
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
@@ -175,7 +174,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (data.hasKey("progress")) {
             this.progress = data.getLong("progress");
         }
-        this.gravity = data.getDouble("gravity");
+        this.turnAltitude = data.getDouble("turnAltitude");
         this.fuelList.clear();
         if (data.hasKey("fuelListSize")) {
             for (int i = 0; i < data.getInteger("fuelListSize"); i++) {
@@ -210,7 +209,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         tag.setBoolean("isWorkingEnabled", this.isWorkingEnabled);
         if (progress != 0)
             tag.setLong("progress", this.progress);
-        tag.setDouble("gravity", this.gravity);
+        tag.setDouble("turnAltitude", this.turnAltitude);
 
         tag.setInteger("fuelListSize", this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
@@ -235,7 +234,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         super.writeInitialSyncData(buf);
         buf.writeBoolean(this.isWorkingEnabled);
         buf.writeLong(this.progress);
-        buf.writeDouble(this.gravity);
+        buf.writeDouble(this.turnAltitude);
         buf.writeInt(this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (this.fuelList.get(i) == null) {
@@ -267,7 +266,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         super.receiveInitialSyncData(buf);
         this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readLong();
-        this.gravity = buf.readDouble();
+        this.turnAltitude = buf.readDouble();
 
         this.fuelList.clear();
         int size = buf.readInt();
@@ -626,7 +625,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (getOffsetTimer() % 20 == 0) {
             // the bench sizes designs for an Earth launch; gravity is the only thing the
             // operator gets to dial in so far
-            this.stats = this.getBlueprint().calculateInitialSuccess(gravity,
+            this.stats = this.getBlueprint().calculateInitialSuccess(turnAltitude,
                     CelestialObjects.EARTH.getSurfacePressure(), this.fuel, this.progress);
 
             sendComputationInfoToClient();
@@ -716,19 +715,20 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 this::isSolidBlueprint);
         // Gravity selector
         menuGroup.addWidget(
-                new LabelWidget(10, 80, this.getMetaName() + ".gui.gravity_selector_label", 0xffffff));
-        menuGroup.addWidget(new TextFieldWidget2(10, 88, 60, 12, () -> Double.valueOf(gravity).toString(), value -> {
-            if (!value.isEmpty()) {
-                try {
-                    gravity = Double.parseDouble(value);
-                    if (gravity <= 0) {
-                        gravity = SuSyValues.G0;
+                new LabelWidget(10, 80, this.getMetaName() + ".gui.turn_altitude_selector_label", 0xffffff));
+        menuGroup.addWidget(
+                new TextFieldWidget2(10, 88, 60, 12, () -> Double.valueOf(turnAltitude).toString(), value -> {
+                    if (!value.isEmpty()) {
+                        try {
+                            turnAltitude = Double.parseDouble(value);
+                            if (turnAltitude <= 0) {
+                                turnAltitude = 50;
+                            }
+                        } catch (NumberFormatException ignored) {
+                            turnAltitude = 50;
+                        }
                     }
-                } catch (NumberFormatException ignored) {
-                    gravity = SuSyValues.G0;
-                }
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
 
         menuGroup.addWidgetWithTest(new AdvancedTextWidget(9, 19, (l) -> {
             AbstractRocketBlueprint bp = this.getBlueprint();

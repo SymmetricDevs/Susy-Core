@@ -21,4 +21,5 @@ public class SuSyValues {
             new ResourceLocation(Supersymmetry.MODID, "lunar_rocket"), "inventory");
 
     public static final double G0 = 9.81;
+    public static final double GRAVITATIONAL_CONSTANT = 6.6743e-11;
 }

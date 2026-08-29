@@ -1,10 +1,15 @@
 package supersymmetry.common.rocketry.rockets;
 
+import static supersymmetry.SuSyValues.GRAVITATIONAL_CONSTANT;
+import static supersymmetry.api.rocketry.NozzleFlow.GAS_CONSTANT;
+import static supersymmetry.api.space.CelestialObjects.*;
 import static supersymmetry.common.rocketry.SuccessCalculation.ESCAPE_VELOCITY_CONSTANT;
 import static supersymmetry.common.rocketry.SuccessCalculation.augmentSuccess;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -220,9 +225,16 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= (1 - (0.5 * Math.exp(1 - thrustToWeightRatio)));
         double oblateness = this.getHeight() / this.getMaxRadius();
         success *= (1 - (0.2 * Math.exp(-oblateness)));
+
+        double deltaV = simulateRocketTakeoff(EARTH, fuel, gravity * 1000);
+        if (deltaV > 0) {
+            success = Math.clamp(Math.sqrt(deltaV / 100), 0, 1);
+        } else {
+            success = 0;
+        }
         success *= Math.pow(0.995, this.getComponentCount("engine"));
         double radialInstability = this.getTotalRadiusMismatch();
-        success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
+        // success *= (1 - (0.02 * radialInstability * Math.exp(radialInstability / 10)));
 
         success *= this.getGuidanceMultiplier();
         double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);
@@ -284,6 +296,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         double redundancyMult = Math.clamp(0.7 + this.getRedundancy() * 0.4, 0.7, 1.1);
         success *= redundancyMult;
+        success = Math.max(0, success);
         success = augmentSuccess(success, augmentation);
 
         if (Math.random() < success) {
@@ -294,6 +307,106 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
                     SuccessCalculation.LaunchResult.CRASHES;
         }
+    }
+
+    /**
+     * Simulates a ground-to-low-orbit flight of the given staged rocket on the given planet.
+     * Returns the delta-V budget available to the rocket once it has reached said orbit, or -1 if it can't.
+     */
+    public double simulateRocketTakeoff(Planetoid planet, RocketFuelEntry fuel, double turnAltitude) {
+        int time = 0; // seconds
+        LinkedHashMap<RocketStage, Double> activeStages = new LinkedHashMap<>(); // stage, remaining fuel mass
+        LinkedHashMap<RocketStage, Double> remainingStages = new LinkedHashMap<>();
+        for (RocketStage stage : this.stages) {
+            remainingStages.put(stage, stage.getFuelCapacity() * fuel.getDensity());
+        }
+
+        double speed = 0; // m/s, speed along gravity direction
+
+        double horizontalSpeed = 2 * Math.PI * planet.getRadius() * EARTH_RADIUS /
+                (planet.getRotationPeriod() * EARTH_SIDEREAL_ROTATION_PERIOD);
+        // speed perpendicular to gravity direction
+        // we'll be nice and assume the player is always launching from the equator
+        double altitude = 0; // m
+        double headingAngle = 0; // angle between -gravity and thrust vectors
+        double orbitalSpeed = Math.sqrt((GRAVITATIONAL_CONSTANT * planet.getMass() * EARTH_MASS) /
+                (planet.getRadius() * EARTH_RADIUS + planet.getLowOrbitAltitude())); // the minimum speed to remain in
+                                                                                     // orbit for this planet
+        while (!remainingStages.isEmpty() ||
+                (!activeStages.isEmpty() && activeStages.firstEntry().getKey().getComponentCount("engine") > 0)) { //
+            // ignite stages when previous ones have burned out
+            if (activeStages.isEmpty()) {
+                Map.Entry<RocketStage, Double> entry = remainingStages.pollFirstEntry();
+                activeStages.put(entry.getKey(), entry.getValue());
+            }
+            // I'm assuming all parallel-burning stages are going to be called "boosters" in the future
+            if (activeStages.size() == 1 && activeStages.firstEntry().getKey().name.equals("boosters")) {
+                Map.Entry<RocketStage, Double> entry = remainingStages.pollFirstEntry();
+                activeStages.put(entry.getKey(), entry.getValue());
+            }
+
+            double currentThrust = 0;
+            double gravitationalForce = 0;
+            double dragForce = 0;
+            double currentMass = 0;
+            List<Map.Entry<RocketStage, Double>> stagesToRemove = new ArrayList<>();
+            for (Map.Entry<RocketStage, Double> currentStage : activeStages.entrySet()) {
+                currentThrust += currentStage.getKey().getThrust(fuel, "engine",
+                        planet.getPressureFromAltitude(altitude));
+                currentStage.setValue(currentStage.getValue() - currentStage.getKey().getFuelThroughput("engine"));
+                currentMass += currentStage.getKey().getMass() + currentStage.getValue();
+                if (currentStage.getValue() <= 0) {
+                    stagesToRemove.add(currentStage);
+                }
+
+            }
+            for (Map.Entry<RocketStage, Double> stage : stagesToRemove) {
+                activeStages.remove(stage.getKey());
+            }
+
+            for (Map.Entry<RocketStage, Double> remainingStage : remainingStages.entrySet()) {
+                currentMass += remainingStage.getKey().getMass() + remainingStage.getValue();
+            }
+            gravitationalForce = GRAVITATIONAL_CONSTANT * (currentMass * planet.getMass() * EARTH_MASS) /
+                    (Math.pow((planet.getRadius() * EARTH_RADIUS + altitude), 2));
+            double atmosphereDensity = planet.getAtmosphereMolarMass() * planet.getPressureFromAltitude(altitude) /
+                    (GAS_CONSTANT * planet.getGroundTemperature()); // this ignores temperature change with altitude,
+                                                                    // but calculating that isn't easily possible :(
+
+            double dragCoeff = this.getMaxRadius() / this.getHeight() + this.getTotalRadiusMismatch() / 200.0;
+            // it's stupid but I'm not gonna implement actual aerodynamics
+
+            // https://en.wikipedia.org/wiki/Drag_equation
+            dragForce = 0.5 * atmosphereDensity * speed * speed * dragCoeff * this.getMaxRadius() *
+                    this.getMaxRadius() * Math.PI;
+            // this doesn't take into account stage separation, but after the first stage separates drag is already
+            // fairly miniscule
+            dragForce = (dragForce > 10000 ? dragForce : 0); // ignore drag if it's small
+            double vertThrust = currentThrust * Math.cos(headingAngle);
+            double horiThrust = currentThrust * Math.sin(headingAngle);
+            double accel = (vertThrust - gravitationalForce - dragForce) / currentMass;
+            double horiAccel = horiThrust / currentMass;
+            altitude += speed;
+            speed += accel;
+            horizontalSpeed += horiAccel;
+            headingAngle = Math.asin(
+                    horiThrust / Math.sqrt(horiThrust * horiThrust + Math.pow(vertThrust - gravitationalForce, 2)));
+            // Gravity turn maneuver (this should consume a little thrust but idc)
+            if (headingAngle == 0 && altitude > turnAltitude) {
+                headingAngle = Math.PI / 72.0; // 2.5 degrees
+            }
+            if (altitude < 0) {
+                altitude = 0;
+                speed = 0;
+            }
+            time++;
+        }
+        double finalSpeed = Math.sqrt(speed * speed + horizontalSpeed * horizontalSpeed);
+        // the altitude check is to prevent completely stupid things
+        if (finalSpeed > orbitalSpeed && altitude > 0.66 * planet.getLowOrbitAltitude()) {
+            return finalSpeed - orbitalSpeed;
+        }
+        return -1;
     }
 
     @Override
