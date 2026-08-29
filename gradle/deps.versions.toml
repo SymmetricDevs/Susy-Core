@@ -54,6 +54,7 @@ shetiphianCore = "2661618"
 multiStorage = "2710024"
 cd4017beLib = "3004631"
 dimStack = "2937031"
+visualOres = "0.2.8"
 
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
@@ -105,6 +106,7 @@ shetiphianCore = { module = "curse.maven:shetiphiancore-71738", version.ref = "s
 multiStorage = { module = "curse.maven:multistorage-244864", version.ref = "multiStorage" }
 cd4017beLib = { module = "curse.maven:cd4017be-library-229208", version.ref = "cd4017beLib" }
 dimStack = { module = "curse.maven:vertically-stacked-dimensions-310992", version.ref = "dimStack" }
+visualOres = { module = "maven.modrinth:visualores", version.ref = "visualOres" }
 theBeneath = { module = "curse.maven:the-beneath-254629", version.ref = "theBeneath" }
 realisticTerrainGenerationUnofficial = { module = "curse.maven:realistic-terrain-generation-unofficial-648514", version.ref = "realisticTerrainGenerationUnofficial" }
 worldEdit = { module = "curse.maven:worldedit-225608", version.ref = "worldEdit" }
