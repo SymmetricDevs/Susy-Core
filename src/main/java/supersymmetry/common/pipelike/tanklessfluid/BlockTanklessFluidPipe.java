@@ -1,20 +1,27 @@
 package supersymmetry.common.pipelike.tanklessfluid;
 
+import static gregtech.api.metatileentity.MetaTileEntity.FULL_CUBE_COLLISION;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,18 +29,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Preconditions;
 
+import codechicken.lib.raytracer.IndexedCuboid6;
 import dev.tianmi.sussypatches.api.core.mixin.extension.MaterialPipeExtension;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.toolitem.ToolClasses;
+import gregtech.api.items.toolitem.ToolHelper;
 import gregtech.api.pipenet.block.material.BlockMaterialPipe;
 import gregtech.api.pipenet.tile.IPipeTile;
 import gregtech.api.pipenet.tile.TileEntityPipeBase;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.client.renderer.pipe.PipeRenderer;
+import gregtech.common.pipelike.fluidpipe.tile.TileEntityFluidPipe;
 import lombok.val;
 import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -115,14 +126,15 @@ public class BlockTanklessFluidPipe
     public boolean canPipesConnect(IPipeTile<TanklessFluidPipeType, TanklessFluidPipeProperties> selfTile,
                                    EnumFacing side,
                                    IPipeTile<TanklessFluidPipeType, TanklessFluidPipeProperties> sideTile) {
-        return selfTile instanceof TileEntityTanklessFluidPipe && sideTile instanceof TileEntityTanklessFluidPipe;
+        return selfTile instanceof TileEntityTanklessFluidPipe &&
+                (sideTile instanceof TileEntityTanklessFluidPipe ||
+                        ((IPipeTile<?, ?>) sideTile) instanceof TileEntityFluidPipe);
     }
 
     @Override
     public boolean canPipeConnectToBlock(IPipeTile<TanklessFluidPipeType, TanklessFluidPipeProperties> selfTile,
                                          EnumFacing side, TileEntity tile) {
-        return tile != null &&
-                tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()) != null;
+        return tile != null && tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
     }
 
     @Override
@@ -132,6 +144,43 @@ public class BlockTanklessFluidPipe
         }
         val stack = player.getHeldItemMainhand();
         return stack != ItemStack.EMPTY && stack.getItem() instanceof ItemBlockTanklessFluidPipe;
+    }
+
+    @Override
+    protected List<IndexedCuboid6> getCollisionBox(IBlockAccess world, BlockPos pos, @Nullable Entity entityIn) {
+        val result = super.getCollisionBox(world, pos, entityIn);
+        if (result.isEmpty() || result.getFirst() == FULL_CUBE_COLLISION) return result;
+
+        val pipeTile = (TileEntityTanklessFluidPipe) getPipeTileEntity(world, pos);
+        int visualConnections = pipeTile.getVisualConnections();
+        int connections = pipeTile.getConnections();
+        float thickness = pipeType.getThickness();
+        for (val side : EnumFacing.VALUES) {
+            if ((visualConnections & 1 << side.getIndex()) > 0 && // Connected
+                    (connections & 1 << (12 + side.getIndex())) <= 0 && // No cover (dedupe)
+                    pipeTile.isFlangeVisible(side) // Flange visible
+            ) {
+                val flange = TanklessFluidPipeRenderer.getFlangeBox(side, thickness, false);
+                result.add(new IndexedCuboid6(new PipeConnectionData(side), flange));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public EnumActionResult onPipeToolUsed(World world, BlockPos pos, ItemStack stack, EnumFacing coverSide,
+                                           IPipeTile<TanklessFluidPipeType, TanklessFluidPipeProperties> pipeTile,
+                                           EntityPlayer entityPlayer, EnumHand hand) {
+        if (coverSide != null && pipeTile instanceof TileEntityTanklessFluidPipe tanklessPipe &&
+                ToolHelper.isTool(stack, ToolClasses.HARD_HAMMER)) {
+            if (!world.isRemote) {
+                tanklessPipe.toggleFlangeVisible(coverSide);
+                ToolHelper.playToolSound(stack, entityPlayer);
+            }
+            entityPlayer.swingArm(hand);
+            return EnumActionResult.SUCCESS;
+        }
+        return super.onPipeToolUsed(world, pos, stack, coverSide, pipeTile, entityPlayer, hand);
     }
 
     @Override

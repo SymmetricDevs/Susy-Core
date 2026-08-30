@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,6 @@ import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
@@ -51,40 +49,10 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityCompon
 
 public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
-    // Unfortunately, this class has to be cursed.
-    protected static Field lDist_f;
-    protected static Field rDist_f;
-    protected static Field bDist_f;
-    protected static Field fDist_f;
-    protected static Field hDist_f;
-    protected static Field energy_cont_f;
-    protected static Field receivers_f;
-
     public MetaTileEntityComponentScanner scanner;
 
     public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
-        try {
-            hDist_f = MetaTileEntityCleanroom.class.getDeclaredField("hDist");
-            if (hDist_f.isAccessible()) {
-                return;
-            }
-            hDist_f.setAccessible(true);
-            rDist_f = MetaTileEntityCleanroom.class.getDeclaredField("rDist");
-            rDist_f.setAccessible(true);
-            bDist_f = MetaTileEntityCleanroom.class.getDeclaredField("bDist");
-            bDist_f.setAccessible(true);
-            fDist_f = MetaTileEntityCleanroom.class.getDeclaredField("fDist");
-            fDist_f.setAccessible(true);
-            lDist_f = MetaTileEntityCleanroom.class.getDeclaredField("lDist");
-            lDist_f.setAccessible(true);
-            receivers_f = MetaTileEntityCleanroom.class.getDeclaredField("cleanroomReceivers");
-            receivers_f.setAccessible(true);
-            energy_cont_f = MetaTileEntityCleanroom.class.getDeclaredField("energyContainer");
-            energy_cont_f.setAccessible(true);
-        } catch (Exception e) { // this shouldn't happen UNLESS there is a bug
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -149,26 +117,19 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             invalidateStructure();
             return false;
         }
-        try {
-            lDist_f.setInt(this, lDist);
-            rDist_f.setInt(this, rDist);
-            bDist_f.setInt(this, bDist);
-            fDist_f.setInt(this, fDist);
-            hDist_f.setInt(this, hDist);
-        } catch (Exception e) {
-            invalidateStructure();
-            return false;
-        }
+
+        this.lDist = lDist;
+        this.rDist = rDist;
+        this.bDist = bDist;
+        this.fDist = fDist;
+        this.hDist = hDist;
+
         writeCustomData(GregtechDataCodes.UPDATE_STRUCTURE_SIZE, buf -> {
-            try {
-                buf.writeInt(lDist_f.getInt(this));
-                buf.writeInt(rDist_f.getInt(this));
-                buf.writeInt(bDist_f.getInt(this));
-                buf.writeInt(fDist_f.getInt(this));
-                buf.writeInt(hDist_f.getInt(this));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            buf.writeInt(this.lDist);
+            buf.writeInt(this.rDist);
+            buf.writeInt(this.bDist);
+            buf.writeInt(this.fDist);
+            buf.writeInt(this.hDist);
         });
         return true;
     }
@@ -208,171 +169,157 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         if (this.getWorld() != null) {
             this.updateStructureDimensions();
         }
-        try {
-            if (lDist_f.getInt(this) < MIN_RADIUS)
-                lDist_f.setInt(this, MIN_RADIUS);
-            if (rDist_f.getInt(this) < MIN_RADIUS)
-                rDist_f.setInt(this, MIN_RADIUS);
-            if (bDist_f.getInt(this) < MIN_RADIUS)
-                bDist_f.setInt(this, MIN_RADIUS);
-            if (fDist_f.getInt(this) < MIN_RADIUS)
-                fDist_f.setInt(this, MIN_RADIUS);
-            if (hDist_f.getInt(this) < MIN_RADIUS)
-                hDist_f.setInt(this, MIN_RADIUS);
-
-            if (this.frontFacing == EnumFacing.EAST || this.frontFacing == EnumFacing.WEST) {
-                int tmp = lDist_f.getInt(this);
-                lDist_f.setInt(this, rDist_f.getInt(this));
-                rDist_f.setInt(this, tmp);
-            }
-
-            StringBuilder borderBuilder = new StringBuilder();
-            StringBuilder floorBuilder = new StringBuilder();
-            StringBuilder wallBuilder = new StringBuilder();
-            StringBuilder insideBuilder = new StringBuilder();
-            StringBuilder roofBuilder = new StringBuilder();
-            StringBuilder controllerBuilder = new StringBuilder();
-
-            int i;
-            for (i = 0; i < lDist_f.getInt(this); ++i) {
-                borderBuilder.append("B"); // Aerospace gasket edges
-                if (i == 0) {
-                    floorBuilder.append("B"); // Aerospace gasket at floor edges
-                    wallBuilder.append("B"); // Aerospace gasket edge
-                    insideBuilder.append("W"); // Left wall (EAST/WEST facing)
-                    roofBuilder.append("B"); // Aerospace gasket edge
-                    controllerBuilder.append("B"); // Aerospace gasket edge
-                } else {
-                    floorBuilder.append("L"); // Vinyl composite flooring
-                    insideBuilder.append(" "); // Air
-                    wallBuilder.append("Y"); // Back/front wall (NORTH/SOUTH facing)
-                    roofBuilder.append("F"); // Ceiling tiles/filters
-                    controllerBuilder.append("F"); // Ceiling tiles/filters
-                }
-            }
-
-            borderBuilder.append("B"); // Aerospace gasket edge
-            floorBuilder.append("L"); // Aerospace gasket at floor edge
-            wallBuilder.append("Y"); // Back/front wall center (NORTH/SOUTH facing)
-            insideBuilder.append(" "); // Air
-            roofBuilder.append("F"); // Ceiling
-            controllerBuilder.append("S"); // Controller
-
-            for (i = 0; i < rDist_f.getInt(this); ++i) {
-                borderBuilder.append("B"); // Aerospace gasket edge
-                if (i == rDist_f.getInt(this) - 1) {
-                    floorBuilder.append("B"); // Aerospace gasket at floor edge
-                    wallBuilder.append("B"); // Aerospace gasket edge
-                    insideBuilder.append("W"); // Right wall (EAST/WEST facing)
-                    roofBuilder.append("B"); // Aerospace gasket edge
-                    controllerBuilder.append("B"); // Aerospace gasket edge
-                } else {
-                    floorBuilder.append("L"); // Vinyl composite flooring
-                    insideBuilder.append(" "); // Air
-                    wallBuilder.append("Y"); // Back/front wall (NORTH/SOUTH facing)
-                    roofBuilder.append("F"); // Ceiling tiles/filters
-                    controllerBuilder.append("F"); // Ceiling tiles/filters
-                }
-            }
-
-            String[] wall = new String[hDist_f.getInt(this) + 1];
-            Arrays.fill(wall, wallBuilder.toString());
-            wall[0] = borderBuilder.toString(); // The bottom row of the wall is an edge
-            wall[wall.length - 1] = borderBuilder.toString(); // Top edges
-            String[] slice = new String[hDist_f.getInt(this) + 1];
-            Arrays.fill(slice, insideBuilder.toString());
-            slice[0] = floorBuilder.toString(); // Floor with edges
-            slice[slice.length - 1] = roofBuilder.toString(); // Ceiling
-            String[] center = Arrays.copyOf(slice, slice.length);
-            if (this.frontFacing != EnumFacing.NORTH && this.frontFacing != EnumFacing.SOUTH) {
-                center[0] = floorBuilder.toString(); // Floor with edges
-                center[center.length - 1] = controllerBuilder.toString(); // Ceiling with controller
-            } else {
-                center[0] = floorBuilder.reverse().toString(); // Floor with edges (reversed)
-                center[center.length - 1] = controllerBuilder.reverse().toString(); // Ceiling with controller
-                                                                                    // (reversed)
-            }
-
-            // Count total ceiling positions for 5% calculation
-            int totalCeilingPositions = (bDist_f.getInt(this) + fDist_f.getInt(this) - 1) *
-                    (lDist_f.getInt(this) + rDist_f.getInt(this) - 1) - 1;
-            int minFilters = Math.max(1, (int) Math.ceil(totalCeilingPositions * 0.05));
-
-            TraceabilityPredicate basePredicate = this.autoAbilities()
-                    .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3));
-
-            // Glass wall predicate (no facing constraint)
-            TraceabilityPredicate glassPredicate = states(this.getGlassState());
-
-            // Polystyrene wall with NORTH/SOUTH facing (for left/right walls perpendicular
-            // to X-axis)
-            TraceabilityPredicate polystyreneNSPredicate = new TraceabilityPredicate((blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() != SuSyBlocks.METALLURGY_2)
-                    return false;
-                EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
-
-                return SuSyBlocks.METALLURGY_2.getState(state) ==
-                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                        (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH);
-            }));
-
-            // Polystyrene wall with EAST/WEST facing (for front/back walls perpendicular to
-            // Z-axis)
-            TraceabilityPredicate polystyreneEWPredicate = new TraceabilityPredicate((blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() != SuSyBlocks.METALLURGY_2)
-                    return false;
-                EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
-
-                return SuSyBlocks.METALLURGY_2.getState(state) ==
-                        BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
-                        (facing == EnumFacing.EAST || facing == EnumFacing.WEST);
-            }));
-
-            // Scanner predicate to catch both sides
-            TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1)
-                    .setMinGlobalLimited(1);
-
-            return FactoryBlockPattern.start().aisle(wall).aisle(slice).setRepeatable(bDist_f.getInt(this) - 1)
-                    .aisle(center).aisle(slice).setRepeatable(fDist_f.getInt(this) - 1).aisle(wall)
-                    .where('S', this.selfPredicate())
-                    .where('B',
-                            states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                    .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
-                                    .or(basePredicate))
-                    .where('L',
-                            states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                    .getState(BlockRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
-                    .where('W',
-                            glassPredicate.or(polystyreneEWPredicate).or(basePredicate)
-                                    .or(doorPredicate().setMaxGlobalLimited(8)).or(scannerPredicate)
-                                    .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
-                    .where('Y',
-                            glassPredicate.or(polystyreneNSPredicate).or(basePredicate)
-                                    .or(doorPredicate().setMaxGlobalLimited(8)).or(scannerPredicate)
-                                    .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
-                    .where('F',
-                            states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                    .getState(BlockRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
-                                    .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
-                                            .getState(
-                                                    BlockRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
-                                            .setMinGlobalLimited(minFilters)))
-                    .where(' ', this.innerPredicate()).build();
-        } catch (Exception e) {
-            return null;
+        this.lDist = Math.max(lDist, MIN_RADIUS);
+        this.rDist = Math.max(rDist, MIN_RADIUS);
+        this.bDist = Math.max(bDist, MIN_RADIUS);
+        this.fDist = Math.max(fDist, MIN_RADIUS);
+        this.hDist = Math.max(hDist, MIN_RADIUS);
+        if (this.frontFacing == EnumFacing.EAST || this.frontFacing == EnumFacing.WEST) {
+            int tmp = lDist;
+            this.lDist = rDist;
+            this.rDist = tmp;
         }
+
+        StringBuilder borderBuilder = new StringBuilder();
+        StringBuilder floorBuilder = new StringBuilder();
+        StringBuilder wallBuilder = new StringBuilder();
+        StringBuilder insideBuilder = new StringBuilder();
+        StringBuilder roofBuilder = new StringBuilder();
+        StringBuilder controllerBuilder = new StringBuilder();
+
+        int i;
+        for (i = 0; i < lDist; ++i) {
+            borderBuilder.append("B"); // Aerospace gasket edges
+            if (i == 0) {
+                floorBuilder.append("B"); // Aerospace gasket at floor edges
+                wallBuilder.append("B"); // Aerospace gasket edge
+                insideBuilder.append("W"); // Left wall (EAST/WEST facing)
+                roofBuilder.append("B"); // Aerospace gasket edge
+                controllerBuilder.append("B"); // Aerospace gasket edge
+            } else {
+                floorBuilder.append("L"); // Vinyl composite flooring
+                insideBuilder.append(" "); // Air
+                wallBuilder.append("Y"); // Back/front wall (NORTH/SOUTH facing)
+                roofBuilder.append("F"); // Ceiling tiles/filters
+                controllerBuilder.append("F"); // Ceiling tiles/filters
+            }
+        }
+
+        borderBuilder.append("B"); // Aerospace gasket edge
+        floorBuilder.append("L"); // Aerospace gasket at floor edge
+        wallBuilder.append("Y"); // Back/front wall center (NORTH/SOUTH facing)
+        insideBuilder.append(" "); // Air
+        roofBuilder.append("F"); // Ceiling
+        controllerBuilder.append("S"); // Controller
+
+        for (i = 0; i < rDist; ++i) {
+            borderBuilder.append("B"); // Aerospace gasket edge
+            if (i == rDist - 1) {
+                floorBuilder.append("B"); // Aerospace gasket at floor edge
+                wallBuilder.append("B"); // Aerospace gasket edge
+                insideBuilder.append("W"); // Right wall (EAST/WEST facing)
+                roofBuilder.append("B"); // Aerospace gasket edge
+                controllerBuilder.append("B"); // Aerospace gasket edge
+            } else {
+                floorBuilder.append("L"); // Vinyl composite flooring
+                insideBuilder.append(" "); // Air
+                wallBuilder.append("Y"); // Back/front wall (NORTH/SOUTH facing)
+                roofBuilder.append("F"); // Ceiling tiles/filters
+                controllerBuilder.append("F"); // Ceiling tiles/filters
+            }
+        }
+
+        String[] wall = new String[hDist + 1];
+        Arrays.fill(wall, wallBuilder.toString());
+        wall[0] = borderBuilder.toString(); // The bottom row of the wall is an edge
+        wall[wall.length - 1] = borderBuilder.toString(); // Top edges
+        String[] slice = new String[hDist + 1];
+        Arrays.fill(slice, insideBuilder.toString());
+        slice[0] = floorBuilder.toString(); // Floor with edges
+        slice[slice.length - 1] = roofBuilder.toString(); // Ceiling
+        String[] center = Arrays.copyOf(slice, slice.length);
+        if (this.frontFacing != EnumFacing.NORTH && this.frontFacing != EnumFacing.SOUTH) {
+            center[0] = floorBuilder.toString(); // Floor with edges
+            center[center.length - 1] = controllerBuilder.toString(); // Ceiling with controller
+        } else {
+            center[0] = floorBuilder.reverse().toString(); // Floor with edges (reversed)
+            center[center.length - 1] = controllerBuilder.reverse().toString(); // Ceiling with controller
+            // (reversed)
+        }
+
+        // Count total ceiling positions for 5% calculation
+        int totalCeilingPositions = (bDist + fDist - 1) *
+                (lDist + rDist - 1) - 1;
+        int minFilters = Math.max(1, (int) Math.ceil(totalCeilingPositions * 0.05));
+
+        TraceabilityPredicate basePredicate = this.autoAbilities()
+                .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(3));
+
+        // Glass wall predicate (no facing constraint)
+        TraceabilityPredicate glassPredicate = states(this.getGlassState());
+
+        // Polystyrene wall with NORTH/SOUTH facing (for left/right walls perpendicular
+        // to X-axis)
+        TraceabilityPredicate polystyreneNSPredicate = new TraceabilityPredicate((blockWorldState -> {
+            IBlockState state = blockWorldState.getBlockState();
+            if (state.getBlock() != SuSyBlocks.METALLURGY_2)
+                return false;
+            EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
+
+            return SuSyBlocks.METALLURGY_2.getState(state) ==
+                    BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
+                    (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH);
+        }));
+
+        // Polystyrene wall with EAST/WEST facing (for front/back walls perpendicular to
+        // Z-axis)
+        TraceabilityPredicate polystyreneEWPredicate = new TraceabilityPredicate((blockWorldState -> {
+            IBlockState state = blockWorldState.getBlockState();
+            if (state.getBlock() != SuSyBlocks.METALLURGY_2)
+                return false;
+            EnumFacing facing = state.getValue(VariantHorizontalRotatableBlock.FACING);
+
+            return SuSyBlocks.METALLURGY_2.getState(state) ==
+                    BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL &&
+                    (facing == EnumFacing.EAST || facing == EnumFacing.WEST);
+        }));
+
+        // Scanner predicate to catch both sides
+        TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1)
+                .setMinGlobalLimited(1);
+
+        return FactoryBlockPattern.start().aisle(wall).aisle(slice).setRepeatable(bDist - 1)
+                .aisle(center).aisle(slice).setRepeatable(fDist - 1).aisle(wall)
+                .where('S', this.selfPredicate())
+                .where('B',
+                        states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET))
+                                .or(basePredicate))
+                .where('L',
+                        states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockRocketMultiblockCasing.CasingType.VINYL_COMPOSITE_FLOORING)))
+                .where('W',
+                        glassPredicate.or(polystyreneEWPredicate).or(basePredicate)
+                                .or(doorPredicate().setMaxGlobalLimited(8)).or(scannerPredicate)
+                                .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
+                .where('Y',
+                        glassPredicate.or(polystyreneNSPredicate).or(basePredicate)
+                                .or(doorPredicate().setMaxGlobalLimited(8)).or(scannerPredicate)
+                                .or(abilities(MultiblockAbility.PASSTHROUGH_HATCH).setMaxGlobalLimited(30)))
+                .where('F',
+                        states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                .getState(BlockRocketMultiblockCasing.CasingType.VINYL_CEILING_TILE))
+                                .or(states(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                                        .getState(
+                                                BlockRocketMultiblockCasing.CasingType.CEILING_GRID_FILTER_UNIT))
+                                        .setMinGlobalLimited(minFilters)))
+                .where(' ', this.innerPredicate()).build();
     }
 
     @Override
     public int getEnergyTier() {
-        try {
-            return this.energy_cont_f.get(this) == null ? 1 : Math.max(4, GTUtility
-                    .getFloorTierByVoltage(((IEnergyContainer) energy_cont_f.get(this)).getInputVoltage()));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        return this.energyContainer == null ? 1 :
+                Math.max(4, GTUtility.getFloorTierByVoltage(this.energyContainer.getInputVoltage()));
     }
 
     protected TraceabilityPredicate scannerPredicate() {
@@ -381,18 +328,13 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
             TileEntity tile = blockWorldState.getTileEntity();
             if (tile instanceof MetaTileEntityHolder) {
                 MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tile).getMetaTileEntity();
-                if (metaTileEntity instanceof MetaTileEntityComponentScanner scanner) {
-                    ICleanroomReceiver cleanroomReceiver = scanner;
+                if (metaTileEntity instanceof MetaTileEntityComponentScanner thisScanner) {
                     Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext().getOrCreate("MultiblockParts",
                             HashSet::new);
                     partsFound.add((IMultiblockPart) metaTileEntity);
-                    if (cleanroomReceiver.getCleanroom() != this) {
-                        cleanroomReceiver.setCleanroom(this);
-                        try {
-                            ((Collection<ICleanroomReceiver>) receivers_f.get(this)).add(cleanroomReceiver);
-                        } catch (Exception e) {
-                            return false;
-                        }
+                    if (thisScanner.getCleanroom() != this) {
+                        thisScanner.setCleanroom(this);
+                        this.cleanroomReceivers.add(thisScanner);
                     }
                     return true;
                 }
@@ -402,12 +344,12 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     }
 
     public List<MultiblockShapeInfo> getMatchingShapes() {
-        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList();
+        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
         MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle(new String[] { "BBBBB", "BILOB", "BEHDB", "BYCYB", "BBBBB" })
-                .aisle(new String[] { "BJJJB", "W   X", "W   X", "W   X", "BFGFB" })
-                .aisle(new String[] { "BJJJB", "W   X", "W   X", "W   X", "BGSGB" })
-                .aisle(new String[] { "BJJJB", "W   X", "W   X", "W   X", "BFGFB" })
+                .aisle("BBBBB", "BILOB", "BEHDB", "BYCYB", "BBBBB")
+                .aisle("BJJJB", "W   X", "W   X", "W   X", "BFGFB")
+                .aisle("BJJJB", "W   X", "W   X", "W   X", "BGSGB")
+                .aisle("BJJJB", "W   X", "W   X", "W   X", "BFGFB")
                 .aisle(new String[] { "BBMBB", "BZPZB", "BZRZB", "BZZZB", "BBBBB" })
                 // Edges/borders
                 .where('B',
@@ -485,18 +427,14 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         EnumFacing left = front.rotateYCCW();
         EnumFacing right = left.getOpposite();
         Vec3i down = new Vec3i(0, -1, 0);
-        try {
-            BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist_f.getInt(this) - 1))
-                    .add(multiply(left.getDirectionVec(), lDist_f.getInt(this) - 1))
-                    .add(multiply(down, hDist_f.getInt(this) - 1));
-            BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist_f.getInt(this) - 1))
-                    .add(multiply(right.getDirectionVec(), rDist_f.getInt(this) - 1));
-            AxisAlignedBB nearRet = new AxisAlignedBB(frontleftdown, backrightup);
-            return new AxisAlignedBB(nearRet.minX, nearRet.minY, nearRet.minZ, nearRet.maxX + 1, nearRet.maxY,
-                    nearRet.maxZ + 1); // here to be consistent with block analysis
-        } catch (Exception e) {
-            return null;
-        }
+        BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist - 1))
+                .add(multiply(left.getDirectionVec(), lDist - 1))
+                .add(multiply(down, hDist - 1));
+        BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist - 1))
+                .add(multiply(right.getDirectionVec(), rDist - 1));
+        AxisAlignedBB nearRet = new AxisAlignedBB(frontleftdown, backrightup);
+        return new AxisAlignedBB(nearRet.minX, nearRet.minY, nearRet.minZ, nearRet.maxX + 1, nearRet.maxY,
+                nearRet.maxZ + 1); // here to be consistent with block analysis
     }
 
     @Override
@@ -512,11 +450,7 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
     }
 
     public IEnergyContainer getEnergyContainer() {
-        try {
-            return (IEnergyContainer) energy_cont_f.get(this);
-        } catch (IllegalAccessException e) {
-            return null;
-        }
+        return this.energyContainer;
     }
 
     @Override

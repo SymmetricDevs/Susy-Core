@@ -648,7 +648,7 @@ susy.machine.distiller.bronze.tooltip=Extracting most relevant Parts of Fluids
 susy.machine.distiller.steel.tooltip=Extracting most relevant Parts of Fluids
 
 # Latex Collector
-susy.machine.latex_collector=Latex Collector
+susy.machine.latex_collector.jei.group=Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
 susy.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
 susy.machine.latex_collector.bronze.name=Steam Latex Collector
@@ -659,7 +659,7 @@ susy.machine.latex_collector.hv.name=Advanced Latex Collector II
 susy.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-susy.machine.vulcanizing_press=Vulcanizing Press
+susy.machine.vulcanizing_press.jei.group=Vulcanizing Press
 susy.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
 susy.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
 susy.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
@@ -672,7 +672,7 @@ susy.machine.mixer.bronze.name=Steam Mixer
 susy.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
-susy.machine.roaster=Roaster
+susy.machine.roaster.jei.group=Roaster
 susy.machine.roaster.bronze.name=Steam Roaster
 susy.machine.roaster.steel.name=High Pressure Steam Roaster
 susy.machine.roaster.lv.name=Basic Roaster
@@ -690,7 +690,7 @@ susy.machine.roaster.uxv.name=Epic Roaster IV
 susy.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
-susy.machine.vacuum_chamber=Vacuum Chamber
+susy.machine.vacuum_chamber.jei.group=Vacuum Chamber
 susy.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
 susy.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
 susy.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
@@ -708,7 +708,7 @@ susy.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
 susy.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
 # CSTR
-susy.machine.continuous_stirred_tank_reactor=Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.jei.group=Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
@@ -724,7 +724,7 @@ susy.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Ta
 susy.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
 
 # Fixed Bed Reactor
-susy.machine.fixed_bed_reactor=Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.jei.group=Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
@@ -740,7 +740,7 @@ susy.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
 susy.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
 
 # Trickle Bed Reactor
-susy.machine.trickle_bed_reactor=Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.jei.group=Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
@@ -756,7 +756,7 @@ susy.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
 susy.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
 # Bubble Column Reactor
-susy.machine.bubble_column_reactor=Bubble Column Reactor
+susy.machine.bubble_column_reactor.jei.group=Bubble Column Reactor
 susy.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
 susy.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
 susy.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
@@ -774,7 +774,7 @@ susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 # Batch Reactor
 susy.machine.batch_reactor.bronze.name=Steam Batch Reactor
 susy.machine.batch_reactor.steel.name=High Pressure Steam Batch Reactor
-susy.machine.batch_reactor=Batch Reactor
+susy.machine.batch_reactor.jei.group=Batch Reactor
 susy.machine.batch_reactor.lv.name=Basic Batch Reactor
 susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
 susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
@@ -790,7 +790,7 @@ susy.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
 susy.machine.batch_reactor.opv.name=Legendary Batch Reactor
 
 # Crystallizer
-susy.machine.crystallizer=Crystallizer
+susy.machine.crystallizer.jei.group=Crystallizer
 susy.machine.crystallizer.lv.name=Basic Crystallizer
 susy.machine.crystallizer.mv.name=Advanced Crystallizer
 susy.machine.crystallizer.hv.name=Advanced Crystallizer II
@@ -806,7 +806,7 @@ susy.machine.crystallizer.uxv.name=Epic Crystallizer IV
 susy.machine.crystallizer.opv.name=Legendary Crystallizer
 
 # Dryer
-susy.machine.dryer=Dryer
+susy.machine.dryer.jei.group=Dryer
 susy.machine.dryer.lv.name=Basic Dryer
 susy.machine.dryer.mv.name=Advanced Dryer
 susy.machine.dryer.hv.name=Advanced Dryer II
@@ -822,7 +822,7 @@ susy.machine.dryer.uxv.name=Epic Dryer IV
 susy.machine.dryer.opv.name=Legendary Dryer
 
 # Ion Exchange Column
-susy.machine.ion_exchange_column=Ion Exchange Column
+susy.machine.ion_exchange_column.jei.group=Ion Exchange Column
 susy.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
 susy.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
 susy.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
@@ -838,7 +838,7 @@ susy.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
 susy.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
 
 # Zone Refiner
-susy.machine.zone_refiner=Zone Refiner
+susy.machine.zone_refiner.jei.group=Zone Refiner
 susy.machine.zone_refiner.lv.name=Basic Zone Refiner
 susy.machine.zone_refiner.mv.name=Advanced Zone Refiner
 susy.machine.zone_refiner.hv.name=Advanced Zone Refiner II
@@ -854,7 +854,7 @@ susy.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
 susy.machine.zone_refiner.opv.name=Legendary Zone Refiner
 
 # Tube Furnace
-susy.machine.tube_furnace=Tube Furnace
+susy.machine.tube_furnace.jei.group=Tube Furnace
 susy.machine.tube_furnace.lv.name=Basic Tube Furnace
 susy.machine.tube_furnace.mv.name=Advanced Tube Furnace
 susy.machine.tube_furnace.hv.name=Advanced Tube Furnace II
@@ -870,7 +870,7 @@ susy.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
 susy.machine.tube_furnace.opv.name=Legendary Tube Furnace
 
 # UV Light Box
-susy.machine.uv_light_box=UV Light Box
+susy.machine.uv_light_box.jei.group=UV Light Box
 susy.machine.uv_light_box.lv.name=Basic UV Light Box
 susy.machine.uv_light_box.mv.name=Advanced UV Light Box
 susy.machine.uv_light_box.hv.name=Advanced UV Light Box II
@@ -886,7 +886,7 @@ susy.machine.uv_light_box.uxv.name=Epic UV Light Box IV
 susy.machine.uv_light_box.opv.name=Legendary UV Light Box
 
 # CVD
-susy.machine.cvd=CVD Unit
+susy.machine.cvd.jei.group=CVD Unit
 susy.machine.cvd.lv.name=Basic CVD Unit
 susy.machine.cvd.mv.name=Advanced CVD Unit
 susy.machine.cvd.hv.name=Advanced CVD Unit II
@@ -902,7 +902,7 @@ susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
 # ALD
-susy.machine.ald=ALD Unit
+susy.machine.ald.jei.group=ALD Unit
 susy.machine.ald.lv.name=Basic ALD Unit
 susy.machine.ald.mv.name=Advanced ALD Unit
 susy.machine.ald.hv.name=Advanced ALD Unit II
@@ -918,7 +918,7 @@ susy.machine.ald.uxv.name=Epic ALD Unit IV
 susy.machine.ald.opv.name=Legendary ALD Unit
 
 # Ion Implanter
-susy.machine.ion_implanter=Ion Implanter
+susy.machine.ion_implanter.jei.group=Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
 susy.machine.ion_implanter.hv.name=Advanced Ion Implanter II
@@ -934,14 +934,14 @@ susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
 # Screen Printer
-susy.machine.screen_printer=Screen Printer
+susy.machine.screen_printer.jei.group=Screen Printer
 susy.machine.screen_printer.lv.name=Basic Screen Printer
 susy.machine.screen_printer.mv.name=Advanced Screen Printer
 susy.machine.screen_printer.hv.name=Advanced Screen Printer II
 susy.machine.screen_printer.ev.name=Advanced Screen Printer III
 
 # Fluid Compressor
-susy.machine.fluid_compressor=Fluid Compressor
+susy.machine.fluid_compressor.jei.group=Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
 susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
 susy.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
@@ -957,7 +957,7 @@ susy.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
 susy.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
 
 # Fluid Decompressor
-susy.machine.fluid_decompressor=Fluid Decompressor
+susy.machine.fluid_decompressor.jei.group=Fluid Decompressor
 susy.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
 susy.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
 susy.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
@@ -973,7 +973,7 @@ susy.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
 susy.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
 
 # Weapons Factory
-susy.machine.weapons_factory=Weapons Factory
+susy.machine.weapons_factory.jei.group=Weapons Factory
 susy.machine.weapons_factory.lv.name=Basic Weapons Factory
 susy.machine.weapons_factory.mv.name=Advanced Weapons Factory
 susy.machine.weapons_factory.hv.name=Advanced Weapons Factory II
@@ -992,7 +992,7 @@ susy.machine.weapons_factory.opv.name=Legendary Weapons Factory
 susy.machine.phase_separator.name=Phase Separator
 
 # RTG
-susy.machine.rtg=RTG
+susy.machine.rtg.jei.group=RTG
 susy.machine.rtg.lv.name=Basic RTG
 susy.machine.rtg.mv.name=Advanced RTG
 susy.machine.rtg.tooltip.info=Power for your pacemaker.
@@ -1000,7 +1000,7 @@ susy.machine.rtg.tooltip.description=Generates a small but steady amount of elec
 susy.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
-susy.machine.electrostatic_separator=Electrostatic Separator
+susy.machine.electrostatic_separator.jei.group=Electrostatic Separator
 susy.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 susy.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
 susy.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
@@ -1016,7 +1016,7 @@ susy.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
 susy.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
 # Textile Spinner
-susy.machine.textile_spinner=Textile Spinner
+susy.machine.textile_spinner.jei.group=Textile Spinner
 susy.machine.textile_spinner.lv.name=Basic Textile Spinner
 susy.machine.textile_spinner.mv.name=Advanced Textile Spinner
 susy.machine.textile_spinner.hv.name=Advanced Textile Spinner II
@@ -1032,7 +1032,7 @@ susy.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 susy.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
 # Polishing Machine
-susy.machine.polishing_machine=Polishing Machine
+susy.machine.polishing_machine.jei.group=Polishing Machine
 susy.machine.polishing_machine.lv.name=Basic Polishing Machine
 susy.machine.polishing_machine.mv.name=Advanced Polishing Machine
 susy.machine.polishing_machine.hv.name=Advanced Polishing Machine II
@@ -1048,7 +1048,7 @@ susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 # Resistance Furnace
-susy.machine.resistance_furnace=Resistance Furnace
+susy.machine.resistance_furnace.jei.group=Resistance Furnace
 susy.machine.resistance_furnace.lv.name=Basic Resistance Furnace
 susy.machine.resistance_furnace.mv.name=Advanced Resistance Furnace
 susy.machine.resistance_furnace.hv.name=Advanced Resistance Furnace II
@@ -1072,7 +1072,7 @@ recipemap.greenhouse_plant.name=Greenhouse
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
-susy.machine.incinerator=Incinerator
+susy.machine.incinerator.jei.group=Incinerator
 susy.machine.incinerator.lv.name=Basic Incinerator
 susy.machine.incinerator.mv.name=Advanced Incinerator
 susy.machine.incinerator.hv.name=Advanced Incinerator II
@@ -1117,7 +1117,7 @@ susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
 
-susy.machine.combustion_generator=Combustion Generator
+susy.machine.combustion_generator.jei.group=Combustion Generator
 susy.machine.combustion_generator.lv.name=Basic Combustion Generator
 susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
 susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
@@ -1136,7 +1136,7 @@ susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
 
 # Sputtering Machine
-susy.machine.sputter_deposition=Sputtering Machine
+susy.machine.sputter_deposition.jei.group=Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
 susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
 susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
@@ -1152,7 +1152,7 @@ susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
 # Evaporation Deposition Machine
-susy.machine.evaporation_deposition=Evaporation Deposition Machine
+susy.machine.evaporation_deposition.jei.group=Evaporation Deposition Machine
 susy.machine.evaporation_deposition.lv.name=Basic Evaporation Deposition Machine
 susy.machine.evaporation_deposition.mv.name=Advanced Evaporation Deposition Machine
 susy.machine.evaporation_deposition.hv.name=Advanced Evaporation Deposition Machine II
@@ -1319,7 +1319,7 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-susy.machine.dumping_hatch=Dumping Hatch
+susy.machine.dumping_hatch.jei.group=Dumping Hatch
 susy.machine.dumping_hatch.lv.name=Dumping Hatch
 
 # Distillation tower explanations
@@ -2024,15 +2024,16 @@ tile.wire_coil.nichrome.name=Kanthal Coil Block
 
 # Tankless Fluid Pipes
 susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
-item.material.oreprefix.pipeTinyTanklessFluid=%s Tiny Direct Fluid Pipe
-item.material.oreprefix.pipeSmallTanklessFluid=%s Small Direct Fluid Pipe
+item.material.oreprefix.pipeTinyTanklessFluid=Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallTanklessFluid=Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalTanklessFluid=%s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeTanklessFluid=%s Large Direct Fluid Pipe
-item.material.oreprefix.pipeHugeTanklessFluid=%s Huge Direct Fluid Pipe
-item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Tiny Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Small Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeTanklessFluid=Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeTanklessFluid=Huge %s Direct Fluid Pipe
+item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Restrictive Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Restrictive Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Large Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Huge Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Restrictive Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Restrictive Huge %s Direct Fluid Pipe
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
-susy.tankless_fluid_pipe.resistance=§9Resistance: §f%,d
+susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
+susy.tool_action.hammer.toggle_flange=§8Use Hammer to toggle flanges

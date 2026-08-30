@@ -26,7 +26,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "appliedenergistics2",
             "universalmodcore",
             "dimstack",
-            "visualores"
+            "visualores",
+            "gcym"
     );
 
     @Override
