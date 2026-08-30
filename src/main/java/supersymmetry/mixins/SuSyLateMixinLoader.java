@@ -12,11 +12,9 @@ import zone.rong.mixinbooter.ILateMixinLoader;
 @SuppressWarnings("unused")
 public class SuSyLateMixinLoader implements ILateMixinLoader {
 
-    public static final List<String> modMixins = ImmutableList.of("bdsandm", "gregtech", "xnet",
-            "travelersbackpack",
+    public static final List<String> modMixins = ImmutableList.of("bdsandm", "gregtech", "xnet", "travelersbackpack",
             "reccomplex", "fluidlogged_api", "littletiles", "celeritas", "projectred-core", "icbmclassic",
-            "appliedenergistics2", "universalmodcore",
-            "dimstack");
+            "appliedenergistics2", "universalmodcore", "gcym", "dimstack");
 
     @Override
     public List<String> getMixinConfigs() {

@@ -28,6 +28,14 @@ dependencies {
         rfg.deobf("${it.module.group}:${it.module.name}:${it.versionConstraint.requiredVersion}")
     }
 
+    constraints {
+        implementation(deps.gregtech) {
+            accessTransformers.configure(this) {
+                config = project.file("src/main/resources/susy_at.cfg") // TODO)) simplify the process in future buildscript updates
+            }
+        }
+    }
+
     // Lombok
     compileOnly(deps.lombok)
     annotationProcessor(deps.lombok)
