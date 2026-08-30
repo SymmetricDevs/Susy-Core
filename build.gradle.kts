@@ -133,6 +133,8 @@ dependencies {
     implementation(deps.icbm.deobf())
 
     // # Optional dependencies. Uncomment the ones you need
+//    runtimeOnly(deps.cd4017beLib.deobf())
+//    runtimeOnly(deps.dimStack.deobf())
 //    runtimeOnly(deps.theBeneath.deobf())
 //    runtimeOnly(deps.realisticTerrainGenerationUnofficial.deobf())
 //    runtimeOnly(deps.worldEdit.deobf())
