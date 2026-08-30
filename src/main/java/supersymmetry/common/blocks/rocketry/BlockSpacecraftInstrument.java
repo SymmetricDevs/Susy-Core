@@ -24,6 +24,7 @@ import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
+import supersymmetry.common.rocketry.instruments.InstrumentLanderOneWay;
 import supersymmetry.common.rocketry.instruments.InstrumentRobotArm;
 
 public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstrument.Type>
@@ -50,6 +51,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case BATTERY -> 100;
             case ARM -> 400;
             case LANDER -> 15200; // Apollo lander mass from wikipedia
+            case LANDER_ONE_WAY -> 7600; // Apollo lander mass from wikipedia
             case NUCLEAR_REACTOR -> 1500;
             case CHEMICAL_THRUSTER -> 300;
             case FUEL_CELL -> 120; // Apollo fuel cell was 111, rounded up
@@ -89,6 +91,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case SENSOR_ARRAY -> 250;
             case ARM -> 1000;
             case LANDER -> 1500;
+            case LANDER_ONE_WAY -> 1000;
             default -> 0;
         }; // life support is 1500, guidance is 250
     }
@@ -126,7 +129,8 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         NUCLEAR_REACTOR("nuclear_reactor", 4), // https://en.wikipedia.org/wiki/Kilopower
         CHEMICAL_THRUSTER("chemical_thruster", 4),
         FUEL_CELL("fuel_cell", 4),
-        EARTH_LANDING_SYSTEM("earth_landing_system", 4);
+        EARTH_LANDING_SYSTEM("earth_landing_system", 4),
+        LANDER_ONE_WAY("lander_one_way", 4, new InstrumentLanderOneWay());
 
         public String name;
         public int h;

@@ -79,6 +79,12 @@ public class RocketConfiguration {
         return tag;
     }
 
+    public void truncate() {
+        MissionConfiguration config = this.popFront();
+        this.missions.clear();
+        this.missions.add(config);
+    }
+
     public boolean setBudget(int startingDim, int budget) {
         // To go between two bodies within the same planetary system requires a budget
         // of 1
@@ -116,6 +122,11 @@ public class RocketConfiguration {
     public MissionConfiguration popFront() {
         return this.missions.remove(0);
     }
+
+    public MissionConfiguration peek() {
+        return this.missions.get(0);
+    }
+
 
     public boolean isEmpty() {
         return this.missions.isEmpty();

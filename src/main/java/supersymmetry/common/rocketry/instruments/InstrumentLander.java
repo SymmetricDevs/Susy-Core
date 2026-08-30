@@ -2,8 +2,6 @@ package supersymmetry.common.rocketry.instruments;
 
 import net.minecraft.entity.Entity;
 
-import org.jetbrains.annotations.Nullable;
-
 import supersymmetry.api.rocketry.components.Instrument;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.entities.EntityAbstractRocket;
@@ -15,11 +13,11 @@ import supersymmetry.common.rocketry.RocketConfiguration;
 public class InstrumentLander implements Instrument {
 
     public void act(int count, EntityAbstractRocket rocket) {
-        RocketConfiguration.MissionConfiguration next = getMissionConfiguration(rocket);
-        if (next == null)
+        RocketConfiguration config = getMissionConfiguration(rocket);
+        if (config.isEmpty())
             return;
         if (rocket.getPassengers().isEmpty()) {
-            spawnLander(rocket, next, true);
+            spawnLander(rocket, config, true);
             return;
         }
 
@@ -32,25 +30,23 @@ public class InstrumentLander implements Instrument {
                 break;
 
             EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, next, i == 0), passenger));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, i == 0), passenger));
         }
     }
 
-    public static RocketConfiguration.@Nullable MissionConfiguration getMissionConfiguration(
-                                                                                             EntityAbstractRocket rocket) {
+    public static RocketConfiguration getMissionConfiguration(
+                                                              EntityAbstractRocket rocket) {
         RocketConfiguration config = rocket.getRocketConfiguration();
-        if (config.isEmpty()) {
-            return null;
-        }
         RocketConfiguration.MissionConfiguration next = config.popFront();
         while (!config.isEmpty() && next.destinationType != RocketConfiguration.DestinationType.Landing) {
             next = config.popFront();
         }
-        return next;
+        return config;
     }
 
-    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration.MissionConfiguration next,
+    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config,
                                      boolean withCargo) {
+        RocketConfiguration.MissionConfiguration next = config.popFront();
         EntityLander dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
 
         // Use the config with a popped mission
@@ -60,7 +56,7 @@ public class InstrumentLander implements Instrument {
         if (withCargo && teleported instanceof EntityLander lander) {
             lander.setInventory(rocket.getInventory());
         }
-        teleported.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, next.serialize());
+        teleported.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize()); // Rest
         return teleported;
     }
 }

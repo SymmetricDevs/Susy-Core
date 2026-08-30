@@ -59,6 +59,11 @@
         "textures" : {
           "all" : "gregtech:blocks/rocketry/struct/earth_landing_system"
         }
+      },
+      "lander_one_way" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/lander_one_way"
+        }
       }
     }
   }
