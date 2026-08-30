@@ -96,6 +96,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     public static final int UPDATE_FLUID_DISPLAY_SIZE = GregtechDataCodes.assignId();
 
     private static final int MIN_DISPLAY_SIZE = 0;
+    private static final int MAX_DISPLAY_SIZE = 64;
 
     private final VatCasingRenderer defaultRenderer;
     private final EffectMode defaultMode;
@@ -524,7 +525,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     }
 
     private void changeDisplaySize(int delta) {
-        int newSize = Math.max(fluidDisplaySize + delta, MIN_DISPLAY_SIZE);
+        int newSize = Math.max(Math.min(fluidDisplaySize + delta, MAX_DISPLAY_SIZE), MIN_DISPLAY_SIZE);
         if (newSize != fluidDisplaySize) {
             fluidDisplaySize = newSize;
             writeCustomData(UPDATE_FLUID_DISPLAY_SIZE, buf -> buf.writeInt(fluidDisplaySize));
@@ -587,7 +588,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         this.isActive = buf.readBoolean();
         this.isWorkingEnabled = buf.readBoolean();
         this.effectMode = EffectMode.values()[buf.readInt()];
-        this.fluidDisplaySize = buf.readInt();
+        this.fluidDisplaySize = Math.max(Math.min(buf.readInt(), MAX_DISPLAY_SIZE), MIN_DISPLAY_SIZE);
 
         this.renderFluid = buf.readBoolean();
         if (this.renderFluid) {
@@ -643,7 +644,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
             }
             scheduleRenderUpdate();
         } else if (dataId == UPDATE_FLUID_DISPLAY_SIZE) {
-            this.fluidDisplaySize = buf.readInt();
+            this.fluidDisplaySize = Math.max(Math.min(buf.readInt(), MAX_DISPLAY_SIZE), MIN_DISPLAY_SIZE);
             scheduleRenderUpdate();
             if (getWorld() != null && getWorld().isRemote) syncFluidVisual();
         }
@@ -666,7 +667,8 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         if (mode >= 0 && mode < EffectMode.values().length) {
             this.effectMode = EffectMode.values()[mode];
         }
-        this.fluidDisplaySize = data.getInteger("FluidDisplaySize");
+        this.fluidDisplaySize = Math.max(Math.min(data.getInteger("FluidDisplaySize"), MAX_DISPLAY_SIZE),
+                MIN_DISPLAY_SIZE);
     }
 
     @Override
