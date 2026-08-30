@@ -2036,4 +2036,4 @@ item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Restrictive Large %s D
 item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Restrictive Huge %s Direct Fluid Pipe
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
 susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
-susy.tool_action.hammer.toggle_flange=§8Use hammer to toggle flanges
+susy.tool_action.hammer.toggle_flange=§8Use Hammer to toggle flanges
