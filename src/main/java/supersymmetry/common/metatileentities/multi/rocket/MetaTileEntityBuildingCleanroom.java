@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,6 @@ import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.ICleanroomReceiver;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockPattern;
@@ -320,7 +318,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
     @Override
     public int getEnergyTier() {
-        return this.energyContainer == null ? 1 : Math.max(4, GTUtility.getFloorTierByVoltage(this.energyContainer.getInputVoltage()));
+        return this.energyContainer == null ? 1 :
+                Math.max(4, GTUtility.getFloorTierByVoltage(this.energyContainer.getInputVoltage()));
     }
 
     protected TraceabilityPredicate scannerPredicate() {

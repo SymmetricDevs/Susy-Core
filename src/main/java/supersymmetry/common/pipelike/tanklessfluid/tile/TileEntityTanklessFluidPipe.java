@@ -3,8 +3,6 @@ package supersymmetry.common.pipelike.tanklessfluid.tile;
 import java.lang.ref.WeakReference;
 import java.util.EnumMap;
 
-import gregtech.common.pipelike.fluidpipe.tile.TileEntityFluidPipe;
-import lombok.Getter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -15,11 +13,13 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.pipenet.block.material.TileEntityMaterialPipeBase;
 import gregtech.api.pipenet.tile.IPipeTile;
+import gregtech.common.pipelike.fluidpipe.tile.TileEntityFluidPipe;
+import lombok.Getter;
 import lombok.val;
-import org.jspecify.annotations.NonNull;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.pipelike.ConnectablePipe;
 import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
@@ -29,8 +29,9 @@ import supersymmetry.common.pipelike.tanklessfluid.net.TanklessFluidPipeNet;
 import supersymmetry.common.pipelike.tanklessfluid.net.WorldTanklessFluidPipeNet;
 
 public class TileEntityTanklessFluidPipe
-        extends TileEntityMaterialPipeBase<TanklessFluidPipeType, TanklessFluidPipeProperties>
-        implements ConnectablePipe {
+                                         extends
+                                         TileEntityMaterialPipeBase<TanklessFluidPipeType, TanklessFluidPipeProperties>
+                                         implements ConnectablePipe {
 
     private static final String NBT_FLANGE_VISIBILITY = "FlangeVisibility";
 

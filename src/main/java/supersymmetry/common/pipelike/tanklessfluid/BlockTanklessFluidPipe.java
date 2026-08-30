@@ -1,13 +1,13 @@
 package supersymmetry.common.pipelike.tanklessfluid;
 
+import static gregtech.api.metatileentity.MetaTileEntity.FULL_CUBE_COLLISION;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import codechicken.lib.lighting.LightMatrix;
-import gregtech.common.pipelike.fluidpipe.tile.TileEntityFluidPipe;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
@@ -44,6 +44,7 @@ import gregtech.api.pipenet.tile.TileEntityPipeBase;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.registry.MaterialRegistry;
 import gregtech.client.renderer.pipe.PipeRenderer;
+import gregtech.common.pipelike.fluidpipe.tile.TileEntityFluidPipe;
 import lombok.val;
 import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -51,11 +52,10 @@ import supersymmetry.common.pipelike.tanklessfluid.net.WorldTanklessFluidPipeNet
 import supersymmetry.common.pipelike.tanklessfluid.tile.TileEntityTanklessFluidPipe;
 import supersymmetry.common.pipelike.tanklessfluid.tile.TileEntityTanklessFluidPipeTickable;
 
-import static gregtech.api.metatileentity.MetaTileEntity.FULL_CUBE_COLLISION;
-
 public class BlockTanklessFluidPipe
-        extends BlockMaterialPipe<TanklessFluidPipeType, TanklessFluidPipeProperties, WorldTanklessFluidPipeNet>
-        implements MaterialPipeExtension {
+                                    extends
+                                    BlockMaterialPipe<TanklessFluidPipeType, TanklessFluidPipeProperties, WorldTanklessFluidPipeNet>
+                                    implements MaterialPipeExtension {
 
     private final SortedMap<Material, TanklessFluidPipeProperties> enabledMaterials = new TreeMap<>();
 
@@ -127,7 +127,8 @@ public class BlockTanklessFluidPipe
                                    EnumFacing side,
                                    IPipeTile<TanklessFluidPipeType, TanklessFluidPipeProperties> sideTile) {
         return selfTile instanceof TileEntityTanklessFluidPipe &&
-                (sideTile instanceof TileEntityTanklessFluidPipe || ((IPipeTile<?, ?>) sideTile) instanceof TileEntityFluidPipe);
+                (sideTile instanceof TileEntityTanklessFluidPipe ||
+                        ((IPipeTile<?, ?>) sideTile) instanceof TileEntityFluidPipe);
     }
 
     @Override
@@ -155,8 +156,7 @@ public class BlockTanklessFluidPipe
         int connections = pipeTile.getConnections();
         float thickness = pipeType.getThickness();
         for (val side : EnumFacing.VALUES) {
-            if (
-                    (visualConnections & 1 << side.getIndex()) > 0 && // Connected
+            if ((visualConnections & 1 << side.getIndex()) > 0 && // Connected
                     (connections & 1 << (12 + side.getIndex())) <= 0 && // No cover (dedupe)
                     pipeTile.isFlangeVisible(side) // Flange visible
             ) {

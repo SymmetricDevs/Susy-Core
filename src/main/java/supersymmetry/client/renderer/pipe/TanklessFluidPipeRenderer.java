@@ -3,18 +3,15 @@ package supersymmetry.client.renderer.pipe;
 import java.util.Arrays;
 import java.util.List;
 
-import codechicken.lib.lighting.LightMatrix;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraft.util.math.BlockPos;
+
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.lighting.LightMatrix;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.uv.IconTransformation;
@@ -28,6 +25,9 @@ import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.client.renderer.pipe.PipeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.val;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.pipelike.CustomContext;
@@ -71,12 +71,14 @@ public final class TanklessFluidPipeRenderer extends PipeRenderer implements Ico
     public void buildRenderer(PipeRenderContext pipeRenderContext, BlockPipe<?, ?, ?> blockPipe,
                               @Nullable IPipeTile<?, ?> iPipeTile, IPipeType<?> iPipeType,
                               @Nullable Material material) {
-        if (material == null || !(iPipeType instanceof TanklessFluidPipeType pipeType) || !(pipeRenderContext instanceof RenderContext renderContext)) {
+        if (material == null || !(iPipeType instanceof TanklessFluidPipeType pipeType) ||
+                !(pipeRenderContext instanceof RenderContext renderContext)) {
             return;
         }
 
         renderContext
-                .flangeVisibility(iPipeTile instanceof TileEntityTanklessFluidPipe tanklessPipe ? tanklessPipe.getFlangeVisibility() : ITEM_FLANGE_VISIBILITY)
+                .flangeVisibility(iPipeTile instanceof TileEntityTanklessFluidPipe tanklessPipe ?
+                        tanklessPipe.getFlangeVisibility() : ITEM_FLANGE_VISIBILITY)
                 .addOpenFaceRender(new IconTransformation(SusUtil.getBlockSprite(getIconType(pipeType), material)))
                 .addSideRender(new IconTransformation(
                         SusUtil.getBlockSprite(SuSyMaterialIconType.pipeSideTanklessFluid, material)));
@@ -141,17 +143,21 @@ public final class TanklessFluidPipeRenderer extends PipeRenderer implements Ico
     }
 
     @Override
-    public PipeRenderContext createRenderContext(@org.jspecify.annotations.Nullable BlockPos pos, @org.jspecify.annotations.Nullable LightMatrix lightMatrix, int connections, int blockedConnections, float thickness) {
+    public PipeRenderContext createRenderContext(@org.jspecify.annotations.Nullable BlockPos pos,
+                                                 @org.jspecify.annotations.Nullable LightMatrix lightMatrix,
+                                                 int connections, int blockedConnections, float thickness) {
         return new RenderContext(pos, lightMatrix, connections, blockedConnections, thickness);
     }
 
     private static final class RenderContext extends PipeRenderContext {
 
         @Accessors(fluent = true)
-        @Getter @Setter
+        @Getter
+        @Setter
         private int flangeVisibility;
 
-        public RenderContext(@Nullable BlockPos pos, @Nullable LightMatrix lightMatrix, int connections, int blockedConnections, float thickness) {
+        public RenderContext(@Nullable BlockPos pos, @Nullable LightMatrix lightMatrix, int connections,
+                             int blockedConnections, float thickness) {
             super(pos, lightMatrix, connections, blockedConnections, thickness);
         }
     }
