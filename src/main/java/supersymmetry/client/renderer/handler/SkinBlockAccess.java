@@ -11,8 +11,8 @@ import net.minecraft.world.biome.Biome;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
-import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityActiveMuffler;
-import supersymmetry.common.metatileentities.single.electric.MetaTileEntityFluidActiveCasing;
+import supersymmetry.common.metatileentities.multiblockpart.active.MetaTileEntityActiveMuffler;
+import supersymmetry.common.metatileentities.single.active.MetaTileEntityFluidActiveCasing;
 
 public class SkinBlockAccess implements IBlockAccess {
 

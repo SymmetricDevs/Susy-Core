@@ -20,6 +20,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.file.AnimationFile;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
+import supersymmetry.common.blocks.active.RedstoneActiveBlock;
 
 public class AnimatablePartTileEntity extends TileEntity implements IAnimatable {
 
@@ -39,8 +40,8 @@ public class AnimatablePartTileEntity extends TileEntity implements IAnimatable 
                     !state.getValue(IAnimatablePartBlock.ACTIVE)) {
                 return PlayState.STOP;
             }
-            if (getBlockType() instanceof supersymmetry.common.blocks.RedstoneActiveBlock) {
-                if (!((supersymmetry.common.blocks.RedstoneActiveBlock<?>) getBlockType()).isEffectActive(state)) {
+            if (getBlockType() instanceof RedstoneActiveBlock) {
+                if (!((RedstoneActiveBlock<?>) getBlockType()).isEffectActive(state)) {
                     return PlayState.STOP;
                 }
             }

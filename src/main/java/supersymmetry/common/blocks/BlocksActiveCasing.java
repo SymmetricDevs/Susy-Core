@@ -25,6 +25,7 @@ import gregtech.api.block.VariantActiveBlock;
 import gregtech.client.model.ActiveVariantBlockBakedModel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import supersymmetry.common.blocks.active.RedstoneActiveBlockHelper;
 
 public class BlocksActiveCasing extends VariantActiveBlock<BlocksActiveCasing.ActiveBlockType> {
 

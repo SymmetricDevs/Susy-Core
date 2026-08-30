@@ -30,6 +30,12 @@ public class BlockSkinRenderer {
 
     public static void renderBlockSkin(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline,
                                        IBlockState state, IBlockAccess world, BlockPos pos) {
+        // Blocks that own a tile entity cannot be skinned away from their world model; skinning them
+        // produces an invisible/broken texture. Bail out so callers fall back to their default casing.
+        if (state.getBlock().hasTileEntity(state)) {
+            throw new IllegalArgumentException("Block has a tile entity and cannot be rendered as a skin");
+        }
+
         BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
         if (layer != null && !state.getBlock().canRenderInLayer(state, layer)) {
             return;

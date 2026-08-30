@@ -36,8 +36,13 @@ import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.common.blocks.*;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockEccentricRoll;
+import supersymmetry.common.blocks.BlockGirthGearTooth;
+import supersymmetry.common.blocks.BlockHeliostat;
+import supersymmetry.common.blocks.BlockRobotArm;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.active.BlockActiveEccentricRoll;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 
 /**
