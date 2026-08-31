@@ -36,8 +36,13 @@ import supersymmetry.api.blocks.VariantAxialRotatableBlock;
 import supersymmetry.common.blocks.*;
 import supersymmetry.common.blocks.BlockConveyor;
 import supersymmetry.common.blocks.BlockCoolingCoil;
+import supersymmetry.common.blocks.BlockEccentricRoll;
+import supersymmetry.common.blocks.BlockGirthGearTooth;
+import supersymmetry.common.blocks.BlockHeliostat;
+import supersymmetry.common.blocks.BlockRobotArm;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.active.BlockActiveEccentricRoll;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
 
 /**
@@ -304,7 +309,8 @@ public class SuSyPredicates {
     @NotNull public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
         return new TraceabilityPredicate(bws -> {
             IBlockState state = bws.getBlockState();
-            if (state.getBlock() instanceof BlockEccentricRoll) {
+            if (state.getBlock() instanceof BlockEccentricRoll ||
+                    state.getBlock() instanceof BlockActiveEccentricRoll) {
 
                 // Corrects the direction of the eccentric roll, while ignoring the in/active
                 // state
