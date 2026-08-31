@@ -55,6 +55,7 @@ import supersymmetry.api.recipes.properties.InductionCrucibleMaterialProperty;
 import supersymmetry.common.blocks.BlockInductionCoilAssembly;
 import supersymmetry.common.blocks.BlockInductionCrucible;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.inductionCrucibles;
@@ -121,7 +122,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         int[] waterAmount = getWaterAmount();
 
         if (waterToConsume > 0 && heat >= DANGEROUS_HEAT) {
-            explodeMultiblock(2.0F + heat / 1000.0F + 4.0F * waterAmount[0] / 10000.0F);
+            explodeMultiblock(heat / 1000.0F + waterAmount[0] / 10000.0F);
             return;
         }
 
@@ -132,7 +133,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
 
         if (waterToConsume > 0) {
             FluidStack actualWater = Materials.Water.getFluid(waterToConsume);
-            FluidStack actualHeatedWater = Materials.Steam.getFluid(waterToConsume);
+            FluidStack actualHeatedWater = SusyMaterials.HotSoftenedWater.getFluid(waterToConsume);
 
             boolean hasOutputSpace = outputFluidInventory.fill(actualHeatedWater, false) >= waterToConsume;
 
@@ -259,6 +260,11 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;
+    }
+
+    @Override
+    protected boolean shouldShowVoidingModeButton() {
+        return false;
     }
 
     @Override

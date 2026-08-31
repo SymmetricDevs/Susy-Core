@@ -7,6 +7,7 @@ import static gregtech.api.unification.ore.OrePrefix.*;
 
 import java.util.*;
 
+import gregtech.api.unification.material.Materials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -184,13 +185,16 @@ public class SuSyMaterialRecipeHandler {
         if (material.hasFlag(SuSyMaterialFlags.ALUMINA_CRUCIBLE)) {
             mat = "Alumina";
         }
+        else if (material == Materials.Magnesium) {
+            mat = "Magnesia";
+        }
 
         SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
                 .circuitMeta(1)
                 .input(ingot, material)
                 .fluidOutputs(material.getFluid(144))
-                .material(mat)
                 .EUt(30)
+                .material(mat)
                 .buildAndRegister();
 
         SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()

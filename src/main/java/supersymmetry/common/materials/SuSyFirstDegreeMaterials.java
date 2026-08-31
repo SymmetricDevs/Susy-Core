@@ -105,6 +105,10 @@ public class SuSyFirstDegreeMaterials {
                 .gas(new FluidBuilder().temperature(1000)).color(0xA9D0F5).flags(DISABLE_DECOMPOSITION)
                 .components(Nitrogen, 78, Oxygen, 21, Argon, 9).build();
 
+        HotSoftenedWater = new Material.Builder(27152, SuSyUtility.susyId("hot_softened_water"))
+                .liquid(new FluidBuilder().temperature(315)).color(0x5A9BB5).flags(DISABLE_DECOMPOSITION)
+                .components(Hydrogen, 2, Oxygen, 1).build();
+
         // Aluminium Alloys
 
         AluminiumAlloy6061 = new Material.Builder(8759, SuSyUtility.susyId("aluminium_alloy_6061")).ingot()

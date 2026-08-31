@@ -33,7 +33,9 @@ public class BlockInductionCrucible extends VariantBlock<BlockInductionCrucible.
     public enum InductionCrucibleType implements IStringSerializable, IStateHarvestLevel {
 
         SILICON_CARBIDE("silicon_carbide", "Silicon Carbide", 1),
-        ALUMINA("alumina", "Alumina",1);
+        ALUMINA("alumina", "Alumina", 1),
+        MAGNESIA("magnesia", "Magnesia", 1),
+        HP_ALUMINA("hp_alumina", "High-Performance Alumina", 1);
 
         private final String name;
         public final String material;

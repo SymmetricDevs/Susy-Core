@@ -41,7 +41,7 @@ public class InductionFurnaceRecipeBuilder extends RecipeBuilder<InductionFurnac
     }
 
     public String getMaterial() {
-        return this.recipePropertyStorage == null ? "Silicon Carbide" :
+        return this.recipePropertyStorage == null ? "" :
                 this.recipePropertyStorage.getRecipePropertyValue(InductionCrucibleMaterialProperty.getInstance(),
                         "");
     }

@@ -6,6 +6,7 @@ import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.ore.OrePrefix.spring;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import gregtech.api.unification.material.properties.PropertyKey;
@@ -28,6 +29,7 @@ import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
 import net.minecraftforge.fluids.FluidStack;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -659,15 +661,17 @@ public class SuSyRecipeMaps {
 
         SuSyRecipeMaps.INDUCTION_FURNACE.onRecipeBuild(recipeBuilder -> {
 
+            String mat = recipeBuilder.getMaterial();
+            if (Objects.equals(mat, "")) {
+                recipeBuilder.material("Silicon Carbide");
+            }
+
             int totalTemperature = 0;
-            System.out.println("[Recipe Debug] Inputs: " + recipeBuilder.getInputs());
             for (GTRecipeInput recipeInput : recipeBuilder.getInputs()) {
                 for (ItemStack input : recipeInput.getInputStacks()) {
                     if (OreDictUnifier.getPrefix(input) != OrePrefix.dust &&
                             OreDictUnifier.getPrefix(input) != OrePrefix.ingot)
                         continue;
-
-                    System.out.println("[Recipe Debug] Input: " + input);
 
                     MaterialStack matStack = OreDictUnifier.getMaterial(input);
                     if (matStack == null || matStack.material == null ||
@@ -677,10 +681,6 @@ public class SuSyRecipeMaps {
                     int temperature = matStack.material.getFluid().getTemperature();
                     int amount = input.getCount();
 
-                    System.out.println("[Recipe Debug] Material: " + matStack.material +
-                            " | Amount: " + amount +
-                            " | Temperature: " + temperature);
-
                     totalTemperature += temperature * amount;
 
                     break;
@@ -688,9 +688,6 @@ public class SuSyRecipeMaps {
             }
 
             int duration = totalTemperature / 64;
-
-            System.out.println("[Recipe Debug] Total Temperature: " + totalTemperature);
-            System.out.println("[Recipe Debug] Duration: " + duration);
 
             recipeBuilder.duration(duration);
         });

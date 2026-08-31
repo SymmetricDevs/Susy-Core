@@ -182,9 +182,10 @@ tile.susy_multiblock_casing.hardened_titanium_casing.name=Hardened Titanium Casi
 tile.vehicle_track.default.name=Heavy-Duty Vehicle Track
 tile.bwe_conveyor_belt.default.name=Heavy-Duty Hardened Titanium Conveyor Belt
 
-
-
 tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
+tile.crucible.alumina.name=Alumina Crucible
+tile.crucible.magnesia.name=Magnesia Crucible
+tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -267,6 +268,7 @@ susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
+susy.material.hot_softened_water=Hot Cooling Water
 
 # Rock/Mineral Materials
 susy.material.fluorite=Fluorite
