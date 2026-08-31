@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "active=false,variant=dirt": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/evaporation_bed/evaporation_bed"
+      }
+    },
+    "active=true,variant=dirt": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/evaporation_bed/evaporation_bed"
+      }
+    }
+  }
+}

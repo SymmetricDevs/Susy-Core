@@ -66,6 +66,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
@@ -225,6 +226,7 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 
@@ -351,6 +353,7 @@ public class ClientProxy extends CommonProxy {
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
             RenderMaskManager.clearDisabled();
+            ActiveFluidVisualHandler.clearAll();
         }
     }
 
