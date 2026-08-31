@@ -321,7 +321,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         double throatArea = NozzleFlow.crossSectionArea(throatRadius);
         this.chamberPressure = NozzleFlow.equilibriumChamberPressure(throatArea, pumpThroughput);
-        this.fuelThroughput = pumpThroughput; 
+        this.fuelThroughput = pumpThroughput;
         tag.setDouble("throughput", fuelThroughput);
         tag.setDouble("chamber_pressure", chamberPressure);
 

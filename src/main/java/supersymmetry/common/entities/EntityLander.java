@@ -345,6 +345,11 @@ public class EntityLander extends EntityAbstractRocket
     }
 
     @Override
+    public double getTurnAltitude() {
+        return 9999999;
+    }
+
+    @Override
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);

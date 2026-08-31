@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
+import static supersymmetry.api.space.CelestialObjects.EARTH;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
-import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -121,6 +122,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private boolean hasNotEnoughCoolant = false;
 
     public RocketFuelEntry fuel;
+    public Planetoid planet = EARTH; // FIXME: add planet selector
     public final List<FluidStack> fuelList = new ArrayList<>();
 
     // phantom slot backing the solid fuel selector; only dusts of a material with a
@@ -149,6 +151,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     };
 
     private double turnAltitude = 50;
+    private double cargoMass = 0;
     private AFSStats stats = AFSStats.none();
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
@@ -175,6 +178,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             this.progress = data.getLong("progress");
         }
         this.turnAltitude = data.getDouble("turnAltitude");
+        this.cargoMass = data.getDouble("cargoMass");
         this.fuelList.clear();
         if (data.hasKey("fuelListSize")) {
             for (int i = 0; i < data.getInteger("fuelListSize"); i++) {
@@ -235,6 +239,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         buf.writeBoolean(this.isWorkingEnabled);
         buf.writeLong(this.progress);
         buf.writeDouble(this.turnAltitude);
+        buf.writeDouble(this.cargoMass);
         buf.writeInt(this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (this.fuelList.get(i) == null) {
@@ -267,6 +272,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readLong();
         this.turnAltitude = buf.readDouble();
+        this.cargoMass = buf.readDouble();
 
         this.fuelList.clear();
         int size = buf.readInt();
@@ -622,11 +628,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             hasNotEnoughEnergy = true;
             crash();
         }
-        if (getOffsetTimer() % 20 == 0) {
-            // the bench sizes designs for an Earth launch; gravity is the only thing the
-            // operator gets to dial in so far
-            this.stats = this.getBlueprint().calculateInitialSuccess(turnAltitude,
-                    CelestialObjects.EARTH.getSurfacePressure(), this.fuel, this.progress);
+        if (getOffsetTimer() % 100 == 0) {
+            this.stats = this.getBlueprint().calculateInitialSuccess(this.planet, this.fuel,
+                    this.turnAltitude, this.cargoMass, this.progress);
 
             sendComputationInfoToClient();
         }
@@ -639,13 +643,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start().aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
+        return FactoryBlockPattern.start()
+                .aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
                 .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
                 .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
                 .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
                 .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII").where('S', selfPredicate())
-                .where(' ', air()).where('C', states(getCasingState())).where('P', SuSyPredicates.computation())
+                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII")
+                .where('S', selfPredicate())
+                .where(' ', air())
+                .where('C', states(getCasingState()))
+                .where('P', SuSyPredicates.computation())
                 .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
                 .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
@@ -713,7 +721,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         .setClearSlotOnRightClick(true)
                         .setBackgroundTexture(GuiTextures.SLOT_DARK),
                 this::isSolidBlueprint);
-        // Gravity selector
+        // Turn altitude selector
         menuGroup.addWidget(
                 new LabelWidget(10, 80, this.getMetaName() + ".gui.turn_altitude_selector_label", 0xffffff));
         menuGroup.addWidget(
@@ -729,7 +737,22 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         }
                     }
                 }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
-
+        // Cargo mass selector
+        menuGroup.addWidget(
+                new LabelWidget(10, 96, this.getMetaName() + ".gui.cargo_mass_selector_label", 0xffffff));
+        menuGroup.addWidget(
+                new TextFieldWidget2(10, 104, 60, 12, () -> Double.valueOf(cargoMass).toString(), value -> {
+                    if (!value.isEmpty()) {
+                        try {
+                            cargoMass = Double.parseDouble(value);
+                            if (cargoMass <= 0) {
+                                cargoMass = 0;
+                            }
+                        } catch (NumberFormatException ignored) {
+                            cargoMass = 0;
+                        }
+                    }
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(9));
         menuGroup.addWidgetWithTest(new AdvancedTextWidget(9, 19, (l) -> {
             AbstractRocketBlueprint bp = this.getBlueprint();
             if (this.hasBlueprint() && bp != null) {
@@ -776,57 +799,84 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         builder.widget(mainGroup);
         // Various stats beneath
         workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 52,
+                new DynamicLabelWidget(10, 8,
                         () -> I18n.format(getMetaName() + ".gui.success_chance",
                                 String.format("%.2f%%", 100 * this.stats.success())),
                         0xffffff),
                 () -> this.isActive() && !this.stats.isNone());
         workingGroup
                 .addWidgetWithTest(
-                        new DynamicLabelWidget(10, 63,
+                        new DynamicLabelWidget(10, 19,
                                 () -> I18n.format(getMetaName() + ".gui.mass",
                                         String.format("%.0f", this.stats.mass())),
                                 0xffffff),
                         () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 74,
-                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
-                                String.format("%.0f", this.stats.fuelMass())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 30,
+                () -> I18n.format(getMetaName() + ".gui.fuel_mass",
+                        String.format("%.0f", this.stats.fuelMass())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 41,
+                () -> I18n.format(getMetaName() + ".gui.delta_v",
+                        String.format("%.2f", this.stats.deltaV())),
+                0xffffff), () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 52,
+                () -> I18n.format(getMetaName() + ".gui.drag_coefficient",
+                        String.format("%.2f", this.stats.dragCoefficient())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 63,
+                () -> I18n.format(getMetaName() + ".gui.first_sep_altitude",
+                        String.format("%.2f", this.stats.firstSepAltitude())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 74,
+                () -> I18n.format(getMetaName() + ".gui.first_sep_time",
+                        String.format("%.2f", this.stats.firstSepTime())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 85,
-                () -> I18n.format(getMetaName() + ".gui.velocity_percent",
-                        String.format("%.2f", 100 * this.stats.deltaV() / this.stats.escapeVelocity())),
-                0xffffff), () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup
-                .addWidgetWithTest(
-                        new DynamicLabelWidget(10, 96,
-                                () -> I18n.format(getMetaName() + ".gui.thrust",
-                                        String.format("%.2f", this.stats.thrust())),
-                                0xffffff),
-                        () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 107,
-                        () -> I18n.format(getMetaName() + ".gui.cargo_capacity",
-                                String.format("%.2f", this.stats.cargoCapacity())),
-                        0xffffff),
+                () -> I18n.format(getMetaName() + ".gui.second_sep_altitude",
+                        String.format("%.2f", this.stats.secondSepAltitude())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 52,
-                        () -> I18n.format(getMetaName() + ".gui.radial_instability",
-                                String.format("%.2f", this.stats.radialInstability())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 96,
+                () -> I18n.format(getMetaName() + ".gui.second_sep_time",
+                        String.format("%.2f", this.stats.secondSepTime())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 63,
-                        () -> I18n.format(getMetaName() + ".gui.oblateness",
-                                String.format("%.2f", this.stats.oblateness())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 107,
+                () -> I18n.format(getMetaName() + ".gui.third_sep_altitude",
+                        String.format("%.2f", this.stats.thirdSepAltitude())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 74,
-                        () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 8,
+                () -> I18n.format(getMetaName() + ".gui.third_sep_time",
+                        String.format("%.2f", this.stats.thirdSepTime())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 19,
+                () -> I18n.format(getMetaName() + ".gui.burnout_altitude",
+                        String.format("%.2f", this.stats.burnoutAltitude())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 30,
+                () -> I18n.format(getMetaName() + ".gui.burnout_time",
+                        String.format("%.2f", this.stats.burnoutTime())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 41,
+                () -> I18n.format(getMetaName() + ".gui.burnout_speed",
+                        String.format("%.2f", this.stats.burnoutSpeed())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 52,
+                () -> I18n.format(getMetaName() + ".gui.burnout_horizontal_speed",
+                        String.format("%.2f", this.stats.burnoutHorizontalSpeed())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 140, 63,
+                () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         return builder;
     }

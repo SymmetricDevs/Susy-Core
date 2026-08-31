@@ -15,6 +15,7 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.costs.RocketBlueprintCosts;
 import supersymmetry.api.rocketry.costs.RocketCostGroup;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.components.ComponentBlueprintOverhead;
@@ -200,8 +201,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         }
     }
 
-    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, double ambientPressure,
-                                                                        RocketFuelEntry fuel, long augmentation);
+    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(Planetoid planet, RocketFuelEntry fuel,
+                                                                        double turnAltitude, double cargoMass,
+                                                                        long augmentation);
 
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
 

@@ -46,6 +46,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
 
     protected static final DataParameter<String> FUEL = EntityDataManager.createKey(EntityBlueprintRocket.class,
             DataSerializers.STRING);
+    protected static final DataParameter<Float> TURN_ALTITUDE = EntityDataManager.createKey(EntityBlueprintRocket.class,
+            DataSerializers.FLOAT);
     private int maxFuelVolume;
 
     // Troll mode - rocket curves back towards launch pad
@@ -74,6 +76,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(FUEL, "");
+        this.dataManager.register(TURN_ALTITUDE, 0.0f);
         this.dataManager.register(LAUNCH_RESULT, SuccessCalculation.LaunchResult.LAUNCHES.ordinal());
         this.dataManager.register(CRASH_POSITION, BlockPos.ORIGIN);
     }
@@ -313,9 +316,18 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         this.dataManager.set(FUEL, fuelEntry.getFuelKey());
     }
 
+    public void setTurnAltitude(double turnAltitude) {
+        this.dataManager.set(TURN_ALTITUDE, (float) turnAltitude);
+    }
+
     @Override
     public RocketFuelEntry getFuel() {
         return RocketFuelEntry.fromFuelKey(this.dataManager.get(FUEL));
+    }
+
+    @Override
+    public double getTurnAltitude() {
+        return this.dataManager.get(TURN_ALTITUDE);
     }
 
     /**
@@ -372,6 +384,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         // the datawatcher only syncs, so without this a fuelled rocket comes back from a
         // reload unfuelled and silently aborts its own countdown
         this.dataManager.set(FUEL, compound.getString("Fuel"));
+        this.dataManager.set(TURN_ALTITUDE, compound.getFloat("TurnAltitude"));
     }
 
     @Override
@@ -385,6 +398,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
         compound.setString("Fuel", this.dataManager.get(FUEL));
+        compound.setFloat("TurnAltitude", this.dataManager.get(TURN_ALTITUDE));
     }
 
     @Override

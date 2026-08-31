@@ -23,11 +23,13 @@ public class SuccessCalculation {
         EXPLODES
     }
 
-    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
-                           double cargoCapacity, double radialInstability, double thrust, double oblateness) {
+    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double dragCoefficient,
+                           double firstSepAltitude, double firstSepTime, double secondSepAltitude,
+                           double secondSepTime, double thirdSepAltitude, double thirdSepTime, double burnoutAltitude,
+                           double burnoutTime, double burnoutSpeed, double burnoutHorizontalSpeed) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public boolean isNone() {
@@ -38,20 +40,29 @@ public class SuccessCalculation {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setDouble("success", success);
             tag.setDouble("mass", mass);
-            tag.setDouble("fuelMass", mass);
+            tag.setDouble("fuelMass", fuelMass);
             tag.setDouble("deltaV", deltaV);
-            tag.setDouble("escapeVelocity", escapeVelocity);
-            tag.setDouble("cargoCapacity", cargoCapacity);
-            tag.setDouble("radialInstability", radialInstability);
-            tag.setDouble("thrust", thrust);
-            tag.setDouble("oblateness", oblateness);
+            tag.setDouble("dragCoefficient", dragCoefficient);
+            tag.setDouble("firstSepAltitude", firstSepAltitude);
+            tag.setDouble("firstSepTime", firstSepTime);
+            tag.setDouble("secondSepAltitude", secondSepAltitude);
+            tag.setDouble("secondSepTime", secondSepTime);
+            tag.setDouble("thirdSepAltitude", thirdSepAltitude);
+            tag.setDouble("thirdSepTime", thirdSepTime);
+            tag.setDouble("burnoutAltitude", burnoutAltitude);
+            tag.setDouble("burnoutTime", burnoutTime);
+            tag.setDouble("burnoutSpeed", burnoutSpeed);
+            tag.setDouble("burnoutHorizontalSpeed", burnoutHorizontalSpeed);
             return tag;
         }
 
         public static AFSStats deserializeNBT(NBTTagCompound nbt) {
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
-                    nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"), nbt.getDouble("cargoCapacity"),
-                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
+                    nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), nbt.getDouble("firstSepAltitude"),
+                    nbt.getDouble("firstSepTime"), nbt.getDouble("secondSepAltitude"), nbt.getDouble("secondSepTime"),
+                    nbt.getDouble("thirdSepAltitude"), nbt.getDouble("thirdSepTime"), nbt.getDouble("burnoutAltitude"),
+                    nbt.getDouble("burnoutTime"), nbt.getDouble("burnoutSpeed"),
+                    nbt.getDouble("burnoutHorizontalSpeed"));
         }
 
         public void writeToBuffer(PacketBuffer buf) {
@@ -59,16 +70,23 @@ public class SuccessCalculation {
             buf.writeDouble(mass);
             buf.writeDouble(fuelMass);
             buf.writeDouble(deltaV);
-            buf.writeDouble(escapeVelocity);
-            buf.writeDouble(cargoCapacity);
-            buf.writeDouble(radialInstability);
-            buf.writeDouble(thrust);
-            buf.writeDouble(oblateness);
+            buf.writeDouble(dragCoefficient);
+            buf.writeDouble(firstSepAltitude);
+            buf.writeDouble(firstSepTime);
+            buf.writeDouble(secondSepAltitude);
+            buf.writeDouble(thirdSepAltitude);
+            buf.writeDouble(thirdSepTime);
+            buf.writeDouble(burnoutAltitude);
+            buf.writeDouble(burnoutTime);
+            buf.writeDouble(burnoutSpeed);
+            buf.writeDouble(burnoutHorizontalSpeed);
         }
 
         public static AFSStats readFromBuffer(PacketBuffer buf) {
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                    buf.readDouble());
         }
     }
 }
