@@ -18,10 +18,10 @@ public class Particles {
     // Leptons
     public static Particle electronNeutrino;
     public static Particle muonNeutrino;
-    public static Particle tauNeutrino;
+    public static Particle tauonNeutrino;
     public static Particle electron;
     public static Particle muon;
-    public static Particle tau;
+    public static Particle tauon;
 
     // Quarks
     public static Particle up;
@@ -42,10 +42,10 @@ public class Particles {
     // Leptons
     public static Particle positron;
     public static Particle antiMuon;
-    public static Particle antiTau;
+    public static Particle antiTauon;
     public static Particle electronAntineutrino;
     public static Particle muonAntineutrino;
-    public static Particle tauAntineutrino;
+    public static Particle tauonAntineutrino;
 
     // Quarks
     public static Particle antiUp;
@@ -63,15 +63,15 @@ public class Particles {
 
     public static void init() {
         // Leptons
-        electronNeutrino = new Particle("electron neutrino", 0.000002, 0, 0.5, 0.0, false, true,
+        electronNeutrino = new Particle("electron_neutrino", 0.000002, 0, 0.5, 0.0, false, true,
                 susyId("particles/electron_neutrino.png"));
-        muonNeutrino = new Particle("muon neutrino", 0.00019, 0, 0.5, 0.0, false, true,
+        muonNeutrino = new Particle("muon_neutrino", 0.00019, 0, 0.5, 0.0, false, true,
                 susyId("particles/muon_neutrino.png"));
-        tauNeutrino = new Particle("tau neutrino", 18.2, 0, 0.5, 0.0, false, true,
-                susyId("particles/tau_neutrino.png"));
+        tauonNeutrino = new Particle("tauon_neutrino", 18.2, 0, 0.5, 0.0, false, true,
+                susyId("particles/tauon_neutrino.png"));
         electron = new Particle("electron", 0.511, -1, 0.5, 0.0, false, true, susyId("particles/electron.png"));
         muon = new Particle("muon", 105.66, -1, 0.5, 0.0, false, true, susyId("particles/muon.png"));
-        tau = new Particle("tau", 1776.86, -1, 0.5, 0.0, false, true, susyId("particles/tau.png"));
+        tauon = new Particle("tauon", 1776.86, -1, 0.5, 0.0, false, true, susyId("particles/tauon.png"));
 
         // Quarks
         up = new Particle("up", 2.2, +0.666f, 0.5, 0.0, true, true, susyId("particles/up.png"));
@@ -84,13 +84,13 @@ public class Particles {
         // AntiLeptons
         positron = new Particle("positron", 0.511, +1, 0.5, 0.0, false, true, susyId("particles/positron.png"));
         antiMuon = new Particle("antimuon", 105.66, +1, 0.5, 0.0, false, true, susyId("particles/antimuon.png"));
-        antiTau = new Particle("antitau", 1776.86, +1, 0.5, 0.0, false, true, susyId("particles/antitau.png"));
-        electronAntineutrino = new Particle("electron antineutrino", 0.000002, 0, 0.5, 0.0, false, true,
+        antiTauon = new Particle("antitauon", 1776.86, +1, 0.5, 0.0, false, true, susyId("particles/antitauon.png"));
+        electronAntineutrino = new Particle("electron_antineutrino", 0.000002, 0, 0.5, 0.0, false, true,
                 susyId("particles/electron_antineutrino.png"));
-        muonAntineutrino = new Particle("muon antineutrino", 0.00019, 0, 0.5, 0.0, false, true,
+        muonAntineutrino = new Particle("muon_antineutrino", 0.00019, 0, 0.5, 0.0, false, true,
                 susyId("particles/muon_antineutrino.png"));
-        tauAntineutrino = new Particle("tau antineutrino", 18.2, 0, 0.5, 0.0, false, true,
-                susyId("particles/tau_antineutrino.png"));
+        tauonAntineutrino = new Particle("tauon_antineutrino", 18.2, 0, 0.5, 0.0, false, true,
+                susyId("particles/tauon_antineutrino.png"));
 
         // AntiQuarks
         antiUp = new Particle("antiup", 2.2, -0.666f, 0.5, 0.0, true, true, susyId("particles/antiup.png"));
@@ -105,17 +105,17 @@ public class Particles {
         // Gauge Bosons
         gluon = new Particle("gluon", 0.0, 0, 1.0, 0.0, true, false, susyId("particles/gluon.png"));
         photon = new Particle("photon", 0.0, 0, 1.0, 0.0, false, false, susyId("particles/photon.png"));
-        WPlus = new Particle("W+ boson", 80379.0, +1, 1.0, 2085.0, false, true, susyId("particles/WPlus.png"));
-        WMinus = new Particle("W- boson", 80379.0, -1, 1.0, 2085.0, false, true, susyId("particles/WMinus.png"));
-        Z = new Particle("Z boson", 91187.6, 0, 1.0, 2495.0, false, true, susyId("particles/Z_boson.png"));
-        higgs = new Particle("Higgs boson", 125100.0, 0, 0.0, 4300.0, false, false, susyId("particles/higgs.png"));
+        WPlus = new Particle("W+_boson", 80379.0, +1, 1.0, 2085.0, false, true, susyId("particles/wplus.png"));
+        WMinus = new Particle("W-_boson", 80379.0, -1, 1.0, 2085.0, false, true, susyId("particles/wminus.png"));
+        Z = new Particle("Z_boson", 91187.6, 0, 1.0, 2495.0, false, true, susyId("particles/z_boson.png"));
+        higgs = new Particle("Higgs_boson", 125100.0, 0, 0.0, 4300.0, false, false, susyId("particles/higgs.png"));
 
         electron.setAntiParticle(positron);
         muon.setAntiParticle(antiMuon);
-        tau.setAntiParticle(antiTau);
+        tauon.setAntiParticle(antiTauon);
         electronNeutrino.setAntiParticle(electronAntineutrino);
         muonNeutrino.setAntiParticle(muonAntineutrino);
-        tauNeutrino.setAntiParticle(tauAntineutrino);
+        tauonNeutrino.setAntiParticle(tauonAntineutrino);
 
         up.setAntiParticle(antiUp);
         down.setAntiParticle(antiDown);
@@ -127,18 +127,18 @@ public class Particles {
         WPlus.setAntiParticle(WMinus);
 
         // Composite particles
-        proton = new Particle("proton", 938.272, +1, 0.5, 0, false, true, susyId("particles/proton"));
+        proton = new Particle("proton", 938.272, +1, 0.5, 0, false, true, susyId("particles/proton.png"));
         proton.addComponent(up, 2);
         proton.addComponent(down, 1);
         proton.addComponent(gluon, 0);
-        antiProton = makeAntiParticle(proton, susyId("particles/antiproton"));
+        antiProton = makeAntiParticle(proton, susyId("particles/antiproton.png"));
         proton.setAntiParticle(antiProton);
 
-        neutron = new Particle("neutron", 939.565, 0, 0.5, 0, false, true, susyId("particles/neutron"));
+        neutron = new Particle("neutron", 939.565, 0, 0.5, 0, false, true, susyId("particles/neutron.png"));
         neutron.addComponent(up, 1);
         neutron.addComponent(down, 2);
         neutron.addComponent(gluon, 0);
-        antiNeutron = makeAntiParticle(neutron, susyId("particles/antineutron"));
+        antiNeutron = makeAntiParticle(neutron, susyId("particles/antineutron.png"));
         neutron.setAntiParticle(antiNeutron);
     }
 
@@ -146,16 +146,16 @@ public class Particles {
         // Leptons
         registerParticle(electronNeutrino);
         registerParticle(muonNeutrino);
-        registerParticle(tauNeutrino);
+        registerParticle(tauonNeutrino);
         registerParticle(electron);
         registerParticle(muon);
-        registerParticle(tau);
+        registerParticle(tauon);
         registerParticle(electronAntineutrino);
         registerParticle(muonAntineutrino);
-        registerParticle(tauAntineutrino);
+        registerParticle(tauonAntineutrino);
         registerParticle(positron);
         registerParticle(antiMuon);
-        registerParticle(antiTau);
+        registerParticle(antiTauon);
 
         // Quarks
         registerParticle(up);
