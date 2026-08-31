@@ -1781,17 +1781,17 @@ susy.particle.strange.name=Strange Quark
 susy.particle.tauon.name=Tauon
 susy.particle.top.name=Top Quark
 susy.particle.up.name=Up Quark
-susy.particle.electron_antineutrino.name=Electron Anti-nuetrino
-susy.particle.electron_neutrino.name=Electron Nuetrino
+susy.particle.electron_antineutrino.name=Electron Anti-neutrino
+susy.particle.electron_neutrino.name=Electron Neutrino
 susy.particle.gluon.name=Gluon
-susy.particle.higgs.name=Higgs Boson
+susy.particle.Higgs_boson.name=Higgs Boson
 susy.particle.muon_antineutrino.name=Muon Anti-neutrino
 susy.particle.muon_neutrino.name=Muon Neutrino
 susy.particle.tauon_antineutrino.name=Tauon Anti-neutrino
 susy.particle.tauon_neutrino.name=Tauon Neutrino
-susy.particle.wminus.name=W- Boson
-susy.particle.wplus.name=W+ Boson
-susy.particle.z_boson.name=Z Boson
+susy.particle.W-_boson.name=W- Boson
+susy.particle.W+_boson.name=W+ Boson
+susy.particle.Z_boson.name=Z Boson
 
 #Random Concrete
 tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete

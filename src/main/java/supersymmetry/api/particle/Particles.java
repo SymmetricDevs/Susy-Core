@@ -67,7 +67,7 @@ public class Particles {
                 susyId("particles/electron_neutrino.png"));
         muonNeutrino = new Particle("muon_neutrino", 0.00019, 0, 0.5, 0.0, false, true,
                 susyId("particles/muon_neutrino.png"));
-        tauonNeutrino = new Particle("tauon neutrino", 18.2, 0, 0.5, 0.0, false, true,
+        tauonNeutrino = new Particle("tauon_neutrino", 18.2, 0, 0.5, 0.0, false, true,
                 susyId("particles/tauon_neutrino.png"));
         electron = new Particle("electron", 0.511, -1, 0.5, 0.0, false, true, susyId("particles/electron.png"));
         muon = new Particle("muon", 105.66, -1, 0.5, 0.0, false, true, susyId("particles/muon.png"));
