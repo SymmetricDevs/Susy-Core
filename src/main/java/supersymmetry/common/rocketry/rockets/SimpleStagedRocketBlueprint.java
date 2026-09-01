@@ -15,14 +15,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
-import org.apache.logging.log4j.core.pattern.NotANumber;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.rocketry.RocketConfiguration;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.world.WorldProviderPlanet;
 
@@ -362,7 +360,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         }
         success *= altitudeMult;
         return new SuccessCalculation.AFSStats(success, dryMass, fuelMass,
-                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes.get(0), stageSepTimes.get(0),
+                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes.get(0),
+                stageSepTimes.get(0),
                 stageSepAltitudes.get(1), stageSepTimes.get(1), stageSepAltitudes.get(2), stageSepTimes.get(2),
                 speed, horizontalSpeed);
     }

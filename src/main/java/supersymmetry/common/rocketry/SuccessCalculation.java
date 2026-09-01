@@ -29,7 +29,7 @@ public class SuccessCalculation {
                            double burnoutSpeed, double burnoutHorizontalSpeed) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public boolean isNone() {

@@ -741,8 +741,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         planetSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
         builder.widget(planetSlot);
 
-
-
         mainGroup.addWidget(menuGroup);
         mainGroup.addWidget(workingGroup);
         // Fuel selector
@@ -836,17 +834,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         builder.widget(mainGroup);
         // Various stats beneath
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 8,
-                        () -> I18n.format(getMetaName() + ".gui.success_chance",
-                                String.format("%.2f%%", 100 * this.stats.success())),
-                        0x00eeff),
+                () -> I18n.format(getMetaName() + ".gui.success_chance",
+                        String.format("%.2f%%", 100 * this.stats.success())),
+                0x00eeff),
                 () -> this.isActive() && !this.stats.isNone());
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 19,
-                        () -> I18n.format(getMetaName() + ".gui.mass",
-                                String.format("%.0f", this.stats.mass())),
-                        0xffffff),
+                () -> I18n.format(getMetaName() + ".gui.mass",
+                        String.format("%.0f", this.stats.mass())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 30,
-                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
+                () -> I18n.format(getMetaName() + ".gui.fuel_mass",
                         String.format("%.0f", this.stats.fuelMass())),
                 0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);

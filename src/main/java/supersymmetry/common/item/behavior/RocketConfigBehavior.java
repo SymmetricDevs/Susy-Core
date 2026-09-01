@@ -139,8 +139,8 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         rowFlow.child(IKey.lang("susy.gui.rocket_programmer.turn_altitude").asWidget().setEnabledIf(
                 (w) -> pageNum == 0));
         Flow turnAltitudeFlow = new Row().coverChildren().setEnabledIf((w) -> pageNum == 0);
-            FloatSyncValue turnAltitude = new FloatSyncValue(() -> getTurnAltitude(pageNum, stack),
-                    v -> setTurnAltitude(pageNum, stack, v));
+        FloatSyncValue turnAltitude = new FloatSyncValue(() -> getTurnAltitude(pageNum, stack),
+                v -> setTurnAltitude(pageNum, stack, v));
         turnAltitudeFlow.child(new TextFieldWidget().height(16).setNumbers().value(turnAltitude));
         rowFlow.child(turnAltitudeFlow);
 
@@ -222,5 +222,4 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         pageTag.setFloat("turn_altitude", turnAltitude);
     }
-
 }
