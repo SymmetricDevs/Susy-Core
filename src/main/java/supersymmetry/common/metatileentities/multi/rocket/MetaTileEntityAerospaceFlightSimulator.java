@@ -4,6 +4,7 @@ import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
 import static supersymmetry.api.space.CelestialObjects.EARTH;
+import static supersymmetry.api.space.Planetoid.getPlanetFromItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -132,6 +133,29 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return SolidRocketFuelProperty.search(stack) != null;
+        }
+
+        @Override
+        public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+            // phantom slots write straight through setStackInSlot, which skips isItemValid
+            if (!stack.isEmpty() && !isItemValid(slot, stack)) {
+                return;
+            }
+            super.setStackInSlot(slot, stack);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            setFuelFromData();
+            markDirty();
+        }
+    };
+
+    public final ItemStackHandler planetSlot = new ItemStackHandler(1) {
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return getPlanetFromItem(stack) != null;
         }
 
         @Override
@@ -314,6 +338,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     // the fuel is derived state; fuelList and solidFuelSlot are what persists, and
     // the blueprint decides which of the two is read
     public void setFuelFromData() {
+        if (!planetSlot.getStackInSlot(0).isEmpty()) {
+            planet = getPlanetFromItem(planetSlot.getStackInSlot(0));
+        }
         if (isSolidBlueprint()) {
             this.fuel = SolidRocketFuelProperty.search(this.solidFuelSlot.getStackInSlot(0));
             return;
@@ -705,6 +732,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
         ConditionalWidget menuGroup = new ConditionalWidget(0, 0, width, height, () -> !this.isActive());
         ConditionalWidget workingGroup = new ConditionalWidget(0, 0, width, height, this::isActive);
+        // planet selector
+        menuGroup.addWidget(
+                new LabelWidget(105, 45, this.getMetaName() + ".gui.planet_selector_label", 0xffffff));
+        PhantomSlotWidget planetSlot = new PhantomSlotWidget(this.planetSlot, 0, 0, 0);
+
+        planetSlot.setSelfPosition(new Position(105, 54));
+        planetSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
+        builder.widget(planetSlot);
+
+
 
         mainGroup.addWidget(menuGroup);
         mainGroup.addWidget(workingGroup);

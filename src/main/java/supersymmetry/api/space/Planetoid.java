@@ -22,10 +22,19 @@ public class Planetoid extends CelestialObject {
     private double atmosphereMolarMass;
     private double groundTemperature;
     private double atmosphereSpecificHeat;
-    private double lowOrbitAltitude;
     /// the altitude where a body is considered to have reached orbit (if it has sufficient speed)
+    private double lowOrbitAltitude;
     private double rotationPeriod;
     public static BiMap<Planetoid, Integer> PLANETOIDS = HashBiMap.create();
+
+    public static Planetoid getPlanetFromItem(ItemStack item) {
+        for (Planetoid planet : PLANETOIDS.keySet()) {
+            if (item.isItemEqual(planet.getDisplayItem())) {
+                return planet;
+            }
+        }
+        return null;
+    }
 
     public Planetoid(String translationKey, double mass, double posT, double posX, double posY, double posZ,
                      @Nullable CelestialObject parentBody, PlanetType planetType) {

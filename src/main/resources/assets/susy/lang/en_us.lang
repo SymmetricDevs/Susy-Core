@@ -353,6 +353,7 @@ susy.machine.aerospace_flight_simulator.gui.not_formed=Structure not formed!
 susy.machine.aerospace_flight_simulator.gui.fuel_selector_label=Select fuel:
 susy.machine.aerospace_flight_simulator.gui.turn_altitude_selector_label=Set sim. turn altitude (km):
 susy.machine.aerospace_flight_simulator.gui.cargo_mass_selector_label=Set sim. cargo mass (kg):
+susy.machine.aerospace_flight_simulator.gui.planet_selector_label=Select sim. planet:
 susy.machine.aerospace_flight_simulator.gui.success_chance=Success chance: %.1f
 susy.machine.aerospace_flight_simulator.gui.mass=Dry mass: %s kg
 susy.machine.aerospace_flight_simulator.gui.fuel_mass=Fuel mass: %s kg
@@ -375,7 +376,7 @@ susy.machine.aerospace_flight_simulator.gui.start_button=Stop simulation
 susy.machine.aerospace_flight_simulator.gui.reset_fuel=Clear fuel
 
 susy.machine.aerospace_flight_simulator.gui.computation_power=Computation: %s floppa/t
-# googs/s is a very technical term
+# floppa/s is a very technical term
 susy.machine.aerospace_flight_simulator.gui.energy_consumption=Power input: %s EU/t
 susy.machine.aerospace_flight_simulator.gui.coolant_flow=Coolant input: %s mB/s
 susy.machine.aerospace_flight_simulator.gui.no_coolant_warning=Insufficient FC-75 coolant flow
