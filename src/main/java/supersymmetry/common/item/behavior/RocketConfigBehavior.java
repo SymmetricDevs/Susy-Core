@@ -135,6 +135,15 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         rowFlow.child(landingFlow);
         overallFlow.child(planetoidsFlow);
 
+        // Set turn altitude
+        rowFlow.child(IKey.lang("susy.gui.rocket_programmer.turn_altitude").asWidget().setEnabledIf(
+                (w) -> pageNum == 0));
+        Flow turnAltitudeFlow = new Row().coverChildren().setEnabledIf((w) -> pageNum == 0);
+            FloatSyncValue turnAltitude = new FloatSyncValue(() -> getTurnAltitude(pageNum, stack),
+                    v -> setTurnAltitude(pageNum, stack, v));
+        turnAltitudeFlow.child(new TextFieldWidget().height(16).setNumbers().value(turnAltitude));
+        rowFlow.child(turnAltitudeFlow);
+
         return panel;
     }
 
@@ -200,4 +209,18 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
         pageTag.setInteger("landing_" + axis, x);
     }
+
+    private float getTurnAltitude(int page, ItemStack stack) {
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
+        if (!pageTag.hasKey("turn_altitude") && pageNum == 0) {
+            pageTag.setFloat("turn_altitude", 50);
+        }
+        return pageTag.getFloat("turn_altitude");
+    }
+
+    private void setTurnAltitude(int page, ItemStack stack, float turnAltitude) {
+        NBTTagCompound pageTag = stack.getOrCreateSubCompound("page_" + page);
+        pageTag.setFloat("turn_altitude", turnAltitude);
+    }
+
 }

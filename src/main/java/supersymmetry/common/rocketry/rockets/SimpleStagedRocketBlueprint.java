@@ -15,12 +15,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import org.apache.logging.log4j.core.pattern.NotANumber;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.rocketry.RocketConfiguration;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.world.WorldProviderPlanet;
 
@@ -216,12 +218,15 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
     }
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
+        NBTTagCompound rocketnbt = rocket.getEntityData();
+        NBTTagCompound configTag = rocketnbt.getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
+        double turnAltitude = configTag.getFloat("turn_altitude");
         Planetoid launchSite = EARTH;
         if (rocket.world.provider instanceof WorldProviderPlanet planet) {
             launchSite = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension());
         }
         SuccessCalculation.AFSStats stats = simulateRocketTakeoff(launchSite, rocket.getFuel(),
-                rocket.getTurnAltitude(), rocket.getCargoMass());
+                turnAltitude, rocket.getCargoMass());
         double success = stats.success();
 
         // Number of engines
@@ -357,7 +362,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         }
         success *= altitudeMult;
         return new SuccessCalculation.AFSStats(success, dryMass, fuelMass,
-                finalSpeed - orbitalSpeed, dragCoeff, stageSepAltitudes.get(0), stageSepTimes.get(0),
+                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes.get(0), stageSepTimes.get(0),
                 stageSepAltitudes.get(1), stageSepTimes.get(1), stageSepAltitudes.get(2), stageSepTimes.get(2),
                 speed, horizontalSpeed);
     }

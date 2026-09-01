@@ -1575,6 +1575,7 @@ susy.gui.rocket_programmer.mission_type=Mission type
 susy.gui.rocket_programmer.planetoid=Destination
 susy.gui.rocket_programmer.destination_type=Destination type
 susy.gui.rocket_programmer.landing_coordinates=Landing coordinates
+susy.gui.rocket_programmer.turn_altitude=Set gravity turn start altitude (in km)
 susy.rocket_programmer.circuit_slot=Place Config Tool here
 
 

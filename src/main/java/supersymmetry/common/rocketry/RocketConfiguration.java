@@ -59,25 +59,36 @@ public class RocketConfiguration {
         }
     }
 
+    public final float turnAltitude;
     private final List<MissionConfiguration> missions = new ArrayList<>();
 
     public RocketConfiguration(NBTTagCompound tag) {
+        float tempTurnAlt = 0;
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
+            if (i == 0) {
+                tempTurnAlt = missionTag.getFloat("turn_altitude");
+            }
             if (!missionTag.isEmpty()) {
                 MissionConfiguration config = new MissionConfiguration(missionTag);
                 if (i == 0 || !config.isDefault())
                     missions.add(new MissionConfiguration(missionTag));
             }
         }
+        turnAltitude = tempTurnAlt;
     }
 
     public NBTTagCompound serialize() {
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setFloat("turn_altitude", turnAltitude);
         for (int i = 0; i < missions.size(); i++) {
             tag.setTag("page_" + i, missions.get(i).serialize());
         }
         return tag;
+    }
+
+    public float getTurnAltitude() {
+        return this.turnAltitude;
     }
 
     public void truncate() {

@@ -123,7 +123,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private boolean hasNotEnoughCoolant = false;
 
     public RocketFuelEntry fuel;
-    public Planetoid planet = EARTH; // FIXME: add planet selector
+    public Planetoid planet = EARTH;
     public final List<FluidStack> fuelList = new ArrayList<>();
 
     // phantom slot backing the solid fuel selector; only dusts of a material with a
