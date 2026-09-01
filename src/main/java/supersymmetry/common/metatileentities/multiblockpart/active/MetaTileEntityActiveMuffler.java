@@ -91,7 +91,10 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity implements ICont
 
     @Override
     protected IItemHandlerModifiable createImportItemHandler() {
-        return blockSlot;
+        // No real machine item inventory: the casing block is a phantom/ghost filter (JEI drag and
+        // drop) used only by the UI widget and kept in the private blockSlot field, never part of the
+        // import/export inventories, so it is never dropped when the machine is broken.
+        return new GTItemStackHandler(this, 0);
     }
 
     @Override
@@ -246,6 +249,7 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity implements ICont
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setBoolean("WorkingEnabled", isWorkingEnabled);
+        data.setTag("BlockSlot", blockSlot.serializeNBT());
         return data;
     }
 
@@ -253,6 +257,9 @@ public class MetaTileEntityActiveMuffler extends MetaTileEntity implements ICont
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         this.isWorkingEnabled = data.getBoolean("WorkingEnabled");
+        if (data.hasKey("BlockSlot")) {
+            blockSlot.deserializeNBT(data.getCompoundTag("BlockSlot"));
+        }
     }
 
     @Override

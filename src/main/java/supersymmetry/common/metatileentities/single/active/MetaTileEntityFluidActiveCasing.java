@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -43,8 +44,6 @@ import codechicken.lib.vec.uv.UVTransformationList;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
-import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.impl.NotifiableFluidTank;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ClickButtonWidget;
@@ -102,7 +101,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     private final EffectMode defaultMode;
     private final int tankSize;
 
-    private NotifiableFluidTank fluidTank;
+    private FluidTank phantomFluidTank;
     private IItemHandlerModifiable blockSlot;
     private EffectMode effectMode;
     private boolean isWorkingEnabled = true;
@@ -126,6 +125,14 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         this.defaultMode = defaultMode;
         this.effectMode = defaultMode;
         this.tankSize = tankSize;
+        this.phantomFluidTank = new FluidTank(tankSize);
+        this.blockSlot = new GTItemStackHandler(this, 1) {
+
+            @Override
+            public boolean isItemValid(int slot, net.minecraft.item.ItemStack stack) {
+                return !stack.isEmpty() && stack.getItem() instanceof ItemBlock;
+            }
+        };
         initializeInventory();
     }
 
@@ -135,21 +142,11 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     }
 
     @Override
-    protected FluidTankList createImportFluidHandler() {
-        this.fluidTank = new NotifiableFluidTank(tankSize, this, false);
-        return new FluidTankList(false, fluidTank);
-    }
-
-    @Override
     protected IItemHandlerModifiable createImportItemHandler() {
-        this.blockSlot = new GTItemStackHandler(this, 1) {
-
-            @Override
-            public boolean isItemValid(int slot, net.minecraft.item.ItemStack stack) {
-                return !stack.isEmpty() && stack.getItem() instanceof ItemBlock;
-            }
-        };
-        return blockSlot;
+        // No real machine item inventory: the casing block is a phantom/ghost filter (JEI drag and
+        // drop) used only by the UI widget and kept in the private blockSlot field, never part of the
+        // import/export inventories, so it is never dropped when the machine is broken.
+        return new GTItemStackHandler(this, 0);
     }
 
     @Override
@@ -184,14 +181,14 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     public void update() {
         super.update();
         if (!getWorld().isRemote) {
-            boolean hasFluid = fluidTank.getFluidAmount() > 0;
+            boolean hasFluid = phantomFluidTank.getFluidAmount() > 0;
             boolean newActive = hasFluid && isWorkingEnabled;
             if (newActive != isActive) {
                 isActive = newActive;
                 writeCustomData(GregtechDataCodes.IS_WORKING, buf -> buf.writeBoolean(newActive));
             }
 
-            FluidStack fluid = fluidTank.getFluid();
+            FluidStack fluid = phantomFluidTank.getFluid();
             boolean fluidChanged = lastSyncedFluid == null ? fluid != null :
                     (fluid == null || !fluid.isFluidStackIdentical(lastSyncedFluid));
             if (fluidChanged) {
@@ -352,8 +349,8 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     }
 
     private boolean hasSameFluid(MetaTileEntityFluidActiveCasing other) {
-        FluidStack myFluid = fluidTank.getFluid();
-        FluidStack otherFluid = other.fluidTank.getFluid();
+        FluidStack myFluid = phantomFluidTank.getFluid();
+        FluidStack otherFluid = other.phantomFluidTank.getFluid();
         if (myFluid == null && otherFluid == null) return true;
         if (myFluid == null || otherFluid == null) return false;
         return myFluid.getFluid() == otherFluid.getFluid();
@@ -502,7 +499,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     protected ModularUI createUI(EntityPlayer player) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, 176, 166)
                 .label(6, 6, getMetaFullName())
-                .widget(new PhantomFluidWidget(52, 25, 18, 18, fluidTank)
+                .widget(new PhantomFluidWidget(52, 25, 18, 18, phantomFluidTank)
                         .setBackgroundTexture(GuiTextures.FLUID_SLOT))
                 .widget(new PhantomSlotWidget(blockSlot, 0, 80, 25)
                         .setClearSlotOnRightClick(true)
@@ -567,7 +564,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         buf.writeInt(effectMode.ordinal());
         buf.writeInt(fluidDisplaySize);
 
-        FluidStack fluid = fluidTank.getFluid();
+        FluidStack fluid = phantomFluidTank.getFluid();
         buf.writeBoolean(fluid != null && fluid.amount > 0);
         if (fluid != null && fluid.amount > 0) {
             buf.writeInt(fluid.getFluid().getColor(fluid));
@@ -656,6 +653,8 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         data.setBoolean("WorkingEnabled", isWorkingEnabled);
         data.setInteger("EffectMode", effectMode.ordinal());
         data.setInteger("FluidDisplaySize", fluidDisplaySize);
+        data.setTag("BlockSlot", ((GTItemStackHandler) blockSlot).serializeNBT());
+        data.setTag("PhantomFluid", phantomFluidTank.writeToNBT(new NBTTagCompound()));
         return data;
     }
 
@@ -669,6 +668,12 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
         }
         this.fluidDisplaySize = Math.max(Math.min(data.getInteger("FluidDisplaySize"), MAX_DISPLAY_SIZE),
                 MIN_DISPLAY_SIZE);
+        if (data.hasKey("BlockSlot")) {
+            ((GTItemStackHandler) blockSlot).deserializeNBT(data.getCompoundTag("BlockSlot"));
+        }
+        if (data.hasKey("PhantomFluid")) {
+            phantomFluidTank.readFromNBT(data.getCompoundTag("PhantomFluid"));
+        }
     }
 
     @Override
