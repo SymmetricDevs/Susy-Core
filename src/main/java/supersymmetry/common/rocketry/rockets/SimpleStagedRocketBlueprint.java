@@ -212,8 +212,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
                 initStats.dragCoefficient(), initStats.firstSepAltitude(), initStats.firstSepTime(),
                 initStats.secondSepAltitude(),
                 initStats.secondSepTime(), initStats.thirdSepAltitude(), initStats.thirdSepTime(),
-                initStats.burnoutAltitude(),
-                initStats.burnoutTime(), initStats.burnoutSpeed(), initStats.burnoutHorizontalSpeed());
+                initStats.burnoutSpeed(), initStats.burnoutHorizontalSpeed());
     }
 
     public SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation) {
@@ -225,13 +224,14 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
                 rocket.getTurnAltitude(), rocket.getCargoMass());
         double success = stats.success();
 
-        // Number of engines, radius mismatch
+        // Number of engines
         success *= Math.pow(0.995, this.getComponentCount("engine"));
 
         // Guidance system
         double weatherChallenge = rocket.world.rainingStrength + rocket.world.thunderingStrength;
         success *= (this.getGuidanceMultiplier() - (weatherChallenge * (1 - this.getGuidanceMultiplier())));
 
+        // Redundancy
         double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
         success *= redundancyMult;
         success = Math.max(0, success);
@@ -249,6 +249,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
     public SuccessCalculation.AFSStats simulateRocketTakeoff(Planetoid planet, RocketFuelEntry fuel,
                                                              double turnAltitude, double cargoMass) {
+        turnAltitude *= 1000;
         int time = 0; // seconds
         double dryMass = cargoMass;
         double fuelMass = 0;
@@ -347,15 +348,18 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             time++;
         }
         double finalSpeed = Math.sqrt(speed * speed + horizontalSpeed * horizontalSpeed);
-        // the altitude check is to prevent completely stupid things
         double success = 0;
-        if (horizontalSpeed >= orbitalSpeed && altitude >= 0.66 * planet.getLowOrbitAltitude()) {
-            success = Math.sqrt((finalSpeed - orbitalSpeed) / 1000);
+        // punish people for too low of an orbit
+        double altitudeMult = Math.clamp(Math.pow(altitude / planet.getLowOrbitAltitude() - 0.66, 3) * 30, 0, 1);
+        if (horizontalSpeed >= orbitalSpeed) {
+            // final speed should be over 7% the orbital speed for maximum success
+            success = Math.clamp(Math.sqrt((finalSpeed - orbitalSpeed) / (0.07 * orbitalSpeed)), 0, 1);
         }
+        success *= altitudeMult;
         return new SuccessCalculation.AFSStats(success, dryMass, fuelMass,
-                finalSpeed - orbitalSpeed, dragCoeff, stageSepAltitudes.get(0), stageSepAltitudes.get(0),
-                stageSepAltitudes.get(1), stageSepAltitudes.get(1), stageSepAltitudes.get(2), stageSepAltitudes.get(2),
-                altitude, time, speed, horizontalSpeed);
+                finalSpeed - orbitalSpeed, dragCoeff, stageSepAltitudes.get(0), stageSepTimes.get(0),
+                stageSepAltitudes.get(1), stageSepTimes.get(1), stageSepAltitudes.get(2), stageSepTimes.get(2),
+                speed, horizontalSpeed);
     }
 
     @Override

@@ -25,11 +25,11 @@ public class SuccessCalculation {
 
     public record AFSStats(double success, double mass, double fuelMass, double deltaV, double dragCoefficient,
                            double firstSepAltitude, double firstSepTime, double secondSepAltitude,
-                           double secondSepTime, double thirdSepAltitude, double thirdSepTime, double burnoutAltitude,
-                           double burnoutTime, double burnoutSpeed, double burnoutHorizontalSpeed) {
+                           double secondSepTime, double thirdSepAltitude, double thirdSepTime,
+                           double burnoutSpeed, double burnoutHorizontalSpeed) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public boolean isNone() {
@@ -49,8 +49,6 @@ public class SuccessCalculation {
             tag.setDouble("secondSepTime", secondSepTime);
             tag.setDouble("thirdSepAltitude", thirdSepAltitude);
             tag.setDouble("thirdSepTime", thirdSepTime);
-            tag.setDouble("burnoutAltitude", burnoutAltitude);
-            tag.setDouble("burnoutTime", burnoutTime);
             tag.setDouble("burnoutSpeed", burnoutSpeed);
             tag.setDouble("burnoutHorizontalSpeed", burnoutHorizontalSpeed);
             return tag;
@@ -60,8 +58,7 @@ public class SuccessCalculation {
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
                     nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), nbt.getDouble("firstSepAltitude"),
                     nbt.getDouble("firstSepTime"), nbt.getDouble("secondSepAltitude"), nbt.getDouble("secondSepTime"),
-                    nbt.getDouble("thirdSepAltitude"), nbt.getDouble("thirdSepTime"), nbt.getDouble("burnoutAltitude"),
-                    nbt.getDouble("burnoutTime"), nbt.getDouble("burnoutSpeed"),
+                    nbt.getDouble("thirdSepAltitude"), nbt.getDouble("thirdSepTime"), nbt.getDouble("burnoutSpeed"),
                     nbt.getDouble("burnoutHorizontalSpeed"));
         }
 
@@ -74,10 +71,9 @@ public class SuccessCalculation {
             buf.writeDouble(firstSepAltitude);
             buf.writeDouble(firstSepTime);
             buf.writeDouble(secondSepAltitude);
+            buf.writeDouble(secondSepTime);
             buf.writeDouble(thirdSepAltitude);
             buf.writeDouble(thirdSepTime);
-            buf.writeDouble(burnoutAltitude);
-            buf.writeDouble(burnoutTime);
             buf.writeDouble(burnoutSpeed);
             buf.writeDouble(burnoutHorizontalSpeed);
         }
@@ -85,8 +81,7 @@ public class SuccessCalculation {
         public static AFSStats readFromBuffer(PacketBuffer buf) {
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
                     buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble());
+                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
         }
     }
 }

@@ -36,13 +36,12 @@ public class CelestialObjects {
     public static CelestialRenderer RENDERER;
 
     // Earth values (since the other values are relative to it)
-    public static final double EARTH_MASS = 5.97217e24;
     /// kg
-    public static final double EARTH_RADIUS = 6371000;
+    public static final double EARTH_MASS = 5.97217e24;
     /// meters
-    public static final double EARTH_SIDEREAL_ROTATION_PERIOD = 86164.1;
-
+    public static final double EARTH_RADIUS = 6371000;
     /// seconds
+    public static final double EARTH_SIDEREAL_ROTATION_PERIOD = 86164.1;
 
     public static void init() {
         MILKY_WAY = new Galaxy("milky_way", 1., 0., 0., 0., 0., null, GalaxyType.SPIRAL);
