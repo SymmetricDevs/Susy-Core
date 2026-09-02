@@ -505,7 +505,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>(
             "electron_beam_lithography", 1, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 2, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 3, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
     public static final RecipeMap<SimpleRecipeBuilder> GREENHOUSE_PLANT = new RecipeMap<>("greenhouse_plant", 2, 4, 3,
             1, new SimpleRecipeBuilder(), false)
