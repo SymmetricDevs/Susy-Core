@@ -34,9 +34,9 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
     private static final int PODS_MAX = 4;
     private static final int POD_SPAWN_HEIGHT = 300;
     private static final int POD_SPREAD_RADIUS = 4;
+    public static groovy.lang.Closure<?> fedPayloadProvider = null;
 
     private UUID targetPlayerUUID = null;
-    //private UUID targetPlayerUUID = UUID.fromString("31c4910d-9b69-4725-8969-9ed53ac8a7dc");
 
     private final List<Vec3d> positionSamples = new ArrayList<>();
 
@@ -182,36 +182,42 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
     private void launchStrike(World world, Vec3d target) {
         int podCount = PODS_MIN + GTValues.RNG.nextInt(PODS_MAX - PODS_MIN + 1);
 
-        List<String> landingCommands = buildLandingCommands();
+        List<String[]> payloadOptions = buildPayloadOptions();
 
         for (int i = 0; i < podCount; i++) {
             double angle = GTValues.RNG.nextDouble() * 2 * Math.PI;
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(target.x + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(target.z + Math.sin(angle) * radius) + 0.5;
-            double spawnY = POD_SPAWN_HEIGHT + GTValues.RNG.nextInt(10); //apparently this is better than math rand, not gonna question it
+            double spawnY = POD_SPAWN_HEIGHT + GTValues.RNG.nextInt(10);
 
             EntityDropPod pod = new EntityDropPod(world, spawnX, spawnY, spawnZ);
             pod.canExplode(false);
-            pod.setCommandsOnLanding(new ArrayList<>(landingCommands));
+            pod.setPayloadOptions(new ArrayList<>(payloadOptions));
             world.spawnEntity(pod);
         }
     }
 
-    private List<String> buildLandingCommands() {
-        List<String> commands = new ArrayList<>();
+    private List<String[]> buildPayloadOptions() {
+        List<String[]> options = new ArrayList<>();
         try {
-            Object result = org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(
-                    MetaTileEntityFederationDropBeacon.class, "getFedStrikeCommands", new Object[] {});
+            if (fedPayloadProvider == null) return options;
+            Object result = fedPayloadProvider.call();
             if (result instanceof List) {
-                for (Object cmd : (List<?>) result) {
-                    if (cmd instanceof String) commands.add((String) cmd);
+                for (Object entry : (List<?>) result) {
+                    if (entry instanceof List) {
+                        List<?> pair = (List<?>) entry;
+                        if (pair.size() >= 1) {
+                            String meta = pair.size() >= 2 ? pair.get(1).toString() : "0";
+                            options.add(new String[]{ pair.get(0).toString(), meta });
+                        }
+                    }
                 }
             }
         } catch (Throwable t) {
             t.printStackTrace();
         }
-        return commands;
+        return options;
     }
 
     //WIP

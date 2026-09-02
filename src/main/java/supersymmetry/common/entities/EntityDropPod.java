@@ -58,6 +58,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     private boolean explosive = true;
 
     private List<String> commandsOnLanding = new ArrayList<>();
+    private List<String[]> payloadOptions = new ArrayList<>();
+
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
@@ -255,6 +257,88 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         }
     }
 
+    public void setPayloadOptions(List<String[]> options) {
+        this.payloadOptions.clear();
+        if (options != null) {
+            this.payloadOptions.addAll(options);
+        }
+    }
+
+    public void placeDownPayloadOnLanding() {
+        System.out.println("[DropPod] placeDownPayloadOnLanding called. Options: " + payloadOptions.size());
+
+        if (payloadOptions.isEmpty()) {
+            System.out.println("[DropPod] No payload options, aborting.");
+            return;
+        }
+
+        String[] chosen = payloadOptions.get(GTValues.RNG.nextInt(payloadOptions.size()));
+
+        String blockName = chosen[0];
+        int meta = chosen.length >= 2 ? Integer.parseInt(chosen[1]) : 0;
+        String nbtString = chosen.length >= 3 ? chosen[2] : "";
+
+        System.out.println("[DropPod] Attempting to place block: " + blockName + " meta: " + meta);
+
+        net.minecraft.block.Block block = net.minecraft.block.Block.getBlockFromName(blockName);
+        if (block == null) {
+            System.out.println("[DropPod] Block not found: " + blockName);
+            return;
+        }
+
+        BlockPos placePos = new BlockPos(
+                MathHelper.floor(this.posX),
+                MathHelper.floor(this.posY),
+                MathHelper.floor(this.posZ));
+        System.out.println("[DropPod] Placing at: " + placePos);
+
+        gregtech.api.metatileentity.MetaTileEntity mte =
+                gregtech.api.GregTechAPI.MTE_REGISTRY.getObjectById(meta);
+
+        if (mte == null) {
+            System.out.println("[DropPod] No MTE found for id: " + meta);
+            return;
+        }
+
+        System.out.println("[DropPod] Found MTE: " + mte.metaTileEntityId);
+
+        @SuppressWarnings("deprecation")
+        IBlockState state = block.getStateFromMeta(0);
+        boolean placed = this.world.setBlockState(placePos, state, 3);
+        System.out.println("[DropPod] setBlockState result: " + placed);
+
+        gregtech.api.metatileentity.MetaTileEntityHolder holder =
+                (gregtech.api.metatileentity.MetaTileEntityHolder) this.world.getTileEntity(placePos);
+
+        if (holder != null) {
+            holder.setMetaTileEntity(mte);
+
+            if (!nbtString.isEmpty()) {
+                try {
+                    NBTTagCompound extraNbt = net.minecraft.nbt.JsonToNBT.getTagFromJson(nbtString);
+                    NBTTagCompound existing = new NBTTagCompound();
+                    holder.writeToNBT(existing);
+
+                    // targetUUID etc. belong inside the MetaTileEntity sub-tag
+                    NBTTagCompound mteTag = existing.getCompoundTag("MetaTileEntity");
+                    mteTag.merge(extraNbt);
+                    existing.setTag("MetaTileEntity", mteTag);
+
+                    holder.readFromNBT(existing);
+                    System.out.println("[DropPod] Applied NBT: " + nbtString);
+                } catch (net.minecraft.nbt.NBTException e) {
+                    System.out.println("[DropPod] Failed to parse NBT: " + nbtString);
+                    e.printStackTrace();
+                }
+            }
+
+            holder.markDirty();
+            System.out.println("[DropPod] MTE set on holder: " + mte.metaTileEntityId);
+        } else {
+            System.out.println("[DropPod] Holder was null after placement.");
+        }
+    }
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
@@ -280,12 +364,33 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
 
             if (this.hasLanded()) {
                 if (!this.commandsOnLanding.isEmpty()) {
-                    for (String command : new ArrayList<>(this.commandsOnLanding)) { // copy to avoid concurrent
-                                                                                     // modification
-                        this.world.getMinecraftServer().getCommandManager()
-                                .executeCommand(this.getCommandSender(), command);
+                    List<String> cmds = new ArrayList<>(this.commandsOnLanding);
+                    // override since I don't want to bother adding in custom logic just for this.
+                    // for any kind of vanilla block, you could just get away with /setblock, however due to how gt stores it's blocks
+                    // our only options are either this or using RC as some kind of fucked up proxy where we store the gt block we are trying to make
+                    // and generate it as a 1x1x1 structure when the drop pod lands and executes a /#gen command. This would make it a pain in the ass to edit though
+                    if (cmds.get(0).equals("blocklist")) {
+                        List<String[]> payloadFromCommands = new ArrayList<>();
+                        for (int i = 1; i < cmds.size(); i++) {
+                            String entry = cmds.get(i);
+                            String[] parts = entry.split(",", 3); // limit 3 so NBT json isn't split
+                            String blockName = parts[0];
+                            String meta = parts.length >= 2 ? parts[1] : "0";
+                            String nbt = parts.length >= 3 ? parts[2] : null;
+                            payloadFromCommands.add(new String[]{ blockName, meta, nbt != null ? nbt : "" });
+                        }
+                        this.payloadOptions.addAll(payloadFromCommands);
+                    } else {
+                        for (String command : cmds) {
+                            this.world.getMinecraftServer().getCommandManager()
+                                    .executeCommand(this.getCommandSender(), command);
+                        }
                     }
-                    this.commandsOnLanding.clear(); // ensure they only run once
+                    this.commandsOnLanding.clear(); //ensure they only run once
+                }
+                if (!this.payloadOptions.isEmpty()) {
+                    placeDownPayloadOnLanding();
+                    this.payloadOptions.clear(); // only place once
                 }
                 if (this.getTimeSinceLanding() == 0) {
                     int posXRounded = MathHelper.floor(this.posX);
