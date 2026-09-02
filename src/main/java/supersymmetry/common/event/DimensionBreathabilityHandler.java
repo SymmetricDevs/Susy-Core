@@ -34,9 +34,9 @@ public final class DimensionBreathabilityHandler {
         dimensionBreathabilityMap.clear();
 
         // Nether
-        addHazard(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2));
+        addHazard(-1, new BreathabilityInfo(SuSyDamageSources.getToxicAtmoDamage(), 2).ignoreMobs());
         // Beneath
-        addHazard(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5));
+        addHazard(10, new BreathabilityInfo(SuSyDamageSources.getSuffocationDamage(), 0.5).ignoreMobs());
         // SPACE
         addHazard(CelestialObjects.MOON.getDimension(), SPACE);
     }
@@ -59,13 +59,16 @@ public final class DimensionBreathabilityHandler {
     public static void tickEntity(Entity entity) {
         if (isInHazardousEnvironment(entity)) {
             for (BreathabilityInfo info : dimensionBreathabilityMap.get(entity.dimension)) {
+                if (info.ignoresMobs && entity instanceof EntityMob) {
+                    continue;
+                }
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
                     if (AtmosphereWorldData.get(entity.getEntityWorld()).getGraph()
                             .getOxygenation(entity.getPosition()) >= 0.1) {
                         return;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
-                    if (entity.getBrightness() > 0.05F || entity instanceof EntityMob) {
+                    if (entity.getBrightness() > 0.05F) {
                         return;
                     }
                 }
@@ -110,6 +113,7 @@ public final class DimensionBreathabilityHandler {
 
         public DamageSource damageType;
         public double defaultDamage;
+        public boolean ignoresMobs;
 
         public BreathabilityInfo(DamageSource damageType, double defaultDamage) {
             this.damageType = damageType;
@@ -117,13 +121,19 @@ public final class DimensionBreathabilityHandler {
         }
 
         public void damagePlayer(Entity player) {
-            player.attackEntityFrom(damageType, (float) defaultDamage);
+            damagePlayer(player, 0);
         }
 
         public void damagePlayer(Entity player, double amountAbsorbed) {
+            if (ignoresMobs && player instanceof EntityMob) return;
             if (defaultDamage > amountAbsorbed) {
                 player.attackEntityFrom(damageType, (float) defaultDamage - (float) amountAbsorbed);
             }
+        }
+
+        public BreathabilityInfo ignoreMobs() {
+            ignoresMobs = true;
+            return this;
         }
     }
 }

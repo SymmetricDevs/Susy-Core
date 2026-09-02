@@ -37,4 +37,5 @@ public class SuSyDamageSources {
     public static DamageSource getCrusherDamage() {
         return CRUSHER;
     }
+
 }
