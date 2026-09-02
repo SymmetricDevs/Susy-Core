@@ -265,10 +265,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     }
 
     public void placeDownPayloadOnLanding() {
-        System.out.println("[DropPod] placeDownPayloadOnLanding called. Options: " + payloadOptions.size());
-
         if (payloadOptions.isEmpty()) {
-            System.out.println("[DropPod] No payload options, aborting.");
             return;
         }
 
@@ -278,11 +275,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         int meta = chosen.length >= 2 ? Integer.parseInt(chosen[1]) : 0;
         String nbtString = chosen.length >= 3 ? chosen[2] : "";
 
-        System.out.println("[DropPod] Attempting to place block: " + blockName + " meta: " + meta);
-
         net.minecraft.block.Block block = net.minecraft.block.Block.getBlockFromName(blockName);
         if (block == null) {
-            System.out.println("[DropPod] Block not found: " + blockName);
             return;
         }
 
@@ -290,22 +284,17 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 MathHelper.floor(this.posX),
                 MathHelper.floor(this.posY),
                 MathHelper.floor(this.posZ));
-        System.out.println("[DropPod] Placing at: " + placePos);
 
         gregtech.api.metatileentity.MetaTileEntity mte =
                 gregtech.api.GregTechAPI.MTE_REGISTRY.getObjectById(meta);
 
         if (mte == null) {
-            System.out.println("[DropPod] No MTE found for id: " + meta);
             return;
         }
-
-        System.out.println("[DropPod] Found MTE: " + mte.metaTileEntityId);
 
         @SuppressWarnings("deprecation")
         IBlockState state = block.getStateFromMeta(0);
         boolean placed = this.world.setBlockState(placePos, state, 3);
-        System.out.println("[DropPod] setBlockState result: " + placed);
 
         gregtech.api.metatileentity.MetaTileEntityHolder holder =
                 (gregtech.api.metatileentity.MetaTileEntityHolder) this.world.getTileEntity(placePos);
@@ -325,17 +314,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                     existing.setTag("MetaTileEntity", mteTag);
 
                     holder.readFromNBT(existing);
-                    System.out.println("[DropPod] Applied NBT: " + nbtString);
                 } catch (net.minecraft.nbt.NBTException e) {
-                    System.out.println("[DropPod] Failed to parse NBT: " + nbtString);
                     e.printStackTrace();
                 }
             }
 
             holder.markDirty();
-            System.out.println("[DropPod] MTE set on holder: " + mte.metaTileEntityId);
-        } else {
-            System.out.println("[DropPod] Holder was null after placement.");
         }
     }
 
