@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -64,7 +65,7 @@ public final class DimensionBreathabilityHandler {
                         return;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
-                    if (entity.getBrightness() > 0.05F) {
+                    if (entity.getBrightness() > 0.05F || entity instanceof EntityMob) {
                         return;
                     }
                 }
