@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import codechicken.lib.vec.Cuboid6;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
@@ -63,6 +64,28 @@ public class BlockTanklessFluidPipe
         super(pipeType, registry);
         setCreativeTab(GregTechAPI.TAB_GREGTECH_PIPES);
         setHarvestLevel(ToolClasses.WRENCH, 1);
+    }
+
+    public static Cuboid6 getFlangeBox(@Nullable EnumFacing side, float thickness, boolean hasCover) {
+        // Frame render box is offset by 0.001d inside, so here we offset by 0.0011d to make it rendered correctly
+        double min = Math.max((thickness > 0.3 ? 0.375d - thickness / 2.0d : 0.4375d - thickness / 2.0d), 0) + 0.0011d;
+        double max = 1 - min;
+        // the flange front face sits right at the base pipe cube's face when there is no cover, but is recessed
+        // (behind the cover box, which sits at 0.001 / 0.999) when a cover occupies this side
+        double faceMin = hasCover ? 0.0011d : -0.0001d;
+        double faceMax = 1 - faceMin;
+        double flangeMin = 0.1249d;
+        double flangeMax = 1 - flangeMin;
+
+        return switch (side) {
+            case WEST -> new Cuboid6(faceMin, min, min, flangeMin, max, max);
+            case EAST -> new Cuboid6(flangeMax, min, min, faceMax, max, max);
+            case NORTH -> new Cuboid6(min, min, faceMin, max, max, flangeMin);
+            case SOUTH -> new Cuboid6(min, min, flangeMax, max, max, faceMax);
+            case UP -> new Cuboid6(min, flangeMax, min, max, faceMax, max);
+            case DOWN -> new Cuboid6(min, faceMin, min, max, flangeMin, max);
+            case null -> new Cuboid6(min, min, min, max, max, max);
+        };
     }
 
     public void addPipeMaterial(Material material, TanklessFluidPipeProperties properties) {
@@ -160,7 +183,7 @@ public class BlockTanklessFluidPipe
                     (connections & 1 << (12 + side.getIndex())) <= 0 && // No cover (dedupe)
                     pipeTile.isFlangeVisible(side) // Flange visible
             ) {
-                val flange = TanklessFluidPipeRenderer.getFlangeBox(side, thickness, false);
+                val flange = getFlangeBox(side, thickness, false);
                 result.add(new IndexedCuboid6(new PipeConnectionData(side), flange));
             }
         }
