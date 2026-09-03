@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import codechicken.lib.vec.Cuboid6;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.base.Preconditions;
 
 import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.vec.Cuboid6;
 import dev.tianmi.sussypatches.api.core.mixin.extension.MaterialPipeExtension;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.toolitem.ToolClasses;
