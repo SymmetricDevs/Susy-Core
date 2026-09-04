@@ -219,9 +219,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             return Optional.empty();
         }
 
-        if (!componentList.contains(Type.EARTH_LANDING_SYSTEM)) { // FIXME: improve this once satellites that
-            analysis.status = BuildStat.NO_LANDING_SYSTEM;        // stay permanently in orbit or fly to
-            return Optional.empty();                              // another body and don't return are added
+        if (!componentList.contains(Type.EARTH_LANDING_SYSTEM) && !componentList.contains(Type.LANDER_ONE_WAY)) {
+            analysis.status = BuildStat.NO_LANDING_SYSTEM; // FIXME: improve this once satellites that stay permanently in orbit are added
         }
 
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
@@ -272,6 +271,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         int numSensors = 0;
         int numThrusters = 0;
         int numFuelCells = 0;
+        int numMainEngines = 0;
+        int numOxTanks = 0;
+        int numFuelTanks = 0;
+        int numLanders = 0;
+        int numOneWayLanders = 0;
 
         for (Type component : componentList) {
             powerConsumption += getPowerConsumed(component);
@@ -282,6 +286,12 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             numSensors += (component == Type.SENSOR_ARRAY ? 1 : 0);
             numThrusters += (component == Type.CHEMICAL_THRUSTER ? 1 : 0);
             numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
+            numMainEngines += (component == Type.MAIN_ENGINE ? 1 : 0);
+            numOxTanks += (component == Type.OXIDIZER_TANK ? 1 : 0);
+            numFuelTanks += (component == Type.FUEL_TANK ? 1 : 0);
+            numLanders += (component == Type.LANDER ? 1 : 0);
+            numOneWayLanders += (component == Type.LANDER_ONE_WAY ? 1 : 0);
+
         }
 
         powerConsumption += guidanceComputers.size() * 250; // FIXME: make powergen a more universal property
@@ -296,6 +306,27 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             return Optional.empty();
         }
 
+        if ((numLanders > 0 || numOneWayLanders > 0) && numMainEngines < 1) {
+            analysis.status = BuildStat.NO_ENGINE;
+            return Optional.empty();
+        }
+
+        if ((numLanders > 0 && numFuelTanks < 8) || (numOneWayLanders > 0 && numFuelTanks < 4)) {
+            analysis.status = BuildStat.NOT_ENOUGH_FUEL;
+            return Optional.empty();
+        }
+
+        if ((numLanders > 0 && numOxTanks < 8) || (numOneWayLanders > 0 && numOxTanks < 4)) {
+            analysis.status = BuildStat.NOT_ENOUGH_OXIDIZER;
+            return Optional.empty();
+        }
+
+        if (numMainEngines > 0 && numThrusters < 4) {
+            analysis.status = BuildStat.NOT_ENOUGH_RCS;
+            return Optional.empty();
+        }
+
+
         // FIXME: once more detailed satellites are implemented this should be done in a saner way
         double collectionEfficiency = Math.clamp(numArms, 0, 2); // up to 2 arms
         collectionEfficiency *= Math.clamp(
@@ -308,7 +339,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                                                                            // *= 1.26
         collectionEfficiency = Math.clamp(collectionEfficiency, 0, 0.75 * numThrusters); // if you run out of fuel you
                                                                                          // can't collect more scrap
-        this.collectionEfficiency = Math.clamp(collectionEfficiency, 0, 4);
+        this.collectionEfficiency = Math.clamp(collectionEfficiency, 0, 5);
 
         double powerRedundancy = (double) powerGeneration / powerConsumption;
         double batteryRedundancy = (double) numBatteries / batteriesRequired;

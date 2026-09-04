@@ -110,7 +110,11 @@ public class StructAnalysis {
         TOO_MANY_GAS_GEN(
                 "too_many_gas_gen"),
         DIFFERENT_PUMPS(
-                "different_pumps");
+                "different_pumps"),
+        NO_ENGINE("no_engine"),
+        NOT_ENOUGH_OXIDIZER("not_enough_oxidizer"),
+        NOT_ENOUGH_FUEL("not_enough_fuel"),
+        NOT_ENOUGH_RCS("not_enough_rcs");
 
         String code;
 
