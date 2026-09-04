@@ -64,6 +64,21 @@
         "textures" : {
           "all" : "gregtech:blocks/rocketry/struct/lander_one_way"
         }
+      },
+      "main_engine" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/main_engine"
+        }
+      },
+      "oxidizer_tank" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/oxidizer_tank"
+        }
+      },
+      "fuel_tank" : {
+        "textures" : {
+          "all" : "gregtech:blocks/rocketry/struct/fuel_tank"
+        }
       }
     }
   }

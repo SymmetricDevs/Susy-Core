@@ -83,7 +83,9 @@ tile.structural_block_1.structural_block_pipocalypse.name=Structural Block Dense
 tile.structural_block_1.structural_block_vent.name=Structural Block Vent
 tile.structural_block_1.structural_block_vent_broken.name=Structural Block Vent (Broken)
 
-tile.rocket_turbopump.basic.name=Basic Rocket Turbopump
+tile.rocket_turbopump.low_speed.name=Low-Speed Rocket Turbopump
+tile.rocket_turbopump.medium_speed.name=Medium-Speed Rocket Turbopump
+tile.rocket_turbopump.high_speed.name=High-Speed Rocket Turbopump
 tile.rocket_control.basic.name=Basic Rocket Control System
 tile.rocket_outer_hatch.al_2219.name=Al-2219 Rocket Hatch
 tile.rocket_tank_shell.al_2219.name=Al-2219 Tank Shell
@@ -103,6 +105,7 @@ tile.rocket_nozzle.expanding.name=Expanding Rocket Nozzle Shell
 tile.rocket_fairing_connector.al_7075.name=Al-7075 Fairing Connector
 tile.guidance_system.soyuz.name=Soyuz 7K Guidance System
 tile.rocket_engine_gas_generator.open_cycle.name=Open Cycle Gas Generator
+tile.rocket_engine_gas_generator.staged_combustion.name=Staged Combustion Gas Generator
 
 
 tile.deposit_block.orthomagmatic.name=Orthomagmatic Deposit Block
@@ -446,6 +449,13 @@ tile.spacecraft_instrument.battery.name=Spacecraft Battery
 tile.spacecraft_instrument.arm.name=Spacecraft Arm
 tile.spacecraft_instrument.lander.name=Spacecraft Lander
 tile.spacecraft_instrument.lander_one_way.name=Spacecraft One-Way Lander
+tile.spacecraft_instrument.nuclear_reactor.name=Spacecraft Nuclear Reactor
+tile.spacecraft_instrument.chemical_thruster.name=Spacecraft Reaction Control Thruster
+tile.spacecraft_instrument.fuel_cell.name=Spacecraft Fuel Cell
+tile.spacecraft_instrument.earth_landing_system.name=Spacecraft Earth Landing System
+tile.spacecraft_instrument.main_engine.name=Spacecraft Lunar Main Engine
+tile.spacecraft_instrument.oxidizer_tank.name=Spacecraft Engine Oxidizer Tank
+tile.spacecraft_instrument.fuel_tank.name=Spacecraft Engine Fuel Tank
 
 tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
 

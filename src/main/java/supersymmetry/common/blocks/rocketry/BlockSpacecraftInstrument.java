@@ -51,11 +51,14 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case BATTERY -> 100;
             case ARM -> 400;
             case LANDER -> 15200; // Apollo lander mass from wikipedia
-            case LANDER_ONE_WAY -> 7600; // Apollo lander mass from wikipedia
+            case LANDER_ONE_WAY -> 7600;
             case NUCLEAR_REACTOR -> 1500;
-            case CHEMICAL_THRUSTER -> 300;
-            case FUEL_CELL -> 120; // Apollo fuel cell was 111, rounded up
+            case CHEMICAL_THRUSTER -> 120;
+            case FUEL_CELL -> 270; // Apollo: 111 - fuel cell itself, 13 - liquid hydrogen, 148 - liquid oxygen
             case EARTH_LANDING_SYSTEM -> 1500; // Apollo heat shield was 1400 + the parachutes
+            case MAIN_ENGINE -> 150;
+            case OXIDIZER_TANK -> 1430; // Apollo service module had 11433 kg of oxidizer, divided among 8 tanks
+            case FUEL_TANK -> 890; //  7151 kg Apollo fuel / 8 tanks
         };
     }
 
@@ -67,6 +70,8 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case NUCLEAR_REACTOR -> false;
             case BATTERY -> false;
             case FUEL_CELL -> false;
+            case OXIDIZER_TANK -> false;
+            case FUEL_TANK -> false;
             default -> true;
         };
     }
@@ -130,7 +135,10 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         CHEMICAL_THRUSTER("chemical_thruster", 4),
         FUEL_CELL("fuel_cell", 4),
         EARTH_LANDING_SYSTEM("earth_landing_system", 4),
-        LANDER_ONE_WAY("lander_one_way", 4, new InstrumentLanderOneWay());
+        LANDER_ONE_WAY("lander_one_way", 4, new InstrumentLanderOneWay()),
+        MAIN_ENGINE("main_engine", 4),
+        OXIDIZER_TANK("oxidizer_tank", 4),
+        FUEL_TANK("fuel_tank", 4);
 
         public String name;
         public int h;
