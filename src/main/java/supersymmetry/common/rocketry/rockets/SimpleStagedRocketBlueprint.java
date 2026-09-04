@@ -203,10 +203,10 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         success *= this.getGuidanceMultiplier();
         double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
-        success *= redundancyMult;
         success = Math.max(0, success);
-
+        
         success = augmentSuccess(success, augmentation);
+        success *= redundancyMult;
 
         return new SuccessCalculation.AFSStats(success, initStats.mass(), initStats.fuelMass(), initStats.deltaV(),
                 initStats.dragCoefficient(), initStats.firstSepAltitude(), initStats.firstSepTime(),
@@ -236,9 +236,10 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
 
         // Redundancy
         double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
-        success *= redundancyMult;
+
         success = Math.max(0, success);
         success = augmentSuccess(success, augmentation);
+        success *= redundancyMult; // afs can't fix technical unreliabilities :tr:
 
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
