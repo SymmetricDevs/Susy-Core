@@ -406,6 +406,7 @@ susy.machine.aerospace_flight_simulator.obstructed=No FC-75 coolant
 susy.machine.aerospace_flight_simulator.obstructed.desc=The AFS must be fully filled with coolant to begin normal operation.
 
 susy.rocketry.components.engine.name=Engine(s)
+
 susy.rocketry.components.tank.name=Liquid tank(s)
 susy.rocketry.components.spacecraft.name=Spacecraft
 susy.rocketry.components.fairing.name=Fairing
