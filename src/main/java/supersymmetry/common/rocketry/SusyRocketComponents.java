@@ -42,10 +42,10 @@ public class SusyRocketComponents {
         }
 
         if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
-                (GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide") != null)) {
-            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-N2O4")
+                (GregTechAPI.materialManager.getMaterial("mon_3") != null)) {
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-MON3-")
                     .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
-                    .addComponent(GregTechAPI.materialManager.getMaterial("dinitrogen_tetroxide").getFluid(), 216)
+                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 216)
                     .density(1.2).sIVacuum(336).sIPerPressure(288).register();
         }
 
