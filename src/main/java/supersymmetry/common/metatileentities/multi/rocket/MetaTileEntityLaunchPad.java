@@ -518,7 +518,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntitySoyuzBasic(this.getWorld(), position,
-                this.getFrontFacing().getHorizontalAngle());
+                this.getFrontFacing().getHorizontalAngle() + 45);
         if (tag != null) {
             // Copy in all tags
             for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {

@@ -204,7 +204,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= this.getGuidanceMultiplier();
         double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
         success = Math.max(0, success);
-        
+
         success = augmentSuccess(success, augmentation);
         success *= redundancyMult;
 
