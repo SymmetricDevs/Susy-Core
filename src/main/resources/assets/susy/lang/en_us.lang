@@ -1721,7 +1721,8 @@ item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
 item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
 # JEI Info
-susy.tooltip.specific_impulse=Specific Impulse: %s
+susy.tooltip.specific_impulse=Specific Impulse: %s s
+susy.tooltip.density=Density: %s kg/m³
 susy.tooltip.mass=Mass (as rocket part): %s kg
 susy.tooltip.guidance_multiplier=Base Success Chance: %sx
 rocket_fuel.name=Rocket Fuel
