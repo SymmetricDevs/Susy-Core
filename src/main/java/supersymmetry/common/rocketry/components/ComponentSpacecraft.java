@@ -220,7 +220,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         }
 
         if (!componentList.contains(Type.EARTH_LANDING_SYSTEM) && !componentList.contains(Type.LANDER_ONE_WAY)) {
-            analysis.status = BuildStat.NO_LANDING_SYSTEM; // FIXME: improve this once satellites that stay permanently in orbit are added
+            analysis.status = BuildStat.NO_LANDING_SYSTEM; // FIXME: improve this once satellites that stay permanently
+                                                           // in orbit are added
         }
 
         IBlockState guidanceBlock = analysis.world.getBlockState(guidanceComputers.get(0));
@@ -325,7 +326,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             analysis.status = BuildStat.NOT_ENOUGH_RCS;
             return Optional.empty();
         }
-
 
         // FIXME: once more detailed satellites are implemented this should be done in a saner way
         double collectionEfficiency = Math.clamp(numArms, 0, 2); // up to 2 arms

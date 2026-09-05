@@ -58,7 +58,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             case EARTH_LANDING_SYSTEM -> 1500; // Apollo heat shield was 1400 + the parachutes
             case MAIN_ENGINE -> 150;
             case OXIDIZER_TANK -> 1430; // Apollo service module had 11433 kg of oxidizer, divided among 8 tanks
-            case FUEL_TANK -> 890; //  7151 kg Apollo fuel / 8 tanks
+            case FUEL_TANK -> 890; // 7151 kg Apollo fuel / 8 tanks
         };
     }
 
