@@ -44,8 +44,10 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
     }
 
     @NotNull protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start().aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ").aisle("CCCCC", "C   C", "C   C", "C   C", " CCC ")
+        return FactoryBlockPattern.start()
+                .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle("CCCCC", "C C C", "C E C", "C C C", " CCC ")
+                .aisle("CCCCC", "C   C", "C   C", "C   C", " CCC ")
                 .aisle(" CSC ", " GGG ", " GGG ", " CCC ", "     ").where('S', selfPredicate())
                 .where('C',
                         states(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
@@ -81,9 +83,6 @@ public class MetaTileEntityElectricDischargeMachine extends RecipeMapMultiblockC
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        if (sourcePart instanceof IMultiblockAbilityPart<?>) {
-            MultiblockAbility<?> ability = ((IMultiblockAbilityPart<?>) sourcePart).getAbility();
-        }
         return GCYMTextures.NONCONDUCTING_CASING;
     }
 
