@@ -6,15 +6,73 @@ tile.cooling_coil.manganese_iron_arsenic_phosphide.name=Manganese Iron Arsenic P
 tile.cooling_coil.praseodymium_nickel.name=Praseodymium-Nickel Cooling Coil
 tile.cooling_coil.gadolinium_silicon_germanium.name=Gadolinium Silicon Germanium Cooling Coil
 tile.cooling_coil.tooltip_temperature=Base Cooling Capacity: §b%,dK
+tile.cooling_coil_active.manganese_iron_arsenic_phosphide.name=Active Manganese Iron Arsenic Phosphide Cooling Coil (Decorative)
+tile.cooling_coil_active.praseodymium_nickel.name=Active Praseodymium-Nickel Cooling Coil (Decorative)
+tile.cooling_coil_active.gadolinium_silicon_germanium.name=Active Gadolinium Silicon Germanium Cooling Coil (Decorative)
+tile.cooling_coil_active_inverted.manganese_iron_arsenic_phosphide.name=Inverted Active Manganese Iron Arsenic Phosphide Cooling Coil (Decorative)
+tile.cooling_coil_active_inverted.praseodymium_nickel.name=Inverted Active Praseodymium-Nickel Cooling Coil (Decorative)
+tile.cooling_coil_active_inverted.gadolinium_silicon_germanium.name=Inverted Active Gadolinium Silicon Germanium Cooling Coil (Decorative)
 tile.heating_coil.molybdenum_disilicide.name=Molybdenum Disilicide Coil Block
 tile.heating_coil.tungsten.name=Tungsten Coil Block
+tile.heating_coil_active.molybdenum_disilicide.name=Active Molybdenum Disilicide Coil Block (Decorative)
+tile.heating_coil_active.tungsten.name=Active Tungsten Coil Block (Decorative)
+tile.heating_coil_active_inverted.molybdenum_disilicide.name=Inverted Active Molybdenum Disilicide Coil Block (Decorative)
+tile.heating_coil_active_inverted.tungsten.name=Inverted Active Tungsten Coil Block (Decorative)
 tile.wire_coil.tooltip_evaporation=§8Evaporation Pool
 tile.wire_coil.tooltip_energy_evaporating=  §cHeat Generation: §f%,d kJ/t
+tile.wire_coil_active.cupronickel.name=Active Cupronickel Coil Block (Decorative)
+tile.wire_coil_active.kanthal.name=Active Kanthal Coil Block (Decorative)
+tile.wire_coil_active.nichrome.name=Active Nichrome Coil Block (Decorative)
+tile.wire_coil_active.rtm_alloy.name=Active RTM Alloy Coil Block (Decorative)
+tile.wire_coil_active.hss_g.name=Active HSS-G Coil Block (Decorative)
+tile.wire_coil_active.naquadah.name=Active Naquadah Coil Block (Decorative)
+tile.wire_coil_active.trinium.name=Active Trinium Coil Block (Decorative)
+tile.wire_coil_active.tritanium.name=Active Tritanium Coil Block (Decorative)
+tile.wire_coil_active_inverted.cupronickel.name=Inverted Active Cupronickel Coil Block (Decorative)
+tile.wire_coil_active_inverted.kanthal.name=Inverted Active Kanthal Coil Block (Decorative)
+tile.wire_coil_active_inverted.nichrome.name=Inverted Active Nichrome Coil Block (Decorative)
+tile.wire_coil_active_inverted.rtm_alloy.name=Inverted Active RTM Alloy Coil Block (Decorative)
+tile.wire_coil_active_inverted.hss_g.name=Inverted Active HSS-G Coil Block (Decorative)
+tile.wire_coil_active_inverted.naquadah.name=Inverted Active Naquadah Coil Block (Decorative)
+tile.wire_coil_active_inverted.trinium.name=Inverted Active Trinium Coil Block (Decorative)
+tile.wire_coil_active_inverted.tritanium.name=Inverted Active Tritanium Coil Block (Decorative)
+
+
+tile.firebox_active.bronze_firebox.name=Active Bronze Firebox Casing (Decorative)
+tile.firebox_active.steel_firebox.name=Active Steel Firebox Casing (Decorative)
+tile.firebox_active.titanium_firebox.name=Active Titanium Firebox Casing (Decorative)
+tile.firebox_active.tungstensteel_firebox.name=Active Tungstensteel Firebox Casing (Decorative)
+tile.firebox_active_inverted.bronze_firebox.name=Inverted Active Bronze Firebox Casing (Decorative)
+tile.firebox_active_inverted.steel_firebox.name=Inverted Active Steel Firebox Casing (Decorative)
+tile.firebox_active_inverted.titanium_firebox.name=Inverted Active Titanium Firebox Casing (Decorative)
+tile.firebox_active_inverted.tungstensteel_firebox.name=Inverted Active Tungstensteel Firebox Casing (Decorative)
+
+tile.engine_intake_active.engine_intake.name=Active Engine Intake Casing (Decorative)
+tile.engine_intake_active.extreme_engine_intake.name=Active Extreme Engine Intake Casing (Decorative)
+tile.engine_intake_active_inverted.engine_intake.name=Inverted Active Engine Intake Casing (Decorative)
+tile.engine_intake_active_inverted.extreme_engine_intake.name=Inverted Active Extreme Engine Intake Casing (Decorative)
+
+tile.assembly_line_active.assembly_line.name=Active Assembly Line Casing (Decorative)
+tile.assembly_line_active_inverted.assembly_line.name=Inverted Active Assembly Line Casing (Decorative)
+
+tile.fusion_casing_active.fusion_casing.name=Active Fusion Machine Casing (Decorative)
+tile.fusion_casing_active.fusion_casing_mk2.name=Active Fusion Machine Casing MK II (Decorative)
+tile.fusion_casing_active.fusion_casing_mk3.name=Active Fusion Machine Casing MK III (Decorative)
+tile.fusion_casing_active_inverted.fusion_casing.name=Inverted Active Fusion Machine Casing (Decorative)
+tile.fusion_casing_active_inverted.fusion_casing_mk2.name=Inverted Active Fusion Machine Casing MK II (Decorative)
+tile.fusion_casing_active_inverted.fusion_casing_mk3.name=Inverted Active Fusion Machine Casing MK III (Decorative)
+tile.heat_vent_active.heat_vent.name=Active Heat Vent Casing (Decorative)
+tile.heat_vent_active_inverted.heat_vent.name=Inverted Active Heat Vent Casing (Decorative)
+
+susy.machine.muffler_active.name=Active Muffler Hatch (Decorative)
+susy.machine.muffler_active.tooltip=Place a block inside to change its appearance
 
 tile.sintering_brick.sintering_block_brick.name=Brick Sintering Block
-tile.sintering_brick.sintering_block_brick_bloom_deco.name=Active Brick Sintering Block
 tile.sintering_brick.sintering_block_magnetoplated.name=Magnetoplated Sintering Block
-tile.sintering_brick.sintering_block_magnetoplated_bloom_deco.name=Active Magnetoplated Sintering Block
+tile.sintering_brick_active.sintering_block_brick.name=Active Brick Sintering Block (Decorative)
+tile.sintering_brick_active.sintering_block_magnetoplated.name=Active Magnetoplated Sintering Block (Decorative)
+tile.sintering_brick_active_inverted.sintering_block_brick.name=Inverted Active Brick Sintering Block (Decorative)
+tile.sintering_brick_active_inverted.sintering_block_magnetoplated.name=Inverted Active Magnetoplated Sintering Block (Decorative)
 
 
 tile.coagulation_tank_wall.wooden_coagulation_tank_wall.name=Wooden Coagulation Tank Wall
@@ -55,6 +113,8 @@ tile.rocket_multiblock_casing.aerospace_gasket.name=Aerospace Gasket
 tile.metallurgy_2.polystyrene_wall.name=Polystyrene Wall
 
 tile.serpentine.basic.name=Copper Tubing Serpentine Block
+tile.serpentine_active.basic.name=Active Copper Tubing Serpentine Block (Decorative)
+tile.serpentine_active_inverted.basic.name=Inverted Active Copper Tubing Serpentine Block (Decorative)
 
 tile.structural_block.base_structural_block.name=Structural Block
 tile.structural_block.structural_block_low.name=Striped Structural Block
@@ -144,8 +204,12 @@ tile.multiblock_tank.clarifier.name=Clarifier Vat
 tile.multiblock_tank.flotation.name=Froth Flotation Vat
 
 tile.evaporation_bed.dirt.name=Evaporation Bed
+tile.evaporation_bed_active.dirt.name=Active Evaporation Bed (Decorative)
+tile.evaporation_bed_active_inverted.dirt.name=Inverted Active Evaporation Bed (Decorative)
 
 tile.electrode_assembly.carbon.name=Carbon Electrode Assembly
+tile.electrode_assembly_active.carbon.name=Active Carbon Electrode Assembly (Decorative)
+tile.electrode_assembly_active_inverted.carbon.name=Inverted Active Carbon Electrode Assembly (Decorative)
 
 tile.home_block.home_block_home.name="Home Block (Default)"
 tile.home.allowed=Spawn set
@@ -166,6 +230,8 @@ tile.drill_bit.steel.name=Steel Precision Drill Bit Assembly
 
 tile.induction_coil_assembly.copper.name=Induction Coil Assembly
 tile.eccentric_roll.steel.name=Eccentric Crushing Wheel
+tile.eccentric_roll_active.steel.name=Active Eccentric Crushing Wheel (Decorative)
+tile.eccentric_roll_active_inverted.steel.name=Inverted Active Eccentric Crushing Wheel (Decorative)
 tile.grinder_casing.abrasion_resistant_casing.name=Abrasion Resistant Casing
 tile.grinder_casing.hydraulic_mechanical_gearbox.name=Hydraulic Mechanical Gearbox
 tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mill Shell
@@ -178,6 +244,8 @@ tile.engine_casing.piston_block.name=Engine Block
 tile.engine_casing_2.crankshaft.name=Crankshaft Casing
 
 tile.active_casing.basic_intake_casing.name=Basic Intake Casing
+tile.basic_intake_casing_active.basic_intake_casing.name=Active Basic Intake Casing (Decorative)
+tile.basic_intake_casing_active_inverted.basic_intake_casing.name=Inverted Active Basic Intake Casing (Decorative)
 
 tile.edm_electrode.copper_tungsten.name=Copper-Tungsten EDM Electrode Assembly
 
@@ -687,7 +755,7 @@ susy.machine.distiller.bronze.tooltip=Extracting most relevant Parts of Fluids
 susy.machine.distiller.steel.tooltip=Extracting most relevant Parts of Fluids
 
 # Latex Collector
-susy.machine.latex_collector=Latex Collector
+susy.machine.latex_collector.jei.group=Latex Collector
 susy.machine.latex_collector.steam=Needs Steam!
 susy.machine.latex_collector.tooltip=Extracts liquids from adjacent logs.
 susy.machine.latex_collector.bronze.name=Steam Latex Collector
@@ -698,7 +766,7 @@ susy.machine.latex_collector.hv.name=Advanced Latex Collector II
 susy.machine.latex_collector.ev.name=Advanced Latex Collector III
 
 # Vulcanizing Press
-susy.machine.vulcanizing_press=Vulcanizing Press
+susy.machine.vulcanizing_press.jei.group=Vulcanizing Press
 susy.machine.vulcanizing_press.bronze.name=Steam Vulcanizing Press
 susy.machine.vulcanizing_press.steel.name=High Pressure Steam Vulcanizing Press
 susy.machine.vulcanizing_press.lv.name=Basic Vulcanizing Press
@@ -711,7 +779,7 @@ susy.machine.mixer.bronze.name=Steam Mixer
 susy.machine.mixer.steel.name=High Pressure Steam Mixer
 
 # Roaster
-susy.machine.roaster=Roaster
+susy.machine.roaster.jei.group=Roaster
 susy.machine.roaster.bronze.name=Steam Roaster
 susy.machine.roaster.steel.name=High Pressure Steam Roaster
 susy.machine.roaster.lv.name=Basic Roaster
@@ -729,7 +797,7 @@ susy.machine.roaster.uxv.name=Epic Roaster IV
 susy.machine.roaster.opv.name=Legendary Roaster
 
 # Vacuum Chamber
-susy.machine.vacuum_chamber=Vacuum Chamber
+susy.machine.vacuum_chamber.jei.group=Vacuum Chamber
 susy.machine.vacuum_chamber.bronze.name=Steam Vacuum Chamber
 susy.machine.vacuum_chamber.steel.name=High Pressure Steam Vacuum Chamber
 susy.machine.vacuum_chamber.lv.name=Basic Vacuum Chamber
@@ -747,7 +815,7 @@ susy.machine.vacuum_chamber.uxv.name=Epic Vacuum Chamber IV
 susy.machine.vacuum_chamber.opv.name=Legendary Vacuum Chamber
 
 # CSTR
-susy.machine.continuous_stirred_tank_reactor=Continuous Stirred Tank Reactor (CSTR)
+susy.machine.continuous_stirred_tank_reactor.jei.group=Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.lv.name=Basic Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.mv.name=Advanced Continuous Stirred Tank Reactor (CSTR)
 susy.machine.continuous_stirred_tank_reactor.hv.name=Advanced Continuous Stirred Tank Reactor (CSTR) II
@@ -763,7 +831,7 @@ susy.machine.continuous_stirred_tank_reactor.uxv.name=Epic Continuous Stirred Ta
 susy.machine.continuous_stirred_tank_reactor.opv.name=Legendary Continuous Stirred Tank Reactor (CSTR)
 
 # Fixed Bed Reactor
-susy.machine.fixed_bed_reactor=Fixed Bed Reactor
+susy.machine.fixed_bed_reactor.jei.group=Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.lv.name=Basic Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.mv.name=Advanced Fixed Bed Reactor
 susy.machine.fixed_bed_reactor.hv.name=Advanced Fixed Bed Reactor II
@@ -779,7 +847,7 @@ susy.machine.fixed_bed_reactor.uxv.name=Epic Fixed Bed Reactor IV
 susy.machine.fixed_bed_reactor.opv.name=Legendary Fixed Bed Reactor
 
 # Trickle Bed Reactor
-susy.machine.trickle_bed_reactor=Trickle Bed Reactor
+susy.machine.trickle_bed_reactor.jei.group=Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.lv.name=Basic Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.mv.name=Advanced Trickle Bed Reactor
 susy.machine.trickle_bed_reactor.hv.name=Advanced Trickle Bed Reactor II
@@ -795,7 +863,7 @@ susy.machine.trickle_bed_reactor.uxv.name=Epic Trickle Bed Reactor IV
 susy.machine.trickle_bed_reactor.opv.name=Legendary Trickle Bed Reactor
 
 # Bubble Column Reactor
-susy.machine.bubble_column_reactor=Bubble Column Reactor
+susy.machine.bubble_column_reactor.jei.group=Bubble Column Reactor
 susy.machine.bubble_column_reactor.lv.name=Basic Bubble Column Reactor
 susy.machine.bubble_column_reactor.mv.name=Advanced Bubble Column Reactor
 susy.machine.bubble_column_reactor.hv.name=Advanced Bubble Column Reactor II
@@ -813,7 +881,7 @@ susy.machine.bubble_column_reactor.opv.name=Legendary Bubble Column Reactor
 # Batch Reactor
 susy.machine.batch_reactor.bronze.name=Steam Batch Reactor
 susy.machine.batch_reactor.steel.name=High Pressure Steam Batch Reactor
-susy.machine.batch_reactor=Batch Reactor
+susy.machine.batch_reactor.jei.group=Batch Reactor
 susy.machine.batch_reactor.lv.name=Basic Batch Reactor
 susy.machine.batch_reactor.mv.name=Advanced Batch Reactor
 susy.machine.batch_reactor.hv.name=Advanced Batch Reactor II
@@ -829,7 +897,7 @@ susy.machine.batch_reactor.uxv.name=Epic Batch Reactor IV
 susy.machine.batch_reactor.opv.name=Legendary Batch Reactor
 
 # Crystallizer
-susy.machine.crystallizer=Crystallizer
+susy.machine.crystallizer.jei.group=Crystallizer
 susy.machine.crystallizer.lv.name=Basic Crystallizer
 susy.machine.crystallizer.mv.name=Advanced Crystallizer
 susy.machine.crystallizer.hv.name=Advanced Crystallizer II
@@ -845,7 +913,7 @@ susy.machine.crystallizer.uxv.name=Epic Crystallizer IV
 susy.machine.crystallizer.opv.name=Legendary Crystallizer
 
 # Dryer
-susy.machine.dryer=Dryer
+susy.machine.dryer.jei.group=Dryer
 susy.machine.dryer.lv.name=Basic Dryer
 susy.machine.dryer.mv.name=Advanced Dryer
 susy.machine.dryer.hv.name=Advanced Dryer II
@@ -861,7 +929,7 @@ susy.machine.dryer.uxv.name=Epic Dryer IV
 susy.machine.dryer.opv.name=Legendary Dryer
 
 # Ion Exchange Column
-susy.machine.ion_exchange_column=Ion Exchange Column
+susy.machine.ion_exchange_column.jei.group=Ion Exchange Column
 susy.machine.ion_exchange_column.lv.name=Basic Ion Exchange Column
 susy.machine.ion_exchange_column.mv.name=Advanced Ion Exchange Column
 susy.machine.ion_exchange_column.hv.name=Advanced Ion Exchange Column II
@@ -877,7 +945,7 @@ susy.machine.ion_exchange_column.uxv.name=Epic Ion Exchange Column IV
 susy.machine.ion_exchange_column.opv.name=Legendary Ion Exchange Column
 
 # Zone Refiner
-susy.machine.zone_refiner=Zone Refiner
+susy.machine.zone_refiner.jei.group=Zone Refiner
 susy.machine.zone_refiner.lv.name=Basic Zone Refiner
 susy.machine.zone_refiner.mv.name=Advanced Zone Refiner
 susy.machine.zone_refiner.hv.name=Advanced Zone Refiner II
@@ -893,7 +961,7 @@ susy.machine.zone_refiner.uxv.name=Epic Zone Refiner IV
 susy.machine.zone_refiner.opv.name=Legendary Zone Refiner
 
 # Tube Furnace
-susy.machine.tube_furnace=Tube Furnace
+susy.machine.tube_furnace.jei.group=Tube Furnace
 susy.machine.tube_furnace.lv.name=Basic Tube Furnace
 susy.machine.tube_furnace.mv.name=Advanced Tube Furnace
 susy.machine.tube_furnace.hv.name=Advanced Tube Furnace II
@@ -909,7 +977,7 @@ susy.machine.tube_furnace.uxv.name=Epic Tube Furnace IV
 susy.machine.tube_furnace.opv.name=Legendary Tube Furnace
 
 # UV Light Box
-susy.machine.uv_light_box=UV Light Box
+susy.machine.uv_light_box.jei.group=UV Light Box
 susy.machine.uv_light_box.lv.name=Basic UV Light Box
 susy.machine.uv_light_box.mv.name=Advanced UV Light Box
 susy.machine.uv_light_box.hv.name=Advanced UV Light Box II
@@ -925,7 +993,7 @@ susy.machine.uv_light_box.uxv.name=Epic UV Light Box IV
 susy.machine.uv_light_box.opv.name=Legendary UV Light Box
 
 # CVD
-susy.machine.cvd=CVD Unit
+susy.machine.cvd.jei.group=CVD Unit
 susy.machine.cvd.lv.name=Basic CVD Unit
 susy.machine.cvd.mv.name=Advanced CVD Unit
 susy.machine.cvd.hv.name=Advanced CVD Unit II
@@ -941,7 +1009,7 @@ susy.machine.cvd.uxv.name=Epic CVD Unit IV
 susy.machine.cvd.opv.name=Legendary CVD Unit
 
 # ALD
-susy.machine.ald=ALD Unit
+susy.machine.ald.jei.group=ALD Unit
 susy.machine.ald.lv.name=Basic ALD Unit
 susy.machine.ald.mv.name=Advanced ALD Unit
 susy.machine.ald.hv.name=Advanced ALD Unit II
@@ -957,7 +1025,7 @@ susy.machine.ald.uxv.name=Epic ALD Unit IV
 susy.machine.ald.opv.name=Legendary ALD Unit
 
 # Ion Implanter
-susy.machine.ion_implanter=Ion Implanter
+susy.machine.ion_implanter.jei.group=Ion Implanter
 susy.machine.ion_implanter.lv.name=Basic Ion Implanter
 susy.machine.ion_implanter.mv.name=Advanced Ion Implanter
 susy.machine.ion_implanter.hv.name=Advanced Ion Implanter II
@@ -973,14 +1041,14 @@ susy.machine.ion_implanter.uxv.name=Epic Ion Implanter IV
 susy.machine.ion_implanter.opv.name=Legendary Ion Implanter
 
 # Screen Printer
-susy.machine.screen_printer=Screen Printer
+susy.machine.screen_printer.jei.group=Screen Printer
 susy.machine.screen_printer.lv.name=Basic Screen Printer
 susy.machine.screen_printer.mv.name=Advanced Screen Printer
 susy.machine.screen_printer.hv.name=Advanced Screen Printer II
 susy.machine.screen_printer.ev.name=Advanced Screen Printer III
 
 # Fluid Compressor
-susy.machine.fluid_compressor=Fluid Compressor
+susy.machine.fluid_compressor.jei.group=Fluid Compressor
 susy.machine.fluid_compressor.lv.name=Basic Fluid Compressor
 susy.machine.fluid_compressor.mv.name=Advanced Fluid Compressor
 susy.machine.fluid_compressor.hv.name=Advanced Fluid Compressor II
@@ -996,7 +1064,7 @@ susy.machine.fluid_compressor.uxv.name=Epic Fluid Compressor IV
 susy.machine.fluid_compressor.opv.name=Legendary Fluid Compressor
 
 # Fluid Decompressor
-susy.machine.fluid_decompressor=Fluid Decompressor
+susy.machine.fluid_decompressor.jei.group=Fluid Decompressor
 susy.machine.fluid_decompressor.lv.name=Basic Fluid Decompressor
 susy.machine.fluid_decompressor.mv.name=Advanced Fluid Decompressor
 susy.machine.fluid_decompressor.hv.name=Advanced Fluid Decompressor II
@@ -1012,7 +1080,7 @@ susy.machine.fluid_decompressor.uxv.name=Epic Fluid Decompressor IV
 susy.machine.fluid_decompressor.opv.name=Legendary Fluid Decompressor
 
 # Weapons Factory
-susy.machine.weapons_factory=Weapons Factory
+susy.machine.weapons_factory.jei.group=Weapons Factory
 susy.machine.weapons_factory.lv.name=Basic Weapons Factory
 susy.machine.weapons_factory.mv.name=Advanced Weapons Factory
 susy.machine.weapons_factory.hv.name=Advanced Weapons Factory II
@@ -1031,7 +1099,7 @@ susy.machine.weapons_factory.opv.name=Legendary Weapons Factory
 susy.machine.phase_separator.name=Phase Separator
 
 # RTG
-susy.machine.rtg=RTG
+susy.machine.rtg.jei.group=RTG
 susy.machine.rtg.lv.name=Basic RTG
 susy.machine.rtg.mv.name=Advanced RTG
 susy.machine.rtg.tooltip.info=Power for your pacemaker.
@@ -1039,7 +1107,7 @@ susy.machine.rtg.tooltip.description=Generates a small but steady amount of elec
 susy.machine.rtg.voltage_produced=§aVoltage PRODUCED: §f%,d EU/t (%s§f)
 
 # Electrostatic Separator
-susy.machine.electrostatic_separator=Electrostatic Separator
+susy.machine.electrostatic_separator.jei.group=Electrostatic Separator
 susy.machine.electrostatic_separator.lv.name=Basic Electrostatic Separator
 susy.machine.electrostatic_separator.mv.name=Advanced Electrostatic Separator
 susy.machine.electrostatic_separator.hv.name=Advanced Electrostatic Separator II
@@ -1055,7 +1123,7 @@ susy.machine.electrostatic_separator.uxv.name=Epic Electrostatic Separator IV
 susy.machine.electrostatic_separator.opv.name=Legendary Electrostatic Separator
 
 # Textile Spinner
-susy.machine.textile_spinner=Textile Spinner
+susy.machine.textile_spinner.jei.group=Textile Spinner
 susy.machine.textile_spinner.lv.name=Basic Textile Spinner
 susy.machine.textile_spinner.mv.name=Advanced Textile Spinner
 susy.machine.textile_spinner.hv.name=Advanced Textile Spinner II
@@ -1070,8 +1138,18 @@ susy.machine.textile_spinner.uiv.name=Epic Textile Spinner III
 susy.machine.textile_spinner.uxv.name=Epic Textile Spinner IV
 susy.machine.textile_spinner.opv.name=Legendary Textile Spinner
 
+# Active Fluid Effect Maker
+susy.machine.active_clarifier_vat.name=Active Fluid Effect Maker
+susy.machine.active_clarifier_vat.tooltip=Displays fluid on top of the block. Accepts any fluid and consumes nothing. Place a block in the second slot to override the top texture.
+susy.machine.active_fluid_effect_maker.mode.clarifier=Mode: Clarifier
+susy.machine.active_fluid_effect_maker.mode.froth_flotation=Mode: Froth Flotation
+susy.machine.active_fluid_effect_maker.display_size.decrease=Decrease Display Size
+susy.machine.active_fluid_effect_maker.display_size.increase=Increase Display Size
+susy.machine.active_fluid_effect_maker.display_size.thin=Thin Layer
+susy.machine.active_fluid_effect_maker.display_size.blocks=blocks
+
 # Polishing Machine
-susy.machine.polishing_machine=Polishing Machine
+susy.machine.polishing_machine.jei.group=Polishing Machine
 susy.machine.polishing_machine.lv.name=Basic Polishing Machine
 susy.machine.polishing_machine.mv.name=Advanced Polishing Machine
 susy.machine.polishing_machine.hv.name=Advanced Polishing Machine II
@@ -1087,7 +1165,7 @@ susy.machine.polishing_machine.uxv.name=Epic Polishing Machine IV
 susy.machine.polishing_machine.opv.name=Legendary Polishing Machine
 
 # Resistance Furnace
-susy.machine.resistance_furnace=Resistance Furnace
+susy.machine.resistance_furnace.jei.group=Resistance Furnace
 susy.machine.resistance_furnace.lv.name=Basic Resistance Furnace
 susy.machine.resistance_furnace.mv.name=Advanced Resistance Furnace
 susy.machine.resistance_furnace.hv.name=Advanced Resistance Furnace II
@@ -1111,7 +1189,7 @@ recipemap.greenhouse_plant.name=Greenhouse
 susy.machine.bath_condenser.name=Bath Condenser
 susy.machine.bath_condenser.tooltip=Only works inside a Cryogenic Distillation Tower
 
-susy.machine.incinerator=Incinerator
+susy.machine.incinerator.jei.group=Incinerator
 susy.machine.incinerator.lv.name=Basic Incinerator
 susy.machine.incinerator.mv.name=Advanced Incinerator
 susy.machine.incinerator.hv.name=Advanced Incinerator II
@@ -1156,7 +1234,7 @@ susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
 susy.machine.fuel_cell.tooltip=Temperature requirements for operation: %s°C
 
 
-susy.machine.combustion_generator=Combustion Generator
+susy.machine.combustion_generator.jei.group=Combustion Generator
 susy.machine.combustion_generator.lv.name=Basic Combustion Generator
 susy.machine.combustion_generator.mv.name=Advanced Combustion Generator
 susy.machine.combustion_generator.hv.name=Advanced Combustion Generator II
@@ -1175,7 +1253,7 @@ susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
 
 # Sputtering Machine
-susy.machine.sputter_deposition=Sputtering Machine
+susy.machine.sputter_deposition.jei.group=Sputtering Machine
 susy.machine.sputter_deposition.lv.name=Basic Sputtering Machine
 susy.machine.sputter_deposition.mv.name=Advanced Sputtering Machine
 susy.machine.sputter_deposition.hv.name=Advanced Sputtering Machine II
@@ -1191,7 +1269,7 @@ susy.machine.sputter_deposition.uxv.name=Epic Sputtering Machine IV
 susy.machine.sputter_deposition.opv.name=Legendary Sputtering Machine
 
 # Evaporation Deposition Machine
-susy.machine.evaporation_deposition=Evaporation Deposition Machine
+susy.machine.evaporation_deposition.jei.group=Evaporation Deposition Machine
 susy.machine.evaporation_deposition.lv.name=Basic Evaporation Deposition Machine
 susy.machine.evaporation_deposition.mv.name=Advanced Evaporation Deposition Machine
 susy.machine.evaporation_deposition.hv.name=Advanced Evaporation Deposition Machine II
@@ -1360,7 +1438,7 @@ gregtech.machine.fluid_hatch.export_9x.mv.name=MV Nonuple Output Hatch
 gregtech.machine.fluid_hatch.export_9x.hv.name=HV Nonuple Output Hatch
 
 # Other multiblock parts
-susy.machine.dumping_hatch=Dumping Hatch
+susy.machine.dumping_hatch.jei.group=Dumping Hatch
 susy.machine.dumping_hatch.lv.name=Dumping Hatch
 
 # Distillation tower explanations
@@ -1818,6 +1896,37 @@ susy.machine.beam_export_hatch.name=Beam Export Hatch
 susy.particle.electron.name=Electron
 susy.particle.positron.name=Positron
 susy.particle.photon.name=Photon
+susy.particle.antibottom.name=Anti-bottom Quark
+susy.particle.anticharm.name=Anti-charm Quark
+susy.particle.antidown.name=Anti-down Quark
+susy.particle.antimuon.name=Anti-muon
+susy.particle.antineutron.name=Anti-neutron
+susy.particle.antiproton.name=Anti-proton
+susy.particle.antistrange.name=Anti-strange Quark
+susy.particle.antitauon.name=Anti-tauon
+susy.particle.antitop.name=Anti-top Quark
+susy.particle.antiup.name=Anti-up Quark
+susy.particle.bottom.name=Bottom Quark
+susy.particle.charm.name=Charm Quark
+susy.particle.down.name=Down Quark
+susy.particle.muon.name=Muon
+susy.particle.neutron.name=Neutron
+susy.particle.proton.name=Proton
+susy.particle.strange.name=Strange Quark
+susy.particle.tauon.name=Tauon
+susy.particle.top.name=Top Quark
+susy.particle.up.name=Up Quark
+susy.particle.electron_antineutrino.name=Electron Anti-neutrino
+susy.particle.electron_neutrino.name=Electron Neutrino
+susy.particle.gluon.name=Gluon
+susy.particle.Higgs_boson.name=Higgs Boson
+susy.particle.muon_antineutrino.name=Muon Anti-neutrino
+susy.particle.muon_neutrino.name=Muon Neutrino
+susy.particle.tauon_antineutrino.name=Tauon Anti-neutrino
+susy.particle.tauon_neutrino.name=Tauon Neutrino
+susy.particle.W-_boson.name=W- Boson
+susy.particle.W+_boson.name=W+ Boson
+susy.particle.Z_boson.name=Z Boson
 
 #Random Concrete
 tile.random_concrete.greyindustrialconcrete.name=Grey Industrial Concrete
@@ -2098,15 +2207,16 @@ tile.wire_coil.nichrome.name=Kanthal Coil Block
 
 # Tankless Fluid Pipes
 susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
-item.material.oreprefix.pipeTinyTanklessFluid=%s Tiny Direct Fluid Pipe
-item.material.oreprefix.pipeSmallTanklessFluid=%s Small Direct Fluid Pipe
+item.material.oreprefix.pipeTinyTanklessFluid=Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallTanklessFluid=Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalTanklessFluid=%s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeTanklessFluid=%s Large Direct Fluid Pipe
-item.material.oreprefix.pipeHugeTanklessFluid=%s Huge Direct Fluid Pipe
-item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Tiny Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Small Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeTanklessFluid=Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeTanklessFluid=Huge %s Direct Fluid Pipe
+item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=Restrictive Tiny %s Direct Fluid Pipe
+item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=Restrictive Small %s Direct Fluid Pipe
 item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Large Restrictive %s Direct Fluid Pipe
-item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Huge Restrictive %s Direct Fluid Pipe
+item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=Restrictive Large %s Direct Fluid Pipe
+item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Restrictive Huge %s Direct Fluid Pipe
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
-susy.tankless_fluid_pipe.resistance=§9Resistance: §f%,d
+susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
+susy.tool_action.hammer.toggle_flange=§8Use Hammer to toggle flanges

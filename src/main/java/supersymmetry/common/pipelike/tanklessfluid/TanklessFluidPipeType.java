@@ -12,17 +12,17 @@ import supersymmetry.api.unification.ore.SusyOrePrefix;
 @NullMarked
 public enum TanklessFluidPipeType implements IMaterialPipeType<TanklessFluidPipeProperties> {
 
-    TINY("tiny", 0.25f, SusyOrePrefix.pipeTinyTanklessFluid, 0.25f, 2f),
-    SMALL("small", 0.375f, SusyOrePrefix.pipeSmallTanklessFluid, 0.5f, 1.5f),
-    NORMAL("normal", 0.5f, SusyOrePrefix.pipeNormalTanklessFluid, 1f, 1f),
-    LARGE("large", 0.75f, SusyOrePrefix.pipeLargeTanklessFluid, 2f, 0.75f),
-    HUGE("huge", 0.875f, SusyOrePrefix.pipeHugeTanklessFluid, 4f, 0.5f),
+    TINY("tiny", 0.25f, SusyOrePrefix.pipeTinyTanklessFluid, 0.5f, 2f),
+    SMALL("small", 0.375f, SusyOrePrefix.pipeSmallTanklessFluid, 1f, 1.5f),
+    NORMAL("normal", 0.5f, SusyOrePrefix.pipeNormalTanklessFluid, 3f, 1f),
+    LARGE("large", 0.75f, SusyOrePrefix.pipeLargeTanklessFluid, 6f, 0.75f),
+    HUGE("huge", 0.875f, SusyOrePrefix.pipeHugeTanklessFluid, 12f, 0.5f),
 
-    RESTRICTIVE_TINY("tiny_restrictive", 0.25f, SusyOrePrefix.pipeTinyRestrictiveTanklessFluid, 0.25f, 200f),
-    RESTRICTIVE_SMALL("small_restrictive", 0.375f, SusyOrePrefix.pipeSmallRestrictiveTanklessFluid, 0.5f, 150f),
-    RESTRICTIVE_NORMAL("normal_restrictive", 0.5f, SusyOrePrefix.pipeNormalRestrictiveTanklessFluid, 1f, 100f),
-    RESTRICTIVE_LARGE("large_restrictive", 0.75f, SusyOrePrefix.pipeLargeRestrictiveTanklessFluid, 2f, 75f),
-    RESTRICTIVE_HUGE("huge_restrictive", 0.875f, SusyOrePrefix.pipeHugeRestrictiveTanklessFluid, 4f, 50f);
+    RESTRICTIVE_TINY("tiny_restrictive", 0.25f, SusyOrePrefix.pipeTinyRestrictiveTanklessFluid, 0.5f, 200f),
+    RESTRICTIVE_SMALL("small_restrictive", 0.375f, SusyOrePrefix.pipeSmallRestrictiveTanklessFluid, 1f, 150f),
+    RESTRICTIVE_NORMAL("normal_restrictive", 0.5f, SusyOrePrefix.pipeNormalRestrictiveTanklessFluid, 3f, 100f),
+    RESTRICTIVE_LARGE("large_restrictive", 0.75f, SusyOrePrefix.pipeLargeRestrictiveTanklessFluid, 6f, 75f),
+    RESTRICTIVE_HUGE("huge_restrictive", 0.875f, SusyOrePrefix.pipeHugeRestrictiveTanklessFluid, 12f, 50f);
 
     public static final TanklessFluidPipeType[] VALUES = values();
 
