@@ -3,6 +3,7 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import gregtech.api.capability.IDataStickIntractable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -77,7 +78,7 @@ import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
-public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE {
+public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
@@ -782,5 +783,23 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             return; // don't redo the check
         }
         super.checkStructurePattern();
+    }
+
+
+    @Override
+    public void onDataStickLeftClick(EntityPlayer player, ItemStack dataStick) {
+
+    }
+
+    @Override
+    public boolean onDataStickRightClick(EntityPlayer player, ItemStack dataStick) {
+        if (selectedRocket == null || !player.isSneaking())  {
+            return false;
+        }
+        UUID rocketUuid = selectedRocket.getUniqueID();
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setUniqueId("RocketUUID", rocketUuid);
+        dataStick.setTagCompound(tag);
+        return false;
     }
 }

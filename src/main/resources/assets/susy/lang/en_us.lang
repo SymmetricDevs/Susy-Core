@@ -473,6 +473,8 @@ susy.machine.blueprint_assembler.no_coolant=No FC-75 coolant
 susy.machine.aerospace_flight_simulator.obstructed=No FC-75 coolant
 susy.machine.aerospace_flight_simulator.obstructed.desc=The AFS must be fully filled with coolant to begin normal operation.
 
+susy.machine.mission_control.name=Mission Control
+
 susy.rocketry.components.engine.name=Engine(s)
 
 susy.rocketry.components.tank.name=Liquid tank(s)

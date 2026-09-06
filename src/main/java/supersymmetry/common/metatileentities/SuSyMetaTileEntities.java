@@ -318,6 +318,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
+    public static MetaTileEntityMissionControl MISSION_CONTROL;
 
     // Parallel Ore Processing
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
@@ -741,6 +742,7 @@ public class SuSyMetaTileEntities {
 
         SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         // Free: 18057-8
+        MISSION_CONTROL = registerMetaTileEntity(18057, new MetaTileEntityMissionControl(susyId("mission_control")));
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
                 new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
