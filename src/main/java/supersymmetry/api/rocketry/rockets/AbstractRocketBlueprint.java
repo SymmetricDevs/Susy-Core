@@ -1,15 +1,14 @@
 package supersymmetry.api.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import lombok.Getter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import lombok.Setter;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.costs.RocketBlueprintCosts;
@@ -17,6 +16,7 @@ import supersymmetry.api.rocketry.costs.RocketCostGroup;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.mui.widget.BlueprintRowState;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.components.ComponentBlueprintOverhead;
 import supersymmetry.common.rocketry.components.ComponentSpacecraft;
@@ -52,10 +52,12 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         AbstractRocketBlueprint.registryLock = registryLock;
     }
 
+    @Getter
     public String name;
 
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
 
+    @Getter
     public List<RocketStage> stages = new ArrayList<>();
 
     public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
@@ -63,21 +65,18 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         setRelatedEntity(relatedEntity);
     }
 
-    public List<RocketStage> getStages() {
-        return this.stages;
+    public Optional<RocketStage> getStage(String name) {
+        return this.getStages().stream().filter(x -> x.getName().equals(name))
+                .findFirst();
     }
 
     public boolean isFullBlueprint() {
-        return (stages.stream().allMatch(x -> x.isPopulated()));
+        return (stages.stream().allMatch(RocketStage::isPopulated));
     }
 
     public abstract boolean readFromNBT(NBTTagCompound tag);
 
     public abstract NBTTagCompound writeToNBT();
-
-    public String getName() {
-        return name;
-    }
 
     public double getMass() {
         return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
@@ -187,6 +186,11 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         this.stages = stages;
     }
 
+    @Setter
+    public Function<AbstractRocketBlueprint, ComponentValidationResult> componentValidationFunction = x -> {
+        return ComponentValidationResult.SUCCESS;
+    };
+
     @Override
     public AbstractRocketBlueprint clone() {
         try {
@@ -195,6 +199,7 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
             for (RocketStage stage : this.stages) {
                 cloned.stages.add((RocketStage) stage.clone());
             }
+            cloned.componentValidationFunction = this.componentValidationFunction;
             return cloned;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);

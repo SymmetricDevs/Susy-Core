@@ -462,6 +462,7 @@ susy.machine.blueprint_assembler.build_error.validation_failure=Validation faile
 susy.machine.blueprint_assembler.build_error.invalid_amount=Invalid amount of components in %1$s, %2$s row
 susy.machine.blueprint_assembler.build_error.incompatible_card=Incompatible card in %1$s, %2$s
 susy.machine.blueprint_assembler.build_error.unknown=Unknown error in %1$s. %2$s
+susy.machine.blueprint_assembler.build_error.fairing_too_small=Fairing too short/narrow for spacecraft
 susy.machine.blueprint_assembler.build_error.success=Compilation successful!
 susy.machine.blueprint_assembler.build_error.success.extract=You may now extract the blueprint
 susy.machine.blueprint_assembler.build_button=Build
