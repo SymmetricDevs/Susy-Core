@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import gregtech.api.capability.IDataStickIntractable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,6 +31,7 @@ import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.IDataStickIntractable;
 import gregtech.api.capability.IMaintenanceHatch;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
@@ -78,7 +78,8 @@ import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
-public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable {
+public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
+                                     implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
@@ -785,15 +786,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         super.checkStructurePattern();
     }
 
-
     @Override
-    public void onDataStickLeftClick(EntityPlayer player, ItemStack dataStick) {
-
-    }
+    public void onDataStickLeftClick(EntityPlayer player, ItemStack dataStick) {}
 
     @Override
     public boolean onDataStickRightClick(EntityPlayer player, ItemStack dataStick) {
-        if (selectedRocket == null || !player.isSneaking())  {
+        if (selectedRocket == null || !player.isSneaking()) {
             return false;
         }
         UUID rocketUuid = selectedRocket.getUniqueID();

@@ -68,5 +68,6 @@ public class BlockGuidanceSystem extends VariantBlock<BlockGuidanceSystem.Guidan
                                @NotNull ITooltipFlag advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("susy.tooltip.guidance_multiplier", getState(stack).successChanceMultiplier));
+        tooltip.add(I18n.format("susy.tooltip.power_consumption_space", 250));
     }
 }

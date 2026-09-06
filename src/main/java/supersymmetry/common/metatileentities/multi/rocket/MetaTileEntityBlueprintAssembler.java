@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -447,7 +446,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             }
             ComponentValidationResult validationResult;
             try {
-                 validationResult = bp.componentValidationFunction.apply(bp);
+                validationResult = bp.componentValidationFunction.apply(bp);
             } catch (RuntimeException e) {
                 SusyLog.logger.error(e);
                 lastErrorResult = ComponentValidationResult.UNKNOWN;

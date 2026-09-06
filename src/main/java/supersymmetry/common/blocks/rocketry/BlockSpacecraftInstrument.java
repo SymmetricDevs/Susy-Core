@@ -183,5 +183,14 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
     public void addInformation(@NotNull ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                @NotNull ITooltipFlag advanced) {
         tooltip.add(I18n.format("susy.tooltip.mass", getMass(stack)));
+        if (getPowerConsumed(getState(stack)) > 0) {
+            tooltip.add(I18n.format("susy.tooltip.power_consumption_space", getPowerConsumed(getState(stack))));
+        }
+        if (getPowerProduced(getState(stack)) > 0) {
+            tooltip.add(I18n.format("susy.tooltip.power_generation_space", getPowerProduced(getState(stack))));
+        }
+        if (allowedOnHull(getState(stack))) {
+            tooltip.add(I18n.format("susy.tooltip.allowed_on_hull"));
+        }
     }
 }

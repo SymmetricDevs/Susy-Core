@@ -23,7 +23,6 @@ import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.mui.widget.BlueprintRowState;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.world.WorldProviderPlanet;
 
@@ -160,7 +159,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= Math.pow(0.995, this.getComponentCount("engine"));
 
         success *= this.getGuidanceMultiplier();
-        double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
+        double redundancyMult = Math.clamp(0.85 + 0.35 * Math.pow(this.getRedundancy(), 0.625), 0.85, 1.2);
         success = Math.max(0, success);
 
         success = augmentSuccess(success, augmentation);
@@ -193,7 +192,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= (this.getGuidanceMultiplier() - (weatherChallenge * (1 - this.getGuidanceMultiplier())));
 
         // Redundancy
-        double redundancyMult = Math.clamp(0.85 + this.getRedundancy() * 0.25, 0.85, 1.1);
+        double redundancyMult = Math.clamp(0.85 + 0.35 * Math.pow(this.getRedundancy(), 0.625), 0.85, 1.2);
 
         success = Math.max(0, success);
         success = augmentSuccess(success, augmentation);

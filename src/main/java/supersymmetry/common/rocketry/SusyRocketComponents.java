@@ -59,7 +59,8 @@ public class SusyRocketComponents {
             double fHeight = fairings.stream().mapToDouble(AbstractComponent::getHeight).min().getAsDouble();
             double fRadius = fairings.stream().mapToDouble(AbstractComponent::getRadius).min().getAsDouble();
             ComponentSpacecraft spacecraft = (ComponentSpacecraft) payload.getComponents().get("spacecraft").get(0);
-            return spacecraft.getHeight() >= fHeight || spacecraft.getRadius() >= fRadius ? ComponentValidationResult.FAIRING_TOO_SMALL : ComponentValidationResult.SUCCESS;
+            return spacecraft.getHeight() >= fHeight || spacecraft.getRadius() >= fRadius ?
+                    ComponentValidationResult.FAIRING_TOO_SMALL : ComponentValidationResult.SUCCESS;
         };
 
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")

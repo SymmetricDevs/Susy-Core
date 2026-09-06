@@ -4,10 +4,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import lombok.Getter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import lombok.Getter;
 import lombok.Setter;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -16,7 +16,6 @@ import supersymmetry.api.rocketry.costs.RocketCostGroup;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.mui.widget.BlueprintRowState;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.rocketry.components.ComponentBlueprintOverhead;
 import supersymmetry.common.rocketry.components.ComponentSpacecraft;

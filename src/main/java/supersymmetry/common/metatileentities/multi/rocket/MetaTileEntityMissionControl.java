@@ -1,5 +1,18 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.WorldServer;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.capability.IDataStickIntractable;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -15,39 +28,25 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.WorldServer;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.common.entities.EntityBlueprintRocket;
 import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.rocketry.RocketConfiguration.*;
 import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase implements IDataStickIntractable {
 
     private UUID selectedRocketUuid;
-    //private MetaTileEntityGroundStation groundStation;
+    // private MetaTileEntityGroundStation groundStation;
     private final Map<Integer, String> dimensionNames = Map.of(
             0, "Earth",
-            800, "Moon"
-    );
+            800, "Moon");
 
     public MetaTileEntityMissionControl(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
     }
 
     @Override
-    protected void updateFormedValid() {
-
-    }
+    protected void updateFormedValid() {}
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
@@ -101,26 +100,28 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
         }
 
         // Not Focus Rn
-        /*String metaName = tag.getString("MetaTileEntity");
-        if (metaName == null || !metaName.equals("susy:ground_station")) {
-            return;
-        }
-        if (tag.getInteger("Dimension") != this.getWorld().provider.getDimension()) {
-            return;
-        }
-
-        int[] pos = tag.getIntArray("Position");
-        BlockPos blockPos = new BlockPos(pos[0], pos[1], pos[2]);
-
-        TileEntity tileEntity = this.getWorld().getTileEntity(blockPos);
-        if (!(tileEntity instanceof IGregTechTileEntity gtTileEntity)) {
-            return;
-        }
-        if (!(gtTileEntity.getMetaTileEntity() instanceof MetaTileEntityGroundStation groundStation)) {
-            return;
-        }
-
-        this.groundStation = groundStation;*/
+        /*
+         * String metaName = tag.getString("MetaTileEntity");
+         * if (metaName == null || !metaName.equals("susy:ground_station")) {
+         * return;
+         * }
+         * if (tag.getInteger("Dimension") != this.getWorld().provider.getDimension()) {
+         * return;
+         * }
+         * 
+         * int[] pos = tag.getIntArray("Position");
+         * BlockPos blockPos = new BlockPos(pos[0], pos[1], pos[2]);
+         * 
+         * TileEntity tileEntity = this.getWorld().getTileEntity(blockPos);
+         * if (!(tileEntity instanceof IGregTechTileEntity gtTileEntity)) {
+         * return;
+         * }
+         * if (!(gtTileEntity.getMetaTileEntity() instanceof MetaTileEntityGroundStation groundStation)) {
+         * return;
+         * }
+         * 
+         * this.groundStation = groundStation;
+         */
 
         UUID rocketUuid = tag.getUniqueId("RocketUUID");
         if (rocketUuid != null) {
@@ -168,13 +169,14 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
                 l.add(new TextComponentString("No Rocket Selected"));
             }
         }, 0xe38a0e));
-        mainGroup.addWidget(new AdvancedTextWidget(4,8 + 8, (l) -> {
+        mainGroup.addWidget(new AdvancedTextWidget(4, 8 + 8, (l) -> {
             if (selectedRocket != null) {
                 if (selectedRocket.isLaunched()) {
                     if (selectedRocket.posY == selectedRocket.prevPosY) {
                         LaunchResult result = selectedRocket.getLaunchResult();
                         if (result == LaunchResult.CRASHES) {
-                            l.add(new TextComponentString("Launch Status: Crashed, Position: " + selectedRocket.getCrashPosition().toString()));
+                            l.add(new TextComponentString("Launch Status: Crashed, Position: " +
+                                    selectedRocket.getCrashPosition().toString()));
                         } else if (result == LaunchResult.EXPLODES) {
                             l.add(new TextComponentString("Launch Status: Exploded"));
                         } else {
@@ -207,7 +209,8 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
         }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget((width - 8) / 3, 16 + 24, (l) -> {
             if (selectedRocket != null) {
-                double totalVelocity = Math.sqrt(Math.pow(selectedRocket.motionX, 2) + Math.pow(selectedRocket.motionY, 2) + Math.pow(selectedRocket.motionZ, 2));
+                double totalVelocity = Math.sqrt(Math.pow(selectedRocket.motionX, 2) +
+                        Math.pow(selectedRocket.motionY, 2) + Math.pow(selectedRocket.motionZ, 2));
                 l.add(new TextComponentString("Velocity: " + Math.round(totalVelocity * 20) + " m/s"));
             }
         }, 0xffffff));
@@ -225,7 +228,8 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
                 List<MissionConfiguration> missions = selectedRocket.getRocketConfiguration().getMissions();
                 for (int i = 0; i < missions.size(); i++) {
                     MissionConfiguration mission = missions.get(i);
-                    l.add(new TextComponentString("Mission " + (i + 1) + ": " + dimensionNames.get(mission.dimension) + ", " + mission.destinationType.name()));
+                    l.add(new TextComponentString("Mission " + (i + 1) + ": " + dimensionNames.get(mission.dimension) +
+                            ", " + mission.destinationType.name()));
                 }
                 if (missions.isEmpty()) {
                     l.add(new TextComponentString("No missions"));

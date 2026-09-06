@@ -7,7 +7,6 @@ import java.util.stream.IntStream;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import lombok.Setter;
@@ -67,7 +66,6 @@ public class RocketStage implements Cloneable {
     // allows you to make it so it needs different types of engines for example.
     // ensures compatibility
     // between components of the same type
-
 
     // limits on how many of each component it can have
     public Map<String, int[]> componentLimits = new TreeMap<>();

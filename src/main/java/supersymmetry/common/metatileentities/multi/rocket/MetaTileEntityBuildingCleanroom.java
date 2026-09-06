@@ -264,14 +264,14 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         // Polystyrene wall with NORTH/SOUTH facing (for left/right walls perpendicular
         // to X-axis)
         TraceabilityPredicate polystyreneNSPredicate = SuSyPredicates.horizontalOrientation(this,
-                    SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
-                    RelativeDirection.FRONT, FACING);
+                SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
+                RelativeDirection.FRONT, FACING);
 
         // Polystyrene wall with EAST/WEST facing (for front/back walls perpendicular to
         // Z-axis)
         TraceabilityPredicate polystyreneEWPredicate = SuSyPredicates.horizontalOrientation(this,
-                    SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
-                    RelativeDirection.RIGHT, FACING);
+                SuSyBlocks.METALLURGY_2.getState(BlockMetallurgy2.BlockMetallurgy2Type.POLYSTYRENE_WALL),
+                RelativeDirection.RIGHT, FACING);
 
         // Scanner predicate to catch both sides
         TraceabilityPredicate scannerPredicate = this.scannerPredicate().setMaxGlobalLimited(1)
