@@ -17,8 +17,12 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
+import supersymmetry.common.blocks.BlockGrinderCasing;
+import supersymmetry.common.blocks.BlockRocketMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityEccentricRollCrusher;
 
 public class SuSyConnectedTextures {
 
@@ -30,6 +34,8 @@ public class SuSyConnectedTextures {
     public static final VisualStateRenderer ULV_STRUCTURAL_CASING_CTM;
     public static final VisualStateRenderer ABRASION_RESISTANT_CTM;
     public static final VisualStateRenderer ALUMINIUM_GEARBOX_CTM;
+    public static final VisualStateRenderer BALL_MILL_SHELL_CTM;
+    public static final VisualStateRenderer AEROSPACE_GASKET_CTM;
 
     static {
         WOODEN_COAGULATION_TANK_WALL_CTM = from(
@@ -40,6 +46,10 @@ public class SuSyConnectedTextures {
         ULV_STRUCTURAL_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(ULV_STRUCTURAL_CASING));
         ABRASION_RESISTANT_CTM = from(SuSyBlocks.GRINDER_CASING.getState(ABRASION_RESISTANT_CASING));
         ALUMINIUM_GEARBOX_CTM = from(SuSyBlocks.MULTIBLOCK_CASING.getState(ALUMINIUM_GEARBOX));
+        BALL_MILL_SHELL_CTM = from(
+                SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.WEAR_RESISTANT_LINED_MILL_SHELL));
+        AEROSPACE_GASKET_CTM = from(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
+                .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET));
     }
 
     public static void init() {
@@ -51,17 +61,18 @@ public class SuSyConnectedTextures {
                 susyId("injection_molder"), susyId("large_fluid_pump"), susyId("large_weapons_factory"),
                 susyId("metallurgical_converter"), susyId("mining_drill"), susyId("natural_draft_cooling_tower"),
                 susyId("ore_sorter"), susyId("polymerization_tank"), susyId("quarry"),
-                susyId("railroad_engineering_station"), susyId("rocket_assembler"), susyId("rocket_programmer"),
+                susyId("railroad_engineering_station"), susyId("large_railroad_engineering_station"),
                 susyId("rotary_kiln"), susyId("smoke_stack"), susyId("vacuum_distillation_tower"),
                 susyId("landing_pad"), susyId("advanced_arc_furnace"), susyId("internal_combustion_generator"),
-                susyId("large_steam_hammer"), susyId("layup_machine"));
+                susyId("large_steam_hammer"), susyId("layup_machine"), susyId("launch_pad"), susyId("rocket_assembler"),
+                susyId("aerospace_flight_simulator"), susyId("blueprint_assembler"), susyId("large_boiler.steel"), susyId("induction_furnace"));
         FROST_PROOF_CASING_CTM.override(susyId("condenser"), susyId("high_pressure_cryogenic_distillation_plant"),
                 susyId("low_pressure_cryogenic_distillation_plant"),
                 susyId("single_column_cryogenic_distillation_plant"), susyId("magnetic_refrigerator"),
                 susyId("pressure_swing_adsorber"));
         CLEAN_STAINLESS_STEEL_CASING_CTM.override(susyId("catalytic_reformer"), susyId("curtain_coater"),
                 susyId("froth_flotation_tank"), susyId("mixer_settler"), susyId("quencher"),
-                susyId("sieve_distillation_tower"));
+                susyId("sieve_distillation_tower"), susyId("lunar_bucket_wheel_excavator"));
         STEEL_TURBINE_CASING_CTM.override(susyId("basic_steam_turbine"));
         TITANIUM_TURBINE_CASING_CTM.override(susyId("advanced_steam_turbine"), susyId("gas_turbine"));
         INERT_PTFE_CASING_CTM.override(susyId("fluidized_bed_reactor"), susyId("blender"));
@@ -76,16 +87,20 @@ public class SuSyConnectedTextures {
         VOLTAGE_CASING_ULV_CTM.override(susyId("fermentation_vat"));
         HEAT_PROOF_CASING_CTM.override(susyId("reaction_furnace"));
         PRIMITIVE_BRICKS_CTM.override(susyId("reverberatory_furnace"));
-        STABLE_TITANIUM_CASING_CTM.override(susyId("scrap_recycler"));
-        BRONZE_PLATED_BRICKS_CTM.override(susyId("primitive_mud_pump"));
+        STABLE_TITANIUM_CASING_CTM.override(susyId("scrap_recycler"), susyId("lunar_launch_complex"));
+        BRONZE_PLATED_BRICKS_CTM.override(susyId("primitive_mud_pump"), susyId("large_boiler.bronze"));
+        AEROSPACE_GASKET_CTM.override(susyId("building_cleanroom"));
 
         registerCustomOverride(susyId("slab_mold"), SuSyConnectedTextures::strandMoldHandler);
         registerCustomOverride(susyId("billet_mold"), SuSyConnectedTextures::strandMoldHandler);
         registerCustomOverride(susyId("milling"), SuSyConnectedTextures::millingHandler);
         registerCustomOverride(susyId("multi_stage_flash_distiller"), SuSyConnectedTextures::msfdHandler);
+        registerCustomOverride(susyId("ball_mill"), SuSyConnectedTextures::ballMillHandler);
+        registerCustomOverride(susyId("eccentric_roll_crusher"), SuSyConnectedTextures::ercHandler);
     }
 
-    @NotNull private static ICubeRenderer msfdHandler(@Nullable IMultiblockPart part) {
+    @NotNull
+    private static ICubeRenderer msfdHandler(@Nullable IMultiblockPart part) {
         if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
@@ -95,7 +110,8 @@ public class SuSyConnectedTextures {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @NotNull private static ICubeRenderer millingHandler(@Nullable IMultiblockPart part) {
+    @NotNull
+    private static ICubeRenderer millingHandler(@Nullable IMultiblockPart part) {
         if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
@@ -105,12 +121,38 @@ public class SuSyConnectedTextures {
         return CLEAN_STAINLESS_STEEL_CASING_CTM;
     }
 
-    @NotNull private static ICubeRenderer strandMoldHandler(@Nullable IMultiblockPart part) {
+    @NotNull
+    private static ICubeRenderer strandMoldHandler(@Nullable IMultiblockPart part) {
         if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             MultiblockAbility<?> ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.IMPORT_FLUIDS || ability == MultiblockAbility.EXPORT_FLUIDS ||
                     ability == SuSyMultiblockAbilities.STRAND_EXPORT) {
                 return CONDUCTIVE_COPPER_PIPE_CTM;
+            }
+        }
+        return SOLID_STEEL_CASING_CTM;
+    }
+
+    @NotNull
+    private static ICubeRenderer ballMillHandler(@Nullable IMultiblockPart part) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+            var ability = abilityPart.getAbility();
+            if (ability != MultiblockAbility.MAINTENANCE_HATCH && ability != MultiblockAbility.INPUT_ENERGY) {
+                return BALL_MILL_SHELL_CTM;
+            }
+        }
+        return SOLID_STEEL_CASING_CTM;
+    }
+
+    @NotNull
+    private static ICubeRenderer ercHandler(@Nullable IMultiblockPart part) {
+        if (part instanceof MetaTileEntityMultiblockPart mPart &&
+                part instanceof IMultiblockAbilityPart<?> abilityPart &&
+                abilityPart.getAbility() == MultiblockAbility.IMPORT_ITEMS) {
+            if (mPart.getController() instanceof MetaTileEntityEccentricRollCrusher crusher) {
+                if (crusher.getMetalSheetIdentifier() >= 0) {
+                    return SusyTextures.METAL_SHEETS[crusher.getMetalSheetIdentifier()];
+                }
             }
         }
         return SOLID_STEEL_CASING_CTM;

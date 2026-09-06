@@ -830,7 +830,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         LARGE_RES = registerMetaTileEntity(18520,
-                new MetaTileEntityLargeRES(new ResourceLocation("railroad_engineering_station")));
+                new MetaTileEntityLargeRES(susyId("large_railroad_engineering_station")));
         LAYUP_MACHINE = registerMetaTileEntity(18521, new MetaTileEntityLayupMachine(susyId("layup_machine")));
 
         LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,

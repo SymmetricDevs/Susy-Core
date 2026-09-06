@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -50,6 +51,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      * metal sheets and 16~31 for large ones. This is getting on server-side and
      * sync to client side later.
      */
+    @Getter
     protected byte metalSheetIdentifier = -1;
 
     /**
