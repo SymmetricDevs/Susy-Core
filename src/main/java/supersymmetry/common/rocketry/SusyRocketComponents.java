@@ -35,13 +35,13 @@ public class SusyRocketComponents {
                 .addComponent(GregTechAPI.materialManager.getMaterial("liquid_methane") != null ?
                         GregTechAPI.materialManager.getMaterial("liquid_methane").getFluid() :
                         Materials.Methane.getFluid(), 100)
-                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 321).density(0.82).sIVacuum(369)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 866).density(0.82).sIVacuum(369)
                 .sIPerPressure(309).register();
 
         if (GregTechAPI.materialManager.getMaterial("rp_one") != null) {
             new LiquidRocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
                     .addComponent(GregTechAPI.materialManager.getMaterial("rp_one").getFluid(), 100)
-                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 258).density(1.03).sIVacuum(356)
+                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 363).density(1.03).sIVacuum(356)
                     .sIPerPressure(300).register();
         }
 
@@ -49,7 +49,7 @@ public class SusyRocketComponents {
                 (GregTechAPI.materialManager.getMaterial("mon_3") != null)) {
             new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-MON-3")
                     .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
-                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 228)
+                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 1077)
                     .density(1.17).sIVacuum(342).sIPerPressure(289).register();
         }
 
