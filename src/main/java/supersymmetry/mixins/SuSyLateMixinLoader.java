@@ -27,7 +27,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "universalmodcore",
             "dimstack",
             "visualores",
-            "gcym");
+            "gcym",
+            "immersiverailroading");
 
     @Override
     public List<String> getMixinConfigs() {
