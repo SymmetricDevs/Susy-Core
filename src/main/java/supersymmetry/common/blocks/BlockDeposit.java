@@ -1,5 +1,7 @@
 package supersymmetry.common.blocks;
 
+import static supersymmetry.common.blocks.BlockDeposit.DepositBlockType.ICE_CAP;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -48,6 +50,11 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
     public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
                                           float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, 0.0F, 0);
+    }
+
+    @Deprecated
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+        return this.getState(blockState) == ICE_CAP ? 50 : this.blockHardness;
     }
 
     public enum DepositBlockType implements IStringSerializable {

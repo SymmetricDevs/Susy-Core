@@ -37,6 +37,9 @@ public class InstrumentLander implements Instrument {
     public static RocketConfiguration getMissionConfiguration(
                                                               EntityAbstractRocket rocket) {
         RocketConfiguration config = rocket.getRocketConfiguration();
+        if (config.isEmpty()) {
+            return config;
+        }
         RocketConfiguration.MissionConfiguration next = config.popFront();
         while (!config.isEmpty() && next.destinationType != RocketConfiguration.DestinationType.Landing) {
             next = config.popFront();

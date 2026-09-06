@@ -61,11 +61,11 @@ public final class DimensionBreathabilityHandler {
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
                     if (AtmosphereWorldData.get(entity.getEntityWorld()).getGraph()
                             .getOxygenation(entity.getPosition()) >= 0.1) {
-                        return;
+                        continue;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {
                     if (entity.getBrightness() > 0.05F) {
-                        return;
+                        continue;
                     }
                 }
                 if (entity instanceof EntityPlayer player) {
