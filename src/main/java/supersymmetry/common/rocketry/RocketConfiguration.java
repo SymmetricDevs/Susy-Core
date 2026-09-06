@@ -142,4 +142,8 @@ public class RocketConfiguration {
     public boolean isEmpty() {
         return this.missions.isEmpty();
     }
+
+    public List<MissionConfiguration> getMissions() {
+        return this.missions;
+    }
 }
