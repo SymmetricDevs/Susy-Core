@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -17,10 +18,12 @@ import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.ComponentValidationResult;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.mui.widget.BlueprintRowState;
 import supersymmetry.common.rocketry.SuccessCalculation;
 import supersymmetry.common.world.WorldProviderPlanet;
 
@@ -57,10 +60,18 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             return this;
         }
 
+        public Function<AbstractRocketBlueprint, ComponentValidationResult> componentValidationFunction;
+
+        public Builder componentValidationFunction(Function<AbstractRocketBlueprint, ComponentValidationResult> f) {
+            this.componentValidationFunction = f;
+            return this;
+        }
+
         public SimpleStagedRocketBlueprint build() {
             SimpleStagedRocketBlueprint blueprint = new SimpleStagedRocketBlueprint(name, location);
             blueprint.setStages(stages);
             blueprint.solidRocket(solidRocket);
+            blueprint.setComponentValidationFunction(componentValidationFunction);
             assert blueprint.isFullBlueprint() : "full blueprint produced by the builder, thats not meant to happen :C";
             return blueprint;
         }

@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -61,8 +62,8 @@ import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.ComponentValidationResult;
 import supersymmetry.api.rocketry.rockets.RocketStage;
-import supersymmetry.api.rocketry.rockets.RocketStage.ComponentValidationResult;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -89,7 +90,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
 
     private String lastErrorStage;
     private String lastErrorComponent;
-    private RocketStage.ComponentValidationResult lastErrorResult;
+    private ComponentValidationResult lastErrorResult;
 
     private int buildProgress = 0;
     private int buildDuration = 1200;
@@ -374,7 +375,7 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             String resultName = buf.readString(Short.MAX_VALUE);
             lastErrorStage = buf.readString(Short.MAX_VALUE);
             lastErrorComponent = buf.readString(Short.MAX_VALUE);
-            lastErrorResult = resultName.isEmpty() ? null : RocketStage.ComponentValidationResult.valueOf(resultName);
+            lastErrorResult = resultName.isEmpty() ? null : ComponentValidationResult.valueOf(resultName);
         } else if (dataId == SuSyDataCodes.BLUEPRINT_BUILD_STATE) {
             buildInProgress = buf.readBoolean();
             buildProgress = buf.readInt();
@@ -421,10 +422,9 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             for (var stageEntry : stageRows.entrySet()) {
                 String stageName = stageEntry.getKey();
                 lastErrorStage = stageName;
-                Optional<RocketStage> st = bp.getStages().stream().filter(x -> x.getName().equals(stageName))
-                        .findFirst();
-                if (!st.isPresent()) {
-                    lastErrorResult = RocketStage.ComponentValidationResult.UNKNOWN;
+                Optional<RocketStage> st = bp.getStage(stageName);
+                if (st.isEmpty()) {
+                    lastErrorResult = ComponentValidationResult.UNKNOWN;
                     lastErrorComponent = "";
                     return false;
                 }
@@ -435,17 +435,30 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
                     lastErrorComponent = componentType;
                     List<AbstractComponent<?>> rowCandidate = rowState.materializeComponents();
                     if (rowCandidate == null) {
-                        lastErrorResult = RocketStage.ComponentValidationResult.INVALID_CARD;
+                        lastErrorResult = ComponentValidationResult.INVALID_CARD;
                         return false;
                     }
                     ComponentValidationResult res = stage.setComponentListEntry(componentType, rowCandidate);
-                    if (res != RocketStage.ComponentValidationResult.SUCCESS) {
+                    if (res != ComponentValidationResult.SUCCESS) {
                         lastErrorResult = res;
                         return false;
                     }
                 }
             }
-            lastErrorResult = RocketStage.ComponentValidationResult.SUCCESS;
+            ComponentValidationResult validationResult;
+            try {
+                 validationResult = bp.componentValidationFunction.apply(bp);
+            } catch (RuntimeException e) {
+                SusyLog.logger.error(e);
+                lastErrorResult = ComponentValidationResult.UNKNOWN;
+                return false;
+            }
+            if (validationResult != ComponentValidationResult.SUCCESS) {
+                lastErrorResult = validationResult;
+                return false;
+            }
+
+            lastErrorResult = ComponentValidationResult.SUCCESS;
             return true;
         } catch (Exception e) {
             SusyLog.logger.error("Error in buildBlueprint", e);
@@ -844,15 +857,15 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         conditional.addWidgetWithTest(
                 new DynamicLabelWidget(45, height - INV_HEIGHT - 28, this::getLastErrorMessage, 0xFF5555),
                 () -> this.lastErrorResult != null &&
-                        this.lastErrorResult != RocketStage.ComponentValidationResult.SUCCESS && hasBlueprint() &&
+                        this.lastErrorResult != ComponentValidationResult.SUCCESS && hasBlueprint() &&
                         !buildInProgress);
         conditional.addWidgetWithTest(
                 new LabelWidget(55, height / 2 - 29, this.getMetaName() + ".build_error.success", 0x55FF55),
-                () -> blueprintBuilt && this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS &&
+                () -> blueprintBuilt && this.lastErrorResult == ComponentValidationResult.SUCCESS &&
                         hasBlueprint());
         conditional.addWidgetWithTest(
                 new LabelWidget(55, height / 2 - 17, this.getMetaName() + ".build_error.success.extract", 0x55FF55),
-                () -> blueprintBuilt && this.lastErrorResult == RocketStage.ComponentValidationResult.SUCCESS &&
+                () -> blueprintBuilt && this.lastErrorResult == ComponentValidationResult.SUCCESS &&
                         hasBlueprint());
 
         return builder;

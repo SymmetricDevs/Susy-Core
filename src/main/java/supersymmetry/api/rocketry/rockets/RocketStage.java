@@ -2,7 +2,6 @@ package supersymmetry.api.rocketry.rockets;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -20,31 +19,6 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.common.rocketry.components.IComponentTank;
 
 public class RocketStage implements Cloneable {
-
-    public enum ComponentValidationResult {
-
-        SUCCESS("success"),
-        INVALID_CARD("invalid_card"),
-        VALIDATION_FAILURE("validation_failure"),
-        INVALID_AMOUNT(
-                "invalid_amount"),
-        INCOMPATIBLE_CARD("incompatible_card"),
-        UNKNOWN("unknown");
-
-        private String name;
-
-        ComponentValidationResult(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public String getTranslationKey() {
-            return "susy.rocketry.components.validation_codes." + this.name;
-        }
-    }
 
     public static class Builder {
 
@@ -93,10 +67,7 @@ public class RocketStage implements Cloneable {
     // allows you to make it so it needs different types of engines for example.
     // ensures compatibility
     // between components of the same type
-    @Setter
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationFunction = x -> {
-        return ComponentValidationResult.SUCCESS;
-    };
+
 
     // limits on how many of each component it can have
     public Map<String, int[]> componentLimits = new TreeMap<>();
@@ -117,10 +88,6 @@ public class RocketStage implements Cloneable {
 
     public RocketStage() {
         this.name = "unprocessed"; // meant to be read from nbt later
-    }
-
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> getComponentValidationFunction() {
-        return componentValidationFunction;
     }
 
     public boolean isPopulated() {
@@ -214,8 +181,8 @@ public class RocketStage implements Cloneable {
         this.componentLimits = componentLimits;
     }
 
-    public RocketStage.ComponentValidationResult setComponentListEntry(String name,
-                                                                       List<AbstractComponent<?>> componentList) {
+    public ComponentValidationResult setComponentListEntry(String name,
+                                                           List<AbstractComponent<?>> componentList) {
         if (componentList.stream().anyMatch(x -> x.materials.isEmpty())) {
             SusyLog.logger.info("empty material list in entry {}", name);
         }
@@ -223,10 +190,6 @@ public class RocketStage implements Cloneable {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is
             // invalid
         }
-        ComponentValidationResult validationResult = componentValidationFunction
-                .apply(new Tuple<>(name, componentList));
-        if (validationResult != ComponentValidationResult.SUCCESS)
-            return validationResult;
         components.put(name, componentList);
         return ComponentValidationResult.SUCCESS;
     }

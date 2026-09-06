@@ -1,5 +1,8 @@
 package supersymmetry.common.rocketry;
 
+import java.util.List;
+import java.util.function.Function;
+
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GregTechAPI;
@@ -9,6 +12,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.ComponentValidationResult;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
@@ -16,7 +20,6 @@ import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 public class SusyRocketComponents {
 
     public static SimpleStagedRocketBlueprint ROCKET_SOYUZ_BLUEPRINT_DEFAULT;
-    public static SimpleStagedRocketBlueprint ROCKET_V1_BLUEPRINT_DEFAULT;
     public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
@@ -30,7 +33,8 @@ public class SusyRocketComponents {
 
         new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
                 .addComponent(GregTechAPI.materialManager.getMaterial("liquid_methane") != null ?
-                        GregTechAPI.materialManager.getMaterial("liquid_methane").getFluid() : Materials.Methane.getFluid(), 100)
+                        GregTechAPI.materialManager.getMaterial("liquid_methane").getFluid() :
+                        Materials.Methane.getFluid(), 100)
                 .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 321).density(0.82).sIVacuum(369)
                 .sIPerPressure(309).register();
 
@@ -49,6 +53,15 @@ public class SusyRocketComponents {
                     .density(1.17).sIVacuum(342).sIPerPressure(289).register();
         }
 
+        Function<AbstractRocketBlueprint, ComponentValidationResult> fairingCheck = (bp) -> {
+            RocketStage payload = bp.getStage("payload").get();
+            List<AbstractComponent<?>> fairings = payload.getComponents().get("fairing");
+            double fHeight = fairings.stream().mapToDouble(AbstractComponent::getHeight).min().getAsDouble();
+            double fRadius = fairings.stream().mapToDouble(AbstractComponent::getRadius).min().getAsDouble();
+            ComponentSpacecraft spacecraft = (ComponentSpacecraft) payload.getComponents().get("spacecraft").get(0);
+            return spacecraft.getHeight() >= fHeight || spacecraft.getRadius() >= fRadius ? ComponentValidationResult.FAIRING_TOO_SMALL : ComponentValidationResult.SUCCESS;
+        };
+
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
                 .stage(new RocketStage.Builder("boosters").type("engine").range(1, 4).type("tank").limit(4).build())
                 .stage(new RocketStage.Builder("block_A").type("engine").range(1, 4)
@@ -57,26 +70,16 @@ public class SusyRocketComponents {
                         .type("tank").limit(2).type("interstage").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
                         .type("tank").limit(1).build())
-                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic")).build();
-
-        // this was added for testing so that i dont have to fill out all components
-        // every time
-        ROCKET_V1_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("V1")
-                .stage(new RocketStage.Builder("main").type("engine").limit(1).type("tank").limit(2)
-                        // .type("chemical_bomb")
-                        // .limit(1)
-                        // .limit(2)
-                        // .limit(3)
-                        .build())
-                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic")).build();
+                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
+                .componentValidationFunction(fairingCheck).build();
 
         ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar").solidRocket()
                 .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(1).build())
                 .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
                         .type("tank").limit(1).build())
-                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar")).build();
+                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
+                .componentValidationFunction(fairingCheck).build();
 
-        // AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_LUNAR_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.setRegistryLock(true);
