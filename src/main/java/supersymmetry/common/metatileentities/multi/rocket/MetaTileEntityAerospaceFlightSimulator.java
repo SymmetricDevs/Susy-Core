@@ -739,7 +739,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         planetSlot.setSelfPosition(new Position(105, 54));
         planetSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
-        builder.widget(planetSlot);
+        menuGroup.addWidget(planetSlot);
 
         mainGroup.addWidget(menuGroup);
         mainGroup.addWidget(workingGroup);
@@ -750,12 +750,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // its contents so switching blueprints back restores the old selection
         menuGroup.addWidgetWithTest(
                 new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> setFuelFromData()),
-                () -> !this.isSolidBlueprint());
+                () -> !this.isSolidBlueprint() && !this.isActive());
         menuGroup.addWidgetWithTest(
                 new PhantomSlotWidget(this.solidFuelSlot, 0, 10, 54)
                         .setClearSlotOnRightClick(true)
                         .setBackgroundTexture(GuiTextures.SLOT_DARK),
-                this::isSolidBlueprint);
+                () -> this.isSolidBlueprint() && !this.isActive());
         // Turn altitude selector
         menuGroup.addWidget(
                 new LabelWidget(10, 80, this.getMetaName() + ".gui.turn_altitude_selector_label", 0xffffff));

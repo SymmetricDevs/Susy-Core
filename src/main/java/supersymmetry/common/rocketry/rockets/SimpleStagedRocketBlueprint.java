@@ -140,59 +140,6 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         return true;
     }
 
-    public double calculateVelocity(RocketFuelEntry fuel, double cargo) {
-        double remainingWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume() + cargo;
-        double deltaV = 0;
-        // TODO: somehow incorporate cargo mass in a fair way
-        for (RocketStage stage : this.stages) {
-            double currentFuelWeight = stage.getFuelCapacity() * fuel.getDensity();
-            deltaV += stage.getEffectiveFuelVelocity(fuel) *
-                    Math.log(remainingWeight / (remainingWeight - currentFuelWeight));
-
-            remainingWeight -= stage.getMass() + currentFuelWeight;
-        }
-
-        return deltaV;
-    }
-
-    public double getMaximumCargoMass(RocketFuelEntry fuel, double escapeVelocity) {
-        // DeltaV given some cargo mass x from the above is as such, with w_x being the
-        // base wet weight at stage x and
-        // d_x being the base dry weight:
-        // escapeVelocity = sum(ln((w_x + x) / (d_x + x)) * v_i)
-        // We have to solve numerically
-        // Newton's method, finding largest root specifically. The guess must start at
-        // zero since it's decreasing
-        // concave up
-        double guess = 0;
-        double totalWeight = this.getMass() + fuel.getDensity() * this.getFuelVolume();
-        for (int i = 0; i < 10; i++) {
-            double fprime = 0;
-            double f = 0;
-            double remainingWeight = totalWeight + guess;
-
-            // d/dx (ln((w_x + x) / (d_x + x)) * v_i) =
-            // v_i * (d_x + x) / (w_x + x) * (d_x - w_x) / (d_x + x)^2
-            // x is already accounted for
-            for (RocketStage stage : this.stages) {
-                double currentFuelWeight = stage.getFuelCapacity() * fuel.getDensity();
-                double dryWeight = remainingWeight - currentFuelWeight;
-                fprime += stage.getEffectiveFuelVelocity(fuel) * dryWeight / remainingWeight * -currentFuelWeight /
-                        Math.pow(dryWeight, 2);
-                f += stage.getEffectiveFuelVelocity(fuel) * Math.log(remainingWeight / dryWeight);
-                remainingWeight -= stage.getMass() + currentFuelWeight;
-            }
-            f -= escapeVelocity;
-            if (guess == 0 && f < 0) {
-                return 0; // Exit early as to not blow up
-            }
-            guess -= f / fprime;
-            if (f < 1e-8)
-                break;
-        }
-        return guess;
-    }
-
     // lobotomized version of the function below to only take in the blueprint
     public SuccessCalculation.AFSStats calculateInitialSuccess(Planetoid planet, RocketFuelEntry fuel,
                                                                double turnAltitude, double cargoMass,

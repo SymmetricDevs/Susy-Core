@@ -217,11 +217,6 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         // The radius collection here is skipped
         collectInfo(analysis, blocksConnected, tag);
 
-        if (height > radius * 2) {
-            analysis.status = BuildStat.TOO_SHORT;
-            return Optional.empty();
-        }
-
         analysis.status = BuildStat.SUCCESS;
         writeBlocksToNBT(blocksConnected, analysis.world);
 

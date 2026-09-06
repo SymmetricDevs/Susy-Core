@@ -72,12 +72,12 @@ if (generateTags) {
 }
 
 // AccessTransformers
-if (accessTransformers.isNotEmpty()) {
+if (atFiles.isNotEmpty()) {
 
     // This will apply ATs to both minecraft & forge sources
     tasks.applyJST {
         accessTransformerFiles.from(
-            accessTransformers.split(";")
+            atFiles.split(";")
             .map { file("src/main/resources/$it") }
             .onEach { if (!it.exists()) throw GradleException("Could not find accessTransformer file \"$it\"!") })
     }
@@ -121,8 +121,8 @@ tasks.withType<Jar>().configureEach {
                 put("FMLCorePluginContainsFMLMod", true)
                 put("ForceLoadAsMod", forceLoadAsMod)
             }
-            if (accessTransformers.isNotEmpty()) {
-                put("FMLAT", accessTransformers.replace(";", " "))
+            if (atFiles.isNotEmpty()) {
+                put("FMLAT", atFiles.replace(";", " "))
             }
         })
     }

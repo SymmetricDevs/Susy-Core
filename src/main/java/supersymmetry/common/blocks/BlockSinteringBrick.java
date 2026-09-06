@@ -39,9 +39,7 @@ public class BlockSinteringBrick extends VariantActiveBlock<BlockSinteringBrick.
 
         BRICK("sintering_block_brick", false),
         MAGNETOPLATED("sintering_block_magnetoplated", true),
-        BRICK_BLOOM(
-                "sintering_block_brick_bloom_deco",
-                false),
+        BRICK_BLOOM("sintering_block_brick_bloom_deco", false),
         MAGNETOPLATED_BLOOM("sintering_block_magnetoplated_bloom_deco", true);
 
         public final String name;

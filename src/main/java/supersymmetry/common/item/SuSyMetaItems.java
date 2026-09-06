@@ -183,7 +183,9 @@ public class SuSyMetaItems {
 
         AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
 
-        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1);
+        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1)
+                .addComponents(new OxygenSensorBehavior())
+                .addComponents(ElectricStats.createElectricItem(16000, GTValues.LV));
 
         CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
     }
