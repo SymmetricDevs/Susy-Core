@@ -29,24 +29,24 @@ public class SusyRocketComponents {
         AbstractComponent.lockRegistry();
 
         new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
-                .addComponent(Materials.Methane.getFluid(FluidStorageKeys.LIQUID) != null ?
-                        Materials.Methane.getFluid(FluidStorageKeys.LIQUID) : Materials.Methane.getFluid(), 100)
-                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 355).density(0.983).sIVacuum(369)
+                .addComponent(GregTechAPI.materialManager.getMaterial("liquid_methane") != null ?
+                        GregTechAPI.materialManager.getMaterial("liquid_methane").getFluid() : Materials.Methane.getFluid(), 100)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 321).density(0.82).sIVacuum(369)
                 .sIPerPressure(309).register();
 
         if (GregTechAPI.materialManager.getMaterial("rp_one") != null) {
             new LiquidRocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
                     .addComponent(GregTechAPI.materialManager.getMaterial("rp_one").getFluid(), 100)
-                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 256).density(0.915).sIVacuum(316)
-                    .sIPerPressure(260).register();
+                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 258).density(1.03).sIVacuum(356)
+                    .sIPerPressure(300).register();
         }
 
         if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
                 (GregTechAPI.materialManager.getMaterial("mon_3") != null)) {
-            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-MON3-")
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-MON-3")
                     .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
-                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 216)
-                    .density(1.2).sIVacuum(336).sIPerPressure(288).register();
+                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 228)
+                    .density(1.17).sIVacuum(342).sIPerPressure(289).register();
         }
 
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
