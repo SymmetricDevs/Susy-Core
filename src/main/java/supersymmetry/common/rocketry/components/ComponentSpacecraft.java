@@ -259,6 +259,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.UNSHIELDED_REACTOR;
                 return Optional.empty();
             }
+            if (componentList.contains(Type.LANDER_ONE_WAY)) {
+                analysis.status = BuildStat.NO_LANDING_SYSTEM;
+                return Optional.empty();
+            }
 
             tag.setBoolean("hasAir", true);
             this.hasAir = true;
