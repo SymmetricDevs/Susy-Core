@@ -228,7 +228,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                 }
             }
 
-            if (this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
+            AxisAlignedBB aabb = this.getEntityBoundingBox();
+            aabb = new AxisAlignedBB(aabb.minX, aabb.maxY - 1, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+            if (this.world.collidesWithAnyBlock(aabb)) {
                 this.explode();
             }
 
