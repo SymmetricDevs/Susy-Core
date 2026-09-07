@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
+import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.potion.PotionDropPodSickness;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -78,6 +79,13 @@ public class FactionViolence {
         String mobFaction = susyTag.getString(TAG_FACTION);
         if (mobFaction.isEmpty()) return;
         if (!(mob instanceof IMob)) return;
+
+        //why do you keep attacking the drop pods bro?
+        EntityLivingBase revengeTarget = mob.getRevengeTarget();
+        if (revengeTarget instanceof EntityDropPod) {
+            mob.setRevengeTarget(null);
+        }
+
         if (mob.isPotionActive(PotionDropPodSickness.INSTANCE)) return;
 
         boolean isSmart = susyTag.getBoolean(TAG_SMART_AI);
@@ -121,7 +129,6 @@ public class FactionViolence {
             }
         }
 
-        EntityLivingBase revengeTarget = mob.getRevengeTarget();
         if (revengeTarget != null) {
             String revengeFaction = getFaction(revengeTarget);
             if (!revengeFaction.isEmpty() && mobFaction.equals(revengeFaction)) {
