@@ -57,7 +57,8 @@ public class InstrumentRobotArm implements Instrument {
         double collEff = 0;
         // checks all payload stage components for collection efficiency - it's dumb but the "proper" method didn't work
         for (int i = 0; i < 10; i++) {
-            NBTTagCompound compTag = rocketNBT.getTagList("stages", TAG_COMPOUND).getCompoundTagAt(3).getCompoundTag("componentValues").getCompoundTag(String.valueOf(i));
+            NBTTagCompound compTag = rocketNBT.getTagList("stages", TAG_COMPOUND).getCompoundTagAt(3)
+                    .getCompoundTag("componentValues").getCompoundTag(String.valueOf(i));
             if (compTag.getDouble("collectionEfficiency") > 0) {
                 collEff = compTag.getDouble("collectionEfficiency");
                 break;
