@@ -288,7 +288,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
             batteriesRequired += getRequiredBatteries(component);
             numBatteries += (component == Type.BATTERY ? 1 : 0);
             numArms += (component == Type.ARM ? 1 : 0);
-            numSensors += (component == Type.SENSOR_ARRAY ? 1 : 0);
+            numSensors += (component == Type.SENSORS ? 1 : 0);
             numThrusters += (component == Type.CHEMICAL_THRUSTER ? 1 : 0);
             numFuelCells += (component == Type.FUEL_CELL ? 1 : 0);
             numMainEngines += (component == Type.MAIN_ENGINE ? 1 : 0);

@@ -37,14 +37,14 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         setHardness(5f);
         setResistance(15f);
         setSoundType(SoundType.METAL);
-        setDefaultState(getState(Type.SENSOR_ARRAY));
+        setDefaultState(getState(Type.SENSORS));
         setHarvestLevel("wrench", 4);
     }
 
     @Override
     public double getMass(Type type) {
         return switch (type) {
-            case SENSOR_ARRAY -> 70;
+            case SENSORS -> 70;
             case COLLECTOR -> 200;
             case CAMERA -> 40;
             case SOLAR_PANEL -> 100;
@@ -93,7 +93,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
             return 0;
         }
         return switch (type) {
-            case SENSOR_ARRAY -> 250;
+            case SENSORS -> 250;
             case ARM -> 1000;
             case LANDER -> 1500;
             case LANDER_ONE_WAY -> 1000;
@@ -124,7 +124,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
 
     public enum Type implements IStringSerializable, IStateHarvestLevel {
 
-        SENSOR_ARRAY("sensors", 4),
+        SENSORS("sensors", 4),
         COLLECTOR("collector", 4),
         CAMERA("camera", 4),
         SOLAR_PANEL("solar_panel", 4),
@@ -175,7 +175,7 @@ public class BlockSpacecraftInstrument extends VariantBlock<BlockSpacecraftInstr
         }
 
         public static Type getInstrument(String name) {
-            return Stream.of(values()).filter(type -> type.name.equals(name)).findFirst().orElse(null);
+            return Stream.of(values()).filter(type -> type.name.equalsIgnoreCase(name)).findFirst().orElse(null);
         }
     }
 
