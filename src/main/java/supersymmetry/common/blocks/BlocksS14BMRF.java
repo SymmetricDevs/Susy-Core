@@ -8,9 +8,8 @@ import net.minecraft.util.IStringSerializable;
 
 import org.jetbrains.annotations.NotNull;
 
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
-
 import gregtech.api.block.IStateHarvestLevel;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlocksS14BMRF extends VariantHorizontalRotatableBlock<BlocksS14BMRF.S14BMRFBlockType> {
 
