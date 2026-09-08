@@ -26,6 +26,8 @@ import supersymmetry.api.rocketry.NozzleFlow;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.components.RocketEngine;
+import supersymmetry.api.space.CelestialObject;
+import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.api.util.SuSyUtility;
@@ -88,6 +90,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.contour_efficiency", "%.2f",
                     100 * NozzleFlow.contourEfficiency(tag.getDouble("exit_angle"),
                             tag.getDouble("wetted_ratio"), tag.getDouble("turning"))));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.nozzle_efficiency_sea", "%.1f",
+                    100 * NozzleFlow.nozzleEfficiency(tag.getDouble("area_ratio"), tag.getDouble("chamber_pressure"),
+                            CelestialObjects.EARTH.getSurfacePressure())));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.nozzle_efficiency_vacuum", "%.1f",
+                    100 * NozzleFlow.nozzleEfficiency(tag.getDouble("area_ratio"), tag.getDouble("chamber_pressure"),
+                            0)));
         }
         if (tag.hasKey("efficiency")) {
             lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.engine_efficiency", "%.2f",

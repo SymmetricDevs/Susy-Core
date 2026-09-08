@@ -244,7 +244,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
                     (getLaunchTime() - this.world.getTotalWorldTime()) / 20), true);
         }
         if (hasDisallowedItem(passenger)) {
-            removePassenger(passenger);
+            passenger.dismountRidingEntity();
             if (passenger instanceof EntityPlayer player) {
                 player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.inventory"), true);
             }
