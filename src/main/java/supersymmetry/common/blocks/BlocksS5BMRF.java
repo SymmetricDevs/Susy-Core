@@ -3,12 +3,16 @@ package supersymmetry.common.blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import org.jetbrains.annotations.NotNull;
 
-public class BlocksS5BMRF extends VariantBlock<BlocksS5BMRF.S5BMRFBlockType> {
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+
+import gregtech.api.block.IStateHarvestLevel;
+
+public class BlocksS5BMRF extends VariantHorizontalRotatableBlock<BlocksS5BMRF.S5BMRFBlockType> {
 
     public BlocksS5BMRF() {
         super(Material.ROCK);
@@ -16,6 +20,26 @@ public class BlocksS5BMRF extends VariantBlock<BlocksS5BMRF.S5BMRFBlockType> {
         this.setResistance(5.0F);
         this.setSoundType(SoundType.STONE);
         this.setTranslationKey("s5bmrf_blocks");
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(VARIANT, VALUES[meta % VALUES.length]);
+    }
+
+    @Override
+    public int getMetaFromState(@NotNull IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
+    @Override
+    public ItemStack getItemVariant(S5BMRFBlockType variant, int amount) {
+        return new ItemStack(this, amount, variant.ordinal());
+    }
+
+    @Override
+    public int damageDropped(@NotNull IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
     }
 
     public static enum S5BMRFBlockType implements IStringSerializable, IStateHarvestLevel {

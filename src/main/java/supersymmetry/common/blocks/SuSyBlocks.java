@@ -125,6 +125,16 @@ public class SuSyBlocks {
     public static BlocksS4BMRF S4BMRF;
     public static BlocksS5BMRF S5BMRF;
     public static BlocksS6BMRF S6BMRF;
+    public static BlocksS7BMRF S7BMRF;
+    public static BlocksS8BMRF S8BMRF;
+    public static BlocksS9BMRF S9BMRF;
+    public static BlocksS10BMRF S10BMRF;
+    public static BlocksS11BMRF S11BMRF;
+    public static BlocksS12BMRF S12BMRF;
+    public static BlocksS13BMRF S13BMRF;
+    public static BlocksS14BMRF S14BMRF;
+    public static BlocksS15BMRF S15BMRF;
+    public static BlocksS16BMRF S16BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockSpeaker SPEAKER;
     public static BlockCrucible CRUCIBLE;
