@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -66,7 +65,6 @@ import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
-import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
@@ -351,14 +349,18 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    @SubscribeEvent
-    public static void onWorldLoad(WorldEvent.Load event) {
-        World world = event.getWorld();
-        if (!world.isRemote) return;
-        if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
-            world.provider.setSkyRenderer(CelestialObjects.RENDERER);
-        }
-    }
+    /*
+     * TODO for space 2.0: fix atmosphere renderer
+     * 
+     * @SubscribeEvent
+     * public static void onWorldLoad(WorldEvent.Load event) {
+     * World world = event.getWorld();
+     * if (!world.isRemote) return;
+     * if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
+     * world.provider.setSkyRenderer(CelestialObjects.RENDERER);
+     * }
+     * }
+     */
 
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {

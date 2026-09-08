@@ -17,7 +17,6 @@
     "BlockModelRendererMixin",
     "RenderChunkMixin",
     "TileEntityRendererDispatcherMixin",
-    "RenderGlobalMixin",
-    "WorldProviderSurfaceMixin"
+    "RenderGlobalMixin"
   ]
 }

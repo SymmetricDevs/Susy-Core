@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import supersymmetry.api.space.Orbit;
 import supersymmetry.api.space.Planetoid;
 
+// TODO: space 2.0: fix this class
+@SuppressWarnings("UnusedMixin")
 @Mixin(WorldProviderSurface.class)
 public abstract class WorldProviderSurfaceMixin extends WorldProvider {
 
