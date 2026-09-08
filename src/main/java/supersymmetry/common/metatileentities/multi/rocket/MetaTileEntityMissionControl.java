@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import gregtech.api.gui.widgets.LabelWidget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -236,6 +237,14 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
                 }
             }
         }, 0xffffff));
+
+        // Debug stuff
+        mainGroup.addWidget(new LabelWidget(4, 32 + 64, "[DEBUG]", 0xff0000));
+        mainGroup.addWidget(new AdvancedTextWidget(4, 36 + 72, (l) -> {
+            if (selectedRocket != null) {
+                l.add(new TextComponentString("Launch Result: " + selectedRocket.getLaunchResult()));
+            }
+        }, 0xff9999));
 
         builder.widget(mainGroup);
 
