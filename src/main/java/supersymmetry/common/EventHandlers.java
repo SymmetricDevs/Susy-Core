@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,6 +40,8 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.space.dimension.WorldProviderSpace;
+import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.entities.EntityBlueprintRocket;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -282,6 +285,13 @@ public class EventHandlers {
                 AtmosphereWorldData.get(world).getGraph().onBlockPlace(world, event.getPos());
                 AtmosphereWorldData.get(world).markDirty();
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPickUpItem(EntityItemPickupEvent event) {
+        if (event.getEntityPlayer() != null && event.getEntityPlayer().getRidingEntity() instanceof EntityAbstractRocket) {
+            event.setCanceled(true);
         }
     }
 
