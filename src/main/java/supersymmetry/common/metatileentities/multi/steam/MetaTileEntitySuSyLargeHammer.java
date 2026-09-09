@@ -48,19 +48,14 @@ public class MetaTileEntitySuSyLargeHammer extends RecipeMapSteamMultiblockContr
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ")
+        return FactoryBlockPattern.start().aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ")
                 .aisle("XYAYX", "X###X", "X#H#X", "XPSPX", " PYP ", "  Y  ", "  Y  ")
-                .aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ")
-                .where('S', this.selfPredicate())
+                .aisle("XXXXX", "X   X", "     ", "     ", "     ", "     ", "     ").where('S', this.selfPredicate())
                 .where('A', blocks(Blocks.ANVIL))
                 .where('H', states(MetaBlocks.COMPRESSED.get(Materials.Steel).getBlock(Materials.Steel)))
                 .where('Y', states(getCasingState()))
                 .where('X', states(getCasingState()).setMinGlobalLimited(19).or(autoAbilities()))
-                .where('P', states(getPipeCasingState()))
-                .where('#', air())
-                .where(' ', any())
-                .build();
+                .where('P', states(getPipeCasingState())).where('#', air()).where(' ', any()).build();
     }
 
     protected static IBlockState getCasingState() {
@@ -97,8 +92,7 @@ public class MetaTileEntitySuSyLargeHammer extends RecipeMapSteamMultiblockContr
     }
 
     @SideOnly(Side.CLIENT)
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.FORGE_HAMMER_OVERLAY;
     }

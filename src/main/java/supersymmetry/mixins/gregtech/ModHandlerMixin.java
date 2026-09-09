@@ -14,9 +14,7 @@ import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 public abstract class ModHandlerMixin {
 
     @Inject(method = "addShapedRecipe(ZLjava/lang/String;Lnet/minecraft/item/ItemStack;ZZ[Ljava/lang/Object;)V",
-            at = @At(target = "Lnet/minecraft/item/ItemStack;getCount()I",
-                     value = "INVOKE",
-                     remap = true),
+            at = @At(target = "Lnet/minecraft/item/ItemStack;getCount()I", value = "INVOKE", remap = true),
             cancellable = true)
     private static void replaceWithOurs(boolean i, String dont, ItemStack result, boolean care, boolean about,
                                         Object[] recipe, CallbackInfo ci) {

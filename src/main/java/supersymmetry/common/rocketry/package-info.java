@@ -7,7 +7,8 @@
  * 
  * <pre>
  * {@code
- * // Queue a lander to spawn in 5 seconds (100 ticks) at coordinates (100, 256, 200) in the overworld
+ * // Queue a lander to spawn in 5 seconds (100 ticks) at coordinates (100, 256,
+ * // 200) in the overworld
  * LanderSpawnManager.queueLanderSpawn(world, 0, 100, 256, 200, 100);
  * }
  * </pre>

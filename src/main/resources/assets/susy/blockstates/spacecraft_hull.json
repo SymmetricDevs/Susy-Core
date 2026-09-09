@@ -1,0 +1,22 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_all",
+    "textures" : {
+      "all" : "gregtech:blocks/rocketry/struct/spacecraft_hull_al_li"
+    }
+  },
+  "variants": {
+    "variant": {
+      "al_li": {}
+    },
+    "facing": {
+      "north": {},
+      "south": {},
+      "west": {},
+      "east": {},
+      "up": {},
+      "down": {}
+    }
+  }
+}

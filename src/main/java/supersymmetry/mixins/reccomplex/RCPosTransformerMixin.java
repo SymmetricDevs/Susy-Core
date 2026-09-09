@@ -13,7 +13,8 @@ import ivorius.reccomplex.temp.RCPosTransformer;
 @Mixin(value = RCPosTransformer.class, remap = false)
 public class RCPosTransformerMixin {
 
-    // Adds NBT to spawned TileEntities that prevents them from being cheesed with RefinedTools storage scanners
+    // Adds NBT to spawned TileEntities that prevents them from being cheesed with
+    // RefinedTools storage scanners
     @Inject(method = "transformAdditionalData", at = @At("HEAD"))
     private static void transformAdditionalData(TileEntity tileEntity, AxisAlignedTransform2D transform, int[] size,
                                                 CallbackInfo ci) {

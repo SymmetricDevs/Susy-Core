@@ -2,11 +2,15 @@ package supersymmetry.client.renderer.textures;
 
 import net.minecraft.item.EnumDyeColor;
 
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
+import supersymmetry.client.renderer.textures.custom.VatCasingRenderer;
 
 public class SusyTextures {
 
@@ -71,11 +75,18 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer BATH_CONDENSER_OVERLAY = new OrientedOverlayRenderer(
             "machines/bath_condenser");
     public static final OrientedOverlayRenderer CATALYTIC_REFORMER_OVERLAY = new OrientedOverlayRenderer(
-            "multiblock/catalytic_reformer");
+            "machines/multiblocks/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
 
     public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
+
+    public static final VatCasingRenderer CLARIFIER_VAT_RENDERER = new VatCasingRenderer(
+            "gregtech:blocks/casings/multiblock_tank/clarifier_on",
+            "gregtech:blocks/casings/solid/machine_casing_solid_steel");
+    public static final VatCasingRenderer FLOTATION_VAT_RENDERER = new VatCasingRenderer(
+            "gregtech:blocks/casings/multiblock_tank/flotation_on",
+            "gregtech:blocks/casings/solid/machine_casing_clean_stainless_steel");
 
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/fluid_compressor");
@@ -138,6 +149,8 @@ public class SusyTextures {
             "machines/multiblocks/radiator");
     public static final OrientedOverlayRenderer RAILROAD_ENGINEERING_STATION_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/railroad_engineering_station");
+    public static final OrientedOverlayRenderer LARGE_RES = new OrientedOverlayRenderer(
+            "machines/multiblocks/railroad_engineering_station");
     public static final OrientedOverlayRenderer ROTARY_KILN_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/rotary_kiln");
     public static final OrientedOverlayRenderer SINTERING_OVERLAY = new OrientedOverlayRenderer(
@@ -176,8 +189,24 @@ public class SusyTextures {
             "machines/multiblocks/eccentric_roll_crusher");
     public static final OrientedOverlayRenderer BALL_MILL_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/ball_mill");
+    public static final OrientedOverlayRenderer ATTRITION_SCRUBBER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/attrition_scrubber");
     public static final OrientedOverlayRenderer SCREEN_PRINTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/screen_printer");
+    public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
+    public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/log_washer");
+
+    public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/launch_pad");
+    public static final OrientedOverlayRenderer ROCKET_PROGRAMMER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/rocket_programmer");
+    public static final OrientedOverlayRenderer AFS_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/aerospace_flight_simulator");
+    public static final OrientedOverlayRenderer BLUEPRINT_ASSEMBLER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/blueprint_assembler");
+    public static final @NotNull ICubeRenderer LAYUP_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/layup");
 
     public static final SimpleOverlayRenderer SLAG_HOT = new SimpleOverlayRenderer("resource/slag_hot");
     public static final SimpleOverlayRenderer RESTRICTIVE_FILTER_FILTER_OVERLAY = new SimpleOverlayRenderer(
@@ -188,6 +217,8 @@ public class SusyTextures {
             "storage/crates/code_breacher");
     public static final SimpleOverlayRenderer REDSTONE_CONTROLLER_OVERLAY = new SimpleOverlayRenderer(
             "machines/overlay/overlay_redstone");
+    public static final SimpleOverlayRenderer DRONE_BASKET_OVERLAY = new SimpleOverlayRenderer(
+            "storage/crates/drone_basket");
 
     public static final SimpleCubeRenderer MASONRY_BRICK = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/masonry_brick");
@@ -201,12 +232,18 @@ public class SusyTextures {
             "gregtech:blocks/multiblock_casing/copper_casing_pipe");
     public static final SimpleCubeRenderer ULV_STRUCTURAL_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/multiblock_casing/ulv_structural_casing");
+    public static final SimpleCubeRenderer HYDROSTATIC_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/hydrostatic_casing");
+    public static final SimpleCubeRenderer ALUMINIUM_GEARBOX = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/aluminium_gearbox");
     public static final SimpleCubeRenderer STEEL_TURBINE_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_steel");
     public static final SimpleCubeRenderer TITANIUM_TURBINE_CASING = new SimpleCubeRenderer(
             "gregtech:blocks/casings/mechanic/machine_casing_turbine_titanium");
     public static final SimpleCubeRenderer AEROSPACE_GASKET = new SimpleCubeRenderer(
             "gregtech:blocks/rocket_multiblock_casing/aerospace_gasket");
+    public static final SimpleCubeRenderer ABRASION_RESISTANT_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/casings/grinder_casing/abrasion_resistant_casing");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 

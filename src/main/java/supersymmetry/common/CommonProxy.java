@@ -1,14 +1,18 @@
 package supersymmetry.common;
 
+import static net.minecraftforge.common.BiomeDictionary.Type;
+import static net.minecraftforge.common.BiomeDictionary.addTypes;
 import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
 import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
+import static supersymmetry.common.blocks.SuSyMetaBlocks.TANKLESS_FLUID_PIPES;
 
 import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.item.Item;
@@ -18,7 +22,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -31,6 +34,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.block.IHeatingCoilBlockStats;
 import gregtech.api.block.VariantItemBlock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.modules.ModuleContainerRegistryEvent;
@@ -41,6 +46,7 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockWireCoil;
 import gregtech.common.items.MetaItems;
 import gregtech.modules.ModuleManager;
+import lombok.val;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
@@ -49,6 +55,7 @@ import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.api.fluids.SusyGeneratedFluidHandler;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.space.CelestialObjects;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.api.unification.ore.SusyStoneTypes;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
@@ -57,10 +64,12 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.materials.SusyMaterials;
+import supersymmetry.common.pipelike.tanklessfluid.ItemBlockTanklessFluidPipe;
 import supersymmetry.common.potion.PotionDropPodSickness;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
+import supersymmetry.common.world.biome.BiomeLunarKreepTerrane;
 import supersymmetry.common.world.biome.BiomeLunarMaria;
 import supersymmetry.loaders.SuSyWorldLoader;
 import supersymmetry.loaders.SusyOreDictionaryLoader;
@@ -75,6 +84,7 @@ public class CommonProxy {
         SusyStoneTypes.init();
         Particles.init();
         Particles.register();
+        CelestialObjects.init();
     }
 
     /**
@@ -112,7 +122,8 @@ public class CommonProxy {
     /**
      * Recursively deletes a directory and all its contents.
      *
-     * @param directory the directory to delete
+     * @param directory
+     *                  the directory to delete
      * @return true if the directory was successfully deleted, false otherwise
      */
     private boolean deleteDirectory(File directory) {
@@ -136,7 +147,8 @@ public class CommonProxy {
     }
 
     public void postLoad() {
-        // Remove the ULV energy hatches from multiblock preview, they are a trap for new players
+        // Remove the ULV energy hatches from multiblock preview, they are a trap for
+        // new players
         MultiblockAbility.REGISTRY.get(MultiblockAbility.INPUT_ENERGY).remove(0);
         MultiblockAbility.REGISTRY.get(MultiblockAbility.OUTPUT_ENERGY).remove(0);
     }
@@ -144,7 +156,8 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerBlocks(@NotNull RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
-        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values()) registry.register(block);
+        for (SusyStoneVariantBlock block : SuSyBlocks.SUSY_STONE_BLOCKS.values())
+            registry.register(block);
 
         for (Block b : susyBlocks) {
             registry.register(b);
@@ -152,6 +165,20 @@ public class CommonProxy {
         registry.register(REGOLITH);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val material : materialRegistry) {
+                if (material.hasProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE)) {
+                    for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                        if (!pipe.getItemPipeType(pipe.getItem(material)).getOrePrefix().isIgnored(material)) {
+                            pipe.addPipeMaterial(material, material.getProperty(SuSyPropertyKey.TANKLESS_FLUID_PIPE));
+                        }
+                    }
+                }
+            }
+
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) registry.register(pipe);
+        }
     }
 
     @SubscribeEvent
@@ -163,10 +190,16 @@ public class CommonProxy {
             registry.register(createItemBlock(block, VariantItemBlock::new));
         susyBlocks.stream().distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
         registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
-        SHEETED_FRAMES.values()
-                .stream().distinct()
-                .map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
+        SHEETED_FRAMES.values().stream().distinct().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
+
+        for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
+            for (val pipe : TANKLESS_FLUID_PIPES.get(materialRegistry.getModid())) {
+                if (!pipe.getEnabledMaterials().isEmpty()) {
+                    registry.register(createItemBlock(pipe, ItemBlockTanklessFluidPipe::new));
+                }
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -193,6 +226,7 @@ public class CommonProxy {
         SusyGeneratedFluidHandler.init();
 
         // SusyMaterials.removeFlags();
+        SusyMaterials.addFlags();
     }
 
     @SubscribeEvent
@@ -205,22 +239,47 @@ public class CommonProxy {
     }
 
     private static void handleCoilTooltips(ItemTooltipEvent event) {
-        Block block = Block.getBlockFromItem(event.getItemStack().getItem());
-        if (block instanceof BlockWireCoil && TooltipHelper.isShiftDown()) {
-            ItemStack itemStack = event.getItemStack();
-            Item item = itemStack.getItem();
+        ItemStack itemStack = event.getItemStack();
+        if (!(itemStack.getItem() instanceof VariantItemBlock)) {
+            return;
+        }
+        VariantItemBlock itemBlock = (VariantItemBlock) itemStack.getItem();
+        IBlockState state = itemBlock.getBlockState(itemStack);
+        IHeatingCoilBlockStats coilStats = GregTechAPI.HEATING_COILS.get(state);
+        if (coilStats == null) {
+            return;
+        }
+        Block block = Block.getBlockFromItem(itemStack.getItem());
+        if (block instanceof BlockWireCoil) {
             BlockWireCoil wireCoilBlock = (BlockWireCoil) block;
-            VariantItemBlock itemBlock = (VariantItemBlock) item;
-            BlockWireCoil.CoilType coilType = (BlockWireCoil.CoilType) wireCoilBlock
-                    .getState(itemBlock.getBlockState(itemStack));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_evaporation", new Object[0]));
-            event.getToolTip().add(I18n.format("tile.wire_coil.tooltip_energy_evaporating",
-                    new Object[] { coilType.getCoilTemperature() / 1000 }));
+            BlockWireCoil.CoilType originalStats = wireCoilBlock.getState(state);
+            String oldTemperature = I18n.format(
+                    "tile.wire_coil.tooltip_heat",
+                    originalStats.getCoilTemperature());
+            String newTemperature = I18n.format(
+                    "tile.wire_coil.tooltip_heat",
+                    coilStats.getCoilTemperature());
+            int index = event.getToolTip().indexOf(oldTemperature);
+            if (index >= 0) {
+                event.getToolTip().set(index, newTemperature);
+            }
+        }
+
+        if (TooltipHelper.isShiftDown()) {
+            event.getToolTip().add(
+                    I18n.format("tile.wire_coil.tooltip_evaporation"));
+
+            event.getToolTip().add(
+                    I18n.format(
+                            "tile.wire_coil.tooltip_energy_evaporating",
+                            coilStats.getCoilTemperature() / 1000));
         }
     }
 
-    // Since this function checks if the key is in the translation key, you can sometimes add tooltips to multiple items
-    // with a single call of the function. Useful for hitting both basic and high pressure steam machines, for example.
+    // Since this function checks if the key is in the translation key, you can
+    // sometimes add tooltips to multiple items
+    // with a single call of the function. Useful for hitting both basic and high
+    // pressure steam machines, for example.
     private static void addTooltip(ItemTooltipEvent event, String key, String toolTip, int index) {
         if (event.getItemStack().getTranslationKey().contains(key)) {
             event.getToolTip().add(index, toolTip);
@@ -248,19 +307,25 @@ public class CommonProxy {
     @SubscribeEvent
     public static void register(RegistryEvent.Register<Biome> evt) {
         SuSyBiomes.LUNAR_HIGHLANDS = new BiomeLunarHighlands(new Biome.BiomeProperties("Lunar Highlands")
-                .setRainDisabled().setBaseHeight(1f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "moon");
+                .setRainDisabled().setBaseHeight(2f).setHeightVariation(0.4f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_HIGHLANDS.setRegistryName(Supersymmetry.MODID, "lunar_highlands");
         evt.getRegistry().register(SuSyBiomes.LUNAR_HIGHLANDS);
-        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_HIGHLANDS, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+        addTypes(SuSyBiomes.LUNAR_HIGHLANDS, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyBiomes.LUNAR_MARIA = new BiomeLunarMaria(new Biome.BiomeProperties("Lunar Maria").setRainDisabled()
                 .setBaseHeight(0f).setHeightVariation(0.1f).setRainfall(0).setTemperature(0.3f));
-        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "maria");
+        SuSyBiomes.LUNAR_MARIA.setRegistryName(Supersymmetry.MODID, "lunar_maria");
         evt.getRegistry().register(SuSyBiomes.LUNAR_MARIA);
-        BiomeDictionary.addTypes(SuSyBiomes.LUNAR_MARIA, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.VOID);
+        addTypes(SuSyBiomes.LUNAR_MARIA, Type.DEAD, Type.VOID, Type.NETHER);
 
-        CelestialObjects.init();
+        SuSyBiomes.LUNAR_KREEP_TERRANE = new BiomeLunarKreepTerrane(new Biome.BiomeProperties("Lunar KREEP Terrane")
+                .setRainDisabled().setBaseHeight(0f).setHeightVariation(0.2f).setRainfall(0).setTemperature(0.3f));
+        SuSyBiomes.LUNAR_KREEP_TERRANE.setRegistryName(Supersymmetry.MODID, "lunar_kreep_terrane");
+        evt.getRegistry().register(SuSyBiomes.LUNAR_KREEP_TERRANE);
+        addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);
+
         SuSyDimensions.init();
+        // ReEntryDimensions.init();
     }
 
     @SubscribeEvent

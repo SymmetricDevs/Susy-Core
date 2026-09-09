@@ -28,18 +28,38 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
+import gregtech.client.model.SimpleStateMapper;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.val;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
+import supersymmetry.common.pipelike.tanklessfluid.BlockTanklessFluidPipe;
+import supersymmetry.common.pipelike.tanklessfluid.TanklessFluidPipeType;
 
 public class SuSyMetaBlocks {
 
     public static final Map<Material, BlockSheetedFrame> SHEETED_FRAMES = new HashMap<>();
     public static final List<BlockSheetedFrame> SHEETED_FRAME_BLOCKS = new ArrayList<>();
+    public static final Map<String, BlockTanklessFluidPipe[]> TANKLESS_FLUID_PIPES = new Object2ObjectOpenHashMap<>();
 
     public SuSyMetaBlocks() {}
 
     public static void init() {
         createGeneratedBlock(m -> m.hasProperty(PropertyKey.DUST) && m.hasFlag(GENERATE_FRAME),
                 SuSyMetaBlocks::createSheetedFrameBlock);
+        createTanklessFluidPipes();
+    }
+
+    private static void createTanklessFluidPipes() {
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            val modid = registry.getModid();
+            val pipes = new BlockTanklessFluidPipe[TanklessFluidPipeType.VALUES.length];
+            for (val type : TanklessFluidPipeType.VALUES) {
+                pipes[type.ordinal()] = new BlockTanklessFluidPipe(type, registry);
+                pipes[type.ordinal()].setRegistryName(modid, String.format("tankless_fluid_pipe_%s", type.name));
+            }
+            TANKLESS_FLUID_PIPES.put(modid, pipes);
+        }
     }
 
     public static void createSheetedFrameBlock(Material[] materials, int index) {
@@ -60,10 +80,11 @@ public class SuSyMetaBlocks {
         for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
             if (materialPredicate.test(material)) {
                 int id = material.getId();
-                // all bits more significant than last four = metaBlockID = key in blocksToGenerate map
+                // all bits more significant than last four = metaBlockID = key in
+                // blocksToGenerate map
                 // least significant four bits = subID (index in material[] element)
                 int metaBlockID = id / 4; // -> >>> 2
-                int subBlockID = id % 4;  // -> & 3
+                int subBlockID = id % 4; // -> & 3
                 if (!blocksToGenerate.containsKey(metaBlockID)) {
                     Material[] materials = new Material[4];
                     Arrays.fill(materials, Materials.NULL);
@@ -78,18 +99,25 @@ public class SuSyMetaBlocks {
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
-        // registers blockstates with associated models properly by calling sheeted frame's model register recipes
+        // registers blockstates with associated models properly by calling sheeted
+        // frame's model register recipes
         SHEETED_FRAMES.values().stream().distinct().forEach(BlockSheetedFrame::onModelRegister);
+
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            val normalStateMapper = new SimpleStateMapper(TanklessFluidPipeRenderer.INSTANCE.getModelLocation());
+            for (val pipe : TANKLESS_FLUID_PIPES.get(registry.getModid())) {
+                pipe.onModelRegister();
+                ModelLoader.setCustomStateMapper(pipe, normalStateMapper);
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             // noinspection ConstantConditions
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(state.getProperties())));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(state.getProperties())));
         }
     }
 
@@ -97,14 +125,13 @@ public class SuSyMetaBlocks {
     private static void registerItemModelWithOverride(Block block, Map<IProperty<?>, Comparable<?>> stateOverrides,
                                                       Predicate<IBlockState> condition) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            if (!condition.test(state)) continue;
+            if (!condition.test(state))
+                continue;
             HashMap<IProperty<?>, Comparable<?>> stringProperties = new HashMap<>(state.getProperties());
             stringProperties.putAll(stateOverrides);
             // noinspection ConstantConditions
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(stringProperties)));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(stringProperties)));
         }
     }
 
@@ -121,21 +148,32 @@ public class SuSyMetaBlocks {
 
         /*
          * SHEETED_FRAMES.values().forEach(block -> {
-         * Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(FRAME_BLOCK_COLOR, block);
-         * Minecraft.getMinecraft().getItemColors().registerItemColorHandler(FRAME_ITEM_COLOR, block);
-         * });
+         * Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(
+         * FRAME_BLOCK_COLOR, block);
+         * Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
+         * FRAME_ITEM_COLOR, block); });
          */
     }
 
     public static void registerOreDict() {
         for (Entry<Material, BlockSheetedFrame> entry : SHEETED_FRAMES.entrySet()) {
             Material material = entry.getKey();
-            if (material == Materials.NULL) continue;
+            if (material == Materials.NULL)
+                continue;
 
             BlockSheetedFrame block = entry.getValue();
             ItemStack itemStack = block.getItem(material);
             OreDictUnifier.registerOre(itemStack, SusyOrePrefix.sheetedFrame, material);
             OreDictUnifier.registerOre(itemStack, new ItemMaterialInfo(new MaterialStack(material, 1)));
+        }
+
+        for (val registry : GregTechAPI.materialManager.getRegistries()) {
+            for (val pipe : TANKLESS_FLUID_PIPES.get(registry.getModid())) {
+                for (val pipeMaterial : pipe.getEnabledMaterials()) {
+                    val itemStack = pipe.getItem(pipeMaterial);
+                    OreDictUnifier.registerOre(itemStack, pipe.getPrefix(), pipeMaterial);
+                }
+            }
         }
     }
 
@@ -143,8 +181,7 @@ public class SuSyMetaBlocks {
         StringBuilder stringbuilder = new StringBuilder();
 
         List<Entry<IProperty<?>, Comparable<?>>> entries = properties.entrySet().stream()
-                .sorted(Comparator.comparing(c -> c.getKey().getName()))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(c -> c.getKey().getName())).collect(Collectors.toList());
 
         for (Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {

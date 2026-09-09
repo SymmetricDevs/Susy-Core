@@ -95,8 +95,7 @@ public class EntityExplosion extends Entity {
         int powerSq = this.power * this.power;
         for (int i = 0; i < powerSq; i++) {
             v0scaled = v0 * rnd.nextFloat() * 1.5f;
-            SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(
-                    this.world,
+            SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(this.world,
                     this.posX + this.power * (rnd.nextFloat() - 0.5) * 0.5,
                     this.posY + this.power * (rnd.nextFloat() - 0.5) * 0.5,
                     this.posZ + this.power * (rnd.nextFloat() - 0.5) * 0.5,

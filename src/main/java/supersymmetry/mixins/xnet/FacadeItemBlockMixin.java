@@ -23,15 +23,14 @@ import mcjty.xnet.blocks.facade.FacadeItemBlock;
 public class FacadeItemBlockMixin {
 
     @Inject(method = "onItemUse(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Lnet/minecraft/util/EnumActionResult;",
-            at = @At(
-                     value = "INVOKE",
+            at = @At(value = "INVOKE",
                      target = "Lmcjty/xnet/blocks/facade/FacadeItemBlock;setMimicBlock(Lnet/minecraft/item/ItemStack;Lnet/minecraft/block/state/IBlockState;)V",
                      remap = false,
                      ordinal = 0),
             cancellable = true)
     private void skipGTTiles(EntityPlayer why, World the, BlockPos hell, EnumHand are, EnumFacing there, float so,
-                             float many, float variants,
-                             CallbackInfoReturnable<EnumActionResult> cir, @Local(ordinal = 0) Block block) {
+                             float many, float variants, CallbackInfoReturnable<EnumActionResult> cir,
+                             @Local(ordinal = 0) Block block) {
         if (block instanceof BlockPipe<?, ?, ?> || block instanceof BlockMachine) {
             cir.setReturnValue(EnumActionResult.FAIL);
         }

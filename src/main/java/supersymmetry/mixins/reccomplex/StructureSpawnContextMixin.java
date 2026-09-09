@@ -9,8 +9,9 @@ import ivorius.reccomplex.world.gen.feature.structure.context.StructureSpawnCont
 @Mixin(StructureSpawnContext.class)
 public class StructureSpawnContextMixin {
 
-    // Adds a flag to the setBlockState method that force-replaces the fluid state from FluidloggedAPI
-    @ModifyVariable(method = "setBlock", name = "arg3", at = @At("HEAD"), argsOnly = true, remap = false, require = 1)
+    // Adds a flag to the setBlockState method that force-replaces the fluid state
+    // from FluidloggedAPI
+    @ModifyVariable(method = "setBlock", index = 3, at = @At("HEAD"), argsOnly = true, remap = false, require = 1)
     public int setBlock(int flag) {
         return flag | 64;
     }

@@ -52,7 +52,8 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
         FluidStack stack = getFirstMaterialFluid();
-        if (stack == null || stack.amount < getRequiredMetal()) return false;
+        if (stack == null || stack.amount < getRequiredMetal())
+            return false;
         stack = stack.copy();
         stack.amount = getRequiredMetal();
         this.inputFluidInventory.drain(stack, true);
@@ -96,7 +97,7 @@ public abstract class MetaTileEntityStrandMold extends MetaTileEntityStrandShape
     @SideOnly(Side.CLIENT)
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             MultiblockAbility<?> ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.IMPORT_FLUIDS || ability == MultiblockAbility.EXPORT_FLUIDS ||
                     ability == SuSyMultiblockAbilities.STRAND_EXPORT) {

@@ -51,8 +51,7 @@ public class MetaTileEntityExtender extends MetaTileEntityDelegator {
     }
 
     @Override
-    @Nullable
-    public EnumFacing getDelegatingFacing(EnumFacing facing) {
+    @Nullable public EnumFacing getDelegatingFacing(EnumFacing facing) {
         return facing == getFrontFacing() ? inputFacing : getFrontFacing();
     }
 
@@ -66,7 +65,8 @@ public class MetaTileEntityExtender extends MetaTileEntityDelegator {
     public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                  CuboidRayTraceResult hitResult) {
         if (!playerIn.isSneaking()) {
-            if (getInputFacing() == facing || facing == getFrontFacing()) return false;
+            if (getInputFacing() == facing || facing == getFrontFacing())
+                return false;
             if (!getWorld().isRemote) {
                 setInputFacing(facing);
             }

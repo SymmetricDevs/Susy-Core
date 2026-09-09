@@ -53,9 +53,7 @@ public class CoilingCoilRecipeBuilder extends RecipeBuilder<CoilingCoilRecipeBui
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append(CoilingCoilTemperatureProperty.getInstance().getKey(), getTemperature())
-                .toString();
+        return new ToStringBuilder(this).appendSuper(super.toString())
+                .append(CoilingCoilTemperatureProperty.getInstance().getKey(), getTemperature()).toString();
     }
 }

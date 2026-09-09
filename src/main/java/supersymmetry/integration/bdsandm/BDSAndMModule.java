@@ -14,8 +14,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_BDSAndM,
+@GregTechModule(moduleID = SuSyModules.MODULE_BDSAndM,
                 containerID = Supersymmetry.MODID,
                 modDependencies = "bdsandm",
                 name = "SuSy BDSAndM Integration",
@@ -24,7 +23,8 @@ public class BDSAndMModule extends IntegrationSubmodule {
 
     public static final ICustomRotationBehavior BDSAndM_BARREL_BEHAVIOR = (state, world, pos, hitResult) -> {
         EnumFacing gridSide = CoverRayTracer.determineGridSideHit(hitResult);
-        if (gridSide == null) return false;
+        if (gridSide == null)
+            return false;
         gridSide = gridSide.getOpposite(); // IDK what's happening here, blame the original author
         if (gridSide != state.getValue(BlockDirectional.FACING)) {
             world.setBlockState(pos, state.withProperty(BlockDirectional.FACING, gridSide));

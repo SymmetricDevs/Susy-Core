@@ -23,10 +23,11 @@ public class PseudoMultiRecipeLogic extends RecipeLogicEnergy {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        if (pmMTE.getTargetBlockState() == null) return false; // if world was remote or null
+        if (pmMTE.getTargetBlockState() == null)
+            return false; // if world was remote or null
         return !recipe.hasProperty(PseudoMultiProperty.getInstance()) ||
-                recipe.getProperty(PseudoMultiProperty.getInstance(), null)
-                        .getValidBlockStates().contains(pmMTE.getTargetBlockState()) && super.checkRecipe(recipe);
+                recipe.getProperty(PseudoMultiProperty.getInstance(), null).getValidBlockStates()
+                        .contains(pmMTE.getTargetBlockState()) && super.checkRecipe(recipe);
     }
 
     @Override

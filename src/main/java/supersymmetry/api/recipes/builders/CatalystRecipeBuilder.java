@@ -42,9 +42,7 @@ public class CatalystRecipeBuilder extends RecipeBuilder<CatalystRecipeBuilder> 
         applyProperty(CatalystProperty.getInstance(), new CatalystPropertyValue(tier, catalystGroup));
 
         ItemStack[] inputStacks = catalystGroup.getCatalystInfos().streamEntries()
-                .filter(entry -> entry.getValue().getTier() >= tier)
-                .map(Map.Entry::getKey)
-                .map(is -> {
+                .filter(entry -> entry.getValue().getTier() >= tier).map(Map.Entry::getKey).map(is -> {
                     is = is.copy();
                     is.setCount(amount);
                     return is;

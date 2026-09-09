@@ -60,8 +60,8 @@ public class TrackSegment {
         RailSettings.Mutable mutable = this.settings.mutable();
         List<TrackSegment> trackSegments = new ArrayList<>();
         TrackSegment prevSegment = null;
-        for (int lengthToGo = this.settings.length; lengthToGo >
-                0; lengthToGo = Math.max(0, lengthToGo - segmentLength)) {
+        for (int lengthToGo = this.settings.length; lengthToGo > 0; lengthToGo = Math.max(0,
+                lengthToGo - segmentLength)) {
             int length = Math.min(segmentLength, lengthToGo);
             mutable.length = length;
             RailSettings segmentSettings = mutable.immutable();

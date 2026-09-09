@@ -61,22 +61,16 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeMapWorkable.isWorkingEnabled(), recipeMapWorkable.isActive())
                 .addEnergyUsageLine(getEnergyContainer())
-                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage()))
-                .addCustom(tl -> {
+                .addEnergyTierLine(GTUtility.getTierByVoltage(recipeMapWorkable.getMaxVoltage())).addCustom(tl -> {
                     // Coil heat capacity line
                     if (isStructureFormed()) {
-                        ITextComponent heatString = TextComponentUtil.stringWithColor(
-                                TextFormatting.RED,
+                        ITextComponent heatString = TextComponentUtil.stringWithColor(TextFormatting.RED,
                                 TextFormattingUtil.formatNumbers(temperature) + "K");
 
-                        tl.add(TextComponentUtil.translationWithColor(
-                                TextFormatting.GRAY,
-                                "gregtech.multiblock.blast_furnace.max_temperature",
-                                heatString));
+                        tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "gregtech.multiblock.blast_furnace.max_temperature", heatString));
                     }
-                })
-                .addParallelsLine(recipeMapWorkable.getParallelLimit())
-                .addWorkingStatusLine()
+                }).addParallelsLine(recipeMapWorkable.getParallelLimit()).addWorkingStatusLine()
                 .addProgressLine(recipeMapWorkable.getProgressPercent());
     }
 
@@ -104,16 +98,12 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("XXX", "CCC", "CCC", "XXX")
-                .aisle("XXX", "C#C", "C#C", "XXX")
-                .aisle("XSX", "CCC", "CCC", "XXX")
-                .where('S', selfPredicate())
-                .where('X', states(getCasingState()).setMinGlobalLimited(10)
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('C', SuSyPredicates.coolingCoils())
-                .where('#', air())
-                .build();
+        return FactoryBlockPattern.start().aisle("XXX", "CCC", "CCC", "XXX").aisle("XXX", "C#C", "C#C", "XXX")
+                .aisle("XSX", "CCC", "CCC", "XXX").where('S', selfPredicate())
+                .where('X',
+                        states(getCasingState()).setMinGlobalLimited(10)
+                                .or(autoAbilities(true, true, true, true, true, true, false)))
+                .where('C', SuSyPredicates.coolingCoils()).where('#', air()).build();
     }
 
     protected @NotNull IBlockState getCasingState() {
@@ -133,18 +123,15 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
-        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder()
-                .aisle("XEM", "CCC", "CCC", "XXX")
-                .aisle("XXD", "C#C", "C#C", "XXX")
-                .aisle("ISO", "CCC", "CCC", "XXX")
+        MultiblockShapeInfo.Builder builder = MultiblockShapeInfo.builder().aisle("XEM", "CCC", "CCC", "XXX")
+                .aisle("XXD", "C#C", "C#C", "XXX").aisle("ISO", "CCC", "CCC", "XXX")
                 .where('X', MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF))
                 .where('S', SuSyMetaTileEntities.MAGNETIC_REFRIGERATOR, EnumFacing.SOUTH)
                 .where('#', Blocks.AIR.getDefaultState())
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.MV], EnumFacing.NORTH)
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
-                .where('D', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.EAST)
-                .where('M',
+                .where('D', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.EAST).where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
                                 MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF),
                         EnumFacing.NORTH);
@@ -154,8 +141,7 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
         return shapeInfo;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = super.getDataInfo();
         list.add(new TextComponentTranslation("susy.multiblock.magnetic_refrigerator.min_temperature",

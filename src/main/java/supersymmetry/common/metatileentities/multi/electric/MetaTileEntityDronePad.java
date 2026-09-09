@@ -1,7 +1,5 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -12,6 +10,7 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -26,13 +25,12 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
-import it.unimi.dsi.fastutil.ints.IntLists;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
-import supersymmetry.api.recipes.properties.DimensionProperty;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityDrone;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
@@ -53,21 +51,14 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.DRONE_PAD);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" CCC ")
-                .aisle("CPPPC")
-                .aisle("CPPPC")
-                .aisle("CPPPC")
-                .aisle(" CSC ")
-                .where(' ', any())
-                .where('S', selfPredicate())
-                .where('C', states(getCasingState()).setMinGlobalLimited(6)
-                        .or(autoAbilities(true, false, true, true, false, false, false)))
-                .where('P', states(getPadState()))
-                .build();
+        return FactoryBlockPattern.start().aisle(" CCC ").aisle("CPPPC").aisle("CPPPC").aisle("CPPPC").aisle(" CSC ")
+                .where(' ', any()).where('S', selfPredicate())
+                .where('C',
+                        states(getCasingState()).setMinGlobalLimited(6)
+                                .or(autoAbilities(true, false, true, true, false, false, false)))
+                .where('P', states(getPadState())).build();
     }
 
     @Override
@@ -80,8 +71,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         return new MetaTileEntityDronePad(metaTileEntityId);
     }
 
-    @Nullable
-    public EntityDrone getDrone() {
+    @Nullable public EntityDrone getDrone() {
         return this.drone;
     }
 
@@ -117,7 +107,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
                 pos.y, pos.z, true));
 
         if (drone != null) {
-            setDrone(drone.withPadPos(getPos()));
+            setDrone(drone.withLandingPos(getPos()));
         }
 
         if (getDrone() != null) {
@@ -178,15 +168,6 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
         }
     }
 
-    public boolean checkRecipe(@NotNull Recipe recipe) {
-        for (int dimension : recipe.getProperty(DimensionProperty.getInstance(), IntLists.EMPTY_LIST)) {
-            if (dimension == this.getWorld().provider.getDimension()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         super.writeToNBT(data);
@@ -213,7 +194,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
@@ -238,8 +219,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
             super(tileEntity);
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public MetaTileEntityDronePad getMetaTileEntity() {
             return (MetaTileEntityDronePad) super.getMetaTileEntity();
         }
@@ -251,7 +231,7 @@ public class MetaTileEntityDronePad extends RecipeMapMultiblockController {
 
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
-            return ((MetaTileEntityDronePad) metaTileEntity).checkRecipe(recipe) && super.checkRecipe(recipe);
+            return RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity) && super.checkRecipe(recipe);
         }
 
         @Override

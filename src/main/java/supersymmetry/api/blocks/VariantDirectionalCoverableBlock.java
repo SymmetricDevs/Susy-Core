@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -23,6 +20,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.raytracer.IndexedCuboid6;
@@ -32,20 +31,24 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
-public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSerializable> extends
-                                             VariantDirectionalRotatableBlock<T> implements ITileEntityProvider {
+public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSerializable>
+                                             extends
+                                             VariantDirectionalRotatableBlock<T>
+                                             implements
+                                             ITileEntityProvider {
 
     public VariantDirectionalCoverableBlock(Material materialIn) {
         super(materialIn);
-        // this.setDefaultState(blockState.getBaseState().withProperty(VARIANT, VALUES[0]).withProperty(FACING,
+        // this.setDefaultState(blockState.getBaseState().withProperty(VARIANT,
+        // VALUES[0]).withProperty(FACING,
         // EnumFacing.SOUTH));
-        // CustomBlockRotations.registerCustomRotation(this, BLOCK_DIRECTIONAL_BEHAVIOR);
+        // CustomBlockRotations.registerCustomRotation(this,
+        // BLOCK_DIRECTIONAL_BEHAVIOR);
     }
 
     public Predicate<ItemStack> validCover;
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     public BlockStateContainer createBlockState() {
         Class<T> enumClass = getActualTypeParameter(getClass(), VariantDirectionalCoverableBlock.class);
         this.VARIANT = PropertyEnum.create("variant", enumClass);
@@ -71,8 +74,8 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
 
     @Override
     public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
-                                    @NotNull EntityPlayer playerIn,
-                                    @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY,
+                                    @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY,
                                     float hitZ) {
         if ((validCover.test(playerIn.getHeldItem(hand)) || playerIn.getHeldItem(hand).isEmpty()) &&
                 worldIn.getTileEntity(pos) instanceof TileEntityCoverable te) {
@@ -101,8 +104,7 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
         return ret;
     }
 
-    @Nullable
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nullable public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityCoverable();
     }
 
@@ -111,8 +113,7 @@ public class VariantDirectionalCoverableBlock<T extends Enum<T> & IStringSeriali
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
-    @org.jetbrains.annotations.Nullable
-    @Override
+    @org.jetbrains.annotations.Nullable @Override
     public RayTraceResult collisionRayTrace(@NotNull IBlockState blockState, @NotNull World worldIn,
                                             @NotNull BlockPos pos, @NotNull Vec3d start, @NotNull Vec3d end) {
         List<IndexedCuboid6> collisionList = new ArrayList<>();

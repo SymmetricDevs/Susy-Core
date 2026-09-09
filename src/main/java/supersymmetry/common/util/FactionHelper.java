@@ -2,9 +2,7 @@ package supersymmetry.common.util;
 
 public class FactionHelper {
 
-    public static final String[] FACTIONS = new String[] {
-            "Bandits",
-            "Feds" // add more later, maybe techbros idk
+    public static final String[] FACTIONS = new String[] { "Bandits", "Feds" // add more later, maybe techbros idk
     };
 
     public static String getNextFaction(String current) {

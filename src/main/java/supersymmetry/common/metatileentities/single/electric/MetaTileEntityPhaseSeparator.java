@@ -70,8 +70,7 @@ public class MetaTileEntityPhaseSeparator extends SimpleMachineMetaTileEntity {
             super(metaTileEntity, recipeMap, energyContainer);
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public MetaTileEntityPhaseSeparator getMetaTileEntity() {
             return (MetaTileEntityPhaseSeparator) super.getMetaTileEntity();
         }
@@ -104,13 +103,8 @@ public class MetaTileEntityPhaseSeparator extends SimpleMachineMetaTileEntity {
         @Override
         protected int @NotNull [] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
                                                        long maxVoltage, int recipeDuration, int amountOC) {
-            return standardOverclockingLogic(
-                    1,
-                    getMaxVoltage(),
-                    recipeDuration,
-                    amountOC,
-                    getOverclockingDurationDivisor(),
-                    getOverclockingVoltageMultiplier());
+            return standardOverclockingLogic(1, getMaxVoltage(), recipeDuration, amountOC,
+                    getOverclockingDurationDivisor(), getOverclockingVoltageMultiplier());
         }
 
         @Override

@@ -3,12 +3,12 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -41,22 +41,16 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("XXX", "XXX", "XXX", "YYY")
-                .aisle("XXX", "X#X", "X#X", "Y#Y")
-                .aisle("XXX", "X#X", "X#X", "YYY")
-                .aisle("XXX", "X#X", "X#X", "YYY")
-                .aisle("XXX", "X#X", "X#X", "YYY")
-                .aisle("XXX", "X#X", "X#X", "YYY")
-                .aisle("XXX", "XSX", "XXX", "YYY")
+        return FactoryBlockPattern.start().aisle("XXX", "XXX", "XXX", "YYY").aisle("XXX", "X#X", "X#X", "Y#Y")
+                .aisle("XXX", "X#X", "X#X", "YYY").aisle("XXX", "X#X", "X#X", "YYY").aisle("XXX", "X#X", "X#X", "YYY")
+                .aisle("XXX", "X#X", "X#X", "YYY").aisle("XXX", "XSX", "XXX", "YYY")
                 .where('Y', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS)))
-                .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
-                        .or(autoAbilities(false, false, true, true, true, true, false))
-                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(0))
-                        .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(0)))
-                .where('#', air())
-                .where('S', selfPredicate())
-                .build();
+                .where('X',
+                        states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
+                                .or(autoAbilities(false, false, true, true, true, true, false))
+                                .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_IMPORT_ITEMS).setPreviewCount(0))
+                                .or(abilities(SuSyMultiblockAbilities.PRIMITIVE_EXPORT_ITEMS).setPreviewCount(0)))
+                .where('#', air()).where('S', selfPredicate()).build();
     }
 
     @Override
@@ -78,8 +72,7 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
         return Textures.PRIMITIVE_BRICKS;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_BLAST_FURNACE_OVERLAY;
     }
@@ -126,12 +119,16 @@ public class MetaTileEntityReverberatoryFurnace extends RecipeMapMultiblockContr
             final float y = pos.getY() + GTValues.RNG.nextFloat() * 0.375F + 0.3F;
 
             if (facing.getAxis() == EnumFacing.Axis.X) {
-                if (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) x += 0.52F;
-                else x -= 0.52F;
+                if (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
+                    x += 0.52F;
+                else
+                    x -= 0.52F;
                 z += horizontalOffset;
             } else if (facing.getAxis() == EnumFacing.Axis.Z) {
-                if (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) z += 0.52F;
-                else z -= 0.52F;
+                if (facing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
+                    z += 0.52F;
+                else
+                    z -= 0.52F;
                 x += horizontalOffset;
             }
             if (ConfigHolder.machines.machineSounds && GTValues.RNG.nextDouble() < 0.1) {

@@ -197,7 +197,8 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
 
     @Override
     public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (player.getItemStackFromSlot(HEAD) != itemStack) return; // doing that because it would tick all 4 pieces and
+        if (player.getItemStackFromSlot(HEAD) != itemStack)
+            return; // doing that because it would tick all 4 pieces and
         // subtract 4s/s otherwise, no goog
         if (player.isInsideOfMaterial(Material.WATER)) {
             var chest = player.getItemStackFromSlot(CHEST);
@@ -207,7 +208,8 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
                         player.setAir(300);
                         if (!DimensionBreathabilityHandler.isInHazardousEnvironment(player)) {
                             changeOxygen(player.getItemStackFromSlot(CHEST), (-1f) / 20);
-                            // assuming that if its hazardous the player is already breathing with the suit, so no extra
+                            // assuming that if its hazardous the player is already breathing with the suit,
+                            // so no extra
                             // air is
                             // needed
                         }

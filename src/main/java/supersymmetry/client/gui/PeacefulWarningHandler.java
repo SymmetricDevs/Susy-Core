@@ -19,37 +19,38 @@ public class PeacefulWarningHandler {
     public static void onButtonPressed(GuiScreenEvent.ActionPerformedEvent.Post event) {
         GuiScreen gui = event.getGui();
 
-        if (!(gui instanceof GuiOptions)) return;
-        if (event.getButton().id != 108) return;
+        if (!(gui instanceof GuiOptions))
+            return;
+        if (event.getButton().id != 108)
+            return;
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.world == null) return;
+        if (mc.world == null)
+            return;
 
         if (mc.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             String raw = I18n.format("ui.susy.settings.peaceful_button.ln2");
             String formatted = raw.replace("\\n", "\n");
 
-            mc.displayGuiScreen(new GuiYesNo(
-                    (result, id) -> {
-                        if (!result) {
-                            mc.world.getWorldInfo().setDifficulty(EnumDifficulty.EASY);
-                        }
-                        mc.displayGuiScreen(gui);
-                    },
-                    I18n.format("ui.susy.settings.peaceful_button.ln1"),
-                    formatted,
-                    0));
+            mc.displayGuiScreen(new GuiYesNo((result, id) -> {
+                if (!result) {
+                    mc.world.getWorldInfo().setDifficulty(EnumDifficulty.EASY);
+                }
+                mc.displayGuiScreen(gui);
+            }, I18n.format("ui.susy.settings.peaceful_button.ln1"), formatted, 0));
         }
     }
 
     @SubscribeEvent
     public static void onDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
-        if (!(event.getGui() instanceof net.minecraft.client.gui.GuiOptions)) return;
+        if (!(event.getGui() instanceof net.minecraft.client.gui.GuiOptions))
+            return;
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.world == null) return;
+        if (mc.world == null)
+            return;
 
         if (mc.world.getDifficulty() == net.minecraft.world.EnumDifficulty.PEACEFUL) {
 

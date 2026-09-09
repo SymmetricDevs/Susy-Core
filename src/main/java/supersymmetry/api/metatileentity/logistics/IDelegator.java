@@ -10,6 +10,5 @@ public interface IDelegator {
     /**
      * @return the facing that the input facing in delegating
      */
-    @Nullable
-    EnumFacing getDelegatingFacing(EnumFacing facing);
+    @Nullable EnumFacing getDelegatingFacing(EnumFacing facing);
 }

@@ -1,13 +1,12 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -15,9 +14,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
+import gregtech.client.utils.BloomEffectUtil;
+import gregtech.common.ConfigHolder;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
 public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeType> {
@@ -45,10 +49,11 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
 
     @Override
     public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
-                                    @NotNull EntityPlayer playerIn,
-                                    @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY,
+                                    @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY,
                                     float hitZ) {
-        if (worldIn.isRemote) return true;
+        if (worldIn.isRemote)
+            return true;
         if ((worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != net.minecraft.init.Biomes.HELL)) {
             net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(playerIn, pos, true);
             playerIn.bedLocation = pos;
@@ -61,11 +66,28 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    protected boolean isBloomEnabled() {
+        return ConfigHolder.client.machinesEmissiveTextures;
+    }
+
+    @NotNull @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean canRenderInLayer(@NotNull IBlockState state, @NotNull BlockRenderLayer layer) {
+        return layer == getRenderLayer() || (getState(state) == HomeType.HOME_SCIFI &&
+                layer == BloomEffectUtil.getEffectiveBloomLayer(isBloomEnabled()));
+    }
+
     public enum HomeType implements IStringSerializable {
 
         HOME_PRIMITIVE("home_primitive"),
         HOME_GT_BRUTALIST("home_gt_brutalist"),
-        HOME_RENEWAL_BRUTALIST("home_renewal_brutalist"),
+        HOME_RENEWAL_BRUTALIST(
+                "home_renewal_brutalist"),
         HOME_SCIFI("home_scifi");
 
         public final String name;
@@ -74,8 +96,7 @@ public class BlockHome extends VariantHorizontalRotatableBlock<BlockHome.HomeTyp
             this.name = name;
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public String getName() {
             return this.name;
         }

@@ -44,8 +44,7 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
     private AnimationFactory factory;
 
     public AdvancedBreathingApparatus(EntityEquipmentSlot slot, int maxDurability, double hoursOfLife, String name,
-                                      int tier,
-                                      double relativeAbsorption) {
+                                      int tier, double relativeAbsorption) {
         super(slot, maxDurability);
         this.hoursOfLife = hoursOfLife;
         this.name = name;
@@ -151,8 +150,8 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
 
     @Override
     public ISpecialArmor.ArmorProperties getProperties(EntityLivingBase player, @NotNull ItemStack armor,
-                                                       DamageSource source,
-                                                       double damage, EntityEquipmentSlot equipmentSlot) {
+                                                       DamageSource source, double damage,
+                                                       EntityEquipmentSlot equipmentSlot) {
         ISpecialArmor.ArmorProperties prop = new ISpecialArmor.ArmorProperties(0, 0.0, 0);
         if (source.isUnblockable())
             return prop;
@@ -209,15 +208,12 @@ public class AdvancedBreathingApparatus extends BreathingApparatus implements IG
         return textureRL().toString();
     }
 
-    @Nullable
-    @SideOnly(Side.CLIENT)
+    @Nullable @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
-                                    EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-        return GeoMetaArmorRenderer.INSTANCE
-                .setCurrentItem(entityLiving, itemStack, armorSlot)
-                .applyEntityStats(defaultModel)
-                .applySlot(armorSlot);
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+                                    ModelBiped defaultModel) {
+        return GeoMetaArmorRenderer.INSTANCE.setCurrentItem(entityLiving, itemStack, armorSlot)
+                .applyEntityStats(defaultModel).applySlot(armorSlot);
     }
 
     @Override

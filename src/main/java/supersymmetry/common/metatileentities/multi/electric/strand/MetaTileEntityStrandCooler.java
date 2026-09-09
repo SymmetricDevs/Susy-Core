@@ -73,9 +73,10 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
         if (conversion == null) {
             return false;
         }
-        if (!GTTransferUtils.insertItem(outputInventory,
-                OreDictUnifier.get(conversion.prefix, input.getStrand().material, conversion.amount),
-                true).isEmpty()) {
+        if (!GTTransferUtils
+                .insertItem(outputInventory,
+                        OreDictUnifier.get(conversion.prefix, input.getStrand().material, conversion.amount), true)
+                .isEmpty()) {
             return false;
         }
         return true;
@@ -83,7 +84,8 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
 
     @Override
     protected void output() {
-        if (current == null || outputInventory == null) return;
+        if (current == null || outputInventory == null)
+            return;
         GTTransferUtils.insertItem(outputInventory, current, false);
     }
 
@@ -94,29 +96,19 @@ public class MetaTileEntityStrandCooler extends MetaTileEntityStrandShaper {
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCOCC", "     ", "     ")
-                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC")
-                .aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
-                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC")
-                .aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
-                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC")
-                .aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
-                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC")
-                .aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
-                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC")
-                .aisle("CCCCC", "CCICC", "CAAAC", "CCSCC")
-                .where('S', selfPredicate())
-                .where('P', states(getPipeCasingState()))
+        return FactoryBlockPattern.start().aisle("CCCCC", "CCOCC", "     ", "     ")
+                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC").aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
+                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC").aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
+                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC").aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
+                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC").aisle("CCCCC", "CRRRC", "PAAAP", "PPPPP")
+                .aisle("CCCCC", "CRRRC", "CAAAC", "CCCCC").aisle("CCCCC", "CCICC", "CAAAC", "CCSCC")
+                .where('S', selfPredicate()).where('P', states(getPipeCasingState()))
                 .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
-                .where('C', states(getCasingState())
-                        .or(autoAbilities(true, false))
+                .where('C', states(getCasingState()).or(autoAbilities(true, false))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                .where('A', air())
-                .where('R', rollOrientation(RelativeDirection.RIGHT))
-                .build();
+                .where('A', air()).where('R', rollOrientation(RelativeDirection.RIGHT)).build();
     }
 
     @Override

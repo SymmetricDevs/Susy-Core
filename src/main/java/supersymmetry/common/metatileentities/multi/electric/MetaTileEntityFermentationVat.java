@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -31,21 +31,16 @@ public class MetaTileEntityFermentationVat extends RecipeMapMultiblockController
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("     ", "     ", " XXX ", " XXX ", " XXX ", "     ")
+        return FactoryBlockPattern.start().aisle("     ", "     ", " XXX ", " XXX ", " XXX ", "     ")
                 .aisle(" F F ", " XXX ", "X###X", "X###X", "X###X", " XXX ")
                 .aisle("     ", " XXX ", "X###X", "X###X", "X###X", " XMX ")
                 .aisle(" F F ", " XXX ", "X###X", "X###X", "X###X", " XXX ")
-                .aisle("     ", "     ", " XXX ", " XSX ", " XXX ", "     ")
-                .where('S', selfPredicate())
-                .where('X', states(MetaBlocks.MACHINE_CASING.getState(MachineCasingType.ULV))
-                        .setMinGlobalLimited(40)
-                        .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('F', frames(Materials.Steel))
-                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .aisle("     ", "     ", " XXX ", " XSX ", " XXX ", "     ").where('S', selfPredicate())
+                .where('X',
+                        states(MetaBlocks.MACHINE_CASING.getState(MachineCasingType.ULV)).setMinGlobalLimited(40)
+                                .or(autoAbilities(true, true, true, true, true, true, false)))
+                .where('F', frames(Materials.Steel)).where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
+                .where(' ', any()).where('#', air()).build();
     }
 
     @Override
@@ -53,8 +48,7 @@ public class MetaTileEntityFermentationVat extends RecipeMapMultiblockController
         return Textures.VOLTAGE_CASINGS[0];
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;
     }

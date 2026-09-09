@@ -24,7 +24,8 @@ public class WorldGenPit extends WorldGenerator {
             for (int z = -size; z <= size; z++) {
                 if (x * x + z * z <= size * size * rand.nextFloat(0x.cp0f, 0x1.4p0f)) {
                     int top = worldIn.getHeight(position.getX() + x, position.getZ() + z);
-                    if (top < 0x40) top = 0x40;
+                    if (top < 0x40)
+                        top = 0x40;
                     BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(position.getX() + x, top,
                             position.getZ() + z);
 

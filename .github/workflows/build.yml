@@ -1,12 +1,13 @@
+name: Build Artifacts
+
 on:
   push:
     branches:
       - main
   pull_request:
 
-
 concurrency:
-  group: publish-${{ github.head_ref || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -14,16 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Build
         uses: ./.github/actions/build_setup
 
       - name: Build Project
-        run: ./gradlew build --warning-mode all --build-cache
+        run: gradle build --warning-mode all --build-cache
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v5
         with:
-            name: susy_core
-            path: build/libs
+          name: Artifacts
+          path: build/libs

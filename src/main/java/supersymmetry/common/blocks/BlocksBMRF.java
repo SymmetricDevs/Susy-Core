@@ -3,12 +3,15 @@ package supersymmetry.common.blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import org.jetbrains.annotations.NotNull;
 
-public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
+import gregtech.api.block.IStateHarvestLevel;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+
+public class BlocksBMRF extends VariantHorizontalRotatableBlock<BlocksBMRF.BMRFBlockType> {
 
     public BlocksBMRF() {
         super(Material.ROCK);
@@ -18,6 +21,26 @@ public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
         this.setTranslationKey("bmrf_blocks");
     }
 
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(VARIANT, VALUES[meta % VALUES.length]);
+    }
+
+    @Override
+    public int getMetaFromState(@NotNull IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
+    @Override
+    public ItemStack getItemVariant(BMRFBlockType variant, int amount) {
+        return new ItemStack(this, amount, variant.ordinal());
+    }
+
+    @Override
+    public int damageDropped(@NotNull IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
     public static enum BMRFBlockType implements IStringSerializable, IStateHarvestLevel {
 
         BMRF1("bmrf1", 2),
@@ -25,10 +48,20 @@ public class BlocksBMRF extends VariantBlock<BlocksBMRF.BMRFBlockType> {
         BMRF3("bmrf3", 2),
         BMRF4("bmrf4", 2),
         BMRF5("bmrf5", 2),
-        BMRF6("bmrf6", 2),
+        BMRF6("bmrf6",
+                2),
         BMRF7("bmrf7", 2),
         BMRF8("bmrf8", 2),
-        BMRF9("bmrf9", 2);
+        BMRF9("bmrf9", 2),
+        BMRF10("bmrf10", 2),
+        BMRF11("bmrf11",
+                2),
+        BMRF12("bmrf12",
+                2),
+        BMRF13("bmrf13", 2),
+        BMRF14("bmrf14", 2),
+        BMRF15("bmrf15", 2),
+        BMRF16("bmrf16", 2);
 
         private final String name;
         private final int harvestLevel;

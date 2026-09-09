@@ -50,40 +50,24 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
 
     protected Consumer<SlotWidgetMentallyStable> consumer;
 
-    public SlotWidgetMentallyStable(
-                                    IInventory inventory,
-                                    int slotIndex,
-                                    int xPosition,
-                                    int yPosition,
-                                    boolean canTakeItems,
-                                    boolean canPutItems) {
+    public SlotWidgetMentallyStable(IInventory inventory, int slotIndex, int xPosition, int yPosition,
+                                    boolean canTakeItems, boolean canPutItems) {
         super(new Position(xPosition, yPosition), new Size(18, 18));
         this.canTakeItems = canTakeItems;
         this.canPutItems = canPutItems;
         this.slotReference = createSlot(inventory, slotIndex);
     }
 
-    public SlotWidgetMentallyStable(
-                                    IItemHandler itemHandler,
-                                    int slotIndex,
-                                    int xPosition,
-                                    int yPosition,
-                                    boolean canTakeItems,
-                                    boolean canPutItems) {
+    public SlotWidgetMentallyStable(IItemHandler itemHandler, int slotIndex, int xPosition, int yPosition,
+                                    boolean canTakeItems, boolean canPutItems) {
         super(new Position(xPosition, yPosition), new Size(18, 18));
         this.canTakeItems = canTakeItems;
         this.canPutItems = canPutItems;
         this.slotReference = createSlot(itemHandler, slotIndex, true);
     }
 
-    public SlotWidgetMentallyStable(
-                                    IItemHandler itemHandler,
-                                    int slotIndex,
-                                    int xPosition,
-                                    int yPosition,
-                                    boolean canTakeItems,
-                                    boolean canPutItems,
-                                    boolean canShiftClickInto) {
+    public SlotWidgetMentallyStable(IItemHandler itemHandler, int slotIndex, int xPosition, int yPosition,
+                                    boolean canTakeItems, boolean canPutItems, boolean canShiftClickInto) {
         super(new Position(xPosition, yPosition), new Size(18, 18));
         this.canTakeItems = canTakeItems;
         this.canPutItems = canPutItems;
@@ -106,8 +90,7 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
 
     @Override
     public void drawInForeground(int mouseX, int mouseY) {
-        ((ISlotWidgetMentallyStable) slotReference)
-                .setHover(isMouseOverElement(mouseX, mouseY) && isActive());
+        ((ISlotWidgetMentallyStable) slotReference).setHover(isMouseOverElement(mouseX, mouseY) && isActive());
         if (tooltipText != null && isMouseOverElement(mouseX, mouseY) && !slotReference.getHasStack()) {
             List<String> hoverList = Arrays.asList(LocalizationUtils.formatLines(tooltipText, tooltipArgs));
             drawHoveringText(ItemStack.EMPTY, hoverList, 300, mouseX, mouseY);
@@ -132,11 +115,8 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
             itemStack = gui.entityPlayer.inventory.getItemStack();
             if (!itemStack.isEmpty() && splitSize > 1 && Container.canAddItemToSlot(slotReference, itemStack, true)) {
                 itemStack = itemStack.copy();
-                Container.computeStackSize(
-                        modularUIGui.getDragSplittingSlots(),
-                        modularUIGui.dragSplittingLimit,
-                        itemStack,
-                        slotReference.getStack().isEmpty() ? 0 : slotReference.getStack().getCount());
+                Container.computeStackSize(modularUIGui.getDragSplittingSlots(), modularUIGui.dragSplittingLimit,
+                        itemStack, slotReference.getStack().isEmpty() ? 0 : slotReference.getStack().getCount());
                 int k = Math.min(itemStack.getMaxStackSize(), slotReference.getItemStackLimit(itemStack));
                 if (itemStack.getCount() > k) {
                     itemStack.setCount(k);
@@ -154,8 +134,8 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
             GlStateManager.pushMatrix();
             RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             itemRender.renderItemAndEffectIntoGUI(itemStack, pos.x + 1, pos.y + 1);
-            itemRender.renderItemOverlayIntoGUI(
-                    Minecraft.getMinecraft().fontRenderer, itemStack, pos.x + 1, pos.y + 1, null);
+            itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, itemStack, pos.x + 1, pos.y + 1,
+                    null);
             GlStateManager.enableAlpha();
             GlStateManager.popMatrix();
             RenderHelper.disableStandardItemLighting();
@@ -193,10 +173,9 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
                     modularUIGui.dragSplittingLimit = 0;
                 } else if (button == 1) {
                     modularUIGui.dragSplittingLimit = 1;
-                } else if (Minecraft.getMinecraft().gameSettings.keyBindPickBlock
-                        .isActiveAndMatches(button - 100)) {
-                            modularUIGui.dragSplittingLimit = 2;
-                        }
+                } else if (Minecraft.getMinecraft().gameSettings.keyBindPickBlock.isActiveAndMatches(button - 100)) {
+                    modularUIGui.dragSplittingLimit = 2;
+                }
             }
             return true;
         }
@@ -240,17 +219,18 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
         return this;
     }
 
-    public SlotWidgetMentallyStable(
-                                    IItemHandlerModifiable itemHandler, int slotIndex, int xPosition, int yPosition) {
+    public SlotWidgetMentallyStable(IItemHandlerModifiable itemHandler, int slotIndex, int xPosition, int yPosition) {
         this(itemHandler, slotIndex, xPosition, yPosition, true, true);
     }
 
-    public SlotWidgetMentallyStable(
-                                    IInventory inventory, int slotIndex, int xPosition, int yPosition) {
+    public SlotWidgetMentallyStable(IInventory inventory, int slotIndex, int xPosition, int yPosition) {
         this(inventory, slotIndex, xPosition, yPosition, true, true);
     }
 
-    /** Sets array of background textures used by slot they are drawn on top of each other */
+    /**
+     * Sets array of background textures used by slot they are drawn on top of each
+     * other
+     */
     public SlotWidgetMentallyStable setBackgroundTexture(IGuiTexture... backgroundTexture) {
         this.backgroundTexture = backgroundTexture;
         return this;
@@ -347,8 +327,7 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
             }
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public final ItemStack onTake(@NotNull EntityPlayer thePlayer, @NotNull ItemStack stack) {
             return onItemTake(thePlayer, super.onTake(thePlayer, stack), false);
         }
@@ -369,11 +348,7 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
         boolean isHover;
         final boolean canShiftClickInto;
 
-        public WidgetSlotItemHandler(
-                                     IItemHandler itemHandler,
-                                     int index,
-                                     int xPosition,
-                                     int yPosition,
+        public WidgetSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition,
                                      boolean canShiftClickInto) {
             super(itemHandler, index, xPosition, yPosition);
             this.canShiftClickInto = canShiftClickInto;
@@ -407,8 +382,7 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
             }
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public final ItemStack onTake(@NotNull EntityPlayer thePlayer, @NotNull ItemStack stack) {
             if (changeListener != null) {
                 changeListener.run();

@@ -5,8 +5,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.NotNull;
 
-/// A custom item handler delegate that prevents any insertion or extraction,
-/// but remains modifiable.
+/// A custom item handler delegate that prevents any insertion or extraction, but remains modifiable.
 ///
 /// See [MetaTileEntityLockedCrate#initializeInventory()]
 public class InaccessibleHandlerDelegate implements IItemHandlerModifiable {
@@ -28,20 +27,17 @@ public class InaccessibleHandlerDelegate implements IItemHandlerModifiable {
     }
 
     @Override
-    @NotNull
-    public ItemStack getStackInSlot(int slot) {
+    @NotNull public ItemStack getStackInSlot(int slot) {
         return delegate.getStackInSlot(slot);
     }
 
     @Override
-    @NotNull
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    @NotNull public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         return stack;
     }
 
     @Override
-    @NotNull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+    @NotNull public ItemStack extractItem(int slot, int amount, boolean simulate) {
         return ItemStack.EMPTY;
     }
 

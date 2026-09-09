@@ -1,0 +1,437 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=north,variant=s2bmrf1": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+      }
+    },
+    "facing=south,variant=s2bmrf1": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf1": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf1": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf2": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+      }
+    },
+    "facing=south,variant=s2bmrf2": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf2": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf2": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf3": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf19"
+      }
+    },
+    "facing=south,variant=s2bmrf3": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf19"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf3": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf19"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf3": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf19"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf4": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf20"
+      }
+    },
+    "facing=south,variant=s2bmrf4": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf20"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf4": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf20"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf4": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf20"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf5": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf21"
+      }
+    },
+    "facing=south,variant=s2bmrf5": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf21"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf5": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf21"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf5": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf21"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf6": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf22"
+      }
+    },
+    "facing=south,variant=s2bmrf6": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf22"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf6": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf22"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf6": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf22"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf7": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf23"
+      }
+    },
+    "facing=south,variant=s2bmrf7": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf23"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf7": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf23"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf7": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf23"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf8": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf24"
+      }
+    },
+    "facing=south,variant=s2bmrf8": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf24"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf8": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf24"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf8": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf24"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf9": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf25"
+      }
+    },
+    "facing=south,variant=s2bmrf9": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf25"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf9": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf25"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf9": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf25"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf10": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf26"
+      }
+    },
+    "facing=south,variant=s2bmrf10": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf26"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf10": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf26"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf10": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf26"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf11": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf27"
+      }
+    },
+    "facing=south,variant=s2bmrf11": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf27"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf11": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf27"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf11": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf27"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf12": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf28"
+      }
+    },
+    "facing=south,variant=s2bmrf12": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf28"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf12": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf28"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf12": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf28"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf13": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf29"
+      }
+    },
+    "facing=south,variant=s2bmrf13": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf29"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf13": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf29"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf13": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf29"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf14": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf30"
+      }
+    },
+    "facing=south,variant=s2bmrf14": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf30"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf14": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf30"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf14": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf30"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf15": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf31"
+      }
+    },
+    "facing=south,variant=s2bmrf15": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf31"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf15": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf31"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf15": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf31"
+      },
+      "y": 90
+    },
+    "facing=north,variant=s2bmrf16": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf32"
+      }
+    },
+    "facing=south,variant=s2bmrf16": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf32"
+      },
+      "y": 180
+    },
+    "facing=west,variant=s2bmrf16": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf32"
+      },
+      "y": 270
+    },
+    "facing=east,variant=s2bmrf16": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf32"
+      },
+      "y": 90
+    }
+  }
+}

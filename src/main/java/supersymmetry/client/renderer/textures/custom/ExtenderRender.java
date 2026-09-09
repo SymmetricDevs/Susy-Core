@@ -39,8 +39,8 @@ public class ExtenderRender implements IIconRegister {
     }
 
     @SideOnly(Side.CLIENT)
-    public void render(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline,
-                       EnumFacing outFace, EnumFacing inFace) {
+    public void render(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, EnumFacing outFace,
+                       EnumFacing inFace) {
         for (EnumFacing renderSide : EnumFacing.VALUES) {
             TextureAtlasSprite baseSprite = renderSide == inFace ? textures[0] :
                     renderSide == outFace ? textures[2] : textures[1];

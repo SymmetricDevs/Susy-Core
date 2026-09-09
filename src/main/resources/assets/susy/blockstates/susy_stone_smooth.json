@@ -65,12 +65,17 @@
           "all" : "gregtech:blocks/susy_stones/anorthosite"
         }
       },
+      "leucobasalt" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/leucobasalt"
+        }
+      },
       "industrial_concrete" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/industrial_concrete"
         }
       },
-      "minitary_concrete" : {
+      "military_concrete" : {
         "textures" : {
           "all" : "gregtech:blocks/susy_stones/military_concrete"
         }

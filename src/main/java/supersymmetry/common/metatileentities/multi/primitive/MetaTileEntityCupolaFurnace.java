@@ -60,21 +60,12 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, BACK, UP)
-                .aisle("FAF", "AOA", "FAF")
-                .aisle("CCC", "CAC", "CSC")
-                .aisle("CCC", "CAC", "CCC")
-                .aisle("CCC", "CHC", "CCC").setRepeatable(1, 8)
-                .where('C',
-                        states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
-                                .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
-                                        .setMaxGlobalLimited(4)))
-                .where('A', air())
-                .where('H', isIndicatorPredicate())
-                .where('S', selfPredicate())
-                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
-                .where('F', frames(Materials.Steel))
-                .build();
+        return FactoryBlockPattern.start(RIGHT, BACK, UP).aisle("FAF", "AOA", "FAF").aisle("CCC", "CAC", "CSC")
+                .aisle("CCC", "CAC", "CCC").aisle("CCC", "CHC", "CCC").setRepeatable(1, 8)
+                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.PRIMITIVE_BRICKS))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setMaxGlobalLimited(4)))
+                .where('A', air()).where('H', isIndicatorPredicate()).where('S', selfPredicate())
+                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS)).where('F', frames(Materials.Steel)).build();
     }
 
     @Override
@@ -129,8 +120,7 @@ public class MetaTileEntityCupolaFurnace extends RecipeMapPrimitiveMultiblockCon
 
     public class CupolaFurnaceLogic extends PrimitiveRecipeLogic {
 
-        public CupolaFurnaceLogic(RecipeMapPrimitiveMultiblockController tileEntity,
-                                  RecipeMap<?> recipeMap) {
+        public CupolaFurnaceLogic(RecipeMapPrimitiveMultiblockController tileEntity, RecipeMap<?> recipeMap) {
             super(tileEntity, recipeMap);
         }
 

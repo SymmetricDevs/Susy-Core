@@ -23,8 +23,8 @@ public class FilteredTankWidget extends TankWidget {
         if (isMouseOverElement(mouseX, mouseY) && fluidTank instanceof IFluidHandler) {
             ItemStack held = gui.entityPlayer.inventory.getItemStack();
             if (!held.isEmpty()) {
-                IFluidHandlerItem itemHandler = held.getCapability(
-                        CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                IFluidHandlerItem itemHandler = held.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
+                        null);
                 if (itemHandler != null) {
                     FluidStack heldFluid = itemHandler.drain(Integer.MAX_VALUE, false);
                     if (heldFluid != null && heldFluid.amount > 0) {

@@ -26,11 +26,15 @@ public class ItemBarrelMixin extends ItemBlock {
     /**
      * @author The-Minecraft-Scientist (discord rsci.), MCTian-mi
      */
-    // Hack that keeps a difficult to reproduce bug somewhere else in BDS&M from kicking players.
-    // This hack omits adding the CapabilityBarrel NBT tag if CapabilityBarrel is not present on the given item stack.
-    // The original BDS&M code had an assertion that assumed barrelCap was non-null, which would
+    // Hack that keeps a difficult to reproduce bug somewhere else in BDS&M from
+    // kicking players.
+    // This hack omits adding the CapabilityBarrel NBT tag if CapabilityBarrel is
+    // not present on the given item stack.
+    // The original BDS&M code had an assertion that assumed barrelCap was non-null,
+    // which would
     // fire from the network handler for a given player and kick them.
-    // This hack reduces the scope of the bug to incorrect (not present) barrel metadata on the client.
+    // This hack reduces the scope of the bug to incorrect (not present) barrel
+    // metadata on the client.
     @Inject(method = "getNBTShareTag",
             at = @At(value = "INVOKE",
                      target = "Lfunwayguy/bdsandm/inventory/capability/CapabilityBarrel;serializeNBT()Lnet/minecraft/nbt/NBTTagCompound;"),

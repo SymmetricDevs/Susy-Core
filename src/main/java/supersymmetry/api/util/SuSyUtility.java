@@ -9,22 +9,27 @@ import java.util.stream.Collectors;
 
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import gregtech.api.GTValues;
+import gregtech.api.block.machines.MachineItemBlock;
+import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.unification.material.Material;
+import gregtech.api.util.GTUtility;
+import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
 
 public class SuSyUtility {
 
     /*
-     * if we assume a solar boiler to have an approximately 1m^2 "collecting" surface, and take the hp to be less
-     * inefficient,
-     * one can approximate the J to EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
-     * Assuming solar actually gets slightly less sunlight than 1m^2 conversion may be ~= 5, but potential
-     * inefficiencies
-     * make it unclear the specific amount. Just going to round to one sig fig and leave it at 10J -> 1EU
+     * if we assume a solar boiler to have an approximately 1m^2 "collecting"
+     * surface, and take the hp to be less inefficient, one can approximate the J to
+     * EU conversion via 18L/t -> 9EU/t -> 180EU/s -> 1000J/180EU ~= 6J in one EU.
+     * Assuming solar actually gets slightly less sunlight than 1m^2 conversion may
+     * be ~= 5, but potential inefficiencies make it unclear the specific amount.
+     * Just going to round to one sig fig and leave it at 10J -> 1EU
      */
     public static final int JOULES_PER_EU = 10;
 
@@ -131,6 +136,20 @@ public class SuSyUtility {
         if (bannedSpaceItems == null) {
             loadBannedSpaceItems();
         }
-        return !bannedSpaceItems.contains(item.getItem().getRegistryName().toString());
+        if (bannedSpaceItems.contains(item.getItem().getRegistryName().toString())) {
+            return false;
+        }
+        if (item.getItem() instanceof MetaItem) {
+            return true;
+        }
+        if (item.getItem() instanceof MachineItemBlock mteBlock) {
+            if (GTUtility.getMetaTileEntity(item) instanceof MetaTileEntityCrate) {
+                NBTTagCompound tag = item.getTagCompound();
+                if (tag.hasKey("Inventory")) {
+                    return false;
+                }
+            }
+        }
+        return item.getTagCompound() == null || item.getTagCompound().isEmpty();
     }
 }

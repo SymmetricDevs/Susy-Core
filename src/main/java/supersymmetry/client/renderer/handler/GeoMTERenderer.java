@@ -97,7 +97,8 @@ public enum GeoMTERenderer implements IGeoRenderer<IAnimatableMTE> {
                 EnumFacing upwards = controller.getUpwardsFacing();
                 EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, controller.isFlipped());
 
-                if (/* controller.allowsFlip() && */ controller.isFlipped()) flip(left);
+                if (/* controller.allowsFlip() && */ controller.isFlipped())
+                    flip(left);
                 rotateToFace(front, upwards);
             }
 

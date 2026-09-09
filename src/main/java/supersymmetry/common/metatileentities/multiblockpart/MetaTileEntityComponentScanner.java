@@ -1,6 +1,9 @@
 package supersymmetry.common.metatileentities.multiblockpart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,7 +48,9 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityBuildingCleanroom;
 
 public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
-                                            implements ICleanroomReceiver, IWorkable {
+                                            implements
+                                            ICleanroomReceiver,
+                                            IWorkable {
 
     private final ScannerLogic scannerLogic;
     private float scanDuration = 0;
@@ -60,13 +65,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         shownStatus = BuildStat.UNSCANNED;
 
         struct = new StructAnalysis(getWorld());
-        importItems = new DataStorageLoader(
-                this,
-                is -> {
-                    int metaV = SuSyMetaItems.isMetaItem(is);
-                    return metaV == SuSyMetaItems.DATA_CARD.metaValue ||
-                            metaV == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue;
-                });
+        importItems = new DataStorageLoader(this, is -> {
+            int metaV = SuSyMetaItems.isMetaItem(is);
+            return metaV == SuSyMetaItems.DATA_CARD.metaValue || metaV == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue;
+        });
         if (importItems.getStackInSlot(0).isItemEqual(ItemStack.EMPTY)) {
             shownStatus = BuildStat.NO_CARD;
         }
@@ -105,7 +107,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 3))) + 4; // 5 being the
+        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4; // 5 being the
         // minimum
         // value
         scannerLogic.setGoalTime(scanDuration);
@@ -122,64 +124,46 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
-            /* if it wasnt changed after scanning, nothing matched */ }
+            /* if it wasnt changed after scanning, nothing matched */
+        }
 
         /*
-         * Plan from here on out:
-         * 1. Gather block statistics
-         * 2. Check for unallowed TileEntities (we can't have as many if it's all being modelized)
-         * 3. Identify component purpose:
-         * a. Payload fairing
-         * - Distinguishable by material type
-         * - Attachments along a fissure plane and circling the bottom
-         * - Holds port
-         * - Bottom opening is not filled
-         * - No through-holes:
-         * - All partial holes are counted (if two blocks have a midpoint not in a block, there is a partial hole)
-         * - All air blocks in the hole are counted
-         * - There is no more than one contiguous set of air blocks not inside the hole that has access to the hole!
-         * b. Life compartment
-         * - Contains interior space
-         * - Contains life support TEs
-         * - Allows for containers
-         * c. Fuel tank
-         * - Contains interior space
-         * - Contains structural blocks
-         * - Has a port
-         * - Contains exterior blocks
-         * d. Engine
-         * - Specialized blocks for ignition containment
-         * e. Hull cover
-         * - Connection blocks (skirts)
-         * - Particular surface blocks
-         * - Support blocks
-         * f. Control room
-         * - Port
-         * - Guidance computer (not a tile entity)
-         * - Seat
+         * Plan from here on out: 1. Gather block statistics 2. Check for unallowed
+         * TileEntities (we can't have as many if it's all being modelized) 3. Identify
+         * component purpose: a. Payload fairing - Distinguishable by material type -
+         * Attachments along a fissure plane and circling the bottom - Holds port -
+         * Bottom opening is not filled - No through-holes: - All partial holes are
+         * counted (if two blocks have a midpoint not in a block, there is a partial
+         * hole) - All air blocks in the hole are counted - There is no more than one
+         * contiguous set of air blocks not inside the hole that has access to the hole!
+         * b. Life compartment - Contains interior space - Contains life support TEs -
+         * Allows for containers c. Fuel tank - Contains interior space - Contains
+         * structural blocks - Has a port - Contains exterior blocks d. Engine -
+         * Specialized blocks for ignition containment e. Hull cover - Connection blocks
+         * (skirts) - Particular surface blocks - Support blocks f. Control room - Port
+         * - Guidance computer (not a tile entity) - Seat
          */
     }
 
     public void detectComponents(ArrayList<BlockPos> blockList) {
         for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
-            if (component
-                    .getDetectionPredicate()
-                    .test(new Tuple<>(struct, blockList))) {
+            if (component.getDetectionPredicate().test(new Tuple<>(struct, blockList))) {
                 Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
                 if (scanResult.isPresent()) {
                     if (scanResult.get().hasKey("errorPos")) {
                         errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
                         continue;
                     }
-                    getInventory()
-                            .setNBT(
-                                    t -> {
-                                        NBTTagCompound tag = scanResult.get();
-                                        component.writeToNBT(tag);
-                                        return tag;
-                                    });
+                    getInventory().setNBT(t -> {
+                        NBTTagCompound tag = scanResult.get();
+                        tag.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
+                        component.writeToNBT(tag);
+                        return tag;
+                    });
                     errorPos = null;
                     break;
+                } else {
+                    errorPos = null;
                 }
             }
         }
@@ -239,7 +223,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         IEnergyContainer energyContainer = linkedCleanroom.getEnergyContainer();
         long resultEnergy = energyContainer.getEnergyStored() - scannerLogic.getInfoProviderEUt();
         if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
-            if (!simulate) energyContainer.changeEnergy(-scannerLogic.getInfoProviderEUt());
+            if (!simulate)
+                energyContainer.changeEnergy(-scannerLogic.getInfoProviderEUt());
             return true;
         }
         return false;
@@ -273,17 +258,10 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     }
 
     @Override
-    public void renderMetaTileEntity(
-                                     CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay()
-                .renderOrientedState(
-                        renderState,
-                        translation,
-                        pipeline,
-                        this.getFrontFacing(),
-                        this.isActive(),
-                        this.isWorkingEnabled());
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, this.getFrontFacing(),
+                this.isActive(), this.isWorkingEnabled());
     }
 
     @Override
@@ -335,40 +313,31 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     protected void addDisplayText(List<ITextComponent> textList) {
         MultiblockDisplayText.builder(textList, this.getCleanroom() != null)
                 .setWorkingStatus(this.isWorkingEnabled(), this.isActive())
-                .addEnergyUsageLine(linkedCleanroom.getEnergyContainer())
-                .addCustom(
-                        (tl) -> {
-                            if (linkedCleanroom != null) {
-                                TextComponentTranslation cleanState;
-                                if (scannerLogic.isActive() || struct.status == BuildStat.SCANNING) {
-                                    tl.add(
-                                            TextComponentUtil.translationWithColor(
-                                                    TextFormatting.YELLOW, "susy.machine.component_scanner.scanning"));
-                                } else if (shownStatus == BuildStat.SUCCESS) {
-                                    tl.add(
-                                            TextComponentUtil.translationWithColor(
-                                                    TextFormatting.GREEN, "susy.machine.component_scanner.success"));
+                .addEnergyUsageLine(linkedCleanroom.getEnergyContainer()).addCustom((tl) -> {
+                    if (linkedCleanroom != null) {
+                        TextComponentTranslation cleanState;
+                        if (scannerLogic.isActive() || struct.status == BuildStat.SCANNING) {
+                            tl.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                                    "susy.machine.component_scanner.scanning"));
+                        } else if (shownStatus == BuildStat.SUCCESS) {
+                            tl.add(TextComponentUtil.translationWithColor(TextFormatting.GREEN,
+                                    "susy.machine.component_scanner.success"));
 
-                                } else if (shownStatus == BuildStat.UNSCANNED) {
-                                    tl.add(
-                                            TextComponentUtil.translationWithColor(
-                                                    TextFormatting.GRAY, "susy.machine.component_scanner.unscanned"));
-                                } else {
-                                    tl.add(
-                                            TextComponentUtil.translationWithColor(
-                                                    TextFormatting.DARK_RED, shownStatus.getCode()));
-                                }
-                            }
-                        })
-                .addCustom((tl) -> {
-                    if (errorPos != null &&
-                            !(scannerLogic.isActive() || struct.status == BuildStat.SCANNING)) {
+                        } else if (shownStatus == BuildStat.UNSCANNED) {
+                            tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                    "susy.machine.component_scanner.unscanned"));
+                        } else {
+                            tl.add(TextComponentUtil.translationWithColor(TextFormatting.DARK_RED,
+                                    shownStatus.getCode()));
+                        }
+                    }
+                }).addCustom((tl) -> {
+                    if (errorPos != null && !(scannerLogic.isActive() || struct.status == BuildStat.SCANNING)) {
                         tl.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                                 "susy.machine.component_scanner.pos",
                                 "(" + errorPos.getX() + ", " + errorPos.getY() + ", " + errorPos.getZ() + ")"));
                     }
-                })
-                .addProgressLine(this.scannerLogic.getProgressPercent());
+                }).addProgressLine(this.scannerLogic.getProgressPercent());
     }
 
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
@@ -378,54 +347,24 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         builder.image(4, 4, 190, 109, GuiTextures.DISPLAY);
 
         // single bar
-        ProgressWidget progressBar = new ProgressWidget(
-                scannerLogic::getProgressPercent,
-                4,
-                115,
-                190,
-                7,
-                GuiTextures.PROGRESS_BAR_MULTI_ENERGY_YELLOW,
-                ProgressWidget.MoveType.HORIZONTAL)
-                        .setHoverTextConsumer(list -> addBarHoverText(list, 0));
+        ProgressWidget progressBar = new ProgressWidget(scannerLogic::getProgressPercent, 4, 115, 190, 7,
+                GuiTextures.PROGRESS_BAR_MULTI_ENERGY_YELLOW, ProgressWidget.MoveType.HORIZONTAL)
+                .setHoverTextConsumer(list -> addBarHoverText(list, 0));
         builder.widget(progressBar);
 
-        builder.widget(
-                new IndicatorImageWidget(174, 93, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
-                        .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
-                        .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
+        builder.widget(new IndicatorImageWidget(174, 93, 17, 17, GuiTextures.GREGTECH_LOGO_DARK)
+                .setWarningStatus(GuiTextures.GREGTECH_LOGO_BLINKING_YELLOW, this::addWarningText)
+                .setErrorStatus(GuiTextures.GREGTECH_LOGO_BLINKING_RED, this::addErrorText));
 
         builder.label(9, 9, getMetaFullName(), 0xFFFFFF);
-        builder.widget(
-                new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF)
-                        .setMaxWidthLimit(181)
-                        .setClickHandler(this::handleDisplayClick));
+        builder.widget(new AdvancedTextWidget(9, 20, this::addDisplayText, 0xFFFFFF).setMaxWidthLimit(181)
+                .setClickHandler(this::handleDisplayClick));
 
-        // Power Button
-        IControllable controllable = getCapability(GregtechTileCapabilities.CAPABILITY_CONTROLLABLE, null);
-        if (controllable != null) {
-            builder.widget(
-                    new ImageCycleButtonWidget(
-                            173,
-                            183,
-                            18,
-                            18,
-                            GuiTextures.BUTTON_POWER,
-                            controllable::isWorkingEnabled,
-                            controllable::setWorkingEnabled));
-            builder.widget(new ImageWidget(173, 201, 18, 6, GuiTextures.BUTTON_POWER_DETAIL));
-        }
         // Scan Button
-        builder
-                .widget(
-                        new ClickButtonWidget(
-                                68,
-                                75,
-                                54,
-                                18,
-                                new TextComponentTranslation("susy.machine.component_scanner.scan_button")
-                                        .getUnformattedComponentText(),
-                                this::handleScan))
-                .slot(importItems, 0, 90, 95, GuiTextures.SLOT);
+        builder.widget(new ClickButtonWidget(68, 75, 54, 18,
+                new TextComponentTranslation("susy.machine.component_scanner.scan_button")
+                        .getUnformattedComponentText(),
+                this::handleScan)).slot(importItems, 0, 90, 95, GuiTextures.SLOT);
 
         builder.bindPlayerInventory(entityPlayer.inventory, 125);
         return builder;

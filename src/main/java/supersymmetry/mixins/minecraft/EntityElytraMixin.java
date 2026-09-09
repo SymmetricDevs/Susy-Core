@@ -14,10 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemFirework.class)
 public abstract class EntityElytraMixin {
 
-    @Inject(
-            method = "onItemRightClick",
-            at = @At(
-                     value = "INVOKE",
+    @Inject(method = "onItemRightClick",
+            at = @At(value = "INVOKE",
                      target = "Lnet/minecraft/entity/item/EntityFireworkRocket;<init>(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)V"),
             cancellable = true)
     public void onUse(World world, EntityPlayer player, EnumHand hand, CallbackInfoReturnable<ItemStack> cir) {

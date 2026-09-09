@@ -87,8 +87,7 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
             super(tileEntity, recipeMap, energyContainer);
         }
 
-        @NotNull
-        @Override
+        @NotNull @Override
         public MetaTileEntityBathCondenser getMetaTileEntity() {
             return (MetaTileEntityBathCondenser) super.getMetaTileEntity();
         }
@@ -107,7 +106,8 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
         @Override
         protected boolean canProgressRecipe() {
             if (super.canProgressRecipe()) {
-                if (previousRecipe == null) return true;
+                if (previousRecipe == null)
+                    return true;
                 Boolean value = previousRecipe.getProperty(CryogenicEnvironmentProperty.getInstance(), null);
                 return value == null || !value || (getMetaTileEntity().getCryogenicProvider() != null &&
                         getMetaTileEntity().getCryogenicProvider().isStructureFormed());
@@ -143,13 +143,8 @@ public class MetaTileEntityBathCondenser extends SimpleMachineMetaTileEntity imp
         @Override
         protected int @NotNull [] runOverclockingLogic(@NotNull IRecipePropertyStorage propertyStorage, int recipeEUt,
                                                        long maxVoltage, int recipeDuration, int amountOC) {
-            return standardOverclockingLogic(
-                    1,
-                    getMaxVoltage(),
-                    recipeDuration,
-                    amountOC,
-                    getOverclockingDurationDivisor(),
-                    getOverclockingVoltageMultiplier()
+            return standardOverclockingLogic(1, getMaxVoltage(), recipeDuration, amountOC,
+                    getOverclockingDurationDivisor(), getOverclockingVoltageMultiplier()
 
             );
         }

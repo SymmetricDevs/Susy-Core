@@ -144,7 +144,8 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
         if (getWorld() != null) {
             updateStructureDimensions();
         }
-        if (sDist < MIN_CELLS) sDist = MIN_CELLS;
+        if (sDist < MIN_CELLS)
+            sDist = MIN_CELLS;
         return createStructurePattern(sDist);
     }
 
@@ -211,28 +212,22 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
     protected @NotNull BlockPattern createStructurePattern(int sDist) {
         String[][] layers = buildPatternStrings(sDist);
         var pad = String.format("%-" + ((sDist / 2 - 1) * 3 + 1) + "s", "");
-        return FactoryBlockPattern.start()
-                .aisle(layers[0][0], layers[1][0], layers[2][0])
-                .aisle(layers[0][1], layers[1][1], layers[2][1])
-                .aisle(layers[0][2], layers[1][2], layers[2][2])
-                .aisle(layers[0][3], layers[1][3], layers[2][3])
-                .aisle(layers[0][4], layers[1][4], layers[2][4])
+        return FactoryBlockPattern.start().aisle(layers[0][0], layers[1][0], layers[2][0])
+                .aisle(layers[0][1], layers[1][1], layers[2][1]).aisle(layers[0][2], layers[1][2], layers[2][2])
+                .aisle(layers[0][3], layers[1][3], layers[2][3]).aisle(layers[0][4], layers[1][4], layers[2][4])
                 .aisle(" XX" + pad, " SX" + pad, " XX" + pad) // control panel
-                .where('S', selfPredicate())
-                .where('X', states(getCasingState()).or(autoAbilities()))
+                .where('S', selfPredicate()).where('X', states(getCasingState()).or(autoAbilities()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .where('P', states(getPipeCasingState()))
+                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS)).where('P', states(getPipeCasingState()))
                 .where('C', states(getCasingState()))
-                .where('T', states(SuSyBlocks.MULTIBLOCK_CASING
-                        .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
+                .where('T',
+                        states(SuSyBlocks.MULTIBLOCK_CASING
+                                .getState(BlockSuSyMultiblockCasing.CasingType.COALESCENCE_PLATE)))
 
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
-                .where('F', frames(Materials.StainlessSteel))
-                .where(' ', any())
-                .build();
+                .where('F', frames(Materials.StainlessSteel)).where(' ', any()).build();
     }
 
     public TraceabilityPredicate autoAbilities() {
@@ -297,7 +292,8 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
         @Override
         protected void modifyOverclockPost(int[] overclockResults, @NotNull IRecipePropertyStorage storage) {
             int cellsOff = (sDist - storage.getRecipePropertyValue(MixerSettlerCellsProperty.getInstance(), 2)) / 2;
-            // Divides the duration by an increasing factor that approaches 2 as the number of cells approaches
+            // Divides the duration by an increasing factor that approaches 2 as the number
+            // of cells approaches
             // infinity.
             overclockResults[1] = (int) ((double) overclockResults[1] / (Math.atan(cellsOff + 1) * 4 / Math.PI));
 

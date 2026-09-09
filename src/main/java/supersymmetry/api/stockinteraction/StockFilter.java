@@ -6,8 +6,6 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -15,6 +13,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -106,79 +105,43 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
     }
 
     @SuppressWarnings("deprecation")
-    @NotNull
-    public ModularPanel createPopupPanel(PanelSyncManager syncManager) { // TODO: loc
-        return Mui2Utils.createPopupPanel("simple_stock_filter", 86, 121)
-                .padding(4)
-                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter")
-                        .asWidget()
-                        .pos(5, 5))
+    @NotNull public ModularPanel createPopupPanel(PanelSyncManager syncManager) { // TODO: loc
+        return Mui2Utils.createPopupPanel("simple_stock_filter", 86, 121).padding(4)
+                .child(IKey.lang("susy.gui.stock_interactor.title.stock_filter").asWidget().pos(5, 5))
                 .child(createWidgets(syncManager).top(22));
     }
 
-    @NotNull
-    public Widget<?> createWidgets(PanelSyncManager syncManager) {
+    @NotNull public Widget<?> createWidgets(PanelSyncManager syncManager) {
         SlotGroup filterInventory = new SlotGroup("filter_inv", 3, 1000, true);
         syncManager.registerSlotGroup(filterInventory);
 
         StringSyncValue patternString = new StringSyncValue(this::getPatternString, this::setPatternString);
         BooleanSyncValue enabledValue = new BooleanSyncValue(() -> enabled, val -> enabled = val);
 
-        return Flow.column()
-                .coverChildrenHeight()
-                .child(Flow.row()
-                        .coverChildrenHeight()
-                        .marginBottom(2)
-                        .widthRel(1f)
-                        .child(new ToggleButton()
-                                .overlay(SusyGuiTextures.BUTTON_STOCK_FILTER
-                                        .asIcon()
-                                        .size(16))
+        return Flow.column().coverChildrenHeight()
+                .child(Flow.row().coverChildrenHeight().marginBottom(2).widthRel(1f)
+                        .child(new ToggleButton().overlay(SusyGuiTextures.BUTTON_STOCK_FILTER.asIcon().size(16))
                                 .addTooltipLine(IKey.lang("susy.gui.stock_interactor.stock_filter.enabled.tooltip"))
                                 .value(enabledValue))
-                        .child(IKey.lang("susy.gui.stock_interactor.stock_filter.enabled.title")
-                                .asWidget()
-                                .align(Alignment.Center)
-                                .height(18)))
-                .child(SlotGroupWidget.builder()
-                        .matrix("XXX", "XXX", "XXX")
-                        .key('X', index -> new PhantomItemSlot()
-                                .tooltip(tooltip -> {
-                                    tooltip.setAutoUpdate(true);
-                                    tooltip.textColor(Color.GREY.main);
-                                })
-                                .slot(SyncHandlers.itemSlot(this.handler, index)
-                                        .slotGroup(filterInventory)
-                                        .filter(stack -> StockHelperFunctions.getDefinitionNameFromStack(stack) !=
-                                                null)))
-                        .build()
-                        .marginRight(4))
-                .child(Flow.row()
-                        .coverChildren()
-                        .child(Flow.column()
-                                .height(18)
-                                .coverChildrenWidth()
-                                .marginRight(2)
-                                .child(SusyGuiTextures.OREDICT_INFO
-                                        .asWidget()
-                                        .size(8)
-                                        .top(0)
-                                        .addTooltipLine(
-                                                IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.info")))
-                                .child(new Widget<>()
-                                        .size(8)
-                                        .bottom(0)
-                                        .onUpdateListener(this::getStatusIcon)
-                                        .tooltipBuilder(this::createStatusTooltip)
-                                        .tooltipAutoUpdate(true)
+                        .child(IKey.lang("susy.gui.stock_interactor.stock_filter.enabled.title").asWidget()
+                                .align(Alignment.Center).height(18)))
+                .child(SlotGroupWidget.builder().matrix("XXX", "XXX", "XXX")
+                        .key('X', index -> new PhantomItemSlot().tooltip(tooltip -> {
+                            tooltip.setAutoUpdate(true);
+                            tooltip.textColor(Color.GREY.main);
+                        }).slot(SyncHandlers.itemSlot(this.handler, index).slotGroup(filterInventory)
+                                .filter(stack -> StockHelperFunctions.getDefinitionNameFromStack(stack) != null)))
+                        .build().marginRight(4))
+                .child(Flow.row().coverChildren()
+                        .child(Flow.column().height(18).coverChildrenWidth().marginRight(2)
+                                .child(SusyGuiTextures.OREDICT_INFO.asWidget().size(8).top(0).addTooltipLine(
+                                        IKey.lang("susy.gui.stock_interactor.stock_filter.regex.tooltip.info")))
+                                .child(new Widget<>().size(8).bottom(0).onUpdateListener(this::getStatusIcon)
+                                        .tooltipBuilder(this::createStatusTooltip).tooltipAutoUpdate(true)
                                         .tooltip(tooltip -> tooltip.setAutoUpdate(true))))
-                        .child(new HighlightedTextField()
-                                .size(44, 14)
-                                .onUnfocus(this::refreshPattern)
-                                .setHighlightRule(this::highlightRule)
-                                .setTextColor(Color.WHITE.darker(1))
-                                .value(patternString)
-                                .marginBottom(4)));
+                        .child(new HighlightedTextField().size(44, 14).onUnfocus(this::refreshPattern)
+                                .setHighlightRule(this::highlightRule).setTextColor(Color.WHITE.darker(1))
+                                .value(patternString).marginBottom(4)));
     }
 
     // TODO: better formatting?
@@ -270,7 +233,7 @@ public class StockFilter implements INBTSerializable<NBTTagCompound>, Predicate<
         }
 
         @Override
-        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        public void setStackInSlot(int slot, @NonNull ItemStack stack) {
             validateSlotIndex(slot);
             if (!stack.isEmpty()) {
                 stack.setCount(Math.min(stack.getCount(), 1)); // TODO: check this

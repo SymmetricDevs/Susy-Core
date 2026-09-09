@@ -43,7 +43,8 @@ public class DistillationTowerRecipeLogic extends MultiblockRecipeLogic {
         IItemHandlerModifiable exportInventory = getOutputInventory();
 
         // We have already trimmed outputs and chanced outputs at this time
-        // Attempt to merge all outputs + chanced outputs into the output bus, to prevent voiding chanced outputs
+        // Attempt to merge all outputs + chanced outputs into the output bus, to
+        // prevent voiding chanced outputs
         if (!metaTileEntity.canVoidRecipeItemOutputs() &&
                 !GTTransferUtils.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs())) {
             this.isOutputsFull = true;

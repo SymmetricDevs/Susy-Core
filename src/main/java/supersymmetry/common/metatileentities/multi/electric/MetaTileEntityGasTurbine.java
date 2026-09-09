@@ -22,7 +22,8 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
 
     public MetaTileEntityGasTurbine(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, int tier, int maxSpeed,
                                     int accel, int decel, IBlockState casingState, IBlockState rotorState,
-                                    ICubeRenderer casingRenderer, ICubeRenderer frontOverlay) {
+                                    ICubeRenderer casingRenderer,
+                                    ICubeRenderer frontOverlay) {
         super(metaTileEntityId, recipeMap, tier, maxSpeed, accel, decel, casingState, rotorState, casingRenderer,
                 frontOverlay);
         this.recipeMapWorkable = new GasTurbineRecipeLogic(this);
@@ -42,28 +43,24 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
                 .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1));
         TraceabilityPredicate maintenance = abilities(MultiblockAbility.MAINTENANCE_HATCH).setMaxGlobalLimited(1);
 
-        return FactoryBlockPattern.start()
-                .aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
-                .aisle("GAAAAAAAO", "IDDDDCCCF", "GAAAAAAAO")
-                .aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
+        return FactoryBlockPattern.start().aisle("GAAAAAAAO", "GAAAAAAAO", "G   A   O")
+                .aisle("GAAAAAAAO", "IDDDDCCCF", "GAAAAAAAO").aisle("GAAAAAAAO", "GSAAAAAAO", "G   A   O")
                 .where('S', selfPredicate())
-                .where('A', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, false, false))
-                        .or(maintenance))
-                .where('O', casingPredicate
-                        .or(autoAbilities(false, false, false, false, false, true, false))
-                        .or(maintenance))
-                .where('C', coilOrientation())
-                .where('D', rotorOrientation())
+                .where('A',
+                        casingPredicate.or(autoAbilities(false, false, false, false, false, false, false))
+                                .or(maintenance))
+                .where('O',
+                        casingPredicate.or(autoAbilities(false, false, false, false, false, true, false))
+                                .or(maintenance))
+                .where('C', coilOrientation()).where('D', rotorOrientation())
                 .where('F', abilities(MultiblockAbility.OUTPUT_ENERGY))
-                .where('G', casingPredicate
-                        .or(autoAbilities(false, false, false, false, true, false, false))
-                        .or(maintenance))
+                .where('G',
+                        casingPredicate.or(autoAbilities(false, false, false, false, true, false, false))
+                                .or(maintenance))
                 .where('I',
                         states(MetaBlocks.MULTIBLOCK_CASING
                                 .getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     public class GasTurbineRecipeLogic extends SuSyTurbineRecipeLogic {
@@ -84,7 +81,8 @@ public class MetaTileEntityGasTurbine extends MetaTileEntitySUSYLargeTurbine {
         @Override
         protected void updateRecipeProgress() {
             if (canRecipeProgress && drawEnergy(recipeEUt, true)) {
-                // as recipe starts with progress on 1 this has to be > only not => to compensate for it
+                // as recipe starts with progress on 1 this has to be > only not => to
+                // compensate for it
                 if (++progressTime > getMaxProgress()) {
                     completeRecipe();
                     return;

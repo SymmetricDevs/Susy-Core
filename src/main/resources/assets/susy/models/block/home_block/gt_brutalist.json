@@ -1,9 +1,11 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "front": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_front",
-    "side": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_left",
+    "north": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_front",
+    "east":  "gregtech:blocks/home_blocks/gt_brutalist/brutalist_left",
     "south": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_back",
-    "top": "gregtech:blocks/home_blocks/gt_brutalist/brutalist_top"
+    "west":  "gregtech:blocks/home_blocks/gt_brutalist/brutalist_right",
+    "up":    "gregtech:blocks/home_blocks/gt_brutalist/brutalist_top",
+    "down":  "gregtech:blocks/home_blocks/gt_brutalist/brutalist_bottom"
   }
 }

@@ -1,5 +1,6 @@
 {
   "ambientocclusion": false,
+  "parent": "block/cube",
   "textures": {
     "particle": "#side",
     "top": "#end",

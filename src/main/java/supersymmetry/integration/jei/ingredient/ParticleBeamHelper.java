@@ -12,11 +12,11 @@ import supersymmetry.api.particle.ParticleBeam;
 
 public class ParticleBeamHelper implements IIngredientHelper<ParticleBeam> {
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public ParticleBeam getMatch(Iterable<ParticleBeam> ingredients, @NotNull ParticleBeam ingredientToMatch) {
         for (ParticleBeam particleBeam : ingredients) {
-            if (particleBeam == null) continue;
+            if (particleBeam == null)
+                continue;
             if (ingredientToMatch.getParticle() == particleBeam.getParticle()) {
                 return particleBeam;
             }

@@ -23,7 +23,13 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "celeritas",
             "projectred-core",
             "icbmclassic",
-            "gaspunk");
+            "gaspunk",
+            "icbmclassic",
+            "appliedenergistics2",
+            "universalmodcore",
+            "dimstack",
+            "visualores",
+            "gcym");
 
     @Override
     public List<String> getMixinConfigs() {

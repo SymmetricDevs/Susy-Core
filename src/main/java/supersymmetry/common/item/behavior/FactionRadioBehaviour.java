@@ -49,9 +49,11 @@ public class FactionRadioBehaviour implements IItemBehaviour {
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
 
-        if (stack.isEmpty()) return;
+        if (stack.isEmpty())
+            return;
 
-        if (player.world.isRemote) return;
+        if (player.world.isRemote)
+            return;
 
         // Only our faction radio item
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.FACTION_RADIO.metaValue)
@@ -61,9 +63,7 @@ public class FactionRadioBehaviour implements IItemBehaviour {
         NBTTagCompound tag = stack.getSubCompound(TAG_ROOT);
 
         if (tag == null) {
-            player.sendStatusMessage(
-                    new TextComponentTranslation("chat.susy.radio.no_tag"),
-                    true);
+            player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.no_tag"), true);
             event.setCanceled(true);
             return;
         }
@@ -71,9 +71,7 @@ public class FactionRadioBehaviour implements IItemBehaviour {
         String faction = tag.getString(TAG_FACTION);
 
         if (faction.isEmpty()) {
-            player.sendStatusMessage(
-                    new TextComponentTranslation("chat.susy.radio.no_faction"),
-                    true);
+            player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.no_faction"), true);
             event.setCanceled(true);
             return;
         }
@@ -82,9 +80,7 @@ public class FactionRadioBehaviour implements IItemBehaviour {
         int hate = FactionHateManager.getHate(player, faction);
 
         // Send to player (action bar)
-        player.sendStatusMessage(
-                new TextComponentTranslation("chat.susy.radio.get_hate", hate),
-                true);
+        player.sendStatusMessage(new TextComponentTranslation("chat.susy.radio.get_hate", hate), true);
 
         event.setCanceled(true);
 

@@ -13,7 +13,8 @@ public interface IRotationSpeedHandler {
     int getMaxRotationSpeed();
 
     /**
-     * @returns the fraction of the max rotation speed for power generation [0.0 - 1.0]
+     * @returns the fraction of the max rotation speed for power generation [0.0 -
+     *          1.0]
      */
     default long getRotationSpeedFraction() {
         return getRotationSpeed() / (long) (getMaxRotationSpeed());

@@ -18,7 +18,7 @@ import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 public interface Recyclable {
 
-    Recyclable EMPTY = v -> ItemStack.EMPTY;
+    Recyclable EMPTY = x -> ItemStack.EMPTY;
 
     // TODO: registry?
     static Recyclable from(Object obj) {
@@ -50,7 +50,8 @@ public interface Recyclable {
     }
 
     default void addToMStack(Object2ObjectMap<Material, Fraction> mStacks, Fraction count) {
-        if (Fraction.ZERO.equals(count)) return;
+        if (Fraction.ZERO.equals(count))
+            return;
         RecyclingManager.addItemStackToMaterialStacks(asStack(), mStacks, count);
     }
 }

@@ -1,5 +1,6 @@
 package supersymmetry;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,11 +12,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import li.cil.oc.api.Driver;
+import li.cil.oc.api.FileSystem;
+import li.cil.oc.api.Items;
 import supercritical.common.SCConfigHolder;
+import supersymmetry.api.blocks.SuSyHeatingCoils;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
+import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
+import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.command.*;
@@ -26,17 +33,19 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.integration.opencomputers.DriverSpeaker;
 import supersymmetry.loaders.SuSyIRLoader;
+import supersymmetry.network.SuSyNetwork;
 
 @Mod(name = Supersymmetry.NAME,
      modid = Supersymmetry.MODID,
-     version = Tags.VERSION,
+     version = Tags.MOD_VERSION,
      dependencies = GTInternalTags.DEP_VERSION_STRING + ";required-after:gcym;after:immersiverailroading")
 
 public class Supersymmetry {
 
-    public static final String NAME = "Supersymmetry";
-    public static final String MODID = "susy";
+    public static final String NAME = Tags.MOD_NAME;
+    public static final String MODID = Tags.MOD_ID;
 
     @SidedProxy(modId = MODID,
                 clientSide = "supersymmetry.client.ClientProxy",
@@ -64,9 +73,11 @@ public class Supersymmetry {
     public void onPreInit(@NotNull FMLPreInitializationEvent event) {
         proxy.preLoad();
 
+        SuSyNetwork.init();
         SuSyMetaBlocks.init();
         SuSyMetaItems.initMetaItems();
         SuSyBlocks.init();
+        SuSyHeatingCoils.init();
 
         SusySounds.registerSounds();
 
@@ -74,6 +85,7 @@ public class Supersymmetry {
         SuSyCapabilities.init();
 
         SusyMetaEntities.init();
+        SusyCriteriaTriggers.init();
 
         if (FMLLaunchHandler.side() == Side.CLIENT) {
             OBJLoader.INSTANCE.addDomain(MODID);
@@ -85,7 +97,18 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onInit(@NotNull FMLInitializationEvent event) {
         proxy.load();
+        if (event.getSide().isClient()) {
+            ShaderManager.initShaders();
+        }
         SuSyCoverBehaviors.init();
+
+        Driver.add(new DriverSpeaker());
+
+        Items.registerFloppy(
+                "speaker example",
+                EnumDyeColor.GRAY,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
+                true);
     }
 
     @Mod.EventHandler
@@ -100,9 +123,14 @@ public class Supersymmetry {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
         CommandUntranslatedKeys untranslatedKeys = new CommandUntranslatedKeys();
+        CommandMultiblock multiblockCommand = new CommandMultiblock();
+        CommandTPDimSpace tpDimSpace = new CommandTPDimSpace();
+
         event.registerServerCommand(hordeCommand);
         event.registerServerCommand(jeidump);
         event.registerServerCommand(untranslatedKeys);
+        event.registerServerCommand(multiblockCommand);
+        event.registerServerCommand(tpDimSpace);
 
         hordeCommand.addSubcommand(new CommandHordeStart());
         hordeCommand.addSubcommand(new CommandHordeStop());

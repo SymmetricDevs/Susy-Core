@@ -143,7 +143,8 @@ public class EntityTunnelBore extends Locomotive {
     public void onTick() {
         super.onTick();
 
-        if (!this.isBuilt()) return;
+        if (!this.isBuilt())
+            return;
 
         this.updateBorer();
         if (!this.getWorld().isClient) {
@@ -153,10 +154,12 @@ public class EntityTunnelBore extends Locomotive {
             List<IElectricItem> electricItems = this.getNonEmptyBatteries();
             for (IElectricItem electricItem : electricItems) {
                 discharged += electricItem.discharge(consumption - discharged, 20, false, true, false);
-                if (discharged >= consumption) this.hasGTElectricalPower = true;
+                if (discharged >= consumption)
+                    this.hasGTElectricalPower = true;
             }
 
-            if (this.getRotationYaw() % 90 != 0) return;
+            if (this.getRotationYaw() % 90 != 0)
+                return;
 
             if (!this.states.isEmpty()) {
                 SimulationState currentState = getCurrentState();
@@ -178,8 +181,7 @@ public class EntityTunnelBore extends Locomotive {
     }
 
     /*
-     * Assumes uniform circular motion.
-     * Angle in degrees.
+     * Assumes uniform circular motion. Angle in degrees.
      */
 
     public void updateBorer() {
@@ -188,8 +190,9 @@ public class EntityTunnelBore extends Locomotive {
     }
 
     /*
-     * Determines the velocity at which the bore head rotates. Returns the velocity in units revolutions per second
-     * Based on current locomotive throttle. Maximum throttle corresponds to a speed of 0.2 revolutions per second.
+     * Determines the velocity at which the bore head rotates. Returns the velocity
+     * in units revolutions per second Based on current locomotive throttle. Maximum
+     * throttle corresponds to a speed of 0.2 revolutions per second.
      *
      */
     public double getBorerVelocity() {
@@ -209,7 +212,8 @@ public class EntityTunnelBore extends Locomotive {
         int amount = 0;
         for (int i = 0; i < this.cargoItems.getSlotCount(); i++) {
             ItemStack stackInInv = this.cargoItems.get(i);
-            if (!stack.isEmpty() && stackInInv.is(stack)) amount += stackInInv.getCount();
+            if (!stack.isEmpty() && stackInInv.is(stack))
+                amount += stackInInv.getCount();
         }
 
         return amount;
@@ -217,7 +221,8 @@ public class EntityTunnelBore extends Locomotive {
 
     public void extractFromCargo(ItemStack stack, int amount) {
         for (int i = this.getBatterySlots() + this.getTrackSlots(); i < this.cargoItems.getSlotCount(); i++) {
-            if (amount <= 0) return;
+            if (amount <= 0)
+                return;
             ItemStack stackInInv = this.cargoItems.get(i);
             if (!stack.isEmpty() && stackInInv.is(stack)) {
                 ItemStack extracted = this.cargoItems.extract(i, amount, false);
@@ -236,8 +241,10 @@ public class EntityTunnelBore extends Locomotive {
 
                 RailSettings settings;
                 // Can be 360 for some reason
-                if (this.getRotationPitch() % 360 == 0) settings = getSettingsStraight(placeableLength);
-                else settings = getSettingsSlope(placeableLength);
+                if (this.getRotationPitch() % 360 == 0)
+                    settings = getSettingsStraight(placeableLength);
+                else
+                    settings = getSettingsSlope(placeableLength);
 
                 ItemStack trackBlueprintStack = new ItemStack(IRItems.ITEM_TRACK_BLUEPRINT, 0);
                 settings.write(trackBlueprintStack);
@@ -251,7 +258,8 @@ public class EntityTunnelBore extends Locomotive {
                     pos = pos.offset(facing, 9).down();
                     placementAngle = facing.getOpposite().getAngle();
                     // We have the bottom of the world, don't try to go down further
-                    if (pos.y < 1) return;
+                    if (pos.y < 1)
+                        return;
                 }
 
                 PlacementInfo placementInfo = new PlacementInfo(trackBlueprintStack, placementAngle,
@@ -261,7 +269,8 @@ public class EntityTunnelBore extends Locomotive {
                 BuilderBase trackBuilder = railInfo.getBuilder(irWorld, pos);
 
                 int cost = trackBuilder.costFill();
-                if (this.getAmountInInventory(this.getRailBedFill()) < cost) return;
+                if (this.getAmountInInventory(this.getRailBedFill()) < cost)
+                    return;
 
                 List<ItemStack> trackSegments = new ArrayList<>();
                 trackSegments.add(trackSegmentStack);
@@ -279,36 +288,14 @@ public class EntityTunnelBore extends Locomotive {
     }
 
     public RailSettings getSettingsStraight(int length) {
-        return new RailSettings(
-                this.gauge,
-                "immersiverailroading:track/bmtrack.json",
-                TrackItems.STRAIGHT,
-                length,
-                90,
-                1,
-                TrackPositionType.FIXED,
-                TrackSmoothing.BOTH,
-                TrackDirection.NONE,
-                ItemStack.EMPTY,
-                this.getRailBedFill(),
-                false,
-                false);
+        return new RailSettings(this.gauge, "immersiverailroading:track/bmtrack.json", TrackItems.STRAIGHT, length, 90,
+                1, TrackPositionType.FIXED, TrackSmoothing.BOTH, TrackDirection.NONE, ItemStack.EMPTY,
+                this.getRailBedFill(), false, false);
     }
 
     public RailSettings getSettingsSlope(int length) {
-        return new RailSettings(
-                this.gauge,
-                "immersiverailroading:track/bmtrack.json",
-                TrackItems.SLOPE,
-                length,
-                90,
-                1,
-                TrackPositionType.FIXED,
-                TrackSmoothing.NEITHER,
-                TrackDirection.NONE,
-                ItemStack.EMPTY,
-                this.getRailBedFill(),
-                false,
-                false);
+        return new RailSettings(this.gauge, "immersiverailroading:track/bmtrack.json", TrackItems.SLOPE, length, 90, 1,
+                TrackPositionType.FIXED, TrackSmoothing.NEITHER, TrackDirection.NONE, ItemStack.EMPTY,
+                this.getRailBedFill(), false, false);
     }
 }

@@ -32,14 +32,17 @@ public class ScannerLogic {
     }
 
     public void updateLogic() {
-        if (!this.isWorkingEnabled() || !this.isActive) return;
+        if (!this.isWorkingEnabled() || !this.isActive)
+            return;
         // drain the energy
         if (consumeEnergy(true)) {
             consumeEnergy(false);
         } else {
             if (progressTime >= 2) {
-                if (ConfigHolder.machines.recipeProgressLowEnergy) this.progressTime = 1;
-                else this.progressTime = Math.max(1, progressTime - 2);
+                if (ConfigHolder.machines.recipeProgressLowEnergy)
+                    this.progressTime = 1;
+                else
+                    this.progressTime = Math.max(1, progressTime - 2);
             }
             hasNotEnoughEnergy = true;
 
@@ -75,7 +78,7 @@ public class ScannerLogic {
     }
 
     public void setActive(boolean active) {
-        if (this.isActive != active) {
+        if (this.isActive != active && workingEnabled) {
             this.isActive = active;
             this.progressTime = 0;
             this.mte.markDirty();
@@ -99,8 +102,8 @@ public class ScannerLogic {
     }
 
     /**
-     * writes all needed values to NBT
-     * This MUST be called and returned in the MetaTileEntity's {@link MetaTileEntity#writeToNBT(NBTTagCompound)} method
+     * writes all needed values to NBT This MUST be called and returned in the
+     * MetaTileEntity's {@link MetaTileEntity#writeToNBT(NBTTagCompound)} method
      */
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         data.setBoolean("isActive", this.isActive);
@@ -112,9 +115,8 @@ public class ScannerLogic {
     }
 
     /**
-     * reads all needed values from NBT
-     * This MUST be called and returned in the MetaTileEntity's {@link MetaTileEntity#readFromNBT(NBTTagCompound)}
-     * method
+     * reads all needed values from NBT This MUST be called and returned in the
+     * MetaTileEntity's {@link MetaTileEntity#readFromNBT(NBTTagCompound)} method
      */
     public void readFromNBT(@NotNull NBTTagCompound data) {
         this.isActive = data.getBoolean("isActive");
@@ -125,8 +127,8 @@ public class ScannerLogic {
     }
 
     /**
-     * writes all needed values to InitialSyncData
-     * This MUST be called and returned in the MetaTileEntity's
+     * writes all needed values to InitialSyncData This MUST be called and returned
+     * in the MetaTileEntity's
      * {@link MetaTileEntity#writeInitialSyncData(PacketBuffer)} method
      */
     public void writeInitialSyncData(@NotNull PacketBuffer buf) {
@@ -138,8 +140,8 @@ public class ScannerLogic {
     }
 
     /**
-     * reads all needed values from InitialSyncData
-     * This MUST be called and returned in the MetaTileEntity's
+     * reads all needed values from InitialSyncData This MUST be called and returned
+     * in the MetaTileEntity's
      * {@link MetaTileEntity#receiveInitialSyncData(PacketBuffer)} method
      */
     public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
@@ -151,8 +153,8 @@ public class ScannerLogic {
     }
 
     /**
-     * reads all needed values from CustomData
-     * This MUST be called and returned in the MetaTileEntity's
+     * reads all needed values from CustomData This MUST be called and returned in
+     * the MetaTileEntity's
      * {@link MetaTileEntity#receiveCustomData(int, PacketBuffer)} method
      */
     public void receiveCustomData(int dataId, PacketBuffer buf) {
@@ -172,7 +174,8 @@ public class ScannerLogic {
     /**
      * set whether the cleanroom was active and needs an update
      *
-     * @param wasActiveAndNeedsUpdate the state to set
+     * @param wasActiveAndNeedsUpdate
+     *                                the state to set
      */
     public void setWasActiveAndNeedsUpdate(boolean wasActiveAndNeedsUpdate) {
         this.wasActiveAndNeedsUpdate = wasActiveAndNeedsUpdate;

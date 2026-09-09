@@ -1,0 +1,29 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+        "facing=north,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft"
+        },
+        "facing=south,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft",
+          "y" : 180
+        },
+        "facing=west,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft",
+          "y" : 270
+        },
+        "facing=east,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft",
+          "y" : 90
+        },
+        "facing=up,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft",
+          "x" : 270
+        },
+        "facing=down,variant=iron" : {
+          "model" : "susy:paddle_shaft/paddle_shaft",
+          "x" : 90
+        }
+      }
+    }
+

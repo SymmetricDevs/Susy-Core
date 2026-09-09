@@ -35,13 +35,13 @@ public class InstrumentRobotArm implements Instrument {
 
         // Then, the next mission must have a landing destination type
         MissionConfiguration nextMission = config.popFront();
-        if (!(nextMission.destinationType == DestinationType.Landing)) {
+        if (nextMission.destinationType != DestinationType.Landing) {
             return;
         }
 
         List<ItemStack> dummyInputs = new ArrayList<>();
         dummyInputs.add(Planetoid.PLANETOIDS.inverse().get(mission.dimension).getDisplayItem());
-        Recipe salvagingRecipe = SuSyRecipeMaps.SALVAGING_RECIPES.findRecipe(0, dummyInputs, null, false);
+        Recipe salvagingRecipe = SuSyRecipeMaps.SALVAGING_RECIPES.findRecipe(1, dummyInputs, new ArrayList<>(), false);
         if (salvagingRecipe == null) {
             return;
         }
@@ -51,8 +51,7 @@ public class InstrumentRobotArm implements Instrument {
         List<ItemStack> outputs = salvagingRecipe.getResultItemOutputs(0, 0, SuSyRecipeMaps.SALVAGING_RECIPES);
         // Turn into non-null list
         NonNullList<ItemStack> nonNullList = NonNullList.from(ItemStack.EMPTY, outputs.toArray(new ItemStack[0]));
-        LanderSpawnEntry entry = new LanderSpawnEntry(
-                nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
+        LanderSpawnEntry entry = new LanderSpawnEntry(nextMission.dimension, landingPos, salvagingRecipe.getDuration(),
                 new ItemStackHandler(nonNullList).serializeNBT());
         LanderSpawnQueue.get(server.getWorld(nextMission.dimension)).addEntry(entry);
     }

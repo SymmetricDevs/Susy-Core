@@ -10,8 +10,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.network.*;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_CORE,
+@GregTechModule(moduleID = SuSyModules.MODULE_CORE,
                 containerID = Supersymmetry.MODID,
                 name = "SuSy Core",
                 description = "Core module of SuSy Core, so this should be called SuSy Core Core ngl.",
@@ -28,7 +27,12 @@ public class SuSyCoreModule implements IGregTechModule {
         GregTechAPI.networkHandler.registerPacket(SPacketRemoveFluidState.class);
         GregTechAPI.networkHandler.registerPacket(SPacketFirstJoin.class);
         GregTechAPI.networkHandler.registerPacket(CPacketRocketInteract.class);
+        GregTechAPI.networkHandler.registerPacket(CPacketRocketLaunch.class);
         GregTechAPI.networkHandler.registerPacket(SPacketUpdateRenderMask.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerAudio.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerStop.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastAudio.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastStop.class);
         GregTechAPI.networkHandler.registerPacket(SPacketDustFog.class);
     }
 }

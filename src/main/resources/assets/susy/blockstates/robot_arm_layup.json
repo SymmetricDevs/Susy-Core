@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=layup": { "model": "susy:robot_arm/layup", "y": 270 },
+    "facing=south,variant=layup": { "model": "susy:robot_arm/layup", "y": 90 },
+    "facing=west,variant=layup": { "model": "susy:robot_arm/layup", "y": 180 },
+    "facing=east,variant=layup": { "model": "susy:robot_arm/layup"}
+  }
+}

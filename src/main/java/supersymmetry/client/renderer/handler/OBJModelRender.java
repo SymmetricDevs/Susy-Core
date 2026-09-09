@@ -25,8 +25,8 @@ import codechicken.lib.util.TransformUtils;
 import supersymmetry.api.SusyLog;
 
 /**
- * A wrapped OBJ IBakedModel
- * Mostly copied from Draconic Evolution, with minor modifications.
+ * A wrapped OBJ IBakedModel Mostly copied from Draconic Evolution, with minor
+ * modifications.
  *
  * @author brandon3055
  *         <a href="https://github.com/Draconic-Inc/Draconic-Evolution">Link</a>

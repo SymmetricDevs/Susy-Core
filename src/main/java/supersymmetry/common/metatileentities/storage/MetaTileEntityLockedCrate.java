@@ -24,6 +24,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityUIFactory;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -88,6 +89,15 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
     }
 
     @Override
+    protected ModularUI createUI(EntityPlayer entityPlayer) {
+        ItemStack heldStack = entityPlayer.getHeldItemMainhand();
+        if (!heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm())) {
+            return null;
+        }
+        return super.createUI(entityPlayer);
+    }
+
+    @Override
     public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                 CuboidRayTraceResult hitResult) {
         if (!playerIn.isSneaking()) {
@@ -107,13 +117,7 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
                     playerIn.sendStatusMessage(new TextComponentTranslation("chat.susy.crate.requires_code_breacher"),
                             true);
                     BlockPos pos = getPos();
-                    getWorld().playSound(
-                            null,
-                            pos,
-                            SusySounds.LOCKED_CRATE,
-                            SoundCategory.BLOCKS,
-                            0.5F,
-                            1.0F);
+                    getWorld().playSound(null, pos, SusySounds.LOCKED_CRATE, SoundCategory.BLOCKS, 0.5F, 1.0F);
                 }
             }
         }

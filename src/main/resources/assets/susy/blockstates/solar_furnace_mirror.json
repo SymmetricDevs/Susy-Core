@@ -1,0 +1,13 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy" },
+    "facing=south,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy", "y": 180 },
+    "facing=west,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy", "y": 270 },
+    "facing=east,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy", "y": 90 },
+    "facing=north,variant=steel": { "model": "susy:solar_furnace_mirror/steel" },
+    "facing=south,variant=steel": { "model": "susy:solar_furnace_mirror/steel", "y": 180 },
+    "facing=west,variant=steel": { "model": "susy:solar_furnace_mirror/steel", "y": 270 },
+    "facing=east,variant=steel": { "model": "susy:solar_furnace_mirror/steel", "y": 90 }
+  }
+}

@@ -31,10 +31,12 @@ public class SusyParticleFlameLarge extends ParticleFlame {
         float f0 = ((float) this.particleAge + partialTicks) / (float) this.particleMaxAge;
         this.particleScale = this.hugeFlameScale * (1.0F - f0 * f0 * 0.5F);
 
-        // super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
+        // super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ,
+        // rotationYZ, rotationXY,
         // rotationXZ);
 
-        // Using the vanilla code from Particle::renderParticle directly, thank you private final float flameScale in
+        // Using the vanilla code from Particle::renderParticle directly, thank you
+        // private final float flameScale in
         // ParticleFlame <3
         float f = (float) this.particleTextureIndexX / 16.0F;
         float f1 = f + 0.0624375F;

@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -19,8 +18,8 @@ public class BlockInductionCoilAssembly extends VariantBlock<BlockInductionCoilA
     public BlockInductionCoilAssembly() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("induction_coil_assembly");
-        setHardness(5.0f);
-        setResistance(10.0f);
+        setHardness(3.0f);
+        setResistance(0.1f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
         setDefaultState(getState(InductionCoilAssemblyType.COPPER));
@@ -44,8 +43,7 @@ public class BlockInductionCoilAssembly extends VariantBlock<BlockInductionCoilA
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

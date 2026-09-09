@@ -21,7 +21,8 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 public interface ICryogenicProvider {
 
     /**
-     * @param receiver the receiver to associate with this provider
+     * @param receiver
+     *                 the receiver to associate with this provider
      */
     void setReceiver(@NotNull ICryogenicReceiver receiver);
 

@@ -1,0 +1,13 @@
+speaker_single and speaker_broadcast have the same api
+the difference is that playing a sound through speaker_broadcast will make it play through all speaker_broadcast
+speakers on the network at once (sort of, only 3 are actually used at once to avoid nearby speakers being way too loud)
+
+playSoundBlocking and PlaySoundAsync are the same function, except that the blocking version pauses the lua thread until
+the sound is done playing, and the async version pauses for 0.05s and returns how much time is left (not including the
+small context pause that it does) before you can make another call
+
+accepts a playback rate and a 16 bit integer array (time domain waveform) as a string, so the input string length must be even
+
+the length limit is here because i am lazy and didnt want to implement buffering, so each sound api call is a separate
+packet. this means that there is always going to be some sound tearing, deal with it, i dont want it to have a buffer
+client side because that can run out of memory if you spam hard enough

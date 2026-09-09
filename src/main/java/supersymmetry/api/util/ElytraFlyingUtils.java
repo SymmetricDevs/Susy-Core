@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.modules.ModuleManager;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
@@ -23,20 +24,20 @@ public class ElytraFlyingUtils {
     @SuppressWarnings("DataFlowIssue")
     public static boolean isElytraFlying(@NotNull EntityLivingBase entity) {
         ItemStack itemstack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (isFlying(entity, itemstack)) {
+        if (!itemstack.isEmpty() && isFlying(entity, itemstack)) {
             return true;
         }
-        if (ModuleManager.getInstance().isModuleEnabled(SuSyModules.MODULE_BAUBLES)) {
+        if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
             itemstack = BaublesModule.getElytraBauble(entity);
-            return isFlying(entity, itemstack);
+            return !itemstack.isEmpty() && isFlying(entity, itemstack);
         }
         return false;
     }
 
     public static boolean isFlying(@NotNull EntityLivingBase entity, ItemStack itemstack) {
         if (itemstack.hasCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null)) {
-            return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(
-                    entity, itemstack,
+            return itemstack.getCapability(SuSyCapabilities.ELYTRA_FLYING_PROVIDER, null).isElytraFlying(entity,
+                    itemstack,
                     entity.onGround ||
                             entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isFlying ||
                             entity.isRiding() || entity.isInWater() || isInLavaSafe(entity));
@@ -51,9 +52,7 @@ public class ElytraFlyingUtils {
 
     // non-chunkloading copy of Entity.isInLava()
     private static boolean isInLavaSafe(@NotNull Entity entity) {
-        return isMaterialInBBSafe(entity.world,
-                entity.getEntityBoundingBox().expand(-0.1, -0.4, -0.1),
-                Material.LAVA);
+        return isMaterialInBBSafe(entity.world, entity.getEntityBoundingBox().expand(-0.1, -0.4, -0.1), Material.LAVA);
     }
 
     // non-chunkloading copy of World.isMaterialInBB()
@@ -71,8 +70,7 @@ public class ElytraFlyingUtils {
             for (int l1 = k; l1 < l; ++l1) {
                 for (int i2 = i1; i2 < j1; ++i2) {
                     pos.setPos(k1, l1, i2);
-                    if (world.isBlockLoaded(pos, false) &&
-                            world.getBlockState(pos).getMaterial() == materialIn) {
+                    if (world.isBlockLoaded(pos, false) && world.getBlockState(pos).getMaterial() == materialIn) {
                         pos.release();
                         return true;
                     }

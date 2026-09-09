@@ -48,10 +48,9 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     private FluidTankList displayedTankList;
 
     // Initialization
-    public MetaTileEntityFuelCell(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
-                                  ICubeRenderer renderer, int tier,
-                                  Function<Integer, Integer> tankScalingFunction,
-                                  int maxTemperature, int thresholdTemperature) {
+    public MetaTileEntityFuelCell(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap, ICubeRenderer renderer,
+                                  int tier, Function<Integer, Integer> tankScalingFunction, int maxTemperature,
+                                  int thresholdTemperature) {
         super(metaTileEntityId, recipeMap, renderer, tier, tankScalingFunction, false);
         this.thresholdTemperature = thresholdTemperature;
         this.maxTemperature = maxTemperature;
@@ -67,10 +66,12 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
     @Override
     // Handle fluid imports
     protected FluidTankList createImportFluidHandler() {
-        if (workable == null) return new FluidTankList(false);
+        if (workable == null)
+            return new FluidTankList(false);
         FluidTank[] fluidImports = new FluidTank[workable.getRecipeMap().getMaxFluidInputs()];
         FluidTank[] displayedTanks = new FluidTank[workable.getRecipeMap().getMaxFluidInputs() - 1];
-        // Maybe in the future, this could just be simplified, if maxFluidInputs is always 2
+        // Maybe in the future, this could just be simplified, if maxFluidInputs is
+        // always 2
         for (int i = 0; i < fluidImports.length - 1; i++) {
             NotifiableFluidTank filteredFluidHandler = new NotifiableFluidTank(
                     this.getTankScalingFunction().apply(this.getTier()), this, false);
@@ -154,13 +155,12 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
         int thresholdYOffset = (int) ((1 - (thresholdTemperature / (maxTemperature * 1.0))) * 54) + 19;
 
         ModularUI.Builder builder;
-        builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems,
-                exportItems, displayedTankList, exportFluids, yOffset);
-        builder.widget(new LabelWidget(6, 6, getMetaFullName()))
-                .bindPlayerInventory(player.inventory, GuiTextures.SLOT, yOffset);
+        builder = workableRecipeMap.createUITemplateNoOutputs(workable::getProgressPercent, importItems, exportItems,
+                displayedTankList, exportFluids, yOffset);
+        builder.widget(new LabelWidget(6, 6, getMetaFullName())).bindPlayerInventory(player.inventory, GuiTextures.SLOT,
+                yOffset);
         builder.widget(new ProgressWidget(this::getTemperaturePercent, 124, 21, 10, 54)
-                .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true),
-                        GuiTextures.PROGRESS_BAR_BOILER_HEAT,
+                .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true), GuiTextures.PROGRESS_BAR_BOILER_HEAT,
                         ProgressWidget.MoveType.VERTICAL)
                 .setHoverTextConsumer(list -> list.add(new TextComponentTranslation(
                         I18n.format("susy.gui.temperature_celsius", currentTemperature, maxTemperature)))));
@@ -168,8 +168,7 @@ public class MetaTileEntityFuelCell extends SimpleGeneratorMetaTileEntity {
         builder.widget(new TankWidget(hotGasTank, 110, 21, 10, 54)
                 .setBackgroundTexture(GuiTextures.PROGRESS_BAR_BOILER_EMPTY.get(true)));
         builder.widget(new ImageWidget(152, 63 + yOffset, 17, 17,
-                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO)
-                        .setIgnoreColor(true));
+                GTValues.XMAS.get() ? GuiTextures.GREGTECH_LOGO_XMAS : GuiTextures.GREGTECH_LOGO).setIgnoreColor(true));
 
         return builder;
     }

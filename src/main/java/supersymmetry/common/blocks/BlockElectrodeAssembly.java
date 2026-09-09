@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantActiveBlock;
@@ -29,20 +28,22 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
         setDefaultState(getState(ElectrodeAssemblyType.CARBON));
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.SOLID;
     }
 
     @Override
-    public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
+    public boolean canRenderInLayer(@NonNull IBlockState state, @NonNull BlockRenderLayer layer) {
         ElectrodeAssemblyType type = getState(state);
         if (type == ElectrodeAssemblyType.CARBON) {
-            if (layer == BlockRenderLayer.SOLID) return true;
-        } else if (layer == BlockRenderLayer.CUTOUT) return true;
+            if (layer == BlockRenderLayer.SOLID)
+                return true;
+        } else if (layer == BlockRenderLayer.CUTOUT)
+            return true;
 
-        if (isBloomEnabled(type)) return layer == BloomEffectUtil.getEffectiveBloomLayer();
+        if (isBloomEnabled(type))
+            return layer == BloomEffectUtil.getEffectiveBloomLayer();
         return layer == BlockRenderLayer.CUTOUT;
     }
 
@@ -72,8 +73,7 @@ public class BlockElectrodeAssembly extends VariantActiveBlock<BlockElectrodeAss
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

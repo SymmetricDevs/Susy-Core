@@ -2,9 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -12,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -41,14 +40,10 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
         return new MetaTileEntityPolymerizationTank(this.metaTileEntityId);
     }
 
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("F F", "XXX", "XXX", "XXX", "XXX")
-                .aisle("   ", "XPX", "XPX", "XPX", "XPX")
-                .aisle("F F", "XSX", "XXX", "XXX", "XXX")
-                .where('S', this.selfPredicate())
-                .where('F', frames(Materials.Steel))
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start().aisle("F F", "XXX", "XXX", "XXX", "XXX")
+                .aisle("   ", "XPX", "XPX", "XPX", "XPX").aisle("F F", "XSX", "XXX", "XXX", "XXX")
+                .where('S', this.selfPredicate()).where('F', frames(Materials.Steel))
                 .where('P', states(getPipeCasingState()))
                 .where('X', states(getCasingState()).setMinGlobalLimited(20)
                         .or(this.autoAbilities(true, true, false, false, false, false, false))
@@ -76,8 +71,7 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @Nonnull
-    protected ICubeRenderer getFrontOverlay() {
+    @NonNull protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.POLYMERIZATION_TANK_OVERLAY;
     }
 }

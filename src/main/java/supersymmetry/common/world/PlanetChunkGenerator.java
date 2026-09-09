@@ -3,10 +3,9 @@ package supersymmetry.common.world;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -16,7 +15,14 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
+
+import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.world.gen.ComplexCrater;
 import supersymmetry.common.world.gen.MapGenLunarLavaTube;
+import supersymmetry.common.world.gen.SimpleCrater;
+import supersymmetry.common.world.gen.WorldGenPit;
 
 public class PlanetChunkGenerator implements IChunkGenerator {
 
@@ -38,7 +44,13 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     private NoiseGeneratorOctaves mainPerlinNoise;
     private NoiseGeneratorPerlin surfaceNoise;
     private double[] depthBuffer = new double[256];
+
     private final MapGenLunarLavaTube caveGenerator = new MapGenLunarLavaTube();
+    private final WorldGenPit pitGenerator = new WorldGenPit();
+
+    private final SimpleCrater simpleCraterGenerator;
+    private final ComplexCrater complexCraterGenerator;
+
     private Biome[] biomesForGeneration;
     private final double depthNoiseScaleX = 200.0D;
     private final double depthNoiseScaleZ = 200.0D;
@@ -75,9 +87,16 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         heightMap = new double[825];
         biomeWeights = new float[25];
 
-        Planet planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
+        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
         this.stone = planet.getStone();
         this.bedrock = planet.getBedrock();
+
+        IBlockState breccia = planet.hasCraterMaterials() ? planet.getBreccia() : stone;
+        IBlockState impactMelt = SuSyBlocks.REGOLITH.getDefaultState();
+        IBlockState impactEjecta = SuSyBlocks.REGOLITH.getDefaultState();
+
+        this.simpleCraterGenerator = new SimpleCrater(stone, breccia, impactMelt, impactEjecta);
+        this.complexCraterGenerator = new ComplexCrater(stone, breccia, impactMelt, impactEjecta);
 
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -103,10 +122,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
     /**
      * Creates base terrain (air and stone) using heightmaps.
-     *
-     * @param chunkX
-     * @param chunkZ
-     * @param primer
      */
     public void generateTerrain(int chunkX, int chunkZ, ChunkPrimer primer) {
         // Get biomes being used in this chunk
@@ -129,7 +144,6 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                 int l1 = (k + iZ + 1) * 33;
 
                 // Divide chunk along y axis.
-                // Now have a 4 x 8 x 4 subchunk to work with.
                 for (int iY = 0; iY < 32; ++iY) {
                     // Get noise values from heightmap.
                     double d1 = this.heightMap[i1 + iY];
@@ -152,7 +166,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                         double d13 = (d4 - d2) * 0.25D;
 
                         int height = (iY * 8) + jY;
-                        // Loop through x axis
+                        // Loop through x-axis
                         for (int jX = 0; jX < 4; ++jX) {
                             double d14 = 0.25D;
                             double d16 = (d11 - d10) * 0.25D;
@@ -161,12 +175,11 @@ public class PlanetChunkGenerator implements IChunkGenerator {
                             // Loop through z axis
                             for (int jZ = 0; jZ < 4; ++jZ) {
                                 // If the noiseLevel is above 0, set block to stone.
-                                if (height < 1) {
+                                if (height < 2) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, bedrock);
                                 } else if ((zVariation += d16) > 0.0D) {
                                     primer.setBlockState(iX * 4 + jX, iY * 8 + jY, iZ * 4 + jZ, stone);
                                 }
-
                             }
 
                             d10 += d12;
@@ -184,16 +197,17 @@ public class PlanetChunkGenerator implements IChunkGenerator {
     }
 
     public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn) {
-        if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.world)) return;
+        if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.world))
+            return;
         double d0 = 0.03125D;
-        this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, x * 16, z * 16, 16, 16,
-                0.0625D, 0.0625D, 1.0D);
+        this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, x * 16, z * 16, 16, 16, 0.0625D, 0.0625D,
+                1.0D);
 
         // Loop through each x row.
         for (int iX = 0; iX < 16; ++iX) {
             // Loop through each y row.
             for (int iZ = 0; iZ < 16; ++iZ) {
-                // Get the biome at this x,z coord?
+                // Get the biome at this x,z coord
                 Biome biome = biomesIn[iZ + iX * 16];
 
                 // Use the biome to replace blocks at this x, z coord (full y column).
@@ -216,6 +230,9 @@ public class PlanetChunkGenerator implements IChunkGenerator {
 
         this.caveGenerator.generate(this.world, x, z, chunkprimer);
 
+        this.simpleCraterGenerator.generate(this.world, x, z, chunkprimer);
+        this.complexCraterGenerator.generate(this.world, x, z, chunkprimer);
+
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
 
@@ -235,10 +252,10 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, xOffset, yOffset,
                 zOffset, 5, 33, 5, coordF / this.mainNoiseScaleX, heightF / this.mainNoiseScaleY,
                 coordF / this.mainNoiseScaleZ);
-        this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, xOffset,
-                yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
-        this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, xOffset,
-                yOffset, zOffset, 5, 33, 5, coordF, heightF, coordF);
+        this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, xOffset, yOffset,
+                zOffset, 5, 33, 5, coordF, heightF, coordF);
+        this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, xOffset, yOffset,
+                zOffset, 5, 33, 5, coordF, heightF, coordF);
         int heightMapPosition = 0;
         int depthRegionPosition = 0;
 
@@ -336,6 +353,8 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         }
     }
 
+    private static final IBlockState AIR = Blocks.AIR.getDefaultState();
+
     @Override
     public void populate(int x, int z) {
         int i = x * 16;
@@ -343,12 +362,37 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         BlockPos blockpos = new BlockPos(i, 0, j);
         Biome biome = this.world.getBiome(blockpos.add(16, 0, 16));
 
+        // Call biome decoration first
         biome.decorate(this.world, this.rand, blockpos);
+
+        // Generate pit entrances to lava tubes
+        generatePitEntrances(x, z, blockpos);
     }
 
-    /**
-     * Called to generate additional structures after initial worldgen, used by ocean monuments
-     */
+    private void generatePitEntrances(int chunkX, int chunkZ, BlockPos chunkPos) {
+        // Use chunk-based random with world seed
+        Random pitRand = new Random(world.getSeed() + (long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
+
+        // Low probability of pit entrance per chunk (adjust as needed)
+        if (pitRand.nextDouble() < 0.02) { // 2% chance per chunk
+            // Random position within chunk
+            int x = chunkPos.getX() + pitRand.nextInt(16);
+            int z = chunkPos.getZ() + pitRand.nextInt(16);
+
+            // Find surface height
+            int y = world.getHeight(x, z);
+
+            // Create a marker block that WorldGenPit will use to determine size
+            // The metadata determines the pit size (0-15, where size = meta + 1)
+            int size = 2 + pitRand.nextInt(6); // Size 3-8
+
+            BlockPos pitPos = new BlockPos(x, y, z);
+
+            // Generate the pit
+            pitGenerator.generate(world, pitRand, pitPos);
+        }
+    }
+
     public boolean generateStructures(Chunk chunkIn, int x, int z) {
         return false;
     }
@@ -363,16 +407,18 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         return false;
     }
 
-    @Nullable
-    public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position,
+    @Nullable public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position,
                                            boolean findUnexplored) {
         return null;
     }
 
-    /**
-     * Recreates data about structures intersecting given chunk (used for example by getPossibleCreatures), without
-     * placing any blocks. When called for the first time before any chunk is generated - also initializes the internal
-     * state needed by getPossibleCreatures.
-     */
     public void recreateStructures(Chunk chunkIn, int x, int z) {}
+
+    @NotNull public SimpleCrater getSimpleCraterGenerator() {
+        return this.simpleCraterGenerator;
+    }
+
+    @NotNull public ComplexCrater getComplexCraterGenerator() {
+        return this.complexCraterGenerator;
+    }
 }

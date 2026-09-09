@@ -44,10 +44,12 @@ public abstract class VoidingMultiblockBase extends MultiblockWithDisplayBase im
 
     @Override
     protected void updateFormedValid() {
-        if (this.getWorld().isRemote) return;
+        if (this.getWorld().isRemote)
+            return;
         if (getOffsetTimer() % voidingFrequency == 0) {
             this.active = false;
-            if (!this.workingEnabled) return;
+            if (!this.workingEnabled)
+                return;
             for (IFluidTank tank : getAbilities(MultiblockAbility.IMPORT_FLUIDS)) {
                 FluidStack fs = tank.getFluid();
                 if (fs != null) {

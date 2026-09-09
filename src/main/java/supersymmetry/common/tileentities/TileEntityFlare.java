@@ -56,19 +56,19 @@ public class TileEntityFlare extends TileEntity implements ITickable {
     }
 
     private void spawnMobsForType() {
-        if (target == null || flareType == null) return;
+        if (target == null || flareType == null)
+            return;
 
         net.minecraft.entity.player.EntityPlayer player = world.getPlayerEntityByUUID(target);
 
-        if (player == null) return;
+        if (player == null)
+            return;
 
-        if (player.getDistanceSq(pos) > 200 * 200) return;
+        if (player.getDistanceSq(pos) > 200 * 200)
+            return;
 
         try {
-            InvokerHelper.invokeMethod(
-                    this,
-                    "callGroovySpawn",
-                    new Object[] { flareType, player });
+            InvokerHelper.invokeMethod(this, "callGroovySpawn", new Object[] { flareType, player });
         } catch (Throwable t) {
             System.out.println("Groovy spawn handler missing or failed");
             t.printStackTrace();
@@ -113,13 +113,9 @@ public class TileEntityFlare extends TileEntity implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void spawnClientParticles() {
-        Minecraft.getMinecraft().effectRenderer.addEffect(
-                new SusyParticleFlareSmoke(
-                        world,
-                        pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                        pos.getY() + 0.1,
-                        pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
-                        red, green, blue));
+        Minecraft.getMinecraft().effectRenderer
+                .addEffect(new SusyParticleFlareSmoke(world, pos.getX() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2,
+                        pos.getY() + 0.1, pos.getZ() + 0.5 + (world.rand.nextDouble() - 0.5) * 0.2, red, green, blue));
     }
 
     @Override

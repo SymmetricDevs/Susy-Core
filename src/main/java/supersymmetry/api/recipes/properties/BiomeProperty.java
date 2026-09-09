@@ -62,8 +62,8 @@ public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyLis
 
         BiomePropertyList list = castValue(value);
 
-        if (mouseX < POSITION.getX() || mouseX > POSITION.getX() + SIZE.getWidth() ||
-                mouseY < POSITION.getY() || mouseY > POSITION.getY() + SIZE.getHeight())
+        if (mouseX < POSITION.getX() || mouseX > POSITION.getX() + SIZE.getWidth() || mouseY < POSITION.getY() ||
+                mouseY > POSITION.getY() + SIZE.getHeight())
             return;
 
         tooltip.add(getBiomesForRecipe(list, false));
@@ -106,8 +106,10 @@ public class BiomeProperty extends RecipeProperty<BiomeProperty.BiomePropertyLis
 
         public boolean checkBiome(Biome biome) {
             boolean valid = true;
-            if (this.blackListBiomes.size() > 0) valid = !this.blackListBiomes.contains(biome);
-            if (this.whiteListBiomes.size() > 0) valid = this.whiteListBiomes.contains(biome);
+            if (this.blackListBiomes.size() > 0)
+                valid = !this.blackListBiomes.contains(biome);
+            if (this.whiteListBiomes.size() > 0)
+                valid = this.whiteListBiomes.contains(biome);
             return valid;
         }
     }

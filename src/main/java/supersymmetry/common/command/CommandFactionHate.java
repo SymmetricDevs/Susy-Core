@@ -2,8 +2,6 @@ package supersymmetry.common.command;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -12,6 +10,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.common.faction.FactionHateManager;
 import supersymmetry.common.util.FactionHelper;
@@ -25,8 +25,7 @@ public class CommandFactionHate extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return new TextComponentTranslation(
-                "susy.command.faction.generic.usage").getUnformattedText();
+        return new TextComponentTranslation("susy.command.faction.generic.usage").getUnformattedText();
     }
 
     @Override
@@ -60,8 +59,7 @@ public class CommandFactionHate extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
-            ITextComponent textComponent = new TextComponentTranslation(
-                    "susy.command.faction.generic.usage");
+            ITextComponent textComponent = new TextComponentTranslation("susy.command.faction.generic.usage");
             sender.sendMessage(textComponent);
             return;
         }
@@ -72,10 +70,7 @@ public class CommandFactionHate extends CommandBase {
         switch (arg) {
             case "get": {
                 int hate = FactionHateManager.getHate((EntityPlayer) sender, faction);
-                ITextComponent text = new TextComponentTranslation(
-                        "susy.command.faction.get",
-                        faction,
-                        hate);
+                ITextComponent text = new TextComponentTranslation("susy.command.faction.get", faction, hate);
 
                 sender.sendMessage(text);
                 break;
@@ -83,26 +78,19 @@ public class CommandFactionHate extends CommandBase {
             case "add": {
                 int value = Integer.parseInt(args[2]);
                 FactionHateManager.addHate((EntityPlayer) sender, faction, value);
-                ITextComponent text = new TextComponentTranslation(
-                        "susy.command.faction.add",
-                        value,
-                        faction);
+                ITextComponent text = new TextComponentTranslation("susy.command.faction.add", value, faction);
                 sender.sendMessage(text);
                 break;
             }
             case "set": {
                 int value = Integer.parseInt(args[2]);
                 FactionHateManager.setHate((EntityPlayer) sender, faction, value);
-                ITextComponent text = new TextComponentTranslation(
-                        "susy.command.faction.set",
-                        value,
-                        faction);
+                ITextComponent text = new TextComponentTranslation("susy.command.faction.set", value, faction);
                 sender.sendMessage(text);
                 break;
             }
             default: {
-                ITextComponent text = new TextComponentTranslation(
-                        "susy.command.faction.invalid");
+                ITextComponent text = new TextComponentTranslation("susy.command.faction.invalid");
                 sender.sendMessage(text);
                 break;
             }

@@ -1,36 +1,60 @@
 package supersymmetry.common.entities;
 
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 
 import cam72cam.immersiverailroading.entity.Freight;
+import cam72cam.immersiverailroading.util.Speed;
 import cam72cam.mod.entity.Entity;
+import cam72cam.mod.entity.Player;
 import cam72cam.mod.entity.boundingbox.IBoundingBox;
 import cam72cam.mod.entity.sync.TagSync;
+import cam72cam.mod.item.ClickResult;
+import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.serialization.TagField;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
+import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.metatileentities.multi.rocket.MetaTileEntityRocketAssembler;
 import supersymmetry.integration.immersiverailroading.registry.TransporterErectorDefinition;
 
 public class EntityTransporterErector extends Freight implements IAlwaysRender {
 
-    @TagField("isRocketLoaded")
+    // Fraction (0..1) of the rocket that has been assembled. 0 = no rocket present,
+    // 1 = fully built. Drives the partial sweep render on the transporter erector.
+    @TagField("assemblyProgress")
     @TagSync
-    private boolean isRocketLoaded;
+    private float assemblyProgress = 0f;
+    @TagField("nextAssemblyProgress")
+    @TagSync
+    private float nextAssemblyProgress = 0f;
+    // Interpolation helper variables
+    @TagField("start")
+    @TagSync
+    private float start = 0f;
+    @TagField("end")
+    @TagSync
+    private float end = 0f;
+
     @TagField("lifterAngle")
     @TagSync
     private float lifterAngle = (float) 0;
     @TagField("liftingMode")
     @TagSync
     private LiftingMode liftingMode = LiftingMode.STOP;
-    @TagField("rocketNBT")
+    @TagField(value = "rocketNBT")
     @TagSync
-    private final NBTTagCompound rocketNBT = new NBTTagCompound();
+    private TagCompound rocketNBT = new TagCompound();
 
     // In radians per tick
     private double liftingSpeed = 0.087 / 20;
+    private MetaTileEntityRocketAssembler assembler;
 
-    public EntityTransporterErector() {
-        this.setRocketLoaded(true);
-    }
+    public EntityTransporterErector() {}
 
     @Override
     public IBoundingBox getBounds() {
@@ -51,12 +75,39 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         return super.getDefinition(TransporterErectorDefinition.class);
     }
 
+    /**
+     * True only once the rocket is fully assembled (a partially-built rocket is not
+     * "loaded").
+     */
     public boolean isRocketLoaded() {
-        return isRocketLoaded;
+        return assemblyProgress >= 1f || isDead();
     }
 
     public void setRocketLoaded(boolean rocketLoaded) {
-        isRocketLoaded = rocketLoaded;
+        nextAssemblyProgress = assemblyProgress = rocketLoaded ? 1f : 0f;
+    }
+
+    public float getVisualAssemblyProgress(float renderTime) {
+        // Safely lerp (even if start = end)
+        float interpTime = Math.clamp((renderTime - start) / Math.max((end - start), 0.000001f), 0, 1);
+        return (1 - interpTime) * assemblyProgress + interpTime * nextAssemblyProgress;
+    }
+
+    public float getAssemblyProgress() {
+        return assemblyProgress;
+    }
+
+    public float getNextAssemblyProgress() {
+        return nextAssemblyProgress;
+    }
+
+    // Set the assembly progress to a specific value, and the assembler for tracking
+    // progress more closely
+    public void setAssemblyProgress(float assemblyProgress, float nextAssemblyProgress, float start, float end) {
+        this.assemblyProgress = Math.clamp(assemblyProgress, 0f, 1f);
+        this.nextAssemblyProgress = Math.clamp(nextAssemblyProgress, 0f, 1f);
+        this.start = start;
+        this.end = end;
     }
 
     public LiftingMode getLiftingMode() {
@@ -73,7 +124,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     }
 
     public NBTTagCompound getRocketNBT() {
-        return rocketNBT;
+        return rocketNBT.internal;
     }
 
     public float getLifterAngle() {
@@ -83,7 +134,7 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
     @Override
     public void onTick() {
         super.onTick();
-
+        this.setCurrentSpeed(Speed.ZERO);
         if (this.getCurrentSpeed().isZero()) {
             switch (this.liftingMode) {
                 case UP:
@@ -113,5 +164,35 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
         UP,
         DOWN,
         STOP;
+    }
+
+    @Override
+    public double getDirectFrictionNewtons(List<Vec3i> track) {
+        if (this.lifterAngle > 0 || this.liftingMode == LiftingMode.UP) {
+            return 10000000;
+        }
+        return super.getDirectFrictionNewtons(track);
+    }
+
+    @Override
+    public double getWeight() {
+        // Rocket mass scales with how much of it has been assembled.
+        return super.getWeight() - 311500 * (1 - this.assemblyProgress);
+    }
+
+    @Override
+    public ClickResult onClick(Player playerIn, Player.Hand hand) {
+        if (this.assemblyProgress == 0 && playerIn.isCreative() && playerIn.getHeldItem(hand)
+                .is(new ItemStack(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm()))) {
+            TagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
+            if (tag != null) {
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
+                bp.readFromNBT(tag.internal);
+                this.rocketNBT.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
+                this.rocketNBT.internal.setTag("rocket", bp.writeToNBT());
+                this.setRocketLoaded(true);
+            }
+        }
+        return super.onClick(playerIn, hand);
     }
 }

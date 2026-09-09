@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -33,25 +33,18 @@ public class MetaTileEntityReactionFurnace extends RecipeMapMultiblockController
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("     ", "     ", " P P ", " P P ", " P P ")
-                .aisle("F   F", "FBBBF", "XPXPX", "XXXXX", " P P ")
-                .aisle("     ", "XBBBX", "XP#PX", "XPMPX", " P P ")
-                .aisle("F   F", "FBBBF", "XXSXX", "XXXXX", "     ")
-                .where('S', selfPredicate())
+        return FactoryBlockPattern.start().aisle("     ", "     ", " P P ", " P P ", " P P ")
+                .aisle("F   F", "FBBBF", "XPXPX", "XXXXX", " P P ").aisle("     ", "XBBBX", "XP#PX", "XPMPX", " P P ")
+                .aisle("F   F", "FBBBF", "XXSXX", "XXXXX", "     ").where('S', selfPredicate())
                 .where('X',
                         states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF))
-                                .setMinGlobalLimited(13)
-                                .or(autoAbilities(true, true, true, true, true, true, false)))
+                                .setMinGlobalLimited(13).or(autoAbilities(true, true, true, true, true, true, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where('F', frames(Materials.Invar))
-                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
+                .where('F', frames(Materials.Invar)).where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where('B',
                         states(MetaBlocks.BOILER_FIREBOX_CASING
                                 .getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX)))
-                .where('#', air())
-                .where(' ', any())
-                .build();
+                .where('#', air()).where(' ', any()).build();
     }
 
     @Override
@@ -59,8 +52,7 @@ public class MetaTileEntityReactionFurnace extends RecipeMapMultiblockController
         return Textures.HEAT_PROOF_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PYROLYSE_OVEN_OVERLAY;
     }

@@ -16,7 +16,6 @@ public class StrandConversion {
         new StrandConversion(3, 5, 1. / 5, 1 / 3., OrePrefix.plateDouble, 9);
         new StrandConversion(4 / 9., 5 / 9., 1 / 5., 1 / 4., OrePrefix.ingot, 18);
         new StrandConversion(2 / 7., 2 / 5., 5 / 18., 7 / 18., OrePrefix.stick, 36);
-
     }
 
     public double minWidth;

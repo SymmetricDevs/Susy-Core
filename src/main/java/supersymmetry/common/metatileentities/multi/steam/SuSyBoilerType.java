@@ -15,23 +15,13 @@ import gregtech.client.renderer.texture.Textures;
 
 public enum SuSyBoilerType {
 
-    BRONZE(1536, 1200, 1,
-            METAL_CASING.getState(BRONZE_BRICKS),
-            BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX),
-            BOILER_CASING.getState(BRONZE_PIPE),
-            Textures.BRONZE_PLATED_BRICKS,
-            Textures.BRONZE_FIREBOX,
-            Textures.BRONZE_FIREBOX_ACTIVE,
-            Textures.LARGE_BRONZE_BOILER),
+    BRONZE(1536, 1200, 1, METAL_CASING.getState(BRONZE_BRICKS), BOILER_FIREBOX_CASING.getState(BRONZE_FIREBOX),
+            BOILER_CASING.getState(BRONZE_PIPE), Textures.BRONZE_PLATED_BRICKS, Textures.BRONZE_FIREBOX,
+            Textures.BRONZE_FIREBOX_ACTIVE, Textures.LARGE_BRONZE_BOILER),
 
-    STEEL(3072, 1800, 1,
-            METAL_CASING.getState(STEEL_SOLID),
-            BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX),
-            BOILER_CASING.getState(STEEL_PIPE),
-            Textures.SOLID_STEEL_CASING,
-            Textures.STEEL_FIREBOX,
-            Textures.STEEL_FIREBOX_ACTIVE,
-            Textures.LARGE_STEEL_BOILER);
+    STEEL(3072, 1800, 1, METAL_CASING.getState(STEEL_SOLID), BOILER_FIREBOX_CASING.getState(STEEL_FIREBOX),
+            BOILER_CASING.getState(STEEL_PIPE), Textures.SOLID_STEEL_CASING, Textures.STEEL_FIREBOX,
+            Textures.STEEL_FIREBOX_ACTIVE, Textures.LARGE_STEEL_BOILER);
 
     // Workable Data
     private final int steamPerTick;
@@ -49,14 +39,9 @@ public enum SuSyBoilerType {
     public final ICubeRenderer fireboxActiveRenderer;
     public final ICubeRenderer frontOverlay;
 
-    SuSyBoilerType(int steamPerTick, int ticksToBoiling, double efficiency,
-                   IBlockState casingState,
-                   IBlockState fireboxState,
-                   IBlockState pipeState,
-                   ICubeRenderer casingRenderer,
-                   ICubeRenderer fireboxIdleRenderer,
-                   ICubeRenderer fireboxActiveRenderer,
-                   ICubeRenderer frontOverlay) {
+    SuSyBoilerType(int steamPerTick, int ticksToBoiling, double efficiency, IBlockState casingState,
+                   IBlockState fireboxState, IBlockState pipeState, ICubeRenderer casingRenderer,
+                   ICubeRenderer fireboxIdleRenderer, ICubeRenderer fireboxActiveRenderer, ICubeRenderer frontOverlay) {
         this.steamPerTick = steamPerTick;
         this.ticksToBoiling = ticksToBoiling;
         this.efficiency = efficiency;

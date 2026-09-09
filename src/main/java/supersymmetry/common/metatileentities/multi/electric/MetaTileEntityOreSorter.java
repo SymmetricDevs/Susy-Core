@@ -1,9 +1,9 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -33,23 +33,17 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle(" C C ", " C C ", " C C ", " D D ")
-                .aisle("     ", "     ", "     ", " D D ")
-                .aisle("ABBBA", "ABBBA", "ABBBA", " D D ")
-                .aisle("ABBBA", "B###B", "ABBBA", " D D ")
-                .aisle("ABSBA", "ABBBA", "ABBBA", " D D ")
-                .where('S', selfPredicate())
-                .where('A', frames(Materials.Steel))
-                .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .setMinGlobalLimited(16)
-                        .or(autoAbilities(true, true, true, true, false, false, false)))
-                .where('C', states(new IBlockState[] { MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE) })
-                        .or(autoAbilities(false, false, false, false, true, true, false)))
-                .where('D', frames(Materials.Aluminium))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+        return FactoryBlockPattern.start().aisle(" C C ", " C C ", " C C ", " D D ")
+                .aisle("     ", "     ", "     ", " D D ").aisle("ABBBA", "ABBBA", "ABBBA", " D D ")
+                .aisle("ABBBA", "B###B", "ABBBA", " D D ").aisle("ABSBA", "ABBBA", "ABBBA", " D D ")
+                .where('S', selfPredicate()).where('A', frames(Materials.Steel))
+                .where('B',
+                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)).setMinGlobalLimited(16)
+                                .or(autoAbilities(true, true, true, true, false, false, false)))
+                .where('C',
+                        states(new IBlockState[] { MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE) })
+                                .or(autoAbilities(false, false, false, false, true, true, false)))
+                .where('D', frames(Materials.Aluminium)).where(' ', any()).where('#', air()).build();
     }
 
     @Override
@@ -57,8 +51,7 @@ public class MetaTileEntityOreSorter extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.ORE_SORTER_OVERLAY;
     }
