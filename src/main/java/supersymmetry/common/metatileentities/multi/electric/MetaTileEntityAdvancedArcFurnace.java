@@ -33,7 +33,7 @@ public class MetaTileEntityAdvancedArcFurnace extends RecipeMapMultiblockControl
 
     public MetaTileEntityAdvancedArcFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ADVANCED_ARC_FURNACE);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
