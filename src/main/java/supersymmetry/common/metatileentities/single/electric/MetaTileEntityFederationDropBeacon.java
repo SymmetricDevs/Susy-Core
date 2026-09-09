@@ -189,7 +189,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(target.x + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(target.z + Math.sin(angle) * radius) + 0.5;
-            double spawnY = POD_SPAWN_HEIGHT + GTValues.RNG.nextInt(10);
+            double spawnY = POD_SPAWN_HEIGHT + (int)(Math.random() * 80);
 
             EntityDropPod pod = new EntityDropPod(world, spawnX, spawnY, spawnZ);
             pod.canExplode(false);
