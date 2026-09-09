@@ -227,7 +227,7 @@ public class MobHordeEvent {
         Chunk chunk = player.world.getChunk(new BlockPos(x, 0, z));
         int localX = x & 15;
         int localZ = z & 15;
-        int groundY = chunk.heightMap[localZ << 4 | localX]; // Y of highest opaque block + 1
+        int groundY = chunk.getHeightValue(localX, localZ); // Y of highest opaque block + 1
 
         BlockPos spawnPos = new BlockPos(x, groundY, z); // already the air block above ground
 

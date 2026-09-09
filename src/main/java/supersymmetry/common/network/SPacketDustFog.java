@@ -1,7 +1,5 @@
 package supersymmetry.common.network;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
@@ -12,7 +10,6 @@ import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
 import supersymmetry.client.renderer.handler.DustFogRenderer;
 
-@ParametersAreNonnullByDefault
 public class SPacketDustFog implements IPacket, IClientExecutor {
 
     private float fogStrength;

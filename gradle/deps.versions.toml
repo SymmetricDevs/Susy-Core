@@ -113,3 +113,5 @@ worldEdit = { module = "curse.maven:worldedit-225608", version.ref = "worldEdit"
 worldEditCuiForgeEdition3 = { module = "curse.maven:worldeditcui-forge-edition-3-380401", version.ref = "worldEditCuiForgeEdition3" }
 configAnytime = { module = "com.cleanroommc:configanytime", version.ref = "configAnytime" }
 flare = { module = "curse.maven:flare-692142", version.ref = "flare" }
+techguns = { module = "curse.maven:techguns-244201", version = "2958103" }
+gaspunk = { module = "curse.maven:gaspunk-286505", version = "3048663" }

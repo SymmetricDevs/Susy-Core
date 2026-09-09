@@ -54,14 +54,14 @@ public class SuSyMetaItems {
     public static MetaValueItem SHAPE_MOLD_TARGET;
     public static MetaValueItem ENTITY_TAGGER;
     public static MetaValueItem FACTION_RADIO;
-    public static MetaValueItem INTEL_CHIP;
-    public static MetaValueItem INTEL_CHIP_FULL;
-    public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem BASIC_CARGO_DRONE;
     public static MetaValueItem ADVANCED_CARGO_DRONE;
     public static MetaValueItem LOCATION_CARD;
     public static MetaValueItem ELITE_CARGO_DRONE;
     public static MetaValueItem CLAY_GRAPHITE_CRUCIBLE;
+    public static MetaValueItem INTEL_CHIP;
+    public static MetaValueItem INTEL_CHIP_FULL;
+    public static MetaValueItem ENTITY_PROMOTER;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -150,29 +150,16 @@ public class SuSyMetaItems {
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
         EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
 
-        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
-        ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
-        CODE_BREACHER = initOneItem("code_breacher").setMaxStackSize(1).addComponents(
-                (IItemDurabilityManager) itemStack -> {
+        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1)
+                .addComponents((IItemDurabilityManager) itemStack -> {
                     int uses = itemStack.hasTagCompound() ? itemStack.getTagCompound().getInteger("Uses") : 0;
                     return (double) (BREACH_DURABILITY - uses) / BREACH_DURABILITY;
-                }
-        );
-        CODE_BREACHER_DEV = initOneItem("code_breacher_dev").setMaxStackSize(1);
+                });
+        ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1)
+                .addComponents(FactionRadioBehaviour.INSTANCE);
 
-        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
-
-        DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
-        ENTITY_PROMOTER = initOneItem("entity_promoter").setMaxStackSize(1);
-
-        FACTION_RADIO = initOneItem("faction_radio").setMaxStackSize(1).addComponents(FactionRadioBehaviour.INSTANCE);
-
-        INTEL_CHIP = initOneItem("intel_chip").setMaxStackSize(1).addComponents(IntelChipBehaviour.INSTANCE);
-
-        INTEL_CHIP_FULL = initOneItem("intel_chip_full").addComponents(IntelChipFullBehaviour.INSTANCE);
-
-        DATA_CARD = initOneItem("data_card").setMaxStackSize(1)
-                .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
+        DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1);
 
         DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),
@@ -208,6 +195,16 @@ public class SuSyMetaItems {
         OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1);
 
         CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
+
+        CODE_BREACHER_DEV = metaItem.addItem(25, "code_breacher_dev").setMaxStackSize(1);
+
+        ENTITY_PROMOTER = metaItem.addItem(26, "entity_promoter").setMaxStackSize(1);
+
+        INTEL_CHIP = metaItem.addItem(27, "intel_chip").setMaxStackSize(1)
+                .addComponents(IntelChipBehaviour.INSTANCE);
+
+        INTEL_CHIP_FULL = metaItem.addItem(28, "intel_chip_full")
+                .addComponents(IntelChipFullBehaviour.INSTANCE);
     }
 
     private static void addExtraBehaviours() {

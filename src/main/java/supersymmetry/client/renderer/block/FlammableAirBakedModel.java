@@ -10,7 +10,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class FlammableAirBakedModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
         if (side == null) return ImmutableList.of();
 
         List<BakedQuad> quads = new ArrayList<>(2);

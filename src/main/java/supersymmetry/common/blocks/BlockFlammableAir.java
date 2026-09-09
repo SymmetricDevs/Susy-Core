@@ -19,7 +19,6 @@ import gregtech.api.block.VariantBlock;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityHydrocarbonSaturator;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class BlockFlammableAir extends VariantBlock<BlockFlammableAir.BlockRadicalAirType> {
@@ -76,7 +75,6 @@ public class BlockFlammableAir extends VariantBlock<BlockFlammableAir.BlockRadic
     }
 
     @Override
-    @Nullable
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         return NULL_AABB;
     }
