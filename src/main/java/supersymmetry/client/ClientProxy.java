@@ -68,6 +68,7 @@ import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
@@ -227,6 +228,9 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
+        for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
+            map.registerSprite(flame);
+        }
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 

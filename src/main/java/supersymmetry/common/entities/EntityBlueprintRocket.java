@@ -2,6 +2,7 @@ package supersymmetry.common.entities;
 
 import java.util.List;
 
+import gregtech.client.particle.GTParticleManager;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,6 +34,7 @@ import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
+import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.network.CPacketRocketInteract;
@@ -102,12 +104,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         for (double[] engine : getEngineOffsets()) {
             double x = this.posX + engine[0];
             double z = this.posZ + engine[1];
-            SusyParticleFlameLarge flame = new SusyParticleFlameLarge(this.world, x, this.posY, z,
-                    1.5 * (getRNG().nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (getRNG().nextFloat() - 0.5) * 0.08);
-            SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(this.world, x, this.posY, z,
+            SusyParticleRocketFlame smoke = new SusyParticleRocketFlame(this.world, x, this.posY, z,
                     1.5 * (getRNG().nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (getRNG().nextFloat() - 0.5) * 0.16);
-            Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
-            Minecraft.getMinecraft().effectRenderer.addEffect(flame);
+            GTParticleManager.INSTANCE.addEffect(smoke);
         }
     }
 
