@@ -1,5 +1,6 @@
 package supersymmetry.common.rocketry.instruments;
 
+import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 import static supersymmetry.common.rocketry.RocketConfiguration.*;
 
 import java.util.ArrayList;
@@ -53,7 +54,16 @@ public class InstrumentRobotArm implements Instrument {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         BlockPos landingPos = nextMission.landingPos;
         List<ItemStack> outputs = salvagingRecipe.getResultItemOutputs(0, 0, SuSyRecipeMaps.SALVAGING_RECIPES);
-        double collEff = (blueprint != null ? blueprint.getCollectionEfficiency() : 0);
+        double collEff = 0;
+        // checks all payload stage components for collection efficiency - it's dumb but the "proper" method didn't work
+        for (int i = 0; i < 10; i++) {
+            NBTTagCompound compTag = rocketNBT.getTagList("stages", TAG_COMPOUND).getCompoundTagAt(3)
+                    .getCompoundTag("componentValues").getCompoundTag(String.valueOf(i));
+            if (compTag.getDouble("collectionEfficiency") > 0) {
+                collEff = compTag.getDouble("collectionEfficiency");
+                break;
+            }
+        }
         for (ItemStack output : outputs) {
             output.setCount((int) Math.round(output.getCount() * collEff));
         }

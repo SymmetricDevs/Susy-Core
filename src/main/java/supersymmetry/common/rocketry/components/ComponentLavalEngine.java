@@ -26,7 +26,6 @@ import supersymmetry.api.rocketry.NozzleFlow;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.components.RocketEngine;
-import supersymmetry.api.space.CelestialObject;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
