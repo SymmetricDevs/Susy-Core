@@ -30,16 +30,18 @@ public class InstrumentRobotArm implements Instrument {
     public void act(int count, EntityAbstractRocket rocket) {
         // Check if an unmanned collection mission is next in the configuration
         RocketConfiguration config = rocket.getRocketConfiguration();
-        MissionConfiguration mission = config.popFront();
+        if (config.getMissions().size() < 2) {
+            return;
+        }
+        MissionConfiguration mission = config.getMissions().get(0);
         NBTTagCompound rocketNBT = rocket.getEntityData().getCompoundTag("rocket");
         AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
-
         if (!(mission.destinationType == DestinationType.Orbit)) {
             return;
         }
 
         // Then, the next mission must have a landing destination type
-        MissionConfiguration nextMission = config.popFront();
+        MissionConfiguration nextMission = config.getMissions().get(1);
         if (nextMission.destinationType != DestinationType.Landing) {
             return;
         }

@@ -13,11 +13,13 @@ import supersymmetry.common.rocketry.RocketConfiguration;
 public class InstrumentLander implements Instrument {
 
     public void act(int count, EntityAbstractRocket rocket) {
-        RocketConfiguration config = getMissionConfiguration(rocket);
-        if (config.isEmpty())
+        RocketConfiguration oldConfig = rocket.getRocketConfiguration();
+        RocketConfiguration.MissionConfiguration next = getNextLanderConfig(oldConfig);
+        RocketConfiguration config = oldConfig.clipAt(next);
+        if (next == null)
             return;
         if (rocket.getPassengers().isEmpty()) {
-            spawnLander(rocket, config, true);
+            spawnLander(rocket, config, next, true);
             return;
         }
 
@@ -30,26 +32,22 @@ public class InstrumentLander implements Instrument {
                 break;
 
             EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, i == 0), passenger));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passenger));
         }
     }
 
-    public static RocketConfiguration getMissionConfiguration(
-                                                              EntityAbstractRocket rocket) {
-        RocketConfiguration config = rocket.getRocketConfiguration();
-        if (config.isEmpty()) {
-            return config;
+    public static RocketConfiguration.MissionConfiguration getNextLanderConfig(
+                                                              RocketConfiguration config) {
+        for (RocketConfiguration.MissionConfiguration mission : config.getMissions()) {
+            if (mission.destinationType != RocketConfiguration.DestinationType.Landing) {
+                return mission;
+            }
         }
-        RocketConfiguration.MissionConfiguration next = config.popFront();
-        while (!config.isEmpty() && next.destinationType != RocketConfiguration.DestinationType.Landing) {
-            next = config.popFront();
-        }
-        return config;
+        return null;
     }
 
-    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config,
+    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config, RocketConfiguration.MissionConfiguration next,
                                      boolean withCargo) {
-        RocketConfiguration.MissionConfiguration next = config.popFront();
         EntityLander dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
 
         // Use the config with a popped mission

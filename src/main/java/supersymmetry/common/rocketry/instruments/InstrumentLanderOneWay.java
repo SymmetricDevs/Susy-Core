@@ -11,12 +11,13 @@ public class InstrumentLanderOneWay extends InstrumentLander {
 
     @Override
     public void act(int count, EntityAbstractRocket rocket) {
-        RocketConfiguration config = getMissionConfiguration(rocket);
-        if (config.isEmpty())
+        RocketConfiguration oldConfig = rocket.getRocketConfiguration();
+        RocketConfiguration.MissionConfiguration next = getNextLanderConfig(oldConfig);
+        if (next == null)
             return;
-        config.truncate();
+        RocketConfiguration config = RocketConfiguration.empty();
         if (rocket.getPassengers().isEmpty()) {
-            spawnLander(rocket, config, true);
+            spawnLander(rocket, config, next,true);
             return;
         }
 
@@ -29,7 +30,7 @@ public class InstrumentLanderOneWay extends InstrumentLander {
                 break;
 
             EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, i == 0), passenger));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next,i == 0), passenger));
         }
     }
 }

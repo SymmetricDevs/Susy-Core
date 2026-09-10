@@ -224,14 +224,15 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     protected void act() {
         // Land on next planet
-        RocketConfiguration config = InstrumentLander.getMissionConfiguration(this);
-        if (config.isEmpty()) {
+        RocketConfiguration.MissionConfiguration mission = InstrumentLander.getNextLanderConfig(this.getRocketConfiguration());
+        RocketConfiguration config = this.getRocketConfiguration().clipAt(mission);
+        if (mission == null) {
             SusyLog.logger.error(
                     "The next mission really should have been defined if the lander launched... welp, you deserve this NPE");
         }
         Entity passenger = getPassengers().isEmpty() ? null : this.getPassengers().get(0);
         // Cannot use TeleportHandler here because it doesn't get the new entity
-        Entity teleported = InstrumentLander.spawnLander(this, config, true);
+        Entity teleported = InstrumentLander.spawnLander(this, config, mission, true);
         if (passenger != null) {
             EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
         }
@@ -239,7 +240,7 @@ public class EntityLander extends EntityAbstractRocket
 
     @Override
     protected boolean canStartCountdown() {
-        if (InstrumentLander.getMissionConfiguration(this).isEmpty()) {
+        if (InstrumentLander.getNextLanderConfig(this.getRocketConfiguration()) == null) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
                 this.setDead();

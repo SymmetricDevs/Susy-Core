@@ -3,6 +3,7 @@ package supersymmetry.common.rocketry;
 import static supersymmetry.api.space.Planetoid.PLANETOIDS;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,10 @@ import net.minecraft.util.math.BlockPos;
 
 import supersymmetry.api.space.Planetoid;
 
+
+/*
+ * Treat this class like a record.
+ */
 public class RocketConfiguration {
 
     /**
@@ -78,6 +83,11 @@ public class RocketConfiguration {
         turnAltitude = tempTurnAlt;
     }
 
+    public RocketConfiguration(List<MissionConfiguration> config) {
+        this.missions.addAll(config);
+        turnAltitude = 0;
+    }
+
     public NBTTagCompound serialize() {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setFloat("turn_altitude", turnAltitude);
@@ -91,10 +101,8 @@ public class RocketConfiguration {
         return this.turnAltitude;
     }
 
-    public void truncate() {
-        MissionConfiguration config = this.popFront();
-        this.missions.clear();
-        this.missions.add(config);
+    public static RocketConfiguration empty() {
+        return new RocketConfiguration(Collections.emptyList());
     }
 
     public boolean setBudget(int startingDim, int budget) {
@@ -131,12 +139,9 @@ public class RocketConfiguration {
         return true;
     }
 
-    public MissionConfiguration popFront() {
-        return this.missions.remove(0);
-    }
 
-    public MissionConfiguration peek() {
-        return this.missions.get(0);
+    public RocketConfiguration clipAt(MissionConfiguration clip) {
+        return new RocketConfiguration(this.missions.subList(this.missions.indexOf(clip) + 1, this.missions.size()));
     }
 
     public boolean isEmpty() {
