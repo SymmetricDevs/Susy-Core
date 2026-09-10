@@ -8,10 +8,13 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import ladysnake.gaspunk.GasPunkConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -31,12 +34,13 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.network.PacketBuffer;
-import supersymmetry.client.renderer.particles.SusyParticleFlareSmoke;
 import supersymmetry.client.renderer.particles.SusyParticleToxicPlume;
 
 public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
 
     private static final int PARTICLE_BURST = 1;
+
+    private static final float SPEWER_IMMUNITY_THRESHOLD = 0.9f;
 
     private int currentRadius = 0;
 
@@ -145,15 +149,17 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
                 center.getX() + radius, 256,
                 center.getZ() + radius);
 
-        List<net.minecraft.entity.EntityLivingBase> entities = world
-                .getEntitiesWithinAABB(net.minecraft.entity.EntityLivingBase.class, searchBox);
+        List<EntityLivingBase> entities = world
+                .getEntitiesWithinAABB(EntityLivingBase.class, searchBox);
 
-        for (net.minecraft.entity.EntityLivingBase entity : entities) {
+        for (EntityLivingBase entity : entities) {
             double dx = entity.posX - center.getX();
             double dz = entity.posZ - center.getZ();
             if (dx * dx + dz * dz > (double) radius * radius) continue;
             BlockPos entityPos = new BlockPos(entity.posX, entity.posY, entity.posZ);
             if (!world.canSeeSky(entityPos)) continue;
+            if (isProtectedAgainstSpewer(entity)) continue;
+
             entity.addPotionEffect(new net.minecraft.potion.PotionEffect(
                     MobEffects.POISON, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
                     true));
@@ -163,6 +169,88 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
             entity.addPotionEffect(new net.minecraft.potion.PotionEffect(
                     MobEffects.HUNGER, (int) (GTValues.V[getTier()] * 20), getTier() - 1, false,
                     true));
+        }
+    }
+
+    //not sure if this is a good way of doing this or not, but I already have a working variant of this
+    //in the mixins so imma just copy paste and call it a day
+    private static boolean isProtectedAgainstSpewer(EntityLivingBase entity) {
+        for (String alt : GasPunkConfig.otherGasMasks) {
+            String slotsPart;
+            float maskStrength;
+
+            int eqIdx = alt.lastIndexOf('=');
+            if (eqIdx >= 0) {
+                slotsPart = alt.substring(0, eqIdx);
+                try {
+                    maskStrength = Float.parseFloat(alt.substring(eqIdx + 1).trim());
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            } else {
+                slotsPart = alt;
+                maskStrength = 1.0f;
+            }
+
+            if (maskStrength < SPEWER_IMMUNITY_THRESHOLD) continue;
+
+            String[] suit = slotsPart.split("&");
+            boolean matches;
+
+            switch (suit.length) {
+                case 1:
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD);
+                    break;
+                case 2:
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
+                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST);
+                    break;
+                case 3:
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
+                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
+                            && spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS);
+                    break;
+                case 4:
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
+                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
+                            && spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS)
+                            && spewer$matchesSlot(suit[3], entity, EntityEquipmentSlot.FEET);
+                    break;
+                default:
+                    continue;
+            }
+
+            if (matches) return true;
+        }
+
+        return false;
+    }
+
+    private static boolean spewer$matchesSlot(String token, EntityLivingBase entity,
+                                              EntityEquipmentSlot slot) {
+        if (token.equals("*")) return true;
+
+        ItemStack stack = entity.getItemStackFromSlot(slot);
+        if (stack.isEmpty()) return false;
+
+        String registryName = String.valueOf(stack.getItem().getRegistryName());
+
+        int firstColon = token.indexOf(':');
+        if (firstColon < 0) return false;
+
+        int secondColon = token.indexOf(':', firstColon + 1);
+
+        if (secondColon < 0) {
+            return registryName.equals(token);
+        } else {
+            String tokenName = token.substring(0, secondColon);
+            if (!registryName.equals(tokenName)) return false;
+
+            try {
+                return stack.getItemDamage() == Integer.parseInt(token.substring(secondColon + 1));
+            } catch (NumberFormatException e) {
+                return false;
+            }
         }
     }
 
