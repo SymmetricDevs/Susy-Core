@@ -66,6 +66,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
+import supersymmetry.api.metatileentity.IRocketFueler;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.mixin.RenderDistanceMTE;
 import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
@@ -79,7 +80,8 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
 public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
-                                     implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable {
+                                     implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable,
+                                     IRocketFueler {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
@@ -422,7 +424,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
 
     private boolean loadCargo() {
         GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
-        if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
+        if (isFuelingComplete()) {
             return true;
         }
         // the Soyuz is liquid-fuelled, and nothing here ever puts a solid fuel on it
@@ -461,6 +463,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
             inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
 
+        return isFuelingComplete();
+    }
+
+    public boolean isFuelingComplete() {
         return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
@@ -514,6 +520,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
         List<EntitySoyuzBasic> rockets = getWorld().getEntitiesWithinAABB(EntitySoyuzBasic.class, getRocketAABB());
         if (!rockets.isEmpty()) {
             this.selectedRocket = rockets.get(0);
+            selectedRocket.fueler = this;
         }
     }
 
@@ -521,6 +528,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntitySoyuzBasic(this.getWorld(), position,
                 this.getFrontFacing().getHorizontalAngle() + 45);
+        selectedRocket.fueler = this;
         if (tag != null) {
             // Copy in all tags
             for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {

@@ -41,7 +41,6 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.common.entities.EntityAbstractRocket;
-import supersymmetry.common.entities.EntityBlueprintRocket;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
@@ -290,7 +289,8 @@ public class EventHandlers {
 
     @SubscribeEvent
     public static void onPickUpItem(EntityItemPickupEvent event) {
-        if (event.getEntityPlayer() != null && event.getEntityPlayer().getRidingEntity() instanceof EntityAbstractRocket) {
+        if (event.getEntityPlayer() != null &&
+                event.getEntityPlayer().getRidingEntity() instanceof EntityAbstractRocket) {
             event.setCanceled(true);
         }
     }

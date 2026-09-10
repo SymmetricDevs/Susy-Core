@@ -238,13 +238,13 @@ public class EntityLander extends EntityAbstractRocket
     }
 
     @Override
-    public void startCountdown(int length) {
+    protected boolean canStartCountdown() {
         if (InstrumentLander.getMissionConfiguration(this).isEmpty()) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
                 this.setDead();
             }
-            return;
+            return false;
         }
         double gravMult = GravityHandler.getGravityMultiplier(this.world);
         if (gravMult > 0.4) {
@@ -252,22 +252,13 @@ public class EntityLander extends EntityAbstractRocket
             if (cargo.isEmpty()) {
                 this.setDead();
             }
-            return;
+            return false;
         }
         if (getCargoMass() > MAX_LAUNCH_MASS) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.too_heavy"));
-            return;
+            return false;
         }
-
-        super.startCountdown(length);
-    }
-
-    public void sendMessageToPassengers(TextComponentTranslation translation) {
-        for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer player) {
-                player.sendStatusMessage(translation, true);
-            }
-        }
+        return true;
     }
 
     @Override

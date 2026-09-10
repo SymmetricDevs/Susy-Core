@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
-import codechicken.lib.vec.Vector3;
 import gregtech.client.particle.GTBloomParticle;
 import gregtech.client.renderer.IRenderSetup;
 import gregtech.client.shader.postprocessing.BloomEffect;
@@ -83,19 +81,18 @@ public class SusyParticleRocketFlame extends GTBloomParticle {
         this.setPosition(xCoordIn, yCoordIn, zCoordIn);
     }
 
-    public void setPosition(double x, double y, double z)
-    {
+    public void setPosition(double x, double y, double z) {
         this.posX = x;
         this.posY = y;
         this.posZ = z;
         float f = 1 / 2.0F;
         float f1 = 1;
-        this.setBoundingBox(new AxisAlignedBB(x - (double)f, y, z - (double)f, x + (double)f, y + (double)f1, z + (double)f));
+        this.setBoundingBox(
+                new AxisAlignedBB(x - (double) f, y, z - (double) f, x + (double) f, y + (double) f1, z + (double) f));
     }
 
     @Override
-    public void renderParticle(@NotNull BufferBuilder buffer, @NotNull EffectRenderContext context) {
-    }
+    public void renderParticle(@NotNull BufferBuilder buffer, @NotNull EffectRenderContext context) {}
 
     public void onUpdate() {
         this.prevPosX = this.posX;
@@ -198,7 +195,7 @@ public class SusyParticleRocketFlame extends GTBloomParticle {
                         context.rotationZ() + context.rotationXY()),
                 new Vec3d(context.rotationX() - context.rotationYZ(),
                         -context.rotationXZ(),
-                        context.rotationZ() - context.rotationXY())};
+                        context.rotationZ() - context.rotationXY()) };
         for (int i = 0; i < 4; i++) {
             avec3d[i] = avec3d[i].scale(4);
         }
@@ -208,10 +205,10 @@ public class SusyParticleRocketFlame extends GTBloomParticle {
         float minV = sprite.getMinV();
         float maxV = sprite.getMaxV();
 
-        buffer.pos(avec3d[0].x, avec3d[0].y,  avec3d[0].z).tex(maxU, maxV).endVertex();
-        buffer.pos(avec3d[1].x, avec3d[1].y,  avec3d[1].z).tex(maxU, minV).endVertex();
-        buffer.pos(avec3d[2].x, avec3d[2].y,  avec3d[2].z).tex(minU, minV).endVertex();
-        buffer.pos(avec3d[3].x, avec3d[3].y,  avec3d[3].z).tex(minU, maxV).endVertex();
+        buffer.pos(avec3d[0].x, avec3d[0].y, avec3d[0].z).tex(maxU, maxV).endVertex();
+        buffer.pos(avec3d[1].x, avec3d[1].y, avec3d[1].z).tex(maxU, minV).endVertex();
+        buffer.pos(avec3d[2].x, avec3d[2].y, avec3d[2].z).tex(minU, minV).endVertex();
+        buffer.pos(avec3d[3].x, avec3d[3].y, avec3d[3].z).tex(minU, maxV).endVertex();
     }
 
     /**

@@ -76,7 +76,7 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
-import supersymmetry.common.entities.EntityLander;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
@@ -383,7 +383,7 @@ public class ClientProxy extends CommonProxy {
         if (Minecraft.getMinecraft().currentScreen != null)
             return;
 
-        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityLander lander) {
+        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityAbstractRocket lander) {
             if (Minecraft.getMinecraft().inGameHasFocus && player.equals(Minecraft.getMinecraft().player)) {
                 if (!lander.isLaunched() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
                     GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));

@@ -2,10 +2,8 @@ package supersymmetry.common.entities;
 
 import java.util.List;
 
-import gregtech.client.particle.GTParticleManager;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,15 +26,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GregTechAPI;
+import gregtech.client.particle.GTParticleManager;
 import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.metatileentity.IRocketFueler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
-import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
-import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -57,6 +56,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             .createKey(EntityBlueprintRocket.class, DataSerializers.VARINT);
     protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager
             .createKey(EntityBlueprintRocket.class, DataSerializers.BLOCK_POS);
+
+    public IRocketFueler fueler;
 
     public EntityBlueprintRocket(World worldIn) {
         super(worldIn);
@@ -430,4 +431,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         double radius = getModelRadius();
         return new AxisAlignedBB(new Vec3d(radius, getRocketHeight(), radius), new Vec3d(-radius, 0, -radius));
     }
+
+    protected boolean canStartCountdown() {
+        return fueler.isFuelingComplete();
+    }
+
 }

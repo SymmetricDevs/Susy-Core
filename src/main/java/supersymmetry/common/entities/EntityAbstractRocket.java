@@ -126,10 +126,25 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     public void startCountdown(int length) {
+        if (!canStartCountdown()) {
+            return;
+        }
         this.setCountdownStarted(true);
         // it will take six years chillax
         this.setLaunchTime((int) this.world.getTotalWorldTime() + length);
         this.setStartPos((float) this.posY);
+    }
+
+    protected boolean canStartCountdown() {
+        return true;
+    }
+
+    public void sendMessageToPassengers(TextComponentTranslation translation) {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(translation, true);
+            }
+        }
     }
 
     public void launchRocket() {

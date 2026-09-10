@@ -62,6 +62,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.metatileentity.IRocketFueler;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -96,7 +97,8 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                                               implements
                                               IProgressBarMultiblock,
                                               IRedstoneControllable,
-                                              IRocketAssemblyController {
+                                              IRocketAssemblyController,
+                                              IRocketFueler {
 
     /** In liters per second, matching the launch pad. */
     private static final int MAX_FUELING_SPEED = 8000;
@@ -294,6 +296,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = getLaunchPosition();
         this.selectedRocket = new EntityLunarRocket(getWorld(), position, getFrontFacing().getHorizontalAngle());
+        selectedRocket.fueler = this;
         if (tag != null) {
             // Copy in all tags
             for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {
@@ -313,6 +316,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         if (rockets.isEmpty())
             return false;
         this.selectedRocket = rockets.get(0);
+        selectedRocket.fueler = this;
         return true;
     }
 
@@ -400,7 +404,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     }
 
     private boolean loadRocketFuel() {
-        if (this.fuelingProgress >= this.selectedRocket.getFuelVolume()) {
+        if (isFuelingComplete()) {
             return true;
         }
         RocketFuelEntry fuelEntry = this.selectedRocket.getFuel();
@@ -473,7 +477,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         if (loaded > 0) {
             setFuelingProgress(this.fuelingProgress + (int) Math.ceil(loaded * litersPerDust));
         }
-        return this.fuelingProgress >= this.selectedRocket.getFuelVolume();
+        return isFuelingComplete();
     }
 
     private boolean fuelLiquid(LiquidRocketFuelEntry fuelEntry) {
@@ -499,7 +503,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
             setFuelingProgress(this.fuelingProgress + (unitsDrained * totalMBPerUnit));
         }
 
-        return this.fuelingProgress >= this.selectedRocket.getFuelVolume();
+        return isFuelingComplete();
     }
 
     private void loadRocketCargo() {
@@ -873,6 +877,10 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
             return true;
         }
         return false;
+    }
+
+    public boolean isFuelingComplete() {
+        return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
     public enum LaunchComplexState {

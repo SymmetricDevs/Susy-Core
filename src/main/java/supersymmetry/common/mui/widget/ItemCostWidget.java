@@ -225,7 +225,8 @@ public class ItemCostWidget extends Widget {
     private void addScrollOffset(int offset) {
         if (this.shouldRender.getAsBoolean()) {
             int maxScrollOffset = this.getListHeight() - getSize().height - 1;
-            this.scrollOffset = MathHelper.clamp(scrollOffset + (double) (offset * maxScrollOffset) / (getSize().height - 14),
+            this.scrollOffset = MathHelper.clamp(
+                    scrollOffset + (double) (offset * maxScrollOffset) / (getSize().height - 14),
                     0, maxScrollOffset);
         }
     }
