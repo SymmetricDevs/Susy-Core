@@ -41,7 +41,7 @@ public class ItemCostWidget extends Widget {
     public static final int TEXT_COLOR = 0xf0f0f0;
     public int totalListHeight;
     public int mouseWheelMoveStep = 6;
-    public int scrollOffset;
+    public double scrollOffset;
 
     public int lastMouseX;
 
@@ -161,14 +161,14 @@ public class ItemCostWidget extends Widget {
         if (this.lastSyncedItems.size() > this.getSize().height / HEIGHT_OFFSET) {
             GuiTextures.SLIDER_BACKGROUND_VERTICAL.draw(scrollX + 1, position.y + 1, paneSize - 2, size.height - 2);
 
-            int maxScrollOffset = getSize().height - this.getListHeight() - 1;
-            float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
+            int maxScrollOffset = this.getListHeight() - getSize().height - 1;
+            double scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
             int scrollSliderHeight = 14;
-            int scrollSliderY = Math.round(position.y + (size.height - scrollSliderHeight) * scrollPercent);
+            double scrollSliderY = Math.round(position.y + (size.height - scrollSliderHeight) * scrollPercent);
             GuiTextures.SLIDER_ICON.draw(scrollX + 1, scrollSliderY + 2, paneSize - 2, scrollSliderHeight);
         }
         RenderUtil.useScissor(position.x, position.y, size.width - paneSize, size.height, () -> {
-            Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
+            Position startpos = new Position(this.getPosition().x, this.getPosition().y - (int) scrollOffset - 8);
             for (ItemStack itemStack : lastSyncedItems) {
                 startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
                 this.drawStack(startpos, size, itemStack);
@@ -224,9 +224,9 @@ public class ItemCostWidget extends Widget {
 
     private void addScrollOffset(int offset) {
         if (this.shouldRender.getAsBoolean()) {
-            int maxScrollOffset = getSize().height - this.getListHeight() - 1;
-            this.scrollOffset = MathHelper.clamp(scrollOffset + offset * maxScrollOffset / (getSize().height - 14),
-                    -(this.getListHeight() - this.getSize().height), 0);
+            int maxScrollOffset = this.getListHeight() - getSize().height - 1;
+            this.scrollOffset = MathHelper.clamp(scrollOffset + (double) (offset * maxScrollOffset) / (getSize().height - 14),
+                    0, maxScrollOffset);
         }
     }
 
