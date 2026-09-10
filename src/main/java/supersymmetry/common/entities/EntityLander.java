@@ -307,7 +307,7 @@ public class EntityLander extends EntityAbstractRocket
                 this.handleCollidedBlocks(true);
             }
             if (this.posY > 1000 && isLaunched()) {
-                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                if (this.hasActed()) {
                     this.setDead();
                 } else {
                     act();

@@ -746,7 +746,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
     @Override
     public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                 CuboidRayTraceResult hitResult) {
-        if (this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
+        if (!playerIn.world.isRemote && this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
                 playerIn.getHeldItem(hand).isItemEqual(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm())) {
             NBTTagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
             if (tag != null) {

@@ -243,7 +243,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             }
 
             if (this.posY > 1000 && this.getLaunchResult() == SuccessCalculation.LaunchResult.LAUNCHES) {
-                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                if (this.hasActed()) {
                     this.setDead();
                 } else {
                     act();

@@ -764,7 +764,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                       CuboidRayTraceResult hitResult) {
-        if (playerIn.isCreative() && this.getCurrentBlueprint() != null) {
+        if (!playerIn.world.isRemote && playerIn.isCreative() && this.getCurrentBlueprint() != null) {
             finishAssembly();
             return true;
         }
