@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechCapabilities;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +21,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,14 +49,31 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
 
     private int intelCount = 0;
     boolean launched = false;
+    private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityFederationDropBeacon(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityFederationDropBeacon(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
+        this.overlay = overlay;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityFederationDropBeacon(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityFederationDropBeacon(this.metaTileEntityId, this.overlay, this.getTier());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.overlay.renderOrientedState(
+                renderState,
+                translation,
+                pipeline,
+                Cuboid6.full,
+                getFrontFacing(),
+                true,
+                true
+        );
     }
 
     @Override

@@ -260,6 +260,9 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer HYDROCARBON_SATURATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/problem_causers/hydrocarbon_saturator");
 
+    public static final OrientedOverlayRenderer FEDERATION_DROP_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/federation_drop");
+
     // Stock stuff
     // public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new
     // SimpleCubeRenderer("rail_interfaces/stock_machine_casing/stock_machine_casing");

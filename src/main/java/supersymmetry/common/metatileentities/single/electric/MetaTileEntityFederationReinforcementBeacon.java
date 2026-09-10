@@ -1,11 +1,16 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +20,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import supersymmetry.common.entities.EntityDropPod;
@@ -32,14 +39,31 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
 
     public static Function<World, EntityLiving> fedPayloadProvider = null;
     public static Consumer<EntityLiving> fedPostSpawnModifier = null;
+    private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityFederationReinforcementBeacon(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityFederationReinforcementBeacon(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
+        this.overlay = overlay;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityFederationReinforcementBeacon(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityFederationReinforcementBeacon(this.metaTileEntityId, this.overlay, this.getTier());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.overlay.renderOrientedState(
+                renderState,
+                translation,
+                pipeline,
+                Cuboid6.full,
+                getFrontFacing(),
+                true,
+                true
+        );
     }
 
     @Override

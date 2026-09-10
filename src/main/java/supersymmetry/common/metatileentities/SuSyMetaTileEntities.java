@@ -868,9 +868,9 @@ public class SuSyMetaTileEntities {
         DUST_AGITATOR[0] = registerMetaTileEntity(18640,
                 new MetaTileEntityDustAgitator(susyId("dust_agitator.lv"),SusyTextures.DUST_AGITATOR_OVERLAY, 1));
         FED_BEACON[0] = registerMetaTileEntity(18650,
-                new MetaTileEntityFederationDropBeacon(susyId("fed_beacon.lv"), 1));
+                new MetaTileEntityFederationDropBeacon(susyId("fed_beacon.lv"),SusyTextures.FEDERATION_DROP_OVERLAY, 1));
         FED_REINFORCER[0] = registerMetaTileEntity(18660,
-                new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"), 1));
+                new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),SusyTextures.FEDERATION_DROP_OVERLAY, 1));
 
     }
 
