@@ -5,9 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.metatileentity.multiblock.IMaintenance;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -23,6 +27,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +44,7 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
     private int currentRadius = 0;
+    private final OrientedOverlayRenderer overlay;
 
     private static final Field PROGRESS_TIME_FIELD;
 
@@ -50,13 +57,29 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
         }
     }
 
-    public MetaTileEntityDefoliator(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityDefoliator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
+        this.overlay = overlay;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
-        return new MetaTileEntityDefoliator(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityDefoliator(this.metaTileEntityId, this.overlay, this.getTier());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.overlay.renderOrientedState(
+                renderState,
+                translation,
+                pipeline,
+                Cuboid6.full,
+                getFrontFacing(),
+                true,
+                true
+        );
     }
 
     @Override

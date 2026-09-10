@@ -1,11 +1,16 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -17,6 +22,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,14 +34,31 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
     private int currentRadius = 0;
     private final IBlockState FLAMMABLE_AIR = stateOf("susy", "flammable_air", 0);
     public static final int MAX_RADIUS = 32;
+    private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
+        this.overlay = overlay;
     }
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tile) {
-        return new MetaTileEntityHydrocarbonSaturator(this.metaTileEntityId, this.getTier());
+        return new MetaTileEntityHydrocarbonSaturator(this.metaTileEntityId, this.overlay, this.getTier());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.overlay.renderOrientedState(
+                renderState,
+                translation,
+                pipeline,
+                Cuboid6.full,
+                getFrontFacing(),
+                true,
+                true
+        );
     }
 
     @Override

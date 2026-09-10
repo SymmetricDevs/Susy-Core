@@ -247,6 +247,19 @@ public class SusyTextures {
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
+    //Problem causers
+
+    public static final OrientedOverlayRenderer TOXIC_SPEWER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/toxic_spewer");
+    public static final OrientedOverlayRenderer DEFOLIATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/defoliator");
+    public static final OrientedOverlayRenderer DUST_AGITATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/dust_agitator");
+    public static final OrientedOverlayRenderer INTERFERENCE_DYNAMO_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/interference_dynamo");
+    public static final OrientedOverlayRenderer HYDROCARBON_SATURATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/hydrocarbon_saturator");
+
     // Stock stuff
     // public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new
     // SimpleCubeRenderer("rail_interfaces/stock_machine_casing/stock_machine_casing");
