@@ -883,6 +883,11 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
+    @Override
+    public void launch() {
+        this.setComplexState(LaunchComplexState.LAUNCHING);
+    }
+
     public enum LaunchComplexState {
         IDLE, // Nothing being built, nothing on the pad.
         ASSEMBLING, // Working through the blueprint's components.

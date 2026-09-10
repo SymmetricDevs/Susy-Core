@@ -351,6 +351,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             setCountdownStarted(false);
             return;
         }
+        fueler.launch();
         if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");

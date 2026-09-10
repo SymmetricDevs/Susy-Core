@@ -470,6 +470,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
         return this.fuelingProgress >= selectedRocket.getFuelVolume();
     }
 
+    @Override
+    public void launch() {
+        this.setLaunchPadState(LaunchPadState.LAUNCHING);
+    }
+
     private void setFuelingProgress(int fuelingProgress) {
         this.fuelingProgress = fuelingProgress;
         writeCustomData(SuSyDataCodes.UPDATE_FUEL_PROGRESS, (buf) -> buf.writeInt(fuelingProgress));
