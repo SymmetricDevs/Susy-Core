@@ -346,7 +346,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     public void launchRocket() {
-        if (this.getFuel() == null) {
+        if (this.getFuel() == null || this.fueler == null) {
             setLaunchTime(-1);
             setCountdownStarted(false);
             return;

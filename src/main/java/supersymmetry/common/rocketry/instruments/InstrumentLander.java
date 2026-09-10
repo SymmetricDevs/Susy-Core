@@ -39,7 +39,7 @@ public class InstrumentLander implements Instrument {
     public static RocketConfiguration.MissionConfiguration getNextLanderConfig(
                                                               RocketConfiguration config) {
         for (RocketConfiguration.MissionConfiguration mission : config.getMissions()) {
-            if (mission.destinationType != RocketConfiguration.DestinationType.Landing) {
+            if (mission.destinationType == RocketConfiguration.DestinationType.Landing) {
                 return mission;
             }
         }
