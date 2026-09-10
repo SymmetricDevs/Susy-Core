@@ -2132,6 +2132,20 @@ susy.machine.dust_agitator.lv.name=Basic Dust Agitator
 susy.machine.dust_agitator.tooltip.info=The Great Smog of London in a can
 susy.machine.dust_agitator.tooltip.description=Disturbs dust particles in the local area to dramatically reduce visibility
 
+#Federation Drop Beacon
+susy.machine.fed_beacon.lv.name=Federation Ordinance Drop Beacon
+susy.machine.fed_beacon.tooltip.info=Calls onto whatever remains of the orbital federation fleet to bring down their war machines.
+susy.machine.fed_beacon.tooltip.description=This one-time-use machine will cause problem causers to airdrop right onto your base.
+susy.machine.fed_beacon.tooltip.description1=It will destroy itself once it completes it's cycle.
+susy.machine.fed_beacon.tooltip.description2=§bBreaking this machine early will permanently sever it's uplink connection, but you may be able to salvage it's internal components.
+
+#Federation Troop Beacon
+susy.machine.fed_reinforcer.lv.name=Federation Troop Drop Beacon
+susy.machine.fed_reinforcer.tooltip.info=Step into your Hellpod, diver!
+susy.machine.fed_reinforcer.tooltip.description=This one-time-use machine will bring the attention of a rapid orbital response unit, causing federation soldiers to airdrop right on top of it!
+susy.machine.fed_reinforcer.tooltip.description1=It will destroy once after it completes it's cycle.
+susy.machine.fed_reinforcer.tooltip.description2=§cIf you can salvage this machine, it would allow you to instantly call down federation soldiers to a desired location.
+
 #Flallable Air
 tile.flammable_air.flammableair.name=Flammable Air
 
@@ -2148,6 +2162,8 @@ item.susy.intel_chip_full.no_faction=No faction data
 
 metaitem.intel_chip.name=Intelligence gathering chip
 metaitem.intel_chip_full.name=Intelligence gathering chip
+
+//end of problem causers
 
 chat.susy.location_card.x=X (%s)
 chat.susy.location_card.y=Y (%s)
