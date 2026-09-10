@@ -5,32 +5,37 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.Supersymmetry;
 
-public class SusyParticleFlareSmoke extends Particle {
+@SideOnly(Side.CLIENT)
+public class SusyParticleToxicPlume extends Particle {
 
     private static final ResourceLocation PLUME_SPRITE = new ResourceLocation(Supersymmetry.MODID, "particle/plume");
-    public SusyParticleFlareSmoke(World worldIn, double x, double y, double z, float R, float G, float B) {
-        super(worldIn, x, y, z);
 
-        this.motionX = (rand.nextDouble() - 0.5) * 0.01;
-        this.motionY = 0.4;
-        this.motionZ = (rand.nextDouble() - 0.5) * 0.01;
+    public SusyParticleToxicPlume(World world, double x, double y, double z) {
+        super(world, x, y, z);
 
-        this.particleRed = R;
-        this.particleGreen = G;
-        this.particleBlue = B;
+        this.motionX = 0.0;
+        this.motionY = 0.1;
+        this.motionZ = 0.0;
 
-        this.particleScale = 3f;
+        this.particleRed   = 0.0f;
+        this.particleGreen = 0.75f;
+        this.particleBlue  = 0.0f;
+        this.particleAlpha = 0.9f;
 
-        this.particleMaxAge = 100;
+        this.particleScale = 30.0f;
 
+        this.particleMaxAge = 500;
         this.canCollide = false;
 
         this.setParticleTexture(
                 Minecraft.getMinecraft().getTextureMapBlocks()
                         .getAtlasSprite(PLUME_SPRITE.toString())
         );
+
     }
 
     @Override
@@ -43,17 +48,12 @@ public class SusyParticleFlareSmoke extends Particle {
             this.setExpired();
         }
 
-        // Move upward
-        this.motionY += 0.0005; // slight acceleration
         this.move(this.motionX, this.motionY, this.motionZ);
 
-        // Fade out slowly
-        this.particleAlpha = 1.0f - ((float) this.particleAge / this.particleMaxAge);
-    }
-
-    @Override
-    public int getFXLayer() {
-        return 1;
+        float lifeFraction = (float) this.particleAge / this.particleMaxAge;
+        if (lifeFraction > 0.8f) {
+            this.particleAlpha = 0.9f * (1.0f - ((lifeFraction - 0.8f) / 0.2f));
+        }
     }
 
     @Override
@@ -65,5 +65,10 @@ public class SusyParticleFlareSmoke extends Particle {
     @Override
     public boolean shouldDisableDepth() {
         return true;
+    }
+
+    @Override
+    public int getFXLayer() {
+        return 1;
     }
 }

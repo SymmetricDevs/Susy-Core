@@ -234,6 +234,7 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/plume"));
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 

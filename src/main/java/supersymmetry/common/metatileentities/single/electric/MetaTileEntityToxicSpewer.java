@@ -8,6 +8,7 @@ import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -29,8 +30,13 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import net.minecraft.network.PacketBuffer;
+import supersymmetry.client.renderer.particles.SusyParticleFlareSmoke;
+import supersymmetry.client.renderer.particles.SusyParticleToxicPlume;
 
 public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
+
+    private static final int PARTICLE_BURST = 1;
 
     private int currentRadius = 0;
 
@@ -106,6 +112,28 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
         applyEffectsInRadius(getWorld(), getPos(), currentRadius);
 
         if (currentRadius < GTValues.VH[getTier()]) currentRadius++;
+
+        writeCustomData(PARTICLE_BURST, buf -> {});
+    }
+
+    @Override
+    public void receiveCustomData(int discriminator, PacketBuffer buf) {
+        if (discriminator == PARTICLE_BURST) {
+            spawnGreenSmokeBurst();
+        } else {
+            super.receiveCustomData(discriminator, buf);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void spawnGreenSmokeBurst() {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        Minecraft.getMinecraft().effectRenderer.addEffect(
+                new SusyParticleToxicPlume(world,
+                        pos.getX() + 0.5,
+                        pos.getY() + 1.05,
+                        pos.getZ() + 0.5));
     }
 
     private void applyEffectsInRadius(World world, BlockPos center, int radius) {
