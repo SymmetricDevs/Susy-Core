@@ -200,7 +200,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             }
 
             // Troll mode: curve the rocket back towards the launch pad
-            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.CRASHES && this.getPosition().getY() > 256) {
+            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.CRASHES && flightTime > 240) {
                 if (this.getCrashPosition() == null || this.getCrashPosition().getY() == 0) {
                     BlockPos targetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
                             ((Math.random() * 2) - 1) * 1000);
@@ -208,8 +208,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                     this.setCrashPosition(targetPos.down(targetPos.getY() + 1));
                 }
                 moveToCrash(flightTime);
-            } else if (this.getCrashPosition().getY() != 0) {
-              this.moveToCrash(flightTime);
             } else {
                 // Normal flight
                 this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
