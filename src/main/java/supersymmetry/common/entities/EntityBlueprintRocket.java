@@ -208,6 +208,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                     this.setCrashPosition(targetPos.down(targetPos.getY() + 1));
                 }
                 moveToCrash(flightTime);
+            } else if (this.getCrashPosition().getY() != 0) {
+              this.moveToCrash(flightTime);
             } else {
                 // Normal flight
                 this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
