@@ -272,7 +272,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
 
     @SideOnly(Side.CLIENT)
     private void syncFluidVisual() {
-        if (renderFluid && fluidTexture != null) {
+        if (renderFluid && fluidTexture != null && fluidDisplaySize > 0) {
             ActiveFluidVisualHandler.registerFluid(getPos(), fluidColor, fluidDisplaySize);
         } else {
             ActiveFluidVisualHandler.unregisterFluid(getPos());
@@ -300,9 +300,7 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
 
         BlockRenderLayer currentLayer = MinecraftForgeClient.getRenderLayer();
         boolean shouldRenderFluid = renderFluid && fluidTexture != null && currentLayer == BlockRenderLayer.TRANSLUCENT;
-        if (fluidDisplaySize > 0) {
-            shouldRenderFluid = shouldRenderFluid && isActive && isWorkingEnabled;
-        }
+        shouldRenderFluid = shouldRenderFluid && isActive && isWorkingEnabled;
         if (shouldRenderFluid) {
             int fluidRGBA = GTUtility.convertRGBtoRGBA_CL(fluidColor & 0x00FFFFFF, 0xD0);
             IVertexOperation[] fluidPipeline = new IVertexOperation[] {
