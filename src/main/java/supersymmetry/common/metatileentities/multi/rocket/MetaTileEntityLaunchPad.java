@@ -92,6 +92,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
     private LaunchPadState state = LaunchPadState.EMPTY;
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
+    public boolean isRetracted = false;
     /**
      * Optional. A rocket programmer along the track normally stamps the mission
      * list onto the erector, but the configurer can also be dropped in here to
@@ -669,9 +670,19 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
-                event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().setAnimation(new AnimationBuilder().playAndHold("cycle"));
+        if (this.state == LaunchPadState.LAUNCHING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped) && !isRetracted) {
+            event.getController().setAnimation(new AnimationBuilder().playAndHold("retract"));
+            isRetracted = true;
+            return PlayState.CONTINUE;
+        } else if (this.state == LaunchPadState.LOADING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped) && !isRetracted) {
+            event.getController().setAnimation(new AnimationBuilder().playAndHold("retract_load"));
+            isRetracted = true;
+            return PlayState.CONTINUE;
+        } else if (isRetracted && (this.state == LaunchPadState.LOADED || this.state == LaunchPadState.EMPTY)) {
+            event.getController().setAnimation(new AnimationBuilder().playAndHold("protract"));
+            isRetracted = false;
             return PlayState.CONTINUE;
         }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
