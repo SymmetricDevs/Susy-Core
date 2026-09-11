@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -71,9 +72,11 @@ import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.mixin.RenderDistanceMTE;
 import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntitySoyuzBasic;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -407,6 +410,30 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
+                }
+                if (selectedRocket.isLaunched() && selectedRocket.posY - getLaunchPosition().y < 40 &&
+                        selectedRocket.ticksExisted % 5 == 0) {
+
+                    net.minecraft.util.math.AxisAlignedBB searchBox = new net.minecraft.util.math.AxisAlignedBB(
+                            getLaunchPosition().x - 50, getLaunchPosition().y - 50,
+                            getLaunchPosition().z - 50,
+                            getLaunchPosition().x + 50, getLaunchPosition().y + 50,
+                            getLaunchPosition().z + 50);
+
+                    List<EntityLivingBase> entities = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class,
+                            searchBox);
+
+                    for (EntityLivingBase entity : entities) {
+                        if (!(entity instanceof EntityAbstractRocket ||
+                                entity.getRidingEntity() instanceof EntityAbstractRocket)) {
+                            float damage = (float) (100000 /
+                                    Math.pow(getLaunchPosition().distanceTo(entity.getPositionVector()), 3));
+                            if (damage >= 0.8) {
+                                entity.attackEntityFrom(SuSyDamageSources.ROCKET_EXHAUST, damage);
+                            }
+                        }
+                    }
+
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {

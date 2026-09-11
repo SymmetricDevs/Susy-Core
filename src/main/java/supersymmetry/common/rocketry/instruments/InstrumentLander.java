@@ -37,7 +37,7 @@ public class InstrumentLander implements Instrument {
     }
 
     public static RocketConfiguration.MissionConfiguration getNextLanderConfig(
-                                                              RocketConfiguration config) {
+                                                                               RocketConfiguration config) {
         for (RocketConfiguration.MissionConfiguration mission : config.getMissions()) {
             if (mission.destinationType == RocketConfiguration.DestinationType.Landing) {
                 return mission;
@@ -46,7 +46,8 @@ public class InstrumentLander implements Instrument {
         return null;
     }
 
-    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config, RocketConfiguration.MissionConfiguration next,
+    public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config,
+                                     RocketConfiguration.MissionConfiguration next,
                                      boolean withCargo) {
         EntityLander dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
 

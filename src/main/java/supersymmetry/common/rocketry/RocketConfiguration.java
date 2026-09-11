@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 
 import supersymmetry.api.space.Planetoid;
 
-
 /*
  * Treat this class like a record.
  */
@@ -138,7 +137,6 @@ public class RocketConfiguration {
         }
         return true;
     }
-
 
     public RocketConfiguration clipAt(MissionConfiguration clip) {
         return new RocketConfiguration(this.missions.subList(this.missions.indexOf(clip) + 1, this.missions.size()));

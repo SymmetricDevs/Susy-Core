@@ -224,7 +224,8 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     protected void act() {
         // Land on next planet
-        RocketConfiguration.MissionConfiguration mission = InstrumentLander.getNextLanderConfig(this.getRocketConfiguration());
+        RocketConfiguration.MissionConfiguration mission = InstrumentLander
+                .getNextLanderConfig(this.getRocketConfiguration());
         RocketConfiguration config = this.getRocketConfiguration().clipAt(mission);
         if (mission == null) {
             SusyLog.logger.error(

@@ -17,7 +17,7 @@ public class InstrumentLanderOneWay extends InstrumentLander {
             return;
         RocketConfiguration config = RocketConfiguration.empty();
         if (rocket.getPassengers().isEmpty()) {
-            spawnLander(rocket, config, next,true);
+            spawnLander(rocket, config, next, true);
             return;
         }
 
@@ -30,7 +30,7 @@ public class InstrumentLanderOneWay extends InstrumentLander {
                 break;
 
             EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next,i == 0), passenger));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passenger));
         }
     }
 }
