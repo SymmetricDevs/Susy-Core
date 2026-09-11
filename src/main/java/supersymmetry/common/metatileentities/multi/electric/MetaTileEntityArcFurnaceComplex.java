@@ -41,6 +41,11 @@ public class MetaTileEntityArcFurnaceComplex extends MetaTileEntityAdvancedArcFu
         this.recipeMapWorkable = new ArcFurnaceComplexLogic(this);
     }
 
+    @Override
+    public boolean canBeDistinct() {
+        return true;
+    }
+
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityArcFurnaceComplex(this.metaTileEntityId);
     }
