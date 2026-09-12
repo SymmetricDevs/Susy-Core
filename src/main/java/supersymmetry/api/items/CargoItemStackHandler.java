@@ -5,6 +5,7 @@ import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemSta
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.unification.stack.MaterialStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -205,7 +206,12 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             currentMass += (int) (info.getMaterials().stream()
                     .mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() / (GTValues.M / 36));
         } else {
-            currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
+            MaterialStack stack = OreDictUnifier.getMaterial(item);
+            if (stack != null) {
+                currentMass += (int) (stack.material.getMass() * stack.amount / (GTValues.M / 36));
+            } else {
+                currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
+            }
         }
         NBTTagCompound tag = item.getTagCompound();
         IFluidHandlerItem fluidHandlerItem = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,

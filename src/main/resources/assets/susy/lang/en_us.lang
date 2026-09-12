@@ -1805,7 +1805,7 @@ tile.regolith.kreep.name=KREEP Rich Regolith
 item.susy.tool.behavior.pipeliner=§6Pipeliner: §fOperates all adjacent pipes
 item.susy.tool.tooltip.pipeliner=§7Hold §f[%s]§7 to activate §6Pipeliner§7 mode
 
-item.susy.weight=§8Mass: %dg
+item.susy.weight=§8Mass: %dkg
 
 # JEI Info
 susy.tooltip.specific_impulse=Specific Impulse: %s s

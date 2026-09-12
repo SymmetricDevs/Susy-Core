@@ -68,6 +68,7 @@ import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
@@ -141,14 +142,14 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public static void addWeightTooltip(@NonNull ItemTooltipEvent event) {
-        if (event.getEntityPlayer() == null || TooltipHelper.isShiftDown()) {
+        if (event.getEntityPlayer() == null || !TooltipHelper.isShiftDown()) {
             return;
         }
         ItemStack stack = event.getItemStack();
         List<String> tooltips = event.getToolTip();
 
-        int weight = CargoItemStackHandler.getMass(stack);
-        tooltips.add(I18n.format("item.susy.weight", weight));
+        double weight = CargoItemStackHandler.getMass(stack);
+        tooltips.add(SuSyUtility.formatDouble("item.susy.weight", "%.4E", weight / 1000));
     }
 
     @SubscribeEvent
