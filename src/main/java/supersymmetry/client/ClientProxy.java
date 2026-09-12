@@ -149,7 +149,7 @@ public class ClientProxy extends CommonProxy {
         List<String> tooltips = event.getToolTip();
 
         double weight = CargoItemStackHandler.getMass(stack);
-        tooltips.add(SuSyUtility.formatDouble("item.susy.weight", "%.4E", weight / 1000));
+        tooltips.add(SuSyUtility.formatDouble("item.susy.weight", "%.4g", weight / 1000));
     }
 
     @SubscribeEvent

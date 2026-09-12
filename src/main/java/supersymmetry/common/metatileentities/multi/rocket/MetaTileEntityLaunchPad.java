@@ -465,7 +465,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
     private static final int MAX_FUELING_SPEED = 8000;
 
     private boolean loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
+        GTTransferUtils.moveInventoryItems(this.inputInventory, selectedRocket.getInventory());
         if (isFuelingComplete()) {
             return true;
         }
