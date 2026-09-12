@@ -529,8 +529,8 @@ public class MetaTileEntityFluidActiveCasing extends MetaTileEntity implements I
     }
 
     private String getDisplaySizeText() {
-        if (fluidDisplaySize == 0) return I18n.format("susy.machine.active_fluid_effect_maker.display_size.thin");
-        return fluidDisplaySize + " " + I18n.format("susy.machine.active_fluid_effect_maker.display_size.blocks");
+        if (fluidDisplaySize == 0) return net.minecraft.util.text.translation.I18n.translateToLocal("susy.machine.active_fluid_effect_maker.display_size.thin");
+        return fluidDisplaySize + " " + net.minecraft.util.text.translation.I18n.translateToLocal("susy.machine.active_fluid_effect_maker.display_size.blocks");
     }
 
     private void cycleEffectMode() {
