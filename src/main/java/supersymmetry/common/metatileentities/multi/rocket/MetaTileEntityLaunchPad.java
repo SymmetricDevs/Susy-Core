@@ -435,6 +435,20 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                         }
                     }
 
+                    net.minecraft.util.math.AxisAlignedBB trainDamageBox = new net.minecraft.util.math.AxisAlignedBB(
+                            getLaunchPosition().x - 18, getLaunchPosition().y - 18,
+                            getLaunchPosition().z - 18,
+                            getLaunchPosition().x + 18, getLaunchPosition().y + 18,
+                            getLaunchPosition().z + 18);
+
+                    List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, trainDamageBox);
+
+                    if (!trains.isEmpty()) {
+                        for (ModdedEntity forgeTrainEntity : trains) {
+                            forgeTrainEntity.attackEntityFrom(DamageSource.causeExplosionDamage(selectedRocket), 20f);
+                        }
+                    }
+
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {
@@ -677,14 +691,15 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
             return PlayState.CONTINUE;
         } else if (this.state == LaunchPadState.LOADING &&
                 event.getController().getAnimationState().equals(AnimationState.Stopped) && !isRetracted) {
-            event.getController().setAnimation(new AnimationBuilder().playAndHold("retract_load"));
-            isRetracted = true;
-            return PlayState.CONTINUE;
-        } else if (isRetracted && (this.state == LaunchPadState.LOADED || this.state == LaunchPadState.EMPTY)) {
-            event.getController().setAnimation(new AnimationBuilder().playAndHold("protract"));
-            isRetracted = false;
-            return PlayState.CONTINUE;
-        }
+                    event.getController().setAnimation(new AnimationBuilder().playAndHold("retract_load"));
+                    isRetracted = true;
+                    return PlayState.CONTINUE;
+                } else
+            if (isRetracted && (this.state == LaunchPadState.LOADED || this.state == LaunchPadState.EMPTY)) {
+                event.getController().setAnimation(new AnimationBuilder().playAndHold("protract"));
+                isRetracted = false;
+                return PlayState.CONTINUE;
+            }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
     }
 
