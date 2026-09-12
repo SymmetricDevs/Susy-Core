@@ -410,13 +410,13 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             if (passenger instanceof EntityPlayer player) {
                 mass += 70;
                 for (ItemStack stack : player.inventory.mainInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.armorInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.offHandInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
                     mass += (double) BaublesModule.getBaubleMass(player) / 1000;

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import gregtech.client.utils.TooltipHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
@@ -63,6 +64,7 @@ import gregtech.api.util.input.KeyBind;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
@@ -135,6 +137,18 @@ public class ClientProxy extends CommonProxy {
                 // pretty YELLOW is being auto-converted to a string
                 event.getToolTip().add(TextFormatting.YELLOW + unificationEntry.material.getChemicalFormula());
         }
+    }
+
+    @SubscribeEvent
+    public static void addWeightTooltip(@NonNull ItemTooltipEvent event) {
+        if (event.getEntityPlayer() == null || TooltipHelper.isShiftDown()) {
+            return;
+        }
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        int weight = CargoItemStackHandler.getMass(stack);
+        tooltips.add(I18n.format("item.susy.weight", weight));
     }
 
     @SubscribeEvent

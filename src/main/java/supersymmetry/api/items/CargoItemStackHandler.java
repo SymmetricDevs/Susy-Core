@@ -222,6 +222,10 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         return currentMass;
     }
 
+    public static int getMass(ItemStack item) {
+        return getMassPerItem(item) * item.getCount();
+    }
+
     private static int getFluidMass(FluidStack fluid) {
         if (fluid == null || fluid.amount == 0)
             return 0;

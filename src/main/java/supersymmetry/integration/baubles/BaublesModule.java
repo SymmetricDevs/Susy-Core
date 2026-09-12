@@ -67,7 +67,7 @@ public class BaublesModule extends IntegrationSubmodule {
         int mass = 0;
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(entity);
         for (int i = 0; i < handler.getSlots(); i++) {
-            mass += CargoItemStackHandler.getMassPerItem(handler.getStackInSlot(i));
+            mass += CargoItemStackHandler.getMass(handler.getStackInSlot(i));
         }
         return mass;
     }
