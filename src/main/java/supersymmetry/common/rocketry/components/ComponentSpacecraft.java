@@ -193,10 +193,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     allowedOnHull(getTypeFromBlockstate(analysis.world.getBlockState(bp)))) {
                         componentList.add(getTypeFromBlockstate(analysis.world.getBlockState(bp)));
                         includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
-            } else {
-                analysis.status = BuildStat.HULL_WEAK;
-                return analysis.errorPos(bp);
-            }
+                    } else {
+                        analysis.status = BuildStat.HULL_WEAK;
+                        return analysis.errorPos(bp);
+                    }
         }
         Set<BlockPos> allInteriorBlocks = Set.copyOf(interior);
 

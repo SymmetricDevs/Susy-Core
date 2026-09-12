@@ -146,7 +146,8 @@ public class StructAnalysis {
 
     public boolean isEffectiveAir(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
-        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp || state.getBlock() instanceof BlockLever;
+        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp ||
+                state.getBlock() instanceof BlockLever;
     }
 
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {

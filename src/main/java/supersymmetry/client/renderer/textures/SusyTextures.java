@@ -20,6 +20,7 @@ public class SusyTextures {
             "casings/wooden_coagulation_tank_wall");
     public static final SimpleSidedCubeRenderer PLASTIC_CAN_OVERLAY = new SimpleSidedCubeRenderer(
             "storage/drums/plastic_can_top");
+
     public static final SimpleSidedCubeRenderer INV_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv");
     public static final SimpleSidedCubeRenderer TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/tank");
     public static final SimpleSidedCubeRenderer INV_TANK_BRIDGE = new SimpleSidedCubeRenderer(
