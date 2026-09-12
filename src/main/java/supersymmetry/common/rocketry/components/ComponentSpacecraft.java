@@ -136,7 +136,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
         spacecraft.height = compound.getInteger("height");
         spacecraft.collectionEfficiency = compound.getInteger("collectionEfficiency");
-        spacecraft.redundancy = compound.getInteger("redundancy");
+        spacecraft.redundancy = compound.getDouble("redundancy");
 
         NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
