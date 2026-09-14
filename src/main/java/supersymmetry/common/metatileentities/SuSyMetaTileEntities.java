@@ -73,6 +73,8 @@ import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
 public class SuSyMetaTileEntities {
 
+    public static MetaTileEntityExtendedChiselMaker EXTENDED_CHISEL_MAKER;
+
     public static MetaTileEntityMagneticRefrigerator MAGNETIC_REFRIGERATOR;
 
     public static MetaTileEntityCoagulationTank COAGULATION_TANK;
@@ -849,6 +851,9 @@ public class SuSyMetaTileEntities {
         ACTIVE_CLARIFIER_VAT = registerMetaTileEntity(18527, new MetaTileEntityFluidActiveCasing(
                 susyId("active_clarifier_vat"), SusyTextures.CLARIFIER_VAT_RENDERER,
                 MetaTileEntityFluidActiveCasing.EffectMode.CLARIFIER, 1));
+
+        EXTENDED_CHISEL_MAKER = registerMetaTileEntity(18528,
+                new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
