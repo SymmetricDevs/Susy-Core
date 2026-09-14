@@ -1075,3 +1075,9 @@ susy.machine.cvd.opv.tooltip=Установка химического осаж�
 
 
 susy.machine.quencher.tooltip=Охладитель горячих слитков
+
+susy.machine.extended_chisel_maker.name=Extended Chisel Maker
+susy.machine.extended_chisel_maker.crafting.disabled=Machine Disabled
+susy.machine.extended_chisel_maker.crafting.enabled=Machine Enabled
+susy.machine.extended_chisel_maker.tooltip.1=Convert any block into any other block of the same extended chisel group (1:1).
+susy.machine.extended_chisel_maker.tooltip.2=Select the output block in the folder browser; search filters by block id and location.

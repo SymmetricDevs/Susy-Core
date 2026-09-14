@@ -1496,3 +1496,9 @@ susy.msg.rocket_component.wrong_tile=Une tuile a été mal utilisée.
 susy.msg.rocket_component.interstage_not_cylindrical=L'interstage a l'air bizarre.
 
 entity.Rocket.name=Fusée FG Soyouz
+
+susy.machine.extended_chisel_maker.name=Extended Chisel Maker
+susy.machine.extended_chisel_maker.crafting.disabled=Machine Disabled
+susy.machine.extended_chisel_maker.crafting.enabled=Machine Enabled
+susy.machine.extended_chisel_maker.tooltip.1=Convert any block into any other block of the same extended chisel group (1:1).
+susy.machine.extended_chisel_maker.tooltip.2=Select the output block in the folder browser; search filters by block id and location.
