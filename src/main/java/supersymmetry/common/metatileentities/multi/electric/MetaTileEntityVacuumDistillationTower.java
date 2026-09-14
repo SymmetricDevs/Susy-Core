@@ -38,7 +38,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 public class MetaTileEntityVacuumDistillationTower extends MetaTileEntityOrderedDT {
 
     public MetaTileEntityVacuumDistillationTower(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES, true);
+        super(metaTileEntityId, SuSyRecipeMaps.VACUUM_DISTILLATION_RECIPES, false);
     }
 
     @Override

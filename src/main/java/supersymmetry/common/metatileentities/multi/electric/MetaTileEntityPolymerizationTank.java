@@ -33,7 +33,7 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
 
     public MetaTileEntityPolymerizationTank(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.POLYMERIZATION_RECIPES);
-        this.recipeMapWorkable = new MultiblockRecipeLogic(this, true);
+        this.recipeMapWorkable = new MultiblockRecipeLogic(this, false);
     }
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
