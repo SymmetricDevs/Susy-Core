@@ -177,8 +177,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         lifeSupports.forEach(bp -> includePart(analysis, bp, tag, PARTS_KEY, this.parts));
 
         for (BlockPos bp : exterior) {
-
-            if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACECRAFT_HULL)) {
+            Block block = analysis.world.getBlockState(bp).getBlock();
+            if (block.equals(SuSyBlocks.SPACECRAFT_HULL)) {
                 TileEntityCoverable te = (TileEntityCoverable) analysis.world.getTileEntity(bp);
                 for (EnumFacing side : EnumFacing.VALUES) {
                     // If it is both covered but facing another hull block
@@ -189,14 +189,14 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                         return analysis.errorPos(bp);
                     }
                 }
-            } else if (analysis.world.getBlockState(bp).getBlock().equals(SuSyBlocks.SPACE_INSTRUMENT) &&
+            } else if (block.equals(SuSyBlocks.SPACE_INSTRUMENT) &&
                     allowedOnHull(getTypeFromBlockstate(analysis.world.getBlockState(bp)))) {
                         componentList.add(getTypeFromBlockstate(analysis.world.getBlockState(bp)));
                         includePart(analysis, bp, tag, INSTRUMENTS_KEY, this.instruments);
-                    } else {
-                        analysis.status = BuildStat.HULL_WEAK;
-                        return analysis.errorPos(bp);
-                    }
+            } else {
+                analysis.status = BuildStat.HULL_WEAK;
+                return analysis.errorPos(bp);
+            }
         }
         Set<BlockPos> allInteriorBlocks = Set.copyOf(interior);
 

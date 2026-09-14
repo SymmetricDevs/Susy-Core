@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -145,7 +146,7 @@ public class StructAnalysis {
 
     public boolean isEffectiveAir(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
-        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp;
+        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp || state.getBlock() instanceof BlockLever;
     }
 
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
