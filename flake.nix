@@ -30,8 +30,7 @@
         libxfixes
         libxcb
       ];
-      x11LibPath = pkgs.lib.makeLibraryPath (x11Libs ++ [ pkgs.libGL ]);
-
+      x11LibPath = pkgs.lib.makeLibraryPath (x11Libs ++ [ pkgs.libGL pkgs.alsa-lib pkgs.libpulseaudio ]);
     in
     {
       devShells.${system}.default = pkgs.mkShell {
