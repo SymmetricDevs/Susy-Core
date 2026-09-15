@@ -36,6 +36,7 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import lombok.Getter;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -50,6 +51,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
      * metal sheets and 16~31 for large ones. This is getting on server-side and
      * sync to client side later.
      */
+    @Getter
     protected byte metalSheetIdentifier = -1;
 
     /**

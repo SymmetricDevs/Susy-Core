@@ -80,6 +80,9 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
 
+    public static final OrientedOverlayRenderer EXTENDED_CHISEL_OVERLAY = new OrientedOverlayRenderer(
+            "machines/extended_chisel_maker");
+
     public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
 
     public static final VatCasingRenderer CLARIFIER_VAT_RENDERER = new VatCasingRenderer(

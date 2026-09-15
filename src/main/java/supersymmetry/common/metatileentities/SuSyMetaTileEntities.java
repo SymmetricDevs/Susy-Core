@@ -7,7 +7,6 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -73,6 +72,8 @@ import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
 
 public class SuSyMetaTileEntities {
+
+    public static MetaTileEntityExtendedChiselMaker EXTENDED_CHISEL_MAKER;
 
     public static MetaTileEntityMagneticRefrigerator MAGNETIC_REFRIGERATOR;
 
@@ -832,7 +833,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         LARGE_RES = registerMetaTileEntity(18520,
-                new MetaTileEntityLargeRES(new ResourceLocation("railroad_engineering_station")));
+                new MetaTileEntityLargeRES(susyId("large_railroad_engineering_station")));
         LAYUP_MACHINE = registerMetaTileEntity(18521, new MetaTileEntityLayupMachine(susyId("layup_machine")));
 
         LUNAR_BUCKET_WHEEL_EXCAVATOR = registerMetaTileEntity(18522,
@@ -852,6 +853,9 @@ public class SuSyMetaTileEntities {
         ACTIVE_CLARIFIER_VAT = registerMetaTileEntity(18527, new MetaTileEntityFluidActiveCasing(
                 susyId("active_clarifier_vat"), SusyTextures.CLARIFIER_VAT_RENDERER,
                 MetaTileEntityFluidActiveCasing.EffectMode.CLARIFIER, 1));
+
+        EXTENDED_CHISEL_MAKER = registerMetaTileEntity(18528,
+                new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
