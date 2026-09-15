@@ -1,5 +1,23 @@
 package supersymmetry.common.entities;
 
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.EntityGuiData;
+import com.cleanroommc.modularui.factory.GuiFactories;
+import com.cleanroommc.modularui.network.NetworkUtils;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandler;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.modules.ModuleManager;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,28 +46,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-
 import org.jetbrains.annotations.NotNull;
-
-import com.cleanroommc.modularui.api.GuiAxis;
-import com.cleanroommc.modularui.api.IGuiHolder;
-import com.cleanroommc.modularui.api.drawable.IKey;
-import com.cleanroommc.modularui.factory.EntityGuiData;
-import com.cleanroommc.modularui.factory.GuiFactories;
-import com.cleanroommc.modularui.network.NetworkUtils;
-import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.screen.UISettings;
-import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.value.sync.SyncHandler;
-import com.cleanroommc.modularui.widgets.layout.Flow;
-import com.cleanroommc.modularui.widgets.slot.ItemSlot;
-import com.cleanroommc.modularui.widgets.slot.ModularSlot;
-import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.modules.ModuleManager;
-import io.netty.buffer.ByteBuf;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -76,35 +73,33 @@ import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
-public class EntityLander extends EntityAbstractRocket
+public class EntityEarthLandingSystem extends EntityAbstractRocket
                           implements
-                          IAnimatable,
                           IInventory,
                           IGuiHolder<EntityGuiData>,
                           IEntityAdditionalSpawnData {
 
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityLander.class,
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityEarthLandingSystem.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
-            .<Integer>createKey(EntityLander.class, DataSerializers.VARINT);
+            .<Integer>createKey(EntityEarthLandingSystem.class, DataSerializers.VARINT);
 
-    private AnimationFactory factory = new AnimationFactory(this);
     public static final double MAX_LAUNCH_MASS = 10000;
 
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
-    public EntityLander(World worldIn) {
+    public EntityEarthLandingSystem(World worldIn) {
         super(worldIn);
         setSize(3, 5);
     }
 
-    public EntityLander(World worldIn, double x, double y, double z) {
+    public EntityEarthLandingSystem(World worldIn, double x, double y, double z) {
         this(worldIn);
         this.setLocationAndAngles(x, y, z, 0.F, 0.F);
     }
 
-    public EntityLander(World worldIn, BlockPos pos) {
+    public EntityEarthLandingSystem(World worldIn, BlockPos pos) {
         this(worldIn, (float) pos.getX() - 0.5F, (float) pos.getY(), (float) pos.getZ() + 0.5);
     }
 
@@ -223,20 +218,6 @@ public class EntityLander extends EntityAbstractRocket
 
     @Override
     protected void act() {
-        // Land on next planet
-        RocketConfiguration.MissionConfiguration mission = InstrumentLander
-                .getNextLanderConfig(this.getRocketConfiguration());
-        RocketConfiguration config = this.getRocketConfiguration().clipAt(mission);
-        if (mission == null) {
-            SusyLog.logger.error(
-                    "The next mission really should have been defined if the lander launched... welp, you deserve this NPE");
-        }
-        if (this.getPassengers().isEmpty()) {
-            return;
-        }
-        // Cannot use TeleportHandler here because it doesn't get the new entity
-        Entity teleported = InstrumentLander.spawnLander(this, config, mission, true);
-        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, this.getPassengers()));
     }
 
     @Override
@@ -246,21 +227,8 @@ public class EntityLander extends EntityAbstractRocket
             if (cargo.isEmpty()) {
                 this.setDead();
             }
-            return false;
         }
-        double gravMult = GravityHandler.getGravityMultiplier(this.world);
-        if (gravMult > 0.4) {
-            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.gravity_too_high"));
-            if (cargo.isEmpty()) {
-                this.setDead();
-            }
-            return false;
-        }
-        if (getCargoMass() > MAX_LAUNCH_MASS) {
-            sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.too_heavy"));
-            return false;
-        }
-        return true;
+        return false;
     }
 
     @Override
@@ -297,30 +265,9 @@ public class EntityLander extends EntityAbstractRocket
                 }
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
             }
-
-            if (this.isLaunched()) {
-                if (this.motionY < 10.D) {
-                    if (this.motionY < 1.D) {
-                        this.motionY += 0.1;
-                    }
-                    this.motionY *= 1.1D;
-                }
-                this.handleCollidedBlocks(true);
-            }
-            if (this.posY > 1000 && isLaunched()) {
-                if (this.hasActed()) {
-                    this.setDead();
-                } else {
-                    act();
-                    this.setActed(true);
-                }
-            }
         } else {
             if (!this.hasLanded()) {
                 this.spawnFlightParticles(false);
-            }
-            if (this.isLaunched()) {
-                this.spawnFlightParticles(true);
             }
             if (soundDropPod != null) {
                 if (!this.hasLanded() || this.isLaunched()) {
@@ -382,25 +329,6 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     public void setAir(int air) {
         super.setAir(300);
-    }
-
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.hasLanded()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ladder.extend",
-                    ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-        }
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData
-                .addAnimationController(new AnimationController<EntityLander>(this, "controller", 0, this::predicate));
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
     }
 
     @Override

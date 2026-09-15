@@ -2,10 +2,12 @@ package supersymmetry.common.event;
 
 import net.minecraft.entity.Entity;
 
+import java.util.List;
+
 public class DimensionRidingSwapData {
 
     public Entity mount;
-    public Entity passenger;
+    public List<Entity> passengers;
     public long time;
     // Set once the player has actually been moved into the mount's dimension. The
     // re-mount is deferred until MOUNT_DELAY ticks after this, so the client has
@@ -15,9 +17,9 @@ public class DimensionRidingSwapData {
     public boolean transferred = false;
     public long transferTime = 0;
 
-    public DimensionRidingSwapData(Entity mount, Entity passenger) {
+    public DimensionRidingSwapData(Entity mount, List<Entity> passengers) {
         this.mount = mount;
-        this.passenger = passenger;
+        this.passengers = passengers;
         this.time = mount.world.getTotalWorldTime();
     }
 }

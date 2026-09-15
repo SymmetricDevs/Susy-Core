@@ -168,47 +168,50 @@ public class EventHandlers {
     private static @NotNull void handleEntityTransfer() {
         List<DimensionRidingSwapData> toRemove = new ArrayList<>();
         for (DimensionRidingSwapData data : travellingPassengers) {
-
             Entity mount = data.mount;
-            Entity passenger = data.passenger;
-            if (passenger.getServer() == null) {
+            List<Entity> passengers = data.passengers;
+            if (passengers.isEmpty() || passengers.get(0).getServer() == null) {
                 continue;
             }
             long now = mount.world.getTotalWorldTime();
-
-            if (!data.transferred) {
-                // Phase 1: move the player into the mount's dimension once the mount has
-                // settled there (>2 ticks). Deliberately do NOT mount on this tick.
-                if (mount.dimension != passenger.dimension && now - data.time > 2) {
+            List<Entity> passengersToRemove = new ArrayList<>();
+            for (Entity passenger : passengers) {
+                if (!data.transferred) {
+                    // Phase 1: move the player into the mount's dimension once the mount has
+                    // settled there (>2 ticks). Deliberately do NOT mount on this tick.
+                    if (mount.dimension != passenger.dimension && now - data.time > 2) {
+                        WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
+                        passenger.dismountRidingEntity();
+                        passenger.setLocationAndAngles(mount.getPosition().getX(), mount.getPosition().getY(),
+                                mount.getPosition().getZ(), mount.rotationYaw, mount.rotationPitch);
+                        passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
+                                mount.dimension, new GTTeleporter(newWorld, mount.getPosition().getX(),
+                                        mount.getPosition().getY(), mount.getPosition().getZ()));
+                        Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
+                        if (realMount != null) {
+                            realMount.forceSpawn = true;
+                        }
+                        data.transferred = true;
+                        data.transferTime = now;
+                    }
+                } else if (now - data.transferTime > MOUNT_DELAY) {
+                    // Phase 2: the client has rebuilt its world around the now-stable player
+                    // entity (which retains the original entity id). Mount, and re-send the
+                    // passenger packet explicitly in case the client missed the tracker's
+                    // update mid-reload. If the mount isn't registered in the destination
+                    // world yet, keep retrying until the hard timeout below.
                     WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
-                    passenger.dismountRidingEntity();
-                    passenger.setLocationAndAngles(mount.getPosition().getX(), mount.getPosition().getY(),
-                            mount.getPosition().getZ(), mount.rotationYaw, mount.rotationPitch);
-                    passenger.getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP) passenger,
-                            mount.dimension, new GTTeleporter(newWorld, mount.getPosition().getX(),
-                                    mount.getPosition().getY(), mount.getPosition().getZ()));
                     Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
                     if (realMount != null) {
-                        realMount.forceSpawn = true;
+                        passenger.startRiding(realMount);
+                        passengersToRemove.add(passenger);
                     }
-                    data.transferred = true;
-                    data.transferTime = now;
-                }
-            } else if (now - data.transferTime > MOUNT_DELAY) {
-                // Phase 2: the client has rebuilt its world around the now-stable player
-                // entity (which retains the original entity id). Mount, and re-send the
-                // passenger packet explicitly in case the client missed the tracker's
-                // update mid-reload. If the mount isn't registered in the destination
-                // world yet, keep retrying until the hard timeout below.
-                WorldServer newWorld = passenger.getServer().getWorld(mount.dimension);
-                Entity realMount = newWorld.getEntityFromUuid(mount.getPersistentID());
-                if (realMount != null) {
-                    passenger.startRiding(realMount);
-                    toRemove.add(data);
                 }
             }
-
-            if (now - data.time > 200) {
+            for (Entity passenger : passengersToRemove) {
+                data.passengers.remove(passenger);
+            }
+            if (passengers.isEmpty() || now - data.time > 200) {
                 toRemove.add(data);
             }
         }
@@ -218,7 +221,7 @@ public class EventHandlers {
     }
 
     public static boolean isEntityTravelling(Entity entity) {
-        return travellingPassengers.stream().anyMatch(data -> data.passenger == entity);
+        return travellingPassengers.stream().anyMatch(data -> data.passengers.contains(entity));
     }
 
     @SubscribeEvent

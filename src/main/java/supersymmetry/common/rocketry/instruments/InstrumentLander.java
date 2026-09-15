@@ -10,6 +10,9 @@ import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InstrumentLander implements Instrument {
 
     public void act(int count, EntityAbstractRocket rocket) {
@@ -24,16 +27,25 @@ public class InstrumentLander implements Instrument {
         }
 
         int i = 0;
+        List<Entity> passengersQueued = new ArrayList<>();
         for (Entity passenger : rocket.getPassengers()) {
             i++;
             if (EventHandlers.isEntityTravelling(passenger))
                 continue;
             if (i > count)
-                break;
+                return;
 
-            EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passenger));
+            passengersQueued.add(passenger);
+            if (passengersQueued.size() == 4) {
+                i++;
+                EventHandlers.travellingPassengers
+                        .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passengersQueued));
+                passengersQueued.clear();
+            }
         }
+        if (!passengersQueued.isEmpty())
+            EventHandlers.travellingPassengers
+                .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passengersQueued));
     }
 
     public static RocketConfiguration.MissionConfiguration getNextLanderConfig(
