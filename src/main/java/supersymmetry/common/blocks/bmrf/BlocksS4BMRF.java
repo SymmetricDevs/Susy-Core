@@ -1,5 +1,6 @@
-package supersymmetry.common.blocks;
+package supersymmetry.common.blocks.bmrf;
 
+import gregtech.api.block.VariantBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlocksS4BMRF extends VariantHorizontalRotatableBlock<BlocksS4BMRF.S4BMRFBlockType> {
+public class BlocksS4BMRF extends VariantBlock<BlocksS4BMRF.S4BMRFBlockType> {
 
     public BlocksS4BMRF() {
         super(Material.ROCK);
