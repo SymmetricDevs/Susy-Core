@@ -59,6 +59,7 @@ import gregtech.api.util.world.DummyWorld;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
@@ -671,17 +672,33 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII")
+                .aisle("        IIIIIII        ", "        IIIIIII        ", "        IIIIIII        ",
+                        "        IIIIIII        ", "                       ")
+                .aisle("      IIIIIIIIIII      ", "      IIPPPVPPPII      ", "      IIPPPVPPPII      ",
+                        "      IIFFFVFFFII      ", "        IIIIIII        ")
+                .aisle("    IIIIIIIIIIIIIII    ", "    IIPPFFFVFFFPPII    ", "    IIPPFFFVFFFPPII    ",
+                        "    IIFFFFFVFFFFFII    ", "      IIIIIIIIIII      ")
+                .aisle("   IIIIIIIIIIIIIIIII   ", "   IFFFFPPPVPPPFFFFI   ", "   IFFFFPPPVPPPFFFFI   ",
+                        "   IFFFFFFFVFFFFFFFI   ", "    IIIIIIIIIIIIIII    ")
+                .aisle("  IIIIIIIIISIIIIIIIII  ", "  IPPPPPLLLLLLLPPPPPI  ", "  IPPPPPLLLLLLLPPPPPI  ",
+                        "  IFFFFFLLLLLLLFFFFFI  ", "   IIIII       IIIII   ")
+                .aisle("  IIIIII       IIIIII  ", "  IFFFLL       LLFFFI  ", "  IFFFLL       LLFFFI  ",
+                        "  IFFFLL       LLFFFI  ", "   III           III   ")
+                .aisle(" IIIII           IIIII ", " IPPPL           LPPPI ", " IPPPL           LPPPI ",
+                        " IFFFL           LFFFI ", "  III             III  ")
+                .aisle(" IIIII           IIIII ", " IFFFL           LFFFI ", " IFFFL           LFFFI ",
+                        " IFFFL           LFFFI ", "  III             III  ")
+                .aisle("IIIII             IIIII", "IPPPL             LPPPI", "IPPPL             LPPPI",
+                        "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IFFFL             LFFFI", "IFFFL             LFFFI",
+                        "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IVVVL             LVVVI", "IVVVL             LVVVI",
+                        "IVVVL             LVVVI", " III               III ")
                 .where('S', selfPredicate())
-                .where(' ', air())
+                .where(' ', any())
                 .where('C', states(getCasingState()))
                 .where('P', SuSyPredicates.computation())
-                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+                .where('L', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS)))
                 .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(1, 1))
@@ -689,6 +706,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                                 .or(states(getCasingState()))
                                 .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                         .or(states(getCasingState())))
+                .where('V', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .build();
     }
 
