@@ -113,6 +113,8 @@ dependencies {
     // LittleTiles
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
+    // Chisel
+    compileOnly(deps.chisel.deobf())
     // OpenComputers
     implementation(deps.openComputers.deobf())
 

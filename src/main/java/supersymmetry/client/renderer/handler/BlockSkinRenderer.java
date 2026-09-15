@@ -35,6 +35,13 @@ public class BlockSkinRenderer {
         if (state.getBlock().hasTileEntity(state)) {
             throw new IllegalArgumentException("Block has a tile entity and cannot be rendered as a skin");
         }
+        // Transparent blocks (glass, leaves, frames, connected-texture blocks...) cannot be skinned
+        // either: their translucent/connected rendering is not a solid surface, so it leaks through
+        // the machine and produces see-through/x-ray bugs. Bail out so callers fall back to their
+        // default casing.
+        if (!state.isOpaqueCube()) {
+            throw new IllegalArgumentException("Block is not opaque and cannot be rendered as a skin");
+        }
 
         BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
         if (layer != null && !state.getBlock().canRenderInLayer(state, layer)) {

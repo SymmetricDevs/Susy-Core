@@ -2146,7 +2146,11 @@ item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=Restrictive Huge %s Dir
 susy.tankless_fluid_pipe.tooltip=§4Will NOT accept fluids it can't handle!
 susy.tankless_fluid_pipe.tooltip.resistance=§9Resistance: §f%,d
 susy.tool_action.hammer.toggle_flange=§8Use Hammer to toggle flanges
-susy.machine.marking_maker.name=Marking Maker
+susy.machine.extended_chisel_maker.name=Extended Chisel Maker
+susy.machine.extended_chisel_maker.crafting.disabled=Machine Disabled
+susy.machine.extended_chisel_maker.crafting.enabled=Machine Enabled
+susy.machine.extended_chisel_maker.tooltip.1=Convert any block into any other block of the same extended chisel group (1:1).
+susy.machine.extended_chisel_maker.tooltip.2=Select the output block in the folder browser; search filters by block id and location.
 
 #S7BMRF blocks
 tile.s7bmrf_blocks.s7bmrf1.name=BMRF-97
