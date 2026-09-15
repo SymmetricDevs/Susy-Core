@@ -49,6 +49,7 @@ import supersymmetry.common.blocks.active.BlockInvertedActiveSerpentine;
 import supersymmetry.common.blocks.active.BlockInvertedActiveSinteringBrick;
 import supersymmetry.common.blocks.active.BlockInvertedActiveWireCoil;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 
 public class SuSyBlocks {
@@ -187,12 +188,19 @@ public class SuSyBlocks {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
         susyBlocks = new ArrayList<>();
+
+        AIRLOCK_DOOR = new BlockAirlockDoor(() -> SuSyMetaItems.AIRLOCK.getStackForm());
+        AIRLOCK_DOOR.setRegistryName("airlock_door");
+
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
                 // Try block is necessary in case getDeclaredConstructor does not exist (though
                 // it should)
                 try {
+                    if (field.get(null) != null) {
+                        continue;
+                    }
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
                     newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));

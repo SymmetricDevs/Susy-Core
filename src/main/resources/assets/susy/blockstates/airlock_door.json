@@ -1,28 +1,28 @@
 {
   "variants": {
     "half=upper,open=true,powered=true,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_top"
     },
     "half=upper,open=true,powered=false,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_top"
     },
     "half=upper,open=false,powered=true,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_top"
     },
     "half=upper,open=false,powered=false,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_closed_bottom"
     },
     "half=lower,open=true,powered=true,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_bottom"
     },
     "half=lower,open=true,powered=false,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_bottom"
     },
     "half=lower,open=false,powered=true,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_open_bottom"
     },
     "half=lower,open=false,powered=false,variant=basic" : {
-      "model" : "birch_door_bottom"
+      "model" : "airlock_door_closed_bottom"
     }
   }
 }

@@ -3,11 +3,18 @@ package supersymmetry.common.blocks;
 import gregtech.api.block.IStateHarvestLevel;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import supersymmetry.api.blocks.VariantFullDoorBlock;
 
+import java.util.function.Supplier;
+
 public class BlockAirlockDoor extends VariantFullDoorBlock<BlockAirlockDoor.AirlockType> {
-    public BlockAirlockDoor() {
+    private final Supplier<ItemStack> itemSupplier;
+
+    public BlockAirlockDoor(Supplier<ItemStack> itemSupplier) {
+        this.itemSupplier = itemSupplier;
+
         setTranslationKey("airlock_door");
         setHardness(5.0f);
         setResistance(10.0f);

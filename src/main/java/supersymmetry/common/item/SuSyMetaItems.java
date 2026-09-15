@@ -30,6 +30,7 @@ import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
@@ -64,6 +65,7 @@ public class SuSyMetaItems {
 
     public static MetaValueItem AIR_DISPERSER;
     public static MetaValueItem OXYGEN_SENSOR;
+    public static MetaValueItem AIRLOCK;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -188,6 +190,9 @@ public class SuSyMetaItems {
                 .addComponents(ElectricStats.createElectricItem(16000, GTValues.LV));
 
         CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
+
+        AIRLOCK = metaItem.addItem(25, "airlock")
+                .addComponents(new AirlockBehavior(SuSyBlocks.AIRLOCK_DOOR));
     }
 
     private static void addExtraBehaviours() {
