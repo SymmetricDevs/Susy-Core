@@ -7,6 +7,8 @@ import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.rocketry.RocketConfiguration;
 
+import java.util.Collections;
+
 public class InstrumentLanderOneWay extends InstrumentLander {
 
     @Override
@@ -21,16 +23,9 @@ public class InstrumentLanderOneWay extends InstrumentLander {
             return;
         }
 
-        int i = 0;
-        for (Entity passenger : rocket.getPassengers()) {
-            i++;
-            if (EventHandlers.isEntityTravelling(passenger))
-                continue;
-            if (i > count)
-                break;
-
+        if (count >= 1) {
             EventHandlers.travellingPassengers
-                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passenger));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, true), Collections.emptyList()));
         }
     }
 }
