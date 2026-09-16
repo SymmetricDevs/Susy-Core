@@ -1310,6 +1310,11 @@ susy.machine.solar_panel.voltage_produced=§aPeak Production: §f%,d EU/t (%s§f
 tile.solar_panel.default.name=Solar Panel Display Block
 susy.top.solar_panel.producing=Producing
 
+#Simple Condenser
+susy.machine.simple_condenser.name=Simple Condenser
+susy.machine.simple_condenser.tooltip.info=Requires five-block-deep regolith below to function.
+
+
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation

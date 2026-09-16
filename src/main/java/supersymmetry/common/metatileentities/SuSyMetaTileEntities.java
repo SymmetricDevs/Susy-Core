@@ -335,6 +335,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLunarBucketWheelExcavator LUNAR_BUCKET_WHEEL_EXCAVATOR;
     public static MetaTileEntitySolarFurnace SOLAR_FURNACE;
     public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
+    public static SimpleMachineMetaTileEntity[] SIMPLE_CONDENSER;
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -758,6 +760,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         CARGO_DRONE_PAD = registerMetaTileEntity(18112, new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
+        SIMPLE_CONDENSER[0] = registerMetaTileEntity(18113, new MetaTileEntitySimpleCondenser(susyId("simple_condenser")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
@@ -975,6 +978,7 @@ public class SuSyMetaTileEntities {
         POLISHING_MACHINE = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
+        SIMPLE_CONDENSER = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
 
         RESISTANCE_FURNACE = new SimpleMachineMetaTileEntity[GTValues.OpV];
