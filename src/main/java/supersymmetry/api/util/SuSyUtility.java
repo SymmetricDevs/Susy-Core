@@ -138,6 +138,9 @@ public class SuSyUtility {
     }
 
     public static boolean isAllowedItemForSpace(ItemStack item) {
+        if (item.isEmpty()) {
+            return true;
+        }
         if (bannedSpaceItems == null) {
             loadBannedSpaceItems();
         }

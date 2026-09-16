@@ -1,13 +1,11 @@
 package supersymmetry.common.rocketry.instruments;
 
-import net.minecraft.entity.Entity;
+import java.util.Collections;
 
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import java.util.Collections;
 
 public class InstrumentLanderOneWay extends InstrumentLander {
 

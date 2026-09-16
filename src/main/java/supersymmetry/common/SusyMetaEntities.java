@@ -44,6 +44,5 @@ public class SusyMetaEntities {
                 manager -> new SusyOBJRenderer<>(manager, SuSyValues.modelLunarRocket));
         RenderingRegistry.registerEntityRenderingHandler(EntityEarthLandingSystem.class,
                 manager -> new SusyOBJRenderer<>(manager, SuSyValues.modelEarthLandingSystem));
-
     }
 }

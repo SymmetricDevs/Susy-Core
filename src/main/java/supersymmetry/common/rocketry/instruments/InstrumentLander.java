@@ -1,17 +1,21 @@
 package supersymmetry.common.rocketry.instruments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 
+import supersymmetry.SuSyValues;
 import supersymmetry.api.rocketry.components.Instrument;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.entities.EntityEarthLandingSystem;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.entities.teleporters.DropPodTeleporter;
 import supersymmetry.common.event.DimensionRidingSwapData;
 import supersymmetry.common.rocketry.RocketConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
+import supersymmetry.common.world.PlanetoidHandler;
 
 public class InstrumentLander implements Instrument {
 
@@ -45,7 +49,7 @@ public class InstrumentLander implements Instrument {
         }
         if (!passengersQueued.isEmpty())
             EventHandlers.travellingPassengers
-                .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passengersQueued));
+                    .add(new DimensionRidingSwapData(spawnLander(rocket, config, next, i == 0), passengersQueued));
     }
 
     public static RocketConfiguration.MissionConfiguration getNextLanderConfig(
@@ -61,8 +65,15 @@ public class InstrumentLander implements Instrument {
     public static Entity spawnLander(EntityAbstractRocket rocket, RocketConfiguration config,
                                      RocketConfiguration.MissionConfiguration next,
                                      boolean withCargo) {
-        EntityLander dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
-
+        Entity dropPod;
+        Planetoid p = Planetoid.PLANETOIDS.inverse().get(next.dimension);
+        double g = PlanetoidHandler.get(next.dimension) == null ? SuSyValues.G0 :
+                PlanetoidHandler.get(next.dimension).gravity * SuSyValues.G0;
+        if (p.getSurfacePressure() > 10000 && g > 0.4) {
+            dropPod = new EntityEarthLandingSystem(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
+        } else {
+            dropPod = new EntityLander(rocket.world, next.landingPos.getX(), 350, next.landingPos.getZ());
+        }
         // Use the config with a popped mission
         // Cannot use TeleportHandler here because it doesn't get the new entity
         Entity teleported = dropPod.changeDimension(next.dimension, new DropPodTeleporter());

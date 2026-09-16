@@ -23,8 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jspecify.annotations.Nullable;
 
-import supersymmetry.common.entities.EntityBlueprintRocket;
-
 @SideOnly(Side.CLIENT)
 public class SusyOBJRenderer<T extends Entity> extends Render<T> {
 
