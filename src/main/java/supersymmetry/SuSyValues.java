@@ -19,6 +19,8 @@ public class SuSyValues {
             new ResourceLocation(Supersymmetry.MODID, "icbm"), "inventory");
     public static ModelResourceLocation modelLunarRocket = new ModelResourceLocation(
             new ResourceLocation(Supersymmetry.MODID, "lunar_rocket"), "inventory");
+    public static ModelResourceLocation modelEarthLandingSystem = new ModelResourceLocation(
+            new ResourceLocation(Supersymmetry.MODID, "earth_landing_system"), "inventory");
 
     public static final double G0 = 9.81;
     public static final double GRAVITATIONAL_CONSTANT = 6.6743e-11;

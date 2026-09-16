@@ -222,6 +222,8 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/soyuz.obj", SuSyValues.modelRocket);
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
+        bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
+
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,

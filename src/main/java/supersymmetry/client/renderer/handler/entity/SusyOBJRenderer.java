@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,12 +26,12 @@ import org.jspecify.annotations.Nullable;
 import supersymmetry.common.entities.EntityBlueprintRocket;
 
 @SideOnly(Side.CLIENT)
-public class RocketRenderer<T extends EntityBlueprintRocket> extends Render<T> {
+public class SusyOBJRenderer<T extends Entity> extends Render<T> {
 
     private ModelManager manager = null;
     private final ModelResourceLocation modelLocation;
 
-    public RocketRenderer(RenderManager renderManager, ModelResourceLocation modelLocation) {
+    public SusyOBJRenderer(RenderManager renderManager, ModelResourceLocation modelLocation) {
         super(renderManager);
         this.modelLocation = modelLocation;
     }
