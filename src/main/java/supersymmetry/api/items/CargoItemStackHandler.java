@@ -213,6 +213,13 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                 currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
             }
         }
+        // deliberately set masses should override the generated ones, but still take fluids into account
+        if (ItemMassRegistry.getMass(item) != null) {
+            if (ItemMassRegistry.getMass(item) != 0) {
+                currentMass = ItemMassRegistry.getMass(item);
+            }
+        }
+
         NBTTagCompound tag = item.getTagCompound();
         IFluidHandlerItem fluidHandlerItem = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
                 null);
