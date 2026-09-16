@@ -1,15 +1,17 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
+import java.util.function.Supplier;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+
+import gregtech.api.block.IStateHarvestLevel;
 import supersymmetry.api.blocks.VariantFullDoorBlock;
 
-import java.util.function.Supplier;
-
 public class BlockAirlockDoor extends VariantFullDoorBlock<BlockAirlockDoor.AirlockType> {
+
     private final Supplier<ItemStack> itemSupplier;
 
     public BlockAirlockDoor(Supplier<ItemStack> itemSupplier) {
@@ -24,8 +26,8 @@ public class BlockAirlockDoor extends VariantFullDoorBlock<BlockAirlockDoor.Airl
     }
 
     public enum AirlockType implements IStringSerializable, IStateHarvestLevel {
-        AIRLOCK("basic", 2);
 
+        AIRLOCK("basic", 2);
 
         private final String name;
         private final int harvestLevel;

@@ -1,23 +1,5 @@
 package supersymmetry.common.entities;
 
-import com.cleanroommc.modularui.api.GuiAxis;
-import com.cleanroommc.modularui.api.IGuiHolder;
-import com.cleanroommc.modularui.api.drawable.IKey;
-import com.cleanroommc.modularui.factory.EntityGuiData;
-import com.cleanroommc.modularui.factory.GuiFactories;
-import com.cleanroommc.modularui.network.NetworkUtils;
-import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.screen.UISettings;
-import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.value.sync.SyncHandler;
-import com.cleanroommc.modularui.widgets.layout.Flow;
-import com.cleanroommc.modularui.widgets.slot.ItemSlot;
-import com.cleanroommc.modularui.widgets.slot.ModularSlot;
-import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.modules.ModuleManager;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -46,40 +27,50 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import com.cleanroommc.modularui.api.GuiAxis;
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.factory.EntityGuiData;
+import com.cleanroommc.modularui.factory.GuiFactories;
+import com.cleanroommc.modularui.network.NetworkUtils;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandler;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
+
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.modules.ModuleManager;
+import io.netty.buffer.ByteBuf;
 import supersymmetry.Supersymmetry;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.rocketry.ICargoInventory;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.client.renderer.particles.SusyParticleSmoke;
-import supersymmetry.common.EventHandlers;
-import supersymmetry.common.event.DimensionRidingSwapData;
-import supersymmetry.common.event.GravityHandler;
 import supersymmetry.common.network.CPacketRocketInteract;
-import supersymmetry.common.rocketry.RocketConfiguration;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.integration.baubles.BaublesModule;
 import supersymmetry.modules.SuSyModules;
 
 public class EntityEarthLandingSystem extends EntityAbstractRocket
-                          implements
-                          IInventory,
-                          IGuiHolder<EntityGuiData>,
-                          IEntityAdditionalSpawnData {
+                                      implements
+                                      ICargoInventory,
+                                      IGuiHolder<EntityGuiData>,
+                                      IEntityAdditionalSpawnData {
 
-    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(EntityEarthLandingSystem.class,
+    private static final DataParameter<Boolean> HAS_LANDED = EntityDataManager.<Boolean>createKey(
+            EntityEarthLandingSystem.class,
             DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> TIME_SINCE_LANDING = EntityDataManager
             .<Integer>createKey(EntityEarthLandingSystem.class, DataSerializers.VARINT);
@@ -217,8 +208,7 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
     }
 
     @Override
-    protected void act() {
-    }
+    protected void act() {}
 
     @Override
     protected boolean canStartCountdown() {

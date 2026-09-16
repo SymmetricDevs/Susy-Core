@@ -1,8 +1,8 @@
 package supersymmetry.common.event;
 
-import net.minecraft.entity.Entity;
-
 import java.util.List;
+
+import net.minecraft.entity.Entity;
 
 public class DimensionRidingSwapData {
 

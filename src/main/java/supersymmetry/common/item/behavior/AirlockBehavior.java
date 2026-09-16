@@ -1,6 +1,5 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
@@ -11,7 +10,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
+
 public class AirlockBehavior implements IItemBehaviour {
+
     private final Block block;
 
     public AirlockBehavior(Block block) {
@@ -19,7 +21,8 @@ public class AirlockBehavior implements IItemBehaviour {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResult<ItemStack> onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+                                             EnumFacing facing, float hitX, float hitY, float hitZ) {
         // Copied from ItemDoor
         ItemStack stack = player.getHeldItem(hand);
         if (facing != EnumFacing.UP) {
@@ -33,8 +36,10 @@ public class AirlockBehavior implements IItemBehaviour {
         if (player.canPlayerEdit(pos, facing, stack) && this.block.canPlaceBlockAt(world, pos)) {
             EnumFacing playerFacing = EnumFacing.fromAngle(player.rotationYaw);
             placeDoor(world, pos, playerFacing, this.block);
-            SoundType soundType = world.getBlockState(pos).getBlock().getSoundType(world.getBlockState(pos), world, pos, player);
-            world.playSound(player, pos, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1) / 2, soundType.getPitch() * 0.8f);
+            SoundType soundType = world.getBlockState(pos).getBlock().getSoundType(world.getBlockState(pos), world, pos,
+                    player);
+            world.playSound(player, pos, soundType.getPlaceSound(), SoundCategory.BLOCKS,
+                    (soundType.getVolume() + 1) / 2, soundType.getPitch() * 0.8f);
             if (!player.isCreative()) {
                 stack.shrink(1);
             }
@@ -43,12 +48,14 @@ public class AirlockBehavior implements IItemBehaviour {
             return ActionResult.newResult(EnumActionResult.FAIL, stack);
         }
     }
-    public static void placeDoor(World worldIn, BlockPos pos, EnumFacing facing, Block door)
-    {
+
+    public static void placeDoor(World worldIn, BlockPos pos, EnumFacing facing, Block door) {
         BlockPos blockpos2 = pos.up();
 
         boolean flag2 = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos2);
-        IBlockState iblockstate = door.getDefaultState().withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.POWERED, Boolean.valueOf(flag2)).withProperty(BlockDoor.OPEN, Boolean.valueOf(flag2));
+        IBlockState iblockstate = door.getDefaultState()
+                .withProperty(BlockDoor.POWERED, Boolean.valueOf(flag2))
+                .withProperty(BlockDoor.OPEN, Boolean.valueOf(flag2));
         worldIn.setBlockState(pos, iblockstate.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER), 2);
         worldIn.setBlockState(blockpos2, iblockstate.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2);
         worldIn.notifyNeighborsOfStateChange(pos, door, false);

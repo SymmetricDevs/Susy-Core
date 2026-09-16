@@ -223,7 +223,6 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
         bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
-
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
@@ -243,6 +242,7 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/earth_landing_system"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
         for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {

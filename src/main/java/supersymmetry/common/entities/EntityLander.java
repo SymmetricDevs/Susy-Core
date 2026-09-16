@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -62,6 +61,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.rocketry.ICargoInventory;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
@@ -79,7 +79,7 @@ import supersymmetry.modules.SuSyModules;
 public class EntityLander extends EntityAbstractRocket
                           implements
                           IAnimatable,
-                          IInventory,
+                          ICargoInventory,
                           IGuiHolder<EntityGuiData>,
                           IEntityAdditionalSpawnData {
 
