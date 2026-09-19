@@ -48,6 +48,7 @@ import supersymmetry.common.blocks.active.BlockInvertedActiveHeatingCoil;
 import supersymmetry.common.blocks.active.BlockInvertedActiveSerpentine;
 import supersymmetry.common.blocks.active.BlockInvertedActiveSinteringBrick;
 import supersymmetry.common.blocks.active.BlockInvertedActiveWireCoil;
+import supersymmetry.common.blocks.bmrf.*;
 import supersymmetry.common.blocks.rocketry.*;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.tileentities.SuSyTileEntities;

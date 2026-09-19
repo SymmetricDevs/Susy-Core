@@ -1,4 +1,4 @@
-package supersymmetry.common.blocks;
+package supersymmetry.common.blocks.bmrf;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -9,16 +9,16 @@ import net.minecraft.util.IStringSerializable;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.block.IStateHarvestLevel;
-import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+import gregtech.api.block.VariantBlock;
 
-public class BlocksS7BMRF extends VariantHorizontalRotatableBlock<BlocksS7BMRF.S7BMRFBlockType> {
+public class BlocksS2BMRF extends VariantBlock<BlocksS2BMRF.S2BMRFBlockType> {
 
-    public BlocksS7BMRF() {
+    public BlocksS2BMRF() {
         super(Material.ROCK);
         this.setHardness(3.0F);
         this.setResistance(5.0F);
         this.setSoundType(SoundType.STONE);
-        this.setTranslationKey("s7bmrf_blocks");
+        this.setTranslationKey("s2bmrf_blocks");
     }
 
     @Override
@@ -32,7 +32,7 @@ public class BlocksS7BMRF extends VariantHorizontalRotatableBlock<BlocksS7BMRF.S
     }
 
     @Override
-    public ItemStack getItemVariant(S7BMRFBlockType variant, int amount) {
+    public ItemStack getItemVariant(S2BMRFBlockType variant, int amount) {
         return new ItemStack(this, amount, variant.ordinal());
     }
 
@@ -41,29 +41,33 @@ public class BlocksS7BMRF extends VariantHorizontalRotatableBlock<BlocksS7BMRF.S
         return state.getValue(VARIANT).ordinal();
     }
 
-    public static enum S7BMRFBlockType implements IStringSerializable, IStateHarvestLevel {
+    public static enum S2BMRFBlockType implements IStringSerializable, IStateHarvestLevel {
 
-        S7BMRF1("s7bmrf1", 2),
-        S7BMRF2("s7bmrf2", 2),
-        S7BMRF3("s7bmrf3", 2),
-        S7BMRF4("s7bmrf4", 2),
-        S7BMRF5("s7bmrf5", 2),
-        S7BMRF6("s7bmrf6", 2),
-        S7BMRF7("s7bmrf7", 2),
-        S7BMRF8("s7bmrf8", 2),
-        S7BMRF9("s7bmrf9", 2),
-        S7BMRF10("s7bmrf10", 2),
-        S7BMRF11("s7bmrf11", 2),
-        S7BMRF12("s7bmrf12", 2),
-        S7BMRF13("s7bmrf13", 2),
-        S7BMRF14("s7bmrf14", 2),
-        S7BMRF15("s7bmrf15", 2),
-        S7BMRF16("s7bmrf16", 2);
+        S2BMRF1("s2bmrf1", 2),
+        S2BMRF2("s2bmrf2", 2),
+        S2BMRF3("s2bmrf3", 2),
+        S2BMRF4("s2bmrf4", 2),
+        S2BMRF5("s2bmrf5",
+                2),
+        S2BMRF6("s2bmrf6", 2),
+        S2BMRF7("s2bmrf7", 2),
+        S2BMRF8("s2bmrf8", 2),
+        S2BMRF9("s2bmrf9",
+                2),
+        S2BMRF10("s2bmrf10", 2),
+        S2BMRF11("s2bmrf11", 2),
+        S2BMRF12("s2bmrf12", 2),
+        S2BMRF13(
+                "s2bmrf13",
+                2),
+        S2BMRF14("s2bmrf14", 2),
+        S2BMRF15("s2bmrf15", 2),
+        S2BMRF16("s2bmrf16", 2);
 
         private final String name;
         private final int harvestLevel;
 
-        private S7BMRFBlockType(String name, int harvestLevel) {
+        private S2BMRFBlockType(String name, int harvestLevel) {
             this.name = name;
             this.harvestLevel = harvestLevel;
         }
