@@ -207,6 +207,7 @@ public class SuSyMaterialRecipeHandler {
             throw new IllegalArgumentException("Melting point too high for resistance furnace");
         } else {
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .circuitMeta(4)
                     .input(ingot, material)
                     .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))
@@ -216,6 +217,7 @@ public class SuSyMaterialRecipeHandler {
                     .buildAndRegister();
 
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .circuitMeta(4)
                     .input(dust, material)
                     .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))
