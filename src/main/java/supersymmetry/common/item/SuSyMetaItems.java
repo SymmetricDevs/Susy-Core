@@ -62,6 +62,7 @@ public class SuSyMetaItems {
     public static MetaValueItem INTEL_CHIP;
     public static MetaValueItem INTEL_CHIP_FULL;
     public static MetaValueItem ENTITY_PROMOTER;
+    public static MetaValueItem HYPER_DEFOLIANT;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -205,6 +206,8 @@ public class SuSyMetaItems {
 
         INTEL_CHIP_FULL = metaItem.addItem(28, "intel_chip_full")
                 .addComponents(IntelChipFullBehaviour.INSTANCE);
+        HYPER_DEFOLIANT = metaItem.addItem(29, "hyper_defoliant")
+                .addComponents(new HyperDefoliantBehavior());
     }
 
     private static void addExtraBehaviours() {
