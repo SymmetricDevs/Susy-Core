@@ -34,7 +34,6 @@ import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
 import supersymmetry.common.materials.SusyMaterials;
-import supersymmetry.common.metatileentities.multi.rail.LargeRESRecipeMap;
 
 public class SuSyRecipeMaps {
 
@@ -445,7 +444,7 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.MACERATOR);
 
-    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 1, 4, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> BALL_MILL = new RecipeMap<>("ball_mill", 3, 4, 2, 1,
             new SimpleRecipeBuilder().EUt(VA[LV]), false).setSlotOverlay(false, false, GuiTextures.CRUSHED_ORE_OVERLAY)
             .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, ProgressWidget.MoveType.HORIZONTAL)
@@ -491,7 +490,11 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<PrimitiveRecipeBuilder> CUPOLA_FURNACE = new RecipeMap<>("cupola_furnace", 4, 1, 0, 0,
             new PrimitiveRecipeBuilder(), false).setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<?> LARGE_RES = LargeRESRecipeMap.RES_RECIPES;
+    public static final RecipeMap<SimpleRecipeBuilder> LARGE_RES_RECIPES = new RecipeMap<>(
+            "large_railroad_engineering_station", 25, 1, 3, 0, new SimpleRecipeBuilder(), false)
+            .setSlotOverlay(false, false, GuiTextures.SLOT).setSlotOverlay(true, false, GuiTextures.SLOT)
+            .setSound(GTSoundEvents.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL);
 
     public static final RecipeMap<SimpleRecipeBuilder> RIE = new RecipeMap<>("reactive_ion_etching", 1, 1, 4, 1,
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
@@ -505,13 +508,13 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>(
             "electron_beam_lithography", 1, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
-    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 2, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 3, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
     public static final RecipeMap<SimpleRecipeBuilder> GREENHOUSE_PLANT = new RecipeMap<>("greenhouse_plant", 2, 4, 3,
             1, new SimpleRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressWidget.MoveType.HORIZONTAL);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 2, 1, 1, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> SCREEN_PRINTER = new RecipeMap<>("screen_printer", 3, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
 
     public static final RecipeMap<SimpleRecipeBuilder> ALD_RECIPES = new RecipeMap<>("atomic_layer_deposition", 1, 1, 4,

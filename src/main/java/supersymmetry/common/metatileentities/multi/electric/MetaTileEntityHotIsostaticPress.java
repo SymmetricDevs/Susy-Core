@@ -100,4 +100,9 @@ public class MetaTileEntityHotIsostaticPress extends RecipeMapMultiblockControll
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity iGregTechTileEntity) {
         return new MetaTileEntityHotIsostaticPress(metaTileEntityId);
     }
+
+    @Override
+    public boolean canBeDistinct() {
+        return true;
+    }
 }

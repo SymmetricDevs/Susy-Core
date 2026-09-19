@@ -10,6 +10,7 @@ import gregtech.client.renderer.texture.cube.*;
 import gregtech.client.renderer.texture.custom.DrumRenderer;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
+import supersymmetry.client.renderer.textures.custom.VatCasingRenderer;
 
 public class SusyTextures {
 
@@ -78,7 +79,17 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
 
+    public static final OrientedOverlayRenderer EXTENDED_CHISEL_OVERLAY = new OrientedOverlayRenderer(
+            "machines/extended_chisel_maker");
+
     public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
+
+    public static final VatCasingRenderer CLARIFIER_VAT_RENDERER = new VatCasingRenderer(
+            "gregtech:blocks/casings/multiblock_tank/clarifier_on",
+            "gregtech:blocks/casings/solid/machine_casing_solid_steel");
+    public static final VatCasingRenderer FLOTATION_VAT_RENDERER = new VatCasingRenderer(
+            "gregtech:blocks/casings/multiblock_tank/flotation_on",
+            "gregtech:blocks/casings/solid/machine_casing_clean_stainless_steel");
 
     public static final OrientedOverlayRenderer FLUID_COMPRESSOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/fluid_compressor");

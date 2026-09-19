@@ -22,7 +22,7 @@ val Project.enableHotswap: Boolean by envOrFlag("HOTSWAP", default = true)
 val Project.generateTags: Boolean by flag(default = true)
 val Project.enableSpotless: Boolean by flag(default = false)
 
-val Project.accessTransformers: String by optional()
+val Project.atFiles: String by optional()
 val Project.useMixin: Boolean by flag(default = false)
 val Project.mixinPackage: String by requiredIf { useMixin }
 val Project.mixinRefmap: String by optional { "mixins.$modId.refmap.json" }

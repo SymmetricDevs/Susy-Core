@@ -12,7 +12,7 @@
       "beanie"
     ],
     "credits" : "The Supersymmetry Dev Team",
-    "logoFile": "",
+    "logoFile": "icon.png",
     "screenshots": [],
     "dependencies": []
   }

@@ -19,6 +19,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import supersymmetry.common.blocks.active.RedstoneActiveBlock;
 
 public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> extends TileEntitySpecialRenderer<T>
                                            implements
@@ -82,6 +83,12 @@ public abstract class FixedGeoBlockRenderer<T extends TileEntity & IAnimatable> 
     @SuppressWarnings("DuplicatedCode")
     public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(tile));
+
+        if (tile instanceof supersymmetry.common.tileentities.AnimatablePartTileEntity apte &&
+                tile.getBlockType() instanceof RedstoneActiveBlock) {
+            apte.restoreAnimationPhase(getUniqueID(tile), partialTicks);
+        }
+
         modelProvider.setLivingAnimations(tile, getUniqueID(tile));
         setupLight(tile.getWorld().getCombinedLight(tile.getPos(), 0));
 

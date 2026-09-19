@@ -327,7 +327,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public AxisAlignedBB getRocketAABB() {
         Vec3d launchPosition = getLaunchPosition();
-        return new AxisAlignedBB(launchPosition, launchPosition).expand(2, 8, 2);
+        return new AxisAlignedBB(new BlockPos(launchPosition)).expand(2, 8, 2);
     }
 
     @Override

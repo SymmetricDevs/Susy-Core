@@ -287,7 +287,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
 
     public AxisAlignedBB getRocketAABB() {
         Vec3d launchPosition = getLaunchPosition();
-        return new AxisAlignedBB(launchPosition, launchPosition).grow(3, 0, 3).expand(0, 40, 0);
+        return new AxisAlignedBB(new BlockPos(launchPosition)).grow(3, 0, 3).expand(0, 40, 0);
     }
 
     public void spawnRocket(NBTTagCompound tag) {

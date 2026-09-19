@@ -654,13 +654,13 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         mainGroup.addWidget(workingGroup);
         // Fuel selector
         menuGroup.addWidget(
-                new LabelWidget(10, 45, I18n.format(this.getMetaName() + ".gui.fuel_selector_label"), 0xffffff));
+                new LabelWidget(10, 45, this.getMetaName() + ".gui.fuel_selector_label", 0xffffff));
         menuGroup.addWidget(new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> {
             this.fuel = fuel;
         }));
         // Gravity selector
         menuGroup.addWidget(
-                new LabelWidget(10, 80, I18n.format(this.getMetaName() + ".gui.gravity_selector_label"), 0xffffff));
+                new LabelWidget(10, 80, this.getMetaName() + ".gui.gravity_selector_label", 0xffffff));
         menuGroup.addWidget(new TextFieldWidget2(10, 88, 60, 12, () -> Double.valueOf(gravity).toString(), value -> {
             if (!value.isEmpty()) {
                 try {
@@ -678,7 +678,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             AbstractRocketBlueprint bp = this.getBlueprint();
             if (this.hasBlueprint() && bp != null) {
                 l.add(new TextComponentTranslation(this.getMetaName() + ".gui.rocket_name",
-                        I18n.format("susy.rocketry." + bp.name + ".name")));
+                        new TextComponentTranslation("susy.rocketry." + bp.name + ".name")));
 
             }
         }, 0xffffff), () -> !this.isActive() && this.hasBlueprint());
@@ -686,15 +686,15 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         // multi information
         // these should probably be visible at all times in some different corner
         menuGroup.addWidget(new LabelWidget(width - 130, 9,
-                I18n.format(getMetaName() + ".gui.computation_power", this.getCompute()), 0xffffff));
+                getMetaName() + ".gui.computation_power", 0xffffff, this.getCompute()));
         menuGroup.addWidget(new LabelWidget(width - 130, 20,
-                I18n.format(getMetaName() + ".gui.coolant_flow", this.getCoolantToConsume() * 20), 0xffffff));
+                getMetaName() + ".gui.coolant_flow", 0xffffff, this.getCoolantToConsume() * 20));
         menuGroup.addWidget(new DynamicLabelWidget(width - 130, 31,
                 () -> I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()), 0xffffff));
         menuGroup.addWidget(new LabelWidget(9, 9, getMetaFullName(), 0xffffff));
 
         menuGroup.addWidgetWithTest(
-                new LabelWidget(9, height - 80, I18n.format(this.getMetaName() + "gui.cant_improve_error"), 0xff0000),
+                new LabelWidget(9, height - 80, this.getMetaName() + "gui.cant_improve_error", 0xff0000),
                 () -> this.hasBlueprint() && !(this.getBlueprint() instanceof IAFSImprovable));
         // rocket render
 

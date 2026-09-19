@@ -1490,3 +1490,25 @@ susy.command.faction.get=current HATE for %s: %s
 susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+# Tankless Fluid Pipes
+susy.jei.group.tankless_fluid_pipes=路由流体管道
+item.material.oreprefix.pipeTinyTanklessFluid=微型%s路由流体管道
+item.material.oreprefix.pipeSmallTanklessFluid=小型%s路由流体管道
+item.material.oreprefix.pipeNormalTanklessFluid=%s路由流体管道
+item.material.oreprefix.pipeLargeTanklessFluid=大型%s路由流体管道
+item.material.oreprefix.pipeHugeTanklessFluid=巨型%s路由流体管道
+item.material.oreprefix.pipeTinyRestrictiveTanklessFluid=加固微型%s路由流体管道
+item.material.oreprefix.pipeSmallRestrictiveTanklessFluid=加固小型%s路由流体管道
+item.material.oreprefix.pipeNormalRestrictiveTanklessFluid=加固%s路由流体管道
+item.material.oreprefix.pipeLargeRestrictiveTanklessFluid=加固大型%s路由流体管道
+item.material.oreprefix.pipeHugeRestrictiveTanklessFluid=加固巨型%s路由流体管道
+susy.tankless_fluid_pipe.tooltip=§4无法运输不兼容流体！
+susy.tankless_fluid_pipe.tooltip.resistance=§9阻力：§f%,d
+susy.tool_action.hammer.toggle_flange=§8用锤子切换法兰
+
+susy.machine.extended_chisel_maker.name=Extended Chisel Maker
+susy.machine.extended_chisel_maker.crafting.disabled=Machine Disabled
+susy.machine.extended_chisel_maker.crafting.enabled=Machine Enabled
+susy.machine.extended_chisel_maker.tooltip.1=Convert any block into any other block of the same extended chisel group (1:1).
+susy.machine.extended_chisel_maker.tooltip.2=Select the output block in the folder browser; search filters by block id and location.

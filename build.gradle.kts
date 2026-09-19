@@ -1,3 +1,5 @@
+@file:Suppress("AvoidDuplicateDependencies")
+
 plugins {
     alias(conventions.plugins.repositories)
     alias(conventions.plugins.minecraft)
@@ -25,6 +27,20 @@ dependencies {
     fun Provider<MinimalExternalModuleDependency>.deobf() = get().let {
         rfg.deobf("${it.module.group}:${it.module.name}:${it.versionConstraint.requiredVersion}")
     }
+
+    constraints {
+        implementation(deps.gregtech) {
+            accessTransformers.configure(this) {
+                config = project.file("src/main/resources/susy_at.cfg") // TODO)) simplify the process in future buildscript updates
+            }
+        }
+    }
+
+    // Lombok
+    compileOnly(deps.lombok)
+    annotationProcessor(deps.lombok)
+    testCompileOnly(deps.lombok)
+    testAnnotationProcessor(deps.lombok)
 
     // Mixinbooter 11.x breaks runtime (mixins with type-parameters, FMLDeobfuscatingRemapper)
     // So we use Mixinbooter 10.x here, which contains the mixin annotation processor.
@@ -97,6 +113,8 @@ dependencies {
     // LittleTiles
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
+    // Chisel
+    compileOnly(deps.chisel.deobf())
     // OpenComputers
     implementation(deps.openComputers.deobf())
 
@@ -117,6 +135,9 @@ dependencies {
     implementation(deps.icbm.deobf())
 
     // # Optional dependencies. Uncomment the ones you need
+//    runtimeOnly(deps.cd4017beLib.deobf())
+//    runtimeOnly(deps.dimStack.deobf())
+//    runtimeOnly(deps.visualOres)
 //    runtimeOnly(deps.theBeneath.deobf())
 //    runtimeOnly(deps.realisticTerrainGenerationUnofficial.deobf())
 //    runtimeOnly(deps.worldEdit.deobf())
