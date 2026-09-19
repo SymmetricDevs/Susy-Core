@@ -2163,7 +2163,7 @@ item.susy.intel_chip_full.no_faction=No faction data
 metaitem.intel_chip.name=Intelligence gathering chip
 metaitem.intel_chip_full.name=Intelligence gathering chip
 
-metaitem.hyper_defoliant.name="Hyper Defoliant"
+metaitem.hyper_defoliant.name=Hyper Defoliant
 
 # end of problem causers
 
