@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -51,18 +52,13 @@ public class VariantCoverableBlock<T extends Enum<T> & IStringSerializable>
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (world.getTileEntity(pos) instanceof TileEntityCoverable te) {
             ItemStack newStack = te.getCoverItem();
             newStack.setCount(te.getCoverCount());
-            drops.add(newStack);
+            Block.spawnAsEntity(world, pos, newStack);
         }
+        super.breakBlock(world, pos, state);
     }
 
     @Override
