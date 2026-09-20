@@ -27,6 +27,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubstationEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.fluids.SuSyFluidAttributes;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
@@ -70,6 +71,9 @@ import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositB
 import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
+import supersymmetry.common.metatileentities.multi.tank.MetaTileEntityMultiblockTank;
+import supersymmetry.common.metatileentities.multi.tank.MetaTileEntityTankValve;
+import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
 
 public class SuSyMetaTileEntities {
 
@@ -307,6 +311,10 @@ public class SuSyMetaTileEntities {
     public static SuSyCoalBoiler STEAM_BOILER_COAL_STEEL;
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_BRONZE;
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_STEEL;
+
+    // SUSY's tanks
+    public static MetaTileEntityMultiblockTank[] MULTIBLOCK_TANKS;
+    public static MetaTileEntityMultiblockPart[] TANK_VALVES;
 
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
@@ -854,6 +862,22 @@ public class SuSyMetaTileEntities {
 
         EXTENDED_CHISEL_MAKER = registerMetaTileEntity(18528,
                 new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
+    }
+
+    // Tanks
+    MULTIBLOCK_TANKS = new MetaTileEntityMultiblockTank[SuSyTankType.values().length];
+    for (SuSyTankType type : SuSyTankType.values()) {
+        MULTIBLOCK_TANKS[type.ordinal()] = registerMetaTileEntity(18530 + type.ordinal(),
+                new MetaTileEntityMultiblockTank(susyId("tank." + type.slug), type));
+    }
+
+    TANK_VALVES = new MetaTileEntityMultiblockPart[SuSyTankType.values().length];
+    TANK_VALVES[SuSyTankType.WOOD.ordinal()] = gregtech.common.metatileentities.MetaTileEntities.WOODEN_TANK_VALVE;
+    TANK_VALVES[SuSyTankType.STEEL.ordinal()] = gregtech.common.metatileentities.MetaTileEntities.STEEL_TANK_VALVE;
+    for (int i = SuSyTankType.STEEL.ordinal() + 1; i < SuSyTankType.values().length; i++) {
+        SuSyTankType type = SuSyTankType.values()[i];
+        TANK_VALVES[i] = registerMetaTileEntity(18536 + i - 2,
+                new MetaTileEntityTankValve(susyId("tank_valve." + type.slug), type));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
