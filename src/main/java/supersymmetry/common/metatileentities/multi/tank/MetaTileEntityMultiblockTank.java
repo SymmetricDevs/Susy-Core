@@ -48,7 +48,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
-    private static final int MAX_SIZE = 11;
+    private static final int MAX_SIZE = 16;
 
     public final SuSyTankType type;
 
@@ -122,40 +122,63 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     protected boolean updateStructureDimensions() {
         World world = getWorld();
+        if (world.isRemote) {
+            return true;
+        }
+
         EnumFacing front = getFrontFacing();
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite();
-        BlockPos start = getPos();
 
-        int l = 0, r = 0, u = 0, d = 0, air = 0;
-        for (int i = 1; i <= (MAX_SIZE - 1) / 2; i++) {
-            if (isWall(world, start.offset(left, i))) l = i; else break;
-            if (isWall(world, start.offset(right, i))) r = i; else break;
-            if (isWall(world, start.offset(EnumFacing.UP, i))) u = i; else break;
-            if (isWall(world, start.offset(EnumFacing.DOWN, i))) d = i; else break;
-        }
-        for (int i = 1; i <= MAX_SIZE - 2; i++) {
-            if (isAir(world, start.offset(back, i))) air = i; else break;
+        BlockPos.MutableBlockPos lPos = new BlockPos.MutableBlockPos(getPos());
+        BlockPos.MutableBlockPos rPos = new BlockPos.MutableBlockPos(getPos());
+        BlockPos.MutableBlockPos uPos = new BlockPos.MutableBlockPos(getPos());
+        BlockPos.MutableBlockPos dPos = new BlockPos.MutableBlockPos(getPos());
+
+        int lDist = 0;
+        int rDist = 0;
+        int uDist = 0;
+        int dDist = 0;
+        int airDepth = 0;
+
+        // Scansiona i muri laterali, superiore e inferiore fino a 16 blocchi
+        for (int i = 1; i < 16; i++) {
+            if (lDist == 0 && isWall(world, lPos.move(left))) lDist = i;
+            if (rDist == 0 && isWall(world, rPos.move(right))) rDist = i;
+            if (uDist == 0 && isWall(world, uPos.move(EnumFacing.UP))) uDist = i;
+            if (dDist == 0 && isWall(world, dPos.move(EnumFacing.DOWN))) dDist = i;
+
+            if (lDist != 0 && rDist != 0 && uDist != 0 && dDist != 0) break;
         }
 
-        int w = 1 + l + r, h = 1 + u + d, depth = air + 2;
+        // Scansiona la profondità dell'aria interna verso il retro
+        BlockPos.MutableBlockPos bPos = new BlockPos.MutableBlockPos(getPos());
+        for (int i = 1; i < 15; i++) {
+            if (isAir(world, bPos.move(back))) airDepth = i; else break;
+        }
+
+        int w = 1 + lDist + rDist;
+        int h = 1 + uDist + dDist;
+        int depth = airDepth + 2;
+
         if (w < MIN_SIZE || w > MAX_SIZE || h < MIN_SIZE || h > MAX_SIZE || depth < MIN_SIZE || depth > MAX_SIZE) {
+            invalidateStructure();
             return false;
         }
 
-        this.lDist = l;
-        this.rDist = r;
-        this.uDist = u;
-        this.dDist = d;
-        this.airDepth = air;
+        this.lDist = lDist;
+        this.rDist = rDist;
+        this.uDist = uDist;
+        this.dDist = dDist;
+        this.airDepth = airDepth;
 
         writeCustomData(UPDATE_STRUCTURE_SIZE, buf -> {
-            buf.writeInt(lDist);
-            buf.writeInt(rDist);
-            buf.writeInt(uDist);
-            buf.writeInt(dDist);
-            buf.writeInt(airDepth);
+            buf.writeInt(this.lDist);
+            buf.writeInt(this.rDist);
+            buf.writeInt(this.uDist);
+            buf.writeInt(this.dDist);
+            buf.writeInt(this.airDepth);
         });
         return true;
     }
