@@ -192,7 +192,7 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> ION_IMPLANTATION_RECIPES = new RecipeMap<>("ion_implantation", 3,
             1, 2, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ELECTROLYZER);
 
-    public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 4, 2,
+  public static final RecipeMap<SimpleRecipeBuilder> CVD_RECIPES = new RecipeMap<>("cvd", 3, 1, 5, 2,
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>(
