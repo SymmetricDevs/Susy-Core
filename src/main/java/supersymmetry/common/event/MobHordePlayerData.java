@@ -51,8 +51,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             result.setInteger("timeoutPeriod", this.timeoutPeriod);
             result.setInteger("ticksActive", this.ticksActive);
             NBTTagList tagList = new NBTTagList();
-            invasionEntitiesUUIDs.stream()
-                    .forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
+            invasionEntitiesUUIDs.stream().forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
             result.setTag("invasionEntitiesUUIDs", tagList);
         }
         NBTTagList scriptedList = new NBTTagList();
@@ -102,7 +101,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             ++ticksActive;
             if (this.ticksActive > this.timeoutPeriod) {
                 this.stopInvasion(player);
-            } else return;
+            } else
+                return;
         }
         ticksUntilCanSpawn--;
         for (int i = 0; i < invasionTimers.length; i++) {
@@ -110,8 +110,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         }
         if (ticksUntilCanSpawn <= 0 && Math.random() < 0.001) {
             List<Integer> doableEvents = new ArrayList<>();
-            List<MobHordeEvent> events = MobHordeEvent.EVENTS.values().stream()
-                    .collect(Collectors.toList());
+            List<MobHordeEvent> events = MobHordeEvent.EVENTS.values().stream().collect(Collectors.toList());
             MobHordeEvent event;
             for (int i = 0; i < MobHordeEvent.EVENTS.values().size(); i++) {
                 event = events.get(i);
@@ -169,17 +168,20 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     }
 
     public void stopInvasion(EntityPlayerMP player) {
-        if (!this.hasActiveInvasion) return;
+        if (!this.hasActiveInvasion)
+            return;
 
         WorldServer world = player.getServerWorld();
 
         for (UUID uuid : invasionEntitiesUUIDs) {
             Entity entity = world.getEntityFromUuid(uuid);
 
-            if (entity == null) continue;
+            if (entity == null)
+                continue;
 
             NBTTagCompound entityTag = entity.getEntityData();
-            if (!entityTag.hasKey("susy")) continue;
+            if (!entityTag.hasKey("susy"))
+                continue;
 
             NBTTagCompound susy = entityTag.getCompoundTag("susy");
 
@@ -204,11 +206,10 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public void killInvasion(EntityPlayerMP player) {
         if (this.hasActiveInvasion) {
             WorldServer world = player.getServerWorld();
-            this.invasionEntitiesUUIDs.stream()
-                    .map(uuid -> world.getEntityFromUuid(uuid))
-                    .filter(Objects::nonNull)
+            this.invasionEntitiesUUIDs.stream().map(uuid -> world.getEntityFromUuid(uuid)).filter(Objects::nonNull)
                     .forEach(entity -> entity.setDead());
-            // Will get called implicitly from onEntityDeath, but I am doing it again just to be sure
+            // Will get called implicitly from onEntityDeath, but I am doing it again just
+            // to be sure
             this.finishInvasion();
         }
     }

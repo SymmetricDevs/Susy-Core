@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/top",
+    "up": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/top",
+    "north": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/front",
+    "east": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/side",
+    "south": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/front",
+    "west": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/side",
+    "particle": "gregtech:blocks/casings/bucket_wheel_excavator/bwe_conveyor_belt/side"
+  }
+}

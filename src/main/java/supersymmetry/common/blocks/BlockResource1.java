@@ -1,10 +1,10 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -24,7 +24,8 @@ public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockTyp
 
         NATIVE_COPPER("native_copper", 1),
         ANTHRACITE("anthracite", 0),
-        LIGNITE("lignite", 0);
+        LIGNITE("lignite", 0),
+        KREEP("kreep", 1);
 
         private final String name;
         private final int harvestLevel;
@@ -34,8 +35,7 @@ public class BlockResource1 extends VariantBlock<BlockResource1.ResourceBlockTyp
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

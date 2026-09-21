@@ -44,8 +44,10 @@ public class BlockStockDetector extends Block implements ITileEntityProvider {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        // BetterRailInterfaces.logger.warn("broke block and is remote: " + worldIn.isRemote);
-        // BetterRailInterfaces.logger.warn("broke block that had powered: " + state.getValue(POWERED));
+        // BetterRailInterfaces.logger.warn("broke block and is remote: " +
+        // worldIn.isRemote);
+        // BetterRailInterfaces.logger.warn("broke block that had powered: " +
+        // state.getValue(POWERED));
 
         super.breakBlock(worldIn, pos, state);
 
@@ -54,10 +56,8 @@ public class BlockStockDetector extends Block implements ITileEntityProvider {
          * 
          * //worldIn.removeTileEntity(pos);
          * 
-         * if (tileentity instanceof stock_detector_tile_entity)
-         * {
-         * super.breakBlock(worldIn, pos, state);
-         * }
+         * if (tileentity instanceof stock_detector_tile_entity) {
+         * super.breakBlock(worldIn, pos, state); }
          */
     }
 
@@ -67,10 +67,8 @@ public class BlockStockDetector extends Block implements ITileEntityProvider {
     }
 
     /*
-     * @Override
-     * public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-     * {
-     * }
+     * @Override public void updateTick(World worldIn, BlockPos pos, IBlockState
+     * state, Random rand) { }
      */
 
     // old and unused
@@ -93,24 +91,17 @@ public class BlockStockDetector extends Block implements ITileEntityProvider {
     }
 
     /*
-     * @Override
-     * public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
-     * {
-     * //BetterRailInterfaces.logger.warn("called getActualState, state had value: " + state.getValue(POWERED)); //seems
-     * to always match server
-     * stock_detector_tile_entity te = (stock_detector_tile_entity)world.getTileEntity(pos);
-     * return state.withProperty(POWERED, te.detected);
-     * }
+     * @Override public IBlockState getActualState(IBlockState state, IBlockAccess
+     * world, BlockPos pos) {
+     * //BetterRailInterfaces.logger.warn("called getActualState, state had value: "
+     * + state.getValue(POWERED)); //seems to always match server
+     * stock_detector_tile_entity te =
+     * (stock_detector_tile_entity)world.getTileEntity(pos); return
+     * state.withProperty(POWERED, te.detected); }
      * 
-     * @Override
-     * public boolean isOpaqueCube(IBlockState state) {
-     * return true;
-     * }
+     * @Override public boolean isOpaqueCube(IBlockState state) { return true; }
      * 
-     * @Override
-     * public boolean isFullCube(IBlockState state) {
-     * return true;
-     * }
+     * @Override public boolean isFullCube(IBlockState state) { return true; }
      */
 
     @Override
@@ -120,18 +111,21 @@ public class BlockStockDetector extends Block implements ITileEntityProvider {
 
     @Override
     public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing facing) {
-        // BetterRailInterfaces.logger.warn("weak power from state: " + state.getValue(POWERED) + ", weak power from
+        // BetterRailInterfaces.logger.warn("weak power from state: " +
+        // state.getValue(POWERED) + ", weak power from
         // entity: " + ((stock_detector_tile_entity)world.getTileEntity(pos)).detected
         // + ", is remote: " + world.getTileEntity(pos).getWorld().isRemote
         // );
         return state.getValue(POWERED) ? 15 : 0;
-        // return ((stock_detector_tile_entity)world.getTileEntity(pos)).detected ? 15 : 0;
+        // return ((stock_detector_tile_entity)world.getTileEntity(pos)).detected ? 15 :
+        // 0;
     }
 
     @Override
     public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing facing) {
         return getWeakPower(state, world, pos, facing);
-        // return ((stock_detector_tile_entity)world.getTileEntity(pos)).detected ? 15 : 0;
+        // return ((stock_detector_tile_entity)world.getTileEntity(pos)).detected ? 15 :
+        // 0;
     }
 
     @Override

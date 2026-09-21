@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import codechicken.lib.vec.Vector3;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.blocks.VariantCoverableBlock;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
@@ -68,11 +69,18 @@ public class GridOverlayRenderer {
 
             if (tile instanceof TileEntityCoverable) {
                 ItemStack item = player.getHeldItemMainhand();
-                VariantDirectionalCoverableBlock<?> block = (VariantDirectionalCoverableBlock<?>) state.getBlock();
-                if (block.validCover.test(item)) {
-                    drawGridOverlays(facing, box, face -> ((TileEntityCoverable) tile).isCovered(face));
-                } else {
-                    drawGridOverlays(facing, box, face -> face.equals(state.getValue(FACING)));
+                Object block = state.getBlock();
+                if (block instanceof VariantDirectionalCoverableBlock<?> block1) {
+                    if (block1.validCover.test(item)) {
+                        drawGridOverlays(facing, box, face -> ((TileEntityCoverable) tile).isCovered(face));
+                    } else {
+                        drawGridOverlays(facing, box, face -> face.equals(state.getValue(FACING)));
+                    }
+                }
+                if (block instanceof VariantCoverableBlock<?> block1) {
+                    if (block1.validCover.test(item)) {
+                        drawGridOverlays(facing, box, face -> ((TileEntityCoverable) tile).isCovered(face));
+                    }
                 }
             }
             GlStateManager.depthMask(true);
@@ -127,7 +135,8 @@ public class GridOverlayRenderer {
 
     @SideOnly(Side.CLIENT)
     private static void drawGridOverlays(EnumFacing facing, AxisAlignedBB box, Predicate<EnumFacing> test) {
-        if (facing == null) return;
+        if (facing == null)
+            return;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
@@ -329,7 +338,8 @@ public class GridOverlayRenderer {
     @SideOnly(Side.CLIENT)
     public static void onDrawHighlightEvent(@NotNull DrawBlockHighlightEvent event) {
         // noinspection ConstantConditions
-        if (event.getTarget().getBlockPos() == null) return;
+        if (event.getTarget().getBlockPos() == null)
+            return;
 
         EntityPlayer player = event.getPlayer();
         ItemStack stack = player.getHeldItemMainhand();

@@ -9,8 +9,7 @@ import supersymmetry.api.stockinteraction.StockHelperFunctions;
 
 public class RollingStockSubtypeHandler implements ISubtypeInterpreter {
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String apply(@NotNull ItemStack itemStack) {
         String additionalData = StockHelperFunctions.getDefinitionNameFromStack(itemStack);
         return String.format("%d;%s", itemStack.getMetadata(), additionalData == null ? "" : additionalData);

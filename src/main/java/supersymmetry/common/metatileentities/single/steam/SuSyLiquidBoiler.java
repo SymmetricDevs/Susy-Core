@@ -77,8 +77,8 @@ public class SuSyLiquidBoiler extends SteamBoiler {
         if (fluid == null || fluid.tag != null) { // fluid with nbt tag cannot match normal fluids
             return;
         }
-        Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(
-                GTValues.V[GTValues.MAX], NonNullList.create(), Collections.singletonList(fluid));
+        Recipe fluidFuelRecipe = RecipeMaps.SEMI_FLUID_GENERATOR_FUELS.findRecipe(GTValues.V[GTValues.MAX],
+                NonNullList.create(), Collections.singletonList(fluid));
         if (fluidFuelRecipe == null) {
             return;
         }

@@ -2,9 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +9,9 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -30,6 +30,7 @@ import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockLunarConcrete;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -65,16 +66,16 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
                 .where('A',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).setMinGlobalLimited(250)
-                                        .or(autoAbilities()))
+                                .or(states(SuSyBlocks.LUNAR_CONCRETE
+                                        .getState(BlockLunarConcrete.LunarConcreteType.LUNAR_CONCRETE_SMOOTH))
+                                        .setMinGlobalLimited(250)).or(autoAbilities()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('C', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('D',
                         states(SuSyBlocks.MULTIBLOCK_TANK.getState(BlockMultiblockTank.MultiblockTankType.CLARIFIER)))
                 .where('E',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('F', frames(Materials.Steel))
-                .where(' ', any())
-                .build();
+                .where('F', frames(Materials.Steel)).where(' ', any()).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -86,14 +87,13 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CLARIFIER_OVERLAY;
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
@@ -102,22 +102,9 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
         return true;
     }
 
-    private final static String[][] FLUID_PATTERN = { {
-            "     DDDD",
-            "   DDDDDDDD",
-            "  DDDDDDDDDD",
-            " DDDDDDDDDDDD",
-            " DDDDDDDDDDDD",
-            "DDDDDDDDDDDDDD",
-            "DDDDDD  DDDDDD",
-            "DDDDDD  DDDDDD",
-            "DDDDDDDDDDDDDD",
-            " DDDDDDDDDDDD",
-            " DDDDDDDDDDDD",
-            "  DDDDDDDDDD",
-            "   DDDDDDDD",
-            "     DDDD"
-    } };
+    private final static String[][] FLUID_PATTERN = { { "     DDDD", "   DDDDDDDD", "  DDDDDDDDDD", " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD", "DDDDDDDDDDDDDD", "DDDDDD  DDDDDD", "DDDDDD  DDDDDD", "DDDDDDDDDDDDDD", " DDDDDDDDDDDD",
+            " DDDDDDDDDDDD", "  DDDDDDDDDD", "   DDDDDDDD", "     DDDD" } };
     private static final Vec3i PATTERN_OFFSET = new Vec3i(-11, 1, 1);
 
     @Override

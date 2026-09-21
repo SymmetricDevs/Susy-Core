@@ -22,10 +22,12 @@ public class RenderMaskManager {
 
     public static void removeDisableModel(BlockPos controllerPos, boolean updateRendering) {
         Collection<BlockPos> poses = multiDisabled.remove(controllerPos);
-        if (poses == null) return;
+        if (poses == null)
+            return;
         modelDisabled.clear();
         multiDisabled.values().forEach(modelDisabled::addAll);
-        if (updateRendering) updateRenderChunk(poses);
+        if (updateRendering)
+            updateRenderChunk(poses);
     }
 
     private static void updateRenderChunk(Collection<BlockPos> poses) {
@@ -48,7 +50,8 @@ public class RenderMaskManager {
     public static void addDisableModel(BlockPos controllerPos, Collection<BlockPos> poses, boolean updateRendering) {
         multiDisabled.put(controllerPos, poses);
         modelDisabled.addAll(poses);
-        if (updateRendering) updateRenderChunk(poses);
+        if (updateRendering)
+            updateRenderChunk(poses);
     }
 
     public static boolean isModelDisabled(BlockPos pos) {

@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -18,6 +18,7 @@ import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockController {
 
@@ -32,22 +33,19 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("F   F", "XXXPX", "XXXPX", "XXXPX")
-                .aisle("     ", "XXXPX", "X###M", "XXXPX")
-                .aisle("F   F", "XXXPX", "XSXPX", "XXXPX")
+        return FactoryBlockPattern.start().aisle("F   F", "XXXPX", "XXXPX", "XXXPX")
+                .aisle("     ", "XXXPX", "X###M", "XXXPX").aisle("F   F", "XXXPX", "XSXPX", "XXXPX")
                 .where('S', selfPredicate())
-                .where('X', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
-                        MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE))
+                .where('X',
+                        states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN),
+                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE))
                                 .setMinGlobalLimited(24)
                                 .or(autoAbilities(true, true, true, true, true, true, false)))
-                .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE),
-                        MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
+                .where('P',
+                        states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE),
+                                MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE)))
                 .where('F', frames(Materials.StainlessSteel, Materials.Titanium))
-                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH)).where(' ', any()).where('#', air()).build();
     }
 
     @Override
@@ -55,10 +53,9 @@ public class MetaTileEntityCatalyticReformer extends RecipeMapMultiblockControll
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.BLAST_FURNACE_OVERLAY;
+        return SusyTextures.CATALYTIC_REFORMER_OVERLAY;
     }
 
     @Override

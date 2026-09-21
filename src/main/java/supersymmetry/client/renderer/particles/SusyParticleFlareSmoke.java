@@ -44,11 +44,9 @@ public class SusyParticleFlareSmoke extends Particle {
     }
 
     @Override
-    public void renderParticle(BufferBuilder buffer, net.minecraft.entity.Entity entityIn,
-                               float partialTicks, float rotationX, float rotationZ,
-                               float rotationYZ, float rotationXY, float rotationXZ) {
-        super.renderParticle(buffer, entityIn, partialTicks,
-                rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+    public void renderParticle(BufferBuilder buffer, net.minecraft.entity.Entity entityIn, float partialTicks,
+                               float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
     }
 
     @Override

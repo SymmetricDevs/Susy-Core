@@ -9,8 +9,9 @@ import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.world.World;
 
-import supersymmetry.common.world.SuSyDimensions;
+import supersymmetry.common.world.PlanetoidHandler;
 import supersymmetry.common.world.WorldProviderPlanet;
 
 // My endless gratitude to the AdvancedRocketry team for the gravity code
@@ -26,13 +27,17 @@ public class GravityHandler {
     private static WeakHashMap<Entity, Double> entityMap = new WeakHashMap<>();
 
     public static void applyGravity(Entity entity) {
-        if (entity.hasNoGravity()) return;
-        // Because working gravity on elytra-flying players can cause..... severe problems at lower gravity, it is my
+        if (entity.hasNoGravity())
+            return;
+        // Because working gravity on elytra-flying players can cause..... severe
+        // problems at lower gravity, it is my
         // utter delight to announce to you elytra are now magic!
-        // This totally isn't because Mojang decided for some godforsaken @#@#@#% reason to make ALL WAYS TO SET ELYTRA
+        // This totally isn't because Mojang decided for some godforsaken @#@#@#% reason
+        // to make ALL WAYS TO SET ELYTRA
         // FLIGHT _protected_
         // With no set methods
-        // So I cannot, without much more effort than it's worth, set elytra flight. Therefore, they're magic.
+        // So I cannot, without much more effort than it's worth, set elytra flight.
+        // Therefore, they're magic.
         if ((!(entity instanceof EntityPlayer) && !(entity instanceof EntityFlying)) ||
                 (!(entity instanceof EntityFlying) && !(((EntityPlayer) entity).capabilities.isFlying ||
                         ((EntityLivingBase) entity).isElytraFlying()))) {
@@ -46,7 +51,7 @@ public class GravityHandler {
                 entity.motionY += multiplier;
 
             } else if (entity.world.provider instanceof WorldProviderPlanet) {
-                double gravMult = SuSyDimensions.PLANETS.get(entity.world.provider.getDimension()).gravity;
+                double gravMult = PlanetoidHandler.get(entity.world.provider.getDimension()).gravity;
 
                 if (entity instanceof EntityItem)
                     entity.motionY -= (gravMult * OTHER_OFFSET - OTHER_OFFSET);
@@ -59,16 +64,19 @@ public class GravityHandler {
                 else if (entity instanceof EntityLivingBase && entity.isInWater() || entity.isInLava()) {
                     entity.motionY -= (gravMult * FLUID_LIVING_OFFSET - FLUID_LIVING_OFFSET);
                 } else if (entity instanceof EntityLivingBase) {
-                    // Normally gravity works for living entities by accelerating motionY by 0.08, and then applying
+                    // Normally gravity works for living entities by accelerating motionY by 0.08,
+                    // and then applying
                     // "drag"
                     // in the form of multiplying the resulting value by 0.98.
-                    // This code we have here runs *before* all of that, and I'm not about to make a second mixin to
+                    // This code we have here runs *before* all of that, and I'm not about to make a
+                    // second mixin to
                     // change that.
-                    // Let's say we've figured out that the *next* motionY should be X after the vanilla code runs.
+                    // Let's say we've figured out that the *next* motionY should be X after the
+                    // vanilla code runs.
                     // X = (motionY - 0.08) * 0.98
                     // motionY = X / 0.98 + 0.08
 
-                    double drag = SuSyDimensions.PLANETS.get(entity.world.provider.getDimension()).dragMultiplier;
+                    double drag = PlanetoidHandler.get(entity.world.provider.getDimension()).dragMultiplier;
                     double intended = (entity.motionY - (gravMult * 0.08)) * drag;
                     entity.motionY = intended / 0.98 + 0.08;
                 }
@@ -80,5 +88,12 @@ public class GravityHandler {
     public static boolean isOtherEntity(Entity entity) {
         return entity instanceof EntityBoat || entity instanceof EntityMinecart ||
                 entity instanceof EntityFallingBlock || entity instanceof EntityTNTPrimed;
+    }
+
+    public static double getGravityMultiplier(World world) {
+        if (world.provider instanceof WorldProviderPlanet) {
+            return PlanetoidHandler.get(world.provider.getDimension()).gravity;
+        }
+        return 1;
     }
 }

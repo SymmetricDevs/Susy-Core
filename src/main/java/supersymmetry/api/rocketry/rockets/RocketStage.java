@@ -1,59 +1,30 @@
 package supersymmetry.api.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import lombok.Setter;
+import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.common.rocketry.components.ComponentLavalEngine;
-import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
+import supersymmetry.common.rocketry.components.IComponentTank;
 
-public class RocketStage {
-
-    public enum ComponentValidationResult {
-
-        SUCCESS("success"),
-        INVALID_CARD("invalid_card"),
-        VALIDATION_FAILURE("validation_failure"),
-        INVALID_AMOUNT("invalid_amount"),
-        INCOMPATIBLE_CARD("incompatible_card"),
-        UNKNOWN("unknown");
-
-        private String name;
-
-        ComponentValidationResult(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public String getTranslationKey() {
-            return "susy.rocketry.components.validation_codes." + this.name;
-        }
-    }
+public class RocketStage implements Cloneable {
 
     public static class Builder {
 
         String lastComponentName = "";
 
         String name;
-        Map<String, List<Integer>> compLimit = new HashMap<>();
+        Map<String, List<Integer>> compLimit = new TreeMap<>();
 
         public Builder(String stagename) {
             this.name = stagename;
@@ -70,35 +41,38 @@ public class RocketStage {
             return this;
         }
 
+        public Builder range(int min, int max) {
+            List<Integer> possibilities = compLimit.get(lastComponentName);
+            for (int i = min; i <= max; i++) {
+                possibilities.add(i);
+            }
+            return this;
+        }
+
         public Builder stageName(String name) {
             this.name = name;
             return this;
         }
 
         public RocketStage build() {
-            return new RocketStage(
-                    compLimit.entrySet().stream()
-                            .collect(
-                                    Collectors.toMap(
-                                            Map.Entry::getKey,
-                                            e -> e.getValue().stream().mapToInt(Integer::intValue).toArray())),
-                    name);
+            Map<String, int[]> limits = new TreeMap<>();
+            compLimit.forEach((k, v) -> limits.put(k, v.stream().mapToInt(Integer::intValue).toArray()));
+            return new RocketStage(limits, name);
         }
     }
 
-    public Map<String, List<AbstractComponent<?>>> components = new HashMap<>();
+    public Map<String, List<AbstractComponent<?>>> components = new TreeMap<>();
 
-    // allows you to make it so it needs different types of engines for example. ensures compatibility
+    // allows you to make it so it needs different types of engines for example.
+    // ensures compatibility
     // between components of the same type
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationFunction = x -> {
-        return ComponentValidationResult.SUCCESS;
-        // this is done after the type checks in the gui anyways, no need to double check ithink
-    };
 
     // limits on how many of each component it can have
-    public Map<String, int[]> componentLimits = new HashMap<>();
+    public Map<String, int[]> componentLimits = new TreeMap<>();
 
-    // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name string>
+    // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name
+    // string>
+    @Setter
     public String name;
 
     public RocketStage(final Map<String, int[]> limits, String name) {
@@ -114,102 +88,106 @@ public class RocketStage {
         this.name = "unprocessed"; // meant to be read from nbt later
     }
 
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> getComponentValidationFunction() {
-        return componentValidationFunction;
-    }
-
     public boolean isPopulated() {
         return components.values().stream().noneMatch(x -> x.isEmpty()) && !components.isEmpty();
     }
 
     public double getMass() {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getMass)
-                .sum();
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getMass).sum();
     }
 
     public double getFuelCapacity() {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals("tank"))
-                .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume)
-                .sum() * 1000; // 1000 L per m^3 by definition
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("tank"))
+                .mapToInt(tank -> ((IComponentTank) tank).getVolume()).sum() * 1000; // 1000 L per m^3 by definition
     }
 
     // In kg/s
     public double getFuelThroughput(String componentType) {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals(componentType))
-                .mapToDouble(engine -> ((ComponentLavalEngine) engine).fuelThroughput)
-                .sum();
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .mapToDouble(engine -> ((RocketEngine) engine).getFuelThroughput()).sum();
     }
 
     public int getComponentCount(String componentType) {
-        return components.values().stream()
-                .flatMap(List::stream)
-                .filter(c -> c.getType().equals(componentType))
-                .mapToInt(engine -> 1)
-                .sum();
+        return (int) components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .count();
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, double gravity, String componentType) {
-        return getFuelThroughput(componentType) * rocketFuelEntry.getSpecificImpulse() * gravity;
+    /**
+     * Vacuum exhaust velocity, averaged over every engine on the stage in
+     * proportion to how much propellant each one is actually pushing. Delta-v is
+     * spent almost entirely out of the atmosphere, so the bells get judged against
+     * vacuum here even though liftoff thrust is not.
+     */
+    public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry) {
+        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0 * getNozzleEfficiency(0);
+    }
+
+    /**
+     * Flow-weighted nozzle efficiency across the stage's engines, or 1 if the stage
+     * has none to speak for it.
+     */
+    public double getNozzleEfficiency(double ambientPressure) {
+        double flow = 0;
+        double weighted = 0;
+        for (List<AbstractComponent<?>> componentList : components.values()) {
+            for (AbstractComponent<?> component : componentList) {
+                if (component instanceof RocketEngine engine) {
+                    double throughput = engine.getFuelThroughput();
+                    flow += throughput;
+                    weighted += throughput * engine.getNozzleEfficiency(ambientPressure);
+                }
+            }
+        }
+        return flow > 0 ? weighted / flow : 1;
+    }
+
+    /**
+     * Thrust from one class of engine, in N. Summed per engine rather than off the
+     * stage total, since every nozzle answers to its own expansion ratio.
+     */
+    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType, double ambientPressure) {
+        double exhaustVelocity = rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .mapToDouble(component -> {
+                    RocketEngine engine = (RocketEngine) component;
+                    return engine.getFuelThroughput() * exhaustVelocity *
+                            engine.getNozzleEfficiency(ambientPressure) * engine.getEfficiency();
+                }).sum();
     }
 
     public double getRadius() {
         // Max radius, in meters
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getRadius)
-                .max()
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getRadius).max()
                 .orElse(0);
+    }
+
+    public double getInterstageRadius() {
+        // Max radius, in meters
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("interstage"))
+                .mapToDouble(AbstractComponent::getRadius).findFirst().orElse(getRadius());
     }
 
     public double getHeight() {
         // Height (again max), in meters
-        return components.values().stream()
-                .flatMap(List::stream)
-                .mapToDouble(AbstractComponent::getHeight)
-                .max()
+        return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getHeight).max()
                 .orElse(0);
     }
 
-    public void setComponentValidationFunction(
-                                               Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationPredicate) {
-        this.componentValidationFunction = componentValidationPredicate;
-    }
-
-    public void setComponentLimits(Map<String, int[]> componentLimits) {
-        if (!componentLimits.values().stream().noneMatch(arr -> arr.length == 0))
-            throw new IllegalStateException("empty limit array provided");
+    private void setComponentLimits(Map<String, int[]> componentLimits) {
+        if (componentLimits.values().stream().anyMatch(arr -> arr.length == 0))
+            throw new IllegalStateException("empty possibility array provided");
         this.componentLimits = componentLimits;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public RocketStage.ComponentValidationResult setComponentListEntry(
-                                                                       String name,
-                                                                       List<AbstractComponent<?>> componentList) {
+    public ComponentValidationResult setComponentListEntry(String name,
+                                                           List<AbstractComponent<?>> componentList) {
         if (componentList.stream().anyMatch(x -> x.materials.isEmpty())) {
-            SusyLog.logger.info(
-                    "empty material list. {}",
-                    componentList.stream()
-                            .map(x -> x.materials)
-                            .flatMap(m -> m.stream())
-                            .map(x -> x.toNBT())
-                            .collect(Collectors.toList()));
+            SusyLog.logger.info("empty material list in entry {}", name);
         }
         if (IntStream.of(this.componentLimits.get(name)).noneMatch(x -> x == componentList.size())) {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is
             // invalid
         }
-        ComponentValidationResult validation_result = componentValidationFunction.apply(
-                new Tuple<String, List<AbstractComponent<?>>>(name, componentList));
-        if (validation_result != ComponentValidationResult.SUCCESS) return validation_result;
         components.put(name, componentList);
         return ComponentValidationResult.SUCCESS;
     }
@@ -240,21 +218,19 @@ public class RocketStage {
         NBTTagCompound componentsListCompound = new NBTTagCompound();
         HashMap<NBTTagCompound, Integer> tags = new HashMap<>();
         for (Map.Entry<String, List<AbstractComponent<?>>> component : this.getComponents().entrySet()) {
+            String componentKey = component.getKey();
             List<Integer> pos = new ArrayList<>();
 
-            component.getValue().stream()
-                    .forEach(
-                            x -> {
-                                NBTTagCompound innerTag = new NBTTagCompound();
-                                x.writeToNBT(innerTag);
-                                // componentsArray.appendTag(innerTag);
-                                if (!tags.containsKey(innerTag)) {
-                                    tags.put(innerTag, tags.size());
-                                }
-                                pos.add(tags.get(innerTag));
-                            });
+            component.getValue().stream().forEach(x -> {
+                NBTTagCompound innerTag = new NBTTagCompound();
+                x.writeToNBT(innerTag);
+                if (!tags.containsKey(innerTag)) {
+                    tags.put(innerTag, tags.size());
+                }
+                pos.add(tags.get(innerTag));
+            });
 
-            componentsListCompound.setTag(component.getKey(), new NBTTagIntArray(pos));
+            componentsListCompound.setTag(componentKey, new NBTTagIntArray(pos));
         }
         NBTTagCompound tagComponents = new NBTTagCompound();
         for (Entry<NBTTagCompound, Integer> entry : tags.entrySet()) {
@@ -273,34 +249,41 @@ public class RocketStage {
     }
 
     public boolean readFromNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("name", NBT.TAG_STRING)) return false;
-        if (!tag.hasKey("components", NBT.TAG_COMPOUND)) return false;
-        if (!tag.hasKey("allowedCounts", NBT.TAG_COMPOUND)) return false;
-        if (!tag.hasKey("componentValues", NBT.TAG_COMPOUND)) return false;
+        if (!tag.hasKey("name", NBT.TAG_STRING))
+            return false;
+        if (!tag.hasKey("components", NBT.TAG_COMPOUND))
+            return false;
+        if (!tag.hasKey("allowedCounts", NBT.TAG_COMPOUND))
+            return false;
+        if (!tag.hasKey("componentValues", NBT.TAG_COMPOUND))
+            return false;
 
         this.componentLimits.clear();
         this.components.clear();
         NBTTagCompound allowedCounts = tag.getCompoundTag("allowedCounts");
-        for (String key : allowedCounts.getKeySet()) {
+        allowedCounts.getKeySet().stream().sorted().forEach(key -> {
             this.componentLimits.put(key, allowedCounts.getIntArray(key));
-        }
+        });
         NBTTagCompound lookup = (NBTTagCompound) tag.getTag("componentValues");
 
         NBTTagCompound components = tag.getCompoundTag("components");
-        for (String key : components.getKeySet()) {
+        for (String key : components.getKeySet().stream().sorted().collect(Collectors.toList())) {
             int[] componentIndexes = components.getIntArray(key);
             List<AbstractComponent<?>> realComponents = new ArrayList<>();
             for (int i = 0; i < componentIndexes.length; i++) {
                 NBTTagCompound componentTag = (NBTTagCompound) lookup
                         .getTag(Integer.valueOf(componentIndexes[i]).toString());
-                Optional<? extends AbstractComponent<?>> extractedComponent = AbstractComponent
-                        .getComponentFromName(componentTag.getString("name"))
-                        .readFromNBT(componentTag);
+                AbstractComponent<?> prototype = AbstractComponent.getComponentFromName(componentTag.getString("name"));
+                if (prototype == null) {
+                    // component was removed from the mod since this blueprint was saved
+                    continue;
+                }
+                Optional<? extends AbstractComponent<?>> extractedComponent = prototype.readFromNBT(componentTag);
                 if (extractedComponent.isPresent()) {
                     realComponents.add(extractedComponent.get());
                 } else {
-                    SusyLog.logger.error(
-                            "failed to read a component somehow, index: {} nbt at index: {}", i, componentTag);
+                    SusyLog.logger.error("failed to read a component somehow, index: {} nbt at index: {}", i,
+                            componentTag);
                 }
             }
             this.setComponentListEntry(key, realComponents);
@@ -308,5 +291,20 @@ public class RocketStage {
         this.name = tag.getString("name");
 
         return true;
+    }
+
+    @Override
+    public RocketStage clone() {
+        try {
+            RocketStage cloned = (RocketStage) super.clone();
+            cloned.components = new TreeMap<>();
+            for (Map.Entry<String, List<AbstractComponent<?>>> entry : this.components.entrySet()) {
+                cloned.components.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            }
+            cloned.componentLimits = new TreeMap<>(this.componentLimits);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

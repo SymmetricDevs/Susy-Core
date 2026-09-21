@@ -21,8 +21,8 @@ public class FactionBaselineRegistry {
     public static int getBaseline(EntityPlayerMP player) {
         int max = 0;
 
-        AdvancementManager manager = ObfuscationReflectionHelper.getPrivateValue(
-                World.class, player.world, "field_191951_C");
+        AdvancementManager manager = ObfuscationReflectionHelper.getPrivateValue(World.class, player.world,
+                "field_191951_C");
 
         for (Map.Entry<ResourceLocation, Integer> entry : BASELINE_HATE.entrySet()) {
             Advancement adv = manager.getAdvancement(entry.getKey());

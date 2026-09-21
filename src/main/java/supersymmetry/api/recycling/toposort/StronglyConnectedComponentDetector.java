@@ -8,17 +8,15 @@ import java.util.*;
 
 import com.google.common.graph.ValueGraph;
 
-/// An object that splits a graph into strongly connected components lazily with
-/// Tarjan's Strongly Connected Components Algorithm.
+/// An object that splits a graph into strongly connected components lazily with Tarjan's Strongly Connected Components
+/// Algorithm.
 ///
-/// This algorithm allows to detect all cycles in dependencies that prevent topological
-/// sorting.
+/// This algorithm allows to detect all cycles in dependencies that prevent topological sorting.
 ///
-/// This detector evaluates the graph lazily and won't reflect the modifications in the
-/// graph after initial evaluation.
+/// This detector evaluates the graph lazily and won't reflect the modifications in the graph after initial evaluation.
 ///
-/// [CleanroomLoader](cleanroommc.com) is using a newer version of [Guava](guava.dev) library,
-/// where the [com.google.common.graph.ValueGraph] no longer inherits from [com.google.common.graph.Graph].
+/// [CleanroomLoader](cleanroommc.com) is using a newer version of [Guava](guava.dev) library, where the
+/// [com.google.common.graph.ValueGraph] no longer inherits from [com.google.common.graph.Graph].
 @SuppressWarnings("UnstableApiUsage")
 public class StronglyConnectedComponentDetector<T> {
 

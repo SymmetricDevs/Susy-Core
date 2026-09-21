@@ -4,8 +4,6 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -20,6 +18,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -41,6 +40,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
@@ -53,6 +53,14 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityFlareStack(this.metaTileEntityId);
+    }
+
+    @Override
+    protected void updateFormedValid() {
+        if (this.getWorld().isRemote || !RecipeCheckUtils.checkAtmosphere(this, true)) {
+            return;
+        }
+        super.updateFormedValid();
     }
 
     @Override
@@ -70,15 +78,12 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     protected BlockPattern createStructurePattern() {
         // May want to force the input to be underneath the pipe casings
-        return FactoryBlockPattern.start(FRONT, RIGHT, UP)
-                .aisle("S")
-                .aisle("P").setRepeatable(3, 7)
-                .aisle("F")
+        return FactoryBlockPattern.start(FRONT, RIGHT, UP).aisle("S").aisle("P").setRepeatable(3, 7).aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(this.getFireboxCasingState())
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
-                .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
-                .build();
+                .where('P',
+                        states(this.getFireboxCasingState())
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
+                .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1)).build();
     }
 
     // Updates the height and rate of the multiblock
@@ -108,7 +113,8 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
         for (; height < 10; height++) {
-            if (isBlockMuffler(world, pos.move(relativeUp))) break;
+            if (isBlockMuffler(world, pos.move(relativeUp)))
+                break;
         }
 
         this.height = height;
@@ -192,14 +198,11 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "susy.machine.flare_stack.rate",
-                    componentRateBonus);
+                    "susy.machine.flare_stack.rate", componentRateBonus);
             ITextComponent componentRateHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                     "susy.machine.flare_stack.rate_hover");
 
-            textList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "susy.machine.flare_stack.height",
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.flare_stack.height",
                     componentHeight));
             textList.add(TextComponentUtil.setHover(componentRateBase, componentRateHover));
         }
@@ -210,6 +213,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
                                boolean advanced) {
         tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
         tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.2"));
+        tooltip.add(I18n.format("susy.general.requires_atmosphere"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 
@@ -221,8 +225,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         return MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.FLARE_STACK_OVERLAY;
     }

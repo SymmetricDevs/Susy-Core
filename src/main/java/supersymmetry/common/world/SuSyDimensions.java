@@ -1,54 +1,54 @@
 package supersymmetry.common.world;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObjects;
-import supersymmetry.client.renderer.sky.SkyRendererMoon;
+import supersymmetry.api.space.Orbit;
+import supersymmetry.api.space.dimension.WorldProviderSpace;
+import supersymmetry.common.blocks.BlockRegolith;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
+import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
 public class SuSyDimensions {
 
     public static DimensionType planetType;
     public static DimensionType spaceType;
 
-    public static List<Biome> BIOMES = new ArrayList<>();
-    public static Map<Integer, Planet> PLANETS = new Int2ObjectArrayMap<>();
-
     public static void init() {
-        // Registers dimension type. Uses a negative ID so that fire blocks have less logic.
         int id = -2;
-
         for (DimensionType type : DimensionType.values()) {
-            if (type.getId() < id) {
+            if (type.getId() < id)
                 id = type.getId();
-            }
         }
         id--;
 
         SusyLog.logger.info("Registering planet dimension type at id " + id);
-        planetType = DimensionType.register("susy_planet", "_susy", id, WorldProviderPlanet.class, false);
+        planetType = DimensionType.register("Supersymmetry Planet", "_susy", id, WorldProviderPlanet.class, false);
 
-        // Actually registers dimension layout.
+        SusyLog.logger.info("Registering space dimension type at id " + (id - 1));
+        spaceType = DimensionType.register("susy_space", "_susyspace", id - 1, WorldProviderSpace.class, false);
 
-        new Planet(0, CelestialObjects.MOON.getDimension(), "Moon").setBiomeList(
-                new BiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 80),
-                new BiomeEntry(SuSyBiomes.LUNAR_MARIA, 20))
+        new PlanetoidHandler(CelestialObjects.MOON).setBiomeList(
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_HIGHLANDS, 80)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND)),
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_MARIA, 80)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)),
+                new SuSyBiomeEntry(SuSyBiomes.LUNAR_KREEP_TERRANE, 40)
+                        .setCraterBlock(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
                 .setStone(SuSyBlocks.SUSY_STONE_BLOCKS.get(SusyStoneVariantBlock.StoneVariant.SMOOTH)
                         .getState(SusyStoneVariantBlock.StoneType.ANORTHOSITE))
-                .setSkyRenderer(new SkyRendererMoon())
-                .setGravity(0.166f).setDragMultiplier(0f).setBiomeSize(7).load();
+                .setCustomSkyRenderer(CelestialObjects.RENDERER)
+                .setGravity(0.166f)
+                .setBiomeSize(7)
+                .load();
 
-        new Planet(0, 700, "Water Test World").setBiomeList(
-                new BiomeEntry(Biomes.OCEAN, 1)).load();
+        WorldProviderSpace.create(802, "low_earth_orbit")
+                .setOrbit(CelestialObjects.EARTH, new Orbit(
+                        0.00007, 0.0, Math.toRadians(51.6), 0.0, 0.0, 0.0, 0L, 110_400L))
+                .setRenderer(CelestialObjects.RENDERER)
+                .setGravity(0.0f)
+                .register();
     }
 }

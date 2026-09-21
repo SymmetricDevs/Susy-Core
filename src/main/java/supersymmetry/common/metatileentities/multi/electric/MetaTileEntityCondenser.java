@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -32,17 +32,11 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCC", "CCC", "CCC", "CCC")
-                .aisle("CCC", "C C", "C C", "CCC")
-                .aisle("CCC", "CSC", "CCC", "CCC")
-                .where('S', selfPredicate())
-                .where('C',
-                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
-                                .setMinGlobalLimited(27)
-                                .or(autoAbilities(false, true, false, false, true, true, false)))
-                .where(' ', air())
-                .build();
+        return FactoryBlockPattern.start().aisle("CCC", "CCC", "CCC", "CCC").aisle("CCC", "C C", "C C", "CCC")
+                .aisle("CCC", "CSC", "CCC", "CCC").where('S', selfPredicate())
+                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.ALUMINIUM_FROSTPROOF))
+                        .setMinGlobalLimited(27).or(autoAbilities(false, true, false, false, true, true, false)))
+                .where(' ', air()).build();
     }
 
     @Override
@@ -50,8 +44,7 @@ public class MetaTileEntityCondenser extends RecipeMapMultiblockController {
         return Textures.FROST_PROOF_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.CONDENSER_OVERLAY;
     }

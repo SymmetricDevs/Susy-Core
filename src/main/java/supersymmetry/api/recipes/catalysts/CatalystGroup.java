@@ -3,9 +3,9 @@ package supersymmetry.api.recipes.catalysts;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
+
+import org.jspecify.annotations.NonNull;
 
 public class CatalystGroup {
 
@@ -14,7 +14,7 @@ public class CatalystGroup {
     private final String name;
     private final CatalystInfos catalystInfos = new CatalystInfos();
 
-    public CatalystGroup(@Nonnull String registry_name) {
+    public CatalystGroup(@NonNull String registry_name) {
         this.name = registry_name;
         catalystGroups.add(this);
     }
@@ -23,8 +23,9 @@ public class CatalystGroup {
         return this.catalystInfos;
     }
 
-    public void add(@Nonnull ItemStack itemStack, @Nonnull CatalystInfo catalystInfo) {
-        if (itemStack == ItemStack.EMPTY) return;
+    public void add(@NonNull ItemStack itemStack, @NonNull CatalystInfo catalystInfo) {
+        if (itemStack == ItemStack.EMPTY)
+            return;
         this.catalystInfos.put(itemStack, catalystInfo);
     }
 
@@ -35,24 +36,23 @@ public class CatalystGroup {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         CatalystGroup that = (CatalystGroup) o;
 
         return getName().equals(that.getName());
     }
 
-    @Nonnull
-    public String getName() {
+    @NonNull public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "CatalystGroup{" +
-                "name='" + name + '\'' +
-                '}';
+        return "CatalystGroup{" + "name='" + name + '\'' + '}';
     }
 
     public static List<CatalystGroup> getCatalystGroups() {

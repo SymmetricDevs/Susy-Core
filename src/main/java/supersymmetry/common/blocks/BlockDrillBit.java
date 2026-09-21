@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,11 +9,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
+public class BlockDrillBit extends VariantHorizontalRotatableBlock<BlockDrillBit.DrillBitType> {
 
     public BlockDrillBit() {
         super(net.minecraft.block.material.Material.IRON);
@@ -33,10 +32,14 @@ public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
         return false;
     }
 
-    @NotNull
     @Override
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
+        return false;
+    }
+
+    @NotNull @Override
     public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.SOLID;
+        return BlockRenderLayer.CUTOUT;
     }
 
     public enum DrillBitType implements IStringSerializable, IStateHarvestLevel {
@@ -51,8 +54,7 @@ public class BlockDrillBit extends VariantBlock<BlockDrillBit.DrillBitType> {
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

@@ -115,37 +115,19 @@ public class GeoMetaArmorRenderer extends ModelBiped implements IGeoRenderer<IGe
 
         // These are all magic numbers from simply trying
         if (this.isChild) {
-            translate(0.0F, -12.0F, 0.0F,
-                    headBone, bodyBone);
-            translate(2.5F, -11.0F, 0.0F,
-                    rightArmBone);
-            translate(-2.5F, -11.0F, 0.0F,
-                    leftArmBone);
-            translate(1.0F, -6.0F, 0.0F,
-                    rightLegBone, rightBootBone);
-            translate(-1.0F, -6.0F, 0.0F,
-                    leftLegBone, leftBootBone);
-            scale(0.75F,
-                    headBone);
-            scale(0.5F,
-                    bodyBone,
-                    rightArmBone, leftArmBone,
-                    rightLegBone, leftLegBone,
-                    rightBootBone, leftBootBone);
+            translate(0.0F, -12.0F, 0.0F, headBone, bodyBone);
+            translate(2.5F, -11.0F, 0.0F, rightArmBone);
+            translate(-2.5F, -11.0F, 0.0F, leftArmBone);
+            translate(1.0F, -6.0F, 0.0F, rightLegBone, rightBootBone);
+            translate(-1.0F, -6.0F, 0.0F, leftLegBone, leftBootBone);
+            scale(0.75F, headBone);
+            scale(0.5F, bodyBone, rightArmBone, leftArmBone, rightLegBone, leftLegBone, rightBootBone, leftBootBone);
         } else if (this.isSneak) {
-            translate(0.0F, -3.0F, 0.0F,
-                    headBone);
-            translate(0.0F, -3.0F, 0.0F,
-                    bodyBone,
-                    rightArmBone, leftArmBone);
-            translate(0.0F, -0.2F, 0.0F,
-                    headBone, bodyBone,
-                    rightArmBone, leftArmBone,
-                    rightLegBone, leftLegBone,
+            translate(0.0F, -3.0F, 0.0F, headBone);
+            translate(0.0F, -3.0F, 0.0F, bodyBone, rightArmBone, leftArmBone);
+            translate(0.0F, -0.2F, 0.0F, headBone, bodyBone, rightArmBone, leftArmBone, rightLegBone, leftLegBone,
                     rightBootBone, leftBootBone);
-            translate(0.0F, -3.0F, 0.0F,
-                    rightLegBone, leftLegBone,
-                    rightBootBone, leftBootBone);
+            translate(0.0F, -3.0F, 0.0F, rightLegBone, leftLegBone, rightBootBone, leftBootBone);
         }
 
         Color renderColor = getRenderColor(currentMetaArmor, partialTicks);

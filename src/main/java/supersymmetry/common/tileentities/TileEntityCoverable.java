@@ -37,8 +37,6 @@ public class TileEntityCoverable extends TickableTileEntityBase {
     private ItemStack coverItem;
     private IBakedModel sourceModel;
 
-    public static boolean RENDER_SWITCH = true; // false -> regular render; true -> tile rendering
-
     public TileEntityCoverable() {
         super();
         coverSpots = 0;
@@ -143,7 +141,8 @@ public class TileEntityCoverable extends TickableTileEntityBase {
         } else {
             scheduleRenderUpdate();
         }
-        if (player.isCreative()) return inp;
+        if (player.isCreative())
+            return inp;
         return ret;
     }
 

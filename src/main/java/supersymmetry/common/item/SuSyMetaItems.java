@@ -1,6 +1,7 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
+import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,11 +17,10 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.materialitem.MetaPrefixItem;
-import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.*;
+import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
-import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
-import gregtech.api.items.metaitem.StandardMetaItem;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -30,11 +30,10 @@ import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
-import supersymmetry.common.item.behavior.DataCardBehavior;
-import supersymmetry.common.item.behavior.MillBallDurabilityManager;
-import supersymmetry.common.item.behavior.PipeNetPainterBehavior;
-import supersymmetry.common.item.behavior.RocketConfigBehavior;
+import supersymmetry.common.item.behavior.*;
+import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class SuSyMetaItems {
 
@@ -53,12 +52,20 @@ public class SuSyMetaItems {
     public static MetaValueItem SHAPE_MOLD_TARGET;
     public static MetaValueItem ENTITY_TAGGER;
     public static MetaValueItem FACTION_RADIO;
+    public static MetaValueItem BASIC_CARGO_DRONE;
+    public static MetaValueItem ADVANCED_CARGO_DRONE;
+    public static MetaValueItem LOCATION_CARD;
+    public static MetaValueItem ELITE_CARGO_DRONE;
+    public static MetaValueItem CLAY_GRAPHITE_CRUCIBLE;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
-    public static MetaValueItem PADDING_CLOTH;
+
+    public static MetaValueItem AIR_DISPERSER;
+    public static MetaValueItem OXYGEN_SENSOR;
+    public static MetaValueItem AIRLOCK;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -124,13 +131,11 @@ public class SuSyMetaItems {
 
         // IDs start at 1 for historical reasons. Do not renumber existing items.
         CATALYST_BED_SUPPORT_GRID = metaItem.addItem(1, "catalyst_bed_support_grid");
-        CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam")
-                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                        I18n.format("metaitem.conveyor.module.tooltip"),
+        CONVEYOR_STEAM = metaItem.addItem(2, "conveyor.steam").addComponents(
+                new TooltipBehavior(lines -> Collections.addAll(lines, I18n.format("metaitem.conveyor.module.tooltip"),
                         I18n.format("gregtech.universal.tooltip.item_transfer_rate", 4))));
-        PUMP_STEAM = metaItem.addItem(3, "pump.steam")
-                .addComponents(new TooltipBehavior(lines -> Collections.addAll(lines,
-                        I18n.format("metaitem.electric.pump.tooltip"),
+        PUMP_STEAM = metaItem.addItem(3, "pump.steam").addComponents(
+                new TooltipBehavior(lines -> Collections.addAll(lines, I18n.format("metaitem.electric.pump.tooltip"),
                         I18n.format("gregtech.universal.tooltip.fluid_transfer_rate", 32))));
         AIR_VENT = metaItem.addItem(4, "air_vent").addComponents(
                 new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.air_vent.tooltip.1", 100))));
@@ -143,28 +148,51 @@ public class SuSyMetaItems {
         CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
         ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
-        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1)
+                .addComponents(new FactionRadioBehaviour());
 
         DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
         DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")), Arrays.asList("type")));
+                .addComponents(new DataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),
+                        Arrays.asList("name")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
-                .addComponents(new DataCardBehavior(
-                        lines -> lines.add(I18n.format("metaitem.data_card.master_blueprint.tooltip.1")),
-                        Arrays.asList("rocketType")));
+                .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));
 
-        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode");
+        TUNGSTEN_ELECTRODE = metaItem.addItem(14, "tungsten_electrode").setMaxStackSize(1)
+                .addComponents(ElectrodeDurabilityManager.INSTANCE);
 
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
+        // Free ID
 
         SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
+
+        BASIC_CARGO_DRONE = metaItem.addItem(18, "cargo_drone.basic").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(basicDroneCharge, GTValues.MV));
+
+        ADVANCED_CARGO_DRONE = metaItem.addItem(19, "cargo_drone.advanced").setMaxStackSize(1)
+                .addComponents(ElectricStats.createRechargeableBattery(advancedDroneCharge, GTValues.HV));
+
+        LOCATION_CARD = metaItem.addItem(20, "location_card").setMaxStackSize(1)
+                .addComponents(new LocationCardBehavior());
+
+        ELITE_CARGO_DRONE = metaItem.addItem(21, "cargo_drone.elite").setMaxStackSize(1)
+                .addComponents(new HydrogenPoweredDroneBehavior(eliteDroneFuel));
+
+        AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
+
+        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1)
+                .addComponents(new OxygenSensorBehavior())
+                .addComponents(ElectricStats.createElectricItem(16000, GTValues.LV));
+
+        CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
+
+        AIRLOCK = metaItem.addItem(25, "airlock")
+                .addComponents(new AirlockBehavior(SuSyBlocks.AIRLOCK_DOOR));
     }
 
     private static void addExtraBehaviours() {
@@ -172,6 +200,7 @@ public class SuSyMetaItems {
         for (int i = 0; i < EnumDyeColor.values().length; i++) {
             MetaItems.SPRAY_CAN_DYES[i].addComponents(new PipeNetPainterBehavior(512, SPRAY_EMPTY.getStackForm(), i));
         }
+        MetaItems.DUCT_TAPE.addComponents(new TapeRepairBehavior());
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

@@ -5,9 +5,6 @@ import static gregtech.api.util.RelativeDirection.RIGHT;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -21,6 +18,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -44,6 +43,7 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.BiomeProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController {
 
@@ -58,7 +58,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 
@@ -72,27 +72,19 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, RelativeDirection.UP)
-                .aisle("       ", "      P", "       ")
-                .aisle("       ", "      P", "       ")
-                .aisle("FCCCC  ", "CCCCC P", "FCECC  ")
-                .aisle("CCSGC  ", "OPPPPPP", "CCEGC  ")
-                .aisle("FCCC   ", "CCCCC  ", "FCEC   ")
-                .where(' ', any())
-                .where('S', selfPredicate())
-                .where('P', states(getPipeCasingState()))
-                .where('G', states(getGearboxState()))
-                .where('F', frames(Materials.Steel))
-                .where('C', states(getCasingState())
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setExactLimit(1))
-                        .or(autoAbilities(true, false)))
-                .where('E', states(getCasingState())
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY)).setMinGlobalLimited(1).setMaxGlobalLimited(2))
-                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
-                .build();
+        return FactoryBlockPattern.start(RIGHT, FRONT, RelativeDirection.UP).aisle("       ", "      P", "       ")
+                .aisle("       ", "      P", "       ").aisle("FCCCC  ", "CCCCC P", "FCECC  ")
+                .aisle("CCSGC  ", "OPPPPPP", "CCEGC  ").aisle("FCCC   ", "CCCCC  ", "FCEC   ").where(' ', any())
+                .where('S', selfPredicate()).where('P', states(getPipeCasingState()))
+                .where('G', states(getGearboxState())).where('F', frames(Materials.Steel))
+                .where('C',
+                        states(getCasingState()).or(abilities(MultiblockAbility.IMPORT_ITEMS).setExactLimit(1))
+                                .or(autoAbilities(true, false)))
+                .where('E', states(getCasingState()).or(abilities(MultiblockAbility.INPUT_ENERGY))
+                        .setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS)).build();
     }
 
     @Override
@@ -124,16 +116,10 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        EnumFacing leftSide = RelativeDirection.LEFT
-                .getRelativeFacing(
-                        getFrontFacing(),
-                        getUpwardsFacing(),
-                        isFlipped());
-        EnumFacing backSide = RelativeDirection.BACK
-                .getRelativeFacing(
-                        getFrontFacing(),
-                        getUpwardsFacing(),
-                        isFlipped());
+        EnumFacing leftSide = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                isFlipped());
+        EnumFacing backSide = RelativeDirection.BACK.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                isFlipped());
         BlockPos tempPos = getPos().offset(leftSide, 4).offset(backSide);
         int yLevel = getPos().getY();
         String biome = getWorld().getBiome(tempPos).biomeName;
@@ -143,17 +129,16 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
                 .setStyle(new Style().setColor(TextFormatting.YELLOW)));
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.LARGE_FLUID_PUMP_OVERLAY;
     }
 
     /**
-     * A custom recipeLogic class, for adding our check for biomes
-     * This can be moved out to a stand-alone class.
-     * But generally speaking if you do not plan to re-use this, making it an inner class should be fine.
-     * CEu itself has many such cases.
+     * A custom recipeLogic class, for adding our check for biomes This can be moved
+     * out to a stand-alone class. But generally speaking if you do not plan to
+     * re-use this, making it an inner class should be fine. CEu itself has many
+     * such cases.
      */
     public static class LargePumpRecipeLogic extends MultiblockRecipeLogic {
 
@@ -162,8 +147,7 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
         }
 
         /**
-         * Overriding this to add our own custom checks
-         * Don't forget super calls
+         * Overriding this to add our own custom checks Don't forget super calls
          */
         @Override
         public boolean checkRecipe(@NotNull Recipe recipe) {
@@ -178,20 +162,16 @@ public class MetaTileEntityLargeFluidPump extends RecipeMapMultiblockController 
          * This is a method for biome checking
          */
         public boolean checkBiomeRequirement(@NotNull Recipe recipe) {
-            if (!recipe.hasProperty(BiomeProperty.getInstance())) return true;
-            EnumFacing leftSide = RelativeDirection.LEFT
-                    .getRelativeFacing(
-                            getMetaTileEntity().getFrontFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
-            EnumFacing backSide = RelativeDirection.BACK
-                    .getRelativeFacing(
-                            getMetaTileEntity().getFrontFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
-                            ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
+            if (!recipe.hasProperty(BiomeProperty.getInstance()))
+                return true;
+            EnumFacing leftSide = RelativeDirection.LEFT.getRelativeFacing(getMetaTileEntity().getFrontFacing(),
+                    ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
+                    ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
+            EnumFacing backSide = RelativeDirection.BACK.getRelativeFacing(getMetaTileEntity().getFrontFacing(),
+                    ((MultiblockControllerBase) getMetaTileEntity()).getUpwardsFacing(),
+                    ((MultiblockControllerBase) getMetaTileEntity()).isFlipped());
             BlockPos tempPos = getMetaTileEntity().getPos().offset(leftSide, 4).offset(backSide);
-            return recipe.getProperty(BiomeProperty.getInstance(), BiomeProperty.BiomePropertyList.EMPTY_LIST)
-                    .checkBiome(getMetaTileEntity().getWorld().getBiome(tempPos));
+            return RecipeCheckUtils.checkBiomeRequirement(recipe, getMetaTileEntity().getWorld(), tempPos);
         }
 
         @Override

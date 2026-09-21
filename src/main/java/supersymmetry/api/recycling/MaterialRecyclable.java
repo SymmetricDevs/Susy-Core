@@ -27,8 +27,10 @@ public record MaterialRecyclable(Material material) implements Recyclable {
 
     @Override
     public void addToMStack(Object2ObjectMap<Material, Fraction> mStacks, Fraction count) {
-        if (Fraction.ZERO.equals(count)) return;
-        if (material instanceof MarkerMaterial) return; /// Do nothing if this is a marker material
+        if (Fraction.ZERO.equals(count))
+            return;
+        if (material instanceof MarkerMaterial)
+            return; /// Do nothing if this is a marker material
         mStacks.put(material, mStacks.getOrDefault(material, Fraction.ZERO).add(count));
     }
 
@@ -51,9 +53,9 @@ public record MaterialRecyclable(Material material) implements Recyclable {
         if (this == obj) {
             return true;
         } else if (obj instanceof MaterialRecyclable) {
-            /// Not comparing registries here since they'll have the same oreDict in the end anyway...
-            /// This is better for performance, and it's generally not a good practice
-            /// to have materials with the same name in two registries.
+            /// Not comparing registries here since they'll have the same oreDict in the end anyway... This is better
+            /// for performance, and it's generally not a good practice to have materials with the same name in
+            /// two registries.
             return material.getName().equals(((MaterialRecyclable) (obj)).material.getName());
         }
         return false;

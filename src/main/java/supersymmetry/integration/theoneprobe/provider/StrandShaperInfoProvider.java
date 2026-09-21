@@ -13,6 +13,8 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.TextFormattingUtil;
 import mcjty.theoneprobe.api.*;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.capability.IStrandProvider;
+import supersymmetry.api.capability.StrandConversion;
 import supersymmetry.common.metatileentities.multi.electric.strand.MetaTileEntityStrandShaper;
 
 public class StrandShaperInfoProvider implements IProbeInfoProvider {
@@ -27,7 +29,8 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                              IBlockState blockState, IProbeHitData data) {
         if (blockState.getBlock().hasTileEntity(blockState)) {
             TileEntity tileEntity = world.getTileEntity(data.getPos());
-            if (!(tileEntity instanceof IGregTechTileEntity)) return;
+            if (!(tileEntity instanceof IGregTechTileEntity))
+                return;
 
             MetaTileEntity metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity();
             if (metaTileEntity instanceof MetaTileEntityStrandShaper shaper) {
@@ -36,9 +39,28 @@ public class StrandShaperInfoProvider implements IProbeInfoProvider {
                 }
                 long EUt = shaper.getVoltage();
                 String text = TextFormatting.RED + TextFormattingUtil.formatNumbers(EUt) + TextStyleClass.INFO +
-                        " EU/t" + TextFormatting.GREEN +
-                        " (" + GTValues.VN[GTUtility.getTierByVoltage(EUt)] + TextFormatting.GREEN + ")";
+                        " EU/t" + TextFormatting.GREEN + " (" + GTValues.VN[GTUtility.getTierByVoltage(EUt)] +
+                        TextFormatting.GREEN + ")";
                 probeInfo.text(TextStyleClass.INFO + "{*gregtech.top.energy_consumption*} " + text);
+            } else if (metaTileEntity instanceof IStrandProvider bus) {
+                if (bus.getStrand() == null) {
+                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.no_strand*}");
+                } else {
+                    probeInfo
+                            .text(TextStyleClass.INFO + "{*supersymmetry.top.thickness*} " + bus.getStrand().thickness);
+                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.width*} " + bus.getStrand().width);
+                    probeInfo.text(TextStyleClass.INFO + "{*supersymmetry.top.material*} " +
+                            bus.getStrand().material.getLocalizedName());
+                    StrandConversion conversion = StrandConversion.getConversion(bus.getStrand());
+                    if (conversion == null) {
+                        probeInfo.text(TextStyleClass.WARNING + "{*supersymmetry.top.strand_not_usable*}");
+                    } else {
+                        probeInfo
+                                .text(TextStyleClass.INFO + "{*supersymmetry.top.conversion*} {*supersymmetry.prefix." +
+                                        conversion.prefix.name.toLowerCase() + "*}");
+
+                    }
+                }
             }
         }
     }

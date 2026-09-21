@@ -22,14 +22,12 @@ import supersymmetry.common.event.MobHordeWorldData;
 
 public class CommandHordeStart extends CommandBase {
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getName() {
         return "start";
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getUsage(@NotNull ICommandSender sender) {
         return "susy.command.horde.start.usage";
     }

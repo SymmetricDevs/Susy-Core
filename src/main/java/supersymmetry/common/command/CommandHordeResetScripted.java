@@ -20,14 +20,12 @@ import supersymmetry.common.event.MobHordeWorldData;
 
 public class CommandHordeResetScripted extends CommandBase {
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getName() {
         return "resetscripted";
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public String getUsage(@NotNull ICommandSender sender) {
         return "susy.command.horde.resetscripted.usage";
     }
@@ -35,10 +33,7 @@ public class CommandHordeResetScripted extends CommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
                                           @Nullable BlockPos targetPos) {
-        List<String> list = MobHordeEvent.EVENTS.values()
-                .stream()
-                .map(event -> event.KEY)
-                .collect(Collectors.toList());
+        List<String> list = MobHordeEvent.EVENTS.values().stream().map(event -> event.KEY).collect(Collectors.toList());
 
         list.add("all");
 
@@ -53,8 +48,7 @@ public class CommandHordeResetScripted extends CommandBase {
 
         EntityPlayerMP player = (EntityPlayerMP) sender;
 
-        MobHordePlayerData playerData = MobHordeWorldData.get(player.world)
-                .getPlayerData(player.getPersistentID());
+        MobHordePlayerData playerData = MobHordeWorldData.get(player.world).getPlayerData(player.getPersistentID());
 
         if (args.length < 1) {
             throw new CommandException("Usage: /resetscripted <event|all>");
@@ -65,8 +59,7 @@ public class CommandHordeResetScripted extends CommandBase {
         if (name.equalsIgnoreCase("all")) {
             playerData.completedScriptedEvents.clear();
 
-            sender.sendMessage(new TextComponentTranslation(
-                    "susy.command.horde.resetscripted.all"));
+            sender.sendMessage(new TextComponentTranslation("susy.command.horde.resetscripted.all"));
             return;
         }
 
@@ -77,16 +70,12 @@ public class CommandHordeResetScripted extends CommandBase {
         }
 
         if (!playerData.hasCompleted(event.KEY)) {
-            sender.sendMessage(new TextComponentTranslation(
-                    "susy.command.horde.resetscripted.not_set",
-                    event.KEY));
+            sender.sendMessage(new TextComponentTranslation("susy.command.horde.resetscripted.not_set", event.KEY));
             return;
         }
 
         playerData.completedScriptedEvents.remove(event.KEY);
 
-        sender.sendMessage(new TextComponentTranslation(
-                "susy.command.horde.resetscripted.success",
-                event.KEY));
+        sender.sendMessage(new TextComponentTranslation("susy.command.horde.resetscripted.success", event.KEY));
     }
 }

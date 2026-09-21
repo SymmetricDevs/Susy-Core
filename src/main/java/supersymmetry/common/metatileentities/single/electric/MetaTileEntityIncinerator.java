@@ -79,8 +79,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         int rowSize = (int) Math.sqrt(getInventorySize());
-        return createUITemplate(entityPlayer, rowSize)
-                .build(getHolder(), entityPlayer);
+        return createUITemplate(entityPlayer, rowSize).build(getHolder(), entityPlayer);
     }
 
     @Override
@@ -184,9 +183,8 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
             for (int x = 0; x < gridSize; x++) {
                 int index = y * gridSize + x;
 
-                builder.widget(new SlotWidget(importItems, index,
-                        gridStartX + x * 18, 30 + y * 18, true, true)
-                                .setBackgroundTexture(GuiTextures.SLOT));
+                builder.widget(new SlotWidget(importItems, index, gridStartX + x * 18, 30 + y * 18, true, true)
+                        .setBackgroundTexture(GuiTextures.SLOT));
             }
         }
 

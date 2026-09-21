@@ -1,0 +1,18 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "susy:rocket_struct/rockethulltile",
+    "textures": {
+      "0": "gregtech:blocks/rocketry/struct/rockethulltilecarbon"
+    }
+  },
+  "variants": 	{
+    "variant=carbon": { "model": "susy:rocket_struct/rockethulltile" },
+    "variant=steel" : {
+      "model" : "susy:rocket_struct/rockethulltile",
+      "textures" : {
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+      }
+    }
+  }
+}

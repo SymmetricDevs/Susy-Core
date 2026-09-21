@@ -36,14 +36,16 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
     @Override
     protected boolean consumeInputsAndSetupRecipe() {
         Strand orig = this.input.take();
-        if (orig == null) return false;
+        if (orig == null)
+            return false;
         progress = (int) Math.ceil(1 / (4.0 * orig.thickness));
         return true;
     }
 
     @Override
     protected Strand resultingStrand() {
-        if (this.input.getStrand() == null || this.input.getStrand().isCut) return null;
+        if (this.input.getStrand() == null || this.input.getStrand().isCut)
+            return null;
         Strand str = new Strand(this.input.getStrand());
         // t / (2 - e^(-2t)) is a pretty good function for balancing
         double scaling = 2 - Math.pow(Math.E, -2 * str.thickness);
@@ -62,10 +64,8 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
                 .aisle("   P   ", "   P   ", "CCCSCCC", "F  P  F", "   P   ", "   P   ", "   P   ")
                 .where('R', rollOrientation(RelativeDirection.FRONT))
                 .where('H', hydraulicOrientation(RelativeDirection.UP))
-                .where('h', hydraulicOrientation(RelativeDirection.DOWN))
-                .where('F', frames(Materials.Steel))
-                .where('S', selfPredicate())
-                .where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
+                .where('h', hydraulicOrientation(RelativeDirection.DOWN)).where('F', frames(Materials.Steel))
+                .where('S', selfPredicate()).where('I', abilities(SuSyMultiblockAbilities.STRAND_IMPORT))
                 .where('O', abilities(SuSyMultiblockAbilities.STRAND_EXPORT))
                 .where('C',
                         autoAbilities().or(
@@ -73,9 +73,7 @@ public class MetaTileEntityRollingMill extends MetaTileEntityStrandShaper {
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
-                .where(' ', any())
-                .where('A', air())
-                .build();
+                .where(' ', any()).where('A', air()).build();
     }
 
     private IBlockState hydraulicState() {

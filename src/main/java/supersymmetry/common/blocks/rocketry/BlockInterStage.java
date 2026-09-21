@@ -7,11 +7,13 @@ import net.minecraft.util.IStringSerializable;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
+import supersymmetry.common.materials.SusyMaterials;
 
-public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType> {
+public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType>
+                             implements WeightedBlock<BlockInterStage.InterStageType> {
 
     public BlockInterStage() {
         super(Material.IRON);
@@ -21,7 +23,8 @@ public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInter
         setSoundType(SoundType.METAL);
         setDefaultState(getState(InterStageType.AL_7075));
         setHarvestLevel("wrench", 4);
-        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, Materials.Aluminium).isItemEqual(itemStack);
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.AluminiumAlloy7075)
+                .isItemEqual(itemStack);
     }
 
     public enum InterStageType implements IStringSerializable, IStateHarvestLevel {
@@ -50,5 +53,12 @@ public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInter
         public String getName() {
             return name;
         }
+    }
+
+    @Override
+    public double getMass(InterStageType type) {
+        return switch (type) {
+            case AL_7075 -> 12;
+        };
     }
 }

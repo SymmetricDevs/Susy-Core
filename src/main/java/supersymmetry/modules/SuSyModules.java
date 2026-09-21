@@ -14,6 +14,8 @@ public class SuSyModules implements IModuleContainer {
     public static final String MODULE_JEI = "susy_jei_integration";
     public static final String MODULE_PYROTECH = "susy_pyrotech_integration";
     public static final String MODULE_LITTLETILES = "susy_littletiles_integration";
+    public static final String MODULE_MULTISTORAGE = "susy_multistorage_integration";
+    public static final String MODULE_GRS = "susy_groovyscript_integration";
 
     @Override
     public String getID() {

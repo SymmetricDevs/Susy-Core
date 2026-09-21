@@ -70,5 +70,14 @@
         "stream" : true
       }
     ]
+  },
+  "item.oxygen_sensor_beep" : {
+    "category" : "player",
+    "sounds" : [
+      {
+        "name" : "susy:oxygen_sensor_beep",
+        "stream" : false
+      }
+    ]
   }
 }

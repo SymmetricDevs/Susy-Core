@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -12,6 +10,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -32,6 +31,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
@@ -54,7 +54,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
                     new TextComponentTranslation(
                             canUsePlasma ? "susy.multiblocks.sintering_oven.use_plasma.affirmative" :
                                     "susy.multiblocks.sintering_oven.use_plasma.negative")
-                                            .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE))));
+                            .setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE))));
         }
         super.addDisplayText(textList);
     }
@@ -64,8 +64,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
         return SusyTextures.ULV_STRUCTURAL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.SINTERING_OVERLAY;
     }
@@ -74,34 +73,22 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
         return SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.ULV_STRUCTURAL_CASING);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public BlockPattern createStructurePattern() {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(33);
 
-        return FactoryBlockPattern.start()
-                .aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", "CCCCC")
-                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
-                .aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
-                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
-                .aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
-                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
-                .aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
-                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
-                .aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
-                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ")
-                .aisle("DDDDD", "DDSDD", "DDDDD", "DDDDD", "DDDDD")
+        return FactoryBlockPattern.start().aisle("CCCCC", "CCCCC", "CCCCC", "CCCCC", "CCCCC")
+                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ").aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
+                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ").aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
+                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ").aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
+                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ").aisle("FFFFF", "FBBBF", "FB#BF", " BBB ", "     ")
+                .aisle("     ", " BBB ", " B#B ", " BBB ", "     ").aisle("DDDDD", "DDSDD", "DDDDD", "DDDDD", "DDDDD")
                 .where('S', selfPredicate())
-                .where('D', casingPredicate
-                        .or(autoAbilities(true, true, false, true, true, false, false)))
-                .where('C', casingPredicate
-                        .or(autoAbilities(false, false, true, false, false, true, false)))
-                .where('F', frames(Materials.Steel))
-                .where('B', SuSyPredicates.sinteringBricks())
-                .where('#', air())
-                .where(' ', any())
-                .build();
+                .where('D', casingPredicate.or(autoAbilities(true, true, false, true, true, false, false)))
+                .where('C', casingPredicate.or(autoAbilities(false, false, true, false, false, true, false)))
+                .where('F', frames(Materials.Steel)).where('B', SuSyPredicates.sinteringBricks()).where('#', air())
+                .where(' ', any()).build();
     }
 
     @Override
@@ -123,6 +110,7 @@ public class MetaTileEntitySinteringOven extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
-        return this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false));
+        return RecipeCheckUtils.checkAtmosphere(recipe, this) &&
+                (this.canUsePlasma || !(recipe.getProperty(SinterProperty.getInstance(), false)));
     }
 }

@@ -21,8 +21,7 @@ public abstract class ForgeBlockModelRendererMixin {
                    at = @At(value = "INVOKE",
                             target = "Lnet/minecraft/block/state/IBlockState;shouldSideBeRendered(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z",
                             remap = true))
-    private static boolean ignoreBlocked(
-                                         IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing facing,
+    private static boolean ignoreBlocked(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing facing,
                                          Operation<Boolean> method) {
         return RenderMaskManager.isModelDisabled(pos.offset(facing)) || method.call(state, blockAccess, pos, facing);
     }

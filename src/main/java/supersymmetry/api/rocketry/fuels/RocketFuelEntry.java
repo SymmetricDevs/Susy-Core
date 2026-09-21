@@ -1,135 +1,39 @@
 package supersymmetry.api.rocketry.fuels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.util.Tuple;
-
+import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 
-public class RocketFuelEntry {
+public interface RocketFuelEntry {
 
-    public static class RocketFuelEntryBuilder {
+    String LIQUID_PREFIX = "liquid:";
+    String SOLID_PREFIX = "solid:";
 
-        private String registryName;
-        private ArrayList<Tuple<Material, Integer>> composition;
-        private double density;
-        private double sIVacuum;
-        private double sIPerPressure;
+    double getSpecificImpulse();
 
-        public RocketFuelEntryBuilder(String name) {
-            this.registryName = name;
-            this.composition = new ArrayList<>();
+    double getDensity();
+
+    double getSIVariation();
+
+    /**
+     * A name for this fuel that survives a save. The two kinds of fuel live in
+     * different registries, so the key is tagged with which one to look in; resolve
+     * it again with {@link #fromFuelKey}.
+     */
+    String getFuelKey();
+
+    static @Nullable RocketFuelEntry fromFuelKey(String key) {
+        if (key.startsWith(LIQUID_PREFIX)) {
+            return LiquidRocketFuelEntry.getCopyOf(key.substring(LIQUID_PREFIX.length()));
         }
-
-        public RocketFuelEntryBuilder addComponent(Material mat, int proportion) {
-            composition.add(new Tuple<>(mat, proportion));
-            return this;
+        if (key.startsWith(SOLID_PREFIX)) {
+            // material registry names are themselves modid:path, so the rest of the key
+            // gets handed over whole
+            Material material = GregTechAPI.materialManager.getMaterial(key.substring(SOLID_PREFIX.length()));
+            return material == null ? null : material.getProperty(SuSyPropertyKey.SOLID_ROCKET_FUEL);
         }
-
-        public RocketFuelEntryBuilder density(double density) {
-            this.density = density;
-            return this;
-        }
-
-        public RocketFuelEntryBuilder sIVacuum(double sIVacuum) {
-            this.sIVacuum = sIVacuum;
-            return this;
-        }
-
-        public RocketFuelEntryBuilder sIPerPressure(double sIPerPressure) {
-            this.sIPerPressure = sIPerPressure;
-            return this;
-        }
-
-        public void register() {
-            if (this.composition.isEmpty()) {
-                throw new IllegalStateException("empty list of fuel component entries");
-            }
-            RocketFuelEntry.registerFuel(new RocketFuelEntry(this.registryName, this.composition, this.density,
-                    this.sIVacuum, this.sIPerPressure));
-        }
-    }
-
-    private static Map<String, RocketFuelEntry> FUEL_REGISTRY = new HashMap<>();
-
-    public static Map<String, RocketFuelEntry> getFuelRegistry() {
-        return new HashMap<>(FUEL_REGISTRY);
-    }
-
-    public static RocketFuelEntry getCopyOf(String name) {
-        try {
-            return RocketFuelEntry.getFuelRegistry().get(name).clone();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public static void registerFuel(RocketFuelEntry rfe) {
-        FUEL_REGISTRY.put(rfe.registryName, rfe);
-    }
-
-    private ArrayList<Tuple<Material, Integer>> composition; // any extra required materials, their proportions
-
-    private String registryName;
-
-    private double density; // kg/L
-
-    private double sIVacuum; // kg * m / s
-
-    private double sIPerPressure;
-
-    public RocketFuelEntry(
-                           String registryName,
-                           ArrayList<Tuple<Material, Integer>> composition,
-                           double density,
-                           double sIVacuum,
-                           double sIPerPressure) {
-        this.registryName = registryName;
-        this.composition = composition;
-        this.density = density;
-        this.sIVacuum = sIVacuum;
-        this.sIPerPressure = sIPerPressure;
-    }
-
-    @SuppressWarnings("unchecked")
-    public RocketFuelEntry(RocketFuelEntry copy) {
-        this.density = copy.density;
-        this.composition = (ArrayList<Tuple<Material, Integer>>) copy.composition.clone();
-        this.sIVacuum = copy.sIVacuum;
-        this.registryName = copy.registryName;
-    }
-
-    public double getsIVacuum() {
-        return sIVacuum;
-    }
-
-    public double getsIPerPressure() {
-        return sIPerPressure;
-    }
-
-    public ArrayList<Tuple<Material, Integer>> getComposition() {
-        return composition;
-    }
-
-    public RocketFuelEntry clone() {
-        return new RocketFuelEntry(this);
-    }
-
-    public String getRegistryName() {
-        return this.registryName;
-    }
-
-    public double getDensity() {
-        return this.density;
-    }
-
-    public double getSpecificImpulse() {
-        return this.sIVacuum;
-    }
-
-    public double getSIVariation() {
-        return this.sIPerPressure;
+        return null;
     }
 }

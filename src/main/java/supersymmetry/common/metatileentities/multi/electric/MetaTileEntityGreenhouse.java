@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
@@ -21,6 +19,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
@@ -141,16 +140,11 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
             builder.aisle("CDDDC", "G###G", "G###G", " GGG ");
         }
-        return builder
-                .aisle("CCCCC", "FGGGF", "FGGGF", " FFF ")
-                .where('S', selfPredicate())
+        return builder.aisle("CCCCC", "FGGGF", "FGGGF", " FFF ").where('S', selfPredicate())
                 .where('C', states(getCasingState()).or(this.autoAbilities()))
                 .where('D', states(Blocks.DIRT.getDefaultState(), Blocks.GRASS.getDefaultState()))
-                .where('G', states(getGlassState()))
-                .where('F', frames(Materials.Steel))
-                .where(' ', any())
-                .where('#', air())
-                .build();
+                .where('G', states(getGlassState())).where('F', frames(Materials.Steel)).where(' ', any())
+                .where('#', air()).build();
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
@@ -165,8 +159,8 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
         return MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID);
     }
 
-    public boolean isBlockEdge(@Nonnull World world, @Nonnull BlockPos.MutableBlockPos pos,
-                               @Nonnull EnumFacing direction) {
+    public boolean isBlockEdge(@NonNull World world, BlockPos.@NonNull MutableBlockPos pos,
+                               @NonNull EnumFacing direction) {
         pos.move(direction);
         return world.getBlockState(pos) == getCasingState() ||
                 GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
@@ -192,7 +186,7 @@ public class MetaTileEntityGreenhouse extends RecipeMapMultiblockController {
     }
 
     @Override
-    public boolean isMultiblockPartWeatherResistant(@Nonnull IMultiblockPart part) {
+    public boolean isMultiblockPartWeatherResistant(@NonNull IMultiblockPart part) {
         return true;
     }
 

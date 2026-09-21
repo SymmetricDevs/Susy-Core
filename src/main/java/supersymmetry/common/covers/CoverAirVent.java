@@ -51,17 +51,20 @@ public class CoverAirVent extends CoverBase implements ITickable {
     @Override
     public void update() {
         World world = getWorld();
-        if (world.isRemote || getOffsetTimer() % 20 != 0) return;
+        if (world.isRemote || getOffsetTimer() % 20 != 0)
+            return;
         if (world.getBlockState(getPos().offset(getAttachedSide())).isFullBlock()) {
             return;
         }
 
         TileEntity tileEntity = getTileEntityHere();
-        if (tileEntity == null) return;
+        if (tileEntity == null)
+            return;
 
         IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
                 getAttachedSide());
-        if (fluidHandler == null) return;
+        if (fluidHandler == null)
+            return;
 
         if (cachedAirType == null) {
             tryAcquireFluid();
@@ -74,24 +77,22 @@ public class CoverAirVent extends CoverBase implements ITickable {
 
     private void tryAcquireFluid() {
         final int dimension = getWorld().provider.getDimension();
-        RecipeMaps.GAS_COLLECTOR_RECIPES.getRecipeList().stream()
-                .filter(r -> {
-                    IntList list = r.getProperty(GasCollectorDimensionProperty.getInstance(), null);
-                    if (list == null) return false;
+        RecipeMaps.GAS_COLLECTOR_RECIPES.getRecipeList().stream().filter(r -> {
+            IntList list = r.getProperty(GasCollectorDimensionProperty.getInstance(), null);
+            if (list == null)
+                return false;
 
-                    for (int dim : list) {
-                        if (dimension == dim) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .findFirst()
-                .ifPresent(recipe -> {
-                    FluidStack stack = recipe.getFluidOutputs().get(0);
-                    if (stack != null) {
-                        this.cachedAirType = new FluidStack(stack.getFluid(), airPerSecond);
-                    }
-                });
+            for (int dim : list) {
+                if (dimension == dim) {
+                    return true;
+                }
+            }
+            return false;
+        }).findFirst().ifPresent(recipe -> {
+            FluidStack stack = recipe.getFluidOutputs().get(0);
+            if (stack != null) {
+                this.cachedAirType = new FluidStack(stack.getFluid(), airPerSecond);
+            }
+        });
     }
 }

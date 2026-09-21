@@ -9,9 +9,11 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
-public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFairingHull.FairingType> {
+public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFairingHull.FairingType>
+                              implements WeightedBlock<BlockFairingHull.FairingType> {
 
     public BlockFairingHull() {
         super(Material.IRON);
@@ -51,5 +53,12 @@ public class BlockFairingHull extends VariantDirectionalCoverableBlock<BlockFair
         public String getHarvestTool(IBlockState state) {
             return IStateHarvestLevel.super.getHarvestTool(state);
         }
+    }
+
+    @Override
+    public double getMass(FairingType type) {
+        return switch (type) {
+            case ALUMINIUM_FAIRING -> 5;
+        };
     }
 }

@@ -14,7 +14,8 @@ public class MobHordeAdvancementHandler {
 
     @SubscribeEvent
     public static void onAdvancement(AdvancementEvent event) {
-        if (!(event.getEntityPlayer() instanceof EntityPlayerMP)) return;
+        if (!(event.getEntityPlayer() instanceof EntityPlayerMP))
+            return;
 
         EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
         ResourceLocation advancementID = event.getAdvancement().getId();
@@ -25,9 +26,11 @@ public class MobHordeAdvancementHandler {
         for (MobHordeEvent mobEvent : MobHordeEvent.EVENTS.values()) {
 
             ResourceLocation required = mobEvent.getRequiredAdvancement();
-            if (required == null) continue;
+            if (required == null)
+                continue;
 
-            if (!required.equals(advancementID)) continue;
+            if (!required.equals(advancementID))
+                continue;
 
             if (mobEvent.isRunOnce() && playerData.hasCompleted(mobEvent.KEY)) {
                 continue;

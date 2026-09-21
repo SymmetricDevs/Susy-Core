@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks.rocketry;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
@@ -30,8 +29,8 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
     }
 
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(@NonNull IBlockState state, @NonNull IBlockAccess world, @NonNull BlockPos pos,
+                                    EntityLiving.@NonNull SpawnPlacementType type) {
         return false;
     }
 
@@ -55,16 +54,21 @@ public class BlockProcessorCluster extends VariantHorizontalRotatableBlock<Block
 
     public enum TierType implements IStringSerializable {
 
-        TIER_1("tier1");
+        TIER_1("tier1", 32, 5, 1);
 
         private final String name;
+        public final int eut;
+        public final int coolant;
+        public final int computation;
 
-        TierType(String name) {
+        TierType(String name, int eut, int coolant, int computation) {
             this.name = name;
+            this.eut = eut;
+            this.coolant = coolant;
+            this.computation = computation;
         }
 
-        @Nonnull
-        @Override
+        @NonNull @Override
         public String getName() {
             return this.name;
         }

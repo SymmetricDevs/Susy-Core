@@ -1,7 +1,6 @@
 package supersymmetry.common.mui.widget;
 
-import static supersymmetry.api.capability.SuSyDataCodes.LATE_INIT_WIDGET;
-import static supersymmetry.api.capability.SuSyDataCodes.STATE_UPDATE;
+import static supersymmetry.api.capability.SuSyDataCodes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +42,8 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         super.addWidget(widget);
     }
 
-    // jdtls provides the option to suppress warnings but not to automatically insert the fix even
+    // jdtls provides the option to suppress warnings but not to automatically
+    // insert the fix even
     // when it suggests one :C :C
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -72,7 +72,8 @@ public class ConditionalWidget extends AbstractWidgetGroup {
                     // lateInit.remove(w);
                     lateInitDone.add(id);
                     writeUpdateInfo(LATE_INIT_WIDGET, buf -> buf.writeInt(id));
-                    break; // i think it will error if you continue going after deleting an item from a list
+                    break; // i think it will error if you continue going after deleting an item from a
+                           // list
                 }
             }
         }
@@ -88,11 +89,8 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             boolean state = buffer.readBoolean();
             int index = buffer.readInt();
             if (index >= widgets.size()) {
-                SusyLog.logger.error(
-                        "widgets.size()->[{}]: tried to {} widget:{}",
-                        widgets.size(),
-                        state ? "turn on" : "turn off",
-                        id);
+                SusyLog.logger.error("widgets.size()->[{}]: tried to {} widget:{}", widgets.size(),
+                        state ? "turn on" : "turn off", id);
                 // SusyLog.logger.info("client; wsize:{}, {}", widgets.size(), widgets);
                 // ui state
                 // writeClientAction(0xddd, (buf) -> {});
@@ -108,10 +106,8 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             if (test.getAsBoolean()) {
                 addWidgetWithTest(supplier.get(), test);
             } else {
-                SusyLog.logger.error(
-                        "ui state desynced, the ui is likely to implode soon. supplier/test {}/{}",
-                        supplier,
-                        test);
+                SusyLog.logger.error("ui state desynced, the ui is likely to implode soon. supplier/test {}/{}",
+                        supplier, test);
                 // decided to make it add anyways so that it does the error in the log
                 addWidgetWithTest(supplier.get(), test);
             }
@@ -120,13 +116,12 @@ public class ConditionalWidget extends AbstractWidgetGroup {
 
     @Override
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
-        GlStateManager.color(
-                gui.getRColorForOverlay(), gui.getGColorForOverlay(), gui.getBColorForOverlay(), 1.0F);
+        GlStateManager.color(gui.getRColorForOverlay(), gui.getGColorForOverlay(), gui.getBColorForOverlay(), 1.0F);
         for (Widget widget : widgets) {
             if (widget.isVisible() && tests.getOrDefault(widget, defaultPredicate).getAsBoolean()) {
                 widget.drawInBackground(mouseX, mouseY, partialTicks, context);
-                GlStateManager.color(
-                        gui.getRColorForOverlay(), gui.getGColorForOverlay(), gui.getBColorForOverlay(), 1.0F);
+                GlStateManager.color(gui.getRColorForOverlay(), gui.getGColorForOverlay(), gui.getBColorForOverlay(),
+                        1.0F);
             }
         }
     }
@@ -146,12 +141,10 @@ public class ConditionalWidget extends AbstractWidgetGroup {
         if (!(w.isVisible() == ns && w.isActive() == ns)) {
             w.setVisible(ns);
             w.setActive(ns);
-            writeUpdateInfo(
-                    STATE_UPDATE,
-                    buf -> {
-                        buf.writeBoolean(ns);
-                        buf.writeInt(widgets.indexOf(w));
-                    });
+            writeUpdateInfo(STATE_UPDATE, buf -> {
+                buf.writeBoolean(ns);
+                buf.writeInt(widgets.indexOf(w));
+            });
         }
     }
 }

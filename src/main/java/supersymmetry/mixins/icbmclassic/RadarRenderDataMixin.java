@@ -23,7 +23,8 @@ public abstract class RadarRenderDataMixin {
 
     @Inject(method = "update()V", at = @At("TAIL"), remap = false)
     private void supersymmetry$addDropPodDots(CallbackInfo ci) {
-        if (!(host instanceof IDropPodRadar)) return;
+        if (!(host instanceof IDropPodRadar))
+            return;
 
         for (EntityDropPod pod : ((IDropPodRadar) host).susy$getIncomingDropPods()) {
             if (pod.isEntityAlive()) {

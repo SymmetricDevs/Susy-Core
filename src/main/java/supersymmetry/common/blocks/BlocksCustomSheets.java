@@ -21,7 +21,8 @@ public class BlocksCustomSheets extends VariantBlock<BlocksCustomSheets.MetalDec
     public static enum MetalDecorationBlockType implements IStringSerializable, IStateHarvestLevel {
 
         DARKWHITEMETALSHEET("darkwhitemetalsheet", 2),
-        LIGHTERGRAYMETALSHEET("lightergraymetalsheet", 2),
+        LIGHTERGRAYMETALSHEET("lightergraymetalsheet",
+                2),
         DECORATIVECOPPER("decorativecopper", 2),
         DECORATIVECOPPERBRICKS("decorativecopperbricks", 2);
 

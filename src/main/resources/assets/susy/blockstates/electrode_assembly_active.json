@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "active=false,variant=carbon": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/casings/electrode_assembly/carbon_electrode"
+      }
+    },
+    "active=true,variant=carbon": {
+      "model": "gregtech:cube_2_layer_all",
+      "textures": {
+        "bot_all": "gregtech:blocks/casings/electrode_assembly/carbon_electrode",
+        "top_all": "gregtech:blocks/casings/electrode_assembly/carbon_electrode_bloom"
+      }
+    }
+  }
+}

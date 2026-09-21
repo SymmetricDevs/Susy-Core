@@ -1,6 +1,6 @@
 package supersymmetry.api.recipes.catalysts;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 public class CatalystInfo implements Comparable<CatalystInfo> {
 
@@ -36,14 +36,19 @@ public class CatalystInfo implements Comparable<CatalystInfo> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         CatalystInfo that = (CatalystInfo) o;
 
-        if (getTier() != that.getTier()) return false;
-        if (Double.compare(that.getYieldEfficiency(), getYieldEfficiency()) != 0) return false;
-        if (Double.compare(that.getEnergyEfficiency(), getEnergyEfficiency()) != 0) return false;
+        if (getTier() != that.getTier())
+            return false;
+        if (Double.compare(that.getYieldEfficiency(), getYieldEfficiency()) != 0)
+            return false;
+        if (Double.compare(that.getEnergyEfficiency(), getEnergyEfficiency()) != 0)
+            return false;
         return Double.compare(that.getSpeedEfficiency(), getSpeedEfficiency()) == 0;
     }
 
@@ -62,14 +67,17 @@ public class CatalystInfo implements Comparable<CatalystInfo> {
     }
 
     @Override
-    public int compareTo(@Nonnull CatalystInfo o) {
+    public int compareTo(@NonNull CatalystInfo o) {
         // compare order: Tier, Speed, Yield, Energy
         int result = Integer.compare(this.getTier(), o.getTier());
-        if (result != 0) return result;
+        if (result != 0)
+            return result;
         result = Double.compare(this.getSpeedEfficiency(), o.getSpeedEfficiency());
-        if (result != 0) return result;
+        if (result != 0)
+            return result;
         result = Double.compare(this.getYieldEfficiency(), o.getYieldEfficiency());
-        if (result != 0) return result;
+        if (result != 0)
+            return result;
         result = Double.compare(this.getEnergyEfficiency(), o.getEnergyEfficiency());
         return result;
     }

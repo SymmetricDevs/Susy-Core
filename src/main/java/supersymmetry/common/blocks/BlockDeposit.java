@@ -1,6 +1,6 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
+import static supersymmetry.common.blocks.BlockDeposit.DepositBlockType.ICE_CAP;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.VariantBlock;
 
@@ -34,14 +35,12 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         return false;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ItemStack getSilkTouchDrop(@NotNull IBlockState state) {
         return new ItemStack(Blocks.AIR, 1);
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     @SuppressWarnings("deprecation")
     public EnumPushReaction getPushReaction(@NotNull IBlockState state) {
         return EnumPushReaction.BLOCK;
@@ -53,15 +52,26 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
         super.dropBlockAsItemWithChance(worldIn, pos, state, 0.0F, 0);
     }
 
+    @Deprecated
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+        return this.getState(blockState) == ICE_CAP ? 50 : this.blockHardness;
+    }
+
     public enum DepositBlockType implements IStringSerializable {
 
         ORTHOMAGMATIC("orthomagmatic"),
         METAMORPHIC("metamorphic"),
         SEDIMENTARY("sedimentary"),
-        HYDROTHERMAL("hydrothermal"),
+        HYDROTHERMAL(
+                "hydrothermal"),
         ALLUVIAL("alluvial"),
         MAGMATIC_HYDROTHERMAL("magmatic_hydrothermal"),
-        ICE_CAP("ice_cap");
+        ICE_CAP(
+                "ice_cap"),
+        EVAPORITE(
+                "evaporite"),
+        CRATER_DEPOSIT("crater_deposit"),
+        LUNAR_CRATER("lunar_crater");
 
         private final String name;
 
@@ -69,8 +79,7 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
             this.name = name;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
     }

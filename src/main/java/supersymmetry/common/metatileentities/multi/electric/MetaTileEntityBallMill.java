@@ -77,8 +77,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @SideOnly(Side.CLIENT)
     private AnimationFactory factory;
 
-    @Nullable
-    private Collection<BlockPos> hiddenBlocks;
+    @Nullable private Collection<BlockPos> hiddenBlocks;
 
     public MetaTileEntityBallMill(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
@@ -119,7 +118,7 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
     @Override
     @SideOnly(Side.CLIENT)
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?>abilityPart) {
+        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability != MultiblockAbility.MAINTENANCE_HATCH && ability != MultiblockAbility.INPUT_ENERGY) {
                 return SusyTextures.BALL_MILL_SHELL;
@@ -147,33 +146,25 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
                         "  HCCCCCCCCH ", "  G          ", "             ")
                 .aisle(" XMMMXXXXXXXX", "  NSM        ", "             ", "  G          ", "  G          ",
                         "  G          ", "             ", "             ")
-                .where('M', states(getCasingState()).or(autoAbilities(
-                        true, true, false,
-                        false, false, false, false)))
+                .where('M', states(getCasingState()).or(autoAbilities(true, true, false, false, false, false, false)))
                 .where('Y', abilities(MultiblockAbility.IMPORT_ITEMS).or(shell))
                 .where('Z', abilities(MultiblockAbility.EXPORT_FLUIDS).or(shell))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).or(shell))
                 .where('O', abilities(MultiblockAbility.EXPORT_ITEMS).or(shell))
-                .where('A', states(getShellCasingState()))
-                .where('C', hiddenStates(getShellCasingState()))
-                .where('H', hiddenStates(getShellHeadState()))
-                .where('D', hiddenStates(getDiaphragmState()))
+                .where('A', states(getShellCasingState())).where('C', hiddenStates(getShellCasingState()))
+                .where('H', hiddenStates(getShellHeadState())).where('D', hiddenStates(getDiaphragmState()))
                 .where('G', hiddenGearTooth(
-                        // Since isFlipped() isn't reliable at this stage, and we just care about the Axis here
+                        // Since isFlipped() isn't reliable at this stage, and we just care about the
+                        // Axis here
                         // anyway...
                         RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), false)
                                 .getAxis()))
-                .where('N', states(getGearBoxState()))
-                .where('X', frames(Materials.Steel))
-                .where('S', selfPredicate())
-                .where('#', air())
-                .where(' ', any())
-                .build();
+                .where('N', states(getGearBoxState())).where('X', frames(Materials.Steel)).where('S', selfPredicate())
+                .where('#', air()).where(' ', any()).build();
     }
 
     @Override
-    @Nullable
-    public Collection<BlockPos> getHiddenBlocks() {
+    @Nullable public Collection<BlockPos> getHiddenBlocks() {
         return hiddenBlocks;
     }
 
@@ -319,8 +310,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        event.getController().setAnimation(new AnimationBuilder()
-                .addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController()
+                .setAnimation(new AnimationBuilder().addAnimation("default_loop", ILoopType.EDefaultLoopTypes.LOOP));
         return isActive() ? PlayState.CONTINUE : PlayState.STOP;
     }
 
@@ -362,8 +353,8 @@ public class MetaTileEntityBallMill extends RecipeMapMultiblockController implem
             for (int i = 0; i < getInputInventory().getSlots(); i++) {
                 ItemStack stack = getInputInventory().getStackInSlot(i);
                 if (!stack.isEmpty() && OreDictUnifier.getPrefix(stack) == SusyOrePrefix.millBall) {
-                    if (MillBallDurabilityManager.getMillBallDamage(stack) ==
-                            MillBallDurabilityManager.getMillBallMaxDurability(stack)) {
+                    if (MillBallDurabilityManager.getMillBallDamage(stack) == MillBallDurabilityManager
+                            .getMillBallMaxDurability(stack)) {
                         continue;
                     }
                     this.slotCache[slotCacheIndex] = i;

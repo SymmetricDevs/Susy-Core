@@ -47,8 +47,10 @@ public class PseudoMultiMachineMetaTileEntity extends SimpleMachineMetaTileEntit
             return;
         }
 
-        // the traditional "back" side of this type of MTE is actually treated as its front for recipe purposes,
-        // making wrench movement feel as though you are holding onto or manipulating the back side to point the MTE.
+        // the traditional "back" side of this type of MTE is actually treated as its
+        // front for recipe purposes,
+        // making wrench movement feel as though you are holding onto or manipulating
+        // the back side to point the MTE.
         targetBlockState = this.getWorld().getBlockState(this.getPos().offset(this.getFrontFacing().getOpposite()));
     }
 
@@ -74,7 +76,8 @@ public class PseudoMultiMachineMetaTileEntity extends SimpleMachineMetaTileEntit
     public boolean onWrenchClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                  CuboidRayTraceResult hitResult) {
         boolean wrenchClickSucceeded = super.onWrenchClick(playerIn, hand, facing, hitResult);
-        if (wrenchClickSucceeded) this.checkAdjacentBlocks();
+        if (wrenchClickSucceeded)
+            this.checkAdjacentBlocks();
         return wrenchClickSucceeded;
     }
 }

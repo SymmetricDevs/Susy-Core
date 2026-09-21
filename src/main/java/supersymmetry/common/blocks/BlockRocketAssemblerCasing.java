@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -10,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
@@ -35,7 +34,8 @@ public class BlockRocketAssemblerCasing extends VariantBlock<BlockRocketAssemble
 
         REINFORCED_FOUNDATION("reinforced_foundation", 1),
         FOUNDATION("foundation", 1),
-        RAILS("rails", 1),
+        RAILS("rails",
+                1),
         STRUCTURAL_FRAME("structural_frame", 1);
 
         private final String name;
@@ -46,8 +46,7 @@ public class BlockRocketAssemblerCasing extends VariantBlock<BlockRocketAssemble
             this.harvestLevel = harvestLevel;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 

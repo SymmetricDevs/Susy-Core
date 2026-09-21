@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "variant=single": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "susy:blocks/speaker"
+      }
+    },
+    "variant=broadcast": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "susy:blocks/speaker"
+      }
+    }
+  }
+}

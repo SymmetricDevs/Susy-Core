@@ -1,9 +1,9 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -38,25 +38,19 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
         // Different characters use common constraints. Copied from GCyM
         TraceabilityPredicate casingPredicate = states(getCasingState()).setMinGlobalLimited(15);
 
-        return FactoryBlockPattern.start()
-                .aisle("GGBBF", "GG   ", "     ")
-                .aisle("GABC ", "GG D ", " CDD ")
-                .aisle("GGB F", "GG   ", "     ")
-                .aisle("  AAA", "  AAA", "     ")
-                .aisle("  ASA", "  AAA", "     ")
-                .where('S', selfPredicate())
-                .where('A', casingPredicate)
+        return FactoryBlockPattern.start().aisle("GGBBF", "GG   ", "     ").aisle("GABC ", "GG D ", " CDD ")
+                .aisle("GGB F", "GG   ", "     ").aisle("  AAA", "  AAA", "     ").aisle("  ASA", "  AAA", "     ")
+                .where('S', selfPredicate()).where('A', casingPredicate)
                 .where('B', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
                 .where('C',
                         states(MetaBlocks.TURBINE_CASING
                                 .getState(BlockTurbineCasing.TurbineCasingType.STAINLESS_STEEL_GEARBOX)))
                 .where('D', frames(Materials.StainlessSteel))
-                .where('F', autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
-                        .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))
-                .where('G', casingPredicate
-                        .or(autoAbilities(true, true, true, true, false, false, false)))
-                .where(' ', any())
-                .build();
+                .where('F',
+                        autoAbilities(false, false, false, false, false, true, false).setExactLimit(1)
+                                .or(autoAbilities(false, false, false, false, true, false, false).setExactLimit(1)))
+                .where('G', casingPredicate.or(autoAbilities(true, true, true, true, false, false, false)))
+                .where(' ', any()).build();
     }
 
     @Override
@@ -64,8 +58,7 @@ public class MetaTileEntityQuencher extends RecipeMapMultiblockController {
         return Textures.CLEAN_STAINLESS_STEEL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.QUENCHER_OVERLAY;
     }

@@ -8,6 +8,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import supersymmetry.client.renderer.handler.AnimatablePartRenderer;
+import supersymmetry.common.pipelike.tanklessfluid.tile.TileEntityTanklessFluidPipe;
+import supersymmetry.common.pipelike.tanklessfluid.tile.TileEntityTanklessFluidPipeTickable;
 
 public class SuSyTileEntities {
 
@@ -15,6 +17,11 @@ public class SuSyTileEntities {
         GameRegistry.registerTileEntity(AnimatablePartTileEntity.class, susyId("animatable_part"));
         GameRegistry.registerTileEntity(TileEntityCoverable.class, susyId("coverable"));
         GameRegistry.registerTileEntity(TileEntityFlare.class, susyId("flare"));
+        GameRegistry.registerTileEntity(TileEntitySpeaker.class, susyId("speaker"));
+        GameRegistry.registerTileEntity(TileEntitySpeakerBroadcast.class, susyId("speaker_broadcast"));
+        GameRegistry.registerTileEntity(TileEntityTanklessFluidPipe.class, susyId("tankless_fluid_pipe"));
+        GameRegistry.registerTileEntity(TileEntityTanklessFluidPipeTickable.class,
+                susyId("tankless_fluid_pipe_tickable"));
     }
 
     @SideOnly(Side.CLIENT)

@@ -18,7 +18,9 @@ import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.api.particle.IParticleBeamProvider;
 import supersymmetry.api.particle.ParticleBeam;
 
-public class MetaTileEntityBeamLineHatch extends MetaTileEntityMultiblockPart implements IParticleBeamProvider,
+public class MetaTileEntityBeamLineHatch extends MetaTileEntityMultiblockPart
+                                         implements
+                                         IParticleBeamProvider,
                                          IMultiblockAbilityPart<IParticleBeamProvider> {
 
     private ParticleBeam particleBeam;

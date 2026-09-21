@@ -1,12 +1,18 @@
 package supersymmetry.common.rocketry;
 
+import java.util.List;
+import java.util.function.Function;
+
 import net.minecraft.util.ResourceLocation;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.unification.material.Materials;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.rocketry.rockets.ComponentValidationResult;
 import supersymmetry.api.rocketry.rockets.RocketStage;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
@@ -14,75 +20,69 @@ import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 public class SusyRocketComponents {
 
     public static SimpleStagedRocketBlueprint ROCKET_SOYUZ_BLUEPRINT_DEFAULT;
-    public static SimpleStagedRocketBlueprint ROCKET_V1_BLUEPRINT_DEFAULT;
+    public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
         AbstractComponent.registerComponent(new ComponentFairing());
         AbstractComponent.registerComponent(new ComponentLavalEngine());
-        AbstractComponent.registerComponent(new ComponentVernierEngine());
         AbstractComponent.registerComponent(new ComponentInterstage());
         AbstractComponent.registerComponent(new ComponentSpacecraft());
         AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
+        AbstractComponent.registerComponent(new ComponentSolidFuelTank());
         AbstractComponent.lockRegistry();
-        if (Materials.Benzene == null || Materials.Oxygen == null) {
-            throw new RuntimeException();
+
+        new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
+                .addComponent(GregTechAPI.materialManager.getMaterial("liquid_methane") != null ?
+                        GregTechAPI.materialManager.getMaterial("liquid_methane").getFluid() :
+                        Materials.Methane.getFluid(), 100)
+                .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 866).density(0.82).sIVacuum(369)
+                .sIPerPressure(309).register();
+
+        if (GregTechAPI.materialManager.getMaterial("rp_one") != null) {
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("RP1-LOX")
+                    .addComponent(GregTechAPI.materialManager.getMaterial("rp_one").getFluid(), 100)
+                    .addComponent(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID), 363).density(1.03).sIVacuum(356)
+                    .sIPerPressure(300).register();
         }
-        new RocketFuelEntry.RocketFuelEntryBuilder("kerosene-lox")
-                .addComponent(Materials.Benzene, 1)
-                .addComponent(Materials.Oxygen, 1)
-                .density(1000).sIVacuum(1000).sIPerPressure(1000)
-                .register();
 
-        // TODO add the emergency escape system
+        if ((GregTechAPI.materialManager.getMaterial("monomethylhydrazine") != null) &&
+                (GregTechAPI.materialManager.getMaterial("mon_3") != null)) {
+            new LiquidRocketFuelEntry.RocketFuelEntryBuilder("MMH-MON-3")
+                    .addComponent(GregTechAPI.materialManager.getMaterial("monomethylhydrazine").getFluid(), 100)
+                    .addComponent(GregTechAPI.materialManager.getMaterial("mon_3").getFluid(), 1077)
+                    .density(1.17).sIVacuum(342).sIPerPressure(289).register();
+        }
+
+        Function<AbstractRocketBlueprint, ComponentValidationResult> fairingCheck = (bp) -> {
+            RocketStage payload = bp.getStage("payload").get();
+            List<AbstractComponent<?>> fairings = payload.getComponents().get("fairing");
+            double fHeight = fairings.stream().mapToDouble(AbstractComponent::getHeight).min().getAsDouble();
+            double fRadius = fairings.stream().mapToDouble(AbstractComponent::getRadius).min().getAsDouble();
+            ComponentSpacecraft spacecraft = (ComponentSpacecraft) payload.getComponents().get("spacecraft").get(0);
+            return spacecraft.getHeight() >= fHeight || spacecraft.getRadius() >= fRadius ?
+                    ComponentValidationResult.FAIRING_TOO_SMALL : ComponentValidationResult.SUCCESS;
+        };
+
         ROCKET_SOYUZ_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("soyuz")
-                .stage(
-                        new RocketStage.Builder("boosters")
-                                .type("engine")
-                                .limit(16)
-                                .type("tank")
-                                .limit(8)
-                                .type("engine_small")
-                                .limit(8)
-                                .build())
-                .ignitesWith(
-                        new RocketStage.Builder("block_A")
-                                .type("engine")
-                                .limit(4)
-                                .type("engine_small")
-                                .limit(4)
-                                .type("tank")
-                                .limit(2)
-                                .build())
-                .stage(
-                        new RocketStage.Builder("block_F")
-                                .type("engine")
-                                .limit(4)
-                                .type("engine_small")
-                                .limit(4)
-                                .type("tank")
-                                .limit(2)
-                                .build())
+                .stage(new RocketStage.Builder("boosters").type("engine").range(1, 4).type("tank").limit(4).build())
+                .stage(new RocketStage.Builder("block_A").type("engine").range(1, 4)
+                        .type("tank").limit(2).type("interstage").limit(1).build())
+                .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4)
+                        .type("tank").limit(2).type("interstage").limit(1).build())
+                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
+                        .type("tank").limit(1).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
-                .build();
+                .componentValidationFunction(fairingCheck).build();
 
-        // this was added for testing so that i dont have to fill out all components every time
-        ROCKET_V1_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("V1")
-                .stage(
-                        new RocketStage.Builder("main")
-                                .type("engine")
-                                .limit(1)
-                                .type("tank")
-                                .limit(2)
-                                // .type("chemical_bomb")
-                                // .limit(1)
-                                // .limit(2)
-                                // .limit(3)
-                                .build())
-                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
-                .build();
+        ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar").solidRocket()
+                .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(1).build())
+                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
+                        .type("tank").limit(1).build())
+                .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
+                .componentValidationFunction(fairingCheck).build();
 
-        AbstractRocketBlueprint.registerBlueprint(ROCKET_V1_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.registerBlueprint(ROCKET_SOYUZ_BLUEPRINT_DEFAULT);
+        AbstractRocketBlueprint.registerBlueprint(ROCKET_LUNAR_BLUEPRINT_DEFAULT);
         AbstractRocketBlueprint.setRegistryLock(true);
     }
 }

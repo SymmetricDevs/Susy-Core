@@ -4,10 +4,6 @@ import static gregtech.common.blocks.MetaBlocks.ASPHALT;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -24,14 +20,63 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.VariantActiveBlock;
 import gregtech.api.block.VariantBlock;
 import gregtech.api.util.BlockUtility;
+import supersymmetry.common.blocks.active.BlockActiveAssemblyLine;
+import supersymmetry.common.blocks.active.BlockActiveBasicIntakeCasing;
+import supersymmetry.common.blocks.active.BlockActiveCoolingCoil;
+import supersymmetry.common.blocks.active.BlockActiveEccentricRoll;
+import supersymmetry.common.blocks.active.BlockActiveElectrodeAssembly;
+import supersymmetry.common.blocks.active.BlockActiveEngineIntake;
+import supersymmetry.common.blocks.active.BlockActiveEvaporationBed;
+import supersymmetry.common.blocks.active.BlockActiveFirebox;
+import supersymmetry.common.blocks.active.BlockActiveFusionCasing;
+import supersymmetry.common.blocks.active.BlockActiveHeatVent;
+import supersymmetry.common.blocks.active.BlockActiveHeatingCoil;
+import supersymmetry.common.blocks.active.BlockActiveSerpentine;
+import supersymmetry.common.blocks.active.BlockActiveSinteringBrick;
+import supersymmetry.common.blocks.active.BlockActiveWireCoil;
+import supersymmetry.common.blocks.active.BlockInvertedActiveAssemblyLine;
+import supersymmetry.common.blocks.active.BlockInvertedActiveBasicIntakeCasing;
+import supersymmetry.common.blocks.active.BlockInvertedActiveCoolingCoil;
+import supersymmetry.common.blocks.active.BlockInvertedActiveEccentricRoll;
+import supersymmetry.common.blocks.active.BlockInvertedActiveElectrodeAssembly;
+import supersymmetry.common.blocks.active.BlockInvertedActiveEngineIntake;
+import supersymmetry.common.blocks.active.BlockInvertedActiveEvaporationBed;
+import supersymmetry.common.blocks.active.BlockInvertedActiveFirebox;
+import supersymmetry.common.blocks.active.BlockInvertedActiveFusionCasing;
+import supersymmetry.common.blocks.active.BlockInvertedActiveHeatVent;
+import supersymmetry.common.blocks.active.BlockInvertedActiveHeatingCoil;
+import supersymmetry.common.blocks.active.BlockInvertedActiveSerpentine;
+import supersymmetry.common.blocks.active.BlockInvertedActiveSinteringBrick;
+import supersymmetry.common.blocks.active.BlockInvertedActiveWireCoil;
+import supersymmetry.common.blocks.bmrf.*;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 
 public class SuSyBlocks {
 
     public static BlockSpacecraftInstrument SPACE_INSTRUMENT;
     public static BlockCoolingCoil COOLING_COIL;
+    public static BlockActiveCoolingCoil ACTIVE_COOLING_COIL;
+    public static BlockInvertedActiveCoolingCoil INVERTED_ACTIVE_COOLING_COIL;
+    public static BlockHeatingCoil HEATING_COIL;
+    public static BlockActiveHeatingCoil ACTIVE_HEATING_COIL;
+    public static BlockInvertedActiveHeatingCoil INVERTED_ACTIVE_HEATING_COIL;
+    public static BlockActiveWireCoil ACTIVE_WIRE_COIL;
+    public static BlockInvertedActiveWireCoil INVERTED_ACTIVE_WIRE_COIL;
+    public static BlockActiveFirebox ACTIVE_FIREBOX;
+    public static BlockInvertedActiveFirebox INVERTED_ACTIVE_FIREBOX;
+    public static BlockActiveEngineIntake ACTIVE_ENGINE_INTAKE;
+    public static BlockInvertedActiveEngineIntake INVERTED_ACTIVE_ENGINE_INTAKE;
+    public static BlockActiveAssemblyLine ACTIVE_ASSEMBLY_LINE;
+    public static BlockInvertedActiveAssemblyLine INVERTED_ACTIVE_ASSEMBLY_LINE;
+    public static BlockActiveFusionCasing ACTIVE_FUSION_CASING;
+    public static BlockInvertedActiveFusionCasing INVERTED_ACTIVE_FUSION_CASING;
+    public static BlockActiveHeatVent ACTIVE_HEAT_VENT;
+    public static BlockInvertedActiveHeatVent INVERTED_ACTIVE_HEAT_VENT;
     public static BlockSinteringBrick SINTERING_BRICK;
+    public static BlockActiveSinteringBrick ACTIVE_SINTERING_BRICK;
+    public static BlockInvertedActiveSinteringBrick INVERTED_ACTIVE_SINTERING_BRICK;
     public static BlockCoagulationTankWall COAGULATION_TANK_WALL;
     public static final EnumMap<SusyStoneVariantBlock.StoneVariant, SusyStoneVariantBlock> SUSY_STONE_BLOCKS = new EnumMap<>(
             SusyStoneVariantBlock.StoneVariant.class);
@@ -48,9 +93,15 @@ public class SuSyBlocks {
     public static BlockHome HOME;
     public static BlockMultiblockTank MULTIBLOCK_TANK;
     public static BlockEvaporationBed EVAPORATION_BED;
+    public static BlockActiveEvaporationBed ACTIVE_EVAPORATION_BED;
+    public static BlockInvertedActiveEvaporationBed INVERTED_ACTIVE_EVAPORATION_BED;
     public static BlockElectrodeAssembly ELECTRODE_ASSEMBLY;
+    public static BlockActiveElectrodeAssembly ACTIVE_ELECTRODE_ASSEMBLY;
+    public static BlockInvertedActiveElectrodeAssembly INVERTED_ACTIVE_ELECTRODE_ASSEMBLY;
     public static BlockSuSyMultiblockCasing MULTIBLOCK_CASING;
     public static BlockSerpentine SERPENTINE;
+    public static BlockActiveSerpentine ACTIVE_SERPENTINE;
+    public static BlockInvertedActiveSerpentine INVERTED_ACTIVE_SERPENTINE;
     public static BlocksHardened HARDBLOCKS;
     public static BlocksHardened1 HARDBLOCKS1;
     public static BlocksCustomSheets CUSTOMSHEETS;
@@ -67,9 +118,29 @@ public class SuSyBlocks {
     public static BlockEngineCasing ENGINE_CASING;
     public static BlockEngineCasing2 ENGINE_CASING_2;
     public static BlocksActiveCasing ACTIVE_CASING;
+    public static BlockActiveBasicIntakeCasing ACTIVE_BASIC_INTAKE_CASING;
+    public static BlockInvertedActiveBasicIntakeCasing INVERTED_ACTIVE_BASIC_INTAKE_CASING;
     public static BlockSupport SUPPORT;
     public static BlocksBMRF BMRF;
+    public static BlocksS2BMRF S2BMRF;
+    public static BlocksS3BMRF S3BMRF;
+    public static BlocksS4BMRF S4BMRF;
+    public static BlocksS5BMRF S5BMRF;
+    public static BlocksS6BMRF S6BMRF;
+    public static BlocksS7BMRF S7BMRF;
+    public static BlocksS8BMRF S8BMRF;
+    public static BlocksS9BMRF S9BMRF;
+    public static BlocksS10BMRF S10BMRF;
+    public static BlocksS11BMRF S11BMRF;
+    public static BlocksS12BMRF S12BMRF;
+    public static BlocksS13BMRF S13BMRF;
+    public static BlocksS14BMRF S14BMRF;
+    public static BlocksS15BMRF S15BMRF;
+    public static BlocksS16BMRF S16BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
+    public static BlockGoog GOOG;
+    public static BlockSpeaker SPEAKER;
+    public static BlockCrucible CRUCIBLE;
 
     public static BlockRocketMultiblockCasing ROCKET_MULTIBLOCK_CASING;
     public static BlockProcessorCluster PROCESSOR_CLUSTER;
@@ -88,23 +159,49 @@ public class SuSyBlocks {
     public static BlockRoomPadding ROOM_PADDING;
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
+    public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
+    public static BlockIgniter BLOCK_IGNITER;
+
     public static BlockEccentricRoll ECCENTRIC_ROLL;
+    public static BlockActiveEccentricRoll ACTIVE_ECCENTRIC_ROLL;
+    public static BlockInvertedActiveEccentricRoll INVERTED_ACTIVE_ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
-
+    public static BlockEDMElectrode EDM_ELECTRODE;
+    public static BlockRobotArm ROBOT_ARM;
+    public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
+    public static BlockVehicleTrack VEHICLE_TRACK;
+    public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
+    public static BlockSolarPanel SOLAR_PANEL;
+    public static BlockPaddleShaft PADDLE_SHAFT;
+    public static BlockEpoxySolarFurnaceMirror EPOXY_SOLAR_FURNACE_MIRROR;
+    public static BlockSteelSolarFurnaceMirror STEEL_SOLAR_FURNACE_MIRROR;
+    public static BlockHeliostat HELIOSTAT;
+    public static BlockSolarFurnaceRedirectingMirror SOLAR_FURNACE_REDIRECTING_MIRROR;
+    public static BlockSolarFurnaceCrucible SOLAR_FURNACE_CRUCIBLE;
+    public static BlockLunarConcrete LUNAR_CONCRETE;
+    public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
+    public static BlockAirlockDoor AIRLOCK_DOOR;
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
         for (SusyStoneVariantBlock.StoneVariant shape : SusyStoneVariantBlock.StoneVariant.values()) {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
-        registerWalkingSpeedBonus();
         susyBlocks = new ArrayList<>();
+
+        AIRLOCK_DOOR = new BlockAirlockDoor(() -> SuSyMetaItems.AIRLOCK.getStackForm());
+        AIRLOCK_DOOR.setRegistryName("airlock_door");
+
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
-                // Try block is necessary in case getDeclaredConstructor does not exist (though it should)
+                // Try block is necessary in case getDeclaredConstructor does not exist (though
+                // it should)
                 try {
+                    if (field.get(null) != null) {
+                        continue;
+                    }
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
                     newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));
@@ -119,8 +216,12 @@ public class SuSyBlocks {
             }
         }
 
+        GOOG = new BlockGoog();
+        GOOG.setRegistryName("goog");
+
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
+        registerWalkingSpeedBonus();
 
         SuSyTileEntities.register();
     }
@@ -133,19 +234,20 @@ public class SuSyBlocks {
         for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values())
             registerItemModel(block);
         susyBlocks.forEach(b -> {
-            if (b instanceof VariantActiveBlock) ((VariantActiveBlock<?>) b).onModelRegister();
-            else registerItemModel(b);
+            if (b instanceof VariantActiveBlock)
+                ((VariantActiveBlock<?>) b).onModelRegister();
+            else
+                registerItemModel(b);
         });
         registerItemModel(REGOLITH);
+        registerItemModel(GOOG);
     }
 
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                    block.getMetaFromState(state),
-                    new ModelResourceLocation(block.getRegistryName(),
-                            statePropertiesToString(state.getProperties())));
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
+                    new ModelResourceLocation(block.getRegistryName(), statePropertiesToString(state.getProperties())));
         }
     }
 
@@ -153,8 +255,7 @@ public class SuSyBlocks {
         StringBuilder stringbuilder = new StringBuilder();
 
         List<Map.Entry<IProperty<?>, Comparable<?>>> entries = properties.entrySet().stream()
-                .sorted(Comparator.comparing(c -> c.getKey().getName()))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(c -> c.getKey().getName())).collect(Collectors.toList());
 
         for (Map.Entry<IProperty<?>, Comparable<?>> entry : entries) {
             if (stringbuilder.length() != 0) {
@@ -181,9 +282,34 @@ public class SuSyBlocks {
             for (IBlockState state : block.getBlockState().getValidStates())
                 BlockUtility.setWalkingSpeedBonus(state, block.getWalkingSpeed());
         }
+
         for (IBlockState state : ASPHALT.getBlockState().getValidStates()) {
             BlockUtility.setWalkingSpeedBonus(state, 1); // Buff from 0.6F
         }
+        for (IBlockState state : LUNAR_CONCRETE.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (SusyStoneVariantBlock block : SUSY_STONE_BLOCKS.values()) {
+            IBlockState state = block.getState(SusyStoneVariantBlock.StoneType.INDUSTRIAL_CONCRETE);
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE.getBlockState().getValidStates()) {
+            if (isDottedPanel(state)) {
+                continue;
+            }
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+        for (IBlockState state : RANDOM_CONCRETE1.getBlockState().getValidStates()) {
+            BlockUtility.setWalkingSpeedBonus(state, BlockUtility.ASPHALT_WALKING_SPEED_BONUS);
+        }
+    }
+
+    private static boolean isDottedPanel(IBlockState state) {
+        BlockRandomConcrete.BlockRandomConcreteType type = RANDOM_CONCRETE.getState(state);
+        return type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_BORDER ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_COMB ||
+                type == BlockRandomConcrete.BlockRandomConcreteType.DOTTED_PANEL_GRID;
     }
 
     @SuppressWarnings("unchecked")

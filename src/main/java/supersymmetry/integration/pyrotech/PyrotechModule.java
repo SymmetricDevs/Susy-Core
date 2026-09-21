@@ -13,8 +13,7 @@ import supersymmetry.api.SusyLog;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityPrimitiveSmelter;
 import supersymmetry.modules.SuSyModules;
 
-@GregTechModule(
-                moduleID = SuSyModules.MODULE_PYROTECH,
+@GregTechModule(moduleID = SuSyModules.MODULE_PYROTECH,
                 containerID = Supersymmetry.MODID,
                 modDependencies = "pyrotech",
                 name = "SuSy Pyrotech Integration",

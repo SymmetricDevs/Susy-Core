@@ -22,7 +22,8 @@ public abstract class RecyclingRecipesMixin {
         RecyclingManager.init();
     }
 
-    @Redirect(method = { "registerMaceratorRecycling", "registerArcRecycling" },
+    @Redirect(method = { "registerMaceratorRecycling",
+            "registerArcRecycling" },
               at = @At(target = "Lgregtech/api/recipes/RecipeBuilder;buildAndRegister()V",
                        value = "INVOKE",
                        ordinal = 0))

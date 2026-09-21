@@ -2,8 +2,6 @@ package supersymmetry.common.blocks;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -14,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.block.VariantBlock;
@@ -26,7 +25,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
     private static final PropertyEnum<StoneType> PROPERTY = PropertyEnum.create("variant", StoneType.class);
     private final StoneVariant stoneVariant;
 
-    public SusyStoneVariantBlock(@Nonnull StoneVariant stoneVariant) {
+    public SusyStoneVariantBlock(@NonNull StoneVariant stoneVariant) {
         super(Material.ROCK);
         this.stoneVariant = stoneVariant;
         this.setRegistryName(stoneVariant.id);
@@ -39,8 +38,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH_DECORATIONS);
     }
 
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
+    @NonNull protected BlockStateContainer createBlockState() {
         this.VARIANT = PROPERTY;
         this.VALUES = StoneType.values();
         return new BlockStateContainer(this, this.VARIANT);
@@ -52,8 +50,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         return this.stoneVariant == StoneVariant.SMOOTH;
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
         return Item.getItemFromBlock(this.stoneVariant == StoneVariant.SMOOTH ?
                 SuSyBlocks.SUSY_STONE_BLOCKS.get(StoneVariant.COBBLE) : this);
@@ -87,23 +84,23 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
         public final float resistance;
         public final double walkingSpeed;
 
-        StoneVariant(@Nonnull String id) {
+        StoneVariant(@NonNull String id) {
             this(id, id);
         }
 
-        StoneVariant(@Nonnull String id, double walkingSpeed) {
+        StoneVariant(@NonNull String id, double walkingSpeed) {
             this(id, id, 1.5F, 10.0F, walkingSpeed);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey) {
+        StoneVariant(@NonNull String id, @NonNull String translationKey) {
             this(id, translationKey, 1.5F, 10.0F, 0);
         }
 
-        StoneVariant(@Nonnull String id, float hardness, float resistance) {
+        StoneVariant(@NonNull String id, float hardness, float resistance) {
             this(id, id, hardness, resistance, 0);
         }
 
-        StoneVariant(@Nonnull String id, @Nonnull String translationKey, float hardness, float resistance,
+        StoneVariant(@NonNull String id, @NonNull String translationKey, float hardness, float resistance,
                      double walkingSpeed) {
             this.id = id;
             this.translationKey = translationKey;
@@ -117,33 +114,43 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
 
         GABBRO("gabbro", MapColor.GRAY),
         GNEISS("gneiss", MapColor.RED_STAINED_HARDENED_CLAY),
-        LIMESTONE("limestone", MapColor.GRAY_STAINED_HARDENED_CLAY),
+        LIMESTONE("limestone",
+                MapColor.GRAY_STAINED_HARDENED_CLAY),
         PHYLLITE("phyllite", MapColor.GRAY),
-        QUARTZITE("quartzite", MapColor.QUARTZ),
+        QUARTZITE("quartzite",
+                MapColor.QUARTZ),
         SHALE("shale", MapColor.RED_STAINED_HARDENED_CLAY),
-        SLATE("slate", MapColor.RED_STAINED_HARDENED_CLAY),
-        SOAPSTONE("soapstone", MapColor.GRAY_STAINED_HARDENED_CLAY),
-        KIMBERLITE("kimberlite", MapColor.GRAY),
-        INDUSTRIAL_CONCRETE("industrial_concrete", MapColor.YELLOW_STAINED_HARDENED_CLAY),
-        MILITARY_CONCRETE("minitary_concrete", MapColor.BLACK),
-        ANORTHOSITE("anorthosite", MapColor.GRAY);
+        SLATE("slate",
+                MapColor.RED_STAINED_HARDENED_CLAY),
+        SOAPSTONE("soapstone",
+                MapColor.GRAY_STAINED_HARDENED_CLAY),
+        KIMBERLITE("kimberlite",
+                MapColor.GRAY),
+        INDUSTRIAL_CONCRETE("industrial_concrete",
+                MapColor.YELLOW_STAINED_HARDENED_CLAY),
+        MILITARY_CONCRETE(
+                "military_concrete",
+                MapColor.BLACK),
+        ANORTHOSITE("anorthosite",
+                MapColor.GRAY),
+        LEUCOBASALT("leucobasalt",
+                MapColor.BLACK_STAINED_HARDENED_CLAY);
 
         private final String name;
         public final MapColor mapColor;
 
-        StoneType(@Nonnull String name, @Nonnull MapColor mapColor) {
+        StoneType(@NonNull String name, @NonNull MapColor mapColor) {
             this.name = name;
             this.mapColor = mapColor;
         }
 
-        @Nonnull
-        public String getName() {
+        @NonNull public String getName() {
             return this.name;
         }
 
         public OrePrefix getOrePrefix() {
             return switch (this) {
-                case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE, ANORTHOSITE -> OrePrefix.stone;
+                case GABBRO, GNEISS, LIMESTONE, PHYLLITE, QUARTZITE, SHALE, SLATE, SOAPSTONE, KIMBERLITE, ANORTHOSITE, LEUCOBASALT -> OrePrefix.stone;
                 case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE -> OrePrefix.block;
             };
         }
@@ -159,6 +166,7 @@ public class SusyStoneVariantBlock extends VariantBlock<SusyStoneVariantBlock.St
                 case SLATE -> SusyMaterials.Slate;
                 case SOAPSTONE -> Materials.Soapstone;
                 case KIMBERLITE -> SusyMaterials.Kimberlite;
+                case LEUCOBASALT -> SusyMaterials.Leucobasalt;
                 case ANORTHOSITE -> SusyMaterials.Anorthosite;
                 case INDUSTRIAL_CONCRETE, MILITARY_CONCRETE -> Materials.Concrete;
             };

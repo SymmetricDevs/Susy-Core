@@ -3,9 +3,6 @@ package supersymmetry.mixins.bdsandm;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
@@ -14,6 +11,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -30,12 +29,13 @@ public class ItemCrateClientMixin extends ItemBlock {
 
     /**
      * @author Bruberu
-     * @reason It was literally using an assert in client-side logic, causing crashes in servers.
+     * @reason It was literally using an assert in client-side logic, causing
+     *         crashes in servers.
      */
     @Overwrite(remap = true)
     @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
-                               @Nonnull ITooltipFlag flagIn) {
+    public void addInformation(@NonNull ItemStack stack, @Nullable World worldIn, @NonNull List<String> tooltip,
+                               @NonNull ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         ICrate crate = stack.getCapability(BdsmCapabilies.CRATE_CAP, null);
 

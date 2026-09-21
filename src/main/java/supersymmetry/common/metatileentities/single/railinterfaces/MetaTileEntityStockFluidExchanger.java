@@ -2,8 +2,6 @@ package supersymmetry.common.metatileentities.single.railinterfaces;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import cam72cam.immersiverailroading.entity.FreightTank;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -45,7 +44,8 @@ public class MetaTileEntityStockFluidExchanger extends MetaTileEntityStockIntera
                 fluidHandler = dummyHandler;
             } else if (this.stock instanceof FreightTank tankStock) {
                 fluidHandler = tankStock.theTank.internal;
-            } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a utility method
+            } // TODO: add more if-else arguments if there's more kinds of stocks. Or maybe a
+              // utility method
             if (fluidHandler != null && fluidHandler.getTankProperties().length > 0) {
                 return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidHandler);
             }

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -13,6 +11,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
+
+import org.jspecify.annotations.NonNull;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -122,23 +122,19 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("       ", "       ", "       ", "       ", "       ", "       ")
+        return FactoryBlockPattern.start().aisle("       ", "       ", "       ", "       ", "       ", "       ")
                 .aisle(" A   A ", " A   A ", " BBBBB ", " A   A ", " A   A ", " BBBBB ")
                 .aisle("       ", "       ", " BBBBB ", "  CCC  ", "  CCC  ", " BBBBB ")
                 .aisle("       ", "       ", " BBBBB ", "  CCC  ", "  CCC  ", " BBBBB ")
                 .aisle("       ", "       ", " BBBBB ", "  CSC  ", "  CCC  ", " BBBBB ")
                 .aisle(" A   A ", " A   A ", " BBBBB ", " A   A ", " A   A ", " BBBBB ")
-                .aisle("       ", "       ", "       ", "       ", "       ", "       ")
-                .where('S', selfPredicate())
+                .aisle("       ", "       ", "       ", "       ", "       ", "       ").where('S', selfPredicate())
                 .where('A', frames(Materials.TreatedWood))
                 .where('B', states(MetaBlocks.PLANKS.getState(BlockGregPlanks.BlockType.TREATED_PLANK)))
-                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS))
-                        .or(metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0],
-                                MetaTileEntities.FLUID_EXPORT_HATCH[1], MetaTileEntities.PUMP_OUTPUT_HATCH)
-                                        .setExactLimit(1)))
-                .where(' ', any())
-                .build();
+                .where('C', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.BRONZE_BRICKS)).or(
+                        metaTileEntities(MetaTileEntities.FLUID_EXPORT_HATCH[0], MetaTileEntities.FLUID_EXPORT_HATCH[1],
+                                MetaTileEntities.PUMP_OUTPUT_HATCH).setExactLimit(1)))
+                .where(' ', any()).build();
     }
 
     @Override
@@ -146,8 +142,7 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
         return Textures.STEAM_CASING_BRONZE;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.PRIMITIVE_PUMP_OVERLAY;
     }
@@ -160,9 +155,8 @@ public class MetaTileEntityPrimitiveMudPump extends MultiblockControllerBase imp
 
     @Override
     public String[] getDescription() {
-        return Stream.of(
-                new String[] { I18n.format("susy.multiblock.primitive_mud_pump.description") }).flatMap(Stream::of)
-                .toArray(String[]::new);
+        return Stream.of(new String[] { I18n.format("susy.multiblock.primitive_mud_pump.description") })
+                .flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override

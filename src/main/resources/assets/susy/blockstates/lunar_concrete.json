@@ -1,0 +1,71 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_all"
+  },
+  "variants": {
+    "variant": {
+      "lunar_concrete_smooth" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_smooth"
+        }
+      },
+      "lunar_concrete_bricks" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_bricks"
+        }
+      },
+      "lunar_concrete_bricks_cracked" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_bricks_cracked"
+        }
+      },
+      "lunar_concrete_bricks_small" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_bricks_small"
+        }
+      },
+      "lunar_concrete_bricks_square" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_bricks_square"
+        }
+      },
+      "lunar_concrete_chiseled" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_chiseled"
+        }
+      },
+      "lunar_concrete_cobble" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_cobble"
+        }
+      },
+      "lunar_concrete_polished" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_polished"
+        }
+      },
+      "lunar_concrete_tiled" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_tiled"
+        }
+      },
+      "lunar_concrete_tiled_small" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_tiled_small"
+        }
+      },
+      "lunar_concrete_windmill_a" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_windmill_a"
+        }
+      },
+      "lunar_concrete_windmill_b" : {
+        "textures" : {
+          "all" : "gregtech:blocks/susy_stones/lunar_concrete_windmill_b"
+        }
+
+      }
+    }
+  }
+}

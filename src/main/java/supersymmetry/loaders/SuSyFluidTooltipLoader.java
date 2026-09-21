@@ -40,8 +40,10 @@ public class SuSyFluidTooltipLoader {
                         continue;
                     }
                 }
-                if (state == FluidState.LIQUID) FluidTooltipUtil.registerTooltip(fluid, liquidVoidableTooltip);
-                else if (state == FluidState.GAS) FluidTooltipUtil.registerTooltip(fluid, gasVoidableTooltip);
+                if (state == FluidState.LIQUID)
+                    FluidTooltipUtil.registerTooltip(fluid, liquidVoidableTooltip);
+                else if (state == FluidState.GAS)
+                    FluidTooltipUtil.registerTooltip(fluid, gasVoidableTooltip);
             }
         }
     }

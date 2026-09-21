@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,7 +15,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import supersymmetry.api.SusyLog;
 
 /// This is so horrible ngl...
-@ParametersAreNonnullByDefault
 public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
 
     private final World world;
@@ -27,8 +24,7 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
     /// Yippee Java generics
     private final Class<T> basePipeClass;
     private boolean reverse = false;
-    /// Copied from normal pipe net walker class,
-    /// I hate everything being private in ceu...
+    /// Copied from normal pipe net walker class, I hate everything being private in ceu...
     private PipeOperationWalker<T> root;
     private Set<T> walked;
     private List<PipeOperationWalker<T>> walkers;
@@ -38,12 +34,10 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
     private boolean invalid;
     private boolean running;
     private boolean failed = false;
-    /// Function to run on every pipe
-    /// TODO: make this return boolean. If false is returned, then halt the walker
+    /// Function to run on every pipe TODO: make this return boolean. If false is returned, then halt the walker
     private ITraverseOption option;
     /// Only exists for the root walker
-    @Nullable
-    private EnumFacing direction;
+    @Nullable private EnumFacing direction;
 
     private PipeOperationWalker(World world, BlockPos sourcePipe, int walkedBlocks, Class<T> basePipeClass) {
         this.world = world;
@@ -68,7 +62,8 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
     }
 
     private void traverse(int maxWalks) {
-        if (invalid) throw new IllegalStateException("This walker already walked!");
+        if (invalid)
+            throw new IllegalStateException("This walker already walked!");
         {
             this.root = this;
             this.walked = new ObjectOpenHashSet<>();
@@ -97,11 +92,12 @@ public class PipeOperationWalker<T extends IPipeTile<?, ?>> {
                 return true;
             }
 
-            if (nextPipeFacings.isEmpty()) return true;
+            if (nextPipeFacings.isEmpty())
+                return true;
             if (nextPipeFacings.size() == 1) {
 
-                var next = nextPipes.get(0);
-                var into = nextPipeFacings.get(0);
+                var next = nextPipes.getFirst();
+                var into = nextPipeFacings.getFirst();
 
                 {
                     this.root.option.operate(into, currentPipe, next, reverse);

@@ -53,37 +53,29 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
             if (stackInTank != null && stackInTank.amount > 0) {
                 ITextComponent fluidName = TextComponentUtil.setColor(GTUtility.getFluidTranslation(stackInTank),
                         TextFormatting.AQUA);
-                textList.add(TextComponentUtil.translationWithColor(
-                        TextFormatting.GRAY,
-                        "gregtech.multiblock.distillation_tower.distilling_fluid",
-                        fluidName));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gregtech.multiblock.distillation_tower.distilling_fluid", fluidName));
             }
         }
         super.addDisplayText(textList);
     }
 
     @Override
-    @NotNull
-    protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start(RIGHT, FRONT, UP)
-                .aisle("YSY", "YYY", "YYY")
-                .aisle("FXF", "X#X", "FXF").setRepeatable(1, 11)
-                .aisle("XXX", "XXX", "XXX")
-                .where('S', selfPredicate())
+    @NotNull protected BlockPattern createStructurePattern() {
+        return FactoryBlockPattern.start(RIGHT, FRONT, UP).aisle("YSY", "YYY", "YYY").aisle("FXF", "X#X", "FXF")
+                .setRepeatable(1, 11).aisle("XXX", "XXX", "XXX").where('S', selfPredicate())
                 .where('Y', states(getCasingState())
                         .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                .where('X', states(getCasingState())
-                        .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS).stream()
-                                .filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
-                                .toArray(MetaTileEntity[]::new))
-                                        .setMaxLayerLimited(1))
-                        .or(autoAbilities(true, false)))
-                .where('#', states(getSieveState()))
-                .where('F', frames(Materials.StainlessSteel))
-                .build();
+                .where('X',
+                        states(getCasingState())
+                                .or(metaTileEntities(MultiblockAbility.REGISTRY.get(MultiblockAbility.EXPORT_FLUIDS)
+                                        .stream().filter(mte -> !(mte instanceof MetaTileEntityMultiFluidHatch))
+                                        .toArray(MetaTileEntity[]::new)).setMaxLayerLimited(1))
+                                .or(autoAbilities(true, false)))
+                .where('#', states(getSieveState())).where('F', frames(Materials.StainlessSteel)).build();
     }
 
     @SideOnly(Side.CLIENT)
@@ -106,8 +98,7 @@ public class MetaTileEntitySieveDistillationTower extends MetaTileEntityOrderedD
     }
 
     @SideOnly(Side.CLIENT)
-    @NotNull
-    @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.DISTILLATION_TOWER_OVERLAY;
     }

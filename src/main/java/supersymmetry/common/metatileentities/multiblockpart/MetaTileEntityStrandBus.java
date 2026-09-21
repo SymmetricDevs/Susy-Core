@@ -30,7 +30,9 @@ import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.client.renderer.textures.SusyTextures;
 
 public class MetaTileEntityStrandBus extends MetaTileEntityMultiblockPart
-                                     implements IStrandProvider, IMultiblockAbilityPart<IStrandProvider> {
+                                     implements
+                                     IStrandProvider,
+                                     IMultiblockAbilityPart<IStrandProvider> {
 
     private Strand strand;
     private boolean isExport;

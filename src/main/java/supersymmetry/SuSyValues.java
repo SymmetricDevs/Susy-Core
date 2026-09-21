@@ -1,11 +1,8 @@
 package supersymmetry;
 
-import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.blocks;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 
-import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.MarkerMaterials.*;
 import gregtech.api.unification.material.Material;
 
@@ -18,6 +15,13 @@ public class SuSyValues {
 
     public static final ModelResourceLocation modelRocket = new ModelResourceLocation(
             new ResourceLocation(Supersymmetry.MODID, "soyuz"), "inventory");
+    public static final ModelResourceLocation modelICBM = new ModelResourceLocation(
+            new ResourceLocation(Supersymmetry.MODID, "icbm"), "inventory");
+    public static ModelResourceLocation modelLunarRocket = new ModelResourceLocation(
+            new ResourceLocation(Supersymmetry.MODID, "lunar_rocket"), "inventory");
+    public static ModelResourceLocation modelEarthLandingSystem = new ModelResourceLocation(
+            new ResourceLocation(Supersymmetry.MODID, "earth_landing_system"), "inventory");
 
-    public static TraceabilityPredicate rocketHullBlocks = blocks();
+    public static final double G0 = 9.81;
+    public static final double GRAVITATIONAL_CONSTANT = 6.6743e-11;
 }

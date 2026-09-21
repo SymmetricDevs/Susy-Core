@@ -4,8 +4,6 @@ import static gregtech.api.util.RelativeDirection.*;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -20,6 +18,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.fluids.FluidState;
@@ -59,15 +58,12 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
 
     protected BlockPattern createStructurePattern() {
         // May want to force the input to be underneath the pipe casings
-        return FactoryBlockPattern.start(FRONT, RIGHT, UP)
-                .aisle("S")
-                .aisle("P").setRepeatable(3, 7)
-                .aisle("F")
+        return FactoryBlockPattern.start(FRONT, RIGHT, UP).aisle("S").aisle("P").setRepeatable(3, 7).aisle("F")
                 .where('S', this.selfPredicate())
-                .where('P', states(this.getPipeCasingState())
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
-                .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1))
-                .build();
+                .where('P',
+                        states(this.getPipeCasingState())
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setExactLimit(1)))
+                .where('F', abilities(MultiblockAbility.MUFFLER_HATCH).setExactLimit(1)).build();
     }
 
     // Updates the height and rate of the multiblock
@@ -97,7 +93,8 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
 
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
         for (; height < 10; height++) {
-            if (isBlockMuffler(world, pos.move(relativeUp))) break;
+            if (isBlockMuffler(world, pos.move(relativeUp)))
+                break;
         }
 
         this.height = height;
@@ -174,14 +171,11 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
             ITextComponent componentRateBonus = TextComponentUtil.stringWithColor(TextFormatting.DARK_PURPLE,
                     this.rateBonus + "x");
             ITextComponent componentRateBase = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "susy.machine.smoke_stack.rate",
-                    componentRateBonus);
+                    "susy.machine.smoke_stack.rate", componentRateBonus);
             ITextComponent componentRateHover = TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                     "susy.machine.smoke_stack.rate_hover");
 
-            textList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "susy.machine.smoke_stack.height",
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "susy.machine.smoke_stack.height",
                     componentHeight));
             textList.add(TextComponentUtil.setHover(componentRateBase, componentRateHover));
         }
@@ -203,8 +197,7 @@ public class MetaTileEntitySmokeStack extends VoidingMultiblockBase {
         return MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE);
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.SMOKE_STACK_OVERLAY;
     }

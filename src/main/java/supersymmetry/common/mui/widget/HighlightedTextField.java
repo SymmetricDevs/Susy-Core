@@ -31,9 +31,11 @@ public class HighlightedTextField extends TextFieldWidget {
     }
 
     /**
-     * Text highlighter applied only in rendering text. Only formatting characters can be inserted.
+     * Text highlighter applied only in rendering text. Only formatting characters
+     * can be inserted.
      *
-     * @param highlightRule Consumer for text highlighter
+     * @param highlightRule
+     *                      Consumer for text highlighter
      * @return This
      */
     public HighlightedTextField setHighlightRule(Function<String, String> highlightRule) {

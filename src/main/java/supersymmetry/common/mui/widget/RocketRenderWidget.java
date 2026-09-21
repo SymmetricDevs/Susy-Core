@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import gregtech.api.gui.IRenderContext;
 import gregtech.api.gui.Widget;
@@ -19,6 +20,12 @@ public class RocketRenderWidget extends Widget {
 
     private static final double SQRT_2 = Math.sqrt(2.0);
     private static final double SQRT_3 = Math.sqrt(3.0);
+
+    /**
+     * Fraction of full brightness the wireframe is rendered at, so text overlays
+     * remain readable.
+     */
+    private static final float BRIGHTNESS = 0.15f;
 
     public Entity entity;
     public Render<Entity> renderer;
@@ -37,8 +44,7 @@ public class RocketRenderWidget extends Widget {
         }
         this.entity = entity;
         this.renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
-        double sideLen = Math.max(
-                Math.abs(modelAABB.minX) + Math.abs(modelAABB.maxX),
+        double sideLen = Math.max(Math.abs(modelAABB.minX) + Math.abs(modelAABB.maxX),
                 Math.abs(modelAABB.minZ) + Math.abs(modelAABB.maxZ));
         scale = ((float) size.height / sideLen);
         shouldGoSideToSide = (modelAABB.maxY * scale) > size.width;
@@ -50,8 +56,7 @@ public class RocketRenderWidget extends Widget {
     public void drawInBackground(int mouseX, int mouseY, float partialTicks, IRenderContext context) {
         Position pos = this.getPosition();
         Size size = this.getSize();
-        RenderUtil.useScissor(
-                pos.x, pos.y, size.width, size.height, () -> render(partialTicks, pos, size));
+        RenderUtil.useScissor(pos.x, pos.y, size.width, size.height, () -> render(partialTicks, pos, size));
     }
 
     private void render(float partialTicks, Position pos, Size size) {
@@ -66,23 +71,33 @@ public class RocketRenderWidget extends Widget {
             GlStateManager.rotate(270, 0, 0, 1);
             interpolation = (interpolation + partialTicks / 100);
             GlStateManager.rotate((float) (interpolation * 45 * SQRT_2), 0, 1, 0);
-            GlStateManager.color(0f, 1f, 0f);
             GlStateManager.disableTexture2D();
-            GlStateManager.disableBlend();
             GlStateManager.disableAlpha();
             GlStateManager.disableCull();
             GlStateManager.disableDepth();
+
             GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+
+            // Fade the wireframe against the dark background using a constant blend factor.
+            // The entity renderer overrides GlStateManager.color internally, so the alpha
+            // here
+            // (not the source geometry) controls how bright the lines appear.
+            GlStateManager.enableBlend();
+            GL14.glBlendColor(0f, 0f, 0f, BRIGHTNESS);
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA, GL11.GL_ONE,
+                    GL11.GL_ZERO);
 
             GlStateManager.colorMask(false, true, false, true);
             renderer.doRender(entity, 0, 0, 0, 0, partialTicks);
             GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
             GlStateManager.enableTexture2D();
             GlStateManager.enableCull();
-            GlStateManager.enableDepth();
-            GlStateManager.enableBlend();
             GlStateManager.enableAlpha();
-            GlStateManager.color(1f, 1f, 1f);
+            GlStateManager.enableDepth();
+            GlStateManager.disableBlend();
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+                    GL11.GL_ZERO);
+            GlStateManager.color(1f, 1f, 1f, 1f);
             GlStateManager.colorMask(true, true, true, true);
         }
         GlStateManager.popMatrix();

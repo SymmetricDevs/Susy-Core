@@ -7,9 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,18 +36,23 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.lwjgl.input.Keyboard;
 
 import dev.tianmi.sussypatches.common.SusConfig;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaOreDictItem;
 import gregtech.api.items.toolitem.IGTTool;
@@ -56,22 +60,32 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.Mods;
 import gregtech.api.util.input.KeyBind;
+import gregtech.client.utils.TooltipHelper;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.api.util.SuSyUtility;
+import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
+import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
+import supersymmetry.common.network.CPacketRocketLaunch;
+import supersymmetry.common.network.SPacketSpeakerAudio;
+import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
 
@@ -86,9 +100,11 @@ public class ClientProxy extends CommonProxy {
     public void preLoad() {
         super.preLoad();
         GeckoLib.initialize();
+        SpeakerCodec.register();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
+        TanklessFluidPipeRenderer.INSTANCE.preInit();
     }
 
     @Override
@@ -107,10 +123,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addMaterialFormulaHandler(@Nonnull ItemTooltipEvent event) {
+    public static void addMaterialFormulaHandler(@NonNull ItemTooltipEvent event) {
         // ensure itemstack is a sheetedframe
         ItemStack itemStack = event.getItemStack();
-        if (!(itemStack.getItem() instanceof SheetedFrameItemBlock)) return;
+        if (!(itemStack.getItem() instanceof SheetedFrameItemBlock))
+            return;
 
         UnificationEntry unificationEntry = OreDictUnifier.getUnificationEntry(itemStack);
 
@@ -124,7 +141,19 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addPipelinerTooltip(@Nonnull ItemTooltipEvent event) {
+    public static void addWeightTooltip(@NonNull ItemTooltipEvent event) {
+        if (event.getEntityPlayer() == null || !TooltipHelper.isShiftDown()) {
+            return;
+        }
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        double weight = CargoItemStackHandler.getMass(stack);
+        tooltips.add(SuSyUtility.formatDouble("item.susy.weight", "%.4g", weight / 1000));
+    }
+
+    @SubscribeEvent
+    public static void addPipelinerTooltip(@NonNull ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         List<String> tooltips = event.getToolTip();
 
@@ -136,7 +165,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public static void addCatalystTooltipHandler(@Nonnull ItemTooltipEvent event) {
+    public static void addCatalystTooltipHandler(@NonNull ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         // Handles Item tooltips
         Collection<String> tooltips = new ArrayList<>();
@@ -190,10 +219,17 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void bakeModel(ModelBakeEvent event) {
         IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        bakeEntityModel(registry, "models/entity/soyuz.obj", SuSyValues.modelRocket);
+        bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
+        bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
+        bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
+    }
+
+    private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
+                                        ModelResourceLocation target) {
         try {
-            IModel model = OBJLoader.INSTANCE
-                    .loadModel(new ResourceLocation(Supersymmetry.MODID, "models/entity/soyuz.obj"));
-            registry.putObject(SuSyValues.modelRocket,
+            IModel model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Supersymmetry.MODID, path));
+            registry.putObject(target,
                     model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter()));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -204,7 +240,14 @@ public class ClientProxy extends CommonProxy {
     public static void stitchTexture(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/earth_landing_system"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
+        for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
+            map.registerSprite(flame);
+        }
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 
@@ -214,6 +257,7 @@ public class ClientProxy extends CommonProxy {
         if (event.phase != TickEvent.Phase.START) {
             return;
         }
+        SPacketSpeakerAudio.tickTracked();
         if (titleRenderTimer >= 0) {
             GuiIngame gui = Minecraft.getMinecraft().ingameGUI;
             titleRenderTimer++;
@@ -224,23 +268,22 @@ public class ClientProxy extends CommonProxy {
                     return;
                 }
                 // This is literally how you have to use this method. I'm sorry.
-                gui.displayTitle(null, null,
-                        20, 100, 30);
-                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i),
-                        20, 100, 30);
-                gui.displayTitle(I18n.format("supersymmetry.title." + i), null,
-                        20, 100, 30);
+                gui.displayTitle(null, null, 20, 100, 30);
+                gui.displayTitle(null, I18n.format("supersymmetry.subtitle." + i), 20, 100, 30);
+                gui.displayTitle(I18n.format("supersymmetry.title." + i), null, 20, 100, 30);
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void afterRenderSubtitles(RenderGameOverlayEvent.Pre event) {
-        // Subtitles are the last thing to render before the titles, and it seems bad to not let the subtitles render,
+        // Subtitles are the last thing to render before the titles, and it seems bad to
+        // not let the subtitles render,
         // so this is the best place.
 
         if (event.getType() == RenderGameOverlayEvent.ElementType.SUBTITLES && titleRenderTimer >= 0) {
-            // Render a black foreground. The alpha should stay at 255 until the first title, at which it starts fading.
+            // Render a black foreground. The alpha should stay at 255 until the first
+            // title, at which it starts fading.
             // This is taken from Gui.java, with some cleanup.
             double left = 0, top = 0, right = event.getResolution().getScaledWidth(),
                     bottom = event.getResolution().getScaledHeight();
@@ -250,13 +293,15 @@ public class ClientProxy extends CommonProxy {
             // Fade out the top color:
             if (titleRenderTimer > TITLE_RENDER_LENGTH * 5 / 2) {
                 topColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 5 / 2) * 255 / TITLE_RENDER_LENGTH;
-                if (topColor < 0) topColor = 0;
+                if (topColor < 0)
+                    topColor = 0;
             }
             int bottomColor = 255;
             // Fade out the bottom color:
             if (titleRenderTimer > TITLE_RENDER_LENGTH * 2) {
                 bottomColor -= (titleRenderTimer - TITLE_RENDER_LENGTH * 2) * 255 / TITLE_RENDER_LENGTH;
-                if (bottomColor < 0) bottomColor = 0;
+                if (bottomColor < 0)
+                    bottomColor = 0;
             }
             GlStateManager.disableTexture2D();
             GlStateManager.enableBlend();
@@ -285,11 +330,13 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void onLivingEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
         var livingBase = event.getEntityLiving();
-        if (!(livingBase instanceof EntityPlayer)) return;
+        if (!(livingBase instanceof EntityPlayer))
+            return;
 
         ItemStack from = event.getFrom(), into = event.getTo();
 
-        if (from.isItemEqual(into)) return;
+        if (from.isItemEqual(into))
+            return;
 
         EntityEquipmentSlot slot = event.getSlot();
         changeSkinVisibility(from, slot, false);
@@ -297,7 +344,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public static void changeSkinVisibility(ItemStack armor, EntityEquipmentSlot slot, boolean into) {
-        if (armor.getItem() instanceof ArmorMetaItem<?>metaArmor) {
+        if (armor.getItem() instanceof ArmorMetaItem<?> metaArmor) {
             var metaValueArmor = metaArmor.getItem(armor);
             // Using a Class#equals(Class) here to avoid counting in child classes
             // May be changed later
@@ -323,10 +370,42 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    /*
+     * TODO for space 2.0: fix atmosphere renderer
+     * 
+     * @SubscribeEvent
+     * public static void onWorldLoad(WorldEvent.Load event) {
+     * World world = event.getWorld();
+     * if (!world.isRemote) return;
+     * if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
+     * world.provider.setSkyRenderer(CelestialObjects.RENDERER);
+     * }
+     * }
+     */
+
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
             RenderMaskManager.clearDisabled();
+            ActiveFluidVisualHandler.clearAll();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+        final Minecraft minecraft = FMLClientHandler.instance().getClient();
+        final EntityPlayerSP player = minecraft.player;
+
+        // Prevent control when a GUI is open
+        if (Minecraft.getMinecraft().currentScreen != null)
+            return;
+
+        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityAbstractRocket lander) {
+            if (Minecraft.getMinecraft().inGameHasFocus && player.equals(Minecraft.getMinecraft().player)) {
+                if (!lander.isLaunched() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+                    GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));
+                }
+            }
         }
     }
 }

@@ -1,0 +1,111 @@
+package supersymmetry.api.blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import codechicken.lib.raytracer.IndexedCuboid6;
+import codechicken.lib.raytracer.RayTracer;
+import gregtech.api.block.VariantBlock;
+import gregtech.api.cover.CoverRayTracer;
+import gregtech.api.metatileentity.MetaTileEntity;
+import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.common.tileentities.TileEntityCoverable;
+
+public class VariantCoverableBlock<T extends Enum<T> & IStringSerializable>
+                                  extends VariantBlock<T>
+                                  implements ITileEntityProvider {
+
+    public VariantCoverableBlock(Material materialIn) {
+        super(materialIn);
+    }
+
+    public Predicate<ItemStack> validCover;
+
+    @NonNull @Override
+    public BlockStateContainer createBlockState() {
+        Class<T> enumClass = getActualTypeParameter(getClass(), VariantCoverableBlock.class);
+        this.VARIANT = PropertyEnum.create("variant", enumClass);
+        this.VALUES = enumClass.getEnumConstants();
+        return new BlockStateContainer(this, VARIANT);
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        if (world.getTileEntity(pos) instanceof TileEntityCoverable te) {
+            ItemStack newStack = te.getCoverItem();
+            newStack.setCount(te.getCoverCount());
+            Block.spawnAsEntity(world, pos, newStack);
+        }
+        super.breakBlock(world, pos, state);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+                                    @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+                                    float hitX, float hitY,
+                                    float hitZ) {
+        if ((validCover.test(playerIn.getHeldItem(hand)) || playerIn.getHeldItem(hand).isEmpty()) &&
+                worldIn.getTileEntity(pos) instanceof TileEntityCoverable te) {
+            CuboidRayTraceResult rayTraceResult = (CuboidRayTraceResult) RayTracer.retraceBlock(worldIn, playerIn, pos);
+            ItemStack itemStack = playerIn.getHeldItem(hand);
+            if (rayTraceResult == null) {
+                return false;
+            }
+            EnumFacing gridSideHit = CoverRayTracer.determineGridSideHit(rayTraceResult);
+            ItemStack out = te.placeCover(gridSideHit, playerIn.getHeldItem(hand), playerIn);
+            playerIn.setHeldItem(hand, out);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return super.shouldSideBeRendered(state, world, pos, face) &&
+                !((TileEntityCoverable) world.getTileEntity(pos)).isCovered(face);
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return VariantCoverableBlockRenderer.BLOCK_RENDER_TYPE;
+    }
+
+    @Nullable public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityCoverable();
+    }
+
+    @Override
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+
+    @org.jetbrains.annotations.Nullable @Override
+    public RayTraceResult collisionRayTrace(@NotNull IBlockState blockState, @NotNull World worldIn,
+                                            @NotNull BlockPos pos, @NotNull Vec3d start, @NotNull Vec3d end) {
+        List<IndexedCuboid6> collisionList = new ArrayList<>();
+        collisionList.add(MetaTileEntity.FULL_CUBE_COLLISION);
+        return RayTracer.rayTraceCuboidsClosest(start, end, pos, collisionList);
+    }
+}

@@ -22,9 +22,7 @@ public class Borer {
         Vec3d wheelPos = borer.center;
         state.push(settings -> settings.add((ModelState.Animator) (stock, partialTicks) -> new Matrix4()
                 .translate(wheelPos.x, wheelPos.y, wheelPos.z)
-                .rotate(Math.toRadians(stock instanceof EntityTunnelBore bore ?
-                        angle.apply(bore) : 0),
-                        1, 0, 0)
+                .rotate(Math.toRadians(stock instanceof EntityTunnelBore bore ? angle.apply(bore) : 0), 1, 0, 0)
                 .translate(-wheelPos.x, -wheelPos.y, -wheelPos.z))).include(borer);
     }
 }

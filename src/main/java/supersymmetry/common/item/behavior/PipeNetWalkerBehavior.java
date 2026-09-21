@@ -38,35 +38,34 @@ public enum PipeNetWalkerBehavior implements IToolBehavior {
         SoundEvent sound = tool.getSound();
 
         if (sound != null) {
-            world.playSound(null, player.posX, player.posY, player.posZ,
-                    sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.posX, player.posY, player.posZ, sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
         }
         player.swingArm(hand);
     }
 
     @Override
-    public EnumActionResult onItemUseFirst(@NotNull EntityPlayer player,
-                                           @NotNull World world,
-                                           @NotNull BlockPos pos,
-                                           @NotNull EnumFacing side,
-                                           float hitX, float hitY, float hitZ,
+    public EnumActionResult onItemUseFirst(@NotNull EntityPlayer player, @NotNull World world, @NotNull BlockPos pos,
+                                           @NotNull EnumFacing side, float hitX, float hitY, float hitZ,
                                            @NotNull EnumHand hand) {
         if (KeyBind.TOOL_AOE_CHANGE.isKeyDown(player)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof IPipeTile<?, ?>pipe) {
+            if (te instanceof IPipeTile<?, ?> pipe) {
 
                 var block = pipe.getPipeBlock();
                 ItemStack toolStack = player.getHeldItem(hand);
 
-                if (!((BlockPipeAccessor) block).checkPipeTool(toolStack)) return EnumActionResult.FAIL;
+                if (!((BlockPipeAccessor) block).checkPipeTool(toolStack))
+                    return EnumActionResult.FAIL;
 
                 CuboidRayTraceResult rayTraceResult = block.getServerCollisionRayTrace(player, pos, world);
 
-                if (rayTraceResult == null) return EnumActionResult.FAIL;
+                if (rayTraceResult == null)
+                    return EnumActionResult.FAIL;
 
                 EnumFacing gridSide = CoverRayTracer.traceCoverSide(rayTraceResult);
 
-                if (gridSide == null) return EnumActionResult.FAIL;
+                if (gridSide == null)
+                    return EnumActionResult.FAIL;
 
                 TraverseOptions option = null;
                 if (pipe.isConnected(gridSide)) {
@@ -79,13 +78,15 @@ public enum PipeNetWalkerBehavior implements IToolBehavior {
                     option = CONNECTING;
                 }
 
-                if (option == null) return EnumActionResult.FAIL;
+                if (option == null)
+                    return EnumActionResult.FAIL;
 
                 NBTTagCompound toolTag = ToolHelper.getToolTag(toolStack);
                 int maxWalks = toolTag.getInteger(ToolHelper.MAX_DURABILITY_KEY) -
                         toolTag.getInteger(ToolHelper.DURABILITY_KEY);
 
-                if (maxWalks <= 0) return EnumActionResult.FAIL;
+                if (maxWalks <= 0)
+                    return EnumActionResult.FAIL;
 
                 int walkedBlocks = PipeOperationWalker.collectPipeNet(world, pos, pipe, gridSide, option, maxWalks);
 

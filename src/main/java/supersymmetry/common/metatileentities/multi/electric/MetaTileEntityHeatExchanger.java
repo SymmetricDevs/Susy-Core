@@ -1,8 +1,8 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.util.ResourceLocation;
+
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -34,25 +34,19 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start()
-                .aisle("CCC", "BCB", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "CDC", "ACA")
-                .aisle("CCC", "BSB", "ACA")
-                .where('S', selfPredicate())
-                .where('A', frames(Materials.Steel))
-                .where('B', autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2)
-                        .or(autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(2)))
-                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(autoAbilities(false, true, false, false, false, false, false))
-                        .or(autoAbilities(false, false, true, false, false, false, false).setMaxGlobalLimited(1)))
-                .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE)))
-                .build();
+        return FactoryBlockPattern.start().aisle("CCC", "BCB", "ACA").aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA").aisle("CCC", "CDC", "ACA").aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "CDC", "ACA").aisle("CCC", "CDC", "ACA").aisle("CCC", "CDC", "ACA")
+                .aisle("CCC", "BSB", "ACA").where('S', selfPredicate()).where('A', frames(Materials.Steel))
+                .where('B',
+                        autoAbilities(false, false, false, false, false, true, false).setMinGlobalLimited(2).or(
+                                autoAbilities(false, false, false, false, true, false, false).setMinGlobalLimited(2)))
+                .where('C',
+                        states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
+                                .or(autoAbilities(false, true, false, false, false, false, false))
+                                .or(autoAbilities(false, false, true, false, false, false, false)
+                                        .setMaxGlobalLimited(1)))
+                .where('D', states(MetaBlocks.BOILER_CASING.getState(BoilerCasingType.STEEL_PIPE))).build();
     }
 
     @Override
@@ -60,8 +54,7 @@ public class MetaTileEntityHeatExchanger extends RecipeMapMultiblockController {
         return Textures.SOLID_STEEL_CASING;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return SusyTextures.HEAT_EXCHANGER_OVERLAY;
     }

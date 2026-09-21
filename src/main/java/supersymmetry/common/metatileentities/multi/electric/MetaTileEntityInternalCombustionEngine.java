@@ -4,8 +4,6 @@ import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -18,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -34,6 +33,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockDisplayText;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.*;
@@ -42,9 +42,11 @@ import gregtech.common.blocks.*;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.common.blocks.*;
+import supersymmetry.common.world.WorldProviderPlanet;
 
 public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorController
-                                                    implements IProgressBarMultiblock {
+                                                    implements
+                                                    IProgressBarMultiblock {
 
     public final int tier;
 
@@ -58,7 +60,17 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         this.casingRenderer = casingRenderer;
         this.frontOverlay = frontOverlay;
         this.tier = tier;
-        this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this);
+        this.recipeMapWorkable = new SuSyTurbineRecipeLogic(this) {
+
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                if (this.getMetaTileEntity().getWorld().provider instanceof WorldProviderPlanet) {
+                    return false;
+                }
+
+                return super.checkRecipe(recipe);
+            }
+        };
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
     }
 
@@ -66,6 +78,11 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityInternalCombustionEngine(metaTileEntityId, recipeMap, maxSpeed, accel, decel, tier,
                 casingRenderer, frontOverlay);
+    }
+
+    @Override
+    public boolean checkRecipe(@NotNull Recipe recipe, boolean consumeIfSuccess) {
+        return super.checkRecipe(recipe, consumeIfSuccess);
     }
 
     @Override
@@ -85,13 +102,10 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         "C  F F F         ", "   HHHHH         ")
                 .aisle("C CCCCCCC  F   F ", "C   FSF    F   F ", "C   FMF    F   F ", "C                ",
                         "C                ", "                 ")
-                .where('S', selfPredicate())
-                .where('C', casingPredicate)
+                .where('S', selfPredicate()).where('C', casingPredicate)
                 .where('M', abilities(MultiblockAbility.MAINTENANCE_HATCH))
-                .where('E', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where('F', frames(Materials.Steel))
-                .where('H', casingPredicate
-                        .or(autoAbilities(false, false, false, false, true, false, false)))
+                .where('E', abilities(MultiblockAbility.MUFFLER_HATCH)).where('F', frames(Materials.Steel))
+                .where('H', casingPredicate.or(autoAbilities(false, false, false, false, true, false, false)))
                 .where('P', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('R', states(SuSyBlocks.SERPENTINE.getState(BlockSerpentine.SerpentineType.BASIC)))
                 .where('X',
@@ -100,18 +114,17 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                                 RelativeDirection.UP, FACING))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX)))
-                .where('A', coilOrientation())
-                .where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
+                .where('A', coilOrientation()).where('D', abilities(MultiblockAbility.OUTPUT_ENERGY))
                 .where('B', states(SuSyBlocks.ENGINE_CASING.getState(BlockEngineCasing.EngineCasingType.PISTON_BLOCK)))
                 .where('I',
                         states(SuSyBlocks.ACTIVE_CASING
                                 .getState(BlocksActiveCasing.ActiveBlockType.BASIC_INTAKE_CASING)))
-                .where(' ', any())
-                .build();
+                .where(' ', any()).build();
     }
 
     protected TraceabilityPredicate coilOrientation() {
-        // makes sure rotor's front faces the left side (relative to the player) of controller front
+        // makes sure rotor's front faces the left side (relative to the player) of
+        // controller front
         return SuSyPredicates.horizontalOrientation(this, copperCoilState(), RelativeDirection.RIGHT, FACING);
     }
 
@@ -124,8 +137,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         return casingRenderer;
     }
 
-    @Nonnull
-    @Override
+    @NonNull @Override
     protected ICubeRenderer getFrontOverlay() {
         return frontOverlay;
     }
@@ -157,6 +169,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         tooltip.add(I18n.format("gregtech.universal.tooltip.max_voltage_out", GTValues.V[tier + 2],
                 GTValues.VNF[tier + 2]));
         tooltip.add(I18n.format("susy.multiblock.rotation_generator.tooltip", maxSpeed, accel, decel));
+        tooltip.add(I18n.format("susy.general.requires_atmosphere"));
     }
 
     // GUI stuff
@@ -224,33 +237,25 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
                         lubricantInfo.amount_required * (2.0 * getRotationSpeed() / 3600) : 0;
             }
 
-            ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(
-                    TextFormatting.GOLD,
+            ITextComponent lubricantStorage = TextComponentUtil.stringWithColor(TextFormatting.GOLD,
                     TextFormattingUtil.formatNumbers(lubricantStored) + " / " +
                             TextFormattingUtil.formatNumbers(lubricantCapacity) + " L");
 
-            ITextComponent lubricantConsumption = TextComponentUtil.stringWithColor(
-                    TextFormatting.GOLD,
+            ITextComponent lubricantConsumption = TextComponentUtil.stringWithColor(TextFormatting.GOLD,
                     TextFormattingUtil.formatNumbers(lubricantConsumptionRate) + " L/min ");
 
-            hoverList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "susy.multiblock.rotation_generator.lubricant_amount",
-                    lubricantStorage, lubricantConsumption));
+            hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "susy.multiblock.rotation_generator.lubricant_amount", lubricantStorage, lubricantConsumption));
         } else {
             ITextComponent rpmTranslated = TextComponentUtil.translationWithColor(
                     getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
                     "gregtech.multiblock.turbine.rotor_rpm_unit_name");
             ITextComponent rotorInfo = TextComponentUtil.translationWithColor(
-                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()),
-                    "%s / %s %s",
+                    getRotorSpeedColor(getRotationSpeed(), getMaxRotationSpeed()), "%s / %s %s",
                     TextFormattingUtil.formatNumbers(getRotationSpeed()),
-                    TextFormattingUtil.formatNumbers(getMaxRotationSpeed()),
-                    rpmTranslated);
-            hoverList.add(TextComponentUtil.translationWithColor(
-                    TextFormatting.GRAY,
-                    "gregtech.multiblock.turbine.rotor_speed",
-                    rotorInfo));
+                    TextFormattingUtil.formatNumbers(getMaxRotationSpeed()), rpmTranslated);
+            hoverList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gregtech.multiblock.turbine.rotor_speed", rotorInfo));
         }
     }
 
@@ -270,8 +275,7 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
         SuSyTurbineRecipeLogic logic = (SuSyTurbineRecipeLogic) this.recipeMapWorkable;
 
         return new ToggleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_ENERGY_VOIDING,
-                logic::getVoidingEnergy, logic::setVoidingEnergy)
-                        .setTooltipText("susy.gui.toggle_energy_voiding");
+                logic::getVoidingEnergy, logic::setVoidingEnergy).setTooltipText("susy.gui.toggle_energy_voiding");
     }
 
     @Override
@@ -299,7 +303,8 @@ public class MetaTileEntityInternalCombustionEngine extends RotationGeneratorCon
 
         MultiblockDisplayText.builder(textList, isStructureFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive())
-                // .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(), recipeLogic.getPreviousRecipeDuration())
+                // .addFuelNeededLine(recipeLogic.getRecipeFluidInputInfo(),
+                // recipeLogic.getPreviousRecipeDuration())
                 .addWorkingStatusLine();
     }
 }

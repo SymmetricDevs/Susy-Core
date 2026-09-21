@@ -35,11 +35,8 @@ public final class CatalystItems {
         addTieredCatalystGroup(OXIDATION_CATALYST_BED, CatalystGroups.OXIDATION_CATALYST_BEDS);
         addTieredCatalystGroup(REDUCTION_CATALYST_BED, CatalystGroups.REDUCTION_CATALYST_BEDS);
 
-        CatalystGroups.CRACKING_CATALYST_BEDS.add(CRACKING_CATALYST_BED.getItemStack(), new CatalystInfo(
-                CatalystInfo.NO_TIER,
-                1,
-                0.95,
-                1.25));
+        CatalystGroups.CRACKING_CATALYST_BEDS.add(CRACKING_CATALYST_BED.getItemStack(),
+                new CatalystInfo(CatalystInfo.NO_TIER, 1, 0.95, 1.25));
     }
 
     public static void addTieredCatalystItem(MetaOreDictItem.OreDictValueItem[] items, int id, int RGB,
@@ -52,11 +49,7 @@ public final class CatalystItems {
 
     public static void addTieredCatalystGroup(MetaOreDictItem.OreDictValueItem[] items, CatalystGroup catalystGroup) {
         for (int i = 0; i < items.length; i++) {
-            catalystGroup.add(items[i].getItemStack(), new CatalystInfo(
-                    i,
-                    1,
-                    0.95,
-                    1.25));
+            catalystGroup.add(items[i].getItemStack(), new CatalystInfo(i, 1, 0.95, 1.25));
         }
     }
 }

@@ -1,0 +1,39 @@
+package supersymmetry.integration.jei;
+
+import java.util.stream.Collectors;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fluids.FluidStack;
+
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
+import mezz.jei.api.recipe.IRecipeWrapper;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
+
+public class RocketFuelWrapper implements IRecipeWrapper {
+
+    private final LiquidRocketFuelEntry entry;
+
+    private final String specificImpulse;
+    private final String density;
+
+    public RocketFuelWrapper(LiquidRocketFuelEntry entry) {
+        this.entry = entry;
+        this.specificImpulse = I18n.format("susy.tooltip.specific_impulse", entry.getSpecificImpulse());
+        this.density = I18n.format("susy.tooltip.density", entry.getDensity());
+    }
+
+    @Override
+    public void getIngredients(IIngredients ingredients) {
+        ingredients.setInputs(VanillaTypes.FLUID, entry.getComposition().stream()
+                .map((t) -> new FluidStack(t.getFirst(), t.getSecond())).collect(Collectors.toList()));
+    }
+
+    @Override
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        int start = 40;
+        minecraft.fontRenderer.drawString(specificImpulse, 0, start, 0x111111);
+        minecraft.fontRenderer.drawString(density, 0, start + 8, 0x111111);
+    }
+}

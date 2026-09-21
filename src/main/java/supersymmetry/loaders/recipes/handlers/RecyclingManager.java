@@ -39,14 +39,12 @@ import supersymmetry.mixins.gregtech.RecipeBuilderAccessor;
 
 @SuppressWarnings({ "UnstableApiUsage", "JavadocReference" })
 // TODO: Partial recursive recycling data reload
-// TODO: Store part of the node geometry so that they can be restored when reloaded via GrS
+// TODO: Store part of the node geometry so that they can be restored when
+// reloaded via GrS
 public class RecyclingManager {
 
     private static final MutableValueGraph<Recyclable, Fraction> graphStorage = ValueGraphBuilder.directed()
-            .allowsSelfLoops(false)
-            .nodeOrder(ElementOrder.unordered())
-            .expectedNodeCount(8192)
-            .build();
+            .allowsSelfLoops(false).nodeOrder(ElementOrder.unordered()).expectedNodeCount(8192).build();
 
     public static final Object2ObjectOpenHashMap<Recyclable, Recipe> arcRecipes = new Object2ObjectOpenHashMap<>();
 
@@ -62,7 +60,8 @@ public class RecyclingManager {
         int itr = 0;
         while (recipe[itr] instanceof String s) {
             for (char c : s.toCharArray()) {
-                if (ToolHelper.getToolFromSymbol(c) != null) continue; // skip tools
+                if (ToolHelper.getToolFromSymbol(c) != null)
+                    continue; // skip tools
                 int count = inputCountMap.getOrDefault(c, 0);
                 inputCountMap.put(c, count + 1);
             }
@@ -79,14 +78,15 @@ public class RecyclingManager {
                 continue;
             }
 
-            if (lastChar == ' ') return;
-            /// Should never happen if recipe is formatted correctly
-            /// In the case that it isn't, this error should be handled
-            /// by an earlier method call parsing the recipe.
+            if (lastChar == ' ')
+                return;
+            /// Should never happen if recipe is formatted correctly In the case that it isn't, this error should be
+            /// handled by an earlier method call parsing the recipe.
 
             Recyclable ing = Recyclable.from(ingredient);
 
-            if (ing.isEmpty()) continue;
+            if (ing.isEmpty())
+                continue;
 
             int ingCount = inputCountMap.get(lastChar) * ing.value(ingredient);
 
@@ -104,17 +104,20 @@ public class RecyclingManager {
             Recyclable ing;
             int count;
 
-            if (input == null) continue;
+            if (input == null)
+                continue;
 
             // TODO: ugly code
             ItemStack[] inputStacks = input.getMatchingStacks();
-            if (inputStacks == null || inputStacks.length == 0) continue;
+            if (inputStacks == null || inputStacks.length == 0)
+                continue;
 
             ItemStack inputStack = inputStacks[0];
 
             ing = Recyclable.from(inputStack);
 
-            if (ing.isEmpty()) continue;
+            if (ing.isEmpty())
+                continue;
 
             count = input.getAmount() * ing.value(inputStack);
 
@@ -138,21 +141,21 @@ public class RecyclingManager {
             Recyclable ing;
             int count;
 
-            if (input == null ||
-                    input.isNonConsumable() ||
-                    input instanceof GTRecipeFluidInput ||
+            if (input == null || input.isNonConsumable() || input instanceof GTRecipeFluidInput ||
                     input instanceof FluidCellInput)
                 continue;
 
             // TODO: ugly code
             ItemStack[] inputStacks = input.getInputStacks();
-            if (inputStacks == null || inputStacks.length == 0) continue;
+            if (inputStacks == null || inputStacks.length == 0)
+                continue;
 
             ItemStack inputStack = inputStacks[0];
 
             ing = Recyclable.from(inputStack);
 
-            if (ing.isEmpty()) continue;
+            if (ing.isEmpty())
+                continue;
 
             count = input.getAmount() * ing.value(inputStack);
 
@@ -179,11 +182,13 @@ public class RecyclingManager {
                                              boolean force) {
         if (graphStorage.nodes().contains(out)) { // There's already recycling data.
             Set<Recyclable> predecessors = new ObjectArraySet<>(graphStorage.predecessors(out)); // No CMEs today!
-            if (force) { // The original recipe is going to get removed, so it's fine to directly replace the data.
+            if (force) { // The original recipe is going to get removed, so it's fine to directly replace
+                         // the data.
                 for (Recyclable ing : predecessors) {
                     graphStorage.removeEdge(ing, out);
                 }
-            } else { // We now need to take the minimum of the two; we don't know which recipe players will use!
+            } else { // We now need to take the minimum of the two; we don't know which recipe
+                     // players will use!
                 // First, find the intersection of the two sets of ingredients
                 Set<Recyclable> intersection = new ObjectArraySet<>(predecessors);
                 intersection.retainAll(ingredients.keySet());
@@ -204,8 +209,7 @@ public class RecyclingManager {
             }
 
         }
-        ingredients.forEach((ing, count) -> graphStorage.putEdgeValue(
-                ing, out, count));
+        ingredients.forEach((ing, count) -> graphStorage.putEdgeValue(ing, out, count));
     }
 
     public static void registerRecycling(ItemStack output, Map<Object, Integer> ingredients, int outputCount,
@@ -230,12 +234,13 @@ public class RecyclingManager {
 
     public static void registerOre(ItemStack itemStack, ItemMaterialInfo materialInfo) {
         Recyclable out = Recyclable.from(itemStack);
-        materialInfo.getMaterials().forEach(ms -> graphStorage.putEdgeValue(
-                Recyclable.from(ms), out, Fraction.getFraction((int) ms.amount, 1)));
+        materialInfo.getMaterials().forEach(
+                ms -> graphStorage.putEdgeValue(Recyclable.from(ms), out, Fraction.getFraction((int) ms.amount, 1)));
     }
 
     private static void registerOreInternal(ItemStack itemStack, ItemMaterialInfo materialInfo) {
-        if (itemStack.isEmpty()) return;
+        if (itemStack.isEmpty())
+            return;
         OreDictUnifierAccessor.getUnificationInfo().put(new ItemAndMetadata(itemStack), materialInfo);
     }
 
@@ -248,7 +253,8 @@ public class RecyclingManager {
     }
 
     private static void registerRecyclingData(Recyclable output) {
-        if (output instanceof MaterialRecyclable) return; /// Skip materials
+        if (output instanceof MaterialRecyclable)
+            return; /// Skip materials
 
         ItemStack outputStack = output.asStack();
         OrePrefix prefix = OreDictUnifier.getPrefix(outputStack);
@@ -259,17 +265,17 @@ public class RecyclingManager {
         Object2ObjectOpenHashMap<Material, Fraction> mStacks = new Object2ObjectOpenHashMap<>();
 
         graphStorage.predecessors(output).forEach(
-                /// Theoretically no default value is needed. However, it has to be here is for CrL compat
-                /// since [MutableValueGraph#edgeValue] returns [Optional] in newer guava versions
+                /// Theoretically no default value is needed. However, it has to be here is for CrL compat since
+                /// [MutableValueGraph#edgeValue] returns [Optional] in newer guava versions
                 ing -> ing.addToMStack(mStacks, graphStorage.edgeValueOrDefault(ing, output, Fraction.ZERO)));
 
-        if (mStacks.isEmpty()) return;
+        if (mStacks.isEmpty())
+            return;
 
         registerOreInternal(outputStack,
-                new ItemMaterialInfo(mStacks.entrySet().stream()
-                        .map(e -> new MaterialStack(e.getKey(), e.getValue().intValue()))
-                        .sorted(Comparator.comparingLong(m -> -m.amount))
-                        .collect(Collectors.toList())));
+                new ItemMaterialInfo(
+                        mStacks.entrySet().stream().map(e -> new MaterialStack(e.getKey(), e.getValue().intValue()))
+                                .sorted(Comparator.comparingLong(m -> -m.amount)).collect(Collectors.toList())));
     }
 
     /// Copied and modified from CEu
@@ -304,12 +310,11 @@ public class RecyclingManager {
         }
     }
 
-    /// Copied and modified from CEu
-    /// Adds a MaterialStack to a map of `<Material, Quantity>`
+    /// Copied and modified from CEu Adds a MaterialStack to a map of `<Material, Quantity>`
     ///
     /// @param receiver the map to add to
-    /// @param amount the number of items in the stack
-    /// @param ms the stack to add
+    /// @param amount   the number of items in the stack
+    /// @param ms       the stack to add
     /// @see RecyclingHandler#addMaterialStack(Object2LongMap, int, MaterialStack)
     private static void addMaterialStack(@NotNull Object2ObjectMap<Material, Fraction> receiver,
                                          @NotNull Fraction amount, @NotNull MaterialStack ms) {
@@ -320,7 +325,7 @@ public class RecyclingManager {
     /// Only removes recipes from [RecipeMaps#MACERATOR_RECIPES] and [RecipeMaps#ARC_FURNACE_RECIPES]
     ///
     /// @implNote as long as [RecipeMap#removeRecipe(Recipe)] is called in a groovy script it will be considered as a
-    /// GrS recipe
+    ///           GrS recipe
     public static void removeByRecyclable(Recyclable recyclable) {
         Recipe recipe = arcRecipes.remove(recyclable);
         if (recipe != null) {

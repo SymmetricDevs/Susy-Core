@@ -8,7 +8,8 @@ import net.minecraft.util.IStringSerializable;
 import org.jetbrains.annotations.NotNull;
 
 public class VariantItemBlockFalling<R extends Enum<R> & IStringSerializable, T extends VariantBlockFalling<R>>
-                                    extends ItemBlock {
+                                    extends
+                                    ItemBlock {
 
     private final T genericBlock;
 

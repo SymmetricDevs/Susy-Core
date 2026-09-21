@@ -30,37 +30,17 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
         public WidgetIntSelector(int[] validValues, Position position, Size size) {
             super(position, size);
             this.validValues = validValues;
-            decreaseButton = new ClickButtonWidget(
-                    0,
-                    0,
-                    size.width / 5,
-                    size.height,
-                    "",
-                    (clickdata) -> {
-                        this.selectedIndex--;
-                    })
-                            .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
-            increaseButton = new ClickButtonWidget(
-                    (size.width / 5) * 4,
-                    0,
-                    size.width / 5,
-                    size.height,
-                    "",
+            decreaseButton = new ClickButtonWidget(0, 0, size.width / 5, size.height, "", (clickdata) -> {
+                this.selectedIndex--;
+            }).setShouldClientCallback(true).setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_LEFT);
+            increaseButton = new ClickButtonWidget((size.width / 5) * 4, 0, size.width / 5, size.height, "",
                     (clickdata) -> {
                         this.selectedIndex++;
-                    })
-                            .setShouldClientCallback(true)
-                            .setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
-            amountTextField = new TextFieldWidget2(
-                    (int) ((size.width / 5) * 2.5) - 5,
-                    3,
-                    (size.width / 5) * 3,
-                    size.height,
-                    () -> {
+                    }).setShouldClientCallback(true).setButtonTexture(SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_RIGHT);
+            amountTextField = new TextFieldWidget2((int) ((size.width / 5) * 2.5) - 5, 3, (size.width / 5) * 3,
+                    size.height, () -> {
                         return Integer.toString(this.getSelectedValue()) + "x";
-                    },
-                    this::trySelectValue);
+                    }, this::trySelectValue);
 
             this.addWidget(amountTextField);
 
@@ -103,27 +83,18 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
 
     private boolean previousStateSlider = false;
 
-    public RocketComponentEntryWidget(
-                                      Position pos, Size size, HorizontalScrollableListWidget itemList,
+    public RocketComponentEntryWidget(Position pos, Size size, HorizontalScrollableListWidget itemList,
                                       int[] validValues) {
         super(pos, size);
         ImageCycleButtonWidget button = new ImageCycleButtonWidget(
-                itemList.getPosition().x + itemList.getSize().width + 10,
-                0,
-                12,
-                12,
-                SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW,
-                () -> {
+                itemList.getPosition().x + itemList.getSize().width + 10, 0, 12, 12,
+                SusyGuiTextures.BLUEPRINT_ASSEMBLER_BUTTON_SHORTVIEW, () -> {
                     return !this.shortView;
-                },
-                (bool) -> {
+                }, (bool) -> {
                     this.setShortView(!bool);
                     this.resetBackgroundWidget();
-                })
-                        .singleTexture();
-        WidgetIntSelector selector = new WidgetIntSelector(
-                validValues,
-                new Position(itemList.getPosition().x + 20, 0),
+                }).singleTexture();
+        WidgetIntSelector selector = new WidgetIntSelector(validValues, new Position(itemList.getPosition().x + 20, 0),
                 new Size((int) (itemList.getSize().width / 2 - 10), 18));
         this.sbutton = button;
         this.selector = selector;
@@ -139,23 +110,17 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
         this.addWidget(itemList);
     }
 
-    public RocketComponentEntryWidget(
-                                      Position pos,
-                                      Size size,
-                                      ImageCycleButtonWidget button,
-                                      HorizontalScrollableListWidget itemList,
-                                      WidgetIntSelector selector,
+    public RocketComponentEntryWidget(Position pos, Size size, ImageCycleButtonWidget button,
+                                      HorizontalScrollableListWidget itemList, WidgetIntSelector selector,
                                       Consumer<Tuple<Boolean, Integer>> callback) {
         super(pos, size);
         this.sbutton = button;
         this.itemList = itemList;
         this.selector = selector;
-        itemList.setSelfPosition(
-                Position.ORIGIN); // the item list should be at the very beginning of the entry
+        itemList.setSelfPosition(Position.ORIGIN); // the item list should be at the very beginning of the entry
         this.addWidget(itemList);
         if (button != null) {
-            button.setSelfPosition(
-                    new Position(itemList.getPosition().x + itemList.getSize().width + 15, 0));
+            button.setSelfPosition(new Position(itemList.getPosition().x + itemList.getSize().width + 15, 0));
             this.addWidget(button);
 
             this.resetBackgroundWidget();
@@ -165,8 +130,7 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
             selector.setVisible(false);
             // off by default since shortView is false by default
             selector.setSelfPosition(
-                    new Position(
-                            itemList.getPosition().x + itemList.getSize().width - selector.getSize().width - 5,
+                    new Position(itemList.getPosition().x + itemList.getSize().width - selector.getSize().width - 5,
                             /* should be hidden behind the item list by default */
                             0));
 
@@ -178,11 +142,9 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
 
     public List<DataStorageLoader> getSlots() {
         // with a prayer
-        return this.itemList.widgets.stream()
-                .map(x -> (SlotWidget) x)
+        return this.itemList.widgets.stream().map(x -> (SlotWidget) x)
                 .map(x -> (SlotWidget.WidgetSlotItemHandler) x.getHandle())
-                .map(x -> (DataStorageLoader) x.getItemHandler())
-                .collect(Collectors.toList());
+                .map(x -> (DataStorageLoader) x.getItemHandler()).collect(Collectors.toList());
     }
 
     @Override
@@ -200,11 +162,8 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     }
 
     public void resetBackgroundWidget() {
-        buttonBackground = new ImageWidget(
-                sbutton.getSelfPosition().x - 2,
-                sbutton.getSelfPosition().y - 2,
-                sbutton.getSize().width + 4,
-                sbutton.getSize().height + 4,
+        buttonBackground = new ImageWidget(sbutton.getSelfPosition().x - 2, sbutton.getSelfPosition().y - 2,
+                sbutton.getSize().width + 4, sbutton.getSize().height + 4,
                 SusyGuiTextures.BLUEPRINT_ASSEMBLER_SLIDER_BACKGROUND);
     }
 
@@ -212,7 +171,8 @@ public class RocketComponentEntryWidget extends AbstractWidgetGroup {
     public void setShortView(boolean state) {
         this.selector.setActive(state);
         this.selector.setVisible(state);
-        if (this.shortView == state) return;
+        if (this.shortView == state)
+            return;
         if (state) {
             this.previousStateSize = this.itemList.getSize();
             this.previousStateSlider = this.itemList.sliderActive;

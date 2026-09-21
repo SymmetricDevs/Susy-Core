@@ -99,6 +99,18 @@
       "textures": {
         "all": "gregtech:blocks/multiblock_casing/aluminium_gearbox"
       }
+    },
+    "variant=hardened_titanium_casing": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/multiblock_casing/hardened_titanium_casing"
+      }
+    },
+    "variant=screener_deck" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/screener_deck"
+      }
     }
   }
 }

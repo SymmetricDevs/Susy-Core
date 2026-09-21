@@ -1,0 +1,9 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=grabber": { "model": "susy:robot_arm/grabber", "y": 270 },
+    "facing=south,variant=grabber": { "model": "susy:robot_arm/grabber", "y": 90 },
+    "facing=west,variant=grabber": { "model": "susy:robot_arm/grabber", "y": 180 },
+    "facing=east,variant=grabber": { "model": "susy:robot_arm/grabber"}
+  }
+}

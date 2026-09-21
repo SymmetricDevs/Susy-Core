@@ -20,33 +20,39 @@ public class FactionViolence {
     // checks every mob every tick, probably not the best way to do this
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (event.getEntity().world.isRemote) return; // server only
-        if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
-        if (!(event.getEntity() instanceof EntityLiving)) return;
+        if (event.getEntity().world.isRemote)
+            return; // server only
+        if (!FactionViolenceManager.isEnabled(event.getEntity().world))
+            return;
+        if (!(event.getEntity() instanceof EntityLiving))
+            return;
 
         EntityLiving mob = (EntityLiving) event.getEntity();
         NBTTagCompound tag = mob.getEntityData();
-        if (!tag.hasKey(TAG_ROOT)) return;
+        if (!tag.hasKey(TAG_ROOT))
+            return;
 
         NBTTagCompound susyTag = tag.getCompoundTag(TAG_ROOT);
-        if (!susyTag.hasKey(TAG_FACTION)) return;
+        if (!susyTag.hasKey(TAG_FACTION))
+            return;
 
         String mobFaction = susyTag.getString(TAG_FACTION);
-        if (mobFaction.isEmpty()) return;
+        if (mobFaction.isEmpty())
+            return;
 
         // Clear attack target if dead or invalid
-        // not sure if this is needed or not, but techguns will shoot at nothing if it isn't
+        // not sure if this is needed or not, but techguns will shoot at nothing if it
+        // isn't
         // they just built different like that
-        if (mob.getAttackTarget() != null &&
-                (mob.getAttackTarget().isDead ||
-                        !mob.getAttackTarget().isEntityAlive() ||
-                        !(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob) &&
-                                !(mob.getAttackTarget() instanceof net.minecraft.entity.player.EntityPlayer))) {
+        if (mob.getAttackTarget() != null && (mob.getAttackTarget().isDead || !mob.getAttackTarget().isEntityAlive() ||
+                !(mob.getAttackTarget() instanceof net.minecraft.entity.monster.IMob) &&
+                        !(mob.getAttackTarget() instanceof net.minecraft.entity.player.EntityPlayer))) {
             mob.setAttackTarget(null);
         }
 
         // Only assign a new target if none exists
-        if (mob.getAttackTarget() != null) return;
+        if (mob.getAttackTarget() != null)
+            return;
 
         EntityLivingBase bestTarget = null;
         double bestDistanceSq = Double.MAX_VALUE;
@@ -54,8 +60,10 @@ public class FactionViolence {
         for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
                 mob.getEntityBoundingBox().grow(radius))) {
 
-            if (target == mob) continue;
-            if (!mob.canEntityBeSeen(target)) continue;
+            if (target == mob)
+                continue;
+            if (!mob.canEntityBeSeen(target))
+                continue;
 
             NBTTagCompound targetTag = target.getEntityData();
             String targetFaction = "";
@@ -83,7 +91,8 @@ public class FactionViolence {
                 shouldAttack = true;
             }
 
-            if (!shouldAttack) continue;
+            if (!shouldAttack)
+                continue;
 
             double distSq = mob.getDistanceSq(target);
             if (distSq < bestDistanceSq) {

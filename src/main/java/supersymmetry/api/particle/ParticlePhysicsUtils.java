@@ -107,7 +107,8 @@ public class ParticlePhysicsUtils {
     }
 
     public static String getEnergyWithUnit(double energy) {
-        if (energy == 0) return "< 1 keV";
+        if (energy == 0)
+            return "< 1 keV";
         return getSIFormat(energy, 6, "eV");
     }
 }

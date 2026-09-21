@@ -29,8 +29,7 @@ public enum SuSyFluidFilters implements IFilter<FluidStack> {
 
         @Override
         public boolean test(@NotNull FluidStack fluid) {
-            return matchesFluid(fluid, Materials.Lubricant) ||
-                    matchesFluid(fluid, SusyMaterials.MidgradeLubricant) ||
+            return matchesFluid(fluid, Materials.Lubricant) || matchesFluid(fluid, SusyMaterials.MidgradeLubricant) ||
                     matchesFluid(fluid, SusyMaterials.PremiumLubricant) ||
                     matchesFluid(fluid, SusyMaterials.SupremeLubricant);
         }
@@ -45,10 +44,8 @@ public enum SuSyFluidFilters implements IFilter<FluidStack> {
 
         @Override
         public boolean test(@NotNull FluidStack fluid) {
-            return matchesFluid(fluid, Materials.Water) ||
-                    matchesFluid(fluid, Materials.DistilledWater) ||
-                    matchesFluid(fluid, SusyMaterials.Coolant) ||
-                    matchesFluid(fluid, SusyMaterials.AdvancedCoolant);
+            return matchesFluid(fluid, Materials.Water) || matchesFluid(fluid, Materials.DistilledWater) ||
+                    matchesFluid(fluid, SusyMaterials.Coolant) || matchesFluid(fluid, SusyMaterials.AdvancedCoolant);
         }
 
         @Override

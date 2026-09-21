@@ -1,9 +1,17 @@
 {
-  "parent": "block/orientable",
+  "parent": "gregtech:block/cube_2_layer",
   "textures": {
-    "front": "gregtech:blocks/home_blocks/scifi/scifi_front",
-    "side": "gregtech:blocks/home_blocks/scifi/scifi_left",
-    "south": "gregtech:blocks/home_blocks/scifi/scifi_back",
-    "top": "gregtech:blocks/home_blocks/scifi/scifi_top"
+    "bot_down": "gregtech:blocks/home_blocks/scifi/scifi_bottom",
+    "bot_north": "gregtech:blocks/home_blocks/scifi/scifi_back",
+    "bot_west": "gregtech:blocks/home_blocks/scifi/scifi_left",
+    "bot_east": "gregtech:blocks/home_blocks/scifi/scifi_right",
+    "bot_south": "gregtech:blocks/home_blocks/scifi/scifi_back",
+    "bot_up": "gregtech:blocks/home_blocks/scifi/scifi_top",
+    "top_down": "gregtech:blocks/home_blocks/scifi/scifi_bottom_emissive",
+    "top_north": "gregtech:blocks/home_blocks/scifi/scifi_back_emissive",
+    "top_west": "gregtech:blocks/home_blocks/scifi/scifi_left_emissive",
+    "top_east": "gregtech:blocks/home_blocks/scifi/scifi_right_emissive",
+    "top_south": "gregtech:blocks/home_blocks/scifi/scifi_back_emissive",
+    "top_up": "gregtech:blocks/home_blocks/scifi/scifi_top_emissive"
   }
 }
