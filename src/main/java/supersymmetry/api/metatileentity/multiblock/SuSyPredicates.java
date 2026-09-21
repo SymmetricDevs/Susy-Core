@@ -1,5 +1,8 @@
 package supersymmetry.api.metatileentity.multiblock;
 
+import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
+import static supersymmetry.common.blocks.BlockEpoxySolarFurnaceMirror.MIRROR_SIDES;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -44,6 +47,7 @@ import supersymmetry.common.blocks.BlockSinteringBrick;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.active.BlockActiveEccentricRoll;
 import supersymmetry.common.blocks.rocketry.BlockProcessorCluster;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntitySolarFurnace;
 
 /**
  * Class containing global predicates
@@ -66,7 +70,8 @@ public class SuSyPredicates {
                 }
                 return false;
             }, () -> Arrays.stream(BlockCoolingCoil.CoolingCoilType.values())
-                    .map(type -> new BlockInfo(SuSyBlocks.COOLING_COIL.getState(type))).toArray(BlockInfo[]::new));
+                    .map(type -> new BlockInfo(SuSyBlocks.COOLING_COIL.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     private static final Supplier<TraceabilityPredicate> SINTERING_BRICKS = () -> new TraceabilityPredicate(
             blockWorldState -> {
@@ -85,12 +90,12 @@ public class SuSyPredicates {
                 }
                 return false;
             }, () -> Arrays.stream(BlockSinteringBrick.SinteringBrickType.values())
-                    .map(type -> new BlockInfo(SuSyBlocks.SINTERING_BRICK.getState(type))).toArray(BlockInfo[]::new));
+                    .map(type -> new BlockInfo(SuSyBlocks.SINTERING_BRICK.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     private static final Supplier<TraceabilityPredicate> RAILS = () -> new TraceabilityPredicate(blockWorldState -> {
         // TODO remove this, i just dont like rails
-        if (!Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING))
-            return true;
+        if (!Loader.isModLoaded(SuSyValues.MODID_IMMERSIVERAILROADING)) return true;
 
         IBlockState state = blockWorldState.getBlockState();
 
@@ -100,29 +105,29 @@ public class SuSyPredicates {
     });
 
     // Allow all conveyor belts, and require them to have the same type.
-    // This will create a list of Pair<BlockPos, RelativeDirection> allowing the
-    // multiblock to reorient the facing.
+    // This will create a list of Pair<BlockPos, RelativeDirection> allowing the multiblock to reorient the facing.
     private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> CONVEYOR_BELT = Arrays
-            .stream(RelativeDirection.values())
-            .collect(Collectors.toMap(facing -> facing, facing -> () -> new TraceabilityPredicate(blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() instanceof BlockConveyor) {
-                    // Check conveyor type
-                    BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
-                    Object currentConveyor = blockWorldState.getMatchContext().getOrPut("ConveyorType", type);
-                    if (!currentConveyor.equals(type)) {
-                        blockWorldState.setError(new PatternStringError("susy.multiblock.pattern.error.conveyor"));
+            .stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
+                    facing -> () -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockConveyor) {
+                            // Check conveyor type
+                            BlockConveyor.ConveyorType type = ((BlockConveyor) state.getBlock()).getState(state);
+                            Object currentConveyor = blockWorldState.getMatchContext().getOrPut("ConveyorType", type);
+                            if (!currentConveyor.equals(type)) {
+                                blockWorldState
+                                        .setError(new PatternStringError("susy.multiblock.pattern.error.conveyor"));
+                                return false;
+                            }
+                            // Adds the position of the conveyor (and target facing) to the match context
+                            blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>())
+                                    .add(Pair.of(blockWorldState.getPos(), facing));
+                            return true;
+                        }
                         return false;
-                    }
-                    // Adds the position of the conveyor (and target facing) to the match context
-                    blockWorldState.getMatchContext().getOrPut("ConveyorBelt", new LinkedList<>())
-                            .add(Pair.of(blockWorldState.getPos(), facing));
-                    return true;
-                }
-                return false;
-            }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
-                    .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
-                    .toArray(BlockInfo[]::new)).addTooltips("susy.multiblock.pattern.error.conveyor")));
+                    }, () -> Arrays.stream(BlockConveyor.ConveyorType.values())
+                            .map(entry -> new BlockInfo(SuSyBlocks.CONVEYOR_BELT.getState(entry), null))
+                            .toArray(BlockInfo[]::new)).addTooltips("susy.multiblock.pattern.error.conveyor")));
 
     public static Supplier<TraceabilityPredicate> COILS_OR_BED = () -> new TraceabilityPredicate(blockWorldState -> {
         IBlockState blockState = blockWorldState.getBlockState();
@@ -142,7 +147,8 @@ public class SuSyPredicates {
     }, () -> GregTechAPI.HEATING_COILS.entrySet().stream()
             // sort to make autogenerated jei previews not pick random coils each game load
             .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier()))
-            .map(entry -> new BlockInfo(entry.getKey(), null)).toArray(BlockInfo[]::new))
+            .map(entry -> new BlockInfo(entry.getKey(), null))
+            .toArray(BlockInfo[]::new))
             .addTooltips("susy.multiblock.pattern.error.coils_or_bed");
 
     private static final Supplier<TraceabilityPredicate> EVAP_BED = () -> new TraceabilityPredicate(
@@ -169,9 +175,9 @@ public class SuSyPredicates {
             .map(type -> new BlockInfo(SuSyBlocks.INDUCTION_CRUCIBLE.getState(type))).toArray(BlockInfo[]::new));
 
     /**
-     * A predicate for allowing using only the same type of metal sheet blocks in a
-     * structure This includes predicate for both small & large metal sheets but
-     * only supplies {@link BlockInfo[]} for small ones
+     * A predicate for allowing using only the same type of metal sheet blocks in a structure
+     * This includes predicate for both small & large metal sheets
+     * but only supplies {@link BlockInfo[]} for small ones
      *
      * @see #LARGE_METAL_SHEETS
      */
@@ -196,7 +202,8 @@ public class SuSyPredicates {
                 }
                 return false;
             }, () -> Arrays.stream(EnumDyeColor.values())
-                    .map(type -> new BlockInfo(MetaBlocks.METAL_SHEET.getState(type))).toArray(BlockInfo[]::new));
+                    .map(type -> new BlockInfo(MetaBlocks.METAL_SHEET.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     /**
      * This only supplies {@link BlockInfo[]} for large metal sheet blocks.
@@ -205,28 +212,30 @@ public class SuSyPredicates {
      */
     private static final Supplier<TraceabilityPredicate> LARGE_METAL_SHEETS = () -> new TraceabilityPredicate(
             blockWorldState -> false, () -> Arrays.stream(EnumDyeColor.values())
-                    .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type))).toArray(BlockInfo[]::new));
+                    .map(type -> new BlockInfo(MetaBlocks.LARGE_METAL_SHEET.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> ROBOT_ARMS = Arrays
-            .stream(RelativeDirection.values())
-            .collect(Collectors.toMap(facing -> facing, facing -> () -> new TraceabilityPredicate(blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() instanceof BlockRobotArm) {
-                    BlockRobotArm.RobotArmType type = ((BlockRobotArm) state.getBlock()).getState(state);
-                    Object currentArm = blockWorldState.getMatchContext().getOrPut("RobotArmType", type);
-                    if (!currentArm.equals(type)) {
-                        blockWorldState.setError(new PatternStringError("susy.multiblock.pattern.error.robot_arm"));
+            .stream(RelativeDirection.values()).collect(Collectors.toMap(facing -> facing,
+                    facing -> () -> new TraceabilityPredicate(blockWorldState -> {
+                        IBlockState state = blockWorldState.getBlockState();
+                        if (state.getBlock() instanceof BlockRobotArm) {
+                            BlockRobotArm.RobotArmType type = ((BlockRobotArm) state.getBlock()).getState(state);
+                            Object currentArm = blockWorldState.getMatchContext().getOrPut("RobotArmType", type);
+                            if (!currentArm.equals(type)) {
+                                blockWorldState
+                                        .setError(new PatternStringError("susy.multiblock.pattern.error.robot_arm"));
+                                return false;
+                            }
+                            // Adds the position of the conveyor (and target facing) to the match context
+                            blockWorldState.getMatchContext().getOrPut("RobotArm", new LinkedList<>())
+                                    .add(Pair.of(blockWorldState.getPos(), facing));
+                            return true;
+                        }
                         return false;
-                    }
-                    // Adds the position of the conveyor (and target facing) to the match context
-                    blockWorldState.getMatchContext().getOrPut("RobotArm", new LinkedList<>())
-                            .add(Pair.of(blockWorldState.getPos(), facing));
-                    return true;
-                }
-                return false;
-            }, () -> Arrays.stream(BlockRobotArm.RobotArmType.values())
-                    .map(entry -> new BlockInfo(SuSyBlocks.ROBOT_ARM.getState(entry), null)).toArray(BlockInfo[]::new))
-                    .addTooltips("susy.multiblock.pattern.error.robot_arm")));
+                    }, () -> Arrays.stream(BlockRobotArm.RobotArmType.values())
+                            .map(entry -> new BlockInfo(SuSyBlocks.ROBOT_ARM.getState(entry), null))
+                            .toArray(BlockInfo[]::new)).addTooltips("susy.multiblock.pattern.error.robot_arm")));
 
     @NotNull public static TraceabilityPredicate coolingCoils() {
         return COOLING_COILS.get();
@@ -261,15 +270,15 @@ public class SuSyPredicates {
     }
 
     public static TraceabilityPredicate orientation(MultiblockControllerBase mte, IBlockState state,
-                                                    RelativeDirection direction, IProperty<EnumFacing> facingProperty) {
+                                                    RelativeDirection direction,
+                                                    IProperty<EnumFacing> facingProperty) {
         EnumFacing facing = getRelativeFacing(mte, direction);
 
         Supplier<BlockInfo[]> supplier = () -> new BlockInfo[] {
                 new BlockInfo(state.withProperty(facingProperty, facing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             if (blockWorldState.getBlockState() != state.withProperty(facingProperty, facing)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock())
-                    return false;
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
                 mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, facing));
             }
             return true;
@@ -286,8 +295,7 @@ public class SuSyPredicates {
                 new BlockInfo(state.withProperty(facingProperty, axis)) };
         return new TraceabilityPredicate(blockWorldState -> {
             if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axis)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock())
-                    return false;
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
                 mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, axis));
             }
             return true;
@@ -299,8 +307,7 @@ public class SuSyPredicates {
                                                               IProperty<EnumFacing> facingProperty) {
         EnumFacing facing = getRelativeFacing(mte, direction);
         // converting the left facing to positive x or z axis direction
-        // this is needed for the following update which converts this rotatable block
-        // from horizontal directional into
+        // this is needed for the following update which converts this rotatable block from horizontal directional into
         // axial directional.
         EnumFacing axialFacing = facing.getIndex() < 4 ? EnumFacing.SOUTH : EnumFacing.WEST;
 
@@ -308,8 +315,7 @@ public class SuSyPredicates {
                 new BlockInfo(state.withProperty(facingProperty, axialFacing)) };
         return new TraceabilityPredicate(blockWorldState -> {
             if (blockWorldState.getBlockState() != state.withProperty(facingProperty, axialFacing)) {
-                if (blockWorldState.getBlockState().getBlock() != state.getBlock())
-                    return false;
+                if (blockWorldState.getBlockState().getBlock() != state.getBlock()) return false;
                 mte.getWorld().setBlockState(blockWorldState.getPos(), state.withProperty(facingProperty, axialFacing));
             }
             return true;
@@ -321,12 +327,11 @@ public class SuSyPredicates {
     }
 
     /**
-     * @param facing
-     *               the axis direction of the eccentric roll (rotates CCW)
+     * @param facing the axis direction of the eccentric roll (rotates CCW)
      *               <p>
-     *               Supplies predicates for each facing direction This autocorrects
-     *               the facing of the eccentric roll and adds the position of the
-     *               eccentric roll to the match context
+     *               Supplies predicates for each facing direction
+     *               This autocorrects the facing of the eccentric roll
+     *               and adds the position of the eccentric roll to the match context
      */
     @NotNull public static TraceabilityPredicate eccentricRolls(EnumFacing facing) {
         return new TraceabilityPredicate(bws -> {
@@ -334,8 +339,7 @@ public class SuSyPredicates {
             if (state.getBlock() instanceof BlockEccentricRoll ||
                     state.getBlock() instanceof BlockActiveEccentricRoll) {
 
-                // Corrects the direction of the eccentric roll, while ignoring the in/active
-                // state
+                // Corrects the direction of the eccentric roll, while ignoring the in/active state
                 if (state.getValue(BlockDirectional.FACING) != facing) {
                     World world = bws.getWorld();
                     BlockPos pos = bws.getPos();
@@ -344,15 +348,15 @@ public class SuSyPredicates {
 
                 /// Adds the position of the eccentric roll to the match context This works much like how CEu deals with
                 /// VAActiveBlocks (e.g. coils)
-                ///
+                /// 
                 /// @see MultiblockControllerBase#states(IBlockState...)
                 bws.getMatchContext().getOrPut("ERC_Rolls", new LinkedList<>()).add(bws.getPos());
                 return true;
             }
             return false;
             // Supplies an eccentric roll with the correct direction
-        }, () -> new BlockInfo[] { new BlockInfo(
-                SuSyBlocks.ECCENTRIC_ROLL.getDefaultState().withProperty(BlockDirectional.FACING, facing)) });
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.ECCENTRIC_ROLL.getDefaultState()
+                .withProperty(BlockDirectional.FACING, facing)) });
     }
 
     @NotNull public static TraceabilityPredicate hiddenStates(IBlockState... allowedStates) {
@@ -379,8 +383,8 @@ public class SuSyPredicates {
             }
             return false;
             // Supplies an eccentric roll with the correct direction
-        }, () -> new BlockInfo[] { new BlockInfo(
-                SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState().withProperty(VariantAxialRotatableBlock.AXIS, axis)) });
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.GIRTH_GEAR_TOOTH.getDefaultState()
+                .withProperty(VariantAxialRotatableBlock.AXIS, axis)) });
     }
 
     public static TraceabilityPredicate computation() {
@@ -395,31 +399,70 @@ public class SuSyPredicates {
             blockWorldState.getMatchContext().increment("energy", type.eut);
             return true;
         }, () -> Arrays.stream(BlockProcessorCluster.TierType.values())
-                .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type))).toArray(BlockInfo[]::new));
+                .map(type -> new BlockInfo(SuSyBlocks.PROCESSOR_CLUSTER.getState(type)))
+                .toArray(BlockInfo[]::new));
     }
 
-    private static final Map<RelativeDirection, Supplier<TraceabilityPredicate>> HELIOSTATS = Arrays
-            .stream(RelativeDirection.values())
-            .collect(Collectors.toMap(facing -> facing, facing -> () -> new TraceabilityPredicate(blockWorldState -> {
-                IBlockState state = blockWorldState.getBlockState();
-                if (state.getBlock() instanceof BlockHeliostat) {
-                    BlockHeliostat.HeliostatType type = ((BlockHeliostat) state.getBlock()).getState(state);
-                    Object currentHeliostat = blockWorldState.getMatchContext().getOrPut("HeliostatType", type);
-                    if (!currentHeliostat.equals(type)) {
-                        blockWorldState.setError(new PatternStringError("susy.multiblock.pattern.error.heliostat"));
-                        return false;
-                    }
-                    // Adds the position of the heliostat (and target facing) to the match context
-                    blockWorldState.getMatchContext().getOrPut("Heliostat", new LinkedList<>())
-                            .add(Pair.of(blockWorldState.getPos(), facing));
-                    return true;
+    @NotNull public static TraceabilityPredicate heliostat(MultiblockControllerBase controller) {
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            if (state.getBlock() instanceof BlockHeliostat) {
+                EnumFacing facing = controller.getFrontFacing().getOpposite();
+                if (state.getValue(FACING) != facing) {
+                    World world = bws.getWorld();
+                    BlockPos pos = bws.getPos();
+                    world.setBlockState(pos, state.withProperty(FACING, facing));
                 }
-                return false;
-            }, () -> Arrays.stream(BlockHeliostat.HeliostatType.values())
-                    .map(entry -> new BlockInfo(SuSyBlocks.HELIOSTAT.getState(entry), null)).toArray(BlockInfo[]::new))
-                    .addTooltips("susy.multiblock.pattern.error.heliostat")));
+                bws.getMatchContext().getOrPut("HeliostatPositions", new LinkedList<>()).add(bws.getPos());
+                return true;
+            }
+            return false;
 
-    @NotNull public static TraceabilityPredicate heliostats(RelativeDirection facing) {
-        return HELIOSTATS.get(facing).get();
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.HELIOSTAT.getDefaultState()
+                .withProperty(FACING, controller.getFrontFacing().getOpposite())) });
+    }
+
+    @NotNull public static TraceabilityPredicate epoxyMirror(MultiblockControllerBase controller,
+                                                    MetaTileEntitySolarFurnace.EnumMirrorSides mirrorSides) {
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            if (state.getBlock() instanceof BlockEpoxySolarFurnaceMirror) {
+                EnumFacing facing = controller.getFrontFacing();
+
+                if (state.getValue(MIRROR_SIDES) != mirrorSides || state.getValue(BlockDirectional.FACING) != facing) {
+                    World world = bws.getWorld();
+                    BlockPos pos = bws.getPos();
+                    world.setBlockState(pos, state.withProperty(MIRROR_SIDES, mirrorSides)
+                            .withProperty(BlockDirectional.FACING, facing));
+                }
+                return true;
+            }
+            return false;
+
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR.getDefaultState()
+                .withProperty(BlockDirectional.FACING, controller.getFrontFacing())
+                .withProperty(MIRROR_SIDES, mirrorSides)) });
+    }
+
+    @NotNull public static TraceabilityPredicate steelMirror(MultiblockControllerBase controller,
+                                                    MetaTileEntitySolarFurnace.EnumMirrorSides mirrorSides) {
+        return new TraceabilityPredicate(bws -> {
+            IBlockState state = bws.getBlockState();
+            if (state.getBlock() instanceof BlockSteelSolarFurnaceMirror) {
+                EnumFacing facing = controller.getFrontFacing();
+
+                if (state.getValue(MIRROR_SIDES) != mirrorSides || state.getValue(BlockDirectional.FACING) != facing) {
+                    World world = bws.getWorld();
+                    BlockPos pos = bws.getPos();
+                    world.setBlockState(pos, state.withProperty(MIRROR_SIDES, mirrorSides)
+                            .withProperty(BlockDirectional.FACING, facing));
+                }
+                return true;
+            }
+            return false;
+
+        }, () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR.getDefaultState()
+                .withProperty(BlockDirectional.FACING, controller.getFrontFacing())
+                .withProperty(MIRROR_SIDES, mirrorSides)) });
     }
 }

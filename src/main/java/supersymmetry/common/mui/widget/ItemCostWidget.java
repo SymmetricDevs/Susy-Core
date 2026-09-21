@@ -20,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.IRenderContext;
 import gregtech.api.gui.Widget;
-import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
@@ -42,7 +41,7 @@ public class ItemCostWidget extends Widget {
     public static final int TEXT_COLOR = 0xf0f0f0;
     public int totalListHeight;
     public int mouseWheelMoveStep = 6;
-    public int scrollOffset;
+    public double scrollOffset;
 
     public int lastMouseX;
 
@@ -162,14 +161,14 @@ public class ItemCostWidget extends Widget {
         if (this.lastSyncedItems.size() > this.getSize().height / HEIGHT_OFFSET) {
             GuiTextures.SLIDER_BACKGROUND_VERTICAL.draw(scrollX + 1, position.y + 1, paneSize - 2, size.height - 2);
 
-            int maxScrollOffset = getSize().height - this.getListHeight() - 1;
-            float scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
+            int maxScrollOffset = this.getListHeight() - getSize().height - 1;
+            double scrollPercent = maxScrollOffset == 0 ? 0 : scrollOffset / (maxScrollOffset * 1.0f);
             int scrollSliderHeight = 14;
-            int scrollSliderY = Math.round(position.y + (size.height - scrollSliderHeight) * scrollPercent);
+            double scrollSliderY = Math.round(position.y + (size.height - scrollSliderHeight) * scrollPercent);
             GuiTextures.SLIDER_ICON.draw(scrollX + 1, scrollSliderY + 2, paneSize - 2, scrollSliderHeight);
         }
         RenderUtil.useScissor(position.x, position.y, size.width - paneSize, size.height, () -> {
-            Position startpos = new Position(this.getPosition().x, this.getPosition().y + scrollOffset - 8);
+            Position startpos = new Position(this.getPosition().x, this.getPosition().y - (int) scrollOffset - 8);
             for (ItemStack itemStack : lastSyncedItems) {
                 startpos = startpos.add(new Position(0, ItemCostWidget.HEIGHT_OFFSET));
                 this.drawStack(startpos, size, itemStack);
@@ -196,14 +195,11 @@ public class ItemCostWidget extends Widget {
         GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
 
-        String item_name = I18n.format(stack.getTranslationKey() + ".name");
-        if (stack.getItem() instanceof MetaItem metaitem) {
-            item_name = I18n.format(metaitem.getTranslationKey(stack));
-        }
+        String itemName = stack.getDisplayName();
         GlStateManager.pushMatrix();
         GlStateManager.scale(HEIGHT_SCALE, HEIGHT_SCALE, HEIGHT_SCALE);
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        fontRenderer.drawString(String.format("%s, x%d", item_name, stack.getCount()),
+        fontRenderer.drawString(String.format("%s, x%d", itemName, stack.getCount()),
                 (int) ((pos.x + HEIGHT_OFFSET + 6 / HEIGHT_SCALE) / HEIGHT_SCALE), (int) (pos.y / HEIGHT_SCALE),
                 TEXT_COLOR);
         GlStateManager.popMatrix();
@@ -228,9 +224,10 @@ public class ItemCostWidget extends Widget {
 
     private void addScrollOffset(int offset) {
         if (this.shouldRender.getAsBoolean()) {
-            int maxScrollOffset = getSize().height - this.getListHeight() - 1;
-            this.scrollOffset = MathHelper.clamp(scrollOffset + offset * maxScrollOffset / (getSize().height - 14),
-                    -(this.getListHeight() - this.getSize().height), 0);
+            int maxScrollOffset = this.getListHeight() - getSize().height - 1;
+            this.scrollOffset = MathHelper.clamp(
+                    scrollOffset + (double) (offset * maxScrollOffset) / (getSize().height - 14),
+                    0, maxScrollOffset);
         }
     }
 

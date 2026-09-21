@@ -41,10 +41,6 @@ public class SuSySecondDegreeMaterials {
         Anorthosite = new Material.Builder(27207, SuSyUtility.susyId("anorthosite")).dust().color(0xcecece)
                 .iconSet(ROUGH).flags(NO_SMASHING, DISABLE_DECOMPOSITION).components(Anorthite, 4, Albite, 2).build();
 
-        KreepBasalt = new Material.Builder(27208, SuSyUtility.susyId("kreep_basalt")).dust().colorAverage()
-                .iconSet(ROUGH).flags(NO_SMASHING, DISABLE_DECOMPOSITION)
-                .components(Basalt, 8, Potassium, 1, RareEarth, 1, Phosphorus, 1).build();
-
         Leucobasalt = new Material.Builder(27209, SuSyUtility.susyId("kreep_basalt")).dust().colorAverage()
                 .iconSet(ROUGH).flags(NO_SMASHING, DISABLE_DECOMPOSITION).components(Basalt, 1, Anorthosite, 1).build();
     }

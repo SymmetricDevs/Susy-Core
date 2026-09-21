@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -73,8 +74,6 @@ public class StructAnalysis {
                 "part_unrecognized"),
         SPACECRAFT_HOLLOW(
                 "spacecraft_hollow"),
-        WEIRD_PADDING(
-                "weird_padding"),
         TOO_SHORT(
                 "too_short"),
         CONN_UNALIGNED(
@@ -94,7 +93,29 @@ public class StructAnalysis {
         NOZZLE_TOO_SHORT(
                 "nozzle_too_short"),
         NOT_INTERSTAGE(
-                "not_interstage");
+                "not_interstage"),
+        IGNITER_WRONG(
+                "igniter_wrong"),
+        NOT_PADDED(
+                "not_padded"),
+        NOT_ENOUGH_POWER(
+                "not_enough_power"),
+        NOT_ENOUGH_BATTERIES(
+                "not_enough_batteries"),
+        UNSHIELDED_REACTOR(
+                "unshielded_reactor"),
+        NO_LANDING_SYSTEM(
+                "no_landing_system"),
+        NO_GAS_GEN(
+                "no_gas_gen"),
+        TOO_MANY_GAS_GEN(
+                "too_many_gas_gen"),
+        DIFFERENT_PUMPS(
+                "different_pumps"),
+        NO_ENGINE("no_engine"),
+        NOT_ENOUGH_OXIDIZER("not_enough_oxidizer"),
+        NOT_ENOUGH_FUEL("not_enough_fuel"),
+        NOT_ENOUGH_RCS("not_enough_rcs");
 
         String code;
 
@@ -125,7 +146,8 @@ public class StructAnalysis {
 
     public boolean isEffectiveAir(BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
-        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp;
+        return state.getBlock() == Blocks.AIR || state.getBlock() instanceof BlockLamp ||
+                state.getBlock() instanceof BlockLever;
     }
 
     public ArrayList<BlockPos> getBlocks(World world, AxisAlignedBB faaBB, boolean checkAir) {
@@ -415,6 +437,9 @@ public class StructAnalysis {
 
     // Obtains the bounding box of all blocks in the collection blocks
     public AxisAlignedBB getBB(Collection<BlockPos> blocks) {
+        if (blocks.isEmpty()) {
+            return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        }
         int minX = (int) 3.0E7, minY = (int) 3.0E7, minZ = (int) 3.0E7, maxX = (int) -3.0E7, maxY = (int) -3.0E7,
                 maxZ = (int) -3.0E7;
         for (BlockPos block : blocks) {

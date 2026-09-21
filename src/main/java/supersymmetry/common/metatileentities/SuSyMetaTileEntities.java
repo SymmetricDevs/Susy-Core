@@ -319,6 +319,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
+    public static MetaTileEntityMissionControl MISSION_CONTROL;
 
     // Parallel Ore Processing
     public static MetaTileEntityEccentricRollCrusher ECCENTRIC_ROLL_CRUSHER;
@@ -334,6 +335,8 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLunarBucketWheelExcavator LUNAR_BUCKET_WHEEL_EXCAVATOR;
     public static MetaTileEntitySolarFurnace SOLAR_FURNACE;
     public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
+    public static SimpleMachineMetaTileEntity[] SIMPLE_CONDENSER;
+
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -742,6 +745,7 @@ public class SuSyMetaTileEntities {
 
         SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
         // Free: 18057-8
+        MISSION_CONTROL = registerMetaTileEntity(18057, new MetaTileEntityMissionControl(susyId("mission_control")));
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,
                 new MetaTileEntityAerospaceFlightSimulator(susyId("aerospace_flight_simulator")));
@@ -756,6 +760,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         CARGO_DRONE_PAD = registerMetaTileEntity(18112, new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
+        SIMPLE_CONDENSER[0] = registerMetaTileEntity(18113, new MetaTileEntitySimpleCondenser(susyId("simple_condenser")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
@@ -973,6 +978,7 @@ public class SuSyMetaTileEntities {
         POLISHING_MACHINE = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         PHASE_SEPARATOR = new SimpleMachineMetaTileEntity[1];
+        SIMPLE_CONDENSER = new SimpleMachineMetaTileEntity[1];
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
 
         RESISTANCE_FURNACE = new SimpleMachineMetaTileEntity[GTValues.OpV];

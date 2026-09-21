@@ -1,0 +1,7 @@
+# Made in Blockbench 5.1.6
+newmtl m_0245c58b-4f72-d3d4-545f-b1434d9f071e
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+map_Kd susy:entities/earth_landing_system
+map_d susy:entities/earth_landing_system
+newmtl none

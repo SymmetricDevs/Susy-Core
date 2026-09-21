@@ -40,6 +40,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.multi.VoidingMultiblockBase;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
@@ -52,6 +53,14 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityFlareStack(this.metaTileEntityId);
+    }
+
+    @Override
+    protected void updateFormedValid() {
+        if (this.getWorld().isRemote || !RecipeCheckUtils.checkAtmosphere(this, true)) {
+            return;
+        }
+        super.updateFormedValid();
     }
 
     @Override
@@ -204,6 +213,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
                                boolean advanced) {
         tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.1", getBaseVoidingRate()));
         tooltip.add(I18n.format("susy.machine.flare_stack.tooltip.2"));
+        tooltip.add(I18n.format("susy.general.requires_atmosphere"));
         super.addInformation(stack, world, tooltip, advanced);
     }
 

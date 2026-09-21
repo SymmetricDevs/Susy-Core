@@ -16,12 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import gregtech.api.block.VariantBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
 
-public class BlockTankShell1 extends VariantDirectionalRotatableBlock<BlockTankShell1.TankCoverType>
-                             implements
-                             WeightedBlock<BlockTankShell1.TankCoverType> {
+public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
+                             implements WeightedBlock<BlockTankShell1.TankCoverType> {
 
     public BlockTankShell1() {
         super(net.minecraft.block.material.Material.IRON);
@@ -35,7 +34,8 @@ public class BlockTankShell1 extends VariantDirectionalRotatableBlock<BlockTankS
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
 
-        CARBON_COMPOSITE("carbon", 2);
+        CARBON_COMPOSITE("carbon", 2),
+        STEEL_SHELL("steel", 3);
 
         private String name;
         private int harvestLevel;
@@ -63,7 +63,10 @@ public class BlockTankShell1 extends VariantDirectionalRotatableBlock<BlockTankS
     @Override
     public double getMass(TankCoverType type) {
         // Again, using a 4.7mm thickness
-        return 7.9;
+        return switch (type) {
+            case STEEL_SHELL -> 36.9;
+            case CARBON_COMPOSITE -> 7.9;
+        };
     }
 
     @SideOnly(Side.CLIENT)

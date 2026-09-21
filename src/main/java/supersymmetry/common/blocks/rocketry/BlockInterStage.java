@@ -9,9 +9,11 @@ import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.ore.OrePrefix;
 import supersymmetry.api.blocks.VariantDirectionalCoverableBlock;
+import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.common.materials.SusyMaterials;
 
-public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType> {
+public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInterStage.InterStageType>
+                             implements WeightedBlock<BlockInterStage.InterStageType> {
 
     public BlockInterStage() {
         super(Material.IRON);
@@ -51,5 +53,12 @@ public class BlockInterStage extends VariantDirectionalCoverableBlock<BlockInter
         public String getName() {
             return name;
         }
+    }
+
+    @Override
+    public double getMass(InterStageType type) {
+        return switch (type) {
+            case AL_7075 -> 12;
+        };
     }
 }

@@ -50,6 +50,7 @@ import supersymmetry.common.blocks.active.BlockInvertedActiveSinteringBrick;
 import supersymmetry.common.blocks.active.BlockInvertedActiveWireCoil;
 import supersymmetry.common.blocks.bmrf.*;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 
 public class SuSyBlocks {
@@ -137,6 +138,7 @@ public class SuSyBlocks {
     public static BlocksS15BMRF S15BMRF;
     public static BlocksS16BMRF S16BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
+    public static BlockGoog GOOG;
     public static BlockSpeaker SPEAKER;
     public static BlockInductionCrucible INDUCTION_CRUCIBLE;
 
@@ -158,6 +160,8 @@ public class SuSyBlocks {
     public static BlockFairingConnector FAIRING_CONNECTOR;
     public static BlockSpacecraftHull SPACECRAFT_HULL;
     public static BlockRocketEngineGasGenerator ROCKET_ENGINE_GAS_GENERATOR;
+    public static BlockIgniter BLOCK_IGNITER;
+
     public static BlockEccentricRoll ECCENTRIC_ROLL;
     public static BlockActiveEccentricRoll ACTIVE_ECCENTRIC_ROLL;
     public static BlockInvertedActiveEccentricRoll INVERTED_ACTIVE_ECCENTRIC_ROLL;
@@ -170,11 +174,14 @@ public class SuSyBlocks {
     public static BlockBWEConveyorBelt BWE_CONVEYOR_BELT;
     public static BlockSolarPanel SOLAR_PANEL;
     public static BlockPaddleShaft PADDLE_SHAFT;
-    public static BlockSolarFurnaceMirror SOLAR_FURNACE_MIRROR;
+    public static BlockEpoxySolarFurnaceMirror EPOXY_SOLAR_FURNACE_MIRROR;
+    public static BlockSteelSolarFurnaceMirror STEEL_SOLAR_FURNACE_MIRROR;
     public static BlockHeliostat HELIOSTAT;
-
+    public static BlockSolarFurnaceRedirectingMirror SOLAR_FURNACE_REDIRECTING_MIRROR;
+    public static BlockSolarFurnaceCrucible SOLAR_FURNACE_CRUCIBLE;
     public static BlockLunarConcrete LUNAR_CONCRETE;
-
+    public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
+    public static BlockAirlockDoor AIRLOCK_DOOR;
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
@@ -182,12 +189,19 @@ public class SuSyBlocks {
             SUSY_STONE_BLOCKS.put(shape, new SusyStoneVariantBlock(shape));
         }
         susyBlocks = new ArrayList<>();
+
+        AIRLOCK_DOOR = new BlockAirlockDoor(() -> SuSyMetaItems.AIRLOCK.getStackForm());
+        AIRLOCK_DOOR.setRegistryName("airlock_door");
+
         // Test all fields
         for (Field field : SuSyBlocks.class.getDeclaredFields()) {
             if (VariantBlock.class.isAssignableFrom(field.getType())) {
                 // Try block is necessary in case getDeclaredConstructor does not exist (though
                 // it should)
                 try {
+                    if (field.get(null) != null) {
+                        continue;
+                    }
                     VariantBlock<?> newBlock = (VariantBlock<?>) field.getType().getDeclaredConstructor().newInstance();
                     // the 5 is used because getTranslationKey leaves ".file" at the start
                     newBlock.setRegistryName(newBlock.getTranslationKey().substring(5));
@@ -201,6 +215,9 @@ public class SuSyBlocks {
                 }
             }
         }
+
+        GOOG = new BlockGoog();
+        GOOG.setRegistryName("goog");
 
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
@@ -223,6 +240,7 @@ public class SuSyBlocks {
                 registerItemModel(b);
         });
         registerItemModel(REGOLITH);
+        registerItemModel(GOOG);
     }
 
     @SideOnly(Side.CLIENT)
