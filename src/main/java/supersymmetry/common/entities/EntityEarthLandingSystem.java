@@ -114,50 +114,6 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
         this.dataManager.set(TIME_SINCE_LANDING, timeSinceLanding);
     }
 
-    @SideOnly(Side.CLIENT)
-    protected void spawnFlightParticles(boolean goingUp) {
-        if (this.isDead) {
-            return;
-        }
-
-        double offset = goingUp ? 0.2D : 0.5D;
-        SusyParticleFlame flame1 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
-                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame2 = new SusyParticleFlame(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
-                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.08, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame3 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
-                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-        SusyParticleFlame flame4 = new SusyParticleFlame(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
-                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.08, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.08);
-
-        SusyParticleSmoke smoke1 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
-                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke2 = new SusyParticleSmoke(this.world, this.posX + 0.8D, this.posY + 0.9D + offset,
-                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() + 0.2) * 0.16, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke3 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
-                this.posZ + 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-        SusyParticleSmoke smoke4 = new SusyParticleSmoke(this.world, this.posX - 0.8D, this.posY + 0.9D + offset,
-                this.posZ - 0.2D, 1.5 * (GTValues.RNG.nextFloat() - 1.2) * 0.16, -1.5,
-                1.5 * (GTValues.RNG.nextFloat() - 0.5) * 0.16);
-
-        Minecraft.getMinecraft().effectRenderer.addEffect(smoke1);
-        Minecraft.getMinecraft().effectRenderer.addEffect(smoke2);
-        Minecraft.getMinecraft().effectRenderer.addEffect(smoke3);
-        Minecraft.getMinecraft().effectRenderer.addEffect(smoke4);
-
-        Minecraft.getMinecraft().effectRenderer.addEffect(flame1);
-        Minecraft.getMinecraft().effectRenderer.addEffect(flame2);
-        Minecraft.getMinecraft().effectRenderer.addEffect(flame3);
-        Minecraft.getMinecraft().effectRenderer.addEffect(flame4);
-    }
-
     private void handleCollidedBlocks(boolean above) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -256,9 +212,6 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
                 this.setTimeSinceLanding(this.getTimeSinceLanding() + 1);
             }
         } else {
-            if (!this.hasLanded()) {
-                this.spawnFlightParticles(false);
-            }
             if (soundDropPod != null) {
                 if (!this.hasLanded() || this.isLaunched()) {
                     soundDropPod.startPlaying();
