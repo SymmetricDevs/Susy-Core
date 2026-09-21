@@ -316,18 +316,18 @@ public class SuSyMetaTileEntities {
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_STEEL;
 
     // SUSY's tanks
-    public static MetaTileEntityMultiblockTank WOOD_TANKS_CONTROLLER;
-    public static MetaTileEntityMultiblockTank STEEL_TANKS_CONTROLLER;
-    //public static MetaTileEntityMultiblockTank MONEL_TANKS_CONTROLLER;
-    public static MetaTileEntityMultiblockTank STAINLESS_STEEL_TANKS_CONTROLLER;
-    public static MetaTileEntityMultiblockTank TITANIUM_TANKS_CONTROLLER;
-    public static MetaTileEntityMultiblockTank TUNGSTEN_STEEL_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockTank WOOD_TANK_CONTROLLER;
+    public static MetaTileEntityMultiblockTank STEEL_TANK_CONTROLLER;
+    public static MetaTileEntityMultiblockTank STAINLESS_STEEL_TANK_CONTROLLER;
+    public static MetaTileEntityMultiblockTank TITANIUM_TANK_CONTROLLER;
+    public static MetaTileEntityMultiblockTank TUNGSTEN_STEEL_TANK_CONTROLLER;
+
     public static MetaTileEntityMultiblockPart WOOD_TANK_VALVES;
     public static MetaTileEntityMultiblockPart STEEL_TANK_VALVES;
     //public static MetaTileEntityMultiblockPart MONEL_TANK_VALVES;
-    public static MetaTileEntityMultiblockPart STAINLESS_STEEL_TANK_VALVES;
-    public static MetaTileEntityMultiblockPart TITANIUM_TANK_VALVES;
-    public static MetaTileEntityMultiblockPart TUNGSTEN_STEELTANK_VALVES;
+    public static MetaTileEntityTankValve STAINLESS_STEEL_TANK_VALVES;
+    public static MetaTileEntityTankValve TITANIUM_TANK_VALVES;
+    public static MetaTileEntityTankValve TUNGSTEN_STEEL_TANK_VALVES;
 
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
@@ -901,7 +901,7 @@ public class SuSyMetaTileEntities {
         TITANIUM_TANK_VALVES = registerMetaTileEntity(18542,
                 new MetaTileEntityTankValve(susyId("tank_valve.titanium"), SuSyTankType.TITANIUM));
         TUNGSTEN_STEEL_TANK_VALVES = registerMetaTileEntity(18543,
-                new MetaTileEntityTankValve(susyId("tank_valve.tungsten_steel"), SuSyTankType.TUNGSTEN_STEELL));
+                new MetaTileEntityTankValve(susyId("tank_valve.tungsten_steel"), SuSyTankType.TUNGSTEN_STEEL));
 
     }
 

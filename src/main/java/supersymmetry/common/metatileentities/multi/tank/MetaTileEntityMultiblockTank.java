@@ -2,7 +2,7 @@ package supersymmetry.common.metatileentities.multi.tank;
 
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,13 +13,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import gregtech.api.GTUtility;
+import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.gui.GuiTextures;
@@ -29,16 +30,18 @@ import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockShapeInfo;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
-import gregtech.api.metatileentity.multiblock.PatternMatchContext;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.api.capability.impl.FluidTankList;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
@@ -58,6 +61,23 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         super(metaTileEntityId);
         this.type = type;
         initializeInventory();
+    }
+
+    private MetaTileEntity getValveForType() {
+        switch (this.type) {
+            case WOOD:
+                return SuSyMetaTileEntities.WOOD_TANK_VALVES;
+            case STEEL:
+                return SuSyMetaTileEntities.STEEL_TANK_VALVES;
+            case STAINLESS_STEEL:
+                return SuSyMetaTileEntities.STAINLESS_STEEL_TANK_VALVES;
+            case TITANIUM:
+                return SuSyMetaTileEntities.TITANIUM_TANK_VALVES;
+            case TUNGSTEN_STEEL:
+                return SuSyMetaTileEntities.TUNGSTEN_STEEL_TANK_VALVES;
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -88,8 +108,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     @Override
-    protected void updateAfterReformulation() {
-        super.updateAfterReformulation();
+    protected void updateFormedValid() {
     }
 
     private boolean isWall(World world, BlockPos pos) {
@@ -141,7 +160,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         return true;
     }
 
-    protected String[] genRow(int w, int h, int depth, int aisle) { return null; } // placeholder for student
+    protected String[] genRow(int w, int h, int depth, int aisle) { return null; }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
@@ -159,12 +178,10 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     protected BlockPattern createStructurePattern() {
         if (getWorld() != null) updateStructureDimensions();
 
-        // fall back to minimum (3^3) so auto-build and JEI keep working
         int w = Math.max(lDist + rDist + 1, MIN_SIZE);
         int h = Math.max(uDist + dDist + 1, MIN_SIZE);
         int depth = Math.max(airDepth + 2, MIN_SIZE);
 
-        // matrix: [depth] aisles, each [h] rows, each row of length w
         String[][] aisles = new String[depth][h];
         for (int a = 0; a < depth; a++) {
             boolean frontWall = a == depth - 1;
@@ -200,7 +217,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .where('S', selfPredicate())
                 .where('X', states(type.casingState)
                         .setMinGlobalLimited(skinCells - MAX_VALVES)
-                        .or(metaTileEntities(SuSyMetaTileEntities.TANK_VALVES[type.ordinal()])
+                        .or(metaTileEntities(getValveForType())
                                 .setMaxGlobalLimited(MAX_VALVES)
                                 .setMinGlobalLimited(1)))
                 .where(' ', air())
@@ -248,8 +265,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     @Override
-    protected ModularUI createUITemplate(EntityPlayer player) {
-        return ModularUI.defaultBuilder()
+    protected ModularUI.Builder createUITemplate(EntityPlayer player) {
+        return ModularUI.builder(GuiTextures.BACKGROUND, 176, 166)
                 .widget(new LabelWidget(6, 6, getMetaFullName()))
                 .widget(new TankWidget(importFluids.getTankAt(0), 52, 18, 72, 61)
                         .setBackgroundTexture(GuiTextures.SLOT)
@@ -296,10 +313,10 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .aisle("XXX", "XXX", "XXX")
                 .aisle("XXX", "X X", "XXX")
                 .aisle("XvX", "XSX", "XXX")
-                .where('S', SuSyMetaTileEntities.MULTIBLOCK_TANKS[type.ordinal()], EnumFacing.SOUTH)
-                .where('v', SuSyMetaTileEntities.TANK_VALVES[type.ordinal()], EnumFacing.NORTH)
+                .where('S', this, EnumFacing.SOUTH)
+                .where('v', getValveForType(), EnumFacing.NORTH)
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
-        return List.of(size3.build());
+        return Collections.singletonList(size3.build());
     }
 }
