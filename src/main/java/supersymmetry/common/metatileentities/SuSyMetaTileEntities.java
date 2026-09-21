@@ -224,6 +224,9 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityElectricDischargeMachine ELECTRIC_DISCHARGE_MACHINE;
 
+    public static MetaTileEntityMultiblockTank[] MULTIBLOCK_TANKS;
+    public static MetaTileEntityMultiblockPart[] TANK_VALVES;
+
     // Space multis
     public static MetaTileEntityLandingPad LANDING_PAD;
     public static MetaTileEntityScrapRecycler SCRAP_RECYCLER;
@@ -313,8 +316,18 @@ public class SuSyMetaTileEntities {
     public static SuSyLiquidBoiler STEAM_BOILER_LIQUID_STEEL;
 
     // SUSY's tanks
-    public static MetaTileEntityMultiblockTank[] MULTIBLOCK_TANKS;
-    public static MetaTileEntityMultiblockPart[] TANK_VALVES;
+    public static MetaTileEntityMultiblockTank WOOD_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockTank STEEL_TANKS_CONTROLLER;
+    //public static MetaTileEntityMultiblockTank MONEL_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockTank STAINLESS_STEEL_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockTank TITANIUM_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockTank TUNGSTEN_STEEL_TANKS_CONTROLLER;
+    public static MetaTileEntityMultiblockPart WOOD_TANK_VALVES;
+    public static MetaTileEntityMultiblockPart STEEL_TANK_VALVES;
+    //public static MetaTileEntityMultiblockPart MONEL_TANK_VALVES;
+    public static MetaTileEntityMultiblockPart STAINLESS_STEEL_TANK_VALVES;
+    public static MetaTileEntityMultiblockPart TITANIUM_TANK_VALVES;
+    public static MetaTileEntityMultiblockPart TUNGSTEN_STEELTANK_VALVES;
 
     // Generators
     public static MetaTileEntityFuelCell[] FUEL_CELL = new MetaTileEntityFuelCell[2];
@@ -862,22 +875,34 @@ public class SuSyMetaTileEntities {
 
         EXTENDED_CHISEL_MAKER = registerMetaTileEntity(18528,
                 new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
-    }
 
-    // Tanks
-    MULTIBLOCK_TANKS = new MetaTileEntityMultiblockTank[SuSyTankType.values().length];
-    for (SuSyTankType type : SuSyTankType.values()) {
-        MULTIBLOCK_TANKS[type.ordinal()] = registerMetaTileEntity(18530 + type.ordinal(),
-                new MetaTileEntityMultiblockTank(susyId("tank." + type.slug), type));
-    }
+        // Tanks
+        
+        WOOD_TANK_CONTROLLER = registerMetaTileEntity(18530,
+                new MetaTileEntityMultiblockTank(susyId("tank.wood"), SuSyTankType.WOOD));
+        STEEL_TANK_CONTROLLER = registerMetaTileEntity(18531,
+                new MetaTileEntityMultiblockTank(susyId("tank.steel"), SuSyTankType.STEEL));
+        //MONEL_TANK_CONTROLLER = registerMetaTileEntity(18532,
+                //new MetaTileEntityMultiblockTank(susyId("tank.monel_400"), SuSyTankType.MONEL));
+        STAINLESS_STEEL_TANK_CONTROLLER = registerMetaTileEntity(18533,
+                new MetaTileEntityMultiblockTank(susyId("tank.stainless_steel"), SuSyTankType.STAINLESS_STEEL));
+        TITANIUM_TANK_CONTROLLER = registerMetaTileEntity(18534,
+                new MetaTileEntityMultiblockTank(susyId("tank.titanium"), SuSyTankType.TITANIUM));
+        TUNGSTEN_STEEL_TANK_CONTROLLER = registerMetaTileEntity(18535,
+                new MetaTileEntityMultiblockTank(susyId("tank.tungsten_steel"), SuSyTankType.TUNGSTEN_STEEL));
 
-    TANK_VALVES = new MetaTileEntityMultiblockPart[SuSyTankType.values().length];
-    TANK_VALVES[SuSyTankType.WOOD.ordinal()] = gregtech.common.metatileentities.MetaTileEntities.WOODEN_TANK_VALVE;
-    TANK_VALVES[SuSyTankType.STEEL.ordinal()] = gregtech.common.metatileentities.MetaTileEntities.STEEL_TANK_VALVE;
-    for (int i = SuSyTankType.STEEL.ordinal() + 1; i < SuSyTankType.values().length; i++) {
-        SuSyTankType type = SuSyTankType.values()[i];
-        TANK_VALVES[i] = registerMetaTileEntity(18536 + i - 2,
-                new MetaTileEntityTankValve(susyId("tank_valve." + type.slug), type));
+        WOOD_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.WOODEN_TANK_VALVE;
+        STEEL_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.STEEL_TANK_VALVE;
+        
+        //MONEL_TANK_VALVES = registerMetaTileEntity(18540,
+                //new MetaTileEntityTankValve(susyId("tank_valve.monel_400"), SuSyTankType.MONEL));
+        STAINLESS_STEEL_TANK_VALVES = registerMetaTileEntity(18541,
+                new MetaTileEntityTankValve(susyId("tank_valve.stainless_steel"), SuSyTankType.STAINLESS_STEEL));
+        TITANIUM_TANK_VALVES = registerMetaTileEntity(18542,
+                new MetaTileEntityTankValve(susyId("tank_valve.titanium"), SuSyTankType.TITANIUM));
+        TUNGSTEN_STEEL_TANK_VALVES = registerMetaTileEntity(18543,
+                new MetaTileEntityTankValve(susyId("tank_valve.tungsten_steel"), SuSyTankType.TUNGSTEN_STEELL));
+
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

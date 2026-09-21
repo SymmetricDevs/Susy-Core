@@ -28,11 +28,11 @@ import gregtech.api.util.GTTransferUtils;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
+import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
 
 import java.util.List;
 
-public class MetaTileEntityTankValve extends MetaTileEntityMultiblockPart
-        implements IMultiblockAbilityPart<IFluidHandler> {
+public class MetaTileEntityTankValve extends MetaTileEntityMultiblockPart implements IMultiblockAbilityPart<IFluidHandler> {
 
     public final SuSyTankType type;
 
