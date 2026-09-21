@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.tank;
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
@@ -89,9 +87,19 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     protected void initializeInventory() {
         super.initializeInventory();
         this.fluidTank = new FilteredFluidHandler(0);
+        
         if (type == SuSyTankType.WOOD) {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
+        } else if (type == SuSyTankType.STEEL) {
+            fluidTank.setFilter(new PropertyFluidFilter(1000, true, true, false, false));
+        } else if (type == SuSyTankType.STAINLESS_STEEL) {
+            fluidTank.setFilter(new PropertyFluidFilter(2000, true, true, true, false));
+        } else if (type == SuSyTankType.TITANIUM) {
+            fluidTank.setFilter(new PropertyFluidFilter(3000, true, true, true, false));
+        } else if (type == SuSyTankType.TUNGSTEN_STEEL) {
+            fluidTank.setFilter(new PropertyFluidFilter(5000, true, true, true, true));
         }
+
         this.importFluids = new FluidTankList(true, new FluidTank[]{ fluidTank });
         this.exportFluids = this.importFluids;
         this.fluidInventory = fluidTank;
@@ -101,8 +109,11 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     public void checkStructurePattern() {
-        if (!isStructureFormed()) {
-            reinitializeStructurePattern();
+        if (getWorld() != null && !getWorld().isRemote) {
+            boolean sizeChanged = updateStructureDimensions();
+            if (sizeChanged || !isStructureFormed()) {
+                reinitializeStructurePattern();
+            }
         }
         super.checkStructurePattern();
     }
@@ -122,8 +133,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     protected boolean updateStructureDimensions() {
         World world = getWorld();
-        if (world.isRemote) {
-            return true;
+        if (world == null || world.isRemote) {
+            return false;
         }
 
         EnumFacing front = getFrontFacing();
@@ -131,10 +142,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite();
 
-        BlockPos.MutableBlockPos lPos = new BlockPos.MutableBlockPos(getPos());
-        BlockPos.MutableBlockPos rPos = new BlockPos.MutableBlockPos(getPos());
-        BlockPos.MutableBlockPos uPos = new BlockPos.MutableBlockPos(getPos());
-        BlockPos.MutableBlockPos dPos = new BlockPos.MutableBlockPos(getPos());
+        BlockPos start = getPos();
 
         int lDist = 0;
         int rDist = 0;
@@ -142,36 +150,51 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         int dDist = 0;
         int airDepth = 0;
 
-        // Scansiona i muri laterali, superiore e inferiore fino a 16 blocchi
-        for (int i = 1; i < 16; i++) {
-            if (lDist == 0 && isWall(world, lPos.move(left))) lDist = i;
-            if (rDist == 0 && isWall(world, rPos.move(right))) rDist = i;
-            if (uDist == 0 && isWall(world, uPos.move(EnumFacing.UP))) uDist = i;
-            if (dDist == 0 && isWall(world, dPos.move(EnumFacing.DOWN))) dDist = i;
+        for (int i = 1; i < MAX_SIZE; i++) {
+            if (lDist == 0 && isWall(world, start.offset(left, i))) lDist = i;
+            if (rDist == 0 && isWall(world, start.offset(right, i))) rDist = i;
+            if (uDist == 0 && isWall(world, start.offset(EnumFacing.UP, i))) uDist = i;
+            if (dDist == 0 && isWall(world, start.offset(EnumFacing.DOWN, i))) dDist = i;
 
             if (lDist != 0 && rDist != 0 && uDist != 0 && dDist != 0) break;
         }
 
-        // Scansiona la profondità dell'aria interna verso il retro
-        BlockPos.MutableBlockPos bPos = new BlockPos.MutableBlockPos(getPos());
-        for (int i = 1; i < 15; i++) {
-            if (isAir(world, bPos.move(back))) airDepth = i; else break;
+        for (int i = 1; i <= MAX_SIZE - 2; i++) {
+            if (isAir(world, start.offset(back, i))) airDepth = i; else break;
         }
 
-        int w = 1 + lDist + rDist;
-        int h = 1 + uDist + dDist;
-        int depth = airDepth + 2;
+        int oldL = this.lDist;
+        int oldR = this.rDist;
+        int oldU = this.uDist;
+        int oldD = this.dDist;
+        int oldAir = this.airDepth;
+
+        this.lDist = Math.max(lDist, 1);
+        this.rDist = Math.max(rDist, 1);
+        this.uDist = Math.max(uDist, 1);
+        this.dDist = Math.max(dDist, 1);
+        this.airDepth = Math.max(airDepth, 1);
+
+        boolean changed = (oldL != this.lDist || oldR != this.rDist || oldU != this.uDist || oldD != this.dDist || oldAir != this.airDepth);
+
+        int w = 1 + this.lDist + this.rDist;
+        int h = 1 + this.uDist + this.dDist;
+        int depth = this.airDepth + 2;
 
         if (w < MIN_SIZE || w > MAX_SIZE || h < MIN_SIZE || h > MAX_SIZE || depth < MIN_SIZE || depth > MAX_SIZE) {
             invalidateStructure();
-            return false;
+            return changed;
         }
 
-        this.lDist = lDist;
-        this.rDist = rDist;
-        this.uDist = uDist;
-        this.dDist = dDist;
-        this.airDepth = airDepth;
+        if (this.lDist != this.rDist) {
+            invalidateStructure();
+            return changed;
+        }
+
+        if (this.dDist != 1) {
+            invalidateStructure();
+            return changed;
+        }
 
         writeCustomData(UPDATE_STRUCTURE_SIZE, buf -> {
             buf.writeInt(this.lDist);
@@ -180,7 +203,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             buf.writeInt(this.dDist);
             buf.writeInt(this.airDepth);
         });
-        return true;
+
+        return changed;
     }
 
     protected String[] genRow(int w, int h, int depth, int aisle) { return null; }
@@ -199,24 +223,23 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     protected BlockPattern createStructurePattern() {
-        if (getWorld() != null) updateStructureDimensions();
-
         int w = Math.max(lDist + rDist + 1, MIN_SIZE);
         int h = Math.max(uDist + dDist + 1, MIN_SIZE);
         int depth = Math.max(airDepth + 2, MIN_SIZE);
 
         String[][] aisles = new String[depth][h];
         for (int a = 0; a < depth; a++) {
-            boolean frontWall = a == depth - 1;
-            boolean backWall = a == 0;
+            boolean frontWall = (a == depth - 1);
+            boolean backWall = (a == 0);
             for (int r = 0; r < h; r++) {
-                boolean topWall = r == h - 1;
-                boolean bottomWall = r == 0;
+                boolean topWall = (r == 0);
+                boolean bottomWall = (r == h - 1);
                 StringBuilder row = new StringBuilder(w);
                 for (int c = 0; c < w; c++) {
-                    boolean sideWall = c == 0 || c == w - 1;
+                    boolean sideWall = (c == 0 || c == w - 1);
                     char cell;
-                    if (frontWall && r == uDist && c == lDist) {
+
+                    if (frontWall && r == (h - 2) && c == lDist) {
                         cell = 'S';
                     } else if (backWall || frontWall || bottomWall || topWall || sideWall) {
                         cell = 'X';
@@ -248,7 +271,10 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     private int interiorVolume() {
-        return Math.max(lDist + rDist - 1, 0) * Math.max(uDist + dDist - 1, 0) * Math.max(airDepth, 0);
+        int w = lDist + rDist + 1;
+        int h = uDist + dDist + 1;
+        int depth = airDepth + 2;
+        return Math.max(w - 2, 1) * Math.max(h - 2, 1) * Math.max(depth - 2, 1);
     }
 
     @Override
