@@ -1,0 +1,20 @@
+{
+  "variants" : {
+    "facing=north,mirror_sides=top_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_left" },
+    "facing=south,mirror_sides=top_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_left", "y": 180 },
+    "facing=west,mirror_sides=top_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_left", "y": 270 },
+    "facing=east,mirror_sides=top_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_left", "y": 90 },
+    "facing=north,mirror_sides=top_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_right" },
+    "facing=south,mirror_sides=top_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_right", "y": 180 },
+    "facing=west,mirror_sides=top_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_right", "y": 270 },
+    "facing=east,mirror_sides=top_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_top_right", "y": 90 },
+    "facing=north,mirror_sides=bottom_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_left" },
+    "facing=south,mirror_sides=bottom_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_left", "y": 180 },
+    "facing=west,mirror_sides=bottom_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_left", "y": 270 },
+    "facing=east,mirror_sides=bottom_left,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_left", "y": 90 },
+    "facing=north,mirror_sides=bottom_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_right" },
+    "facing=south,mirror_sides=bottom_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_right", "y": 180 },
+    "facing=west,mirror_sides=bottom_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_right", "y": 270 },
+    "facing=east,mirror_sides=bottom_right,variant=epoxy": { "model": "susy:solar_furnace_mirror/epoxy_bottom_right", "y": 90 }
+  }
+}

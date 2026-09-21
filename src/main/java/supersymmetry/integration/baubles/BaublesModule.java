@@ -23,6 +23,7 @@ import gregtech.integration.IntegrationSubmodule;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ArmorBaubleBehavior;
 import supersymmetry.modules.SuSyModules;
@@ -66,8 +67,18 @@ public class BaublesModule extends IntegrationSubmodule {
         int mass = 0;
         IBaublesItemHandler handler = BaublesApi.getBaublesHandler(entity);
         for (int i = 0; i < handler.getSlots(); i++) {
-            mass += CargoItemStackHandler.getMassPerItem(handler.getStackInSlot(i));
+            mass += CargoItemStackHandler.getMass(handler.getStackInSlot(i));
         }
         return mass;
+    }
+
+    public static boolean areBaublesAllowed(EntityPlayer entity) {
+        IBaublesItemHandler handler = BaublesApi.getBaublesHandler(entity);
+        for (int i = 0; i < handler.getSlots(); i++) {
+            if (!SuSyUtility.isAllowedItemForSpace(handler.getStackInSlot(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

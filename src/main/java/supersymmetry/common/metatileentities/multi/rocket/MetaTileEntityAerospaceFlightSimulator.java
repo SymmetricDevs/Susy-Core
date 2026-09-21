@@ -3,10 +3,14 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import static supercritical.api.pattern.SCPredicates.FLUID_BLOCKS_KEY;
 import static supercritical.api.pattern.SCPredicates.fluid;
 import static supersymmetry.api.capability.SuSyDataCodes.SYNC_AFS;
+import static supersymmetry.api.space.CelestialObjects.EARTH;
+import static supersymmetry.api.space.Planetoid.getPlanetFromItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -26,6 +30,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,15 +59,18 @@ import gregtech.api.util.world.DummyWorld;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
-import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.IAFSImprovable;
+import supersymmetry.api.space.Planetoid;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -116,9 +124,59 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     private boolean hasNotEnoughCoolant = false;
 
     public RocketFuelEntry fuel;
+    public Planetoid planet = EARTH;
     public final List<FluidStack> fuelList = new ArrayList<>();
 
-    private double gravity = SuSyValues.G0;
+    // phantom slot backing the solid fuel selector; only dusts of a material with a
+    // SolidRocketFuelProperty get in
+    public final ItemStackHandler solidFuelSlot = new ItemStackHandler(1) {
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return SolidRocketFuelProperty.search(stack) != null;
+        }
+
+        @Override
+        public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+            // phantom slots write straight through setStackInSlot, which skips isItemValid
+            if (!stack.isEmpty() && !isItemValid(slot, stack)) {
+                return;
+            }
+            super.setStackInSlot(slot, stack);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            setFuelFromData();
+            markDirty();
+        }
+    };
+
+    public final ItemStackHandler planetSlot = new ItemStackHandler(1) {
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return getPlanetFromItem(stack) != null;
+        }
+
+        @Override
+        public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+            // phantom slots write straight through setStackInSlot, which skips isItemValid
+            if (!stack.isEmpty() && !isItemValid(slot, stack)) {
+                return;
+            }
+            super.setStackInSlot(slot, stack);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            setFuelFromData();
+            markDirty();
+        }
+    };
+
+    private double turnAltitude = 50;
+    private double cargoMass = 0;
     private AFSStats stats = AFSStats.none();
 
     public MetaTileEntityAerospaceFlightSimulator(ResourceLocation metaTileEntityId) {
@@ -144,11 +202,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         if (data.hasKey("progress")) {
             this.progress = data.getLong("progress");
         }
-        this.gravity = data.getDouble("gravity");
-
-        if (data.hasKey("fuelRegistryName")) {
-            this.fuel = RocketFuelEntry.getCopyOf(data.getString("fuelRegistryName"));
-        }
+        this.turnAltitude = data.getDouble("turnAltitude");
+        this.cargoMass = data.getDouble("cargoMass");
         this.fuelList.clear();
         if (data.hasKey("fuelListSize")) {
             for (int i = 0; i < data.getInteger("fuelListSize"); i++) {
@@ -160,6 +215,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 }
             }
         }
+        this.solidFuelSlot.deserializeNBT(data.getCompoundTag("solidFuelSlot"));
         if (data.hasKey("AFSStats")) {
             this.stats = AFSStats.deserializeNBT(data.getCompoundTag("AFSStats"));
         }
@@ -169,6 +225,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             ItemStack blueprintStack = new ItemStack(blueprintTag);
             this.rocketBlueprintSlot.setStackInSlot(0, blueprintStack);
         }
+        // after the blueprint, since which of the two inputs is read depends on it
+        setFuelFromData();
         this.computationPerTick = data.getInteger("computation");
         this.coolantPerTick = data.getInteger("coolant");
         this.energyPerTick = data.getInteger("energy");
@@ -180,11 +238,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         tag.setBoolean("isWorkingEnabled", this.isWorkingEnabled);
         if (progress != 0)
             tag.setLong("progress", this.progress);
-        tag.setDouble("gravity", this.gravity);
+        tag.setDouble("turnAltitude", this.turnAltitude);
 
-        if (this.fuel != null) {
-            tag.setString("fuelRegistryName", this.fuel.getRegistryName());
-        }
         tag.setInteger("fuelListSize", this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (fuelList.get(i) == null) {
@@ -193,6 +248,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 tag.setTag("fuelList" + i, this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
             }
         }
+        tag.setTag("solidFuelSlot", this.solidFuelSlot.serializeNBT());
 
         if (!rocketBlueprintSlot.isEmpty()) {
             var bp = rocketBlueprintSlot.getStackInSlot(0).writeToNBT(new NBTTagCompound());
@@ -207,13 +263,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         super.writeInitialSyncData(buf);
         buf.writeBoolean(this.isWorkingEnabled);
         buf.writeLong(this.progress);
-        buf.writeDouble(this.gravity);
-        if (this.fuel != null) {
-            buf.writeBoolean(true);
-            buf.writeString(this.fuel.getRegistryName());
-        } else {
-            buf.writeBoolean(false);
-        }
+        buf.writeDouble(this.turnAltitude);
+        buf.writeDouble(this.cargoMass);
         buf.writeInt(this.fuelList.size());
         for (int i = 0; i < this.fuelList.size(); i++) {
             if (this.fuelList.get(i) == null) {
@@ -223,6 +274,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 buf.writeCompoundTag(this.fuelList.get(i).writeToNBT(new NBTTagCompound()));
             }
         }
+        buf.writeItemStack(this.solidFuelSlot.getStackInSlot(0));
 
         if (hasBlueprint()) {
             buf.writeBoolean(true);
@@ -244,10 +296,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         super.receiveInitialSyncData(buf);
         this.isWorkingEnabled = buf.readBoolean();
         this.progress = buf.readLong();
-        this.gravity = buf.readDouble();
-        if (buf.readBoolean()) {
-            this.fuel = RocketFuelEntry.getCopyOf(buf.readString(32767));
-        }
+        this.turnAltitude = buf.readDouble();
+        this.cargoMass = buf.readDouble();
+
         this.fuelList.clear();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -261,7 +312,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 this.fuelList.add(null);
             }
         }
-
+        try {
+            this.solidFuelSlot.setStackInSlot(0, buf.readItemStack());
+        } catch (IOException e) {
+            // goognt
+        }
         if (buf.readBoolean()) {
             try {
                 ItemStack blueprintStack = buf.readItemStack();
@@ -270,6 +325,8 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 // goognt
             }
         }
+        // after the blueprint, since which of the two inputs is read depends on it
+        setFuelFromData();
         this.stats.readFromBuffer(buf);
         if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
@@ -277,6 +334,29 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         this.computationPerTick = buf.readInt();
         this.coolantPerTick = buf.readInt();
         this.energyPerTick = buf.readInt();
+    }
+
+    // the fuel is derived state; fuelList and solidFuelSlot are what persists, and
+    // the blueprint decides which of the two is read
+    public void setFuelFromData() {
+        if (!planetSlot.getStackInSlot(0).isEmpty()) {
+            planet = getPlanetFromItem(planetSlot.getStackInSlot(0));
+        }
+        if (isSolidBlueprint()) {
+            this.fuel = SolidRocketFuelProperty.search(this.solidFuelSlot.getStackInSlot(0));
+            return;
+        }
+
+        List<Fluid> userFluids = this.fuelList.stream().filter(x -> x != null).map(FluidStack::getFluid)
+                .collect(Collectors.toList());
+
+        Optional<LiquidRocketFuelEntry> entry = LiquidRocketFuelEntry.search(userFluids);
+        this.fuel = entry.orElse(null);
+    }
+
+    public boolean isSolidBlueprint() {
+        AbstractRocketBlueprint bp = getBlueprint();
+        return bp != null && bp.isSolidRocket();
     }
 
     @Override
@@ -423,8 +503,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     }
 
     // wipe the progress when there is not enough power/coolant to prevent the
-    // player from having too
-    // much fun
+    // player from having too much fun
     public void crash() {
         setWorkingEnabledInternal(false);
         this.rocketBlueprintSlot.setLocked(false);
@@ -577,8 +656,9 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             hasNotEnoughEnergy = true;
             crash();
         }
-        if (getOffsetTimer() % 20 == 0) {
-            this.stats = this.getBlueprint().calculateInitialSuccess(gravity, this.fuel, this.progress);
+        if (getOffsetTimer() % 100 == 0) {
+            this.stats = this.getBlueprint().calculateInitialSuccess(this.planet, this.fuel,
+                    this.turnAltitude, this.cargoMass, this.progress);
 
             sendComputationInfoToClient();
         }
@@ -591,21 +671,42 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start().aisle("IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII", "IIIIIIIII")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIIIIIII", "IPFPFPFPI", "IPFPFPFPI", "IFFFFFFFI", "ITTTTTTTI")
-                .aisle("IIIISIIII", "ITCTCTCTI", "ITCTCTCTI", "ITCTCTCTI", "IIIIIIIII").where('S', selfPredicate())
-                .where(' ', air()).where('C', states(getCasingState())).where('P', SuSyPredicates.computation())
-                .where('T', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS)))
+        return FactoryBlockPattern.start()
+                .aisle("        IIIIIII        ", "        IIIIIII        ", "        IIIIIII        ",
+                        "        IIIIIII        ", "                       ")
+                .aisle("      IIIIIIIIIII      ", "      IIPPPVPPPII      ", "      IIPPPVPPPII      ",
+                        "      IIFFFVFFFII      ", "        IIIIIII        ")
+                .aisle("    IIIIIIIIIIIIIII    ", "    IIPPFFFVFFFPPII    ", "    IIPPFFFVFFFPPII    ",
+                        "    IIFFFFFVFFFFFII    ", "      IIIIIIIIIII      ")
+                .aisle("   IIIIIIIIIIIIIIIII   ", "   IFFFFPPPVPPPFFFFI   ", "   IFFFFPPPVPPPFFFFI   ",
+                        "   IFFFFFFFVFFFFFFFI   ", "    IIIIIIIIIIIIIII    ")
+                .aisle("  IIIIIIIIISIIIIIIIII  ", "  IPPPPPLLLLLLLPPPPPI  ", "  IPPPPPLLLLLLLPPPPPI  ",
+                        "  IFFFFFLLLLLLLFFFFFI  ", "   IIIII       IIIII   ")
+                .aisle("  IIIIII       IIIIII  ", "  IFFFLL       LLFFFI  ", "  IFFFLL       LLFFFI  ",
+                        "  IFFFLL       LLFFFI  ", "   III           III   ")
+                .aisle(" IIIII           IIIII ", " IPPPL           LPPPI ", " IPPPL           LPPPI ",
+                        " IFFFL           LFFFI ", "  III             III  ")
+                .aisle(" IIIII           IIIII ", " IFFFL           LFFFI ", " IFFFL           LFFFI ",
+                        " IFFFL           LFFFI ", "  III             III  ")
+                .aisle("IIIII             IIIII", "IPPPL             LPPPI", "IPPPL             LPPPI",
+                        "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IFFFL             LFFFI", "IFFFL             LFFFI",
+                        "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IVVVL             LVVVI", "IVVVL             LVVVI",
+                        "IVVVL             LVVVI", " III               III ")
+                .where('S', selfPredicate())
+                .where(' ', any())
+                .where('C', states(getCasingState()))
+                .where('P', SuSyPredicates.computation())
+                .where('L', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS)))
                 .where('F', fluid(SusyMaterials.FC75.getFluid()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)
-                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1).setMaxGlobalLimited(1, 1))
+                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(1, 1))
                         .or(abilities(MultiblockAbility.INPUT_ENERGY).setMaxGlobalLimited(2).setMinGlobalLimited(1, 1)
                                 .or(states(getCasingState()))
                                 .or(maintenancePredicate().setMaxGlobalLimited(1).setMinGlobalLimited(1, 1)))
                         .or(states(getCasingState())))
+                .where('V', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .build();
     }
 
@@ -621,7 +722,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             builder.label(9, 12, this.getMetaName() + ".gui.not_formed", 0xAE5421);
             return builder;
         }
-        int width = 280;
+        int width = 320;
         int height = 210;
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
@@ -649,31 +750,62 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         ConditionalWidget mainGroup = new ConditionalWidget(0, 0, width, height, () -> true);
         ConditionalWidget menuGroup = new ConditionalWidget(0, 0, width, height, () -> !this.isActive());
         ConditionalWidget workingGroup = new ConditionalWidget(0, 0, width, height, this::isActive);
+        // planet selector
+        menuGroup.addWidget(
+                new LabelWidget(105, 45, this.getMetaName() + ".gui.planet_selector_label", 0xffffff));
+        PhantomSlotWidget planetSlot = new PhantomSlotWidget(this.planetSlot, 0, 0, 0);
+
+        planetSlot.setSelfPosition(new Position(105, 54));
+        planetSlot.setBackgroundTexture(GuiTextures.SLOT_DARK);
+        menuGroup.addWidget(planetSlot);
 
         mainGroup.addWidget(menuGroup);
         mainGroup.addWidget(workingGroup);
         // Fuel selector
         menuGroup.addWidget(
                 new LabelWidget(10, 45, this.getMetaName() + ".gui.fuel_selector_label", 0xffffff));
-        menuGroup.addWidget(new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> {
-            this.fuel = fuel;
-        }));
-        // Gravity selector
+        // liquid and solid blueprints each get their own selector; the hidden one keeps
+        // its contents so switching blueprints back restores the old selection
+        menuGroup.addWidgetWithTest(
+                new FuelRegistrySelectorWidget(10, 54, 80, 60, this.fuelList, (fuel) -> setFuelFromData()),
+                () -> !this.isSolidBlueprint() && !this.isActive());
+        menuGroup.addWidgetWithTest(
+                new PhantomSlotWidget(this.solidFuelSlot, 0, 10, 54)
+                        .setClearSlotOnRightClick(true)
+                        .setBackgroundTexture(GuiTextures.SLOT_DARK),
+                () -> this.isSolidBlueprint() && !this.isActive());
+        // Turn altitude selector
         menuGroup.addWidget(
-                new LabelWidget(10, 80, this.getMetaName() + ".gui.gravity_selector_label", 0xffffff));
-        menuGroup.addWidget(new TextFieldWidget2(10, 88, 60, 12, () -> Double.valueOf(gravity).toString(), value -> {
-            if (!value.isEmpty()) {
-                try {
-                    gravity = Double.parseDouble(value);
-                    if (gravity <= 0) {
-                        gravity = SuSyValues.G0;
+                new LabelWidget(10, 80, this.getMetaName() + ".gui.turn_altitude_selector_label", 0xffffff));
+        menuGroup.addWidget(
+                new TextFieldWidget2(10, 88, 60, 12, () -> Double.valueOf(turnAltitude).toString(), value -> {
+                    if (!value.isEmpty()) {
+                        try {
+                            turnAltitude = Double.parseDouble(value);
+                            if (turnAltitude <= 0) {
+                                turnAltitude = 50;
+                            }
+                        } catch (NumberFormatException ignored) {
+                            turnAltitude = 50;
+                        }
                     }
-                } catch (NumberFormatException ignored) {
-                    gravity = SuSyValues.G0;
-                }
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
-
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(6));
+        // Cargo mass selector
+        menuGroup.addWidget(
+                new LabelWidget(10, 96, this.getMetaName() + ".gui.cargo_mass_selector_label", 0xffffff));
+        menuGroup.addWidget(
+                new TextFieldWidget2(10, 104, 60, 12, () -> Double.valueOf(cargoMass).toString(), value -> {
+                    if (!value.isEmpty()) {
+                        try {
+                            cargoMass = Double.parseDouble(value);
+                            if (cargoMass <= 0) {
+                                cargoMass = 0;
+                            }
+                        } catch (NumberFormatException ignored) {
+                            cargoMass = 0;
+                        }
+                    }
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(9));
         menuGroup.addWidgetWithTest(new AdvancedTextWidget(9, 19, (l) -> {
             AbstractRocketBlueprint bp = this.getBlueprint();
             if (this.hasBlueprint() && bp != null) {
@@ -685,11 +817,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
         // multi information
         // these should probably be visible at all times in some different corner
-        menuGroup.addWidget(new LabelWidget(width - 130, 9,
-                getMetaName() + ".gui.computation_power", 0xffffff, this.getCompute()));
-        menuGroup.addWidget(new LabelWidget(width - 130, 20,
-                getMetaName() + ".gui.coolant_flow", 0xffffff, this.getCoolantToConsume() * 20));
-        menuGroup.addWidget(new DynamicLabelWidget(width - 130, 31,
+        menuGroup.addWidget(new LabelWidget(width - 170, 9,
+                getMetaName() + ".gui.computation_power", 0xffffff, new Object[] { this.getCompute() }));
+        menuGroup.addWidget(new LabelWidget(width - 170, 20,
+                getMetaName() + ".gui.coolant_flow", 0xffffff, new Object[] { this.getCoolantToConsume() * 20 }));
+        menuGroup.addWidget(new DynamicLabelWidget(width - 170, 31,
                 () -> I18n.format(getMetaName() + ".gui.energy_consumption", this.getEnergyToConsume()), 0xffffff));
         menuGroup.addWidget(new LabelWidget(9, 9, getMetaFullName(), 0xffffff));
 
@@ -719,59 +851,74 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         });
         builder.widget(mainGroup);
         // Various stats beneath
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 52,
-                        () -> I18n.format(getMetaName() + ".gui.success_chance",
-                                String.format("%.2f%%", 100 * this.stats.success())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 8,
+                () -> I18n.format(getMetaName() + ".gui.success_chance",
+                        String.format("%.2f%%", 100 * this.stats.success())),
+                0x00eeff),
                 () -> this.isActive() && !this.stats.isNone());
-        workingGroup
-                .addWidgetWithTest(
-                        new DynamicLabelWidget(10, 63,
-                                () -> I18n.format(getMetaName() + ".gui.mass",
-                                        String.format("%.0f", this.stats.mass())),
-                                0xffffff),
-                        () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 74,
-                        () -> I18n.format(getMetaName() + ".gui.fuel_mass",
-                                String.format("%.0f", this.stats.fuelMass())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 19,
+                () -> I18n.format(getMetaName() + ".gui.mass",
+                        String.format("%.0f", this.stats.mass())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 30,
+                () -> I18n.format(getMetaName() + ".gui.fuel_mass",
+                        String.format("%.0f", this.stats.fuelMass())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 41,
+                () -> I18n.format(getMetaName() + ".gui.delta_v",
+                        String.format("%.2f", this.stats.deltaV())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 52,
+                () -> I18n.format(getMetaName() + ".gui.drag_coefficient",
+                        String.format("%.2f", this.stats.dragCoefficient())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 63,
+                () -> I18n.format(getMetaName() + ".gui.first_sep_altitude",
+                        String.format("%.2f", this.stats.firstSepAltitude() / 1000)),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 74,
+                () -> I18n.format(getMetaName() + ".gui.first_sep_time",
+                        String.format("%.2f", this.stats.firstSepTime())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 85,
-                () -> I18n.format(getMetaName() + ".gui.velocity_percent",
-                        String.format("%.2f", 100 * this.stats.deltaV() / this.stats.escapeVelocity())),
-                0xffffff), () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup
-                .addWidgetWithTest(
-                        new DynamicLabelWidget(10, 96,
-                                () -> I18n.format(getMetaName() + ".gui.thrust",
-                                        String.format("%.2f", this.stats.thrust())),
-                                0xffffff),
-                        () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(10, 107,
-                        () -> I18n.format(getMetaName() + ".gui.cargo_capacity",
-                                String.format("%.2f", this.stats.cargoCapacity())),
-                        0xffffff),
+                () -> I18n.format(getMetaName() + ".gui.second_sep_altitude",
+                        String.format("%.2f", this.stats.secondSepAltitude() / 1000)),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 52,
-                        () -> I18n.format(getMetaName() + ".gui.radial_instability",
-                                String.format("%.2f", this.stats.radialInstability())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(10, 96,
+                () -> I18n.format(getMetaName() + ".gui.second_sep_time",
+                        String.format("%.2f", this.stats.secondSepTime())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 63,
-                        () -> I18n.format(getMetaName() + ".gui.oblateness",
-                                String.format("%.2f", this.stats.oblateness())),
-                        0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 8,
+                () -> I18n.format(getMetaName() + ".gui.third_sep_altitude",
+                        String.format("%.2f", this.stats.thirdSepAltitude() / 1000)),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(
-                new DynamicLabelWidget(width - 140, 74,
-                        () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0xffffff),
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 19,
+                () -> I18n.format(getMetaName() + ".gui.third_sep_time",
+                        String.format("%.2f", this.stats.thirdSepTime())),
+                0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 30,
+                () -> I18n.format(getMetaName() + ".gui.burnout_speed",
+                        String.format("%.2f", this.stats.burnoutSpeed())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 41,
+                () -> I18n.format(getMetaName() + ".gui.burnout_horizontal_speed",
+                        String.format("%.2f", this.stats.burnoutHorizontalSpeed())),
+                0xffffff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 52,
+                () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0x00eeff),
+                () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         return builder;
     }
 

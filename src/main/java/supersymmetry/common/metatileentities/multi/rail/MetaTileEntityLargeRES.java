@@ -542,14 +542,11 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         EnumFacing right = getFrontFacing().rotateY();
         BlockPos aisleBase = getPos().offset(getFrontFacing().getOpposite(), 1);
 
-        System.out.println("Controller: " + getPos() + " facing: " + getFrontFacing());
-        System.out.println("AisleBase: " + aisleBase + " right: " + right);
-
         for (int offset = -12; offset <= 12; offset++) {
             BlockPos candidate = aisleBase.offset(right, offset);
             net.minecraft.block.Block block = getWorld().getBlockState(candidate).getBlock();
-            System.out.println("  offset " + offset + " pos " + candidate + " = " + block.getRegistryName());
-            if (block.getRegistryName() != null && block.getRegistryName().toString().contains("block_rail")) {
+            if (block.getRegistryName() != null &&
+                    block.getRegistryName().toString().contains("block_rail")) {
                 this.railPositions.add(candidate);
             }
         }
@@ -675,13 +672,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
         if (def != null) {
             World irWorld = World.get(getWorld());
             BlockPos railPos = railPositions.isEmpty() ? getRailPos() : railPositions.get(railPositions.size() / 2);
-            System.out.println("Controller pos: " + getPos());
-            System.out.println("Facing: " + getFrontFacing());
-            System.out.println("Rail positions found: " + railPositions.size());
-            for (BlockPos p : railPositions) {
-                System.out.println("  Rail: " + p);
-            }
-            System.out.println("Selected rail pos: " + railPos);
 
             TickPos tp = new TickPos(0, Speed.ZERO,
                     new Vec3d(railPos.getX() + 0.5, railPos.getY() + 0.0625, railPos.getZ() + 0.5), 0, 0, 0, 0.0F,
@@ -865,11 +855,6 @@ public class MetaTileEntityLargeRES extends RecipeMapMultiblockController {
 
         @Override
         protected Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs, IMultipleTankHandler fluidInputs) {
-            // Log all items in input slots
-            for (int i = 0; i < inputs.getSlots(); i++) {
-                net.minecraft.item.ItemStack stack = inputs.getStackInSlot(i);
-            }
-
             Recipe recipe = super.findRecipe(maxVoltage, inputs, fluidInputs);
 
             return recipe;

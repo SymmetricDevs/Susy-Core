@@ -4,12 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +32,8 @@ import codechicken.lib.raytracer.CuboidRayTraceResult;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.IDataStickIntractable;
+import gregtech.api.capability.IMaintenanceHatch;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
@@ -40,7 +42,6 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
@@ -56,6 +57,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -65,19 +67,24 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
+import supersymmetry.api.metatileentity.IRocketFueler;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.mixin.RenderDistanceMTE;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
+import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockRocketAssemblerCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntitySoyuzBasic;
 import supersymmetry.common.entities.EntityTransporterErector;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 
-public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implements IAnimatableMTE, RenderDistanceMTE {
+public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
+                                     implements IAnimatableMTE, RenderDistanceMTE, IDataStickIntractable,
+                                     IRocketFueler {
 
     private AxisAlignedBB trainAABB;
     private EntityTransporterErector selectedErector;
@@ -85,6 +92,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private LaunchPadState state = LaunchPadState.EMPTY;
     protected IItemHandlerModifiable inputInventory;
     protected IMultipleTankHandler inputFluidInventory;
+    public boolean isRetracted = false;
     /**
      * Optional. A rocket programmer along the track normally stamps the mission
      * list onto the erector, but the configurer can also be dropped in here to
@@ -284,8 +292,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public void setAABBs() {
         // Had to make it overshoot a little :(
-        BlockPos offsetBottomLeft = new BlockPos(6, 5, 12);
-        BlockPos offsetTopRight = new BlockPos(-6, 20, 14);
+        BlockPos offsetBottomLeft = new BlockPos(6, 5, 0);
+        BlockPos offsetTopRight = new BlockPos(-6, 20, 4.5);
 
         switch (this.getFrontFacing()) {
             case EAST:
@@ -309,18 +317,12 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     public Vec3d getLaunchPosition() {
         Vec3d offset = new Vec3d(0.5, 1, 7.5);
-        switch (this.getFrontFacing()) {
-            case EAST:
-                offset.rotateYaw((float) (-Math.PI / 2));
-                break;
-            case SOUTH:
-                offset.rotateYaw((float) Math.PI);
-                break;
-            case WEST:
-                offset.rotateYaw((float) (Math.PI / 2));
-                break;
-            default:
-                break;
+        if (this.getFrontFacing() == EnumFacing.EAST) {
+            offset = new Vec3d(-6.5, 1, 0.5);
+        } else if (this.getFrontFacing() == EnumFacing.SOUTH) {
+            offset = new Vec3d(0.5, 1, -6.5);
+        } else if (this.getFrontFacing() == EnumFacing.WEST) {
+            offset = new Vec3d(7.5, 1, 0.5);
         }
         return new Vec3d(this.getPos()).add(offset);
     }
@@ -391,6 +393,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                         break;
                     }
                 }
+                updateSelectedErector();
+                if (checkErector() && this.selectedErector.getLifterAngle() >= Math.PI / 2) {
+                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
+                }
                 if (this.getOffsetTimer() % 4 == 0) {
                     setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
                 }
@@ -399,16 +405,50 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
             case LAUNCHING:
-                updateSelectedErector();
-                if (checkErector()) {
-                    this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
-                }
                 if (!checkRocket()) {
                     findRocket();
                     if (!checkRocket()) {
                         this.setLaunchPadState(LaunchPadState.EMPTY);
                         break;
                     }
+                }
+                if (selectedRocket.isLaunched() && selectedRocket.posY - getLaunchPosition().y < 40 &&
+                        selectedRocket.ticksExisted % 5 == 0) {
+
+                    net.minecraft.util.math.AxisAlignedBB searchBox = new net.minecraft.util.math.AxisAlignedBB(
+                            getLaunchPosition().x - 50, getLaunchPosition().y - 50,
+                            getLaunchPosition().z - 50,
+                            getLaunchPosition().x + 50, getLaunchPosition().y + 50,
+                            getLaunchPosition().z + 50);
+
+                    List<EntityLivingBase> entities = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class,
+                            searchBox);
+
+                    for (EntityLivingBase entity : entities) {
+                        if (!(entity instanceof EntityAbstractRocket ||
+                                entity.getRidingEntity() instanceof EntityAbstractRocket)) {
+                            float damage = (float) (100000 /
+                                    Math.pow(getLaunchPosition().distanceTo(entity.getPositionVector()), 3));
+                            if (damage >= 0.8) {
+                                entity.attackEntityFrom(SuSyDamageSources.ROCKET_EXHAUST, damage);
+                            }
+                        }
+                    }
+
+                    net.minecraft.util.math.AxisAlignedBB trainDamageBox = new net.minecraft.util.math.AxisAlignedBB(
+                            getLaunchPosition().x - 18, getLaunchPosition().y - 18,
+                            getLaunchPosition().z - 18,
+                            getLaunchPosition().x + 18, getLaunchPosition().y + 18,
+                            getLaunchPosition().z + 18);
+
+                    List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, trainDamageBox);
+
+                    if (!trains.isEmpty()) {
+                        for (ModdedEntity forgeTrainEntity : trains) {
+                            forgeTrainEntity.attackEntityFrom(DamageSource.causeExplosionDamage(selectedRocket), 20f);
+                        }
+                    }
+
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {
@@ -425,18 +465,20 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     private static final int MAX_FUELING_SPEED = 8000;
 
     private boolean loadCargo() {
-        GTTransferUtils.moveInventoryItems(this.getImportItems(), selectedRocket.getInventory());
-        if (this.fuelingProgress >= selectedRocket.getFuelVolume()) {
+        GTTransferUtils.moveInventoryItems(this.inputInventory, selectedRocket.getInventory());
+        if (isFuelingComplete()) {
             return true;
         }
-        RocketFuelEntry fuelEntry = selectedRocket.getFuel();
+        // the Soyuz is liquid-fuelled, and nothing here ever puts a solid fuel on it
+        LiquidRocketFuelEntry fuelEntry = selectedRocket.getFuel() instanceof LiquidRocketFuelEntry liquid ? liquid :
+                null;
 
         if (fuelEntry == null) {
             List<Fluid> fluids = this.inputFluidInventory.getFluidTanks().stream()
                     .map((tank) -> tank.getFluid() == null ? null : tank.getFluid().getFluid()).distinct()
                     .filter(Objects::nonNull).collect(Collectors.toList());
 
-            Optional<RocketFuelEntry> possibleEntry = RocketFuelEntry.search(fluids);
+            Optional<LiquidRocketFuelEntry> possibleEntry = LiquidRocketFuelEntry.search(fluids);
             if (possibleEntry.isEmpty()) {
                 return false;
             }
@@ -463,7 +505,16 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
             inputFluidInventory.drain(new FluidStack(comp.getFirst(), (comp.getSecond() * unitsDrained)), true);
         }
 
+        return isFuelingComplete();
+    }
+
+    public boolean isFuelingComplete() {
         return this.fuelingProgress >= selectedRocket.getFuelVolume();
+    }
+
+    @Override
+    public void launch() {
+        this.setLaunchPadState(LaunchPadState.LAUNCHING);
     }
 
     private void setFuelingProgress(int fuelingProgress) {
@@ -516,13 +567,15 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
         List<EntitySoyuzBasic> rockets = getWorld().getEntitiesWithinAABB(EntitySoyuzBasic.class, getRocketAABB());
         if (!rockets.isEmpty()) {
             this.selectedRocket = rockets.get(0);
+            selectedRocket.fueler = this;
         }
     }
 
     public void spawnRocket(NBTTagCompound tag) {
         Vec3d position = this.getLaunchPosition();
         this.selectedRocket = new EntitySoyuzBasic(this.getWorld(), position,
-                this.getFrontFacing().getHorizontalAngle());
+                this.getFrontFacing().getHorizontalAngle() + 45);
+        selectedRocket.fueler = this;
         if (tag != null) {
             // Copy in all tags
             for (Map.Entry<String, NBTBase> info : tag.tagMap.entrySet()) {
@@ -631,11 +684,22 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
 
     @SideOnly(Side.CLIENT)
     private <T extends MetaTileEntity & IAnimatableMTE> PlayState predicate(AnimationEvent<T> event) {
-        if (this.state == LaunchPadState.LOADING || this.state == LaunchPadState.LAUNCHING &&
-                event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().setAnimation(new AnimationBuilder().playOnce("retract").playAndHold("protract"));
+        if (this.state == LaunchPadState.LAUNCHING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped) && !isRetracted) {
+            event.getController().setAnimation(new AnimationBuilder().playAndHold("retract"));
+            isRetracted = true;
             return PlayState.CONTINUE;
-        }
+        } else if (this.state == LaunchPadState.LOADING &&
+                event.getController().getAnimationState().equals(AnimationState.Stopped) && !isRetracted) {
+                    event.getController().setAnimation(new AnimationBuilder().playAndHold("retract_load"));
+                    isRetracted = true;
+                    return PlayState.CONTINUE;
+                } else
+            if (isRetracted && (this.state == LaunchPadState.LOADED || this.state == LaunchPadState.EMPTY)) {
+                event.getController().setAnimation(new AnimationBuilder().playAndHold("protract"));
+                isRetracted = false;
+                return PlayState.CONTINUE;
+            }
         return isStructureFormed() ? PlayState.CONTINUE : PlayState.STOP;
     }
 
@@ -683,11 +747,11 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     public enum LaunchPadState {
         INITIALIZING, // The launch pad is literally just checking for existing entities.
         EMPTY, // No rocket transporter has been selected, nor is there any rocket in the
-               // launch pad.
+        // launch pad.
         LOADING, // A rocket transporter has been selected, causing it to begin the erecting
-                 // process.
+        // process.
         LOADED, // A rocket has been loaded into the launch pad. Players should be able to enter
-                // through physical rocket
+        // through physical rocket
         // supports and remotely launch the rocket.
         LAUNCHING // The rocket supports retract and the engines are turned on.
     }
@@ -735,7 +799,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     @Override
     public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                 CuboidRayTraceResult hitResult) {
-        if (this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
+        if (!playerIn.world.isRemote && this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
                 playerIn.getHeldItem(hand).isItemEqual(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm())) {
             NBTTagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
             if (tag != null) {
@@ -763,13 +827,43 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase implement
     // stupid annoying issue with part checking on chunk reloads
     @Override
     public void checkStructurePattern() {
-        TileEntity te = this.getWorld().getTileEntity(getPos());
-        if (te != this.getHolder()) {
-            if (te instanceof MetaTileEntityHolder holder &&
-                    holder.getMetaTileEntity() instanceof MetaTileEntityLaunchPad launchPad) {
-                launchPad.invalidateStructure();
+        if (structurePattern == null) return;
+        PatternMatchContext context = structurePattern.checkPatternFastAt(getWorld(), getPos(),
+                getFrontFacing().getOpposite(), getUpwardsFacing(), allowsFlip());
+        if (context != null && !this.isStructureFormed()) {
+            Set<IMultiblockPart> rawPartsSet = context.getOrCreate("MultiblockParts", HashSet::new);
+            ArrayList<IMultiblockPart> parts = new ArrayList<>(rawPartsSet);
+            for (IMultiblockPart part : parts) {
+                if (part.isAttachedToMultiBlock()) {
+                    if (part instanceof IMaintenanceHatch && part instanceof MetaTileEntityMultiblockPart mpart) {
+                        if (mpart.getController().getPos().equals(this.getPos())) {
+                            mpart.removeFromMultiBlock(this);
+                        }
+                    }
+                }
             }
         }
+        if (context == null) {
+            if (isStructureFormed()) {
+                invalidateStructure();
+            }
+            return; // don't redo the check
+        }
         super.checkStructurePattern();
+    }
+
+    @Override
+    public void onDataStickLeftClick(EntityPlayer player, ItemStack dataStick) {}
+
+    @Override
+    public boolean onDataStickRightClick(EntityPlayer player, ItemStack dataStick) {
+        if (selectedRocket == null || !player.isSneaking()) {
+            return false;
+        }
+        UUID rocketUuid = selectedRocket.getUniqueID();
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setUniqueId("RocketUUID", rocketUuid);
+        dataStick.setTagCompound(tag);
+        return false;
     }
 }

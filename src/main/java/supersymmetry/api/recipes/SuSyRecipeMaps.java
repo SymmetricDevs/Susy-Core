@@ -488,7 +488,7 @@ public class SuSyRecipeMaps {
             new PrimitiveRecipeBuilder(), false).setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<SimpleRecipeBuilder> LARGE_RES_RECIPES = new RecipeMap<>(
-            "large_railroad_engineering_station", 25, 1, 3, 0, new SimpleRecipeBuilder(), false)
+            "large_railroad_engineering_station", 16, 1, 3, 0, new SimpleRecipeBuilder(), false)
             .setSlotOverlay(false, false, GuiTextures.SLOT).setSlotOverlay(true, false, GuiTextures.SLOT)
             .setSound(GTSoundEvents.ASSEMBLER)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL);
@@ -529,8 +529,9 @@ public class SuSyRecipeMaps {
     public static final RecipeMap<SimpleRecipeBuilder> LUNAR_BUCKET_WHEEL_EXCAVATOR = new RecipeMap<>("lunar_bwe", 1, 3,
             0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.DRILL_TOOL);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SOLAR_FURNACE_RECIPES = new RecipeMap<>("solar_furnace", 3, 3, 2,
-            2, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<SolarFurnaceRecipeBuilder> SOLAR_FURNACE_RECIPES = new RecipeMap<>("solar_furnace", 6,
+            6, 3,
+            4, new SolarFurnaceRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.FURNACE);
 

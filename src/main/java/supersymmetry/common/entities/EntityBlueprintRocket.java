@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,15 +22,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GregTechAPI;
+import gregtech.client.particle.GTParticleManager;
 import gregtech.modules.ModuleManager;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.metatileentity.IRocketFueler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AFSRendered;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
-import supersymmetry.client.renderer.particles.SusyParticleFlameLarge;
-import supersymmetry.client.renderer.particles.SusyParticleSmokeLarge;
+import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.common.advancement.SusyCriteriaTriggers;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.SuccessCalculation;
@@ -44,6 +46,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
 
     protected static final DataParameter<String> FUEL = EntityDataManager.createKey(EntityBlueprintRocket.class,
             DataSerializers.STRING);
+    protected static final DataParameter<Float> TURN_ALTITUDE = EntityDataManager.createKey(EntityBlueprintRocket.class,
+            DataSerializers.FLOAT);
     private int maxFuelVolume;
 
     // Troll mode - rocket curves back towards launch pad
@@ -51,6 +55,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             .createKey(EntityBlueprintRocket.class, DataSerializers.VARINT);
     protected static final DataParameter<BlockPos> CRASH_POSITION = EntityDataManager
             .createKey(EntityBlueprintRocket.class, DataSerializers.BLOCK_POS);
+
+    public IRocketFueler fueler;
 
     public EntityBlueprintRocket(World worldIn) {
         super(worldIn);
@@ -72,6 +78,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(FUEL, "");
+        this.dataManager.register(TURN_ALTITUDE, 0.0f);
         this.dataManager.register(LAUNCH_RESULT, SuccessCalculation.LaunchResult.LAUNCHES.ordinal());
         this.dataManager.register(CRASH_POSITION, BlockPos.ORIGIN);
     }
@@ -97,12 +104,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         for (double[] engine : getEngineOffsets()) {
             double x = this.posX + engine[0];
             double z = this.posZ + engine[1];
-            SusyParticleFlameLarge flame = new SusyParticleFlameLarge(this.world, x, this.posY, z,
-                    1.5 * (getRNG().nextFloat() - 0.5) * 0.08, -1.5, 1.5 * (getRNG().nextFloat() - 0.5) * 0.08);
-            SusyParticleSmokeLarge smoke = new SusyParticleSmokeLarge(this.world, x, this.posY, z,
+            SusyParticleRocketFlame smoke = new SusyParticleRocketFlame(this.world, x, this.posY, z,
                     1.5 * (getRNG().nextFloat() - 0.5) * 0.16, -1.5, 1.5 * (getRNG().nextFloat() - 0.5) * 0.16);
-            Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
-            Minecraft.getMinecraft().effectRenderer.addEffect(flame);
+            GTParticleManager.INSTANCE.addEffect(smoke);
         }
     }
 
@@ -190,58 +194,19 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
 
-            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.CRASHES && this.posY > 256) {
-                BlockPos targetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
-                        ((Math.random() * 2) - 1) * 1000);
-                // Clear out Y
-                this.setCrashPosition(targetPos.down(targetPos.getY()));
-            }
-
             if (this.getLaunchResult() == SuccessCalculation.LaunchResult.EXPLODES && this.posY > 400) {
                 this.explode();
             }
 
             // Troll mode: curve the rocket back towards the launch pad
-            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.CRASHES && this.getCrashPosition() != null) {
-                // Calculate direction to target
-                double dx = this.getCrashPosition().getX() + 0.5 - this.posX;
-                double dy = this.getCrashPosition().getY() - this.posY;
-                double dz = this.getCrashPosition().getZ() + 0.5 - this.posZ;
-                double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
-
-                // Calculate target yaw and pitch
-                float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
-                float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
-
-                // Gradually adjust yaw and pitch (semi-realistic curve)
-                float yawDiff = targetYaw - this.rotationYaw;
-                while (yawDiff > 180.0F)
-                    yawDiff -= 360.0F;
-                while (yawDiff < -180.0F)
-                    yawDiff += 360.0F;
-
-                float pitchDiff = targetPitch - this.rotationPitch;
-                while (pitchDiff > 180.0F)
-                    pitchDiff -= 360.0F;
-                while (pitchDiff < -180.0F)
-                    pitchDiff += 360.0F;
-
-                // Curve rate increases with flight time (rocket becomes more unstable)
-                float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
-                this.rotationYaw += yawDiff * curveRate;
-                this.rotationPitch += pitchDiff * curveRate * 0.05F;
-
-                // Apply lateral motion based on rotation
-                double speed = jerk * Math.pow(flightTime, 2) / 2;
-                double yawRad = Math.toRadians(this.rotationYaw);
-                double pitchRad = Math.toRadians(this.rotationPitch);
-
-                this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
-                this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
-                this.motionY = Math.cos(pitchRad) * speed;
-
-                this.setPositionAndRotation(this.posX + this.motionX, this.posY + this.motionY,
-                        this.posZ + this.motionZ, this.rotationYaw, this.rotationPitch);
+            if (this.getLaunchResult() == SuccessCalculation.LaunchResult.CRASHES && flightTime > 240) {
+                if (this.getCrashPosition() == null || this.getCrashPosition().getY() == 0) {
+                    BlockPos targetPos = this.getPosition().add(((Math.random() * 2) - 1) * 1000, 0,
+                            ((Math.random() * 2) - 1) * 1000);
+                    // Mostly clear out Y
+                    this.setCrashPosition(targetPos.down(targetPos.getY() + 1));
+                }
+                moveToCrash(flightTime);
             } else {
                 // Normal flight
                 this.motionY = jerk * Math.pow(getFlightTime(), 2) / 2;
@@ -262,7 +227,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                 }
             }
 
-            if (this.world.collidesWithAnyBlock(this.getEntityBoundingBox())) {
+            AxisAlignedBB aabb = this.getEntityBoundingBox();
+            aabb = new AxisAlignedBB(aabb.minX, aabb.maxY - 1, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+            if (this.world.collidesWithAnyBlock(aabb)) {
                 this.explode();
             }
 
@@ -275,7 +242,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             }
 
             if (this.posY > 1000 && this.getLaunchResult() == SuccessCalculation.LaunchResult.LAUNCHES) {
-                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                if (this.hasActed()) {
                     this.setDead();
                 } else {
                     act();
@@ -283,6 +250,47 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                 }
             }
         }
+    }
+
+    private void moveToCrash(int flightTime) {
+        double dx = this.getCrashPosition().getX() + 0.5 - this.posX;
+        double dy = this.getCrashPosition().getY() - this.posY;
+        double dz = this.getCrashPosition().getZ() + 0.5 - this.posZ;
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+        // Calculate target yaw and pitch
+        float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
+        float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
+
+        // Gradually adjust yaw and pitch (semi-realistic curve)
+        float yawDiff = targetYaw - this.rotationYaw;
+        while (yawDiff > 180.0F)
+            yawDiff -= 360.0F;
+        while (yawDiff < -180.0F)
+            yawDiff += 360.0F;
+
+        float pitchDiff = targetPitch - this.rotationPitch;
+        while (pitchDiff > 180.0F)
+            pitchDiff -= 360.0F;
+        while (pitchDiff < -180.0F)
+            pitchDiff += 360.0F;
+
+        // Curve rate increases with flight time (rocket becomes more unstable)
+        float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
+        this.rotationYaw += yawDiff * curveRate;
+        this.rotationPitch += pitchDiff * curveRate * 0.05F;
+
+        // Apply lateral motion based on rotation
+        double speed = jerk * Math.pow(flightTime, 2) / 2;
+        double yawRad = Math.toRadians(this.rotationYaw);
+        double pitchRad = Math.toRadians(this.rotationPitch);
+
+        this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
+        this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
+        this.motionY = Math.cos(pitchRad) * speed;
+
+        this.setPositionAndRotation(this.posX + this.motionX, this.posY + this.motionY,
+                this.posZ + this.motionZ, this.rotationYaw, this.rotationPitch);
     }
 
     public int getFuelVolume() {
@@ -306,25 +314,43 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     public void setFuel(RocketFuelEntry fuelEntry) {
-        this.dataManager.set(FUEL, fuelEntry.getRegistryName());
+        this.dataManager.set(FUEL, fuelEntry.getFuelKey());
+    }
+
+    public void setTurnAltitude(double turnAltitude) {
+        this.dataManager.set(TURN_ALTITUDE, (float) turnAltitude);
     }
 
     @Override
     public RocketFuelEntry getFuel() {
-        return RocketFuelEntry.getCopyOf(this.dataManager.get(FUEL));
+        return RocketFuelEntry.fromFuelKey(this.dataManager.get(FUEL));
     }
 
     @Override
-    protected boolean canFitPassenger(Entity passenger) {
-        return this.getPassengers().size() < 4;
+    public double getTurnAltitude() {
+        return this.dataManager.get(TURN_ALTITUDE);
+    }
+
+    /**
+     * The blueprint this rocket was built from, or null if it was spawned without
+     * one.
+     */
+    public @Nullable AbstractRocketBlueprint getBlueprint() {
+        if (!this.getEntityData().hasKey("rocket")) {
+            return null;
+        }
+        NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
+        AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
+        return blueprint != null && blueprint.readFromNBT(rocketNBT) ? blueprint : null;
     }
 
     public void launchRocket() {
-        if (this.getFuel() == null) {
+        if (this.getFuel() == null || this.fueler == null) {
             setLaunchTime(-1);
             setCountdownStarted(false);
             return;
         }
+        fueler.launch();
         if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
@@ -357,6 +383,10 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         this.setLaunchTime(compound.getInteger("LaunchTime"));
         this.setFlightTime(compound.getInteger("FlightTime"));
         this.setStartPos(compound.getFloat("StartPos"));
+        // the datawatcher only syncs, so without this a fuelled rocket comes back from a
+        // reload unfuelled and silently aborts its own countdown
+        this.dataManager.set(FUEL, compound.getString("Fuel"));
+        this.dataManager.set(TURN_ALTITUDE, compound.getFloat("TurnAltitude"));
     }
 
     @Override
@@ -369,6 +399,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         compound.setInteger("LaunchTime", this.getLaunchTime());
         compound.setInteger("FlightTime", this.getFlightTime());
         compound.setFloat("StartPos", this.getStartPos());
+        compound.setString("Fuel", this.dataManager.get(FUEL));
+        compound.setFloat("TurnAltitude", this.dataManager.get(TURN_ALTITUDE));
     }
 
     @Override
@@ -378,13 +410,13 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
             if (passenger instanceof EntityPlayer player) {
                 mass += 70;
                 for (ItemStack stack : player.inventory.mainInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.armorInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.offHandInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
                     mass += (double) BaublesModule.getBaubleMass(player) / 1000;
@@ -398,5 +430,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     public AxisAlignedBB modelAABB() {
         double radius = getModelRadius();
         return new AxisAlignedBB(new Vec3d(radius, getRocketHeight(), radius), new Vec3d(-radius, 0, -radius));
+    }
+
+    protected boolean canStartCountdown() {
+        return fueler.isFuelingComplete();
     }
 }
