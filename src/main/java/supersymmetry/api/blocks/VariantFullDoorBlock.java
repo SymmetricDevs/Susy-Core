@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -53,6 +54,11 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
         return !state.getValue(OPEN);
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return !state.getValue(OPEN);
+    }
+
     public EnumPushReaction getPushReaction(IBlockState state) {
         return EnumPushReaction.DESTROY;
     }
@@ -67,10 +73,10 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
 
     @NonNull @Override
     public IBlockState getStateFromMeta(int meta) {
-        int half = meta & 0b1000 >> 3;
-        boolean open = (meta & 0b0100 >> 2) == 1;
-        boolean powered = (meta & 0b0010 >> 1) == 1;
-        int variant = meta % 2;
+        int half = (meta >> 3) & 1;
+        boolean open = ((meta >> 2) & 1) == 1;
+        boolean powered = ((meta >> 1) & 1) == 1;
+        int variant = meta & 1;
 
         return getDefaultState().withProperty(VARIANT, VALUES[variant % VALUES.length])
                 .withProperty(HALF, BlockDoor.EnumDoorHalf.values()[half])
@@ -123,10 +129,10 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
                 if (blockIn != this && (flag || blockIn.getDefaultState().canProvidePower()) &&
                         flag != ((Boolean) iblockstate1.getValue(POWERED)).booleanValue()) {
                     worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, Boolean.valueOf(flag)), 2);
+                    worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(flag)), 2);
 
                     if (flag != ((Boolean) state.getValue(OPEN)).booleanValue()) {
-                        worldIn.setBlockState(pos, state.withProperty(OPEN, Boolean.valueOf(flag)), 2);
-                        worldIn.markBlockRangeForRenderUpdate(pos, pos);
+                        setOpen(worldIn, pos, flag, 2);
                         // worldIn.playEvent((EntityPlayer)null, flag ? this.getOpenSound() : this.getCloseSound(), pos,
                         // 0);
                     }
@@ -188,12 +194,43 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
         if (iblockstate.getBlock() != this) {
             return false;
         } else {
-            state = iblockstate.cycleProperty(OPEN);
-            worldIn.setBlockState(blockpos, state, 10);
-            worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
+            setOpen(worldIn, blockpos, !iblockstate.getValue(OPEN), 10);
             // worldIn.playEvent(playerIn, ((Boolean)state.getValue(OPEN)).booleanValue() ? this.getOpenSound() :
             // this.getCloseSound(), pos, 0);
             return true;
         }
+    }
+
+    /**
+     * Sets OPEN on both halves so that each half's own state is enough for collision/rendering.
+     */
+    private void setOpen(World worldIn, BlockPos lowerPos, boolean open, int flags) {
+        BlockPos upperPos = lowerPos.up();
+        worldIn.setBlockState(lowerPos, worldIn.getBlockState(lowerPos).withProperty(OPEN, open), flags);
+        IBlockState upperState = worldIn.getBlockState(upperPos);
+        if (upperState.getBlock() == this) {
+            worldIn.setBlockState(upperPos, upperState.withProperty(OPEN, open), flags);
+        }
+        worldIn.markBlockRangeForRenderUpdate(lowerPos, upperPos);
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return blockState.getValue(OPEN) ? BlockDoor.NULL_AABB : super.getCollisionBoundingBox(blockState, worldIn, pos);
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        return FULL_BLOCK_AABB;
+    }
+
+    public boolean causesSuffocation(IBlockState state)
+    {
+        return state.isFullCube();
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return !state.getValue(OPEN);
     }
 }

@@ -2223,6 +2223,9 @@ susy.rocket.msg.inventory=Your inventory contains disallowed items (e.g. backpac
 tile.wire_coil.kanthal.name=Nichrome Coil Block
 tile.wire_coil.nichrome.name=Kanthal Coil Block
 
+tile.airlock_door.name=Airlock
+metaitem.airlock.name=Airlock
+
 # Tankless Fluid Pipes
 susy.jei.group.tankless_fluid_pipes=Direct Fluid Pipes
 item.material.oreprefix.pipeTinyTanklessFluid=Tiny %s Direct Fluid Pipe
