@@ -43,7 +43,6 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
-import supersymmetry.api.metatileentity.multiblock.SuSyMultiblockAbilities;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityLander;
@@ -201,11 +200,12 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
                 .where('A', air())
                 .where('S', selfPredicate())
                 .where('C', abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)
-                                .or(abilities(MultiblockAbility.EXPORT_ITEMS)).setPreviewCount(1)
-                                .or(abilities(MultiblockAbility.INPUT_ENERGY)).setPreviewCount(1)
-                                .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
-                                .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2).setPreviewCount(0))
-                                .or(states(getCasingState()).setMinGlobalLimited(58).setPreviewCount(59)))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS)).setPreviewCount(1)
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY)).setPreviewCount(1)
+                        .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
+                        .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2)
+                                .setPreviewCount(0))
+                        .or(states(getCasingState()).setMinGlobalLimited(58).setPreviewCount(59)))
                 .where('P', states(getPadState())).build();
     }
 

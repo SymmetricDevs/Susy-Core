@@ -230,7 +230,8 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     private Grid3D createGrid(int quarryWidth, int quarryDepth) {
         final var grid = new Grid3D(quarryWidth, 5, quarryDepth).where('M', selfPredicate())
                 .where('A', states(getCasingState()).or(autoAbilities(true, true, true, true, false, false, false)))
-                .where('S', states(getCasingState())).where('C', states(getConcreteState()).or(states(getCasingState())))
+                .where('S', states(getCasingState()))
+                .where('C', states(getConcreteState()).or(states(getCasingState())))
                 .where('F', frames(Materials.Steel)).where('G', states(getGearboxState()));
 
         // Layer 0

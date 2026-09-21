@@ -68,7 +68,8 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).setMinGlobalLimited(250)
                                 .or(states(SuSyBlocks.LUNAR_CONCRETE
                                         .getState(BlockLunarConcrete.LunarConcreteType.LUNAR_CONCRETE_SMOOTH))
-                                        .setMinGlobalLimited(250)).or(autoAbilities()))
+                                        .setMinGlobalLimited(250))
+                                .or(autoAbilities()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('C', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))
                 .where('D',

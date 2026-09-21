@@ -337,7 +337,6 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
     public static SimpleMachineMetaTileEntity[] SIMPLE_CONDENSER;
 
-
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
                 new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -760,7 +759,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityElectricDischargeMachine(susyId("electric_discharge_machine")));
 
         CARGO_DRONE_PAD = registerMetaTileEntity(18112, new MetaTileEntityCargoDronePad(susyId("cargo_drone_pad")));
-        SIMPLE_CONDENSER[0] = registerMetaTileEntity(18113, new MetaTileEntitySimpleCondenser(susyId("simple_condenser")));
+        SIMPLE_CONDENSER[0] = registerMetaTileEntity(18113,
+                new MetaTileEntitySimpleCondenser(susyId("simple_condenser")));
 
         // Locked Loot Crates
         LOCKED_HERMETICALLY_SEALED_CRATE = registerMetaTileEntity(18200,
