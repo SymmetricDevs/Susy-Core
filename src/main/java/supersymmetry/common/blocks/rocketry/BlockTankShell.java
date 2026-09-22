@@ -16,12 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.block.IStateHarvestLevel;
-import supersymmetry.api.blocks.VariantDirectionalRotatableBlock;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.ore.OrePrefix;
+import supersymmetry.api.blocks.VariantCoverableBlock;
 import supersymmetry.api.rocketry.WeightedBlock;
+import supersymmetry.common.materials.SusyMaterials;
 
-public class BlockTankShell extends VariantDirectionalRotatableBlock<BlockTankShell.TankCoverType>
-                            implements
-                            WeightedBlock<BlockTankShell.TankCoverType> {
+public class BlockTankShell extends VariantCoverableBlock<BlockTankShell.TankCoverType>
+                            implements WeightedBlock<BlockTankShell.TankCoverType> {
 
     public BlockTankShell() {
         super(net.minecraft.block.material.Material.IRON);
@@ -31,12 +33,13 @@ public class BlockTankShell extends VariantDirectionalRotatableBlock<BlockTankSh
         setSoundType(SoundType.METAL);
         setDefaultState(getState(TankCoverType.TANK_SHELL));
         setHarvestLevel("wrench", 2);
+        validCover = itemStack -> OreDictUnifier.get(OrePrefix.plate, SusyMaterials.AluminiumAlloyMg6)
+                .isItemEqual(itemStack);
     }
 
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
 
-        TANK_SHELL("al_2219", 2),
-        STEEL_SHELL("steel", 3);
+        TANK_SHELL("al_2219", 2);
 
         private String name;
         private int harvestLevel;
@@ -66,7 +69,6 @@ public class BlockTankShell extends VariantDirectionalRotatableBlock<BlockTankSh
         // Using a 4.7mm thickness
         return switch (type) {
             case TANK_SHELL -> 12.2;
-            case STEEL_SHELL -> 36.9;
         };
     }
 

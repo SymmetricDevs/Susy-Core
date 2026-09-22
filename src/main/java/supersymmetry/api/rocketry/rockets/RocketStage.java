@@ -2,48 +2,22 @@ package supersymmetry.api.rocketry.rockets;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import lombok.Setter;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.RocketEngine;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
-import supersymmetry.common.rocketry.components.ComponentLiquidFuelTank;
+import supersymmetry.common.rocketry.components.IComponentTank;
 
 public class RocketStage implements Cloneable {
-
-    public enum ComponentValidationResult {
-
-        SUCCESS("success"),
-        INVALID_CARD("invalid_card"),
-        VALIDATION_FAILURE("validation_failure"),
-        INVALID_AMOUNT(
-                "invalid_amount"),
-        INCOMPATIBLE_CARD("incompatible_card"),
-        UNKNOWN("unknown");
-
-        private String name;
-
-        ComponentValidationResult(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public String getTranslationKey() {
-            return "susy.rocketry.components.validation_codes." + this.name;
-        }
-    }
 
     public static class Builder {
 
@@ -67,15 +41,23 @@ public class RocketStage implements Cloneable {
             return this;
         }
 
+        public Builder range(int min, int max) {
+            List<Integer> possibilities = compLimit.get(lastComponentName);
+            for (int i = min; i <= max; i++) {
+                possibilities.add(i);
+            }
+            return this;
+        }
+
         public Builder stageName(String name) {
             this.name = name;
             return this;
         }
 
         public RocketStage build() {
-            return new RocketStage(compLimit.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
-                    e -> e.getValue().stream().mapToInt(Integer::intValue).toArray(), (a, b) -> a, TreeMap::new)),
-                    name);
+            Map<String, int[]> limits = new TreeMap<>();
+            compLimit.forEach((k, v) -> limits.put(k, v.stream().mapToInt(Integer::intValue).toArray()));
+            return new RocketStage(limits, name);
         }
     }
 
@@ -84,15 +66,13 @@ public class RocketStage implements Cloneable {
     // allows you to make it so it needs different types of engines for example.
     // ensures compatibility
     // between components of the same type
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationFunction = x -> {
-        return ComponentValidationResult.SUCCESS;
-    };
 
     // limits on how many of each component it can have
     public Map<String, int[]> componentLimits = new TreeMap<>();
 
     // ex "boosters" or "lander", localized with susy.rocketry.stages.name.<name
     // string>
+    @Setter
     public String name;
 
     public RocketStage(final Map<String, int[]> limits, String name) {
@@ -108,10 +88,6 @@ public class RocketStage implements Cloneable {
         this.name = "unprocessed"; // meant to be read from nbt later
     }
 
-    public Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> getComponentValidationFunction() {
-        return componentValidationFunction;
-    }
-
     public boolean isPopulated() {
         return components.values().stream().noneMatch(x -> x.isEmpty()) && !components.isEmpty();
     }
@@ -122,7 +98,7 @@ public class RocketStage implements Cloneable {
 
     public double getFuelCapacity() {
         return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("tank"))
-                .mapToInt(tank -> ((ComponentLiquidFuelTank) tank).volume).sum() * 1000; // 1000 L per m^3 by definition
+                .mapToInt(tank -> ((IComponentTank) tank).getVolume()).sum() * 1000; // 1000 L per m^3 by definition
     }
 
     // In kg/s
@@ -136,12 +112,47 @@ public class RocketStage implements Cloneable {
                 .count();
     }
 
+    /**
+     * Vacuum exhaust velocity, averaged over every engine on the stage in
+     * proportion to how much propellant each one is actually pushing. Delta-v is
+     * spent almost entirely out of the atmosphere, so the bells get judged against
+     * vacuum here even though liftoff thrust is not.
+     */
     public double getEffectiveFuelVelocity(RocketFuelEntry rocketFuelEntry) {
-        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
+        return rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0 * getNozzleEfficiency(0);
     }
 
-    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType) {
-        return getFuelThroughput(componentType) * getEffectiveFuelVelocity(rocketFuelEntry);
+    /**
+     * Flow-weighted nozzle efficiency across the stage's engines, or 1 if the stage
+     * has none to speak for it.
+     */
+    public double getNozzleEfficiency(double ambientPressure) {
+        double flow = 0;
+        double weighted = 0;
+        for (List<AbstractComponent<?>> componentList : components.values()) {
+            for (AbstractComponent<?> component : componentList) {
+                if (component instanceof RocketEngine engine) {
+                    double throughput = engine.getFuelThroughput();
+                    flow += throughput;
+                    weighted += throughput * engine.getNozzleEfficiency(ambientPressure);
+                }
+            }
+        }
+        return flow > 0 ? weighted / flow : 1;
+    }
+
+    /**
+     * Thrust from one class of engine, in N. Summed per engine rather than off the
+     * stage total, since every nozzle answers to its own expansion ratio.
+     */
+    public double getThrust(RocketFuelEntry rocketFuelEntry, String componentType, double ambientPressure) {
+        double exhaustVelocity = rocketFuelEntry.getSpecificImpulse() * SuSyValues.G0;
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals(componentType))
+                .mapToDouble(component -> {
+                    RocketEngine engine = (RocketEngine) component;
+                    return engine.getFuelThroughput() * exhaustVelocity *
+                            engine.getNozzleEfficiency(ambientPressure) * engine.getEfficiency();
+                }).sum();
     }
 
     public double getRadius() {
@@ -150,29 +161,26 @@ public class RocketStage implements Cloneable {
                 .orElse(0);
     }
 
+    public double getInterstageRadius() {
+        // Max radius, in meters
+        return components.values().stream().flatMap(List::stream).filter(c -> c.getType().equals("interstage"))
+                .mapToDouble(AbstractComponent::getRadius).findFirst().orElse(getRadius());
+    }
+
     public double getHeight() {
         // Height (again max), in meters
         return components.values().stream().flatMap(List::stream).mapToDouble(AbstractComponent::getHeight).max()
                 .orElse(0);
     }
 
-    public void setComponentValidationFunction(
-                                               Function<Tuple<String, List<AbstractComponent<?>>>, ComponentValidationResult> componentValidationPredicate) {
-        this.componentValidationFunction = componentValidationPredicate;
-    }
-
-    public void setComponentLimits(Map<String, int[]> componentLimits) {
-        if (!componentLimits.values().stream().noneMatch(arr -> arr.length == 0))
-            throw new IllegalStateException("empty limit array provided");
+    private void setComponentLimits(Map<String, int[]> componentLimits) {
+        if (componentLimits.values().stream().anyMatch(arr -> arr.length == 0))
+            throw new IllegalStateException("empty possibility array provided");
         this.componentLimits = componentLimits;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public RocketStage.ComponentValidationResult setComponentListEntry(String name,
-                                                                       List<AbstractComponent<?>> componentList) {
+    public ComponentValidationResult setComponentListEntry(String name,
+                                                           List<AbstractComponent<?>> componentList) {
         if (componentList.stream().anyMatch(x -> x.materials.isEmpty())) {
             SusyLog.logger.info("empty material list in entry {}", name);
         }
@@ -180,10 +188,6 @@ public class RocketStage implements Cloneable {
             return ComponentValidationResult.INVALID_AMOUNT; // fail if you cant put that amount of components is
             // invalid
         }
-        ComponentValidationResult validation_result = componentValidationFunction
-                .apply(new Tuple<>(name, componentList));
-        if (validation_result != ComponentValidationResult.SUCCESS)
-            return validation_result;
         components.put(name, componentList);
         return ComponentValidationResult.SUCCESS;
     }
@@ -269,8 +273,12 @@ public class RocketStage implements Cloneable {
             for (int i = 0; i < componentIndexes.length; i++) {
                 NBTTagCompound componentTag = (NBTTagCompound) lookup
                         .getTag(Integer.valueOf(componentIndexes[i]).toString());
-                Optional<? extends AbstractComponent<?>> extractedComponent = AbstractComponent
-                        .getComponentFromName(componentTag.getString("name")).readFromNBT(componentTag);
+                AbstractComponent<?> prototype = AbstractComponent.getComponentFromName(componentTag.getString("name"));
+                if (prototype == null) {
+                    // component was removed from the mod since this blueprint was saved
+                    continue;
+                }
+                Optional<? extends AbstractComponent<?>> extractedComponent = prototype.readFromNBT(componentTag);
                 if (extractedComponent.isPresent()) {
                     realComponents.add(extractedComponent.get());
                 } else {

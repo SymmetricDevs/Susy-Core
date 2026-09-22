@@ -30,6 +30,7 @@ import gregtech.common.blocks.StoneVariantBlock;
 import supersymmetry.api.metatileentity.multiblock.FluidRenderRecipeMapMultiBlock;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.blocks.BlockLunarConcrete;
 import supersymmetry.common.blocks.BlockMultiblockTank;
 import supersymmetry.common.blocks.SuSyBlocks;
 
@@ -65,6 +66,9 @@ public class MetaTileEntityClarifier extends FluidRenderRecipeMapMultiBlock {
                 .where('A',
                         states(MetaBlocks.STONE_BLOCKS.get(StoneVariantBlock.StoneVariant.SMOOTH)
                                 .getState(StoneVariantBlock.StoneType.CONCRETE_LIGHT)).setMinGlobalLimited(250)
+                                .or(states(SuSyBlocks.LUNAR_CONCRETE
+                                        .getState(BlockLunarConcrete.LunarConcreteType.LUNAR_CONCRETE_SMOOTH))
+                                        .setMinGlobalLimited(250))
                                 .or(autoAbilities()))
                 .where('B', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID)))
                 .where('C', states(MetaBlocks.BOILER_CASING.getState((BoilerCasingType.STEEL_PIPE))))

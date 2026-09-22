@@ -23,6 +23,7 @@ import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.ItemMaterialInfo;
+import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
@@ -205,8 +206,20 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             currentMass += (int) (info.getMaterials().stream()
                     .mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() / (GTValues.M / 36));
         } else {
-            currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
+            MaterialStack stack = OreDictUnifier.getMaterial(item);
+            if (stack != null) {
+                currentMass += (int) (stack.material.getMass() * stack.amount / (GTValues.M / 36));
+            } else {
+                currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
+            }
         }
+        // deliberately set masses should override the generated ones, but still take fluids into account
+        if (ItemMassRegistry.getMass(item) != null) {
+            if (ItemMassRegistry.getMass(item) != 0) {
+                currentMass = ItemMassRegistry.getMass(item);
+            }
+        }
+
         NBTTagCompound tag = item.getTagCompound();
         IFluidHandlerItem fluidHandlerItem = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
                 null);
@@ -220,6 +233,10 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             currentMass += getFluidMass(fluid);
         }
         return currentMass;
+    }
+
+    public static int getMass(ItemStack item) {
+        return getMassPerItem(item) * item.getCount();
     }
 
     private static int getFluidMass(FluidStack fluid) {

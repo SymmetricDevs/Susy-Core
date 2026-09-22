@@ -20,12 +20,17 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.modules.ModuleManager;
+import supersymmetry.Supersymmetry;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 import supersymmetry.common.rocketry.RocketConfiguration;
+import supersymmetry.integration.baubles.BaublesModule;
+import supersymmetry.modules.SuSyModules;
 
 public abstract class EntityAbstractRocket extends EntityLivingBase {
 
@@ -121,10 +126,25 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     public void startCountdown(int length) {
+        if (!canStartCountdown()) {
+            return;
+        }
         this.setCountdownStarted(true);
         // it will take six years chillax
         this.setLaunchTime((int) this.world.getTotalWorldTime() + length);
         this.setStartPos((float) this.posY);
+    }
+
+    protected boolean canStartCountdown() {
+        return true;
+    }
+
+    public void sendMessageToPassengers(TextComponentTranslation translation) {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(translation, true);
+            }
+        }
     }
 
     public void launchRocket() {
@@ -149,7 +169,9 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         for (String key : instruments.getKeySet()) {
             BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.getInstrument(key);
             int count = instruments.getInteger(key);
-            instrument.act(count, this);
+            if (instrument != null) {
+                instrument.act(count, this);
+            }
         }
         for (Entity passenger : this.getPassengers()) {
             if (!EventHandlers.isEntityTravelling(passenger)) {
@@ -198,6 +220,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public abstract RocketFuelEntry getFuel();
 
+    public abstract double getTurnAltitude();
+
     public abstract double getCargoMass();
 
     @Override
@@ -234,6 +258,13 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
             player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.launch",
                     (getLaunchTime() - this.world.getTotalWorldTime()) / 20), true);
         }
+        // apparently you need the first thing
+        if (!passenger.world.isRemote && hasDisallowedItem(passenger)) {
+            passenger.dismountRidingEntity();
+            if (passenger instanceof EntityPlayer player) {
+                player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.inventory"), true);
+            }
+        }
     }
 
     @Override
@@ -250,5 +281,40 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
 
     public CargoItemStackHandler getInventory() {
         return this.cargo;
+    }
+
+    @Override
+    protected boolean canFitPassenger(Entity passenger) {
+        if (hasDisallowedItem(passenger) && passenger instanceof EntityPlayer player) {
+            player.sendStatusMessage(new TextComponentTranslation("susy.rocket.msg.inventory"), true);
+            return false;
+        }
+        return this.getPassengers().size() < 4;
+    }
+
+    protected static boolean hasDisallowedItem(Entity passenger) {
+        if (passenger instanceof EntityPlayer player) {
+            for (ItemStack stack : player.inventory.mainInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            for (ItemStack stack : player.inventory.armorInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            for (ItemStack stack : player.inventory.offHandInventory) {
+                if (!SuSyUtility.isAllowedItemForSpace(stack)) {
+                    return true;
+                }
+            }
+            if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
+                if (!BaublesModule.areBaublesAllowed(player)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

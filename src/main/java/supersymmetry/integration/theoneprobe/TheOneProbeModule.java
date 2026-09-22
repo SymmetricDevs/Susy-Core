@@ -28,6 +28,7 @@ public class TheOneProbeModule extends IntegrationSubmodule {
         oneProbe.registerProvider(new DelegatorInfoProvider());
         oneProbe.registerProvider(new StrandShaperInfoProvider());
         oneProbe.registerProvider(new SolarPanelInfoProvider());
+        oneProbe.registerProvider(new SolarFurnaceInfoProvider());
         if (Loader.isModLoaded(SuSyValues.MODID_LITTLE_TILES)) {
             oneProbe.registerProvider(new LittleTilesStorageInfoProvider());
         }

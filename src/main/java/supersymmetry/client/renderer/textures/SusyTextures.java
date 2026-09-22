@@ -20,6 +20,7 @@ public class SusyTextures {
             "casings/wooden_coagulation_tank_wall");
     public static final SimpleSidedCubeRenderer PLASTIC_CAN_OVERLAY = new SimpleSidedCubeRenderer(
             "storage/drums/plastic_can_top");
+
     public static final SimpleSidedCubeRenderer INV_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv");
     public static final SimpleSidedCubeRenderer TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/tank");
     public static final SimpleSidedCubeRenderer INV_TANK_BRIDGE = new SimpleSidedCubeRenderer(
@@ -199,6 +200,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
+    public static final OrientedOverlayRenderer SOLAR_FURNACE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/solar_furnace");
 
     public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/launch_pad");

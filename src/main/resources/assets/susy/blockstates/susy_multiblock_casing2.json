@@ -1,0 +1,19 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "model": "minecraft:cube_bottom_top",
+    "textures": {
+      "bottom": "gregtech:blocks/multiblock_casing/light_stainless_casing",
+      "top": "gregtech:blocks/multiblock_casing/light_stainless_casing",
+      "side": "gregtech:blocks/multiblock_casing/light_stainless_casing"
+    }
+  },
+  "variants" : {
+    "variant=light_stainless_casing": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/multiblock_casing/light_stainless_casing"
+      }
+    }
+  }
+}

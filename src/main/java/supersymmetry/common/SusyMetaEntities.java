@@ -11,7 +11,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.client.renderer.handler.LanderRenderer;
 import supersymmetry.client.renderer.handler.entity.DroneRenderer;
 import supersymmetry.client.renderer.handler.entity.DropPodRenderer;
-import supersymmetry.client.renderer.handler.entity.RocketRenderer;
+import supersymmetry.client.renderer.handler.entity.SusyOBJRenderer;
 import supersymmetry.common.entities.*;
 
 public class SusyMetaEntities {
@@ -29,6 +29,8 @@ public class SusyMetaEntities {
                 "Explosion", 5, Supersymmetry.instance, 64, 3, false);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"),
                 EntityLunarRocket.class, "Lunar Rocket", 6, Supersymmetry.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "earth_landing_system"),
+                EntityEarthLandingSystem.class, "Earth Landing System", 7, Supersymmetry.instance, 64, 3, true);
     }
 
     @SideOnly(Side.CLIENT)
@@ -37,8 +39,10 @@ public class SusyMetaEntities {
         RenderingRegistry.registerEntityRenderingHandler(EntityLander.class, LanderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDrone.class, DroneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntitySoyuzBasic.class,
-                manager -> new RocketRenderer<>(manager, SuSyValues.modelRocket));
+                manager -> new SusyOBJRenderer<>(manager, SuSyValues.modelRocket));
         RenderingRegistry.registerEntityRenderingHandler(EntityLunarRocket.class,
-                manager -> new RocketRenderer<>(manager, SuSyValues.modelLunarRocket));
+                manager -> new SusyOBJRenderer<>(manager, SuSyValues.modelLunarRocket));
+        RenderingRegistry.registerEntityRenderingHandler(EntityEarthLandingSystem.class,
+                manager -> new SusyOBJRenderer<>(manager, SuSyValues.modelEarthLandingSystem));
     }
 }

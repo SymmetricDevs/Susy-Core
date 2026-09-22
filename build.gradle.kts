@@ -8,11 +8,16 @@ plugins {
     alias(conventions.plugins.shadow)
     alias(conventions.plugins.jvmdg)
     alias(conventions.plugins.idea)
+    eclipse
     alias(conventions.plugins.test)
     alias(conventions.plugins.jvm)
 }
 
 repositories {
+    maven {
+        name = "tterrag Maven"
+        url = uri("https://maven.tterrag.com/")
+    }
     maven {
         name = "GeckoLib"
         url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
@@ -64,7 +69,7 @@ dependencies {
     // CTM 1.0.2.31
     api(deps.craftTweaker2)
     api(deps.ae2Uel) { isTransitive = false }
-    api(deps.ctm.deobf())
+    api(deps.ctm)
 
     // # GregTech Addons
     // Supercritical 0.2.5
