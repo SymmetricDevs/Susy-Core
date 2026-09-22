@@ -146,4 +146,16 @@ public class SusyGuiTextures {
     public static final UITexture ICON_LEFT = UITexture.builder()
             .location(GTValues.MODID, "textures/gui/terminal/icon/left_hover.png").name("left_button").canApplyTheme()
             .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_ORBIT = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/widget/icon_orbit.png").name("orbit")
+            .build();
+
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "GTCEu 2.9")
+    public static final UITexture ICON_LANDING = UITexture.builder()
+            .location(GTValues.MODID, "textures/gui/widget/icon_landing.png").name("landing")
+            .build();
 }

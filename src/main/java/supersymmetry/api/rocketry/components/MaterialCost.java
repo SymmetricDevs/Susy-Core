@@ -60,6 +60,10 @@ public class MaterialCost {
         return count;
     }
 
+    public ItemStack getStack() {
+        return stack;
+    }
+
     public GTRecipeInput toIngredient() {
         return new GTRecipeItemInput(stack.copy(), count);
     }

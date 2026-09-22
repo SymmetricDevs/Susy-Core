@@ -230,7 +230,8 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     private Grid3D createGrid(int quarryWidth, int quarryDepth) {
         final var grid = new Grid3D(quarryWidth, 5, quarryDepth).where('M', selfPredicate())
                 .where('A', states(getCasingState()).or(autoAbilities(true, true, true, true, false, false, false)))
-                .where('S', states(getCasingState())).where('C', states(getConcreteState()))
+                .where('S', states(getCasingState()))
+                .where('C', states(getConcreteState()).or(states(getCasingState())))
                 .where('F', frames(Materials.Steel)).where('G', states(getGearboxState()));
 
         // Layer 0
@@ -326,8 +327,11 @@ public class MetaTileEntityQuarry extends RecipeMapMultiblockController {
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         var builder = new MultiblockShapeInfo.Builder();
-        builder.where('M', SuSyMetaTileEntities.QUARRY, EnumFacing.SOUTH).where('A', getCasingState())
-                .where('S', getCasingState()).where('C', getConcreteState()).where('F', getSteelFrameState())
+        builder.where('M', SuSyMetaTileEntities.QUARRY, EnumFacing.SOUTH)
+                .where('A', getCasingState())
+                .where('S', getCasingState())
+                .where('C', getConcreteState())
+                .where('F', getSteelFrameState())
                 .where('G', getGearboxState())
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)

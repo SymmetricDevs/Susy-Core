@@ -1,43 +1,70 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static gregtech.api.metatileentity.MetaTileEntityHolder.TRACKED_TICKS;
 import static supersymmetry.api.blocks.VariantHorizontalRotatableBlock.FACING;
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.heliostats;
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.*;
+import static supersymmetry.common.blocks.BlockEpoxySolarFurnaceMirror.MIRROR_SIDES;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.BENEATH_ID;
+import static supersymmetry.common.event.DimensionBreathabilityHandler.NETHER_ID;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GTValues;
+import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.pattern.*;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
+import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.MetaBlocks;
-import supersymmetry.api.capability.impl.NoEnergyMultiblockRecipeLogic;
+import gregtech.common.metatileentities.MetaTileEntities;
+import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
+import supersymmetry.api.recipes.properties.SolarFurnaceMinPowerProperty;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.common.blocks.BlockSolarFurnaceMirror;
-import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.blocks.*;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.util.RecipeCheckUtils;
 
 public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
 
-    public static final int MAX_HELIOSTAT_DISTANCE = 21;
-    private int timer = Math.round(getOffsetTimer());
+    public static final int WATTS_PER_HELIOSTAT = 2000;
+    public int numValidHeliostats = 0;
+    public int currentPower = 0;
+    public boolean hasEnoughPower = false;
+
+    private final int[] recipeSpeedStats = new int[TRACKED_TICKS];
+    private int statsIndex = 0;
 
     public MetaTileEntitySolarFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.SOLAR_FURNACE_RECIPES);
-        this.recipeMapWorkable = new NoEnergyMultiblockRecipeLogic(this);
+        this.recipeMapWorkable = new SolarFurnaceRecipeLogic(this);
     }
 
     @Override
@@ -45,119 +72,247 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
         return new MetaTileEntitySolarFurnace(metaTileEntityId);
     }
 
-    @Override
+    @NotNull @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("      FFF      ", "       F       ", "               ", "               ", "               ",
-                        "               ", "               ", "               ", "               ", "               ",
-                        "               ")
-                .aisle("               ", "       F       ", "       F       ", "               ", "               ",
-                        "               ", "               ", "               ", "               ", "               ",
-                        "               ")
-                .aisle("               ", "               ", "       F       ", "       F       ", "               ",
-                        "               ", "               ", "               ", "               ", "               ",
-                        "               ")
-                .aisle("FF           FF", "F             F", "               ", "       F       ", "       F       ",
-                        "               ", "               ", "               ", "               ", "               ",
-                        "               ")
-                .aisle("F             F", "       F       ", " F     F     F ", " F   FFFFF   F ", "       F       ",
-                        "       F       ", "               ", "               ", "               ", "               ",
-                        "               ")
-                .aisle("     FFFFF     ", "      MMM      ", "     MMMMM     ", "  FFFMMMMMFFF  ", "  F  MMMMM  F  ",
-                        "  F   MMM   F  ", "       F       ", "       F       ", "               ", "               ",
-                        "               ")
-                .aisle("    FMMMMMF    ", "    MM###MM    ", "   MM#####MM   ", " FFMM#####MMFF ", "   MM#####MM   ",
-                        "    MM###MM    ", "   FMMMMMMMF   ", "   F  MMM  F   ", "       F       ", "       F       ",
-                        "               ")
-                .aisle("  FFM#####MFF  ", "  MM#######MM  ", " MM#########MM ", "FMM#########MMF", " MM#########MM ",
-                        "  MM#######MM  ", "   M#######M   ", "   MMM###MMM   ", "    F MMM F    ", "    F  M  F    ",
-                        "      FFF      ")
-                .aisle(" FMM#######MMF ", " M###########M ", "M#############M", "M#############M", "M#############M",
-                        " M###########M ", " MM#########MM ", "  M#########M  ", "  MMMM###MMMM  ", "    MMM#MMM    ",
-                        "     FMMMF     ")
-                .aisle(" M###########M ", "M#############M", "###############", "###############", "###############",
-                        "M#############M", "M#############M", " M###########M ", " M###########M ", "  MM#######MM  ",
-                        "    MM###MM    ")
-                .aisle("M#############M", "###############", "###############", "###############", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("#######I#######", "###############", "###############", "###############", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("####### #######", "#######I#######", "###############", "###############", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("#####I   I#####", "######I I######", "#######I#######", "#######C#######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("##### # # #####", "###### I ######", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("#####  S  #####", "######   ######", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "H#H#H#   #H#H#H", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "####### #######", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "H#H#H#H H#H#H#H", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "####### #######", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "H#H#H#H H#H#H#H", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "###############",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "H#H#H#H#H#H#H#H",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "###############", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "H#H#H#H#H#H#H#H", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "###############", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "H#H#H#H#H#H#H#H", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", " ############# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", " #H#H#H#H#H#H# ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", "               ", " ############# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", "               ", " #H#H#H#H#H#H# ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", "               ", "               ", "  ###########  ",
-                        "    #######    ")
-                .aisle("               ", "               ", "               ", "               ", "               ",
-                        "               ", "               ", "               ", "               ", "  H#H#H#H#H#H  ",
-                        "    #######    ")
-                .where('S', selfPredicate()).where('F', frames(Materials.Aluminium))
-                .where('I', frames(Materials.Aluminium).or(autoAbilities(false, true, true, true, true, true, false)))
-                .where('C', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.TUNGSTENSTEEL_ROBUST)))
-                .where('M', epoxyMirrorOrientation().or(steelMirrorOrientation()))
-                .where('H', heliostats(RelativeDirection.LEFT)).where('#', air()).where(' ', any()).build();
+                // spotless:off
+                .aisle("      RRR      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("   RRRRRRRRR   ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle(" RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "    RRRRRRR    ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "  RRRRRRRRRRR  ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRBBARRRRRR", "RRRRRBBBAARRRRR", " RRRRBBBAARRRR ", "   RRDDDCCRR   ", "      DDC      ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRBBBAARRRRR", "RRRRBB###AARRRR", "RRRBB#####AARRR", "RRRBB#####AARRR", "  RDD#####CCR  ", "    DD###CC    ", "    DDDDCCC    ", "      DDC      ", "               ", "               ", "               ")
+                .aisle("RRRRB#####ARRRR", "RRBB#######AARR", "RBB#########AAR", "RBB#########AAR", " DD#########CC ", "  DD#######CC  ", "   D#######C   ", "   DDD###CCC   ", "      DDC      ", "      DDC      ", "               ")
+                .aisle("RRBB#######AARR", "RB###########AR", "B#############A", "B#############A", "D#############C", " D###########C ", " DD#########CC ", "  D#########C  ", "  DDDD###CCCC  ", "    DD###CC    ", "      DDC      ")
+                .aisle("RB###########AR", "B#############A", "###############", "###############", "###############", "D#############C", "D#############C", " D###########C ", " D###########C ", "  DD#######CC  ", "    DD###CC    ")
+                .aisle("B#############A", "###############", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("###IIIIIIIII###", "###############", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#IIIIIIIIIIIII#", "#######I#######", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("IIIIIIIIIIIIIII", "######IRI######", "#######U#######", "#######X#######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#IIIIIIIIIIIII#", "###### I ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("###IIIISIIII###", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "H#H#H#   #H#H#H", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "H#H#H#H H#H#H#H", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "H#H#H#H H#H#H#H", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "H#H#H#H#H#H#H#H", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "H#H#H#H#H#H#H#H", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "H#H#H#H#H#H#H#H", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " #H#H#H#H#H#H# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " #H#H#H#H#H#H# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  H#H#H#H#H#H  ", "    #######    ")
+                //spotless:on
+                .where('S', selfPredicate())
+                .where('R', states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND))
+                        .or(states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
+                        .or(states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP))))
+                .where('I', states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND))
+                        .or(states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.LOWLAND)))
+                        .or(states(SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.KREEP)))
+                        .or(autoAbilities(false, true, true,
+                                true, true, true, false)))
+                .where('H', heliostat(this).or(air()))
+                .where('#', air())
+                .where('X', redirectingMirrorOrientation())
+                .where('U',
+                        states(SuSyBlocks.SOLAR_FURNACE_CRUCIBLE
+                                .getState(BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType.DEFAULT)))
+                .where(' ', any())
+                .where('A', epoxyMirror(this, EnumMirrorSides.TOP_RIGHT)
+                        .or(steelMirror(this, EnumMirrorSides.TOP_RIGHT)))
+                .where('B', epoxyMirror(this, EnumMirrorSides.TOP_LEFT)
+                        .or(steelMirror(this, EnumMirrorSides.TOP_LEFT)))
+                .where('C', epoxyMirror(this, EnumMirrorSides.BOTTOM_RIGHT)
+                        .or(steelMirror(this, EnumMirrorSides.BOTTOM_RIGHT)))
+                .where('D', epoxyMirror(this, EnumMirrorSides.BOTTOM_LEFT)
+                        .or(steelMirror(this, EnumMirrorSides.BOTTOM_LEFT)))
+                .build();
+    }
+
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() { // FIXME: the rotations are all wrong no matter what is set
+                                                           // here
+        ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>(); // the alternator coils were for testing, the
+                                                                      // issue seems to only happen with blocks that are
+                                                                      // part of the structure already?
+        MultiblockShapeInfo.Builder baseBuilder = MultiblockShapeInfo.builder()
+                .where('S', SuSyMetaTileEntities.SOLAR_FURNACE, EnumFacing.SOUTH)
+                .where('>', SuSyBlocks.HELIOSTAT.getDefaultState().withProperty(FACING, EnumFacing.NORTH))
+                .where('X', SuSyBlocks.SOLAR_FURNACE_REDIRECTING_MIRROR.getState(
+                        BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType.DEFAULT, EnumFacing.SOUTH))
+                .where('A',
+                        SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
+                                .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_RIGHT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('B',
+                        SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
+                                .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_LEFT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('C',
+                        SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
+                                .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_RIGHT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('D',
+                        SuSyBlocks.EPOXY_SOLAR_FURNACE_MIRROR
+                                .getState(BlockEpoxySolarFurnaceMirror.EpoxyMirrorType.EPOXY)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_LEFT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('a',
+                        SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
+                                .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_RIGHT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('b',
+                        SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
+                                .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.TOP_LEFT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('c',
+                        SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
+                                .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_RIGHT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('d',
+                        SuSyBlocks.STEEL_SOLAR_FURNACE_MIRROR
+                                .getState(BlockSteelSolarFurnaceMirror.SteelMirrorType.STEEL)
+                                .withProperty(MIRROR_SIDES, EnumMirrorSides.BOTTOM_LEFT)
+                                .withProperty(BlockDirectional.FACING, EnumFacing.SOUTH))
+                .where('U',
+                        SuSyBlocks.SOLAR_FURNACE_CRUCIBLE
+                                .getState(BlockSolarFurnaceCrucible.SolarFurnaceCrucibleType.DEFAULT))
+                .where('R', SuSyBlocks.REGOLITH.getState(BlockRegolith.BlockRegolithType.HIGHLAND))
+                .where('F', MetaBlocks.FRAMES.get(Materials.Aluminium).getBlock(Materials.Aluminium))
+                .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.EV], EnumFacing.SOUTH)
+                .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.EV], EnumFacing.SOUTH)
+                .where('i', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.EV], EnumFacing.SOUTH)
+                .where('o', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.EV], EnumFacing.SOUTH)
+                .where('M', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
+                        MetaBlocks.FRAMES.get(Materials.Aluminium).getBlock(Materials.Aluminium), EnumFacing.SOUTH);
+        shapeInfo.add(baseBuilder.shallowCopy()
+                // spotless:off
+                .aisle("      RRR      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("   RRRRRRRRR   ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle(" RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "    RRRRRRR    ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "  RRRRRRRRRRR  ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "     RRRRR     ", "               ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRBBARRRRRR", "RRRRRBBBAARRRRR", " RRRRBBBAARRRR ", "   RRDDDCCRR   ", "      DDC      ", "               ", "               ", "               ", "               ", "               ")
+                .aisle("RRRRRBBBAARRRRR", "RRRRBB###AARRRR", "RRRBB#####AARRR", "RRRBB#####AARRR", "  RDD#####CCR  ", "    DD###CC    ", "    DDDDCCC    ", "      DDC      ", "               ", "               ", "               ")
+                .aisle("RRRRB#####ARRRR", "RRBB#######AARR", "RBB#########AAR", "RBB#########AAR", " DD#########CC ", "  DD#######CC  ", "   D#######C   ", "   DDD###CCC   ", "      DDC      ", "      DDC      ", "               ")
+                .aisle("RRBB#######AARR", "RB###########AR", "B#############A", "B#############A", "D#############C", " D###########C ", " DD#########CC ", "  D#########C  ", "  DDDD###CCCC  ", "    DD###CC    ", "      DDC      ")
+                .aisle("RB###########AR", "B#############A", "###############", "###############", "###############", "D#############C", "D#############C", " D###########C ", " D###########C ", "  DD#######CC  ", "    DD###CC    ")
+                .aisle("B#############A", "###############", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("###RRRRRRRRR###", "###############", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#RRRRRRRRRRRRR#", "#######R#######", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("RRRRRRRRRRRRRRR", "######iRo######", "#######U#######", "#######X#######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#RRRRRRRRRRRRR#", "###### M ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("###RRRISORRR###", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", ">#>#>#   #>#>#>", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", ">#>#>#> >#>#>#>", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", ">#>#>#> >#>#>#>", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " #>#>#>#>#>#># ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " #>#>#>#>#>#># ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  >#>#>#>#>#>  ", "    #######    ")
+                .build());
+        shapeInfo.add(baseBuilder.shallowCopy()
+                .aisle("      RRR      ", "               ", "               ", "               ", "               ","               ", "               ", "               ", "               ", "               ","               ")
+                .aisle("   RRRRRRRRR   ", "     RRRRR     ", "               ", "               ", "               ","               ", "               ", "               ", "               ", "               ","               ")
+                .aisle(" RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "    RRRRRRR    ", "               ", "               ","               ", "               ", "               ", "               ", "               ","               ")
+                .aisle("RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "  RRRRRRRRRRR  ", "     RRRRR     ", "               ","               ", "               ", "               ", "               ", "               ","               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRR", " RRRRRRRRRRRRR ", "   RRRRRRRRR   ", "     RRRRR     ","               ", "               ", "               ", "               ", "               ","               ")
+                .aisle("RRRRRRRRRRRRRRR", "RRRRRRbbaRRRRRR", "RRRRRbbbaaRRRRR", " RRRRbbbaaRRRR ", "   RRdddccRR   ","      ddc      ", "               ", "               ", "               ", "               ","               ")
+                .aisle("RRRRRbbbaaRRRRR", "RRRRbb###aaRRRR", "RRRbb#####aaRRR", "RRRbb#####aaRRR", "  Rdd#####ccR  ","    dd###cc    ", "    ddddccc    ", "      ddc      ", "               ", "               ","               ")
+                .aisle("RRRRb#####aRRRR", "RRbb#######aaRR", "Rbb#########aaR", "Rbb#########aaR", " dd#########cc ","  dd#######cc  ", "   d#######c   ", "   ddd###ccc   ", "      ddc      ", "      ddc      ","               ")
+                .aisle("RRbb#######aaRR", "Rb###########aR", "b#############a", "b#############a", "d#############c"," d###########c ", " dd#########cc ", "  d#########c  ", "  dddd###cccc  ", "    dd###cc    ","      ddc      ")
+                .aisle("Rb###########aR", "b#############a", "###############", "###############", "###############","d#############c", "d#############c", " d###########c ", " d###########c ", "  dd#######cc  ","    dd###cc    ")
+                .aisle("b#############a", "###############", "###############", "###############", "###############","###############", "###############", " ############# ", " ############# ", "  ###########  ","    #######    ")
+                .aisle("###RRRRRRRRR###", "###############", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#RRRRRRRRRRRRR#", "#######R#######", "###############", "###############", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("RRRRRRRRRRRRRRR", "######iRo######", "#######U#######", "#######X#######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("#RRRRRRRRRRRRR#", "###### M ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("###RRRISORRR###", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "######   ######", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", ">#>#>#   #>#>#>", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "####### #######", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", ">#>#>#> >#>#>#>", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "####### #######", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", ">#>#>#> >#>#>#>", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "###############", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "###############", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "###############", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", ">#>#>#>#>#>#>#>", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", " #>#>#>#>#>#># ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " ############# ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", " #>#>#>#>#>#># ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  ###########  ", "    #######    ")
+                .aisle("               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "  >#>#>#>#>#>  ", "    #######    ")
+                .build());
+                //spotless:on
+        return shapeInfo;
+    }
+
+    public enum EnumMirrorSides implements IStringSerializable {
+
+        TOP_LEFT("top_left"),
+        TOP_RIGHT("top_right"),
+        BOTTOM_LEFT("bottom_left"),
+        BOTTOM_RIGHT("bottom_right");
+
+        public static EnumMirrorSides fromInteger(int number) {
+            switch (number) {
+                case 1:
+                    return TOP_RIGHT;
+                case 2:
+                    return BOTTOM_LEFT;
+                case 3:
+                    return BOTTOM_RIGHT;
+                default:
+                    return TOP_LEFT;
+            }
+        }
+
+        private final String name;
+
+        private EnumMirrorSides(String name) {
+            this.name = name;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
     @Override
@@ -165,25 +320,26 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
         return Textures.FROST_PROOF_CASING;
     }
 
-    @NonNull @Override
+    @NotNull @Override
     protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.HEAT_EXCHANGER_OVERLAY;
+        return SusyTextures.SOLAR_FURNACE_OVERLAY;
     }
 
-    protected IBlockState epoxyMirrorState() {
-        return SuSyBlocks.SOLAR_FURNACE_MIRROR.getState(BlockSolarFurnaceMirror.SolarFurnaceMirrorType.EPOXY);
+    protected List<BlockPos> heliostats;
+
+    @Override
+    protected void formStructure(PatternMatchContext context) {
+        this.heliostats = context.getOrDefault("HeliostatPositions", new LinkedList<>());
+        super.formStructure(context);
     }
 
-    protected TraceabilityPredicate epoxyMirrorOrientation() {
-        return SuSyPredicates.horizontalOrientation(this, epoxyMirrorState(), RelativeDirection.FRONT, FACING);
+    protected IBlockState redirectingMirrorState() {
+        return SuSyBlocks.SOLAR_FURNACE_REDIRECTING_MIRROR
+                .getState(BlockSolarFurnaceRedirectingMirror.SolarFurnaceRedirectingMirrorType.DEFAULT);
     }
 
-    protected IBlockState steelMirrorState() {
-        return SuSyBlocks.SOLAR_FURNACE_MIRROR.getState(BlockSolarFurnaceMirror.SolarFurnaceMirrorType.STEEL);
-    }
-
-    protected TraceabilityPredicate steelMirrorOrientation() {
-        return SuSyPredicates.horizontalOrientation(this, steelMirrorState(), RelativeDirection.FRONT, FACING);
+    protected TraceabilityPredicate redirectingMirrorOrientation() {
+        return SuSyPredicates.orientation(this, redirectingMirrorState(), RelativeDirection.BACK, FACING);
     }
 
     @Override
@@ -194,109 +350,200 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
     @Override
     public void update() {
         super.update();
-        timer = timer % 200;
-        timer++;
-        if (timer >= 200) {
+        if (getOffsetTimer() % 75 == 0 && isStructureFormed()) {
+            numValidHeliostats = getNumOfValidHeliostats();
+        }
+        currentPower = WATTS_PER_HELIOSTAT * numValidHeliostats;
 
+        if (this.getWorld().provider.getDimension() == 0) {
+            currentPower /= 8;
+        }
+
+        if (this.getWorld().provider.getDimension() == BENEATH_ID ||
+                this.getWorld().provider.getDimension() == NETHER_ID) {
+            currentPower = 0;
         }
     }
 
-    public BlockPos findHeliostat(BlockPos currentBlock, EnumFacing checkDir) {
-        for (int i = 0; i < MAX_HELIOSTAT_DISTANCE; i++) {
-            if (getWorld().getBlockState(currentBlock).getBlock() == SuSyBlocks.HELIOSTAT) {
-                return currentBlock;
+    public int getNumOfValidHeliostats() {
+        World world = this.getWorld();
+        int i = 0;
+        if (heliostats != null && !heliostats.isEmpty()) {
+            for (BlockPos pos : heliostats) {
+                if (world.getBlockState(pos).getBlock() == SuSyBlocks.HELIOSTAT && getWorld().canSeeSky(pos)) {
+                    i++;
+                }
             }
-            currentBlock.offset(checkDir);
         }
-        return null;
+        return i;
     }
 
-    public boolean checkHeliostatValidity(BlockPos checkPos) {
-        return false;
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        textList.add(new TextComponentTranslation("susy.multiblock.solar_furnace.num_heliostats", numValidHeliostats));
+        textList.add(new TextComponentTranslation("susy.multiblock.solar_furnace.current_power", currentPower / 1000));
+        textList.add(new TextComponentTranslation("susy.multiblock.solar_furnace.average_speed", getAverageSpeed()));
     }
-    /*
-     * public class SolarFurnaceRecipeLogic extends MultiblockRecipeLogic {
-     * 
-     * private int recipeJt; private int heatBuffer = 0; private boolean isHeating =
-     * false; private boolean isHalted;
-     * 
-     * public SolarFurnaceRecipeLogic(RecipeMapMultiblockController tileEntity) {
-     * super(tileEntity); }
-     * 
-     * @Override public boolean checkRecipe(@NotNull Recipe recipe) { return
-     * super.checkRecipe(recipe) &&
-     * recipe.hasProperty(EvaporationEnergyProperty.getInstance()); }
-     * 
-     * @Override protected void setupRecipe(Recipe recipe) {
-     * super.setupRecipe(recipe); this.recipeJt =
-     * recipe.getProperty(EvaporationEnergyProperty.getInstance(), 0); // TODO: is
-     * this correct? this.heatBuffer = 0; }
-     * 
-     * /// Do not overclock
-     * 
-     * @Override protected int @NotNull [] calculateOverclock(@NotNull Recipe
-     * recipe) { return new int[] { recipe.getEUt(), recipe.getDuration() }; }
-     * 
-     * @Override protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
-     * return true; }
-     * 
-     * @Override protected void updateRecipeProgress() { if (this.canRecipeProgress)
-     * { int baseHeat = getHeatFromSunlight() + heatBuffer; int coilHeat = 0; int
-     * maxEnergy2Draw = (int) Math.min(Math.min(getEnergyStored(),
-     * getMaxEnergyInput()), getMaxHeatFromCoils() / SuSyUtility.JOULES_PER_EU); if
-     * (drawEnergy(maxEnergy2Draw, true)) { drawEnergy(maxEnergy2Draw, false);
-     * coilHeat = maxEnergy2Draw * SuSyUtility.JOULES_PER_EU; }
-     * 
-     * int totalHeat = (baseHeat + coilHeat); int remainingHeat = totalHeat %
-     * getRecipeJt(); int maxProgress = totalHeat / getRecipeJt();
-     * 
-     * updateSpeedStats(maxProgress);
-     * 
-     * boolean halted = maxProgress == 0; if (this.isHalted != halted) {
-     * this.isHalted = halted; writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf
-     * -> buf.writeBoolean(halted)); } this.isHeating = coilHeat > 0;
-     * 
-     * this.progressTime += maxProgress; this.heatBuffer = remainingHeat; if
-     * (this.progressTime > this.maxProgressTime) { this.completeRecipe(); } } }
-     * 
-     * /// Workaround for backwards compat /// Random fallback number IDK
-     * 
-     * @Deprecated protected int getRecipeJt() { return recipeJt != 0 ? recipeJt :
-     * 500; }
-     * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter
-     * that much protected int getHeatFromSunlight() { return exposedBlocks *
-     * JT_PER_BLOCK; }
-     * 
-     * /// This could potentially be cached in the mte, but ig it doesn't matter
-     * that much protected long getMaxEnergyInput() { IEnergyContainer
-     * energyContainer = getEnergyContainer(); /// This seems to be correct as far
-     * as I've tested return energyContainer.getInputVoltage() *
-     * energyContainer.getInputAmperage(); }
-     * 
-     * @Override protected void completeRecipe() { super.completeRecipe();
-     * this.recipeJt = 0; this.heatBuffer = 0; }
-     * 
-     * @Override public void receiveCustomData(int dataId, @NotNull PacketBuffer
-     * buf) { super.receiveCustomData(dataId, buf); if (dataId ==
-     * SuSyDataCodes.UPDATE_WORK_HALTED) { this.isHalted = buf.readBoolean(); } }
-     * 
-     * @Override public void writeInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.writeInitialSyncData(buf); buf.writeBoolean(this.isHalted); }
-     * 
-     * @Override public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
-     * super.receiveInitialSyncData(buf); this.isHalted = buf.readBoolean(); }
-     * 
-     * @NotNull
-     * 
-     * @Override public NBTTagCompound serializeNBT() { NBTTagCompound compound =
-     * super.serializeNBT(); if (this.progressTime > 0) {
-     * compound.setInteger("RecipeJt", recipeJt); } compound.setBoolean("IsHalted",
-     * this.isHalted); return compound; }
-     * 
-     * @Override public void deserializeNBT(@NotNull NBTTagCompound compound) {
-     * super.deserializeNBT(compound); if (this.progressTime > 0) { recipeJt =
-     * compound.getInteger("RecipeJt"); } this.isHalted =
-     * compound.getBoolean("IsHalted"); } }
-     */
+
+    @Override
+    protected void addWarningText(List<ITextComponent> textList) {
+        super.addWarningText(textList);
+        if (isStructureFormed() && this.isActive() && !hasEnoughPower) {
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                    "susy.multiblock.solar_furnace.low_power"));
+        }
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.numValidHeliostats = 0;
+        this.currentPower = 0;
+        this.hasEnoughPower = false;
+    }
+
+    private void updateSpeedStats(int progress) {
+        recipeSpeedStats[statsIndex] = progress;
+        statsIndex = (statsIndex + 1) % TRACKED_TICKS;
+    }
+
+    public float getAverageSpeed() {
+        return ((float) Arrays.stream(recipeSpeedStats).sum()) / TRACKED_TICKS;
+    }
+
+    public int getCurrentPower() {
+        return currentPower;
+    }
+
+    public int getCurrentValidHeliostats() {
+        return numValidHeliostats;
+    }
+
+    public class SolarFurnaceRecipeLogic extends MultiblockRecipeLogic {
+
+        private int recipePower;
+        private int heatBuffer = 0;
+        private boolean isHalted;
+
+        public SolarFurnaceRecipeLogic(RecipeMapMultiblockController tileEntity) {
+            super(tileEntity);
+        }
+
+        @Override
+        public boolean checkRecipe(@NotNull Recipe recipe) {
+            return super.checkRecipe(recipe) && RecipeCheckUtils.checkDimension(recipe, this.metaTileEntity) &&
+                    recipe.hasProperty(SolarFurnaceMinPowerProperty.getInstance()) &&
+                    recipe.getProperty(SolarFurnaceMinPowerProperty.getInstance(), 2147483647) <= currentPower;
+        }
+
+        @Override
+        protected void setupRecipe(Recipe recipe) {
+            super.setupRecipe(recipe);
+            this.recipePower = recipe.getProperty(SolarFurnaceMinPowerProperty.getInstance(), 0);
+            this.heatBuffer = 0;
+        }
+
+        /// Do not overclock
+        @Override
+        protected int @NotNull [] calculateOverclock(@NotNull Recipe recipe) {
+            return new int[] { recipe.getEUt(), recipe.getDuration() };
+        }
+
+        @Override
+        protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+            return true;
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            if (this.canRecipeProgress) {
+
+                int totalHeat = currentPower + heatBuffer;
+
+                int remainingHeat = 0;
+                int maxProgress;
+                if (currentPower >= getRecipePower()) {
+                    remainingHeat = totalHeat % getRecipePower();
+                    maxProgress = totalHeat / getRecipePower();
+                    hasEnoughPower = true;
+                } else {
+                    maxProgress = (currentPower - getRecipePower()) / 2000; // regress if not enough power
+                    hasEnoughPower = false;
+                }
+
+                updateSpeedStats(maxProgress);
+
+                boolean halted = maxProgress == 0;
+                if (this.isHalted != halted) {
+                    this.isHalted = halted;
+                    writeCustomData(SuSyDataCodes.UPDATE_WORK_HALTED, buf -> buf.writeBoolean(halted));
+                }
+
+                this.progressTime += maxProgress;
+                this.heatBuffer = remainingHeat;
+                if (progressTime < 0) {
+                    progressTime = 0;
+                }
+                if (this.progressTime > this.maxProgressTime) {
+                    this.completeRecipe();
+                }
+            }
+            if (getOffsetTimer() % 100 == 0) {
+                numValidHeliostats = getNumOfValidHeliostats();
+            }
+            currentPower = WATTS_PER_HELIOSTAT * numValidHeliostats;
+        }
+
+        @Deprecated
+        protected int getRecipePower() {
+            return recipePower != 0 ? recipePower : 12000; // copied from evap pool idk what this does exactly
+        }
+
+        @Override
+        protected void completeRecipe() {
+            super.completeRecipe();
+            this.recipePower = 0;
+            this.heatBuffer = 0;
+        }
+
+        @Override
+        public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
+            super.receiveCustomData(dataId, buf);
+            if (dataId == SuSyDataCodes.UPDATE_WORK_HALTED) {
+                this.isHalted = buf.readBoolean();
+            }
+        }
+
+        @Override
+        public void writeInitialSyncData(@NotNull PacketBuffer buf) {
+            super.writeInitialSyncData(buf);
+            buf.writeBoolean(this.isHalted);
+        }
+
+        @Override
+        public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
+            super.receiveInitialSyncData(buf);
+            this.isHalted = buf.readBoolean();
+        }
+
+        @NotNull @Override
+        public NBTTagCompound serializeNBT() {
+            NBTTagCompound compound = super.serializeNBT();
+            if (this.progressTime > 0) {
+                compound.setInteger("RecipePower", recipePower);
+            }
+            compound.setBoolean("IsHalted", this.isHalted);
+            return compound;
+        }
+
+        @Override
+        public void deserializeNBT(@NotNull NBTTagCompound compound) {
+            super.deserializeNBT(compound);
+            if (this.progressTime > 0) {
+                recipePower = compound.getInteger("RecipePower");
+            }
+            this.isHalted = compound.getBoolean("IsHalted");
+        }
+    }
 }

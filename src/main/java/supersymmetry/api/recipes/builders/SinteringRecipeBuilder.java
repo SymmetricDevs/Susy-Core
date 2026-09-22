@@ -6,6 +6,7 @@ import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.ValidationResult;
+import supersymmetry.api.recipes.properties.AtmosphereProperty;
 import supersymmetry.api.recipes.properties.SinterProperty;
 
 public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder> {
@@ -51,5 +52,15 @@ public class SinteringRecipeBuilder extends RecipeBuilder<SinteringRecipeBuilder
             this.usePlasma(false);
         }
         return super.build();
+    }
+
+    public SinteringRecipeBuilder requireAtmosphere() {
+        this.applyProperty(AtmosphereProperty.getInstance(), true);
+        return this;
+    }
+
+    public SinteringRecipeBuilder requireVacuum() {
+        this.applyProperty(AtmosphereProperty.getInstance(), false);
+        return this;
     }
 }

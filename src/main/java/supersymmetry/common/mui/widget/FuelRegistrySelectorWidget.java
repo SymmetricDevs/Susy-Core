@@ -20,17 +20,17 @@ import gregtech.api.gui.widgets.AbstractWidgetGroup;
 import gregtech.api.gui.widgets.PhantomFluidWidget;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 
 public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
 
     public static final int limit = 9;
     public final List<FluidStack> stacks;
     public int slots;
-    public Consumer<RocketFuelEntry> cb;
+    public Consumer<LiquidRocketFuelEntry> cb;
 
     public FuelRegistrySelectorWidget(int x, int y, int w, int h, List<FluidStack> stacks,
-                                      @Nullable Consumer<RocketFuelEntry> cb) {
+                                      @Nullable Consumer<LiquidRocketFuelEntry> cb) {
         super(new Position(x, y), new Size(w, h));
         this.stacks = stacks;
         slots = stacks.size();
@@ -70,20 +70,19 @@ public class FuelRegistrySelectorWidget extends AbstractWidgetGroup {
         searchRegistry();
     }
 
+    // the consumer is also fed a null when nothing matches, so that the listener can
+    // drop a fuel the player just emptied the slots of
     public void searchRegistry() {
         if (cb != null) {
-            Optional<RocketFuelEntry> r = search();
-            if (!r.isEmpty()) {
-                cb.accept(r.get());
-            }
+            cb.accept(search().orElse(null));
         }
     }
 
-    public Optional<RocketFuelEntry> search() {
+    public Optional<LiquidRocketFuelEntry> search() {
         List<Fluid> userFluids = this.stacks.stream().filter(x -> x != null).map(FluidStack::getFluid)
                 .collect(Collectors.toList());
 
-        return RocketFuelEntry.search(userFluids);
+        return LiquidRocketFuelEntry.search(userFluids);
     }
 
     private PhantomFluidWidget newWidget(final int index) {

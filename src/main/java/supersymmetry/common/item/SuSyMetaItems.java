@@ -30,6 +30,7 @@ import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
+import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
 import supersymmetry.common.item.behavior.*;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
@@ -61,10 +62,10 @@ public class SuSyMetaItems {
     public static MetaValueItem DATA_CARD_ACTIVE;
     public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
     public static MetaValueItem ROCKET_CONFIGURER;
-    public static MetaValueItem PADDING_CLOTH;
 
     public static MetaValueItem AIR_DISPERSER;
     public static MetaValueItem OXYGEN_SENSOR;
+    public static MetaValueItem AIRLOCK;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -147,14 +148,15 @@ public class SuSyMetaItems {
         CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
         ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
-        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1);
+        FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1)
+                .addComponents(new FactionRadioBehaviour());
 
         DATA_CARD = metaItem.addItem(11, "data_card").setMaxStackSize(1)
                 .addComponents(new TooltipBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1"))));
 
         DATA_CARD_ACTIVE = metaItem.addItem(12, "data_card.active").setMaxStackSize(1)
                 .addComponents(new DataCardBehavior(lines -> lines.add(I18n.format("metaitem.data_card.tooltip.1")),
-                        Arrays.asList("type")));
+                        Arrays.asList("name")));
 
         DATA_CARD_MASTER_BLUEPRINT = metaItem.addItem(13, "data_card.master_blueprint").setMaxStackSize(1)
                 .addComponents(new BlueprintBehavior(_ -> {}, Arrays.asList("name")));
@@ -165,7 +167,7 @@ public class SuSyMetaItems {
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        PADDING_CLOTH = metaItem.addItem(16, "padding_cloth");
+        // Free ID
 
         SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
 
@@ -183,9 +185,14 @@ public class SuSyMetaItems {
 
         AIR_DISPERSER = metaItem.addItem(22, "air_disperser");
 
-        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1);
+        OXYGEN_SENSOR = metaItem.addItem(23, "oxygen_sensor").setMaxStackSize(1)
+                .addComponents(new OxygenSensorBehavior())
+                .addComponents(ElectricStats.createElectricItem(16000, GTValues.LV));
 
         CLAY_GRAPHITE_CRUCIBLE = metaItem.addItem(24, "clay_graphite_crucible");
+
+        AIRLOCK = metaItem.addItem(25, "airlock")
+                .addComponents(new AirlockBehavior(SuSyBlocks.AIRLOCK_DOOR));
     }
 
     private static void addExtraBehaviours() {
@@ -193,6 +200,7 @@ public class SuSyMetaItems {
         for (int i = 0; i < EnumDyeColor.values().length; i++) {
             MetaItems.SPRAY_CAN_DYES[i].addComponents(new PipeNetPainterBehavior(512, SPRAY_EMPTY.getStackForm(), i));
         }
+        MetaItems.DUCT_TAPE.addComponents(new TapeRepairBehavior());
     }
 
     private static void addTieredOredictItem(OreDictValueItem[] items, int id, int RGB, OrePrefix prefix) {

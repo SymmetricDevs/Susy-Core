@@ -60,14 +60,18 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.api.util.Mods;
 import gregtech.api.util.input.KeyBind;
+import gregtech.client.utils.TooltipHelper;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
 import supersymmetry.common.CommonProxy;
@@ -75,7 +79,7 @@ import supersymmetry.common.SusyMetaEntities;
 import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
-import supersymmetry.common.entities.EntityLander;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
@@ -134,6 +138,18 @@ public class ClientProxy extends CommonProxy {
                 // pretty YELLOW is being auto-converted to a string
                 event.getToolTip().add(TextFormatting.YELLOW + unificationEntry.material.getChemicalFormula());
         }
+    }
+
+    @SubscribeEvent
+    public static void addWeightTooltip(@NonNull ItemTooltipEvent event) {
+        if (event.getEntityPlayer() == null || !TooltipHelper.isShiftDown()) {
+            return;
+        }
+        ItemStack stack = event.getItemStack();
+        List<String> tooltips = event.getToolTip();
+
+        double weight = CargoItemStackHandler.getMass(stack);
+        tooltips.add(SuSyUtility.formatDouble("item.susy.weight", "%.4g", weight / 1000));
     }
 
     @SubscribeEvent
@@ -206,6 +222,7 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/soyuz.obj", SuSyValues.modelRocket);
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
+        bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
@@ -225,8 +242,12 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/soyuz"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/icbm"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/lunar_rocket"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/earth_landing_system"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
+        for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
+            map.registerSprite(flame);
+        }
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
 
@@ -349,6 +370,19 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    /*
+     * TODO for space 2.0: fix atmosphere renderer
+     * 
+     * @SubscribeEvent
+     * public static void onWorldLoad(WorldEvent.Load event) {
+     * World world = event.getWorld();
+     * if (!world.isRemote) return;
+     * if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
+     * world.provider.setSkyRenderer(CelestialObjects.RENDERER);
+     * }
+     * }
+     */
+
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {
@@ -366,7 +400,7 @@ public class ClientProxy extends CommonProxy {
         if (Minecraft.getMinecraft().currentScreen != null)
             return;
 
-        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityLander lander) {
+        if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityAbstractRocket lander) {
             if (Minecraft.getMinecraft().inGameHasFocus && player.equals(Minecraft.getMinecraft().player)) {
                 if (!lander.isLaunched() && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
                     GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));

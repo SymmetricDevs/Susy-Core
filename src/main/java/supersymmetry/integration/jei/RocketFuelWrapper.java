@@ -9,17 +9,19 @@ import net.minecraftforge.fluids.FluidStack;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 
 public class RocketFuelWrapper implements IRecipeWrapper {
 
-    private final RocketFuelEntry entry;
+    private final LiquidRocketFuelEntry entry;
 
     private final String specificImpulse;
+    private final String density;
 
-    public RocketFuelWrapper(RocketFuelEntry entry) {
+    public RocketFuelWrapper(LiquidRocketFuelEntry entry) {
         this.entry = entry;
         this.specificImpulse = I18n.format("susy.tooltip.specific_impulse", entry.getSpecificImpulse());
+        this.density = I18n.format("susy.tooltip.density", entry.getDensity());
     }
 
     @Override
@@ -32,5 +34,6 @@ public class RocketFuelWrapper implements IRecipeWrapper {
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         int start = 40;
         minecraft.fontRenderer.drawString(specificImpulse, 0, start, 0x111111);
+        minecraft.fontRenderer.drawString(density, 0, start + 8, 0x111111);
     }
 }
