@@ -2,31 +2,27 @@ package supersymmetry.common.metatileentities.multi.tank;
 
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.List;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
-import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -35,22 +31,27 @@ import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.api.capability.impl.FluidTankList;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
+
+import java.util.Collections;
+import java.util.List;
+import java.math.BigInteger;
 
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
+    private static final boolean DEBUG_STRUCTURE = false;
 
     public final SuSyTankType type;
 
@@ -137,6 +138,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         if (world == null || world.isRemote) return false;
 
         EnumFacing front = getFrontFacing();
+
         if (front.getAxis().isVertical()) {
             return false;
         }
@@ -147,6 +149,13 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
         BlockPos start = getPos();
         BlockPos centerAir = start.offset(back, 1);
+
+        if (!isAir(world, centerAir)) {
+            if (DEBUG_STRUCTURE) {
+                System.out.println("[TankScan] centerAir not air");
+            }
+            return false;
+        }
 
         final int fixedDDist = 1;
 
@@ -184,11 +193,22 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.dDist = fixedDDist;
         this.airDepth = air;
 
+        if (DEBUG_STRUCTURE) {
+            System.out.println("[TankScan] l=r=" + l + " u=" + u + " d=" + fixedDDist +
+                    " air=" + air + " -> w=" + w + " h=" + h + " depth=" + depth);
+        }
+
         boolean valid = w >= MIN_SIZE && w <= MAX_SIZE
                 && h >= MIN_SIZE && h <= MAX_SIZE
                 && depth >= MIN_SIZE && depth <= MAX_SIZE;
 
-        if (!valid) return false;
+        if (!valid) {
+            if (DEBUG_STRUCTURE) {
+                System.out.println("[TankScan] not right size" +
+                        MIN_SIZE + "-" + MAX_SIZE + ").");
+            }
+            return false;
+        }
 
         writeCustomData(UPDATE_STRUCTURE_SIZE, buf -> {
             buf.writeInt(lDist);
@@ -236,7 +256,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                     boolean sideWall = (c == 0 || c == w - 1);
                     char cell;
 
-                    if (frontWall && r == (h - 1 - dDist) && c == lDist) {
+                    if (frontWall && r == dDist && c == lDist) {
                         cell = 'S';
                     } else if (backWall || frontWall || bottomWall || topWall || sideWall) {
                         cell = 'X';
