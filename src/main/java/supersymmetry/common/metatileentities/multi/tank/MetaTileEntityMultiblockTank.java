@@ -2,24 +2,27 @@ package supersymmetry.common.metatileentities.multi.tank;
 
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
-import net.minecraft.init.Blocks;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -28,30 +31,29 @@ import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.api.capability.impl.FluidTankList;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-import java.util.Collections;
-import java.util.List;
-
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
-    private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
-    private static final boolean DEBUG_STRUCTURE = false;
+    private static final int TANK_SIZE_PACKET_ID = 1000;
 
     public final SuSyTankType type;
 
-    private int lDist = 1, rDist = 1, uDist = 1, dDist = 1;
+    private int lDist = 1;
+    private int rDist = 1;
+    private int uDist = 1;
+    private int dDist = 1;
     private int airDepth = 1;
 
     private FilteredFluidHandler fluidTank;
@@ -87,6 +89,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
+
         this.fluidTank = new FilteredFluidHandler(0);
 
         if (type == SuSyTankType.WOOD) {
@@ -101,7 +104,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             fluidTank.setFilter(new PropertyFluidFilter(5000, true, true, true, true));
         }
 
-        this.importFluids = new FluidTankList(true, new FluidTank[]{ fluidTank });
+        this.importFluids = new FluidTankList(true, new FluidTank[]{fluidTank});
         this.exportFluids = this.importFluids;
         this.fluidInventory = fluidTank;
     }
@@ -110,9 +113,14 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     public void checkStructurePattern() {
-        if (!isStructureFormed()) {
-            reinitializeStructurePattern();
+        if (getWorld() != null && !getWorld().isRemote) {
+            boolean sizeChanged = updateStructureDimensions();
+
+            if (sizeChanged || !isStructureFormed()) {
+                reinitializeStructurePattern();
+            }
         }
+
         super.checkStructurePattern();
     }
 
@@ -121,10 +129,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     private boolean isWall(World world, BlockPos pos) {
-        if (world.getBlockState(pos).equals(type.casingState)) return true;
-        MetaTileEntity mte = GTUtility.getMetaTileEntity(world, pos);
-        if (mte instanceof IMultiblockPart) return true;
-        return !world.isAirBlock(pos);
+        return world.getBlockState(pos) == type.casingState ||
+                GTUtility.getMetaTileEntity(world, pos) instanceof IMultiblockPart;
     }
 
     private boolean isAir(World world, BlockPos pos) {
@@ -133,168 +139,225 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     protected boolean updateStructureDimensions() {
         World world = getWorld();
-        if (world == null || world.isRemote) return false;
 
-        EnumFacing front = getFrontFacing();
-        EnumFacing back = front.getOpposite();
-        EnumFacing right = front.rotateYCCW();
-        EnumFacing left = right.getOpposite();
-
-        BlockPos start = getPos();
-        BlockPos centerAir = start.offset(back, 1);
-
-        if (!isAir(world, centerAir)) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] centerAir not air");
-            }
+        if (world == null || world.isRemote) {
             return false;
         }
 
-        final int fixedDDist = 1;
-
-        int l = 0, u = 0, air = 0;
-
-        for (int i = 1; i < MAX_SIZE; i++) {
-            if (isWall(world, centerAir.offset(left, i))) {
-                l = i;
-                break;
-            }
+        EnumFacing front = getFrontFacing();
+        if (front == null || front.getAxis().isVertical()) {
+            front = EnumFacing.NORTH;
         }
 
+        EnumFacing back = front.getOpposite();
+        EnumFacing left = front.rotateY();
+        EnumFacing right = front.rotateYCCW();
+
+        BlockPos start = getPos();
+        BlockPos inside = start.offset(back);
+
+        int newL = 0;
+        int newR = 0;
+        int newU = 0;
+        int newD = 0;
+        int newAirDepth = 0;
+
         for (int i = 1; i < MAX_SIZE; i++) {
-            if (isWall(world, centerAir.offset(EnumFacing.UP, i))) {
-                u = i;
+            if (newL == 0 && isWall(world, inside.offset(left, i))) {
+                newL = i;
+            }
+            if (newR == 0 && isWall(world, inside.offset(right, i))) {
+                newR = i;
+            }
+            if (newU == 0 && isWall(world, inside.offset(EnumFacing.UP, i))) {
+                newU = i;
+            }
+            if (newD == 0 && isWall(world, inside.offset(EnumFacing.DOWN, i))) {
+                newD = i;
+            }
+
+            if (newL != 0 && newR != 0 && newU != 0 && newD != 0) {
                 break;
             }
         }
 
         for (int i = 1; i <= MAX_SIZE - 2; i++) {
-            if (isAir(world, start.offset(back, i))) {
-                air = i;
-            } else {
+            BlockPos depthPos = start.offset(back, i);
+            if (!isAir(world, depthPos)) {
                 break;
             }
+            newAirDepth = i;
         }
 
-        int w = 1 + l + l;
-        int h = 1 + u + fixedDDist;
-        int depth = air + 2;
+        int oldL = this.lDist;
+        int oldR = this.rDist;
+        int oldU = this.uDist;
+        int oldD = this.dDist;
+        int oldAirDepth = this.airDepth;
 
-        this.lDist = l;
-        this.rDist = l;
-        this.uDist = u;
-        this.dDist = fixedDDist;
-        this.airDepth = air;
+        this.lDist = Math.max(newL, 1);
+        this.rDist = Math.max(newR, 1);
+        this.uDist = Math.max(newU, 1);
+        this.dDist = Math.max(newD, 1);
+        this.airDepth = Math.max(newAirDepth, 1);
 
-        if (DEBUG_STRUCTURE) {
-            System.out.println("[TankScan] l=r=" + l + " u=" + u + " d=" + fixedDDist +
-                    " air=" + air + " -> w=" + w + " h=" + h + " depth=" + depth);
+        boolean changed =
+                oldL != this.lDist ||
+                oldR != this.rDist ||
+                oldU != this.uDist ||
+                oldD != this.dDist ||
+                oldAirDepth != this.airDepth;
+
+        int width = this.lDist + this.rDist + 1;
+        int height = this.uDist + this.dDist + 1;
+        int depth = this.airDepth + 2;
+
+        if (width < MIN_SIZE || width > MAX_SIZE ||
+                height < MIN_SIZE || height > MAX_SIZE ||
+                depth < MIN_SIZE || depth > MAX_SIZE) {
+
+            invalidateStructure();
+            return changed;
         }
 
-        boolean valid = w >= MIN_SIZE && w <= MAX_SIZE
-                && h >= MIN_SIZE && h <= MAX_SIZE
-                && depth >= MIN_SIZE && depth <= MAX_SIZE;
-
-        if (!valid) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] size outside not valid " +
-                        MIN_SIZE + "-" + MAX_SIZE + ").");
-            }
-            return false;
+        if (this.lDist != this.rDist) {
+            invalidateStructure();
+            return changed;
         }
 
-        writeCustomData(UPDATE_STRUCTURE_SIZE, buf -> {
-            buf.writeInt(lDist);
-            buf.writeInt(rDist);
-            buf.writeInt(uDist);
-            buf.writeInt(dDist);
-            buf.writeInt(airDepth);
+        if (this.dDist != 1) {
+            invalidateStructure();
+            return changed;
+        }
+
+        writeCustomData(TANK_SIZE_PACKET_ID, buf -> {
+            buf.writeInt(this.lDist);
+            buf.writeInt(this.rDist);
+            buf.writeInt(this.uDist);
+            buf.writeInt(this.dDist);
+            buf.writeInt(this.airDepth);
         });
-        return true;
+
+        return changed;
     }
 
-    protected String[] genRow(int w, int h, int depth, int aisle) { return null; }
+    protected String[] genRow(int w, int h, int depth, int aisle) {
+        return null;
+    }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == UPDATE_STRUCTURE_SIZE) {
+        if (dataId == TANK_SIZE_PACKET_ID) {
             this.lDist = buf.readInt();
             this.rDist = buf.readInt();
             this.uDist = buf.readInt();
             this.dDist = buf.readInt();
             this.airDepth = buf.readInt();
+        } else {
+            super.receiveCustomData(dataId, buf);
         }
     }
 
     @Override
     protected BlockPattern createStructurePattern() {
-        if (getWorld() != null) {
-            updateStructureDimensions();
-        }
-
-        int w = Math.max(lDist + rDist + 1, MIN_SIZE);
-        int h = Math.max(uDist + dDist + 1, MIN_SIZE);
+        int width = Math.max(lDist + rDist + 1, MIN_SIZE);
+        int height = Math.max(uDist + dDist + 1, MIN_SIZE);
         int depth = Math.max(airDepth + 2, MIN_SIZE);
 
-        String[][] aisles = new String[depth][h];
-        for (int a = 0; a < depth; a++) {
-            boolean frontWall = (a == depth - 1);
-            boolean backWall = (a == 0);
-            for (int r = 0; r < h; r++) {
-                boolean topWall = (r == 0);
-                boolean bottomWall = (r == h - 1);
-                StringBuilder row = new StringBuilder(w);
-                for (int c = 0; c < w; c++) {
-                    boolean sideWall = (c == 0 || c == w - 1);
-                    char cell;
+        String[][] aisles = new String[depth][height];
 
-                    if (frontWall && r == uDist && c == lDist) {
-                        cell = 'S';
-                    } else if (backWall || frontWall || bottomWall || topWall || sideWall) {
-                        cell = 'X';
+        for (int aisle = 0; aisle < depth; aisle++) {
+            boolean frontWall = aisle == depth - 1;
+            boolean backWall = aisle == 0;
+
+            for (int row = 0; row < height; row++) {
+                boolean topWall = row == 0;
+                boolean bottomWall = row == height - 1;
+
+                StringBuilder line = new StringBuilder(width);
+
+                for (int column = 0; column < width; column++) {
+                    boolean sideWall =
+                            column == 0 ||
+                            column == width - 1;
+
+                    char symbol;
+
+                    if (frontWall &&
+                            row == height - 2 &&
+                            column == lDist) {
+
+                        symbol = 'S';
+
+                    } else if (frontWall ||
+                            backWall ||
+                            topWall ||
+                            bottomWall ||
+                            sideWall) {
+
+                        symbol = 'X';
+
                     } else {
-                        cell = ' ';
+                        symbol = ' ';
                     }
-                    row.append(cell);
+
+                    line.append(symbol);
                 }
-                aisles[a][r] = row.toString();
+
+                aisles[aisle][row] = line.toString();
             }
         }
 
-        int interiorCells = (w - 2) * (h - 2) * (depth - 2);
-        int skinCells = w * h * depth - interiorCells;
+        int interiorCells =
+                (width - 2) *
+                (height - 2) *
+                (depth - 2);
+
+        int shellCells =
+                width * height * depth -
+                interiorCells;
+
+        int valveLimit = (shellCells - 1) / 4;
+        int casingMinimum = shellCells - 1 - valveLimit;
 
         FactoryBlockPattern pattern = FactoryBlockPattern.start();
+
         for (String[] rows : aisles) {
             pattern.aisle(rows);
         }
+
         return pattern
                 .where('S', selfPredicate())
                 .where('X', states(type.casingState)
-                        .setMinGlobalLimited(skinCells - MAX_VALVES - 1)
+                        .setMinGlobalLimited(casingMinimum)
                         .or(metaTileEntities(getValveForType())
-                                .setMaxGlobalLimited(MAX_VALVES)
+                                .setMaxGlobalLimited(valveLimit)
                                 .setMinGlobalLimited(1)))
                 .where(' ', air())
                 .build();
     }
 
     private int interiorVolume() {
-        int w = lDist + rDist + 1;
-        int h = uDist + dDist + 1;
+        int width = lDist + rDist + 1;
+        int height = uDist + dDist + 1;
         int depth = airDepth + 2;
-        return Math.max(w - 2, 1) * Math.max(h - 2, 1) * Math.max(depth - 2, 1);
+
+        return Math.max(width - 2, 1) *
+                Math.max(height - 2, 1) *
+                Math.max(depth - 2, 1);
     }
 
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
+
         int volume = interiorVolume();
+
         if (volume < 1 || volume > type.maxAirBlocks) {
             invalidateStructure();
             return;
         }
+
         fluidTank.setCapacity(volume * type.kLPerBlock);
     }
 
@@ -327,7 +390,13 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     protected ModularUI.Builder createUITemplate(EntityPlayer player) {
         return ModularUI.builder(GuiTextures.BACKGROUND, 176, 166)
                 .widget(new LabelWidget(6, 6, getMetaFullName()))
-                .widget(new TankWidget(importFluids.getTankAt(0), 52, 18, 72, 61)
+                .widget(new TankWidget(
+                        importFluids.getTankAt(0),
+                        52,
+                        18,
+                        72,
+                        61
+                )
                         .setBackgroundTexture(GuiTextures.SLOT)
                         .setContainerClicking(true, true))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, 0);
@@ -336,29 +405,57 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
+
         if (isStructureFormed()) {
             int volume = interiorVolume();
-            long volumeInLiters = volume * (long) type.kLPerBlock * 1000L;
-            textList.add(new TextComponentTranslation("susy.multiblock.tank.hud",
-                    lDist + rDist + 1, uDist + dDist + 1, airDepth + 2, volumeInLiters));
+
+            textList.add(new TextComponentTranslation(
+                    "susy.multiblock.tank.hud",
+                    lDist + rDist + 1,
+                    uDist + dDist + 1,
+                    airDepth + 2,
+                    volume * type.kLPerBlock
+            ));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(
+            ItemStack stack,
+            World world,
+            List<String> tooltip,
+            boolean advanced) {
+
         super.addInformation(stack, world, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.multiblock.tank.tooltip"));
-        tooltip.add(I18n.format("susy.multiblock.tank.info", type.kLPerBlock * 1000L, type.maxAirBlocks, MIN_SIZE, MAX_SIZE));
+
+        tooltip.add(I18n.format(
+                "gregtech.multiblock.tank.tooltip"
+        ));
+
+        tooltip.add(I18n.format(
+                "susy.multiblock.tank.info",
+                type.kLPerBlock * 1000L,
+                type.maxAirBlocks,
+                MIN_SIZE,
+                MAX_SIZE
+        ));
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+    public <T> T getCapability(
+            Capability<T> capability,
+            EnumFacing side) {
+
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             if (isStructureFormed()) {
-                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidInventory);
+                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(
+                        fluidInventory
+                );
             }
+
             return null;
         }
+
         return super.getCapability(capability, side);
     }
 
@@ -370,13 +467,26 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
         MultiblockShapeInfo.Builder size3 = MultiblockShapeInfo.builder()
-                .aisle("XXX", "XXX", "XXX")
-                .aisle("XXX", "X X", "XXX")
-                .aisle("XvX", "XSX", "XXX")
+                .aisle(
+                        "XXX",
+                        "XXX",
+                        "XXX"
+                )
+                .aisle(
+                        "XXX",
+                        "X X",
+                        "XXX"
+                )
+                .aisle(
+                        "XvX",
+                        "XSX",
+                        "XXX"
+                )
                 .where('S', this, EnumFacing.SOUTH)
                 .where('v', getValveForType(), EnumFacing.NORTH)
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
+
         return Collections.singletonList(size3.build());
     }
 }
