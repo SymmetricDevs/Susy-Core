@@ -2,24 +2,31 @@ package supersymmetry.common.metatileentities.multi.tank;
 
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -28,33 +35,29 @@ import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.api.capability.impl.FluidTankList;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import java.util.Collections;
-import java.util.List;
+import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
 
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
-    private static final boolean DEBUG_STRUCTURE = false;
 
     public final SuSyTankType type;
 
     private int lDist = 1, rDist = 1, uDist = 1, dDist = 1;
     private int airDepth = 1;
 
-    private FilteredFluidHandler fluidTank;
+    private BigFilteredFluidHandler fluidTank;
 
     public MetaTileEntityMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
         super(metaTileEntityId);
@@ -87,7 +90,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        this.fluidTank = new FilteredFluidHandler(0);
+        this.fluidTank = new BigFilteredFluidHandler();
 
         if (type == SuSyTankType.WOOD) {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
@@ -134,19 +137,16 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         if (world == null || world.isRemote) return false;
 
         EnumFacing front = getFrontFacing();
+        if (front.getAxis().isVertical()) {
+            return false;
+        }
+
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite();
 
         BlockPos start = getPos();
         BlockPos centerAir = start.offset(back, 1);
-
-        if (!isAir(world, centerAir)) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] centerAir not air");
-            }
-            return false;
-        }
 
         final int fixedDDist = 1;
 
@@ -184,22 +184,11 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.dDist = fixedDDist;
         this.airDepth = air;
 
-        if (DEBUG_STRUCTURE) {
-            System.out.println("[TankScan] l=r=" + l + " u=" + u + " d=" + fixedDDist +
-                    " air=" + air + " -> w=" + w + " h=" + h + " depth=" + depth);
-        }
-
         boolean valid = w >= MIN_SIZE && w <= MAX_SIZE
                 && h >= MIN_SIZE && h <= MAX_SIZE
                 && depth >= MIN_SIZE && depth <= MAX_SIZE;
 
-        if (!valid) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] not right size" +
-                        MIN_SIZE + "-" + MAX_SIZE + ").");
-            }
-            return false;
-        }
+        if (!valid) return false;
 
         writeCustomData(UPDATE_STRUCTURE_SIZE, buf -> {
             buf.writeInt(lDist);
@@ -247,7 +236,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                     boolean sideWall = (c == 0 || c == w - 1);
                     char cell;
 
-                    if (frontWall && r == dDist && c == lDist) {
+                    if (frontWall && r == (h - 1 - dDist) && c == lDist) {
                         cell = 'S';
                     } else if (backWall || frontWall || bottomWall || topWall || sideWall) {
                         cell = 'X';
@@ -293,13 +282,37 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             invalidateStructure();
             return;
         }
-        fluidTank.setCapacity(volume * type.kLPerBlock);
+
+        BigInteger capacityMB = BigInteger.valueOf(volume)
+                .multiply(BigInteger.valueOf(type.kLPerBlock))
+                .multiply(BigInteger.valueOf(1000L));
+
+        this.fluidTank.setBigCapacity(capacityMB);
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        fluidTank.setCapacity(0);
+        if (this.fluidTank != null) {
+            this.fluidTank.setBigCapacity(BigInteger.ZERO);
+        }
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        if (this.fluidTank != null) {
+            this.fluidTank.writeToNBT(data);
+        }
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        if (this.fluidTank != null) {
+            this.fluidTank.readFromNBT(data);
+        }
     }
 
     // Rendering
@@ -376,5 +389,122 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
         return Collections.singletonList(size3.build());
+    }
+
+    // Custom Big Fluid Handler
+    public static class BigFilteredFluidHandler extends FilteredFluidHandler {
+        private BigInteger bigCapacity = BigInteger.ZERO;
+        private BigInteger bigAmount = BigInteger.ZERO;
+
+        public BigFilteredFluidHandler() {
+            super(0);
+        }
+
+        public void setBigCapacity(BigInteger capacity) {
+            this.bigCapacity = capacity != null ? capacity : BigInteger.ZERO;
+        }
+
+        public BigInteger getBigCapacity() {
+            return this.bigCapacity;
+        }
+
+        public BigInteger getBigAmount() {
+            return this.bigAmount;
+        }
+
+        public void setBigAmount(BigInteger amount) {
+            this.bigAmount = amount != null ? amount : BigInteger.ZERO;
+            updateInternalStack();
+        }
+
+        private void updateInternalStack() {
+            if (this.bigAmount.compareTo(BigInteger.ZERO) <= 0) {
+                setFluid(null);
+            } else if (getFluid() != null) {
+                getFluid().amount = this.bigAmount.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+            }
+        }
+
+        @Override
+        public int getCapacity() {
+            return this.bigCapacity.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+        }
+
+        @Override
+        public int getFluidAmount() {
+            return this.bigAmount.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            if (resource == null || resource.amount <= 0) return 0;
+            if (getFilter() != null && !getFilter().test(resource)) return 0;
+
+            BigInteger fillAmount = BigInteger.valueOf(resource.amount);
+
+            if (getFluid() == null) {
+                BigInteger toAdd = fillAmount.min(this.bigCapacity);
+                if (doFill && toAdd.compareTo(BigInteger.ZERO) > 0) {
+                    this.bigAmount = toAdd;
+                    setFluid(new FluidStack(resource.getFluid(), toAdd.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue()));
+                }
+                return toAdd.intValue();
+            }
+
+            if (!getFluid().isFluidEqual(resource)) return 0;
+
+            BigInteger space = this.bigCapacity.subtract(this.bigAmount);
+            BigInteger toAdd = fillAmount.min(space);
+
+            if (doFill && toAdd.compareTo(BigInteger.ZERO) > 0) {
+                this.bigAmount = this.bigAmount.add(toAdd);
+                updateInternalStack();
+            }
+            return toAdd.intValue();
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            if (getFluid() == null || maxDrain <= 0 || this.bigAmount.compareTo(BigInteger.ZERO) <= 0) return null;
+
+            BigInteger drainReq = BigInteger.valueOf(maxDrain);
+            BigInteger toDrain = drainReq.min(this.bigAmount);
+
+            FluidStack drained = new FluidStack(getFluid().getFluid(), toDrain.intValue());
+
+            if (doDrain) {
+                this.bigAmount = this.bigAmount.subtract(toDrain);
+                if (this.bigAmount.compareTo(BigInteger.ZERO) <= 0) {
+                    this.bigAmount = BigInteger.ZERO;
+                    setFluid(null);
+                } else {
+                    updateInternalStack();
+                }
+            }
+            return drained;
+        }
+
+        @Override
+        public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+            super.writeToNBT(nbt);
+            nbt.setString("BigFluidAmount", this.bigAmount.toString());
+            return nbt;
+        }
+
+        @Override
+        public FluidTank readFromNBT(NBTTagCompound nbt) {
+            super.readFromNBT(nbt);
+            if (nbt.hasKey("BigFluidAmount")) {
+                try {
+                    this.bigAmount = new BigInteger(nbt.getString("BigFluidAmount"));
+                } catch (Exception e) {
+                    this.bigAmount = BigInteger.valueOf(getFluid() != null ? getFluid().amount : 0);
+                }
+            } else {
+                this.bigAmount = BigInteger.valueOf(getFluid() != null ? getFluid().amount : 0);
+            }
+            updateInternalStack();
+            return this;
+        }
     }
 }
