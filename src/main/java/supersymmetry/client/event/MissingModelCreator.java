@@ -1,5 +1,11 @@
 package supersymmetry.client.event;
 
+import java.io.*;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.*;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -10,17 +16,14 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.*;
+import org.apache.commons.io.IOUtils;
 
 @SideOnly(Side.CLIENT)
 public class MissingModelCreator {
-    public static void createModels(ModelBakeEvent event) throws IOException, NoSuchFieldException, IllegalAccessException {
+
+    public static void createModels(ModelBakeEvent event) throws IOException, NoSuchFieldException,
+                                                          IllegalAccessException {
         ModelLoader loader = event.getModelLoader();
         IBakedModel missingModel = event.getModelRegistry().getObject(ModelBakery.MODEL_MISSING);
 
@@ -55,7 +58,8 @@ public class MissingModelCreator {
                 ModelResourceLocation location = (ModelResourceLocation) entry.getKey();
                 IBakedModel model = event.getModelRegistry().getObject(location);
                 if (model == null || model == missingModel || // unfortunately this class is package-private
-                        model.getClass().toString().equals("class net.minecraftforge.client.model.FancyMissingModel$BakedModel")) {
+                        model.getClass().toString()
+                                .equals("class net.minecraftforge.client.model.FancyMissingModel$BakedModel")) {
                     if (location.getPath().startsWith("metaitems")) {
                         // Copy blankitem.png and blankmodel.txt to assets/gregtech
                         String folderized = location.getPath().replace(".", "/");
