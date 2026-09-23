@@ -318,13 +318,14 @@ public class SuSyMetaTileEntities {
     // SUSY's tanks
     public static MetaTileEntityMultiblockTank WOOD_TANK_CONTROLLER;
     public static MetaTileEntityMultiblockTank STEEL_TANK_CONTROLLER;
+    public static MetaTileEntityMultiblockTank MONEL_TANK_CONTROLLER;
     public static MetaTileEntityMultiblockTank STAINLESS_STEEL_TANK_CONTROLLER;
     public static MetaTileEntityMultiblockTank TITANIUM_TANK_CONTROLLER;
     public static MetaTileEntityMultiblockTank TUNGSTEN_STEEL_TANK_CONTROLLER;
 
     public static MetaTileEntityMultiblockPart WOOD_TANK_VALVES;
     public static MetaTileEntityMultiblockPart STEEL_TANK_VALVES;
-    //public static MetaTileEntityMultiblockPart MONEL_TANK_VALVES;
+    public static MetaTileEntityMultiblockPart MONEL_TANK_VALVES;
     public static MetaTileEntityTankValve STAINLESS_STEEL_TANK_VALVES;
     public static MetaTileEntityTankValve TITANIUM_TANK_VALVES;
     public static MetaTileEntityTankValve TUNGSTEN_STEEL_TANK_VALVES;
@@ -887,8 +888,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityMultiblockTank(susyId("tank.wood"), SuSyTankType.WOOD));
         STEEL_TANK_CONTROLLER = registerMetaTileEntity(18531,
                 new MetaTileEntityMultiblockTank(susyId("tank.steel"), SuSyTankType.STEEL));
-        //MONEL_TANK_CONTROLLER = registerMetaTileEntity(18532,
-                //new MetaTileEntityMultiblockTank(susyId("tank.monel_400"), SuSyTankType.MONEL));
+        MONEL_TANK_CONTROLLER = registerMetaTileEntity(18532,
+                new MetaTileEntityMultiblockTank(susyId("tank.monel_400"), SuSyTankType.MONEL));
         STAINLESS_STEEL_TANK_CONTROLLER = registerMetaTileEntity(18533,
                 new MetaTileEntityMultiblockTank(susyId("tank.stainless_steel"), SuSyTankType.STAINLESS_STEEL));
         TITANIUM_TANK_CONTROLLER = registerMetaTileEntity(18534,
@@ -899,8 +900,8 @@ public class SuSyMetaTileEntities {
         WOOD_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.WOODEN_TANK_VALVE;
         STEEL_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.STEEL_TANK_VALVE;
         
-        //MONEL_TANK_VALVES = registerMetaTileEntity(18540,
-                //new MetaTileEntityTankValve(susyId("tank_valve.monel_400"), SuSyTankType.MONEL));
+        MONEL_TANK_VALVES = registerMetaTileEntity(18540,
+                new MetaTileEntityTankValve(susyId("tank_valve.monel_400"), SuSyTankType.MONEL));
         STAINLESS_STEEL_TANK_VALVES = registerMetaTileEntity(18541,
                 new MetaTileEntityTankValve(susyId("tank_valve.stainless_steel"), SuSyTankType.STAINLESS_STEEL));
         TITANIUM_TANK_VALVES = registerMetaTileEntity(18542,

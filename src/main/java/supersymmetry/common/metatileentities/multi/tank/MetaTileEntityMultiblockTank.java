@@ -37,8 +37,10 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.GregtechDataCodes;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.client.renderer.textures.SusyTextures;
 
 import java.util.Collections;
 import java.util.List;
@@ -69,6 +71,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 return SuSyMetaTileEntities.WOOD_TANK_VALVES;
             case STEEL:
                 return SuSyMetaTileEntities.STEEL_TANK_VALVES;
+            case MONEL:
+                return SuSyMetaTileEntities.MONEL_TANK_VALVES;
             case STAINLESS_STEEL:
                 return SuSyMetaTileEntities.STAINLESS_STEEL_TANK_VALVES;
             case TITANIUM:
@@ -94,8 +98,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
         } else if (type == SuSyTankType.STEEL) {
             fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, false));
-        //} else if (type == SuSyTankType.MONEL) {
-        //    fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, true));
+        } else if (type == SuSyTankType.MONEL) {
+            fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, true));
         } else if (type == SuSyTankType.STAINLESS_STEEL) {
             fluidTank.setFilter(new PropertyFluidFilter(2428, true, true, true, true));
         } else if (type == SuSyTankType.TITANIUM) {
@@ -310,17 +314,52 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         fluidTank.setCapacity(0);
     }
 
+    @Override
+    public void update() {
+        super.update();
+        if (!getWorld().isRemote && isStructureFormed()) {
+            int currentState = getFillState();
+            if (currentState != lastFillState) {
+                this.lastFillState = currentState;
+                writeCustomData(GregtechDataCodes.UPDATE_MULTIBLOCK_STATE, buf -> buf.writeInt(currentState));
+                markDirty();
+            }
+        }
+    }
+
     // Rendering
 
-    @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         return type.baseTexture;
     }
 
+    private int getFillState() {
+        if (!isStructureFormed() || fluidTank == null || fluidTank.getCapacity() <= 0) {
+            return 0;
+        }
+        
+        long stored = fluidTank.getFluidAmount();
+        long capacity = fluidTank.getCapacity();
+
+        if (stored <= 0) return 0;
+        if (stored >= capacity) return 8;
+
+        double fillRatio = (double) stored / capacity;
+        int state = (int) Math.ceil(fillRatio * 8.0);
+        
+        return Math.min(Math.max(state, 1), 8);
+    }
+
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        return Textures.MULTIBLOCK_TANK_OVERLAY;
+        if (!isStructureFormed()) {
+            return Textures.MULTIBLOCK_TANK_OVERLAY;
+        }
+
+        int state = getFillState();
+        return SusyTextures.TANK_LEVEL_OVERLAYS[state];
     }
+    
 
     // GUI
 
@@ -367,12 +406,12 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
                 break;
 
-            //case MONEL:
-            //    tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 811));
-            //    tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
-            //    tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
-            //    tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
-            //    break;
+            case MONEL:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 811));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+                tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
+                break;
 
             case STAINLESS_STEEL:
                 tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 2428));

@@ -32,7 +32,8 @@ public class BlockSuSyMultiblockCasing2 extends VariantBlock<BlockSuSyMultiblock
 
     public enum CasingType implements IStringSerializable {
 
-        LIGHT_STAINLESS_CASING("light_stainless_casing");
+        LIGHT_STAINLESS_CASING("light_stainless_casing"),
+        MONEL_400_CASING("monel_400_casing");
 
         private final String name;
 

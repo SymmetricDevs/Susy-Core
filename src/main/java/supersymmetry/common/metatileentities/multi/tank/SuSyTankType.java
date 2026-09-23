@@ -4,9 +4,9 @@ import static gregtech.common.blocks.BlockMetalCasing.MetalCasingType.STAINLESS_
 import static gregtech.common.blocks.BlockMetalCasing.MetalCasingType.TITANIUM_STABLE;
 import static gregtech.common.blocks.BlockMetalCasing.MetalCasingType.STEEL_SOLID;
 import static gregtech.common.blocks.BlockMetalCasing.MetalCasingType.TUNGSTENSTEEL_ROBUST;
+import static gregtech.common.blocks.BlockSteamCasing.SteamCasingType.WOOD_WALL;
 import static gregtech.common.blocks.MetaBlocks.METAL_CASING;
-import static gregtech.common.blocks.MetaBlocks.PLANKS;
-import static gregtech.common.blocks.wood.BlockGregPlanks.BlockType.TREATED_PLANK;
+import static gregtech.common.blocks.MetaBlocks.STEAM_CASING;
 
 import static gregtech.api.unification.material.Materials.Steel;
 import static gregtech.api.unification.material.Materials.StainlessSteel;
@@ -26,6 +26,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.client.renderer.textures.custom.ExtenderRender;
 import supersymmetry.client.renderer.textures.custom.VatCasingRenderer;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
+import supersymmetry.common.blocks.BlockSuSyMultiblockCasing2;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 
@@ -33,11 +34,11 @@ import org.jetbrains.annotations.Nullable;
 
 public enum SuSyTankType {
 
-    WOOD("wood", 18_750, 2, PLANKS.getState(TREATED_PLANK), Textures.WOOD_WALL, PLANKS.getItemVariant(TREATED_PLANK), Wood),
+    WOOD("wood", 18_750, 2, STEAM_CASING.getState(WOOD_WALL), Textures.WOOD_WALL, STEAM_CASING.getItemVariant(WOOD_WALL), Wood),
 
     STEEL("steel", 25_000, 4, METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING, METAL_CASING.getItemVariant(STEEL_SOLID), Steel),
 
-    //MONEL("monel_400", 27_500, 8, SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), SusyTextures.MONEL_500_CASING, SuSyBlocks.MULTIBLOCK_CASING.getItemVariant(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), null),
+    MONEL("monel_400", 27_500, 8, SuSyBlocks.MULTIBLOCK_CASING_2.getState(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), SusyTextures.MONEL_400_CASING, SuSyBlocks.MULTIBLOCK_CASING_2.getItemVariant(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), null),
 
     STAINLESS_STEEL("stainless_steel", 30_250, 16, METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING, METAL_CASING.getItemVariant(STAINLESS_CLEAN), StainlessSteel),
 
