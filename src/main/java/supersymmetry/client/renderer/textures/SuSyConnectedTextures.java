@@ -96,7 +96,7 @@ public class SuSyConnectedTextures {
         BRONZE_PLATED_BRICKS_CTM.override(susyId("primitive_mud_pump"), susyId("large_boiler.bronze"));
         AEROSPACE_GASKET_CTM.override(susyId("building_cleanroom"));
         NONCONDUCTING_CASING_CTM.override(susyId("electric_discharge_machine"));
-        MONEL_400_CASING_CTM.override(susyId("strand_cooler"));
+        MONEL_400_CASING_CTM.override(susyId("multiblock_tank"));
 
         registerCustomOverride(susyId("slab_mold"), SuSyConnectedTextures::strandMoldHandler);
         registerCustomOverride(susyId("billet_mold"), SuSyConnectedTextures::strandMoldHandler);

@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
@@ -47,6 +46,7 @@ import java.util.List;
 
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
+    private static final int UPDATE_TANK_FILL_STATE = 9999;
     private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
@@ -57,7 +57,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     private int lDist = 1, rDist = 1, uDist = 1, dDist = 1;
     private int airDepth = 1;
 
-    private FilteredFluidHandler fluidTank;
+    private LongFilteredFluidHandler fluidTank;
+    private int lastFillState = -1;
 
     public MetaTileEntityMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
         super(metaTileEntityId);
@@ -92,14 +93,14 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        this.fluidTank = new FilteredFluidHandler(0);
+        this.fluidTank = new LongFilteredFluidHandler(0);
 
         if (type == SuSyTankType.WOOD) {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
         } else if (type == SuSyTankType.STEEL) {
             fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, false));
         } else if (type == SuSyTankType.MONEL) {
-            fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, true));
+            fluidTank.setFilter(new PropertyFluidFilter(811, true, false, false, true));
         } else if (type == SuSyTankType.STAINLESS_STEEL) {
             fluidTank.setFilter(new PropertyFluidFilter(2428, true, true, true, true));
         } else if (type == SuSyTankType.TITANIUM) {
@@ -207,7 +208,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
         if (!valid) {
             if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] not right size" +
+                System.out.println("[TankScan] not right size (" +
                         MIN_SIZE + "-" + MAX_SIZE + ").");
             }
             return false;
@@ -234,9 +235,12 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             this.uDist = buf.readInt();
             this.dDist = buf.readInt();
             this.airDepth = buf.readInt();
+        } else if (dataId == 9999) {
+            this.lastFillState = buf.readInt();
+            scheduleRenderUpdate();
         }
     }
-
+    
     @Override
     protected BlockPattern createStructurePattern() {
         if (getWorld() != null) {
@@ -305,13 +309,13 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             invalidateStructure();
             return;
         }
-        fluidTank.setCapacity((int) (volume * (long) type.kLPerBlock * 1000L));
+        fluidTank.setLongCapacity(volume * (long) type.kLPerBlock * 1000L);
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        fluidTank.setCapacity(0);
+        fluidTank.setLongCapacity(0);
     }
 
     @Override
@@ -321,7 +325,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             int currentState = getFillState();
             if (currentState != lastFillState) {
                 this.lastFillState = currentState;
-                writeCustomData(GregtechDataCodes.UPDATE_MULTIBLOCK_STATE, buf -> buf.writeInt(currentState));
+                writeCustomData(9999, buf -> buf.writeInt(currentState));
                 markDirty();
             }
         }
@@ -329,17 +333,18 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     // Rendering
 
+    @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        return type.baseTexture;
+        return type != null && type.baseTexture != null ? type.baseTexture : SusyTextures.MONEL_400_CASING;
     }
 
     private int getFillState() {
-        if (!isStructureFormed() || fluidTank == null || fluidTank.getCapacity() <= 0) {
+        if (!isStructureFormed() || fluidTank == null || fluidTank.getLongCapacity() <= 0) {
             return 0;
         }
         
         long stored = fluidTank.getFluidAmount();
-        long capacity = fluidTank.getCapacity();
+        long capacity = fluidTank.getLongCapacity();
 
         if (stored <= 0) return 0;
         if (stored >= capacity) return 8;
@@ -352,14 +357,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     protected ICubeRenderer getFrontOverlay() {
-        if (!isStructureFormed()) {
-            return Textures.MULTIBLOCK_TANK_OVERLAY;
-        }
-
-        int state = getFillState();
-        return SusyTextures.TANK_LEVEL_OVERLAYS[state];
+        return SusyTextures.TANK_LEVEL_OVERLAYS[getFillState()];
     }
-    
 
     // GUI
 
@@ -462,5 +461,25 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
         return Collections.singletonList(size3.build());
+    }
+
+    // Inner Class per gestire il Long Capacity
+    public static class LongFilteredFluidHandler extends FilteredFluidHandler {
+
+        private long longCapacity;
+
+        public LongFilteredFluidHandler(long capacity) {
+            super((int) Math.min(capacity, Integer.MAX_VALUE));
+            this.longCapacity = capacity;
+        }
+
+        public void setLongCapacity(long capacity) {
+            this.longCapacity = capacity;
+            super.setCapacity((int) Math.min(capacity, Integer.MAX_VALUE));
+        }
+
+        public long getLongCapacity() {
+            return this.longCapacity;
+        }
     }
 }

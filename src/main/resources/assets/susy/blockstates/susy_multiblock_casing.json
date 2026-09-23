@@ -111,12 +111,6 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/screener_deck"
       }
-    },
-    "variant=monel_400_casing" : {
-      "model" : "minecraft:cube_all",
-      "textures" : {
-        "all" : "gregtech:blocks/multiblock_casing/monel_400_casing"
-      }
     }
   }
 }

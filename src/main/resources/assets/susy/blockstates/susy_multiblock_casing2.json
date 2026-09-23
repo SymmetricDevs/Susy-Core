@@ -15,5 +15,11 @@
         "all": "gregtech:blocks/multiblock_casing/light_stainless_casing"
       }
     }
-  }
+  },
+  "variant=monel_400_casing" : {
+      "model" : "minecraft:cube_all",
+      "textures" : {
+        "all" : "gregtech:blocks/multiblock_casing/monel_400_casing"
+      }
+    }
 }
