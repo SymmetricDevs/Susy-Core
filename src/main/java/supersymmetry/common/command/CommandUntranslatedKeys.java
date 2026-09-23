@@ -2,6 +2,7 @@ package supersymmetry.common.command;
 
 import java.util.*;
 
+import gregtech.api.recipes.RecipeMap;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -65,6 +66,7 @@ public class CommandUntranslatedKeys extends CommandBase {
         checkMaterials(untranslated);
         checkFluids(untranslated);
         checkItems(untranslated);
+        checkRecipemaps(untranslated);
 
         Arrays.asList(BLACKLIST).forEach(untranslated::remove);
 
@@ -78,6 +80,14 @@ public class CommandUntranslatedKeys extends CommandBase {
 
         sender.sendMessage(new TextComponentString(builder.toString()));
         ClipboardUtil.copyToClipboard(builder.toString());
+    }
+
+    public void checkRecipemaps(Set<String> untranslated) {
+        for (RecipeMap map: RecipeMap.getRecipeMaps()) {
+            if (!LocalizationUtils.hasKey(map.getTranslationKey())) {
+                untranslated.add(map.getTranslationKey());
+            }
+        }
     }
 
     public void checkMaterials(Set<String> untranslated) {
