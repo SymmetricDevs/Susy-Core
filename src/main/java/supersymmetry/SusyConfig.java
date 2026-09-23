@@ -29,7 +29,9 @@ public class SusyConfig {
     @Config.RangeDouble(min = 0.0)
     public static double speakerMinDuration = 0.03;
 
-    @Config.Comment({ "Enable missing model generation. Disable vintage fix and UT fancy missing models for this to work.", "Default: false"})
+    @Config.Comment({
+            "Enable missing model generation. Disable vintage fix and UT fancy missing models for this to work.",
+            "Default: false" })
     @Config.RequiresMcRestart
     public static boolean enableMissingModelGen = false;
 }
