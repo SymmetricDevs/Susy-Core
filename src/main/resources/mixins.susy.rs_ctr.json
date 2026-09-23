@@ -1,5 +1,5 @@
 {
-  "package" : "supersymmetry.mixins.redctrl",
+  "package" : "supersymmetry.mixins.rs_ctr",
   "refmap" : "mixins.susy.refmap.json",
   "target" : "@env(DEFAULT)",
   "minVersion" : "0.8",

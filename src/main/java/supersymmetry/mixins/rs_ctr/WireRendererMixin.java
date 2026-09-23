@@ -1,4 +1,4 @@
-package supersymmetry.mixins.redctrl;
+package supersymmetry.mixins.rs_ctr;
 
 import cd4017be.rs_ctr.render.WireRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
