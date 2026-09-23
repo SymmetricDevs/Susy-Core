@@ -193,6 +193,7 @@ public class SuSyMetaItems {
 
         AIRLOCK = metaItem.addItem(25, "airlock")
                 .addComponents(new AirlockBehavior(SuSyBlocks.AIRLOCK_DOOR));
+        metaItem.addItem(26, "test_missing");
     }
 
     private static void addExtraBehaviours() {
