@@ -291,19 +291,18 @@ public class SusyTextures {
         }
     }
 
-    // tank overlay arraw from 0 to 8
-    public static final OrientedOverlayRenderer[] TANK_LEVEL_OVERLAYS = new OrientedOverlayRenderer[] {
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_1"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_2"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_3"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_4"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_5"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_6"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_7"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_8"),
-        new OrientedOverlayRenderer("machines/multiblock/tank/tank_overlay_9")
-    };
+    public static final SimpleOverlayRenderer[] TANK_OVERLAYS = new SimpleOverlayRenderer[] {
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_1"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_2"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_3"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_4"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_5"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_6"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_7"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_8"),
+        new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_9")
+        };
     
-    public static ICubeRenderer MONEL_400_CASING = new SimpleCubeRenderer(
+    public static SimpleCubeRenderer MONEL_400_CASING = new SimpleCubeRenderer(
         "gregtech:blocks/multiblock_casing/monel_400_casing");
 }

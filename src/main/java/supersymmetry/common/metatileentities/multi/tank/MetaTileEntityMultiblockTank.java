@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -13,10 +14,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.util.text.ITextComponent;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
@@ -34,12 +36,15 @@ import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.GregtechDataCodes;
+import gregtech.client.renderer.texture.Textures;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.client.renderer.textures.SusyTextures;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Matrix4;
+import codechicken.lib.render.pipeline.IVertexOperation;
 
 import java.util.Collections;
 import java.util.List;
@@ -114,6 +119,71 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.fluidInventory = fluidTank;
     }
 
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == UPDATE_TANK_FILL_STATE) {
+            this.lastFillState = buf.readInt();
+            if (getWorld() != null && getWorld().isRemote) {
+                scheduleRenderUpdate();
+                getWorld().markBlockRangeForRenderUpdate(getPos(), getPos());
+            }
+        } else if (dataId == UPDATE_STRUCTURE_SIZE) {
+            this.lDist = buf.readInt();
+            this.rDist = buf.readInt();
+            this.uDist = buf.readInt();
+            this.dDist = buf.readInt();
+            this.airDepth = buf.readInt();
+            reinitializeStructurePattern();
+        } else {
+            super.receiveCustomData(dataId, buf);
+        }
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeInt(getFillState());
+        buf.writeInt(lDist);
+        buf.writeInt(rDist);
+        buf.writeInt(uDist);
+        buf.writeInt(dDist);
+        buf.writeInt(airDepth);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.lastFillState = buf.readInt();
+        this.lDist = buf.readInt();
+        this.rDist = buf.readInt();
+        this.uDist = buf.readInt();
+        this.dDist = buf.readInt();
+        this.airDepth = buf.readInt();
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setInteger("lDist", lDist);
+        data.setInteger("rDist", rDist);
+        data.setInteger("uDist", uDist);
+        data.setInteger("dDist", dDist);
+        data.setInteger("airDepth", airDepth);
+        data.setInteger("lastFillState", lastFillState);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.lDist = data.getInteger("lDist");
+        this.rDist = data.getInteger("rDist");
+        this.uDist = data.getInteger("uDist");
+        this.dDist = data.getInteger("dDist");
+        this.airDepth = data.getInteger("airDepth");
+        this.lastFillState = data.getInteger("lastFillState");
+    }
+
     // Building
 
     @Override
@@ -155,9 +225,6 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         BlockPos centerAir = start.offset(back, 1);
 
         if (!isAir(world, centerAir)) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] centerAir not air");
-            }
             return false;
         }
 
@@ -197,20 +264,11 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.dDist = fixedDDist;
         this.airDepth = air;
 
-        if (DEBUG_STRUCTURE) {
-            System.out.println("[TankScan] l=r=" + l + " u=" + u + " d=" + fixedDDist +
-                    " air=" + air + " -> w=" + w + " h=" + h + " depth=" + depth);
-        }
-
         boolean valid = w >= MIN_SIZE && w <= MAX_SIZE
                 && h >= MIN_SIZE && h <= MAX_SIZE
                 && depth >= MIN_SIZE && depth <= MAX_SIZE;
 
         if (!valid) {
-            if (DEBUG_STRUCTURE) {
-                System.out.println("[TankScan] not right size (" +
-                        MIN_SIZE + "-" + MAX_SIZE + ").");
-            }
             return false;
         }
 
@@ -224,23 +282,6 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         return true;
     }
 
-    protected String[] genRow(int w, int h, int depth, int aisle) { return null; }
-
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == UPDATE_STRUCTURE_SIZE) {
-            this.lDist = buf.readInt();
-            this.rDist = buf.readInt();
-            this.uDist = buf.readInt();
-            this.dDist = buf.readInt();
-            this.airDepth = buf.readInt();
-        } else if (dataId == 9999) {
-            this.lastFillState = buf.readInt();
-            scheduleRenderUpdate();
-        }
-    }
-    
     @Override
     protected BlockPattern createStructurePattern() {
         if (getWorld() != null) {
@@ -310,12 +351,19 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             return;
         }
         fluidTank.setLongCapacity(volume * (long) type.kLPerBlock * 1000L);
+
+        if (!getWorld().isRemote) {
+            writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(getFillState()));
+        }
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
         fluidTank.setLongCapacity(0);
+        if (!getWorld().isRemote) {
+            writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(0));
+        }
     }
 
     @Override
@@ -325,7 +373,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             int currentState = getFillState();
             if (currentState != lastFillState) {
                 this.lastFillState = currentState;
-                writeCustomData(9999, buf -> buf.writeInt(currentState));
+                writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(currentState));
                 markDirty();
             }
         }
@@ -356,8 +404,34 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     @Override
-    protected ICubeRenderer getFrontOverlay() {
-        return SusyTextures.TANK_LEVEL_OVERLAYS[getFillState()];
+    @SideOnly(Side.CLIENT)
+    public ICubeRenderer getFrontOverlay() {
+        if (!isStructureFormed()) {
+            return SusyTextures.TANK_OVERLAYS[0];
+        }
+
+        int state = (lastFillState >= 0) ? lastFillState : getFillState();
+
+        if (SusyTextures.TANK_OVERLAYS != null && SusyTextures.TANK_OVERLAYS.length > 0) {
+            int index = Math.min(Math.max(state, 0), SusyTextures.TANK_OVERLAYS.length - 1);
+            if (SusyTextures.TANK_OVERLAYS[index] != null) {
+                return SusyTextures.TANK_OVERLAYS[index];
+            }
+        }
+
+        return SusyTextures.TANK_OVERLAYS[0];
+    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+
+        if (getFrontFacing() != null) {
+            ICubeRenderer overlay = getFrontOverlay();
+            if (overlay != null) {
+                overlay.renderSided(getFrontFacing(), renderState, translation, pipeline);
+            }
+        }
     }
 
     // GUI
