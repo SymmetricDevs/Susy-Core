@@ -22,6 +22,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "littletiles",
             "celeritas",
             "projectred-core",
+            "redctrl",
             "icbmclassic",
             "appliedenergistics2",
             "universalmodcore",
