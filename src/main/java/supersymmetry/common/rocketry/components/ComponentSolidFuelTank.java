@@ -110,7 +110,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
             double welzlRadius = analysis.getRadius(airLayer);
             if (pow(welzlRadius, 2) * Math.PI - 2 > airLayer.size()) {
                 // circular pattern
-                analysis.status = StructAnalysis.BuildStat.HULL_WEAK;
+                analysis.status = StructAnalysis.BuildStat.WEIRD_SHAPE;
                 int finalI = i;
                 // works because the airLayer is not null and the structure is connected
                 return analysis.errorPos(nozzleBlocks.stream().filter(b -> b.getY() == finalI)
@@ -149,7 +149,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         };
         for (BlockPos block : tankBlocks) {
             if (!shellPredicate.test(block)) {
-                analysis.status = StructAnalysis.BuildStat.HULL_WEAK;
+                analysis.status = StructAnalysis.BuildStat.WRONG_SHELL_BLOCK;
                 return analysis.errorPos(block);
             }
         }
@@ -194,8 +194,8 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         }
 
         this.radius = analysis.getRadius(nozzleBlocks);
-        int calculatedHeight = (int) (analysis.getBB(blocks).maxZ - analysis.getBB(blocks).minZ);
-        if (calculatedHeight > radius * 2) {
+        int calculatedHeight = (int) (analysis.getBB(blocks).maxY - analysis.getBB(blocks).minY);
+        if (calculatedHeight < radius * 2) {
             analysis.status = StructAnalysis.BuildStat.TOO_SHORT;
         }
         NBTTagCompound tag = new NBTTagCompound();
@@ -203,7 +203,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         // The scan is successful by this point
         analysis.status = StructAnalysis.BuildStat.SUCCESS;
         // The center column of the rocket shouldn't be counted
-        this.volume = interiorAir - (int) (analysis.getBB(tankBlocks).maxZ - analysis.getBB(tankBlocks).minZ);
+        this.volume = interiorAir - (int) (analysis.getBB(tankBlocks).maxY - analysis.getBB(tankBlocks).minY);
         tag.setInteger("volume", this.volume);
         tag.setDouble("area_ratio", computedAreaRatio);
 

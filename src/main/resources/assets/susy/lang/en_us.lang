@@ -2019,6 +2019,8 @@ susy.msg.rocket_component.no_engine=The spacecraft has no engine to get to the M
 susy.msg.rocket_component.not_enough_oxidizer=The engine does not have enough oxidizer to complete its mission.
 susy.msg.rocket_component.not_enough_fuel=The engine does not have enough fuel to complete its mission.
 susy.msg.rocket_component.not_enough_rcs=The spacecraft does not have enough reaction control thrusters to control itself.
+susy.msg.rocket_component.wrong_nozzle_block=This solid rocket booster is using the wrong kind of tank shell.
+susy.msg.rocket_component.weird_shape=This solid rocket booster has a suboptimal shape.
 
 entity.Rocket.name=Soyuz FG Rocket
 entity.Lander.name=Moon Lander
