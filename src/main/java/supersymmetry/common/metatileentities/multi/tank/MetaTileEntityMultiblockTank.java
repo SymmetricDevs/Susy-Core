@@ -20,6 +20,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Matrix4;
+import codechicken.lib.render.pipeline.IVertexOperation;
+
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
 import gregtech.api.capability.impl.PropertyFluidFilter;
@@ -37,14 +41,9 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.api.capability.impl.FluidTankList;
-import gregtech.client.renderer.texture.Textures;
 
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.client.renderer.textures.SusyTextures;
-
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.vec.Matrix4;
-import codechicken.lib.render.pipeline.IVertexOperation;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,14 +54,13 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
-    private static final boolean DEBUG_STRUCTURE = false;
 
     public final SuSyTankType type;
 
     private int lDist = 1, rDist = 1, uDist = 1, dDist = 1;
     private int airDepth = 1;
 
-    private LongFilteredFluidHandler fluidTank;
+    private FilteredFluidHandler fluidTank;
     private int lastFillState = -1;
 
     public MetaTileEntityMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
@@ -98,7 +96,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        this.fluidTank = new LongFilteredFluidHandler(0);
+        this.fluidTank = new FilteredFluidHandler(0);
 
         if (type == SuSyTankType.WOOD) {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
@@ -159,29 +157,6 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.uDist = buf.readInt();
         this.dDist = buf.readInt();
         this.airDepth = buf.readInt();
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setInteger("lDist", lDist);
-        data.setInteger("rDist", rDist);
-        data.setInteger("uDist", uDist);
-        data.setInteger("dDist", dDist);
-        data.setInteger("airDepth", airDepth);
-        data.setInteger("lastFillState", lastFillState);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        this.lDist = data.getInteger("lDist");
-        this.rDist = data.getInteger("rDist");
-        this.uDist = data.getInteger("uDist");
-        this.dDist = data.getInteger("dDist");
-        this.airDepth = data.getInteger("airDepth");
-        this.lastFillState = data.getInteger("lastFillState");
     }
 
     // Building
@@ -350,7 +325,10 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             invalidateStructure();
             return;
         }
-        fluidTank.setLongCapacity(volume * (long) type.kLPerBlock * 1000L);
+        
+        long calculatedCapacity = volume * (long) type.kLPerBlock * 1000L;
+        int clampedCapacity = (int) Math.min(calculatedCapacity, Integer.MAX_VALUE);
+        fluidTank.setCapacity(clampedCapacity);
 
         if (!getWorld().isRemote) {
             writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(getFillState()));
@@ -360,7 +338,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        fluidTank.setLongCapacity(0);
+        fluidTank.setCapacity(0);
         if (!getWorld().isRemote) {
             writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(0));
         }
@@ -387,12 +365,12 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     private int getFillState() {
-        if (!isStructureFormed() || fluidTank == null || fluidTank.getLongCapacity() <= 0) {
+        if (!isStructureFormed() || fluidTank == null || fluidTank.getCapacity() <= 0) {
             return 0;
         }
         
         long stored = fluidTank.getFluidAmount();
-        long capacity = fluidTank.getLongCapacity();
+        long capacity = fluidTank.getCapacity();
 
         if (stored <= 0) return 0;
         if (stored >= capacity) return 8;
@@ -421,6 +399,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
         return SusyTextures.TANK_OVERLAYS[0];
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
@@ -535,25 +514,5 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
         return Collections.singletonList(size3.build());
-    }
-
-    // Inner Class per gestire il Long Capacity
-    public static class LongFilteredFluidHandler extends FilteredFluidHandler {
-
-        private long longCapacity;
-
-        public LongFilteredFluidHandler(long capacity) {
-            super((int) Math.min(capacity, Integer.MAX_VALUE));
-            this.longCapacity = capacity;
-        }
-
-        public void setLongCapacity(long capacity) {
-            this.longCapacity = capacity;
-            super.setCapacity((int) Math.min(capacity, Integer.MAX_VALUE));
-        }
-
-        public long getLongCapacity() {
-            return this.longCapacity;
-        }
     }
 }
