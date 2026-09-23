@@ -14,8 +14,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
@@ -44,7 +42,6 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 import java.util.Collections;
 import java.util.List;
-import java.math.BigInteger;
 
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
@@ -58,7 +55,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     private int lDist = 1, rDist = 1, uDist = 1, dDist = 1;
     private int airDepth = 1;
 
-    private BigFilteredFluidHandler fluidTank;
+    private FilteredFluidHandler fluidTank;
 
     public MetaTileEntityMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
         super(metaTileEntityId);
@@ -91,18 +88,20 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     protected void initializeInventory() {
         super.initializeInventory();
-        this.fluidTank = new BigFilteredFluidHandler();
+        this.fluidTank = new FilteredFluidHandler(0);
 
         if (type == SuSyTankType.WOOD) {
             fluidTank.setFilter(new PropertyFluidFilter(340, false, false, false, false));
         } else if (type == SuSyTankType.STEEL) {
-            fluidTank.setFilter(new PropertyFluidFilter(1000, true, true, false, false));
+            fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, false));
+        //} else if (type == SuSyTankType.MONEL) {
+        //    fluidTank.setFilter(new PropertyFluidFilter(1855, true, false, false, true));
         } else if (type == SuSyTankType.STAINLESS_STEEL) {
-            fluidTank.setFilter(new PropertyFluidFilter(2000, true, true, true, false));
+            fluidTank.setFilter(new PropertyFluidFilter(2428, true, true, true, true));
         } else if (type == SuSyTankType.TITANIUM) {
-            fluidTank.setFilter(new PropertyFluidFilter(3000, true, true, true, false));
+            fluidTank.setFilter(new PropertyFluidFilter(2426, true, false, true, false));
         } else if (type == SuSyTankType.TUNGSTEN_STEEL) {
-            fluidTank.setFilter(new PropertyFluidFilter(5000, true, true, true, true));
+            fluidTank.setFilter(new PropertyFluidFilter(3587, true, false, false, true));
         }
 
         this.importFluids = new FluidTankList(true, new FluidTank[]{ fluidTank });
@@ -142,7 +141,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         if (front.getAxis().isVertical()) {
             return false;
         }
-
+        
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite();
@@ -302,37 +301,13 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
             invalidateStructure();
             return;
         }
-
-        BigInteger capacityMB = BigInteger.valueOf(volume)
-                .multiply(BigInteger.valueOf(type.kLPerBlock))
-                .multiply(BigInteger.valueOf(1000L));
-
-        this.fluidTank.setBigCapacity(capacityMB);
+        fluidTank.setCapacity((int) (volume * (long) type.kLPerBlock * 1000L));
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        if (this.fluidTank != null) {
-            this.fluidTank.setBigCapacity(BigInteger.ZERO);
-        }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        if (this.fluidTank != null) {
-            this.fluidTank.writeToNBT(data);
-        }
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        if (this.fluidTank != null) {
-            this.fluidTank.readFromNBT(data);
-        }
+        fluidTank.setCapacity(0);
     }
 
     // Rendering
@@ -376,10 +351,49 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     }
 
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, World world, List tooltip, boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
+
         tooltip.add(I18n.format("gregtech.multiblock.tank.tooltip"));
         tooltip.add(I18n.format("susy.multiblock.tank.info", type.kLPerBlock * 1000L, type.maxAirBlocks, MIN_SIZE, MAX_SIZE));
+
+        switch (this.type) {
+            case WOOD:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 340));
+                break;
+
+            case STEEL:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 1855));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+                break;
+
+            //case MONEL:
+            //    tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 811));
+            //    tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+            //    tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
+            //    tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
+            //    break;
+
+            case STAINLESS_STEEL:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 2428));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.cryo_proof"));
+                tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
+                break;
+
+            case TITANIUM:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 2426));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+                tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
+                break;
+
+            case TUNGSTEN_STEEL:
+                tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", 3587));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+                tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
+                break;
+        }
     }
 
     @Override
@@ -409,122 +423,5 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
                 .where('X', type.casingState)
                 .where(' ', Blocks.AIR.getDefaultState());
         return Collections.singletonList(size3.build());
-    }
-
-    // Custom Big Fluid Handler
-    public static class BigFilteredFluidHandler extends FilteredFluidHandler {
-        private BigInteger bigCapacity = BigInteger.ZERO;
-        private BigInteger bigAmount = BigInteger.ZERO;
-
-        public BigFilteredFluidHandler() {
-            super(0);
-        }
-
-        public void setBigCapacity(BigInteger capacity) {
-            this.bigCapacity = capacity != null ? capacity : BigInteger.ZERO;
-        }
-
-        public BigInteger getBigCapacity() {
-            return this.bigCapacity;
-        }
-
-        public BigInteger getBigAmount() {
-            return this.bigAmount;
-        }
-
-        public void setBigAmount(BigInteger amount) {
-            this.bigAmount = amount != null ? amount : BigInteger.ZERO;
-            updateInternalStack();
-        }
-
-        private void updateInternalStack() {
-            if (this.bigAmount.compareTo(BigInteger.ZERO) <= 0) {
-                setFluid(null);
-            } else if (getFluid() != null) {
-                getFluid().amount = this.bigAmount.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
-            }
-        }
-
-        @Override
-        public int getCapacity() {
-            return this.bigCapacity.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
-        }
-
-        @Override
-        public int getFluidAmount() {
-            return this.bigAmount.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue();
-        }
-
-        @Override
-        public int fill(FluidStack resource, boolean doFill) {
-            if (resource == null || resource.amount <= 0) return 0;
-            if (getFilter() != null && !getFilter().test(resource)) return 0;
-
-            BigInteger fillAmount = BigInteger.valueOf(resource.amount);
-
-            if (getFluid() == null) {
-                BigInteger toAdd = fillAmount.min(this.bigCapacity);
-                if (doFill && toAdd.compareTo(BigInteger.ZERO) > 0) {
-                    this.bigAmount = toAdd;
-                    setFluid(new FluidStack(resource.getFluid(), toAdd.min(BigInteger.valueOf(Integer.MAX_VALUE)).intValue()));
-                }
-                return toAdd.intValue();
-            }
-
-            if (!getFluid().isFluidEqual(resource)) return 0;
-
-            BigInteger space = this.bigCapacity.subtract(this.bigAmount);
-            BigInteger toAdd = fillAmount.min(space);
-
-            if (doFill && toAdd.compareTo(BigInteger.ZERO) > 0) {
-                this.bigAmount = this.bigAmount.add(toAdd);
-                updateInternalStack();
-            }
-            return toAdd.intValue();
-        }
-
-        @Override
-        public FluidStack drain(int maxDrain, boolean doDrain) {
-            if (getFluid() == null || maxDrain <= 0 || this.bigAmount.compareTo(BigInteger.ZERO) <= 0) return null;
-
-            BigInteger drainReq = BigInteger.valueOf(maxDrain);
-            BigInteger toDrain = drainReq.min(this.bigAmount);
-
-            FluidStack drained = new FluidStack(getFluid().getFluid(), toDrain.intValue());
-
-            if (doDrain) {
-                this.bigAmount = this.bigAmount.subtract(toDrain);
-                if (this.bigAmount.compareTo(BigInteger.ZERO) <= 0) {
-                    this.bigAmount = BigInteger.ZERO;
-                    setFluid(null);
-                } else {
-                    updateInternalStack();
-                }
-            }
-            return drained;
-        }
-
-        @Override
-        public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-            super.writeToNBT(nbt);
-            nbt.setString("BigFluidAmount", this.bigAmount.toString());
-            return nbt;
-        }
-
-        @Override
-        public FluidTank readFromNBT(NBTTagCompound nbt) {
-            super.readFromNBT(nbt);
-            if (nbt.hasKey("BigFluidAmount")) {
-                try {
-                    this.bigAmount = new BigInteger(nbt.getString("BigFluidAmount"));
-                } catch (Exception e) {
-                    this.bigAmount = BigInteger.valueOf(getFluid() != null ? getFluid().amount : 0);
-                }
-            } else {
-                this.bigAmount = BigInteger.valueOf(getFluid() != null ? getFluid().amount : 0);
-            }
-            updateInternalStack();
-            return this;
-        }
     }
 }

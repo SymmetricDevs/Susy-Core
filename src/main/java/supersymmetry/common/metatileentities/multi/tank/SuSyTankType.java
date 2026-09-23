@@ -33,17 +33,17 @@ import org.jetbrains.annotations.Nullable;
 
 public enum SuSyTankType {
 
-    WOOD("wood", 187_500, 2, PLANKS.getState(TREATED_PLANK), Textures.WOOD_WALL, PLANKS.getItemVariant(TREATED_PLANK), Wood),
+    WOOD("wood", 18_750, 2, PLANKS.getState(TREATED_PLANK), Textures.WOOD_WALL, PLANKS.getItemVariant(TREATED_PLANK), Wood),
 
-    STEEL("steel", 250_000, 4, METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING, METAL_CASING.getItemVariant(STEEL_SOLID), Steel),
+    STEEL("steel", 25_000, 4, METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING, METAL_CASING.getItemVariant(STEEL_SOLID), Steel),
 
-    //MONEL("monel_400", 275_000, 8, SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), SusyTextures.MONEL_500_CASING, SuSyBlocks.MULTIBLOCK_CASING.getItemVariant(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), null),
+    //MONEL("monel_400", 27_500, 8, SuSyBlocks.MULTIBLOCK_CASING.getState(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), SusyTextures.MONEL_500_CASING, SuSyBlocks.MULTIBLOCK_CASING.getItemVariant(BlockSuSyMultiblockCasing.CasingType.MONEL_500_CASING), null),
 
-    STAINLESS_STEEL("stainless_steel", 302_500, 16, METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING, METAL_CASING.getItemVariant(STAINLESS_CLEAN), StainlessSteel),
+    STAINLESS_STEEL("stainless_steel", 30_250, 16, METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING, METAL_CASING.getItemVariant(STAINLESS_CLEAN), StainlessSteel),
 
-    TITANIUM("titanium", 332_750, 32, METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING, METAL_CASING.getItemVariant(TITANIUM_STABLE), Titanium),
+    TITANIUM("titanium", 33_275, 32, METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING, METAL_CASING.getItemVariant(TITANIUM_STABLE), Titanium),
 
-    TUNGSTEN_STEEL("tungsten_steel", 366_025, 64, METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING, METAL_CASING.getItemVariant(TUNGSTENSTEEL_ROBUST), TungstenSteel);
+    TUNGSTEN_STEEL("tungsten_steel", 36_603, 64, METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING, METAL_CASING.getItemVariant(TUNGSTENSTEEL_ROBUST), TungstenSteel);
 
     public final String Material;
     public final int kLPerBlock;
