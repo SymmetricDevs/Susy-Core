@@ -5,6 +5,7 @@ import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemSta
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -27,6 +28,7 @@ import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
+import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.util.SuSyUtility;
 
 public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBTTagCompound> {
@@ -207,12 +209,16 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                     .mapToLong((stack) -> stack.material.getMass() * stack.amount).sum() / (GTValues.M / 36));
         } else {
             MaterialStack stack = OreDictUnifier.getMaterial(item);
-            if (stack != null) {
+            if (stack != null && stack.material.getMaterialComponents() != null) { // marker materials grr
                 currentMass += (int) (stack.material.getMass() * stack.amount / (GTValues.M / 36));
             } else {
-                currentMass += 98 * 36 * 4; // default mass times 36 times another fudge factor
+                currentMass += 98 * 36 * 4; // default Tc mass times 36 times another fudge factor
             }
         }
+        if (item.getItem() instanceof ItemBlock bItem && bItem.getBlock() instanceof WeightedBlock<?> block) {
+            currentMass = (int) Math.ceil(block.getMass(item) * 1000);
+        }
+
         // deliberately set masses should override the generated ones, but still take fluids into account
         if (ItemMassRegistry.getMass(item) != null) {
             if (ItemMassRegistry.getMass(item) != 0) {
