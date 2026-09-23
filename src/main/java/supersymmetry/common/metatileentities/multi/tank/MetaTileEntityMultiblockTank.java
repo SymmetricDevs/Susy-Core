@@ -159,6 +159,29 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         this.airDepth = buf.readInt();
     }
 
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setInteger("lDist", lDist);
+        data.setInteger("rDist", rDist);
+        data.setInteger("uDist", uDist);
+        data.setInteger("dDist", dDist);
+        data.setInteger("airDepth", airDepth);
+        data.setInteger("lastFillState", lastFillState);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.lDist = data.getInteger("lDist");
+        this.rDist = data.getInteger("rDist");
+        this.uDist = data.getInteger("uDist");
+        this.dDist = data.getInteger("dDist");
+        this.airDepth = data.getInteger("airDepth");
+        this.lastFillState = data.getInteger("lastFillState");
+    }
+
     // Building
 
     @Override
