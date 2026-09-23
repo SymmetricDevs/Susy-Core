@@ -14,7 +14,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
@@ -30,10 +29,17 @@ public class MissingModelCreator {
         exceptionsField = ModelLoader.class.getDeclaredField("loadingExceptions");
         exceptionsField.setAccessible(true);
         loadingExceptions = (Map<ResourceLocation, Exception>) exceptionsField.get(loader);
-        IResource blankModel = Minecraft.getMinecraft().getResourceManager()
-                .getResource(new ResourceLocation("susy", "blankmodel.txt"));
-        IResource blankItem = Minecraft.getMinecraft().getResourceManager()
-                .getResource(new ResourceLocation("susy", "blankitem.png"));
+        // IResource.getInputStream() hands back the same single-use stream on every call, so read each resource once
+        String blankModel;
+        byte[] blankItem;
+        try (IResource resource = Minecraft.getMinecraft().getResourceManager()
+                .getResource(new ResourceLocation("susy", "blankmodel.txt"))) {
+            blankModel = new String(IOUtils.toByteArray(resource.getInputStream()), StandardCharsets.UTF_8);
+        }
+        try (IResource resource = Minecraft.getMinecraft().getResourceManager()
+                .getResource(new ResourceLocation("susy", "blankitem.png"))) {
+            blankItem = IOUtils.toByteArray(resource.getInputStream());
+        }
         File gameDirectory = Minecraft.getMinecraft().gameDir;
         File assets = new File(gameDirectory, "resources");
         if (!assets.isDirectory()) {
@@ -58,15 +64,14 @@ public class MissingModelCreator {
                         File textureLoc = new File(assets, "gregtech/textures/items/" + folderized + ".png");
                         modelLoc.getParentFile().mkdirs();
                         textureLoc.getParentFile().mkdirs();
-
-                        Files.copy(blankModel.getInputStream(), modelLoc.toPath());
-                        Files.copy(blankItem.getInputStream(), textureLoc.toPath());
-                        // Replace "REPLACE"
-                        Charset charset = StandardCharsets.UTF_8;
-
-                        String content = new String(Files.readAllBytes(modelLoc.toPath()), charset);
-                        content = content.replaceAll("REPLACE", folderized);
-                        Files.write(modelLoc.toPath(), content.getBytes(charset));
+                        // Don't clobber anything that already exists (e.g. a texture someone has since drawn)
+                        if (!textureLoc.exists()) {
+                            Files.write(textureLoc.toPath(), blankItem);
+                        }
+                        if (!modelLoc.exists()) {
+                            Files.write(modelLoc.toPath(),
+                                    blankModel.replace("REPLACE", folderized).getBytes(StandardCharsets.UTF_8));
+                        }
                     }
                 }
             }
@@ -86,16 +91,12 @@ public class MissingModelCreator {
         // Check if the texture files are different
         for (String path : texturesToCheck) {
             File textureLoc = new File(assets, "gregtech/textures/items/" + path + ".png");
-            if (textureLoc.exists() && !IOUtils.contentEquals(new FileInputStream(textureLoc), blankItem.getInputStream())) {
+            if (textureLoc.exists() && !Arrays.equals(Files.readAllBytes(textureLoc.toPath()), blankItem)) {
                 toRemove.add(path);
             }
         }
         texturesToCheck.removeAll(toRemove);
         // Replace old texture check file
-        FileOutputStream stream = new FileOutputStream(textureCheckFile);
-        for (String path : texturesToCheck) {
-            stream.write(path.getBytes(StandardCharsets.UTF_8));
-            stream.write('\n');
-        }
+        Files.write(textureCheckFile.toPath(), texturesToCheck, StandardCharsets.UTF_8);
     }
 }
