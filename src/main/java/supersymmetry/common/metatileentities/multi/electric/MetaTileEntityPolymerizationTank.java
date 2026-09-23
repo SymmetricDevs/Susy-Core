@@ -3,7 +3,6 @@ package supersymmetry.common.metatileentities.multi.electric;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -22,7 +21,6 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.unification.material.Materials;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import gregtech.client.utils.TooltipHelper;
 import gregtech.common.blocks.BlockBoilerCasing.BoilerCasingType;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
@@ -68,7 +66,6 @@ public class MetaTileEntityPolymerizationTank extends RecipeMapMultiblockControl
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc", new Object[0]));
     }
 
     @NonNull protected ICubeRenderer getFrontOverlay() {

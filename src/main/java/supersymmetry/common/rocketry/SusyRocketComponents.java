@@ -76,8 +76,6 @@ public class SusyRocketComponents {
 
         ROCKET_LUNAR_BLUEPRINT_DEFAULT = new SimpleStagedRocketBlueprint.Builder("lunar").solidRocket()
                 .stage(new RocketStage.Builder("block_A").type("solid_tank").limit(1).build())
-                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
-                        .type("tank").limit(1).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"))
                 .componentValidationFunction(fairingCheck).build();
 

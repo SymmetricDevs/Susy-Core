@@ -162,6 +162,7 @@ public class CommonProxy {
         }
         registry.register(REGOLITH);
         registry.register(GOOG);
+        registry.register(SuSyBlocks.AIRLOCK_DOOR);
 
         SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
 
