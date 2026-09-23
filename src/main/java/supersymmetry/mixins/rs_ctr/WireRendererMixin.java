@@ -16,6 +16,6 @@ public class WireRendererMixin {
     @Overwrite(remap = false)
     public static void drawLine(BufferBuilder b, float[] v, float x, float y, float z,
                                  int l0, int l1, int c) {
-        System.out.println("hello! I'm Wirey;;asd");
+        return;
     }
 }
