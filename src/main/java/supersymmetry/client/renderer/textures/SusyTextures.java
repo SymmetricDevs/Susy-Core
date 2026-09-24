@@ -14,8 +14,7 @@ import supersymmetry.client.renderer.textures.custom.VatCasingRenderer;
 
 public class SusyTextures {
 
-    public SusyTextures() {
-    }
+    public SusyTextures() {}
 
     public static final SimpleSidedCubeRenderer WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer(
             "casings/wooden_coagulation_tank_wall");

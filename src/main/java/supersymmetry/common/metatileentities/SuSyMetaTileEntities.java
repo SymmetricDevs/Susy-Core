@@ -342,8 +342,6 @@ public class SuSyMetaTileEntities {
     public static SimpleMachineMetaTileEntity[] WIRE_BONDER;
     public static SimpleMachineMetaTileEntity[] RESIST_PROCESSOR;
 
-
-
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
                 new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -876,7 +874,6 @@ public class SuSyMetaTileEntities {
                 SusyTextures.PLASMA_ASHER_OVERLAY, true);
         registerSimpleMTE(WIRE_BONDER, 12, 18583, "wire_bonder", SuSyRecipeMaps.WIRE_BONDING,
                 SusyTextures.WIRE_BONDER_OVERLAY, true);
-
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
