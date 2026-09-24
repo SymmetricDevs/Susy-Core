@@ -337,6 +337,13 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
     public static SimpleMachineMetaTileEntity[] SIMPLE_CONDENSER;
 
+    public static SimpleMachineMetaTileEntity[] REACTIVE_ION_ETCHER;
+    public static SimpleMachineMetaTileEntity[] PLASMA_ASHER;
+    public static SimpleMachineMetaTileEntity[] WIRE_BONDER;
+    public static SimpleMachineMetaTileEntity[] RESIST_PROCESSOR;
+
+
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
                 new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -859,6 +866,17 @@ public class SuSyMetaTileEntities {
 
         EXTENDED_CHISEL_MAKER = registerMetaTileEntity(18528,
                 new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
+        // Tanks up to 18543
+
+        registerSimpleMTE(REACTIVE_ION_ETCHER, 12, 18544, "reactive_ion_etcher", SuSyRecipeMaps.RIE,
+                SusyTextures.RIE_OVERLAY, true);
+        registerSimpleMTE(RESIST_PROCESSOR, 12, 18567, "resist_processor", SuSyRecipeMaps.RESIST_PROCESSOR,
+                SusyTextures.RESIST_PROCESSOR_OVERLAY, true);
+        registerSimpleMTE(PLASMA_ASHER, 12, 18570, "plasma_asher", SuSyRecipeMaps.PLASMA_ASHER,
+                SusyTextures.PLASMA_ASHER_OVERLAY, true);
+        registerSimpleMTE(WIRE_BONDER, 12, 18583, "wire_bonder", SuSyRecipeMaps.WIRE_BONDING,
+                SusyTextures.WIRE_BONDER_OVERLAY, true);
+
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

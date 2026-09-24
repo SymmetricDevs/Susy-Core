@@ -14,7 +14,8 @@ import supersymmetry.client.renderer.textures.custom.VatCasingRenderer;
 
 public class SusyTextures {
 
-    public SusyTextures() {}
+    public SusyTextures() {
+    }
 
     public static final SimpleSidedCubeRenderer WOODEN_COAGULATION_TANK_WALL = new SimpleSidedCubeRenderer(
             "casings/wooden_coagulation_tank_wall");
@@ -79,6 +80,12 @@ public class SusyTextures {
             "machines/multiblocks/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
+    public static final ICubeRenderer RIE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/reactive_ion_etcher");
+    public static final ICubeRenderer RESIST_PROCESSOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/resist_processor");
+    public static final ICubeRenderer PLASMA_ASHER_OVERLAY = new OrientedOverlayRenderer("machines/plasma_asher");
+    public static final ICubeRenderer WIRE_BONDER_OVERLAY = new OrientedOverlayRenderer("machines/wire_bonder");
 
     public static final OrientedOverlayRenderer EXTENDED_CHISEL_OVERLAY = new OrientedOverlayRenderer(
             "machines/extended_chisel_maker");
