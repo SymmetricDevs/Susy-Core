@@ -446,7 +446,11 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
             }
             ComponentValidationResult validationResult;
             try {
-                validationResult = bp.componentValidationFunction.apply(bp);
+                if (bp.componentValidationFunction != null) {
+                    validationResult = bp.componentValidationFunction.apply(bp);
+                } else {
+                    validationResult = ComponentValidationResult.SUCCESS;
+                }
             } catch (RuntimeException e) {
                 SusyLog.logger.error(e);
                 lastErrorResult = ComponentValidationResult.UNKNOWN;
