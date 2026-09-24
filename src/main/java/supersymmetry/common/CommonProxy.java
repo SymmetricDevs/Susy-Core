@@ -63,6 +63,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.HyperDefoliantBehavior;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.pipelike.tanklessfluid.ItemBlockTanklessFluidPipe;
 import supersymmetry.common.potion.PotionDropPodSickness;
@@ -85,7 +86,7 @@ public class CommonProxy {
         Particles.init();
         Particles.register();
         CelestialObjects.init();
-    }
+   }
 
     /**
      * Checks for a canary file in the config directory and deletes it if found.
@@ -144,6 +145,7 @@ public class CommonProxy {
             new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10)
                     .setNightOnly(true);
         }
+        HyperDefoliantBehavior.registerDispenserBehavior(new ItemStack(SuSyMetaItems.HYPER_DEFOLIANT.getMetaItem()));
     }
 
     public void postLoad() {
