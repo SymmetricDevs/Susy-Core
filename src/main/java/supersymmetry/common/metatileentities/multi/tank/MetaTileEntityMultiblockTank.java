@@ -52,7 +52,7 @@ import java.util.List;
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int UPDATE_TANK_FILL_STATE = 9999;
-    private static final int MAX_VALVES = 4;
+    private static final int MAX_VALVES = 8;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
 
@@ -313,7 +313,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         return pattern
                 .where('S', selfPredicate())
                 .where('X', states(type.casingState)
-                        .setMinGlobalLimited(skinCells - MAX_VALVES)
+                        .setMinGlobalLimited(skinCells - 1 - MAX_VALVES)
                         .or(metaTileEntities(getValveForType())
                                 .setMaxGlobalLimited(MAX_VALVES)
                                 .setMinGlobalLimited(1)))
@@ -349,8 +349,11 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        fluidTank.setCapacity(0);
-        if (!getWorld().isRemote) {
+        if (fluidTank != null) {
+            fluidTank.setCapacity(0);
+        }
+        World world = getWorld();
+        if (world != null && !world.isRemote) {
             writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(0));
         }
     }
