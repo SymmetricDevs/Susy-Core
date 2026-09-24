@@ -51,7 +51,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
         Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV])
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20)).build().getResult();
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
         return recipe;
     }
 
