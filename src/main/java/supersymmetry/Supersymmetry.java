@@ -109,6 +109,18 @@ public class Supersymmetry {
                 EnumDyeColor.GRAY,
                 () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
                 true);
+
+        Items.registerFloppy(
+                "constructoid-M",
+                EnumDyeColor.RED,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "constructoid/constructoid_m"),
+                true);
+
+        Items.registerFloppy(
+                "constructoid-S",
+                EnumDyeColor.CYAN,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "constructoid/constructoid_s"),
+                true);
     }
 
     @Mod.EventHandler

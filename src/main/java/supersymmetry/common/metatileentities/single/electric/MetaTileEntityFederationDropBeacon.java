@@ -257,10 +257,10 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
-        tooltip.add(I18n.format("susy.machine.federation_drop_beacon.tooltip.info"));
-        tooltip.add(I18n.format("susy.machine.federation_drop_beacon.tooltip.description"));
-        tooltip.add(I18n.format("susy.machine.federation_drop_beacon.tooltip.description1"));
-        tooltip.add(I18n.format("susy.machine.federation_drop_beacon.tooltip.description2"));
+        tooltip.add(I18n.format("susy.machine.fed_beacon.tooltip.info"));
+        tooltip.add(I18n.format("susy.machine.fed_beacon.tooltip.description"));
+        tooltip.add(I18n.format("susy.machine.fed_beacon.tooltip.description1"));
+        tooltip.add(I18n.format("susy.machine.fed_beacon.tooltip.description2"));
     }
 
     @Override
