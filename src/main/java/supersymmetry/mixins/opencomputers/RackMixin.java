@@ -98,15 +98,52 @@ public abstract class RackMixin {
     }
 
     @Inject(method = "onItemRemoved", at = @At("HEAD"))
-    private void supersymmetry$cacheMapping(int slot, ItemStack stack, CallbackInfo ci) {
-        Rack rack = (Rack) (Object) this;
+    private void supersymmetry$cacheAndForceSave(int slot, ItemStack stack, CallbackInfo ci) {
+        Rack rack = (Rack)(Object)this;
         if (rack.getWorld() == null || rack.getWorld().isRemote) return;
+
         try {
             Object[] nodeMapping = (Object[]) supersymmetry$nodeMappingField.get(rack);
             Object[] slotMapping = (Object[]) nodeMapping[slot];
             System.arraycopy(slotMapping, 0, supersymmetry$cachedMappings[slot], 0, 4);
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
+
+        RackMountable mountable = rack.getMountable(slot);
+        if (mountable == null) return;
+
+        try {
+            Method machineMethod = null;
+            for (Method m : mountable.getClass().getMethods()) {
+                if (m.getName().equals("machine") && m.getParameterCount() == 0) {
+                    machineMethod = m;
+                    break;
+                }
+            }
+            if (machineMethod == null) return;
+
+            Object machine = machineMethod.invoke(mountable);
+            Object machineNode = machine.getClass().getMethod("node").invoke(machine);
+            Object network = machineNode.getClass().getMethod("network").invoke(machineNode);
+            if (network == null) return;
+
+            Iterable<?> nodes = (Iterable<?>) network.getClass().getMethod("nodes").invoke(network);
+
+            for (Object n : nodes) {
+                try {
+                    Object host = n.getClass().getMethod("host").invoke(n);
+                    try {
+                        host.getClass().getMethod("saveFiles").invoke(host);
+                        continue;
+                    } catch (NoSuchMethodException ignored) {}
+                    try {
+                        Object fs = host.getClass().getMethod("fileSystem").invoke(host);
+                        if (fs != null) {
+                            fs.getClass().getMethod("saveFiles").invoke(fs);
+                        }
+                    } catch (NoSuchMethodException ignored) {}
+                } catch (Throwable ignored) {}
+            }
+        } catch (Throwable ignored) {}
     }
 
     @Inject(method = "onItemAdded", at = @At("RETURN"))
