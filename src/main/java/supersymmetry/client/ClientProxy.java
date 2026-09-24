@@ -64,12 +64,14 @@ import gregtech.client.utils.TooltipHelper;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
+import supersymmetry.SusyConfig;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
+import supersymmetry.client.event.MissingModelCreator;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -406,6 +408,18 @@ public class ClientProxy extends CommonProxy {
                     GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void afterModelsBake(ModelBakeEvent event) {
+        if (!SusyConfig.enableMissingModelGen) {
+            return;
+        }
+        try {
+            MissingModelCreator.createModels(event);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

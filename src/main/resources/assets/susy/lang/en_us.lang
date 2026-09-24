@@ -1410,6 +1410,9 @@ recipemap.solar_furnace.name=Solar Furnace
 recipemap.evaporation_deposition.name=Evaporation Deposition
 recipemap.salvaging.name=Space Scrap Salvaging
 
+recipemap.resist_processing.name=Resist Processing
+recipemap.layup.name=Layup
+
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
 
