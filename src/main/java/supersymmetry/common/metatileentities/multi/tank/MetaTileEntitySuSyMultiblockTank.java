@@ -19,10 +19,12 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.EnumHand;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Matrix4;
 import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
 
 import gregtech.api.util.GTUtility;
 import gregtech.api.capability.impl.FilteredFluidHandler;
@@ -52,7 +54,7 @@ import java.util.List;
 public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int UPDATE_TANK_FILL_STATE = 9999;
-    private static final int MAX_VALVES = 8;
+    private static final int MAX_VALVES = 4;
     private static final int MIN_SIZE = 3;
     private static final int MAX_SIZE = 16;
 
@@ -156,18 +158,25 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         data.setInteger("dDist", dDist);
         data.setInteger("airDepth", airDepth);
         data.setInteger("lastFillState", lastFillState);
+        if (fluidTank != null) {
+            data.setTag("FluidInventory", fluidTank.writeToNBT(new NBTTagCompound()));
+        }
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.lDist = data.getInteger("lDist");
-        this.rDist = data.getInteger("rDist");
-        this.uDist = data.getInteger("uDist");
-        this.dDist = data.getInteger("dDist");
-        this.airDepth = data.getInteger("airDepth");
-        this.lastFillState = data.getInteger("lastFillState");
+        this.lDist = data.hasKey("lDist") ? data.getInteger("lDist") : this.lDist;
+        this.rDist = data.hasKey("rDist") ? data.getInteger("rDist") : this.rDist;
+        this.uDist = data.hasKey("uDist") ? data.getInteger("uDist") : this.uDist;
+        this.dDist = data.hasKey("dDist") ? data.getInteger("dDist") : this.dDist;
+        this.airDepth = data.hasKey("airDepth") ? data.getInteger("airDepth") : this.airDepth;
+        this.lastFillState = data.hasKey("lastFillState") ? data.getInteger("lastFillState") : this.lastFillState;
+        if (fluidTank != null && data.hasKey("FluidInventory")) {
+            fluidTank.readFromNBT(data.getCompoundTag("FluidInventory"));
+        }
+        reinitializeStructurePattern();
     }
 
     // Building
@@ -268,49 +277,58 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         return true;
     }
 
+    private static String row(char edge, char mid, int width) {
+        StringBuilder sb = new StringBuilder(width);
+        for (int i = 0; i < width; i++) {
+            sb.append(i == 0 || i == width - 1 ? edge : mid);
+        }
+        return sb.toString();
+    }
+
     @Override
     protected BlockPattern createStructurePattern() {
         if (getWorld() != null) {
             updateStructureDimensions();
         }
 
+        lDist = Math.max(lDist, 1);
+        rDist = Math.max(rDist, 1);
+        uDist = Math.max(uDist, 1);
+        dDist = Math.max(dDist, 1);
+        airDepth = Math.max(airDepth, 1);
+
         int w = Math.max(lDist + rDist + 1, MIN_SIZE);
         int h = Math.max(uDist + dDist + 1, MIN_SIZE);
         int depth = Math.max(airDepth + 2, MIN_SIZE);
+        int repeat = depth - 2;
 
-        String[][] aisles = new String[depth][h];
-        for (int a = 0; a < depth; a++) {
-            boolean frontWall = (a == depth - 1);
-            boolean backWall = (a == 0);
-            for (int r = 0; r < h; r++) {
-                boolean topWall = (r == 0);
-                boolean bottomWall = (r == h - 1);
-                StringBuilder row = new StringBuilder(w);
-                for (int c = 0; c < w; c++) {
-                    boolean sideWall = (c == 0 || c == w - 1);
-                    char cell;
+        String full = row('X', 'X', w);
+        String side = row('X', ' ', w);
 
-                    if (frontWall && r == dDist && c == lDist) {
-                        cell = 'S';
-                    } else if (backWall || frontWall || bottomWall || topWall || sideWall) {
-                        cell = 'X';
-                    } else {
-                        cell = ' ';
-                    }
-                    row.append(cell);
-                }
-                aisles[a][r] = row.toString();
+        String[] backWall = new String[h];
+        String[] slice = new String[h];
+        String[] frontWall = new String[h];
+
+        for (int r = 0; r < h; r++) {
+            boolean floorOrRoof = (r == 0 || r == h - 1);
+            backWall[r] = full;
+            slice[r] = floorOrRoof ? full : side;
+            if (r == dDist) {
+                StringBuilder sb = new StringBuilder(full);
+                sb.setCharAt(lDist, 'S');
+                frontWall[r] = sb.toString();
+            } else {
+                frontWall[r] = full;
             }
         }
 
         int interiorCells = (w - 2) * (h - 2) * (depth - 2);
         int skinCells = w * h * depth - interiorCells;
 
-        FactoryBlockPattern pattern = FactoryBlockPattern.start();
-        for (String[] rows : aisles) {
-            pattern.aisle(rows);
-        }
-        return pattern
+        return FactoryBlockPattern.start()
+                .aisle(backWall)
+                .aisle(slice).setRepeatable(repeat)
+                .aisle(frontWall)
                 .where('S', selfPredicate())
                 .where('X', states(type.casingState)
                         .setMinGlobalLimited(skinCells - 1 - MAX_VALVES)
@@ -349,11 +367,8 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        if (fluidTank != null) {
-            fluidTank.setCapacity(0);
-        }
-        World world = getWorld();
-        if (world != null && !world.isRemote) {
+        fluidTank.setCapacity(0);
+        if (!getWorld().isRemote) {
             writeCustomData(UPDATE_TANK_FILL_STATE, buf -> buf.writeInt(0));
         }
     }
@@ -431,7 +446,14 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     protected boolean openGUIOnRightClick() {
-        return true;
+        return isStructureFormed();
+    }
+
+    @Override
+    public boolean onRightClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
+                                CuboidRayTraceResult hitResult) {
+        if (!isStructureFormed()) return false;
+        return super.onRightClick(playerIn, hand, facing, hitResult);
     }
 
     @Override

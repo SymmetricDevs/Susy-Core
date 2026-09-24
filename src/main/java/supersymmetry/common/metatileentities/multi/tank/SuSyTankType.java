@@ -40,7 +40,7 @@ public enum SuSyTankType {
      30_250, 16, METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING, METAL_CASING.getItemVariant(STAINLESS_CLEAN), StainlessSteel),
     TITANIUM("titanium", 2426, true, false, false, false, true,
      33_275, 32, METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING, METAL_CASING.getItemVariant(TITANIUM_STABLE), Titanium),
-    TUNGSTEN_STEEL("tungsten_steel", 3587, true, false, false, true, false,
+    TUNGSTEN_STEEL("tungsten_steel", 3587, true, true, false, false, false,
      36_603, 64, METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING, METAL_CASING.getItemVariant(TUNGSTENSTEEL_ROBUST), TungstenSteel);
 
     public final String Material;
