@@ -1,6 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures" : {
+    "particle" : "gregtech:blocks/rocketry/struct/gasgenerator_staged.side",
     "north" : "gregtech:blocks/rocketry/struct/gasgenerator.top",
     "south" : "gregtech:blocks/rocketry/struct/gasgenerator.top",
     "east" : "gregtech:blocks/rocketry/struct/gasgenerator_staged.side",

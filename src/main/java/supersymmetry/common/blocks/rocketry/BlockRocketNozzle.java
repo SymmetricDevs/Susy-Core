@@ -36,7 +36,8 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
 
     public enum NozzleShapeType implements IStringSerializable, IStateHarvestLevel {
 
-        BELL_NOZZLE("bell_basic", 4);
+        BELL_NOZZLE("bell_basic", 4),
+        SOLID_ROCKET("solid_rocket", 4);
 
         private String name;
         private int harvestLevel;
@@ -66,6 +67,7 @@ public class BlockRocketNozzle extends VariantBlock<BlockRocketNozzle.NozzleShap
     public double getMass(NozzleShapeType type) {
         return switch (type) {
             case BELL_NOZZLE -> 15;
+            case SOLID_ROCKET -> 25;
         };
     }
 
