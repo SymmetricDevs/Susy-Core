@@ -878,16 +878,16 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         int[] xPoses = new int[] {10, 10, width - 170};
         int[] yPoses = new int[] {63, 85, 8};
-        for (int i = 0; i <= this.stats.sepAltitudes().size(); i++) {
+        for (int i = 0; i < this.stats.sepAltitudes().size(); i++) {
             final int j = i;
             workingGroup.addWidgetWithTest(new DynamicLabelWidget(xPoses[i], yPoses[i],
                             () -> I18n.format(getMetaName() + ".gui.sep_altitude",
-                                    j, String.format("%.2f", this.stats.sepAltitudes().get(j) / 1000)),
+                                    j + 1, String.format("%.2f", this.stats.sepAltitudes().get(j) / 1000)),
                             0xffffff),
                     () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
             workingGroup.addWidgetWithTest(new DynamicLabelWidget(xPoses[i],  yPoses[i] + 11,
                             () -> I18n.format(getMetaName() + ".gui.sep_time",
-                                    j, String.format("%.2f", this.stats.sepTimes().get(j))),
+                                    j + 1, String.format("%.2f", this.stats.sepTimes().get(j))),
                             0xffffff),
                     () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         }
