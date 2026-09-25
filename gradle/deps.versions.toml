@@ -115,3 +115,4 @@ configAnytime = { module = "com.cleanroommc:configanytime", version.ref = "confi
 flare = { module = "curse.maven:flare-692142", version.ref = "flare" }
 techguns = { module = "curse.maven:techguns-244201", version = "2958103" }
 gaspunk = { module = "curse.maven:gaspunk-286505", version = "3048663" }
+ftblib = { module = "curse.maven:ftb-library-legacy-forge-237167", version = "2985811" }
