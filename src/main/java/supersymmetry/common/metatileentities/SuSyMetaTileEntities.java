@@ -868,7 +868,7 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(REACTIVE_ION_ETCHER, 12, 18544, "reactive_ion_etcher", SuSyRecipeMaps.RIE,
                 SusyTextures.RIE_OVERLAY, true);
-        registerSimpleMTE(RESIST_PROCESSOR, 12, 18567, "resist_processor", SuSyRecipeMaps.RESIST_PROCESSOR,
+        registerSimpleMTE(RESIST_PROCESSOR, 12, 18557, "resist_processor", SuSyRecipeMaps.RESIST_PROCESSOR,
                 SusyTextures.RESIST_PROCESSOR_OVERLAY, true);
         registerSimpleMTE(PLASMA_ASHER, 12, 18570, "plasma_asher", SuSyRecipeMaps.PLASMA_ASHER,
                 SusyTextures.PLASMA_ASHER_OVERLAY, true);
