@@ -1,5 +1,9 @@
 package supersymmetry.common.faction;
 
+import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerJoinedEvent;
+import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
+import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +21,7 @@ public class FactionHate {
     private static final String TAG_ROOT = "susy";
     private static final String TAG_FACTION = "faction";
     private static final String TAG_HATE = "hate";
+    private static final String FORGE_DATA = "ForgeData";
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
@@ -67,5 +72,66 @@ public class FactionHate {
 
         NBTTagCompound cloneData = clone.getEntityData();
         cloneData.setTag(TAG_ROOT, susyData.copy());
+    }
+
+    @SubscribeEvent
+    public static void onTeamJoin(ForgeTeamPlayerJoinedEvent event) {
+        ForgePlayer joining = event.getPlayer();
+
+        if (!joining.isOnline())
+            return;
+
+        ForgeTeam team = joining.team;
+        if (team == null || !team.isValid())
+            return;
+
+        NBTTagCompound maxHates = new NBTTagCompound();
+        for (ForgePlayer member : team.getMembers()) {
+            if (member.getId().equals(joining.getId()))
+                continue;
+
+            NBTTagCompound memberHate = getMemberHateNBT(member);
+            for (String faction : memberHate.getKeySet()) {
+                int memberValue = memberHate.getInteger(faction);
+                int currentMax = maxHates.getInteger(faction);
+                if (memberValue > currentMax) {
+                    maxHates.setInteger(faction, memberValue);
+                }
+            }
+        }
+
+        NBTTagCompound joiningHate = getMemberHateNBT(joining);
+        for (String faction : joiningHate.getKeySet()) {
+            int joiningValue = joiningHate.getInteger(faction);
+            int currentMax = maxHates.getInteger(faction);
+            if (joiningValue > currentMax) {
+                maxHates.setInteger(faction, joiningValue);
+            }
+        }
+
+        if (maxHates.getSize() == 0)
+            return;
+
+        EntityPlayerMP joiningPlayer = joining.getPlayer();
+        for (String faction : maxHates.getKeySet()) {
+            int trueMax = maxHates.getInteger(faction);
+            FactionHateManager.setHate(joiningPlayer, faction, trueMax);
+            for (ForgePlayer member : team.getMembers()) {
+                if (member.getId().equals(joining.getId()))
+                    continue;
+                FactionHateManager.writeHateToForgePlayer(member, faction, trueMax);
+            }
+        }
+    }
+
+    private static NBTTagCompound getMemberHateNBT(ForgePlayer member) {
+        if (member.isOnline()) {
+            NBTTagCompound root = member.getPlayer().getEntityData().getCompoundTag(TAG_ROOT);
+            return root.getCompoundTag(TAG_HATE);
+        }
+        NBTTagCompound playerNBT = member.getPlayerNBT();
+        NBTTagCompound forgeData = playerNBT.getCompoundTag(FORGE_DATA);
+        NBTTagCompound root = forgeData.getCompoundTag(TAG_ROOT);
+        return root.getCompoundTag(TAG_HATE);
     }
 }

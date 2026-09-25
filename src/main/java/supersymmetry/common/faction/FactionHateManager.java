@@ -65,7 +65,7 @@ public class FactionHateManager {
         return hate.getInteger(faction);
     }
 
-    private static void writeHateToForgePlayer(ForgePlayer fp, String faction, int amount) {
+    protected static void writeHateToForgePlayer(ForgePlayer fp, String faction, int amount) {
         if (fp.isOnline()) {
             writeHate(fp.getPlayer(), faction, amount);
             return;

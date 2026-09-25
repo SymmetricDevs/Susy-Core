@@ -146,6 +146,9 @@ dependencies {
     // Gaspunk
     implementation(deps.gaspunk.deobf())
 
+    // FTB Library Legacy
+    implementation(deps.ftblib.deobf())
+
     // # Optional dependencies. Uncomment the ones you need
 //    runtimeOnly(deps.cd4017beLib.deobf())
 //    runtimeOnly(deps.dimStack.deobf())
