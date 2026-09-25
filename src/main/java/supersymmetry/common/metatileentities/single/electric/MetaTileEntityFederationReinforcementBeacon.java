@@ -35,7 +35,7 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
     private static final int PODS_MIN = 8;
     private static final int PODS_MAX = 12;
     private static final int POD_SPAWN_HEIGHT = 300;
-    private static final int POD_SPREAD_RADIUS = 4;
+    private static final int POD_SPREAD_RADIUS = 2;
 
     public static Function<World, EntityLiving> fedPayloadProvider = null;
     public static Consumer<EntityLiving> fedPostSpawnModifier = null;

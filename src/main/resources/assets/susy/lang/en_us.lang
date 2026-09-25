@@ -2135,16 +2135,16 @@ susy.machine.dust_agitator.tooltip.description=Disturbs dust particles in the lo
 #Federation Drop Beacon
 susy.machine.fed_beacon.lv.name=Federation Ordinance Drop Beacon
 susy.machine.fed_beacon.tooltip.info=Calls onto whatever remains of the orbital federation fleet to bring down their war machines.
-susy.machine.fed_beacon.tooltip.description=This one-time-use machine will cause problem causers to airdrop right onto your base.
-susy.machine.fed_beacon.tooltip.description1=It will destroy itself once it completes it's cycle.
+susy.machine.fed_beacon.tooltip.description=This one-time-use machine will cause problem causers to orbital drop right onto your base.
+susy.machine.fed_beacon.tooltip.description1=The machine destroys itself once it completes it's cycle.
 susy.machine.fed_beacon.tooltip.description2=§bBreaking this machine early will permanently sever it's uplink connection, but you may be able to salvage it's internal components.
 
 #Federation Troop Beacon
 susy.machine.fed_reinforcer.lv.name=Federation Troop Drop Beacon
 susy.machine.fed_reinforcer.tooltip.info=Step into your Hellpod, diver!
-susy.machine.fed_reinforcer.tooltip.description=This one-time-use machine will bring the attention of a rapid orbital response unit, causing federation soldiers to airdrop right on top of it!
-susy.machine.fed_reinforcer.tooltip.description1=It will destroy once after it completes it's cycle.
-susy.machine.fed_reinforcer.tooltip.description2=§cIf you can salvage this machine, it would allow you to instantly call down federation soldiers to a desired location.
+susy.machine.fed_reinforcer.tooltip.description=This one-time-use machine will attract the attention of a rapid orbital response unit, causing federation soldiers to orbital drop right on top of it!
+susy.machine.fed_reinforcer.tooltip.description1=The machine destroys itself once after it completes it's cycle.
+susy.machine.fed_reinforcer.tooltip.description2=§bIf you can salvage this machine, it would allow you to §cinstantly call down federation soldiers §bto a desired location.
 
 #Flallable Air
 tile.flammable_air.flammableair.name=Flammable Air
