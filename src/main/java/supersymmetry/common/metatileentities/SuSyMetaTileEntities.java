@@ -997,5 +997,11 @@ public class SuSyMetaTileEntities {
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
 
         RESISTANCE_FURNACE = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
+        REACTIVE_ION_ETCHER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        RESIST_PROCESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        PLASMA_ASHER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        WIRE_BONDER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
     }
 }
