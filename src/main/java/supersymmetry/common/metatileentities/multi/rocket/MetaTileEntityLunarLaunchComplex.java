@@ -3,6 +3,8 @@ package supersymmetry.common.metatileentities.multi.rocket;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,6 +87,8 @@ import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 
+import static gregtech.api.GTValues.*;
+
 /**
  * The rocket assembler and launch pad rolled into one. Lunar gravity is weak
  * enough that the rocket does not need the transporter erector and the separate
@@ -156,7 +160,50 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 this.launchRequested = true;
             }
         });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this);
+        this.recipeMapWorkable = new RocketAssemblerLogic(this) {
+            // get rid of the electrode requirement
+            @Override
+            protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
+                                                          @NotNull IItemHandlerModifiable importInventory,
+                                                          @NotNull IMultipleTankHandler importFluids) {
+                if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+                    return false;
+                }
+                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+                if (targetComponent == null) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean checkRecipe(@NotNull Recipe recipe) {
+                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+                if (targetComponent == null) {
+                    return false;
+                }
+                return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
+            }
+
+            //set energy consumption to a reasonable level
+            @Override
+            public Recipe getRecipe(long maxVoltage) {
+                if (!assembler.isAssemblyWorking())
+                    return null;
+
+                if (assembler.getComponentCount() == assembler.getComponentIndex()) {
+                    return null;
+                }
+                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+                if (targetComponent == null)
+                    return null;
+                List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
+                Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[HV])
+                        .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
+                return recipe;
+            }
+        };
     }
 
     @Override
@@ -513,18 +560,10 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         IItemHandlerModifiable imports = getInputInventory();
         for (int i = 0; i < imports.getSlots(); i++) {
             ItemStack stack = imports.getStackInSlot(i);
-            if (stack.isEmpty() || isAssemblyConsumable(stack))
+            if (stack.isEmpty())
                 continue;
             imports.setStackInSlot(i, ItemHandlerHelper.insertItemStacked(cargo, stack, false));
         }
-    }
-
-    /**
-     * Electrodes are spent building the rocket, not flown in it, so they stay
-     * behind for the next one.
-     */
-    private static boolean isAssemblyConsumable(ItemStack stack) {
-        return SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack);
     }
 
     private void setComplexState(LaunchComplexState state) {
@@ -613,13 +652,14 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
                 .aisle(floor, side1, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
                 .aisle(selfp, edgee, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
-                .where('S', selfPredicate()).where('C', states(getFoundationState()))
+                .where('S', selfPredicate())
+                .where('C', states(getFoundationState()))
                 .where('E', states(getFoundationState()).setMinGlobalLimited(30).or(autoAbilities())
-                        .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1).setMinGlobalLimited(1)
-                                .setMaxGlobalLimited(2))
-                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(1).setMinGlobalLimited(1)
-                                .setMaxGlobalLimited(4)))
+                        //.or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
+                                .setMaxGlobalLimited(2).setPreviewCount(1))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)
+                                .setMaxGlobalLimited(4).setPreviewCount(1)))
                 .where('T', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TITANIUM_STABLE)))
                 .where('G',
                         states(MetaBlocks.TURBINE_CASING
@@ -791,14 +831,6 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
         }
         if (!this.configWithinBudget) {
             textList.add(new TextComponentTranslation("susy.rocket_programmer.not_enough_budget"));
-        }
-    }
-
-    @Override
-    protected void addWarningText(List<ITextComponent> textList) {
-        super.addWarningText(textList);
-        if (isAssemblyWorking && !((RocketAssemblerLogic) recipeMapWorkable).hasEnoughElectrodes) {
-            textList.add(new TextComponentTranslation("susy.machine.rocket_assembler.warning.no_electrodes"));
         }
     }
 

@@ -116,7 +116,9 @@ public class StructAnalysis {
         NOT_ENOUGH_OXIDIZER("not_enough_oxidizer"),
         NOT_ENOUGH_FUEL("not_enough_fuel"),
         NOT_ENOUGH_RCS("not_enough_rcs"),
-        WRONG_SHELL_BLOCK("wrong_shell_block"), WEIRD_SHAPE("weird_shape");
+        WRONG_SHELL_BLOCK("wrong_shell_block"),
+        WEIRD_SHAPE("weird_shape"),
+        WRONG_NOZZLE_TYPE("wrong_nozzle_type");
 
         String code;
 

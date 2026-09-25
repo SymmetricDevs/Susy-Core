@@ -218,7 +218,9 @@ public class MetaTileEntityMixerSettlerV2 extends RecipeMapMultiblockController 
                 .aisle(" XX" + pad, " SX" + pad, " XX" + pad) // control panel
                 .where('S', selfPredicate()).where('X', states(getCasingState()).or(autoAbilities()))
                 .where('I', abilities(MultiblockAbility.IMPORT_FLUIDS))
-                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS)).where('P', states(getPipeCasingState()))
+                .where('O', abilities(MultiblockAbility.EXPORT_FLUIDS))
+                .where('P', states(getPipeCasingState()).or(states(MetaBlocks.BOILER_CASING.getState(
+                        BlockBoilerCasing.BoilerCasingType.TITANIUM_PIPE))))
                 .where('C', states(getCasingState()))
                 .where('T',
                         states(SuSyBlocks.MULTIBLOCK_CASING

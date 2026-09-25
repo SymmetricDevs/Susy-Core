@@ -3,6 +3,9 @@
   "variants" : {
     "variant=bell_basic" : {
       "model" : "susy:rocket_struct/rocket_nozzle"
+    },
+    "variant=solid_rocket" : {
+      "model" : "susy:rocket_struct/rocket_nozzle_solid"
     }
   }
 }

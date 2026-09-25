@@ -145,7 +145,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
             BlockTankShell1.TankCoverType blockType = ((BlockTankShell1.TankCoverType) (((VariantBlock<?>) blockState
                     .getBlock())
                     .getState(blockState)));
-            return blockType.equals(BlockTankShell1.TankCoverType.STEEL_SHELL);
+            return blockType.equals(BlockTankShell1.TankCoverType.TITANIUM_SHELL);
         };
         for (BlockPos block : tankBlocks) {
             if (!shellPredicate.test(block)) {

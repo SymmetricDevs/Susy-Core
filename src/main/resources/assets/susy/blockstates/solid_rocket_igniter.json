@@ -1,0 +1,8 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=default" : {
+      "model" : "susy:rocket_struct/solid_rocket_igniter"
+    }
+  }
+}
