@@ -60,5 +60,9 @@ public class SuSyMaterialFlags {
             .requireProps(PropertyKey.DUST, PropertyKey.FLUID)
             .build();
 
+    public static final MaterialFlag ALUMINA_CRUCIBLE = (new MaterialFlag.Builder("alumina_crucible"))
+            .requireFlags(SuSyMaterialFlags.INDUCTION_MELT)
+            .build();
+
     public SuSyMaterialFlags() {}
 }

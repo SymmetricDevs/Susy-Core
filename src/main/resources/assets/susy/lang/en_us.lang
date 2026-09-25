@@ -266,8 +266,10 @@ tile.epoxy_solar_furnace_mirror.epoxy.name=Lightweight Epoxy Solar Furnace Mirro
 tile.steel_solar_furnace_mirror.steel.name=Steel Solar Furnace Mirror
 tile.heliostat.default.name=Heliostat
 
-
 tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
+tile.crucible.alumina.name=Alumina Crucible
+tile.crucible.magnesia.name=Magnesia Crucible
+tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -350,6 +352,7 @@ susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
+susy.material.hot_softened_water=Hot Cooling Water
 susy.material.molybdenum_disilicide=Molybdenum Disilicide
 susy.material.metallized_bopet=Metallized BoPET
 
@@ -752,6 +755,7 @@ susy.recipe.blocks=Blocks: %s
 susy.recipe.evaporation=Required Energy: %d J/t
 susy.recipe.cryogenic_environment=Requires Cryogenic Environment
 susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
+susy.recipe.induction_crucible_material=Requires %s Crucible
 
 # More Distilleries
 susy.machine.distiller.bronze.name=Steam Distillery
@@ -1256,6 +1260,8 @@ susy.multiblock.cooling.heating_up=Temperature will rise
 susy.multiblock.cooling.dangerous_heat=Too Hot!
 susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
+
+susy.multiblock.induction_furnace.crucible_material=Crucible Material: %s
 
 # Sputtering Machine
 susy.machine.sputter_deposition.jei.group=Sputtering Machine
