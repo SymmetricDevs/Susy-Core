@@ -11,8 +11,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import gregtech.api.util.BlockInfo;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +36,9 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -62,7 +62,6 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
             return false;
         }), getCandidates(SuSyMetaTileEntities.REDSTONE_CONTROLLER)));
     }
-
 
     private static Supplier<BlockInfo[]> getCandidates(MetaTileEntity... metaTileEntities) {
         return () -> Arrays.stream(metaTileEntities).filter(Objects::nonNull).map(tile -> {
