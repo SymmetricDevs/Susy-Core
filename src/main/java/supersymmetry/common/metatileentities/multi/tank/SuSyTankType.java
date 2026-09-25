@@ -16,20 +16,21 @@ import static gregtech.api.unification.material.Materials.Wood;
 import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.properties.FluidPipeProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
 import gregtech.api.capability.impl.PropertyFluidFilter;
 import gregtech.api.unification.material.Material;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import supersymmetry.api.fluids.SuSyFluidAttributes;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing2;
 import supersymmetry.common.blocks.SuSyBlocks;
+
+import java.util.function.Function;
 
 public enum SuSyTankType {
 
@@ -94,7 +95,7 @@ public enum SuSyTankType {
         return mat != null ? mat.getProperty(PropertyKey.FLUID_PIPE) : null;
     }
 
-    private  T getPipeProp(Function getter, T fallback) {
+    private <T> T getPipeProp(Function<FluidPipeProperties, T> getter, T fallback) {
         FluidPipeProperties pipe = getPipeProperties();
         return pipe != null ? getter.apply(pipe) : fallback;
     }
