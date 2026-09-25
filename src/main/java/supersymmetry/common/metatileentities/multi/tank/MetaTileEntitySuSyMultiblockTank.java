@@ -51,7 +51,7 @@ import supersymmetry.api.fluids.SuSyFluidAttributes;
 import java.util.Collections;
 import java.util.List;
 
-public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
+public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase {
 
     private static final int UPDATE_TANK_FILL_STATE = 9999;
     private static final int MAX_VALVES = 4;
@@ -66,7 +66,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
     private FilteredFluidHandler fluidTank;
     private int lastFillState = -1;
 
-    public MetaTileEntityMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
+    public MetaTileEntitySuSyMultiblockTank(ResourceLocation metaTileEntityId, SuSyTankType type) {
         super(metaTileEntityId);
         this.type = type;
         initializeInventory();
@@ -93,7 +93,7 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityMultiblockTank(metaTileEntityId, type);
+        return new MetaTileEntitySuSyMultiblockTank(metaTileEntityId, type);
     }
 
     @Override
@@ -484,12 +484,12 @@ public class MetaTileEntityMultiblockTank extends MultiblockWithDisplayBase {
         tooltip.add(I18n.format("gregtech.multiblock.tank.tooltip"));
         tooltip.add(I18n.format("susy.multiblock.tank.info", type.kLPerBlock * 1000L, type.maxAirBlocks, MIN_SIZE, MAX_SIZE));
 
-        tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", type.maxTemperature));
-        if (type.gasProof) tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
-        if (type.cryoProof) tooltip.add(I18n.format("gregtech.fluid_pipe.cryo_proof"));
+        tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", type.getMaxTemperature()));
+        if (type.isGasProof()) tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
+        if (type.isCryoProof()) tooltip.add(I18n.format("gregtech.fluid_pipe.cryo_proof"));
         if (type.baseProof) tooltip.add(I18n.format("susy.fluid_pipe.base_proof"));
-        if (type.acidProof) tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
-        if (type.plasmaProof) tooltip.add(I18n.format("gregtech.fluid_pipe.plasma_proof"));
+        if (type.isAcidProof()) tooltip.add(I18n.format("gregtech.fluid_pipe.acid_proof"));
+        if (type.isPlasmaProof()) tooltip.add(I18n.format("gregtech.fluid_pipe.plasma_proof"));
     }
 
     @Override

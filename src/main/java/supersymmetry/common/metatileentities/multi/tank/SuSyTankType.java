@@ -13,6 +13,9 @@ import static gregtech.api.unification.material.Materials.StainlessSteel;
 import static gregtech.api.unification.material.Materials.Titanium;
 import static gregtech.api.unification.material.Materials.TungstenSteel;
 import static gregtech.api.unification.material.Materials.Wood;
+import gregtech.api.GregTechAPI;
+import gregtech.api.unification.material.properties.FluidPipeProperties;
+import gregtech.api.unification.material.properties.PropertyKey;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -30,27 +33,39 @@ import supersymmetry.common.blocks.SuSyBlocks;
 
 public enum SuSyTankType {
 
-    WOOD("wood", 340, false, false, false, false, false,
-     18_750, 2, STEAM_CASING.getState(WOOD_WALL), Textures.WOOD_WALL, STEAM_CASING.getItemVariant(WOOD_WALL), Wood),
-    STEEL("steel", 1855, true, false, false, false, false,
-     25_000, 4, METAL_CASING.getState(STEEL_SOLID), Textures.SOLID_STEEL_CASING, METAL_CASING.getItemVariant(STEEL_SOLID), Steel),
-    MONEL("monel_400", 811, true, true, false, false, true,
-     27_500, 8, SuSyBlocks.MULTIBLOCK_CASING_2.getState(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), SusyTextures.MONEL_400_CASING, SuSyBlocks.MULTIBLOCK_CASING_2.getItemVariant(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), null),
-    STAINLESS_STEEL("stainless_steel", 2428, true, true, true, false, true,
-     30_250, 16, METAL_CASING.getState(STAINLESS_CLEAN), Textures.CLEAN_STAINLESS_STEEL_CASING, METAL_CASING.getItemVariant(STAINLESS_CLEAN), StainlessSteel),
-    TITANIUM("titanium", 2426, true, false, false, false, true,
-     33_275, 32, METAL_CASING.getState(TITANIUM_STABLE), Textures.STABLE_TITANIUM_CASING, METAL_CASING.getItemVariant(TITANIUM_STABLE), Titanium),
-    TUNGSTEN_STEEL("tungsten_steel", 3587, true, true, false, false, false,
-     36_603, 64, METAL_CASING.getState(TUNGSTENSTEEL_ROBUST), Textures.ROBUST_TUNGSTENSTEEL_CASING, METAL_CASING.getItemVariant(TUNGSTENSTEEL_ROBUST), TungstenSteel);
+    WOOD("wood", false, 18_750, 2,
+        STEAM_CASING.getState(WOOD_WALL),
+        Textures.WOOD_WALL,
+        STEAM_CASING.getItemVariant(WOOD_WALL),
+        Wood),
+    STEEL("steel", false, 25_000, 4,
+        METAL_CASING.getState(STEEL_SOLID),
+        Textures.SOLID_STEEL_CASING,
+        METAL_CASING.getItemVariant(STEEL_SOLID),
+        Steel),
+    MONEL("monel_400", true, 27_500, 8, 
+        SuSyBlocks.MULTIBLOCK_CASING_2.getState(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), 
+        SusyTextures.MONEL_400_CASING, 
+        SuSyBlocks.MULTIBLOCK_CASING_2.getItemVariant(BlockSuSyMultiblockCasing2.CasingType.MONEL_400_CASING), 
+        null),
+    STAINLESS_STEEL("stainless_steel", true, 30_250, 16,
+        METAL_CASING.getState(STAINLESS_CLEAN),
+        Textures.CLEAN_STAINLESS_STEEL_CASING,
+        METAL_CASING.getItemVariant(STAINLESS_CLEAN),
+        StainlessSteel),
+    TITANIUM("titanium", true, 33_275, 32,
+        METAL_CASING.getState(TITANIUM_STABLE),
+        Textures.STABLE_TITANIUM_CASING,
+        METAL_CASING.getItemVariant(TITANIUM_STABLE),
+        Titanium),
+    TUNGSTEN_STEEL("tungsten_steel", false, 36_603, 64,
+        METAL_CASING.getState(TUNGSTENSTEEL_ROBUST),
+        Textures.ROBUST_TUNGSTENSTEEL_CASING,
+        METAL_CASING.getItemVariant(TUNGSTENSTEEL_ROBUST),
+        TungstenSteel);
 
     public final String Material;
-    public final int maxTemperature;
-    public final boolean gasProof;
-    public final boolean acidProof;
-    public final boolean cryoProof;
-    public final boolean plasmaProof;
     public final boolean baseProof;
-
     public final int kLPerBlock;
     public final int maxAirBlocks;
     public final IBlockState casingState;
@@ -58,14 +73,9 @@ public enum SuSyTankType {
     public final ItemStack casingStack;
     public final Material recipeMaterial;
 
-    SuSyTankType(String Material, int maxTemperature, boolean gasProof, boolean acidProof, boolean cryoProof, boolean plasmaProof, boolean baseProof,
-                 int kLPerBlock, int maxAirBlocks, IBlockState casingState, ICubeRenderer baseTexture, ItemStack casingStack, Material recipeMaterial) {
+    SuSyTankType(String Material, boolean baseProof, int kLPerBlock, int maxAirBlocks, 
+                 IBlockState casingState, ICubeRenderer baseTexture, ItemStack casingStack, Material recipeMaterial) {
         this.Material = Material;
-        this.maxTemperature = maxTemperature;
-        this.gasProof = gasProof;
-        this.acidProof = acidProof;
-        this.cryoProof = cryoProof;
-        this.plasmaProof = plasmaProof;
         this.baseProof = baseProof;
         this.kLPerBlock = kLPerBlock;
         this.maxAirBlocks = maxAirBlocks;
@@ -75,17 +85,31 @@ public enum SuSyTankType {
         this.recipeMaterial = recipeMaterial;
     }
 
+    public FluidPipeProperties getPipeProperties() {
+        Material mat = this.recipeMaterial;
+        if (mat == null && this.Material != null) {
+            mat = GregTechAPI.materialManager.getMaterial(this.Material);
+            if (mat == null) mat = GregTechAPI.materialManager.getMaterial("susy:" + this.Material);
+        }
+        return mat != null ? mat.getProperty(PropertyKey.FLUID_PIPE) : null;
+    }
+
+    private  T getPipeProp(Function getter, T fallback) {
+        FluidPipeProperties pipe = getPipeProperties();
+        return pipe != null ? getter.apply(pipe) : fallback;
+    }
+
+    public int getMaxTemperature()  { return getPipeProp(FluidPipeProperties::getMaxFluidTemperature, 300); }
+    public boolean isGasProof()     { return getPipeProp(FluidPipeProperties::isGasProof, false); }
+    public boolean isAcidProof()    { return getPipeProp(FluidPipeProperties::isAcidProof, false); }
+    public boolean isCryoProof()    { return getPipeProp(FluidPipeProperties::isCryoProof, false); }
+    public boolean isPlasmaProof()  { return getPipeProp(FluidPipeProperties::isPlasmaProof, false); }
+
     public PropertyFluidFilter createFluidFilter() {
         PropertyFluidFilter filter = new PropertyFluidFilter(
-            this.maxTemperature,
-            this.gasProof,
-            this.acidProof,
-            this.cryoProof,
-            this.plasmaProof
+            getMaxTemperature(), isGasProof(), isAcidProof(), isCryoProof(), isPlasmaProof()
         );
-    
         filter.setCanContain(SuSyFluidAttributes.BASE, this.baseProof);
-    
         return filter;
     }
 }
