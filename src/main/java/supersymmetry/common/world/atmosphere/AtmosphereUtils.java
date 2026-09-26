@@ -28,7 +28,7 @@ public class AtmosphereUtils {
      * Whether air can occupy / flow through the given position. Positions below the world are treated as solid.
      */
     public static boolean isPassable(World world, BlockPos pos) {
-        return pos.getY() >= 0 && !world.isBlockFullCube(pos);
+        return pos.getY() >= 0 && !world.getBlockState(pos).isFullBlock();
     }
 
     /**
