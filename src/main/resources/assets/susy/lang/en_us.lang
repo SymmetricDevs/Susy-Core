@@ -1233,6 +1233,7 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+tile.susy_multiblock_casing2.monel_400_casing.name=Resistant Monel 400 Casing
 
 susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
@@ -2490,3 +2491,17 @@ tile.s16bmrf_blocks.s16bmrf13.name=BMRF-253
 tile.s16bmrf_blocks.s16bmrf14.name=BMRF-254
 tile.s16bmrf_blocks.s16bmrf15.name=BMRF-255
 tile.s16bmrf_blocks.s16bmrf16.name=BMRF-256
+
+#tanks controller
+susy.machine.tank.wood.name=Wooden Tank Controller
+susy.machine.tank.steel.name=Steel Tank Controller
+susy.machine.tank.monel_400.name=Monel Tank Controller
+susy.machine.tank.stainless_steel.name=Stainless Steel Tank Controller
+susy.machine.tank.titanium.name=Titanium Tank Controller
+susy.machine.tank.tungsten_steel.name=Tungstensteel Tank Controller
+
+#tanks valve
+susy.machine.tank_valve.monel_400.name=Monel Tank Valve
+susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
+susy.machine.tank_valve.titanium.name=Titanium Tank Valve
+susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve

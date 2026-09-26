@@ -11,6 +11,8 @@ import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.properties.BlastProperty;
+import gregtech.api.unification.material.properties.FluidPipeProperties;
+import gregtech.api.unification.material.properties.PropertyKey;
 import supersymmetry.api.util.SuSyUtility;
 
 public class SuSyFirstDegreeMaterials {
@@ -133,5 +135,17 @@ public class SuSyFirstDegreeMaterials {
                 .components(Molybdenum, 1, Silicon, 2)
                 .color(0x967BB6)
                 .build();
+
+        // SuSy tank
+
+        Monel400 = new Material.Builder(8824, SuSyUtility.susyId("monel_400"))
+                .dust()
+                .ingot()
+                .liquid(new FluidBuilder().temperature(811))
+                .flags(GENERATE_FRAME, GENERATE_ROD, GENERATE_PLATE, GENERATE_RING, GENERATE_BOLT, GENERATE_SCREW)
+                .color(0x3e563e)
+                .build();
+
+        MONEL_400.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(811, 2048, true, true, false, false));
     }
 }
