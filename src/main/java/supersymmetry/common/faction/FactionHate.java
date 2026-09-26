@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
 
+import java.util.List;
+
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionHate {
 
@@ -23,19 +25,15 @@ public class FactionHate {
     private static final String TAG_HATE = "hate";
     private static final String FORGE_DATA = "ForgeData";
 
+    // how far we'll look for someone to credit an environmental/trap kill to
+    private static final double MAX_ENVIRONMENTAL_KILL_RADIUS = 400.0D;
+
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (event.getEntity().world.isRemote)
             return;
 
         EntityLivingBase dead = (EntityLivingBase) event.getEntity();
-
-        // Get killer
-        Entity source = event.getSource().getTrueSource();
-        if (!(source instanceof EntityPlayer))
-            return;
-
-        EntityPlayer player = (EntityPlayer) source;
 
         NBTTagCompound entityTag = dead.getEntityData();
         if (!entityTag.hasKey(TAG_ROOT))
@@ -49,8 +47,40 @@ public class FactionHate {
 
         int hateValue = susy.getInteger(TAG_HATE);
 
+        // Get killer, if any
+        Entity source = event.getSource().getTrueSource();
+
+        EntityPlayer player;
+        if (source instanceof EntityPlayer) {
+            player = (EntityPlayer) source;
+        } else {
+            // environmental death, give credit to nearest player
+            // works both as anti-cheese for suffocation traps while looting and makes it so your own
+            // defenses (such as turrets/razor wire) work towards hate reduction
+            player = findNearestPlayer(dead, MAX_ENVIRONMENTAL_KILL_RADIUS);
+            if (player == null)
+                return;
+        }
+
         // Apply to player
         FactionHateManager.addHate(player, faction, hateValue);
+    }
+
+    private static EntityPlayer findNearestPlayer(EntityLivingBase dead, double maxRadius) {
+        List<EntityPlayer> players = dead.world.playerEntities;
+
+        EntityPlayer nearest = null;
+        double nearestDistSq = maxRadius * maxRadius;
+
+        for (EntityPlayer candidate : players) {
+            double distSq = dead.getDistanceSq(candidate);
+            if (distSq <= nearestDistSq) {
+                nearest = candidate;
+                nearestDistSq = distSq;
+            }
+        }
+
+        return nearest;
     }
 
     // making sure the hate stays after you die
@@ -131,7 +161,7 @@ public class FactionHate {
         }
         NBTTagCompound playerNBT = member.getPlayerNBT();
         NBTTagCompound forgeData = playerNBT.getCompoundTag(FORGE_DATA);
-        NBTTagCompound root = forgeData.getCompoundTag(TAG_ROOT);
+        NBTTagCompound root = forgeData.getCompoundTag(TAG_HATE);
         return root.getCompoundTag(TAG_HATE);
     }
 }
