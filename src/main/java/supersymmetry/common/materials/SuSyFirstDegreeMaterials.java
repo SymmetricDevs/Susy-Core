@@ -138,7 +138,7 @@ public class SuSyFirstDegreeMaterials {
 
         // SuSy tank
 
-        Monel400 = new Material.Builder(8800, SuSyUtility.susyId("monel_400"))
+        Monel400 = new Material.Builder(8824, SuSyUtility.susyId("monel_400"))
                 .dust()
                 .ingot()
                 .liquid(new FluidBuilder().temperature(811))
