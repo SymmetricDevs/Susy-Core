@@ -2,14 +2,12 @@ package supersymmetry.common.world.atmosphere;
 
 import java.util.Collection;
 
-import gregtech.api.cover.CoverHolder;
-import gregtech.api.pipenet.block.BlockPipe;
-import gregtech.api.pipenet.tile.IPipeTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import gregtech.api.pipenet.tile.IPipeTile;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 
 public class AtmosphereUtils {
@@ -39,7 +37,7 @@ public class AtmosphereUtils {
         if (pipe == null) {
             return false;
         }
-        for (EnumFacing side: EnumFacing.VALUES) {
+        for (EnumFacing side : EnumFacing.VALUES) {
             if (pipe.getCoverableImplementation().getCoverAtSide(side) == null) {
                 return false;
             }
