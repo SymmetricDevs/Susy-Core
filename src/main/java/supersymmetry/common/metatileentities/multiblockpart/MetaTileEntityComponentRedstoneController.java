@@ -3,8 +3,11 @@ package supersymmetry.common.metatileentities.multiblockpart;
 import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_ACTIVATION;
 import static supersymmetry.api.capability.SuSyDataCodes.UPDATE_REDSTONE_SIGNAL;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,10 +36,13 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.util.BlockInfo;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
+import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.client.renderer.textures.SusyTextures;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMultiblockPart {
 
@@ -54,7 +60,18 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
                 }
             }
             return false;
-        })));
+        }), getCandidates(SuSyMetaTileEntities.REDSTONE_CONTROLLER)));
+    }
+
+    private static Supplier<BlockInfo[]> getCandidates(MetaTileEntity... metaTileEntities) {
+        return () -> Arrays.stream(metaTileEntities).filter(Objects::nonNull).map(tile -> {
+            // TODO
+            MetaTileEntityHolder holder = new MetaTileEntityHolder();
+            holder.setMetaTileEntity(tile);
+            holder.getMetaTileEntity().onPlacement();
+            holder.getMetaTileEntity().setFrontFacing(EnumFacing.SOUTH);
+            return new BlockInfo(MetaBlocks.MACHINE.getDefaultState(), holder);
+        }).toArray(BlockInfo[]::new);
     }
 
     public int signal = 0;

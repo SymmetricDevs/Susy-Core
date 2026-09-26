@@ -1290,6 +1290,67 @@ susy.machine.evaporation_deposition.uiv.name=Epic Evaporation Deposition Machine
 susy.machine.evaporation_deposition.uxv.name=Epic Evaporation Deposition Machine IV
 susy.machine.evaporation_deposition.opv.name=Legendary Evaporation Deposition Machine
 
+# Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.jei.group=Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.lv.name=Basic Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.mv.name=Advanced Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.hv.name=Advanced Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.ev.name=Advanced Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.iv.name=Elite Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.luv.name=Elite Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.zpm.name=Elite Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.uv.name=Ultimate Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.uhv.name=Epic Reactive Ion Etcher I
+susy.machine.reactive_ion_etcher.uev.name=Epic Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.uiv.name=Epic Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.uxv.name=Epic Reactive Ion Etcher IV
+susy.machine.reactive_ion_etcher.opv.name=Legendary Reactive Ion Etcher
+
+susy.machine.resist_processor.jei.group=Resist Processor
+susy.machine.resist_processor.lv.name=Basic Resist Processor
+susy.machine.resist_processor.mv.name=Advanced Resist Processor
+susy.machine.resist_processor.hv.name=Advanced Resist Processor II
+susy.machine.resist_processor.ev.name=Advanced Resist Processor III
+susy.machine.resist_processor.iv.name=Elite Resist Processor
+susy.machine.resist_processor.luv.name=Elite Resist Processor II
+susy.machine.resist_processor.zpm.name=Elite Resist Processor III
+susy.machine.resist_processor.uv.name=Ultimate Resist Processor
+susy.machine.resist_processor.uhv.name=Epic Resist Processor I
+susy.machine.resist_processor.uev.name=Epic Resist Processor II
+susy.machine.resist_processor.uiv.name=Epic Resist Processor III
+susy.machine.resist_processor.uxv.name=Epic Resist Processor IV
+susy.machine.resist_processor.opv.name=Legendary Resist Processor
+
+susy.machine.plasma_asher.jei.group=Plasma Asher
+susy.machine.plasma_asher.lv.name=Basic Plasma Asher
+susy.machine.plasma_asher.mv.name=Advanced Plasma Asher
+susy.machine.plasma_asher.hv.name=Advanced Plasma Asher II
+susy.machine.plasma_asher.ev.name=Advanced Plasma Asher III
+susy.machine.plasma_asher.iv.name=Elite Plasma Asher
+susy.machine.plasma_asher.luv.name=Elite Plasma Asher II
+susy.machine.plasma_asher.zpm.name=Elite Plasma Asher III
+susy.machine.plasma_asher.uv.name=Ultimate Plasma Asher
+susy.machine.plasma_asher.uhv.name=Epic Plasma Asher I
+susy.machine.plasma_asher.uev.name=Epic Plasma Asher II
+susy.machine.plasma_asher.uiv.name=Epic Plasma Asher III
+susy.machine.plasma_asher.uxv.name=Epic Plasma Asher IV
+susy.machine.plasma_asher.opv.name=Legendary Plasma Asher
+
+susy.machine.wire_bonder.jei.group=Wire Bonder
+susy.machine.wire_bonder.lv.name=Basic Wire Bonder
+susy.machine.wire_bonder.mv.name=Advanced Wire Bonder
+susy.machine.wire_bonder.hv.name=Advanced Wire Bonder II
+susy.machine.wire_bonder.ev.name=Advanced Wire Bonder III
+susy.machine.wire_bonder.iv.name=Elite Wire Bonder
+susy.machine.wire_bonder.luv.name=Elite Wire Bonder II
+susy.machine.wire_bonder.zpm.name=Elite Wire Bonder III
+susy.machine.wire_bonder.uv.name=Ultimate Wire Bonder
+susy.machine.wire_bonder.uhv.name=Epic Wire Bonder I
+susy.machine.wire_bonder.uev.name=Epic Wire Bonder II
+susy.machine.wire_bonder.uiv.name=Epic Wire Bonder III
+susy.machine.wire_bonder.uxv.name=Epic Wire Bonder IV
+susy.machine.wire_bonder.opv.name=Legendary Wire Bonder
+
 susy.machine.component_scanner.name=Spacecraft Component Scanner
 susy.machine.component_scanner.scan_button=Scan Part
 susy.machine.component_scanner.unscanned=Component unscanned.
@@ -1410,6 +1471,9 @@ recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
 recipemap.solar_furnace.name=Solar Furnace
 recipemap.evaporation_deposition.name=Evaporation Deposition
 recipemap.salvaging.name=Space Scrap Salvaging
+
+recipemap.resist_processing.name=Resist Processing
+recipemap.layup.name=Layup
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.

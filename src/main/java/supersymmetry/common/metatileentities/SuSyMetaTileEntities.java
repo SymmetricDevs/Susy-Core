@@ -356,6 +356,11 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityLunarLaunchComplex LUNAR_LAUNCH_COMPLEX;
     public static SimpleMachineMetaTileEntity[] SIMPLE_CONDENSER;
 
+    public static SimpleMachineMetaTileEntity[] REACTIVE_ION_ETCHER;
+    public static SimpleMachineMetaTileEntity[] PLASMA_ASHER;
+    public static SimpleMachineMetaTileEntity[] WIRE_BONDER;
+    public static SimpleMachineMetaTileEntity[] RESIST_PROCESSOR;
+
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
                 new MetaTileEntityMagneticRefrigerator(susyId("magnetic_refrigerator")));
@@ -906,6 +911,16 @@ public class SuSyMetaTileEntities {
         TUNGSTEN_STEEL_TANK_VALVES = registerMetaTileEntity(18543,
                 new MetaTileEntitySuSyTankValve(susyId("tank_valve.tungsten_steel"), SuSyTankType.TUNGSTEN_STEEL));
 
+        // Tanks up to 18543
+
+        registerSimpleMTE(REACTIVE_ION_ETCHER, 12, 18544, "reactive_ion_etcher", SuSyRecipeMaps.RIE,
+                SusyTextures.RIE_OVERLAY, true);
+        registerSimpleMTE(RESIST_PROCESSOR, 12, 18557, "resist_processor", SuSyRecipeMaps.RESIST_PROCESSOR,
+                SusyTextures.RESIST_PROCESSOR_OVERLAY, true);
+        registerSimpleMTE(PLASMA_ASHER, 12, 18570, "plasma_asher", SuSyRecipeMaps.PLASMA_ASHER,
+                SusyTextures.PLASMA_ASHER_OVERLAY, true);
+        registerSimpleMTE(WIRE_BONDER, 12, 18583, "wire_bonder", SuSyRecipeMaps.WIRE_BONDING,
+                SusyTextures.WIRE_BONDER_OVERLAY, true);
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
@@ -1029,5 +1044,11 @@ public class SuSyMetaTileEntities {
         BATH_CONDENSER = new SimpleMachineMetaTileEntity[1];
 
         RESISTANCE_FURNACE = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
+        REACTIVE_ION_ETCHER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        RESIST_PROCESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        PLASMA_ASHER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+        WIRE_BONDER = new SimpleMachineMetaTileEntity[GTValues.OpV];
+
     }
 }

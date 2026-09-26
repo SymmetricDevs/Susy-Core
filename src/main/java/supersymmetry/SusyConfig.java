@@ -17,7 +17,7 @@ public class SusyConfig {
     @Config.RangeInt(min = 0)
     public static int speakerMinRate = 128;
 
-    @Config.Comment({ "Maxi0um sample rate for speaker audio playback in Hz.", "Default: 22050" })
+    @Config.Comment({ "Maximum sample rate for speaker audio playback in Hz.", "Default: 22050" })
     @Config.RangeInt(min = 1)
     public static int speakerMaxRate = 22050;
 
@@ -28,4 +28,10 @@ public class SusyConfig {
     @Config.Comment({ "Minimum duration of a single speaker audio chunk in seconds.", "Default: 0.03" })
     @Config.RangeDouble(min = 0.0)
     public static double speakerMinDuration = 0.03;
+
+    @Config.Comment({
+            "Enable missing model generation. Disable vintage fix and UT fancy missing models for this to work.",
+            "Default: false" })
+    @Config.RequiresMcRestart
+    public static boolean enableMissingModelGen = false;
 }

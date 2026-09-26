@@ -64,12 +64,14 @@ import gregtech.client.utils.TooltipHelper;
 import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
+import supersymmetry.SusyConfig;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
+import supersymmetry.client.event.MissingModelCreator;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -82,6 +84,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
+import supersymmetry.common.item.armor.SpaceSuit;
 import supersymmetry.common.item.behavior.PipeNetWalkerBehavior;
 import supersymmetry.common.network.CPacketRocketLaunch;
 import supersymmetry.common.network.SPacketSpeakerAudio;
@@ -349,7 +352,8 @@ public class ClientProxy extends CommonProxy {
             // Using a Class#equals(Class) here to avoid counting in child classes
             // May be changed later
             if (metaValueArmor != null &&
-                    metaValueArmor.getArmorLogic().getClass().equals(AdvancedBreathingApparatus.class)) {
+                    metaValueArmor.getArmorLogic() instanceof AdvancedBreathingApparatus ||
+                    metaValueArmor.getArmorLogic() instanceof SpaceSuit) {
                 boolean visible = !into;
                 // Is it a bit too cursed to access game settings for this?
                 GameSettings settings = Minecraft.getMinecraft().gameSettings;
@@ -406,6 +410,18 @@ public class ClientProxy extends CommonProxy {
                     GregTechAPI.networkHandler.sendToServer(new CPacketRocketLaunch(lander));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void afterModelsBake(ModelBakeEvent event) {
+        if (!SusyConfig.enableMissingModelGen) {
+            return;
+        }
+        try {
+            MissingModelCreator.createModels(event);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
