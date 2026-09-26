@@ -155,6 +155,9 @@ end
 
 local giveUp = false
 
+local rechargeRequested = false
+local rechargeActive    = false
+
 local function queueDone()
   if giveUp then return true end
   for _, e in ipairs(sharedQueue) do if not e.placed then return false end end
@@ -230,8 +233,13 @@ local function assignDrone(st)
     return
   end
 
-  if st.instructions >= config.RECHARGE_INTERVAL then
-    logMsg(string.format("  [%d] Recharge.", st.id))
+  if st.instructions >= config.RECHARGE_INTERVAL and not rechargeRequested then
+    logMsg(string.format("  [%d] Hit recharge threshold – requesting synchronized recharge for the fleet.", st.id))
+    rechargeRequested = true
+  end
+
+  if rechargeRequested then
+    logMsg(string.format("  [%d] RTB for synchronized recharge.", st.id))
     local ca, ma = nextSlaveInfo()
     sendFly(ca, ma, st.id, st.pos, homePos, "recharge", nil)
     st.status     = "assigned"
@@ -310,10 +318,8 @@ while not allDone() do
           droneId, tostring(ctx), nx, ny, nz))
 
         if ctx == "recharge" then
-          st.instructions  = 0
-          st.rechargeUntil = computer.uptime() + 5
-          st.status        = "recharging"
-          logMsg(string.format("  [%d] Recharging (5 s).", droneId))
+          st.status = "rtb_wait"
+          logMsg(string.format("  [%d] RTB complete – waiting for the rest of the fleet.", droneId))
         elseif ctx == "done" then
           st.status = "done"
           logMsg(string.format("  [%d] Docked. Done.", droneId))
@@ -401,11 +407,32 @@ while not allDone() do
     end
   end
 
+  if rechargeRequested and not rechargeActive then
+    local allParked = true
+    for _, st in pairs(states) do
+      if st.status ~= "done" and st.status ~= "rtb_wait" then
+        allParked = false
+        break
+      end
+    end
+    if allParked then
+      rechargeActive = true
+      local rechargeUntil = computer.uptime() + 5
+      for _, st in pairs(states) do
+        if st.status == "rtb_wait" then
+          st.status        = "recharging"
+          st.instructions  = 0
+          st.rechargeUntil = rechargeUntil
+        end
+      end
+      logMsg("  [Sync Recharge] Whole fleet home – recharging together (5 s).")
+    end
+  end
+
   for _, st in pairs(states) do
     if st.status == "recharging" and computer.uptime() >= st.rechargeUntil then
       logMsg(string.format("  [%d] Recharge done.", st.id))
       st.status = "idle"
-      assignDrone(st)
     end
     if st.status == "assigned"
     and st.assignedAt > 0
@@ -417,6 +444,18 @@ while not allDone() do
       end
       st.status = "idle"
       assignDrone(st)
+    end
+  end
+
+  if rechargeActive then
+    local stillRecharging = false
+    for _, st in pairs(states) do
+      if st.status == "recharging" then stillRecharging = true; break end
+    end
+    if not stillRecharging then
+      rechargeRequested = false
+      rechargeActive    = false
+      logMsg("  [Sync Recharge] Fleet recharged – resuming construction.")
     end
   end
 
