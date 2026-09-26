@@ -2,6 +2,9 @@ package supersymmetry.common.world.atmosphere;
 
 import java.util.Collection;
 
+import gregtech.api.cover.CoverHolder;
+import gregtech.api.pipenet.block.BlockPipe;
+import gregtech.api.pipenet.tile.IPipeTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +31,20 @@ public class AtmosphereUtils {
      * Whether air can occupy / flow through the given position. Positions below the world are treated as solid.
      */
     public static boolean isPassable(World world, BlockPos pos) {
-        return pos.getY() >= 0 && !world.getBlockState(pos).isFullBlock();
+        return pos.getY() >= 0 && (!world.getBlockState(pos).isFullCube() &&
+                (!(world.getTileEntity(pos) instanceof IPipeTile tile) || !isCovered(tile)));
+    }
+
+    public static boolean isCovered(IPipeTile pipe) {
+        if (pipe == null) {
+            return false;
+        }
+        for (EnumFacing side: EnumFacing.VALUES) {
+            if (pipe.getCoverableImplementation().getCoverAtSide(side) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
