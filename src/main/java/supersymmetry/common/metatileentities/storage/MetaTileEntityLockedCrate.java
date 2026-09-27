@@ -91,7 +91,8 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ItemStack heldStack = entityPlayer.getHeldItemMainhand();
-        if (!heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm())) {
+        if (!heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER.getStackForm()) &&
+                !heldStack.isItemEqual(SuSyMetaItems.CODE_BREACHER_DEV.getStackForm())) {
             return null;
         }
         return super.createUI(entityPlayer);
