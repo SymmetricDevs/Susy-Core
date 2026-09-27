@@ -10,6 +10,7 @@
     "RadarRenderDataMixin",
     "BlastGasBase_GetProtectionRatingMixin",
     "BlastGasBase_DoExplodeMixin",
-    "BlockRadioactive_TryDecayEntitiesMixin"
+    "BlockRadioactive_TryDecayEntitiesMixin",
+    "EntityGrenadeMixin"
   ]
 }
