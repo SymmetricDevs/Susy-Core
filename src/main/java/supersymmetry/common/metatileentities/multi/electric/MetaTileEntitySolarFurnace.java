@@ -359,7 +359,8 @@ public class MetaTileEntitySolarFurnace extends RecipeMapMultiblockController {
             currentPower /= 8;
         }
 
-        if (this.getWorld().provider.getDimension() == BENEATH_ID || this.getWorld().provider.getDimension() == NETHER_ID) {
+        if (this.getWorld().provider.getDimension() == BENEATH_ID ||
+                this.getWorld().provider.getDimension() == NETHER_ID) {
             currentPower = 0;
         }
     }

@@ -1,10 +1,10 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static gregtech.api.GTValues.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-import gregtech.api.capability.IMultipleTankHandler;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +37,7 @@ import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.Widget;
@@ -52,6 +53,7 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.Position;
 import gregtech.api.util.Size;
@@ -80,14 +82,10 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockLunarConcrete;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityLunarRocket;
-import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
 import supersymmetry.common.rocketry.SusyRocketComponents;
-
-import static gregtech.api.GTValues.*;
 
 /**
  * The rocket assembler and launch pad rolled into one. Lunar gravity is weak
@@ -161,6 +159,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
             }
         });
         this.recipeMapWorkable = new RocketAssemblerLogic(this) {
+
             // get rid of the electrode requirement
             @Override
             protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
@@ -186,7 +185,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
             }
 
-            //set energy consumption to a reasonable level
+            // set energy consumption to a reasonable level
             @Override
             public Recipe getRecipe(long maxVoltage) {
                 if (!assembler.isAssemblyWorking())
@@ -655,7 +654,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 .where('S', selfPredicate())
                 .where('C', states(getFoundationState()))
                 .where('E', states(getFoundationState()).setMinGlobalLimited(30).or(autoAbilities())
-                        //.or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
+                        // .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
                                 .setMaxGlobalLimited(2).setPreviewCount(1))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)

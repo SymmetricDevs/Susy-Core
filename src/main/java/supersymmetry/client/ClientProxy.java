@@ -370,19 +370,6 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    /*
-     * TODO for space 2.0: fix atmosphere renderer
-     * 
-     * @SubscribeEvent
-     * public static void onWorldLoad(WorldEvent.Load event) {
-     * World world = event.getWorld();
-     * if (!world.isRemote) return;
-     * if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
-     * world.provider.setSkyRenderer(CelestialObjects.RENDERER);
-     * }
-     * }
-     */
-
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {
         if (Minecraft.getMinecraft().world == event.getWorld()) {

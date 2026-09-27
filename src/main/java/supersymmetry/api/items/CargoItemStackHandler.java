@@ -5,7 +5,6 @@ import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemSta
 import java.util.ArrayList;
 import java.util.List;
 
-import gregtech.api.block.machines.BlockMachine;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +20,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.GTValues;
+import gregtech.api.block.machines.BlockMachine;
 import gregtech.api.unification.FluidUnifier;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;

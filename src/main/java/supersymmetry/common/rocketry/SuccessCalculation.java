@@ -1,11 +1,11 @@
 package supersymmetry.common.rocketry;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 
 public class SuccessCalculation {
 
@@ -66,7 +66,7 @@ public class SuccessCalculation {
 
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
                     nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), sepAltitudes, sepTimes,
-                     nbt.getDouble("burnoutSpeed"),
+                    nbt.getDouble("burnoutSpeed"),
                     nbt.getDouble("burnoutHorizontalSpeed"));
         }
 

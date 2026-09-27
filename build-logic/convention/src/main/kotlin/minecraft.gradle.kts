@@ -51,6 +51,10 @@ minecraft {
             )
         }
 
+        // fixes a segfault when doing runclient/runserver at once
+        // clanker wrote this so i have no idea what its doing 
+        add("-Dio.netty.transport.noNative=true")
+
         if (extJavaArgs.isNotEmpty()) addAll(extJavaArgs.split(";"))
     }
 

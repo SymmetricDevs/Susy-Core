@@ -216,7 +216,8 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return blockState.getValue(OPEN) ? BlockDoor.NULL_AABB : super.getCollisionBoundingBox(blockState, worldIn, pos);
+        return blockState.getValue(OPEN) ? BlockDoor.NULL_AABB :
+                super.getCollisionBoundingBox(blockState, worldIn, pos);
     }
 
     @Override
@@ -224,8 +225,7 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
         return FULL_BLOCK_AABB;
     }
 
-    public boolean causesSuffocation(IBlockState state)
-    {
+    public boolean causesSuffocation(IBlockState state) {
         return state.isFullCube();
     }
 

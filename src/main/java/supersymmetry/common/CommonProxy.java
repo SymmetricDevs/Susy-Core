@@ -326,6 +326,5 @@ public class CommonProxy {
         addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyDimensions.init();
-        // ReEntryDimensions.init();
     }
 }

@@ -172,7 +172,8 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             return Optional.empty();
         }
         for (BlockPos nozzlePos : nozzle) {
-            if (analysis.world.getBlockState(nozzlePos) != SuSyBlocks.ROCKET_NOZZLE.getState(BlockRocketNozzle.NozzleShapeType.BELL_NOZZLE)) {
+            if (analysis.world.getBlockState(nozzlePos) !=
+                    SuSyBlocks.ROCKET_NOZZLE.getState(BlockRocketNozzle.NozzleShapeType.BELL_NOZZLE)) {
                 analysis.status = BuildStat.WRONG_NOZZLE_TYPE;
                 return Optional.empty();
             }

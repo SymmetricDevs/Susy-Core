@@ -45,7 +45,6 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 
-import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.modules.ModuleManager;
 import io.netty.buffer.ByteBuf;
@@ -56,8 +55,6 @@ import supersymmetry.api.rocketry.ICargoInventory;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
-import supersymmetry.client.renderer.particles.SusyParticleFlame;
-import supersymmetry.client.renderer.particles.SusyParticleSmoke;
 import supersymmetry.common.network.CPacketRocketInteract;
 import supersymmetry.common.rocketry.instruments.InstrumentLander;
 import supersymmetry.integration.baubles.BaublesModule;

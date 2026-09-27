@@ -1,5 +1,19 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.EnergyContainerHandler;
@@ -10,21 +24,9 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.util.GTUtility;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.SuSyBlocks;
-
-import java.util.List;
-import java.util.function.Supplier;
-
-import static gregtech.api.recipes.logic.OverclockingLogic.standardOverclockingLogic;
 
 public class MetaTileEntitySimpleCondenser extends SimpleMachineMetaTileEntity {
 
@@ -117,7 +119,9 @@ public class MetaTileEntitySimpleCondenser extends SimpleMachineMetaTileEntity {
         protected void updateRecipeProgress() {
             boolean isRegolith = true;
             for (int i = 0; i < 5; i++) {
-                if (this.metaTileEntity.getWorld().getBlockState(this.metaTileEntity.getPos().offset(EnumFacing.DOWN, i + 1)).getBlock() != SuSyBlocks.REGOLITH) {
+                if (this.metaTileEntity.getWorld()
+                        .getBlockState(this.metaTileEntity.getPos().offset(EnumFacing.DOWN, i + 1)).getBlock() !=
+                        SuSyBlocks.REGOLITH) {
                     isRegolith = false;
                 }
             }

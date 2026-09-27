@@ -9,8 +9,6 @@ import net.minecraft.util.registry.RegistryDefaulted;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import com.google.common.collect.HashBiMap;
-
 import dev.tianmi.sussypatches.api.util.ItemAndMeta;
 
 public class ItemMassRegistry extends RegistryDefaulted<ItemAndMeta, Integer> {
