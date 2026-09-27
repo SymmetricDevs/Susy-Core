@@ -140,7 +140,8 @@ dependencies {
     implementation(deps.icbm.deobf())
 
     // # Optional dependencies. Uncomment the ones you need
-//    runtimeOnly(deps.cd4017beLib.deobf())
+    implementation(deps.cd4017beLib.deobf())
+    implementation(deps.redCtrl.deobf())
 //    runtimeOnly(deps.dimStack.deobf())
 //    runtimeOnly(deps.visualOres)
 //    runtimeOnly(deps.theBeneath.deobf())

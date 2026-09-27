@@ -3,6 +3,10 @@ package supersymmetry.common.rocketry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class SuccessCalculation {
 
     public static final double ESCAPE_VELOCITY_CONSTANT = 1138.92;
@@ -24,12 +28,11 @@ public class SuccessCalculation {
     }
 
     public record AFSStats(double success, double mass, double fuelMass, double deltaV, double dragCoefficient,
-                           double firstSepAltitude, double firstSepTime, double secondSepAltitude,
-                           double secondSepTime, double thirdSepAltitude, double thirdSepTime,
+                           List<Double> sepAltitudes, List<Double> sepTimes,
                            double burnoutSpeed, double burnoutHorizontalSpeed) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0, 0, 0, 0, Collections.emptyList(), Collections.emptyList(), 0, 0);
         }
 
         public boolean isNone() {
@@ -43,45 +46,54 @@ public class SuccessCalculation {
             tag.setDouble("fuelMass", fuelMass);
             tag.setDouble("deltaV", deltaV);
             tag.setDouble("dragCoefficient", dragCoefficient);
-            tag.setDouble("firstSepAltitude", firstSepAltitude);
-            tag.setDouble("firstSepTime", firstSepTime);
-            tag.setDouble("secondSepAltitude", secondSepAltitude);
-            tag.setDouble("secondSepTime", secondSepTime);
-            tag.setDouble("thirdSepAltitude", thirdSepAltitude);
-            tag.setDouble("thirdSepTime", thirdSepTime);
+            tag.setInteger("seps", sepAltitudes.size());
+            for (int i = 0; i < sepAltitudes.size(); i++) {
+                tag.setDouble("sepAltitudes" + i, sepAltitudes.get(i));
+                tag.setDouble("sepTimes" + i, sepTimes.get(i));
+            }
             tag.setDouble("burnoutSpeed", burnoutSpeed);
             tag.setDouble("burnoutHorizontalSpeed", burnoutHorizontalSpeed);
             return tag;
         }
 
         public static AFSStats deserializeNBT(NBTTagCompound nbt) {
+            List<Double> sepAltitudes = new ArrayList<>();
+            List<Double> sepTimes = new ArrayList<>();
+            for (int i = 0; i < nbt.getInteger("seps"); i++) {
+                sepAltitudes.add(nbt.getDouble("sepAltitudes" + i));
+                sepTimes.add(nbt.getDouble("sepTimes" + i));
+            }
+
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
-                    nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), nbt.getDouble("firstSepAltitude"),
-                    nbt.getDouble("firstSepTime"), nbt.getDouble("secondSepAltitude"), nbt.getDouble("secondSepTime"),
-                    nbt.getDouble("thirdSepAltitude"), nbt.getDouble("thirdSepTime"), nbt.getDouble("burnoutSpeed"),
+                    nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), sepAltitudes, sepTimes,
+                     nbt.getDouble("burnoutSpeed"),
                     nbt.getDouble("burnoutHorizontalSpeed"));
         }
 
         public void writeToBuffer(PacketBuffer buf) {
+            buf.writeInt(sepAltitudes.size());
+            for (int i = 0; i < sepAltitudes.size(); i++) {
+                buf.writeDouble(sepAltitudes.get(i));
+                buf.writeDouble(sepTimes.get(i));
+            }
             buf.writeDouble(success);
             buf.writeDouble(mass);
             buf.writeDouble(fuelMass);
             buf.writeDouble(deltaV);
             buf.writeDouble(dragCoefficient);
-            buf.writeDouble(firstSepAltitude);
-            buf.writeDouble(firstSepTime);
-            buf.writeDouble(secondSepAltitude);
-            buf.writeDouble(secondSepTime);
-            buf.writeDouble(thirdSepAltitude);
-            buf.writeDouble(thirdSepTime);
             buf.writeDouble(burnoutSpeed);
             buf.writeDouble(burnoutHorizontalSpeed);
         }
 
         public static AFSStats readFromBuffer(PacketBuffer buf) {
+            List<Double> sepAltitudes = new ArrayList<>();
+            List<Double> sepTimes = new ArrayList<>();
+            int len = buf.readInt();
+            for (int i = 0; i < len; i++) {
+                sepAltitudes.add(buf.readDouble());
+            }
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+                    buf.readDouble(), sepAltitudes, sepTimes, buf.readDouble(), buf.readDouble());
         }
     }
 }

@@ -28,7 +28,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     private List<Integer> electrodeSlotCache = new ArrayList<>();
     public boolean hasEnoughElectrodes = true;
 
-    private final IRocketAssemblyController assembler;
+    public final IRocketAssemblyController assembler;
 
     public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
         super(assembler);
@@ -51,7 +51,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
             return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
         Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV])
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20)).build().getResult();
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
         return recipe;
     }
 
@@ -191,7 +191,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
      * dictionary ingredient stands for a <em>set</em> of acceptable stacks, and
      * expanding it here would demand every member of that set at once.
      */
-    private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
+    protected List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
         List<GTRecipeInput> out = new ArrayList<>();
         for (GTRecipeInput input : in) {
             boolean merged = false;

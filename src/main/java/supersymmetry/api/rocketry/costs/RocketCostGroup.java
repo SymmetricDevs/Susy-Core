@@ -66,8 +66,8 @@ public class RocketCostGroup {
             this.name = name;
         }
 
-        public Builder duration(double seconds) {
-            this.assemblyDuration = seconds;
+        public Builder duration(double ticks) {
+            this.assemblyDuration = ticks;
             return this;
         }
 

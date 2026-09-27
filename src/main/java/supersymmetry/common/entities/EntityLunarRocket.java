@@ -1,7 +1,15 @@
 package supersymmetry.common.entities;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.EventHandlers;
+import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
+
+import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
 
 /**
  * The rocket built and launched by the lunar launch complex. Lunar escape
@@ -70,5 +78,23 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
     @Override
     protected float getExplosionStrength() {
         return 40; // Smaller than the Soyuz, but still needs to cover a passenger sat at 29 blocks
+    }
+
+    @Override
+    protected void act() {
+        if (this.world.isRemote)
+            return;
+        BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.LANDER;
+        if (instrument != null) {
+            instrument.act(1, this);
+        }
+        for (Entity passenger : this.getPassengers()) {
+            if (!EventHandlers.isEntityTravelling(passenger)) {
+                if (passenger instanceof EntityLivingBase living) {
+                    living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
+                }
+                passenger.setDead();
+            }
+        }
     }
 }

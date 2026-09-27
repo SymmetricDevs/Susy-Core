@@ -8,10 +8,10 @@
   },
   "variants": 	{
     "variant=carbon": { "model": "susy:rocket_struct/rockethulltile" },
-    "variant=steel" : {
+    "variant=titanium" : {
       "model" : "susy:rocket_struct/rockethulltile",
       "textures" : {
-        "0" : "gregtech:blocks/rocketry/struct/rockethulltilesteel"
+        "0" : "gregtech:blocks/rocketry/struct/rockethulltiletitanium"
       }
     }
   }

@@ -32,6 +32,7 @@ import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.rocketry.BlockCombustionChamber;
+import supersymmetry.common.blocks.rocketry.BlockRocketNozzle;
 import supersymmetry.common.blocks.rocketry.BlockTurboPump;
 
 public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine> implements RocketEngine {
@@ -169,6 +170,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
         if (nozzle.isEmpty()) {
             analysis.status = BuildStat.NO_NOZZLE;
             return Optional.empty();
+        }
+        for (BlockPos nozzlePos : nozzle) {
+            if (analysis.world.getBlockState(nozzlePos) != SuSyBlocks.ROCKET_NOZZLE.getState(BlockRocketNozzle.NozzleShapeType.BELL_NOZZLE)) {
+                analysis.status = BuildStat.WRONG_NOZZLE_TYPE;
+                return Optional.empty();
+            }
         }
         ArrayList<Integer> areas = new ArrayList<>();
         ArrayList<Double> wallRadii = new ArrayList<>();

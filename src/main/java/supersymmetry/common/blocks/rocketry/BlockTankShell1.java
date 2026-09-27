@@ -35,7 +35,7 @@ public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
     public enum TankCoverType implements IStringSerializable, IStateHarvestLevel {
 
         CARBON_COMPOSITE("carbon", 2),
-        STEEL_SHELL("steel", 3);
+        TITANIUM_SHELL("titanium", 3);
 
         private String name;
         private int harvestLevel;
@@ -64,7 +64,7 @@ public class BlockTankShell1 extends VariantBlock<BlockTankShell1.TankCoverType>
     public double getMass(TankCoverType type) {
         // Again, using a 4.7mm thickness
         return switch (type) {
-            case STEEL_SHELL -> 36.9;
+            case TITANIUM_SHELL -> 15.4;
             case CARBON_COMPOSITE -> 7.9;
         };
     }

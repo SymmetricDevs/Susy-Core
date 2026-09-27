@@ -5,10 +5,7 @@ import static supersymmetry.api.rocketry.NozzleFlow.GAS_CONSTANT;
 import static supersymmetry.api.space.CelestialObjects.*;
 import static supersymmetry.common.rocketry.SuccessCalculation.augmentSuccess;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -166,9 +163,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success *= redundancyMult;
 
         return new SuccessCalculation.AFSStats(success, initStats.mass(), initStats.fuelMass(), initStats.deltaV(),
-                initStats.dragCoefficient(), initStats.firstSepAltitude(), initStats.firstSepTime(),
-                initStats.secondSepAltitude(),
-                initStats.secondSepTime(), initStats.thirdSepAltitude(), initStats.thirdSepTime(),
+                initStats.dragCoefficient(), initStats.sepAltitudes(), initStats.sepTimes(),
                 initStats.burnoutSpeed(), initStats.burnoutHorizontalSpeed());
     }
 
@@ -220,6 +215,12 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             remainingStages.put(stage, stage.getFuelCapacity() * fuel.getDensity());
             dryMass += stage.getMass();
             fuelMass += stage.getFuelCapacity() * fuel.getDensity();
+        }
+        if (this.isSolidRocket()) {
+            // hardcode
+            return new SuccessCalculation.AFSStats(Math.clamp(getFuelVolume() / 2 - 5, 0, 1),
+                    dryMass, fuelMass, 10000, 0.01, Collections.emptyList(), Collections.emptyList(),
+                    10000, 10000);
         }
 
         double speed = 0; // m/s, speed along gravity direction
@@ -318,9 +319,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         }
         success *= altitudeMult;
         return new SuccessCalculation.AFSStats(success, dryMass, fuelMass,
-                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes.get(0),
-                stageSepTimes.get(0),
-                stageSepAltitudes.get(1), stageSepTimes.get(1), stageSepAltitudes.get(2), stageSepTimes.get(2),
+                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes, stageSepTimes,
                 speed, horizontalSpeed);
     }
 

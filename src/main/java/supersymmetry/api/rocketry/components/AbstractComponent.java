@@ -180,7 +180,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
     }
 
     public double getAssemblyDuration() {
-        return 10f;
+        return 200f;
     }
 
     public void setMaterials(List<MaterialCost> materials) {
