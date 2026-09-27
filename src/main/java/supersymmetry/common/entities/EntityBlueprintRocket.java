@@ -429,7 +429,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     @Override
     public AxisAlignedBB modelAABB() {
         double radius = getModelRadius();
-        return new AxisAlignedBB(new Vec3d(radius, getRocketHeight(), radius), new Vec3d(-radius, 0, -radius));
+        return new AxisAlignedBB(radius, getRocketHeight(), radius, -radius, 0, -radius);
     }
 
     protected boolean canStartCountdown() {

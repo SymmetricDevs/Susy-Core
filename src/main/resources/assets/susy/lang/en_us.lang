@@ -267,8 +267,10 @@ tile.epoxy_solar_furnace_mirror.epoxy.name=Lightweight Epoxy Solar Furnace Mirro
 tile.steel_solar_furnace_mirror.steel.name=Steel Solar Furnace Mirror
 tile.heliostat.default.name=Heliostat
 
-
 tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
+tile.crucible.alumina.name=Alumina Crucible
+tile.crucible.magnesia.name=Magnesia Crucible
+tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -351,6 +353,7 @@ susy.material.lubricating_oil=Lubricating Oil
 susy.material.aluminium_alloy_7075=Aluminium Alloy 7075
 susy.material.aluminium_alloy_6061=Aluminium Alloy 6061
 susy.material.aluminium_alloy_mg_6=Aluminium Alloy Mg6
+susy.material.hot_softened_water=Hot Cooling Water
 susy.material.molybdenum_disilicide=Molybdenum Disilicide
 susy.material.metallized_bopet=Metallized BoPET
 
@@ -749,6 +752,7 @@ susy.recipe.blocks=Blocks: %s
 susy.recipe.evaporation=Required Energy: %d J/t
 susy.recipe.cryogenic_environment=Requires Cryogenic Environment
 susy.recipe.mixer_settler_cells=Required mixer settler cells: %s
+susy.recipe.induction_crucible_material=Requires %s Crucible
 
 # More Distilleries
 susy.machine.distiller.bronze.name=Steam Distillery
@@ -1230,6 +1234,7 @@ tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casin
 tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
+tile.susy_multiblock_casing2.monel_400_casing.name=Resistant Monel 400 Casing
 
 susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell
@@ -1253,6 +1258,8 @@ susy.multiblock.cooling.heating_up=Temperature will rise
 susy.multiblock.cooling.dangerous_heat=Too Hot!
 susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
+
+susy.multiblock.induction_furnace.crucible_material=Crucible Material: %s
 
 # Sputtering Machine
 susy.machine.sputter_deposition.jei.group=Sputtering Machine
@@ -1285,6 +1292,67 @@ susy.machine.evaporation_deposition.uev.name=Epic Evaporation Deposition Machine
 susy.machine.evaporation_deposition.uiv.name=Epic Evaporation Deposition Machine III
 susy.machine.evaporation_deposition.uxv.name=Epic Evaporation Deposition Machine IV
 susy.machine.evaporation_deposition.opv.name=Legendary Evaporation Deposition Machine
+
+# Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.jei.group=Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.lv.name=Basic Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.mv.name=Advanced Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.hv.name=Advanced Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.ev.name=Advanced Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.iv.name=Elite Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.luv.name=Elite Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.zpm.name=Elite Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.uv.name=Ultimate Reactive Ion Etcher
+susy.machine.reactive_ion_etcher.uhv.name=Epic Reactive Ion Etcher I
+susy.machine.reactive_ion_etcher.uev.name=Epic Reactive Ion Etcher II
+susy.machine.reactive_ion_etcher.uiv.name=Epic Reactive Ion Etcher III
+susy.machine.reactive_ion_etcher.uxv.name=Epic Reactive Ion Etcher IV
+susy.machine.reactive_ion_etcher.opv.name=Legendary Reactive Ion Etcher
+
+susy.machine.resist_processor.jei.group=Resist Processor
+susy.machine.resist_processor.lv.name=Basic Resist Processor
+susy.machine.resist_processor.mv.name=Advanced Resist Processor
+susy.machine.resist_processor.hv.name=Advanced Resist Processor II
+susy.machine.resist_processor.ev.name=Advanced Resist Processor III
+susy.machine.resist_processor.iv.name=Elite Resist Processor
+susy.machine.resist_processor.luv.name=Elite Resist Processor II
+susy.machine.resist_processor.zpm.name=Elite Resist Processor III
+susy.machine.resist_processor.uv.name=Ultimate Resist Processor
+susy.machine.resist_processor.uhv.name=Epic Resist Processor I
+susy.machine.resist_processor.uev.name=Epic Resist Processor II
+susy.machine.resist_processor.uiv.name=Epic Resist Processor III
+susy.machine.resist_processor.uxv.name=Epic Resist Processor IV
+susy.machine.resist_processor.opv.name=Legendary Resist Processor
+
+susy.machine.plasma_asher.jei.group=Plasma Asher
+susy.machine.plasma_asher.lv.name=Basic Plasma Asher
+susy.machine.plasma_asher.mv.name=Advanced Plasma Asher
+susy.machine.plasma_asher.hv.name=Advanced Plasma Asher II
+susy.machine.plasma_asher.ev.name=Advanced Plasma Asher III
+susy.machine.plasma_asher.iv.name=Elite Plasma Asher
+susy.machine.plasma_asher.luv.name=Elite Plasma Asher II
+susy.machine.plasma_asher.zpm.name=Elite Plasma Asher III
+susy.machine.plasma_asher.uv.name=Ultimate Plasma Asher
+susy.machine.plasma_asher.uhv.name=Epic Plasma Asher I
+susy.machine.plasma_asher.uev.name=Epic Plasma Asher II
+susy.machine.plasma_asher.uiv.name=Epic Plasma Asher III
+susy.machine.plasma_asher.uxv.name=Epic Plasma Asher IV
+susy.machine.plasma_asher.opv.name=Legendary Plasma Asher
+
+susy.machine.wire_bonder.jei.group=Wire Bonder
+susy.machine.wire_bonder.lv.name=Basic Wire Bonder
+susy.machine.wire_bonder.mv.name=Advanced Wire Bonder
+susy.machine.wire_bonder.hv.name=Advanced Wire Bonder II
+susy.machine.wire_bonder.ev.name=Advanced Wire Bonder III
+susy.machine.wire_bonder.iv.name=Elite Wire Bonder
+susy.machine.wire_bonder.luv.name=Elite Wire Bonder II
+susy.machine.wire_bonder.zpm.name=Elite Wire Bonder III
+susy.machine.wire_bonder.uv.name=Ultimate Wire Bonder
+susy.machine.wire_bonder.uhv.name=Epic Wire Bonder I
+susy.machine.wire_bonder.uev.name=Epic Wire Bonder II
+susy.machine.wire_bonder.uiv.name=Epic Wire Bonder III
+susy.machine.wire_bonder.uxv.name=Epic Wire Bonder IV
+susy.machine.wire_bonder.opv.name=Legendary Wire Bonder
 
 susy.machine.component_scanner.name=Spacecraft Component Scanner
 susy.machine.component_scanner.scan_button=Scan Part
@@ -1407,6 +1475,9 @@ recipemap.lunar_bwe.name=Lunar Bucket Wheel Excavator
 recipemap.solar_furnace.name=Solar Furnace
 recipemap.evaporation_deposition.name=Evaporation Deposition
 recipemap.salvaging.name=Space Scrap Salvaging
+
+recipemap.resist_processing.name=Resist Processing
+recipemap.layup.name=Layup
 
 strand_casting.name=Continuous Casting
 susy.multiblock.primitive_mud_pump.description=The Primitive Mud Pump is a Steam Era multiblock that collects mud once per second, but only if it is in a river biome, and when the controller is between Y = 64 and Y = 80 (Inclusive). It can use a Pump, ULV, or LV Output Hatch.
@@ -1725,6 +1796,8 @@ susy.multiblock.quarry.excavation_mode=Excavation Mode
 susy.multiblock.quarry.recipe_mode=Recipe Mode
 susy.machine.quarry.tooltip.info=Max square of %1$sx%1$s, minimum %2$sx%2$s. Hold shift for more details.
 susy.machine.quarry.tooltip.structure_info=Quarries can be formed with any odd dimensions ranging from %2$sx%2$s to %1$sx%1$s, even if it is non-square. Extend the bottom layer of concrete blocks on the corners, so a 23-wide quarry will have 9 concrete per side, and 5 inside blocks.
+
+susy.multiblock.tank.info=Stores %skL per air block (max %s), with min/max side dimensions of %s/%s
 
 death.attack.toxic_atmo=%s's lungs were shredded
 death.attack.suffocation=%s couldn't breathe
@@ -2427,3 +2500,17 @@ tile.s16bmrf_blocks.s16bmrf13.name=BMRF-253
 tile.s16bmrf_blocks.s16bmrf14.name=BMRF-254
 tile.s16bmrf_blocks.s16bmrf15.name=BMRF-255
 tile.s16bmrf_blocks.s16bmrf16.name=BMRF-256
+
+#tanks controller
+susy.machine.tank.wood.name=Wooden Tank Controller
+susy.machine.tank.steel.name=Steel Tank Controller
+susy.machine.tank.monel_400.name=Monel Tank Controller
+susy.machine.tank.stainless_steel.name=Stainless Steel Tank Controller
+susy.machine.tank.titanium.name=Titanium Tank Controller
+susy.machine.tank.tungsten_steel.name=Tungstensteel Tank Controller
+
+#tanks valve
+susy.machine.tank_valve.monel_400.name=Monel Tank Valve
+susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
+susy.machine.tank_valve.titanium.name=Titanium Tank Valve
+susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve

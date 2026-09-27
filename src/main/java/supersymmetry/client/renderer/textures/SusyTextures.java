@@ -79,6 +79,12 @@ public class SusyTextures {
             "machines/multiblocks/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
+    public static final ICubeRenderer RIE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/reactive_ion_etcher");
+    public static final ICubeRenderer RESIST_PROCESSOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/resist_processor");
+    public static final ICubeRenderer PLASMA_ASHER_OVERLAY = new OrientedOverlayRenderer("machines/plasma_asher");
+    public static final ICubeRenderer WIRE_BONDER_OVERLAY = new OrientedOverlayRenderer("machines/wire_bonder");
 
     public static final OrientedOverlayRenderer EXTENDED_CHISEL_OVERLAY = new OrientedOverlayRenderer(
             "machines/extended_chisel_maker");
@@ -290,4 +296,19 @@ public class SusyTextures {
                     "gregtech:blocks/decoration/large_metalsheet_" + SuSyUtility.getNameForColor(color));
         }
     }
+
+    public static final SimpleOverlayRenderer[] TANK_OVERLAYS = new SimpleOverlayRenderer[] {
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_1"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_2"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_3"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_4"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_5"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_6"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_7"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_8"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_9")
+    };
+
+    public static SimpleCubeRenderer MONEL_400_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/monel_400_casing");
 }

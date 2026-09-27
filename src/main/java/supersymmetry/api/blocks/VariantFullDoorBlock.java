@@ -132,7 +132,7 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
                     worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(flag)), 2);
 
                     if (flag != ((Boolean) state.getValue(OPEN)).booleanValue()) {
-                        setOpen(worldIn, pos, flag, 2);
+                        setOpen(worldIn, pos, flag, 3);
                         // worldIn.playEvent((EntityPlayer)null, flag ? this.getOpenSound() : this.getCloseSound(), pos,
                         // 0);
                     }
@@ -194,7 +194,7 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
         if (iblockstate.getBlock() != this) {
             return false;
         } else {
-            setOpen(worldIn, blockpos, !iblockstate.getValue(OPEN), 10);
+            setOpen(worldIn, blockpos, !iblockstate.getValue(OPEN), 11);
             // worldIn.playEvent(playerIn, ((Boolean)state.getValue(OPEN)).booleanValue() ? this.getOpenSound() :
             // this.getCloseSound(), pos, 0);
             return true;
@@ -202,7 +202,8 @@ public class VariantFullDoorBlock<T extends Enum<T> & IStringSerializable> exten
     }
 
     /**
-     * Sets OPEN on both halves so that each half's own state is enough for collision/rendering.
+     * Sets OPEN on both halves so that each half's own state is enough for collision/rendering. Callers include
+     * flag 1 (notify neighbors) so the change fires a NeighborNotifyEvent for the atmosphere system.
      */
     private void setOpen(World worldIn, BlockPos lowerPos, boolean open, int flags) {
         BlockPos upperPos = lowerPos.up();

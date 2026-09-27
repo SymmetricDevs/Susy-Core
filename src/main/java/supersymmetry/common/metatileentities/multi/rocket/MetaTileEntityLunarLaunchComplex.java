@@ -376,6 +376,9 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     @Override
     protected void updateFormedValid() {
         super.updateFormedValid(); // drives the assembly recipe logic
+        if (this.getWorld().provider.getDimension() != CelestialObjects.MOON.getDimension()) {
+            return;
+        }
         if (getWorld().isRemote)
             return;
 
@@ -607,10 +610,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        if (this.getWorld().provider.getDimension() != CelestialObjects.MOON.getDimension()) {
-            invalidateStructure();
-            return;
-        }
+
         this.rocketAABB = getRocketAABB();
         if (findRocket()) {
             setComplexState(LaunchComplexState.LOADED);
@@ -653,8 +653,8 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 .aisle(selfp, edgee, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
                 .where('S', selfPredicate())
                 .where('C', states(getFoundationState()))
-                .where('E', states(getFoundationState()).setMinGlobalLimited(30).or(autoAbilities())
-                        // .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
+                .where('E', states(getFoundationState()).or(autoAbilities())
+                        .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
                                 .setMaxGlobalLimited(2).setPreviewCount(1))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)

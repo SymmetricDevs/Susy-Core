@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import gregtech.api.recipes.RecipeMap;
 import gregtech.api.unification.material.Material;
 import gregtech.api.util.ClipboardUtil;
 import gregtech.api.util.LocalizationUtils;
@@ -65,6 +66,7 @@ public class CommandUntranslatedKeys extends CommandBase {
         checkMaterials(untranslated);
         checkFluids(untranslated);
         checkItems(untranslated);
+        checkRecipemaps(untranslated);
 
         Arrays.asList(BLACKLIST).forEach(untranslated::remove);
 
@@ -78,6 +80,14 @@ public class CommandUntranslatedKeys extends CommandBase {
 
         sender.sendMessage(new TextComponentString(builder.toString()));
         ClipboardUtil.copyToClipboard(builder.toString());
+    }
+
+    public void checkRecipemaps(Set<String> untranslated) {
+        for (RecipeMap map : RecipeMap.getRecipeMaps()) {
+            if (!LocalizationUtils.hasKey(map.getTranslationKey())) {
+                untranslated.add(map.getTranslationKey());
+            }
+        }
     }
 
     public void checkMaterials(Set<String> untranslated) {

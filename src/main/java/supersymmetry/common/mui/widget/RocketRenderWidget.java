@@ -43,7 +43,6 @@ public class RocketRenderWidget extends Widget {
             throw new RuntimeException();
         }
         this.entity = entity;
-        this.renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
         double sideLen = Math.max(Math.abs(modelAABB.minX) + Math.abs(modelAABB.maxX),
                 Math.abs(modelAABB.minZ) + Math.abs(modelAABB.maxZ));
         scale = ((float) size.height / sideLen);
@@ -60,6 +59,9 @@ public class RocketRenderWidget extends Widget {
     }
 
     private void render(float partialTicks, Position pos, Size size) {
+        if (this.renderer == null) {
+            this.renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+        }
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
         {

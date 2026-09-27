@@ -14,6 +14,7 @@ public class ResistanceFurnaceRecipeBuilder extends RecipeBuilder<ResistanceFurn
 
     public ResistanceFurnaceRecipeBuilder() {}
 
+    @SuppressWarnings("unused")
     public ResistanceFurnaceRecipeBuilder(Recipe recipe, RecipeMap<ResistanceFurnaceRecipeBuilder> recipeMap) {
         super(recipe, recipeMap);
     }

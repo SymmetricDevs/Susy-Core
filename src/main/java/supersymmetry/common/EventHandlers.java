@@ -122,7 +122,10 @@ public class EventHandlers {
         }
         // Tick atmosphere system for planet dimensions
         if (world.provider instanceof WorldProviderPlanet) {
-            AtmosphereWorldData.get(world).getGraph().tick(world);
+            AtmosphereWorldData data = AtmosphereWorldData.get(world);
+            if (data.getGraph().tick(world)) {
+                data.markDirty();
+            }
         }
         if (world.provider instanceof WorldProviderSpace) {
             WorldInfo info = world.getWorldInfo();
@@ -263,14 +266,14 @@ public class EventHandlers {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+    public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote)
+        if (world.isRemote || !(world.provider instanceof WorldProviderPlanet))
             return;
-        if (!(world.provider instanceof WorldProviderPlanet))
-            return;
-        AtmosphereWorldData.get(world).getGraph().onBlockBreak(world, event.getPos());
-        AtmosphereWorldData.get(world).markDirty();
+        AtmosphereWorldData data = AtmosphereWorldData.get(world);
+        if (data.getGraph().onBlockChanged(world, event.getPos())) {
+            data.markDirty();
+        }
     }
 
     @SubscribeEvent
@@ -279,13 +282,6 @@ public class EventHandlers {
             Block block = event.getPlacedBlock().getBlock();
             if (block instanceof BlockTorch) {
                 event.setCanceled(true);
-            }
-        }
-        if (!event.isCanceled()) {
-            World world = event.getWorld();
-            if (!world.isRemote && world.provider instanceof WorldProviderPlanet) {
-                AtmosphereWorldData.get(world).getGraph().onBlockPlace(world, event.getPos());
-                AtmosphereWorldData.get(world).markDirty();
             }
         }
     }
