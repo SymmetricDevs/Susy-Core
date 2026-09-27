@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import gregtech.api.unification.material.properties.PropertyKey;
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.GTValues;
@@ -24,12 +23,11 @@ import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
-import net.minecraftforge.fluids.FluidStack;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -697,4 +695,3 @@ public class SuSyRecipeMaps {
         });
     }
 }
-

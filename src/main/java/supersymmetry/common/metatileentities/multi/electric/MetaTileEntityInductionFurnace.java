@@ -1,19 +1,12 @@
 package supersymmetry.common.metatileentities.multi.electric;
 
+import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.inductionCrucibles;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import gregtech.api.GTValues;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.TextFormattingUtil;
-import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockMetalCasing;
-import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -34,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.CommonFluidFilters;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.resources.TextureArea;
@@ -42,13 +36,20 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.TooltipHelper;
+import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.metatileentities.MetaTileEntities;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.InductionCrucibleMaterialProperty;
@@ -57,8 +58,6 @@ import supersymmetry.common.blocks.BlockInductionCrucible;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
-
-import static supersymmetry.api.metatileentity.multiblock.SuSyPredicates.inductionCrucibles;
 
 public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockController implements IProgressBarMultiblock {
 
@@ -348,18 +347,21 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                 .aisle(" XXX ", " XSX ", " XXX ")
                 .where('X', MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
                 .where('S', SuSyMetaTileEntities.INDUCTION_FURNACE, EnumFacing.SOUTH)
-                .where('C', SuSyBlocks.INDUCTION_COIL_ASSEMBLY.getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER))
+                .where('C',
+                        SuSyBlocks.INDUCTION_COIL_ASSEMBLY
+                                .getState(BlockInductionCoilAssembly.InductionCoilAssemblyType.COPPER))
                 .where('#', Blocks.AIR.getDefaultState())
                 .where('E', MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('I', MetaTileEntities.ITEM_IMPORT_BUS[GTValues.LV], EnumFacing.NORTH)
                 .where('F', MetaTileEntities.FLUID_IMPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('D', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.NORTH)
                 .where('M', () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID),
+                        MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID),
                         EnumFacing.NORTH);
         Arrays.stream(BlockInductionCrucible.InductionCrucibleType.values())
                 .sorted(Comparator.comparing(entry -> entry.material))
-                .forEach(entry -> shapeInfo.add(builder.where('U', SuSyBlocks.INDUCTION_CRUCIBLE.getState(entry)).build()));
+                .forEach(entry -> shapeInfo
+                        .add(builder.where('U', SuSyBlocks.INDUCTION_CRUCIBLE.getState(entry)).build()));
         return shapeInfo;
     }
 
@@ -368,7 +370,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         List<ITextComponent> list = super.getDataInfo();
         list.add(new TextComponentTranslation("susy.multiblock.induction_furnace.crucible_material",
                 new TextComponentTranslation(TextFormattingUtil.formatNumbers(material))
-                .setStyle(new Style().setColor(TextFormatting.BLUE))));
+                        .setStyle(new Style().setColor(TextFormatting.BLUE))));
         return list;
     }
 

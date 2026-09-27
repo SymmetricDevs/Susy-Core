@@ -172,7 +172,8 @@ public class SuSyPredicates {
                 }
                 return false;
             }, () -> Arrays.stream(BlockInductionCrucible.InductionCrucibleType.values())
-            .map(type -> new BlockInfo(SuSyBlocks.INDUCTION_CRUCIBLE.getState(type))).toArray(BlockInfo[]::new));
+                    .map(type -> new BlockInfo(SuSyBlocks.INDUCTION_CRUCIBLE.getState(type)))
+                    .toArray(BlockInfo[]::new));
 
     /**
      * A predicate for allowing using only the same type of metal sheet blocks in a structure

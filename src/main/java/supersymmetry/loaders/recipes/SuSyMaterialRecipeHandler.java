@@ -7,7 +7,6 @@ import static gregtech.api.unification.ore.OrePrefix.*;
 
 import java.util.*;
 
-import gregtech.api.unification.material.Materials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,6 +21,7 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.DustProperty;
@@ -186,8 +186,7 @@ public class SuSyMaterialRecipeHandler {
 
         if (material.hasFlag(SuSyMaterialFlags.ALUMINA_CRUCIBLE)) {
             mat = "Alumina";
-        }
-        else if (material == Materials.Magnesium) {
+        } else if (material == Materials.Magnesium) {
             mat = "Magnesia";
         }
 

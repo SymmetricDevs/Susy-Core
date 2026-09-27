@@ -24,10 +24,10 @@ import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntitySubstationEnergyHatch;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
-import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.fluids.SuSyFluidAttributes;
 import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
@@ -55,6 +55,9 @@ import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLarge
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLargeHammer;
 import supersymmetry.common.metatileentities.multi.steam.MetaTileEntitySuSyLogWasher;
 import supersymmetry.common.metatileentities.multi.steam.SuSyBoilerType;
+import supersymmetry.common.metatileentities.multi.tank.MetaTileEntitySuSyMultiblockTank;
+import supersymmetry.common.metatileentities.multi.tank.MetaTileEntitySuSyTankValve;
+import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
 import supersymmetry.common.metatileentities.multiblockpart.*;
 import supersymmetry.common.metatileentities.multiblockpart.active.MetaTileEntityActiveMuffler;
 import supersymmetry.common.metatileentities.single.active.MetaTileEntityFluidActiveCasing;
@@ -71,9 +74,6 @@ import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositB
 import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
-import supersymmetry.common.metatileentities.multi.tank.MetaTileEntitySuSyMultiblockTank;
-import supersymmetry.common.metatileentities.multi.tank.MetaTileEntitySuSyTankValve;
-import supersymmetry.common.metatileentities.multi.tank.SuSyTankType;
 
 public class SuSyMetaTileEntities {
 
@@ -885,7 +885,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityExtendedChiselMaker(susyId("extended_chisel_maker")));
 
         // Tanks
-        
+
         WOOD_TANK_CONTROLLER = registerMetaTileEntity(18530,
                 new MetaTileEntitySuSyMultiblockTank(susyId("tank.wood"), SuSyTankType.WOOD));
         STEEL_TANK_CONTROLLER = registerMetaTileEntity(18531,
@@ -901,7 +901,7 @@ public class SuSyMetaTileEntities {
 
         WOOD_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.WOODEN_TANK_VALVE;
         STEEL_TANK_VALVES = gregtech.common.metatileentities.MetaTileEntities.STEEL_TANK_VALVE;
-        
+
         MONEL_TANK_VALVES = registerMetaTileEntity(18540,
                 new MetaTileEntitySuSyTankValve(susyId("tank_valve.monel_400"), SuSyTankType.MONEL));
         STAINLESS_STEEL_TANK_VALVES = registerMetaTileEntity(18541,

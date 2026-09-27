@@ -14,7 +14,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
-import supercritical.api.unification.material.SCMaterials;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
@@ -303,16 +302,16 @@ public class SusyMaterials {
     }
 
     private static final Set<Material> MATERIAL_REMOVAL = Set.of(
-//            Materials.TinAlloy,
-//            Materials.CobaltBrass,
-//            Materials.Potin,
-//            Materials.BlackBronze,
-//            Materials.SterlingSilver,
-//            Materials.RedSteel,
-//            Materials.BlueSteel,
-//            Materials.RoseGold,
-//            Materials.BismuthBronze,
-//            Materials.DamascusSteel
+    // Materials.TinAlloy,
+    // Materials.CobaltBrass,
+    // Materials.Potin,
+    // Materials.BlackBronze,
+    // Materials.SterlingSilver,
+    // Materials.RedSteel,
+    // Materials.BlueSteel,
+    // Materials.RoseGold,
+    // Materials.BismuthBronze,
+    // Materials.DamascusSteel
     );
 
     public static void changeFlags() {

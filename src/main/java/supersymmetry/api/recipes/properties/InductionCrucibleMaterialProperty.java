@@ -26,6 +26,7 @@ public class InductionCrucibleMaterialProperty extends RecipeProperty<String> {
 
     @Override
     public void drawInfo(@NotNull Minecraft minecraft, int x, int y, int color, Object value) {
-        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.induction_crucible_material", castValue(value)), x, y, color);
+        minecraft.fontRenderer.drawString(I18n.format("susy.recipe.induction_crucible_material", castValue(value)), x,
+                y, color);
     }
 }
