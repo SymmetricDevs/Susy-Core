@@ -2,33 +2,33 @@ package supersymmetry.common.metatileentities.multi.tank;
 
 import static gregtech.api.capability.GregtechDataCodes.UPDATE_STRUCTURE_SIZE;
 
-import net.minecraft.init.Blocks;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.util.EnumHand;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.vec.Matrix4;
-import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.raytracer.CuboidRayTraceResult;
-
-import gregtech.api.util.GTUtility;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.impl.FilteredFluidHandler;
-import gregtech.api.capability.impl.PropertyFluidFilter;
+import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.LabelWidget;
@@ -36,20 +36,15 @@ import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.api.capability.impl.FluidTankList;
-
-import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.client.renderer.textures.SusyTextures;
-import supersymmetry.api.fluids.SuSyFluidAttributes;
-
-import java.util.Collections;
-import java.util.List;
+import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase {
 
@@ -190,8 +185,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
     }
 
     @Override
-    protected void updateFormedValid() {
-    }
+    protected void updateFormedValid() {}
 
     private boolean isWall(World world, BlockPos pos) {
         return world.getBlockState(pos) == type.casingState ||
@@ -211,7 +205,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
         if (front.getAxis().isVertical()) {
             return false;
         }
-        
+
         EnumFacing back = front.getOpposite();
         EnumFacing right = front.rotateYCCW();
         EnumFacing left = right.getOpposite();
@@ -259,9 +253,8 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
         this.dDist = fixedDDist;
         this.airDepth = air;
 
-        boolean valid = w >= MIN_SIZE && w <= MAX_SIZE
-                && h >= MIN_SIZE && h <= MAX_SIZE
-                && depth >= MIN_SIZE && depth <= MAX_SIZE;
+        boolean valid = w >= MIN_SIZE && w <= MAX_SIZE && h >= MIN_SIZE && h <= MAX_SIZE && depth >= MIN_SIZE &&
+                depth <= MAX_SIZE;
 
         if (!valid) {
             return false;
@@ -354,7 +347,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
             invalidateStructure();
             return;
         }
-        
+
         long calculatedCapacity = volume * (long) type.kLPerBlock * 1000L;
         int clampedCapacity = (int) Math.min(calculatedCapacity, Integer.MAX_VALUE);
         fluidTank.setCapacity(clampedCapacity);
@@ -397,7 +390,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
         if (!isStructureFormed() || fluidTank == null || fluidTank.getCapacity() <= 0) {
             return 0;
         }
-        
+
         long stored = fluidTank.getFluidAmount();
         long capacity = fluidTank.getCapacity();
 
@@ -406,7 +399,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
 
         double fillRatio = (double) stored / capacity;
         int state = (int) Math.ceil(fillRatio * 8.0);
-        
+
         return Math.min(Math.max(state, 1), 8);
     }
 

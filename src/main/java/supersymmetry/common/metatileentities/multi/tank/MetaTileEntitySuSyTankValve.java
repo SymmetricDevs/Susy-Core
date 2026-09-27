@@ -1,5 +1,7 @@
 package supersymmetry.common.metatileentities.multi.tank;
 
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -15,7 +16,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-
 import gregtech.api.capability.impl.FluidHandlerProxy;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.ModularUI;
@@ -29,9 +29,8 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 
-import java.util.List;
-
-public class MetaTileEntitySuSyTankValve extends MetaTileEntityMultiblockPart implements IMultiblockAbilityPart<IFluidHandler> {
+public class MetaTileEntitySuSyTankValve extends MetaTileEntityMultiblockPart
+                                         implements IMultiblockAbilityPart<IFluidHandler> {
 
     public final SuSyTankType type;
 
@@ -87,8 +86,8 @@ public class MetaTileEntitySuSyTankValve extends MetaTileEntityMultiblockPart im
 
     private void initializeDummyInventory() {
         this.fluidInventory = new FluidHandlerProxy(
-                new FluidTankList(false, new IFluidTank[]{}),
-                new FluidTankList(false, new IFluidTank[]{}));
+                new FluidTankList(false, new IFluidTank[] {}),
+                new FluidTankList(false, new IFluidTank[] {}));
     }
 
     @Override
