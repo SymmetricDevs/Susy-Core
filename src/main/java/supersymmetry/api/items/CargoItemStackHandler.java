@@ -5,6 +5,7 @@ import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemSta
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.block.machines.BlockMachine;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -215,6 +216,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
                 currentMass += 98 * 36 * 4; // default Tc mass times 36 times another fudge factor
             }
         }
+
+        if (item.getItem() instanceof ItemBlock bItem && bItem.getBlock() instanceof BlockMachine) {
+            currentMass *= 10; // we do a little trolling
+        }
+
         if (item.getItem() instanceof ItemBlock bItem && bItem.getBlock() instanceof WeightedBlock<?> block) {
             currentMass = (int) Math.ceil(block.getMass(item) * 1000);
         }

@@ -1,5 +1,6 @@
 package supersymmetry.api.items;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class ItemMassRegistry extends RegistryDefaulted<ItemAndMeta, Integer> {
 
     @Override
     protected @NonNull Map<ItemAndMeta, Integer> createUnderlyingMap() {
-        return HashBiMap.create();
+        return new HashMap<>();
     }
 
     private Map<ItemAndMeta, Integer> getMap() {

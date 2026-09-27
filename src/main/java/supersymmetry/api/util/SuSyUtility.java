@@ -7,10 +7,14 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.toolitem.IGTTool;
+import gregtech.common.items.armor.MetaArmor;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,6 +27,8 @@ import gregtech.api.util.GTUtility;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
+import supersymmetry.common.item.SuSyArmorItem;
+import supersymmetry.common.item.SuSyMetaItems;
 
 public class SuSyUtility {
 
@@ -148,6 +154,15 @@ public class SuSyUtility {
             return false;
         }
         if (item.getItem() instanceof MetaItem) {
+            return true;
+        }
+        if (item.getItem() instanceof IGTTool) {
+            return true;
+        }
+        if (item.getItem() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm().getItem()) {
+            return true;
+        }
+        if (item.getItem() instanceof ArmorMetaItem<?>) {
             return true;
         }
         if (item.getItem() instanceof MachineItemBlock mteBlock) {
