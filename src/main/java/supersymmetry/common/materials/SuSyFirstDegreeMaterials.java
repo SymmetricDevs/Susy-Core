@@ -142,10 +142,10 @@ public class SuSyFirstDegreeMaterials {
                 .dust()
                 .ingot()
                 .liquid(new FluidBuilder().temperature(811))
-                .flags(GENERATE_FRAME, GENERATE_ROD, GENERATE_PLATE, GENERATE_RING, GENERATE_BOLT, GENERATE_SCREW)
+                .flags(GENERATE_FRAME, GENERATE_ROD, GENERATE_PLATE, GENERATE_RING, GENERATE_BOLT_SCREW)
                 .color(0x3e563e)
                 .build();
 
-        MONEL_400.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(811, 2048, true, true, false, false));
+        Monel400.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(811, 2048, true, true, false, false));
     }
 }

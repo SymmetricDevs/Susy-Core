@@ -482,7 +482,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
         super.addInformation(stack, world, tooltip, advanced);
 
         tooltip.add(I18n.format("gregtech.multiblock.tank.tooltip"));
-        tooltip.add(I18n.format("susy.multiblock.tank.info", type.kLPerBlock * 1000L, type.maxAirBlocks, MIN_SIZE, MAX_SIZE));
+        tooltip.add(I18n.format("susy.multiblock.tank.info", type.kLPerBlock, type.maxAirBlocks, MIN_SIZE, MAX_SIZE));
 
         tooltip.add(I18n.format("gregtech.fluid_pipe.max_temperature", type.getMaxTemperature()));
         if (type.isGasProof()) tooltip.add(I18n.format("gregtech.fluid_pipe.gas_proof"));
