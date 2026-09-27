@@ -190,7 +190,7 @@ public class FactionViolence {
         }
 
         // default
-        if (!isSmart && mob.getAttackTarget() == null) {
+        if (!isSmart) {
             EntityLivingBase bestTarget = null;
             double bestDistanceSq = Double.MAX_VALUE;
             for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
