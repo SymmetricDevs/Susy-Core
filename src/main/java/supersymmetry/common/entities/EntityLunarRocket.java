@@ -2,14 +2,12 @@ package supersymmetry.common.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
-
-import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
 
 /**
  * The rocket built and launched by the lunar launch complex. Lunar escape

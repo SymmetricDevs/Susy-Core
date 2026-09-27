@@ -319,7 +319,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         }
         success *= altitudeMult;
         return new SuccessCalculation.AFSStats(success, dryMass, fuelMass,
-                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes, stageSepTimes,
+                (finalSpeed - orbitalSpeed > 0 ? finalSpeed - orbitalSpeed : 0), dragCoeff, stageSepAltitudes,
+                stageSepTimes,
                 speed, horizontalSpeed);
     }
 
