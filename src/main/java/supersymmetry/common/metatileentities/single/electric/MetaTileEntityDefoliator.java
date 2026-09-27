@@ -219,9 +219,10 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             // spotless:off
 
             // no metadata
-            IBlockState AIR         = stateOf("minecraft", "air",  0);
-            IBlockState WATER       = stateOf("minecraft", "water", 0);
-            IBlockState COARSE_DIRT = stateOf("minecraft", "dirt",  1);
+            IBlockState AIR         = stateOf("minecraft", "air",      0);
+            IBlockState WATER       = stateOf("minecraft", "water",    0);
+            IBlockState COARSE_DIRT = stateOf("minecraft", "dirt",     1);
+            IBlockState ICE         = stateOf("minecraft", "ice",      1);
             IBlockState LOAMY_DIRT  = stateOf("biomesoplenty", "dirt", 8);
             IBlockState SANDY_DIRT  = stateOf("biomesoplenty", "dirt", 9);
             IBlockState SILTY_DIRT  = stateOf("biomesoplenty", "dirt", 10);
@@ -251,6 +252,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             map.put(new ResourceLocation("minecraft", "mycelium"),             COARSE_DIRT);
 
             map.put(new ResourceLocation("minecraft", "snow_layer"),           AIR); //stops trees from leaving floating snow behind
+            map.put(new ResourceLocation("minecraft", "water"),                ICE); //make it possible for constructoid to not get stuck while placing blocks down in areas with water
 
             // Biomes O' Plenty
             map.put(new ResourceLocation("biomesoplenty", "bamboo"),          AIR);
