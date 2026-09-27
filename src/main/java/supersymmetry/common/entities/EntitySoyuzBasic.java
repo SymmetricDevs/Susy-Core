@@ -210,13 +210,18 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         return 38D;
     }
 
+    public Vec3d getCenter(AxisAlignedBB aabb)
+    {
+        return new Vec3d(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
+    }
+
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
         AxisAlignedBB aabb = new AxisAlignedBB(passenger.getPosition()).grow(5, 1, 5);
         List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(passenger, aabb);
         if (!boxes.isEmpty()) {
-            Vec3d newPos = boxes.get(0).getCenter();
+            Vec3d newPos = getCenter(boxes.get(0));
             passenger.setPosition(newPos.x, newPos.y, newPos.z);
             float f = passenger.width / 2.0F;
             float f1 = passenger.height;
