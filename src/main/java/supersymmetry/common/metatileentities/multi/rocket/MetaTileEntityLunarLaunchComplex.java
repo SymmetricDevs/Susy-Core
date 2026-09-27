@@ -82,6 +82,7 @@ import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockLunarConcrete;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.entities.EntityLunarRocket;
+import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 import supersymmetry.common.rocketry.RocketConfigurerHandler;
