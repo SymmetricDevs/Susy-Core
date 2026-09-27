@@ -137,7 +137,7 @@ dependencies {
     implementation(deps.icbm.deobf())
 
     //DO NOT PUSH THIS SHIT TO GIT
-    implementation(deps.techguns.deobf())
+    //implementation(deps.techguns.deobf())
 
     // Ladylib
     compileOnly("com.github.Ladysnake:Ladylib:2.3.0")
