@@ -8,6 +8,7 @@ import static supersymmetry.api.util.SuSyUtility.susyId;
 import static supersymmetry.common.blocks.BlockCoagulationTankWall.CoagulationTankWallType.WOODEN_COAGULATION_TANK_WALL;
 import static supersymmetry.common.blocks.BlockGrinderCasing.Type.ABRASION_RESISTANT_CASING;
 import static supersymmetry.common.blocks.BlockSuSyMultiblockCasing.CasingType.*;
+import static supersymmetry.common.blocks.BlockSuSyMultiblockCasing2.CasingType.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +38,7 @@ public class SuSyConnectedTextures {
     public static final VisualStateRenderer ALUMINIUM_GEARBOX_CTM;
     public static final VisualStateRenderer BALL_MILL_SHELL_CTM;
     public static final VisualStateRenderer AEROSPACE_GASKET_CTM;
+    public static final VisualStateRenderer MONEL_400_CASING_CTM;
 
     static {
         WOODEN_COAGULATION_TANK_WALL_CTM = from(
@@ -51,6 +53,7 @@ public class SuSyConnectedTextures {
                 SuSyBlocks.GRINDER_CASING.getState(BlockGrinderCasing.Type.WEAR_RESISTANT_LINED_MILL_SHELL));
         AEROSPACE_GASKET_CTM = from(SuSyBlocks.ROCKET_MULTIBLOCK_CASING
                 .getState(BlockRocketMultiblockCasing.CasingType.AEROSPACE_GASKET));
+        MONEL_400_CASING_CTM = from(SuSyBlocks.MULTIBLOCK_CASING_2.getState(MONEL_400_CASING));
     }
 
     public static void init() {
@@ -93,6 +96,7 @@ public class SuSyConnectedTextures {
         BRONZE_PLATED_BRICKS_CTM.override(susyId("primitive_mud_pump"), susyId("large_boiler.bronze"));
         AEROSPACE_GASKET_CTM.override(susyId("building_cleanroom"));
         NONCONDUCTING_CASING_CTM.override(susyId("electric_discharge_machine"));
+        MONEL_400_CASING_CTM.override(susyId("multiblock_tank"));
 
         registerCustomOverride(susyId("slab_mold"), SuSyConnectedTextures::strandMoldHandler);
         registerCustomOverride(susyId("billet_mold"), SuSyConnectedTextures::strandMoldHandler);
