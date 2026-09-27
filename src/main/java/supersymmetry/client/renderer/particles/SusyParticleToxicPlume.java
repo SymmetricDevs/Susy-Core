@@ -2,7 +2,6 @@ package supersymmetry.client.renderer.particles;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,12 +53,6 @@ public class SusyParticleToxicPlume extends Particle {
         if (lifeFraction > 0.8f) {
             this.particleAlpha = 0.9f * (1.0f - ((lifeFraction - 0.8f) / 0.2f));
         }
-    }
-
-    @Override
-    public void renderParticle(BufferBuilder buffer, net.minecraft.entity.Entity entityIn, float partialTicks,
-                               float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
     }
 
     @Override
