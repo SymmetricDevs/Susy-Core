@@ -6,8 +6,10 @@ import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.ore.OrePrefix.spring;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
+import gregtech.api.unification.material.properties.PropertyKey;
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.GTValues;
@@ -26,6 +28,8 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.core.sound.GTSoundEvents;
 import gregtech.core.unification.material.internal.MaterialRegistryManager;
+import net.minecraftforge.fluids.FluidStack;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.builders.*;
@@ -469,14 +473,13 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_HAMMER, ProgressWidget.MoveType.VERTICAL)
             .setSound(GTSoundEvents.ELECTROLYZER).allowEmptyOutput();
 
-    public static final RecipeMap<SimpleRecipeBuilder> INDUCTION_FURNACE = new RecipeMap<>(
-            "induction_furnace", 9, 3, 3, 3, new SimpleRecipeBuilder(), false)
+    public static final RecipeMap<InductionFurnaceRecipeBuilder> INDUCTION_FURNACE = new RecipeMap<>(
+            "induction_furnace", 9, 3, 3, 3, new InductionFurnaceRecipeBuilder(), false)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<ResistanceFurnaceRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>(
-            "resistance_furnace",
-            6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
+            "resistance_furnace", 6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
             .setSound(GTSoundEvents.FURNACE);
 
     public static final RecipeMap<NoEnergyRecipeBuilder> SALVAGING_RECIPES = new RecipeMap<>("salvaging", 1, 9, 0, 0,
@@ -662,22 +665,36 @@ public class SuSyRecipeMaps {
 
         SuSyRecipeMaps.INDUCTION_FURNACE.onRecipeBuild(recipeBuilder -> {
 
-            int fluidInput = 0;
-            if (!recipeBuilder.getFluidInputs().isEmpty()) {
-                fluidInput = recipeBuilder.getFluidInputs().getFirst().getInputFluidStack().amount;
+            String mat = recipeBuilder.getMaterial();
+            if (Objects.equals(mat, "")) {
+                recipeBuilder.material("Silicon Carbide");
             }
 
-            if (fluidInput != 0 && recipeBuilder.getDuration() == 0) {
-                int fluidOutput = 0;
+            int totalTemperature = 0;
+            for (GTRecipeInput recipeInput : recipeBuilder.getInputs()) {
+                for (ItemStack input : recipeInput.getInputStacks()) {
+                    if (OreDictUnifier.getPrefix(input) != OrePrefix.dust &&
+                            OreDictUnifier.getPrefix(input) != OrePrefix.ingot)
+                        continue;
 
-                if (!recipeBuilder.getFluidOutputs().isEmpty()) {
-                    fluidOutput = recipeBuilder.getFluidOutputs().getFirst().amount;
+                    MaterialStack matStack = OreDictUnifier.getMaterial(input);
+                    if (matStack == null || matStack.material == null ||
+                            !matStack.material.hasProperty(PropertyKey.FLUID))
+                        continue;
+
+                    int temperature = matStack.material.getFluid().getTemperature();
+                    int amount = input.getCount();
+
+                    totalTemperature += temperature * amount;
+
+                    break;
                 }
-
-                int netFluid = fluidOutput - fluidInput;
-
-                recipeBuilder.duration(netFluid / 144 * 40);
             }
+
+            int duration = totalTemperature / 64;
+
+            recipeBuilder.duration(duration);
         });
     }
 }
+

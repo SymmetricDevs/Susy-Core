@@ -156,6 +156,24 @@ public class SuSyPredicates {
             () -> new BlockInfo[] { new BlockInfo(SuSyBlocks.EVAPORATION_BED.getDefaultState()) })
             .addTooltips("susy.multiblock.pattern.error.coils_or_bed");
 
+    private static final Supplier<TraceabilityPredicate> INDUCTION_CRUCIBLE = () -> new TraceabilityPredicate(
+            blockWorldState -> {
+                IBlockState state = blockWorldState.getBlockState();
+                if (state.getBlock() instanceof BlockInductionCrucible) {
+                    BlockInductionCrucible.InductionCrucibleType type = SuSyBlocks.INDUCTION_CRUCIBLE.getState(state);
+                    Object currentCrucible = blockWorldState.getMatchContext().getOrPut("InductionCrucibleType", type);
+                    if (!currentCrucible.equals(type)) {
+                        blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.coils"));
+                        return false;
+                    }
+                    blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>())
+                            .add(blockWorldState.getPos());
+                    return true;
+                }
+                return false;
+            }, () -> Arrays.stream(BlockInductionCrucible.InductionCrucibleType.values())
+            .map(type -> new BlockInfo(SuSyBlocks.INDUCTION_CRUCIBLE.getState(type))).toArray(BlockInfo[]::new));
+
     /**
      * A predicate for allowing using only the same type of metal sheet blocks in a structure
      * This includes predicate for both small & large metal sheets
@@ -241,6 +259,10 @@ public class SuSyPredicates {
 
     @NotNull public static TraceabilityPredicate coilsOrBeds() {
         return COILS_OR_BED.get().or(EVAP_BED.get());
+    }
+
+    @NotNull public static TraceabilityPredicate inductionCrucibles() {
+        return INDUCTION_CRUCIBLE.get();
     }
 
     protected static EnumFacing getRelativeFacing(MultiblockControllerBase mte, RelativeDirection dir) {

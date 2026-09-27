@@ -7,6 +7,7 @@ import static gregtech.api.unification.ore.OrePrefix.*;
 
 import java.util.*;
 
+import gregtech.api.unification.material.Materials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -181,22 +182,29 @@ public class SuSyMaterialRecipeHandler {
     }
 
     public static void processInductionMelt(OrePrefix orePrefix, Material material, DustProperty dustProperty) {
-        int temp = material.getFluid().getTemperature();
+        String mat = "Silicon Carbide";
+
+        if (material.hasFlag(SuSyMaterialFlags.ALUMINA_CRUCIBLE)) {
+            mat = "Alumina";
+        }
+        else if (material == Materials.Magnesium) {
+            mat = "Magnesia";
+        }
 
         SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
                 .circuitMeta(1)
                 .input(ingot, material)
                 .fluidOutputs(material.getFluid(144))
-                .duration(Math.round((float) temp / 32))
                 .EUt(30)
+                .material(mat)
                 .buildAndRegister();
 
         SuSyRecipeMaps.INDUCTION_FURNACE.recipeBuilder()
                 .circuitMeta(1)
                 .input(dust, material)
                 .fluidOutputs(material.getFluid(144))
-                .duration(Math.round((float) temp / 32))
                 .EUt(30)
+                .material(mat)
                 .buildAndRegister();
     }
 
@@ -207,6 +215,7 @@ public class SuSyMaterialRecipeHandler {
             throw new IllegalArgumentException("Melting point too high for resistance furnace");
         } else {
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .circuitMeta(1)
                     .input(ingot, material)
                     .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))
@@ -216,6 +225,7 @@ public class SuSyMaterialRecipeHandler {
                     .buildAndRegister();
 
             SuSyRecipeMaps.RESISTANCE_FURNACE.recipeBuilder()
+                    .circuitMeta(1)
                     .input(dust, material)
                     .notConsumable(SuSyMetaItems.CLAY_GRAPHITE_CRUCIBLE)
                     .fluidOutputs(material.getFluid(144))

@@ -12,16 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.block.IStateHarvestLevel;
 import gregtech.api.block.VariantBlock;
 
-public class BlockCrucible extends VariantBlock<BlockCrucible.CrucibleType> {
+public class BlockInductionCrucible extends VariantBlock<BlockInductionCrucible.InductionCrucibleType> {
 
-    public BlockCrucible() {
+    public BlockInductionCrucible() {
         super(net.minecraft.block.material.Material.IRON);
         setTranslationKey("crucible");
         setHardness(5.0f);
         setResistance(0.1f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(CrucibleType.SILICON_CARBIDE));
+        setDefaultState(getState(InductionCrucibleType.SILICON_CARBIDE));
     }
 
     @Override
@@ -30,15 +30,20 @@ public class BlockCrucible extends VariantBlock<BlockCrucible.CrucibleType> {
         return false;
     }
 
-    public enum CrucibleType implements IStringSerializable, IStateHarvestLevel {
+    public enum InductionCrucibleType implements IStringSerializable, IStateHarvestLevel {
 
-        SILICON_CARBIDE("silicon_carbide", 1);
+        SILICON_CARBIDE("silicon_carbide", "Silicon Carbide", 1),
+        ALUMINA("alumina", "Alumina", 1),
+        MAGNESIA("magnesia", "Magnesia", 1),
+        HP_ALUMINA("hp_alumina", "High-Performance Alumina", 1);
 
         private final String name;
+        public final String material;
         private final int harvestLevel;
 
-        CrucibleType(String name, int harvestLevel) {
+        InductionCrucibleType(String name, String material, int harvestLevel) {
             this.name = name;
+            this.material = material;
             this.harvestLevel = harvestLevel;
         }
 
