@@ -102,14 +102,10 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
 
     public void launchRocket() {
         if (this.getFuel() == null) {
-            setLaunchTime(-1);
             setCountdownStarted(false);
             return;
         }
-        if (world.isRemote) {
-            setupRocketSound();
-            soundRocket.startPlaying();
-        } else {
+        if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
                 AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
@@ -169,16 +165,29 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     @Override
     public void onUpdate() {
         super.onUpdate();
+        long age = this.world.getTotalWorldTime();
+        int launchTime = this.getLaunchTime();
 
-        if (isCountdownStarted()) {
-            int age = this.getAge();
-            int launchTime = this.getLaunchTime();
+        if (isCountdownStarted() && world.isRemote) {
+            if (launchTime - age > 50 && soundRocket == null) {
+                setupRocketSound();
+                soundRocket.startPlaying();
+            }
             if (age % 2 == 0) {
                 if (launchTime - age < 60 && launchTime - age > 0) {
                     this.spawnLaunchParticles(0.025 * (age - launchTime + 60));
-                } else if (launchTime - age > -100 && launchTime - age < 0) {
+                    this.spawnLaunchParticles(0.025 * (age - launchTime + 60));
+                }
+            }
+
+        }
+        if (isLaunched() && world.isRemote) {
+            if (age % 2 == 0) {
+                if (launchTime - age > -100 && launchTime - age < 0) {
+                    this.spawnLaunchParticles(1.5);
                     this.spawnLaunchParticles(1.5);
                 } else if (launchTime - age > -150 && launchTime - age < -100) {
+                    this.spawnLaunchParticles(-0.03 * (age - launchTime + 150));
                     this.spawnLaunchParticles(-0.03 * (age - launchTime + 150));
                 }
             }
@@ -201,13 +210,18 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         return 38D;
     }
 
+    public Vec3d getCenter(AxisAlignedBB aabb) {
+        return new Vec3d(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D,
+                aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
+    }
+
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
         AxisAlignedBB aabb = new AxisAlignedBB(passenger.getPosition()).grow(5, 1, 5);
         List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(passenger, aabb);
         if (!boxes.isEmpty()) {
-            Vec3d newPos = boxes.get(0).getCenter();
+            Vec3d newPos = getCenter(boxes.get(0));
             passenger.setPosition(newPos.x, newPos.y, newPos.z);
             float f = passenger.width / 2.0F;
             float f1 = passenger.height;

@@ -3,6 +3,15 @@
   "variants" : {
     "variant=silicon_carbide" : {
       "model" : "susy:crucible/silicon_carbide"
+    },
+    "variant=alumina" : {
+      "model" : "susy:crucible/alumina"
+    },
+    "variant=magnesia" : {
+      "model" : "susy:crucible/magnesia"
+    },
+    "variant=hp_alumina" : {
+      "model" : "susy:crucible/alumina"
     }
   }
 }

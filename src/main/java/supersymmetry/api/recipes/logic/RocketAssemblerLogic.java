@@ -4,9 +4,7 @@ import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -20,7 +18,6 @@ import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.item.SuSyMetaItems;
@@ -31,7 +28,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     private List<Integer> electrodeSlotCache = new ArrayList<>();
     public boolean hasEnoughElectrodes = true;
 
-    private final IRocketAssemblyController assembler;
+    public final IRocketAssemblyController assembler;
 
     public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
         super(assembler);
@@ -52,13 +49,9 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null)
             return null;
-        List<GTRecipeInput> flatExpandedInput = targetComponent.materials.stream()
-                .flatMap(x -> x.expandRecipe().stream()).collect(Collectors.toList());
-        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV]) // Almost
-                                                                                                                  // 1
-                                                                                                                  // LuV
-                                                                                                                  // amp
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration() * 20)).build().getResult();
+        List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
+        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV])
+                .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
         return recipe;
     }
 
@@ -191,19 +184,29 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         return (int) ((double) recipe.getInputs().size() * (component.getAssemblyDuration() + component.getRadius()));
     }
 
-    private List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
-        HashMap<ItemStack, Integer> counts = new HashMap<>();
+    /**
+     * Merges ingredients that ask for the same thing, summing their amounts.
+     * <p>
+     * Compares whole ingredients rather than flattening them into stacks: an ore
+     * dictionary ingredient stands for a <em>set</em> of acceptable stacks, and
+     * expanding it here would demand every member of that set at once.
+     */
+    protected List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
+        List<GTRecipeInput> out = new ArrayList<>();
         for (GTRecipeInput input : in) {
-            for (var stack : input.getInputStacks()) {
-                if (counts.containsKey(stack)) {
-                    counts.put(stack, counts.get(stack) + stack.getCount());
-                } else {
-                    counts.put(stack, stack.getCount());
+            boolean merged = false;
+            for (int i = 0; i < out.size(); i++) {
+                GTRecipeInput existing = out.get(i);
+                if (existing.equalIgnoreAmount(input)) {
+                    out.set(i, existing.copyWithAmount(existing.getAmount() + input.getAmount()));
+                    merged = true;
+                    break;
                 }
             }
+            if (!merged) {
+                out.add(input);
+            }
         }
-        return counts.entrySet().stream().map(x -> {
-            return new GTRecipeItemInput(x.getKey(), x.getValue());
-        }).collect(Collectors.toList());
+        return out;
     }
 }

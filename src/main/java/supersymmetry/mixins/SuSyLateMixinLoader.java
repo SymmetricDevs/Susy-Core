@@ -22,6 +22,7 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "littletiles",
             "celeritas",
             "projectred-core",
+            "rs_ctr",
             "icbmclassic",
             "gaspunk",
             "icbmclassic",
@@ -30,7 +31,9 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "dimstack",
             "visualores",
             "gcym",
-            "opencomputers");
+            "opencomputers",
+            "gcym",
+            "immersiverailroading");
 
     @Override
     public List<String> getMixinConfigs() {

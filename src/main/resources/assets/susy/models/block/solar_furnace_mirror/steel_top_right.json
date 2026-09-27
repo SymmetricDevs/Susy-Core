@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/solar_furnace_mirror/steel/top",
+    "up": "gregtech:blocks/casings/solar_furnace_mirror/steel/front",
+    "north": "gregtech:blocks/casings/solar_furnace_mirror/steel/front",
+    "east": "gregtech:blocks/casings/solar_furnace_mirror/steel/front",
+    "south": "gregtech:blocks/casings/solar_furnace_mirror/steel/back",
+    "west": "gregtech:blocks/casings/solar_furnace_mirror/steel/side",
+    "particle": "gregtech:blocks/casings/solar_furnace_mirror/steel/front"
+  }
+}

@@ -2,7 +2,6 @@ package supersymmetry.common.metatileentities.multi.rocket;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -213,8 +212,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.componentIndex = 0;
 
         this.isAssemblyWorking = true;
-        this.componentList = bp.getStages().stream().flatMap(x -> x.getComponents().values().stream())
-                .flatMap(List::stream).collect(Collectors.toList());
+        this.componentList = bp.getAssemblySequence();
         this.blueprintSlot.setLocked(true);
     }
 
@@ -766,7 +764,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     @Override
     public boolean onScrewdriverClick(EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
                                       CuboidRayTraceResult hitResult) {
-        if (playerIn.isCreative() && this.getCurrentBlueprint() != null) {
+        if (!playerIn.world.isRemote && playerIn.isCreative() && this.getCurrentBlueprint() != null) {
             finishAssembly();
             return true;
         }

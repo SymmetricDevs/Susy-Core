@@ -87,7 +87,7 @@ public class PlanetChunkGenerator implements IChunkGenerator {
         heightMap = new double[825];
         biomeWeights = new float[25];
 
-        PlanetoidHandler planet = SuSyDimensions.PLANETS.get(world.provider.getDimension());
+        PlanetoidHandler planet = PlanetoidHandler.get(world.provider.getDimension());
         this.stone = planet.getStone();
         this.bedrock = planet.getBedrock();
 

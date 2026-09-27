@@ -1,20 +1,23 @@
 package supersymmetry.api.rocketry.rockets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import lombok.Getter;
+import lombok.Setter;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.costs.RocketBlueprintCosts;
+import supersymmetry.api.rocketry.costs.RocketCostGroup;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.SuccessCalculation;
+import supersymmetry.common.rocketry.components.ComponentBlueprintOverhead;
 import supersymmetry.common.rocketry.components.ComponentSpacecraft;
 
 public abstract class AbstractRocketBlueprint implements Cloneable {
@@ -48,10 +51,12 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         AbstractRocketBlueprint.registryLock = registryLock;
     }
 
+    @Getter
     public String name;
 
     public ResourceLocation relatedEntity = new ResourceLocation(Supersymmetry.MODID, "rocket_basic");
 
+    @Getter
     public List<RocketStage> stages = new ArrayList<>();
 
     public AbstractRocketBlueprint(String name, ResourceLocation relatedEntity) {
@@ -59,21 +64,18 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         setRelatedEntity(relatedEntity);
     }
 
-    public List<RocketStage> getStages() {
-        return this.stages;
+    public Optional<RocketStage> getStage(String name) {
+        return this.getStages().stream().filter(x -> x.getName().equals(name))
+                .findFirst();
     }
 
     public boolean isFullBlueprint() {
-        return (stages.stream().allMatch(x -> x.isPopulated()));
+        return (stages.stream().allMatch(RocketStage::isPopulated));
     }
 
     public abstract boolean readFromNBT(NBTTagCompound tag);
 
     public abstract NBTTagCompound writeToNBT();
-
-    public String getName() {
-        return name;
-    }
 
     public double getMass() {
         return this.getStages().stream().mapToDouble(RocketStage::getMass).sum();
@@ -87,7 +89,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         // Sum of the absolute differences between consecutive stages.
         double mismatch = 0;
         for (int i = 0; i < this.getStages().size() - 1; i++) {
-            mismatch += Math.abs(this.getStages().get(i).getRadius() - this.getStages().get(i + 1).getRadius());
+            double interstageRadius = this.getStages().get(i).getInterstageRadius();
+            mismatch += Math.abs(this.getStages().get(i).getRadius() - interstageRadius) +
+                    Math.abs(interstageRadius - this.getStages().get(i + 1).getRadius());
         }
         return mismatch;
     }
@@ -96,8 +100,9 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         return this.getStages().stream().mapToDouble(RocketStage::getHeight).sum();
     }
 
-    public double getThrust(RocketFuelEntry entry, String componentType) {
-        return this.getStages().stream().mapToDouble((stage) -> stage.getThrust(entry, componentType)).sum();
+    public double getThrust(RocketFuelEntry entry, String componentType, double ambientPressure) {
+        return this.getStages().stream()
+                .mapToDouble((stage) -> stage.getThrust(entry, componentType, ambientPressure)).sum();
     }
 
     public double getFuelVolume() {
@@ -106,6 +111,27 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
 
     public int getComponentCount(String componentType) {
         return this.getStages().stream().mapToInt((comp) -> comp.getComponentCount(componentType)).sum();
+    }
+
+    /**
+     * Everything the rocket assembler has to build, in order: this blueprint's
+     * fixed cost groups first, then the components the player actually specified.
+     * <p>
+     * The overhead leads so that a player who cannot afford the plumbing finds out
+     * before sinking twenty minutes into engines. Costs are resolved here, at
+     * assembly time, rather than baked into the blueprint — see
+     * {@link RocketBlueprintCosts}.
+     */
+    public List<AbstractComponent<?>> getAssemblySequence() {
+        List<AbstractComponent<?>> sequence = new ArrayList<>();
+        for (RocketCostGroup group : RocketBlueprintCosts.get(this.getName())) {
+            if (!group.isEmpty()) {
+                sequence.add(new ComponentBlueprintOverhead(group, this.getMaxRadius()));
+            }
+        }
+        this.getStages().stream().flatMap(stage -> stage.getComponents().values().stream()).flatMap(List::stream)
+                .forEach(sequence::add);
+        return sequence;
     }
 
     public List<AbstractComponent> getComponents(String componentType) {
@@ -117,6 +143,16 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
     public double getGuidanceMultiplier() {
         List<AbstractComponent> comps = this.getComponents("spacecraft");
         return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).guidanceMultiplier;
+    }
+
+    public double getRedundancy() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).redundancy;
+    }
+
+    public double getCollectionEfficiency() {
+        List<AbstractComponent> comps = this.getComponents("spacecraft");
+        return comps.isEmpty() ? 0 : ((ComponentSpacecraft) comps.get(0)).collectionEfficiency;
     }
 
     public double getCargoVolume() {
@@ -149,6 +185,11 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
         this.stages = stages;
     }
 
+    @Setter
+    public Function<AbstractRocketBlueprint, ComponentValidationResult> componentValidationFunction = x -> {
+        return ComponentValidationResult.SUCCESS;
+    };
+
     @Override
     public AbstractRocketBlueprint clone() {
         try {
@@ -157,14 +198,18 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
             for (RocketStage stage : this.stages) {
                 cloned.stages.add((RocketStage) stage.clone());
             }
+            cloned.componentValidationFunction = this.componentValidationFunction;
             return cloned;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(double gravity, RocketFuelEntry fuel,
+    public abstract SuccessCalculation.AFSStats calculateInitialSuccess(Planetoid planet, RocketFuelEntry fuel,
+                                                                        double turnAltitude, double cargoMass,
                                                                         long augmentation);
 
     public abstract SuccessCalculation.LaunchResult calculateSuccess(EntityAbstractRocket rocket, long augmentation);
+
+    public abstract boolean isSolidRocket();
 }

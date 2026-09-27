@@ -31,6 +31,7 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
         super(metaTileEntityId, tier);
     }
 
+    public double multiplier = 0;
     IBlockState panelDisplayBlock = SuSyBlocks.SOLAR_PANEL.getState(BlockSolarPanel.SolarPanelType.DEFAULT);
 
     @Override
@@ -87,6 +88,9 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
     @Override
     public void update() {
         super.update();
+        if (this.getOffsetTimer() % 50 == 0) {
+            multiplier = getMultiplier();
+        }
         this.energyContainer.changeEnergy(getCurrentProduction(getTier()));
     }
 
@@ -135,31 +139,40 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
     }
 
     public long getCurrentProduction(int tier) {
+        return Math.round(GTValues.V[LV] * multiplier * ((double) tier / 2 + 0.5));
+    }
+
+    public double getMultiplier() {
         World world = this.getWorld();
         long time = world.getWorldTime() % 24000;
         double multiplier = 0;
         if (hasSkyAccess(world, this.getPos()) && hasSolarPanelDisplay(world, this.getPos()) &&
                 panelIsNotObstructed(world, this.getPos())) {
-            if (time >= 2000 && time < 10000) { // 6000 is noon, 18000 is midnight
-                multiplier = 1;
-            } else if (time >= 14000 && time <= 22000) {
-                multiplier = 0;
-            } else if (time >= 10000 && time < 14000) {
-                multiplier = (double) (14000 - time) / 4000.0;
-            } else if (time < 2000) {
-                multiplier = (double) time / 4000.0 + 0.5;
-            } else {
-                multiplier = (double) (time - 22000) / 4000.0;
-            }
+            if (this.getWorld().provider.getDimension() == 0) {
+                if (time >= 2000 && time < 10000) { // 6000 is noon, 18000 is midnight
+                    multiplier = 1;
+                } else if (time >= 14000 && time <= 22000) {
+                    multiplier = 0;
+                } else if (time >= 10000 && time < 14000) {
+                    multiplier = (double) (14000 - time) / 4000.0;
+                } else if (time < 2000) {
+                    multiplier = (double) time / 4000.0 + 0.5;
+                } else {
+                    multiplier = (double) (time - 22000) / 4000.0;
+                }
 
-            Biome biome = world.getBiome(this.getPos());
-            if (world.isRaining() && (biome.canRain() || biome.getEnableSnow())) {
-                multiplier = multiplier * 0.5;
-            }
-            multiplier *= Math.pow(0.5, getNumberOfNearbyPanels(world, this.getPos()));
-            multiplier = Math.clamp(multiplier, 0, 1);
-            return Math.round(GTValues.V[LV] * multiplier * ((double) tier / 2 + 0.5));
+                Biome biome = world.getBiome(this.getPos());
+                if (world.isRaining() && (biome.canRain() || biome.getEnableSnow())) {
+                    multiplier = multiplier * 0.5;
+                }
+                multiplier *= Math.pow(0.5, getNumberOfNearbyPanels(world, this.getPos()));
+                multiplier = Math.clamp(multiplier, 0, 1);
+            } else if (this.getWorld().provider.getDimension() == 800) {
+                multiplier = 1.33;
+                // according to wikipedia avg solar irradiation on a sunny day on earth is ~1000 W/m², on the moon it's
+                multiplier *= Math.clamp((this.getPos().getY() - 60) / 90, 0, 1); // 1361, rounded to produce 64 eu/t
+            }   // the moon base is on the south pole, so solars would be placed on high crater rims
         }
-        return 0;
+        return multiplier;
     }
 }

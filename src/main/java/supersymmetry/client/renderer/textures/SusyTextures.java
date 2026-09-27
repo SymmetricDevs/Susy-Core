@@ -20,6 +20,7 @@ public class SusyTextures {
             "casings/wooden_coagulation_tank_wall");
     public static final SimpleSidedCubeRenderer PLASTIC_CAN_OVERLAY = new SimpleSidedCubeRenderer(
             "storage/drums/plastic_can_top");
+
     public static final SimpleSidedCubeRenderer INV_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/inv");
     public static final SimpleSidedCubeRenderer TANK_BRIDGE = new SimpleSidedCubeRenderer("logistics/bridges/tank");
     public static final SimpleSidedCubeRenderer INV_TANK_BRIDGE = new SimpleSidedCubeRenderer(
@@ -78,6 +79,15 @@ public class SusyTextures {
             "machines/multiblocks/catalytic_reformer");
     public static final OrientedOverlayRenderer INCINERATOR_OVERLAY = new OrientedOverlayRenderer(
             "machines/incinerator");
+    public static final ICubeRenderer RIE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/reactive_ion_etcher");
+    public static final ICubeRenderer RESIST_PROCESSOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/resist_processor");
+    public static final ICubeRenderer PLASMA_ASHER_OVERLAY = new OrientedOverlayRenderer("machines/plasma_asher");
+    public static final ICubeRenderer WIRE_BONDER_OVERLAY = new OrientedOverlayRenderer("machines/wire_bonder");
+
+    public static final OrientedOverlayRenderer EXTENDED_CHISEL_OVERLAY = new OrientedOverlayRenderer(
+            "machines/extended_chisel_maker");
 
     public static final OrientedOverlayRenderer FUEL_CELL_OVERLAY = new OrientedOverlayRenderer("machines/fuel_cell");
 
@@ -196,6 +206,8 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer EDM_OVERLAY = new OrientedOverlayRenderer("machines/multiblocks/edm");
     public static final OrientedOverlayRenderer LOG_WASHER_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/log_washer");
+    public static final OrientedOverlayRenderer SOLAR_FURNACE_OVERLAY = new OrientedOverlayRenderer(
+            "machines/multiblocks/solar_furnace");
 
     public static final OrientedOverlayRenderer LAUNCH_PAD_OVERLAY = new OrientedOverlayRenderer(
             "machines/multiblocks/launch_pad");
@@ -300,4 +312,19 @@ public class SusyTextures {
                     "gregtech:blocks/decoration/large_metalsheet_" + SuSyUtility.getNameForColor(color));
         }
     }
+
+    public static final SimpleOverlayRenderer[] TANK_OVERLAYS = new SimpleOverlayRenderer[] {
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_1"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_2"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_3"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_4"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_5"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_6"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_7"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_8"),
+            new SimpleOverlayRenderer("machines/multiblocks/tank/tank_overlay_9")
+    };
+
+    public static SimpleCubeRenderer MONEL_400_CASING = new SimpleCubeRenderer(
+            "gregtech:blocks/multiblock_casing/monel_400_casing");
 }

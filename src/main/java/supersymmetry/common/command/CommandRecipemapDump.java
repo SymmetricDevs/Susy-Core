@@ -142,7 +142,8 @@ public class CommandRecipemapDump extends CommandBase {
             JsonElement el = fns.get(arg).get();
             long end = System.nanoTime();
             sender.sendMessage(
-                    new TextComponentString(String.format("%s" + " ran in %.3fms", arg, (end - start) / 1e6)));
+                    new TextComponentString(
+                            String.format("%s ran in %.3fms", arg, (end - start) / 1e6)));
 
             root.add(arg, el);
         }
@@ -156,7 +157,8 @@ public class CommandRecipemapDump extends CommandBase {
             JsonElement el = e.getValue().get();
             long end = System.nanoTime();
             sender.sendMessage(
-                    new TextComponentString(String.format("%s" + " ran in %.3fms", e.getKey(), (end - start) / 1e6)));
+                    new TextComponentString(
+                            String.format("%s ran in %.3fms", e.getKey(), (end - start) / 1e6)));
             root.add(e.getKey(), el);
         }
         this.writeJsonToRoot(root, "recipedump", sender);

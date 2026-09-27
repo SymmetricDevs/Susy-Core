@@ -32,7 +32,10 @@ public class MovingSoundRocket extends MovingSound {
     @Override
     public void update() {
         if (this.rocket.isDead) {
-            this.donePlaying = true;
+            this.volume *= 0.97F;
+            if (this.volume < 0.1) {
+                this.donePlaying = true;
+            }
         } else {
             this.xPosF = (float) this.rocket.posX;
             this.yPosF = (float) this.rocket.posY;

@@ -1,5 +1,9 @@
 package supersymmetry.common.rocketry;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 
@@ -23,11 +27,12 @@ public class SuccessCalculation {
         EXPLODES
     }
 
-    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double escapeVelocity,
-                           double cargoCapacity, double radialInstability, double thrust, double oblateness) {
+    public record AFSStats(double success, double mass, double fuelMass, double deltaV, double dragCoefficient,
+                           List<Double> sepAltitudes, List<Double> sepTimes,
+                           double burnoutSpeed, double burnoutHorizontalSpeed) {
 
         public static AFSStats none() {
-            return new AFSStats(-1, 0, 0, 0, 0, 0, 0, 0, 0);
+            return new AFSStats(-1, 0, 0, 0, 0, Collections.emptyList(), Collections.emptyList(), 0, 0);
         }
 
         public boolean isNone() {
@@ -38,37 +43,57 @@ public class SuccessCalculation {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setDouble("success", success);
             tag.setDouble("mass", mass);
-            tag.setDouble("fuelMass", mass);
+            tag.setDouble("fuelMass", fuelMass);
             tag.setDouble("deltaV", deltaV);
-            tag.setDouble("escapeVelocity", escapeVelocity);
-            tag.setDouble("cargoCapacity", cargoCapacity);
-            tag.setDouble("radialInstability", radialInstability);
-            tag.setDouble("thrust", thrust);
-            tag.setDouble("oblateness", oblateness);
+            tag.setDouble("dragCoefficient", dragCoefficient);
+            tag.setInteger("seps", sepAltitudes.size());
+            for (int i = 0; i < sepAltitudes.size(); i++) {
+                tag.setDouble("sepAltitudes" + i, sepAltitudes.get(i));
+                tag.setDouble("sepTimes" + i, sepTimes.get(i));
+            }
+            tag.setDouble("burnoutSpeed", burnoutSpeed);
+            tag.setDouble("burnoutHorizontalSpeed", burnoutHorizontalSpeed);
             return tag;
         }
 
         public static AFSStats deserializeNBT(NBTTagCompound nbt) {
+            List<Double> sepAltitudes = new ArrayList<>();
+            List<Double> sepTimes = new ArrayList<>();
+            for (int i = 0; i < nbt.getInteger("seps"); i++) {
+                sepAltitudes.add(nbt.getDouble("sepAltitudes" + i));
+                sepTimes.add(nbt.getDouble("sepTimes" + i));
+            }
+
             return new AFSStats(nbt.getDouble("success"), nbt.getDouble("mass"), nbt.getDouble("fuelMass"),
-                    nbt.getDouble("deltaV"), nbt.getDouble("escapeVelocity"), nbt.getDouble("cargoCapacity"),
-                    nbt.getDouble("radialInstability"), nbt.getDouble("thrust"), nbt.getDouble("oblateness"));
+                    nbt.getDouble("deltaV"), nbt.getDouble("dragCoefficient"), sepAltitudes, sepTimes,
+                    nbt.getDouble("burnoutSpeed"),
+                    nbt.getDouble("burnoutHorizontalSpeed"));
         }
 
         public void writeToBuffer(PacketBuffer buf) {
+            buf.writeInt(sepAltitudes.size());
+            for (int i = 0; i < sepAltitudes.size(); i++) {
+                buf.writeDouble(sepAltitudes.get(i));
+                buf.writeDouble(sepTimes.get(i));
+            }
             buf.writeDouble(success);
             buf.writeDouble(mass);
             buf.writeDouble(fuelMass);
             buf.writeDouble(deltaV);
-            buf.writeDouble(escapeVelocity);
-            buf.writeDouble(cargoCapacity);
-            buf.writeDouble(radialInstability);
-            buf.writeDouble(thrust);
-            buf.writeDouble(oblateness);
+            buf.writeDouble(dragCoefficient);
+            buf.writeDouble(burnoutSpeed);
+            buf.writeDouble(burnoutHorizontalSpeed);
         }
 
         public static AFSStats readFromBuffer(PacketBuffer buf) {
+            List<Double> sepAltitudes = new ArrayList<>();
+            List<Double> sepTimes = new ArrayList<>();
+            int len = buf.readInt();
+            for (int i = 0; i < len; i++) {
+                sepAltitudes.add(buf.readDouble());
+            }
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                    buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+                    buf.readDouble(), sepAltitudes, sepTimes, buf.readDouble(), buf.readDouble());
         }
     }
 }

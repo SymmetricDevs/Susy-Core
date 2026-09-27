@@ -133,7 +133,7 @@ public class MetaTileEntityMagneticRefrigerator extends RecipeMapMultiblockContr
                 .where('O', MetaTileEntities.ITEM_EXPORT_BUS[GTValues.LV], EnumFacing.SOUTH)
                 .where('D', MetaTileEntities.FLUID_EXPORT_HATCH[GTValues.LV], EnumFacing.EAST).where('M',
                         () -> ConfigHolder.machines.enableMaintenance ? MetaTileEntities.MAINTENANCE_HATCH :
-                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF),
+                                MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF),
                         EnumFacing.NORTH);
         Arrays.stream(BlockCoolingCoil.CoolingCoilType.values())
                 .sorted(Comparator.comparingInt(entry -> -entry.coilTemperature))

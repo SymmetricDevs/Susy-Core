@@ -3,6 +3,7 @@ package supersymmetry.common.rocketry;
 import static supersymmetry.api.space.Planetoid.PLANETOIDS;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,9 @@ import net.minecraft.util.math.BlockPos;
 
 import supersymmetry.api.space.Planetoid;
 
+/*
+ * Treat this class like a record.
+ */
 public class RocketConfiguration {
 
     /**
@@ -20,29 +24,22 @@ public class RocketConfiguration {
     // Soyuz
     public static final int DEFAULT_BUDGET = 2;
 
-    public enum MissionType {
-        Manned,
-        UnmannedCargo,
-        UnmannedCollection
-    }
-
     public enum DestinationType {
         Landing,
         Orbit
     }
 
+    // FIXME: add turn altitude selector (in km)
     public static class MissionConfiguration {
 
         public final int dimension;
         public final BlockPos landingPos;
-        public final MissionType missionType;
         public final DestinationType destinationType;
 
         public MissionConfiguration(NBTTagCompound landing) {
             this.dimension = landing.getInteger("dimension");
             this.landingPos = new BlockPos(landing.getInteger("landing_x"), landing.getInteger("landing_y"),
                     landing.getInteger("landing_z"));
-            this.missionType = MissionType.values()[landing.getInteger("mission_type")];
             this.destinationType = DestinationType.values()[landing.getInteger("destination_type")];
         }
 
@@ -52,7 +49,6 @@ public class RocketConfiguration {
             tag.setInteger("landing_x", landingPos.getX());
             tag.setInteger("landing_y", landingPos.getY());
             tag.setInteger("landing_z", landingPos.getZ());
-            tag.setInteger("mission_type", missionType.ordinal());
             tag.setInteger("destination_type", destinationType.ordinal());
             return tag;
         }
@@ -63,29 +59,49 @@ public class RocketConfiguration {
 
         public boolean isDefault() {
             return this.landingPos.getX() == 0 && this.landingPos.getZ() == 0 && this.landingPos.getY() == 0 &&
-                    this.missionType == MissionType.Manned && this.destinationType == DestinationType.Landing;
+                    this.destinationType == DestinationType.Landing;
         }
     }
 
+    public final float turnAltitude;
     private final List<MissionConfiguration> missions = new ArrayList<>();
 
     public RocketConfiguration(NBTTagCompound tag) {
+        float tempTurnAlt = 0;
         for (int i = 0; i < 10; i++) {
             NBTTagCompound missionTag = tag.getCompoundTag("page_" + i);
+            if (i == 0) {
+                tempTurnAlt = missionTag.getFloat("turn_altitude");
+            }
             if (!missionTag.isEmpty()) {
                 MissionConfiguration config = new MissionConfiguration(missionTag);
                 if (i == 0 || !config.isDefault())
                     missions.add(new MissionConfiguration(missionTag));
             }
         }
+        turnAltitude = tempTurnAlt;
+    }
+
+    public RocketConfiguration(List<MissionConfiguration> config) {
+        this.missions.addAll(config);
+        turnAltitude = 0;
     }
 
     public NBTTagCompound serialize() {
         NBTTagCompound tag = new NBTTagCompound();
+        tag.setFloat("turn_altitude", turnAltitude);
         for (int i = 0; i < missions.size(); i++) {
             tag.setTag("page_" + i, missions.get(i).serialize());
         }
         return tag;
+    }
+
+    public float getTurnAltitude() {
+        return this.turnAltitude;
+    }
+
+    public static RocketConfiguration empty() {
+        return new RocketConfiguration(Collections.emptyList());
     }
 
     public boolean setBudget(int startingDim, int budget) {
@@ -122,11 +138,15 @@ public class RocketConfiguration {
         return true;
     }
 
-    public MissionConfiguration popFront() {
-        return this.missions.remove(0);
+    public RocketConfiguration clipAt(MissionConfiguration clip) {
+        return new RocketConfiguration(this.missions.subList(this.missions.indexOf(clip) + 1, this.missions.size()));
     }
 
     public boolean isEmpty() {
         return this.missions.isEmpty();
+    }
+
+    public List<MissionConfiguration> getMissions() {
+        return this.missions;
     }
 }

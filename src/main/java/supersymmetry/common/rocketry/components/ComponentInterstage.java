@@ -63,6 +63,7 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
 
         interstage.radius = compound.getDouble("radius");
         interstage.mass = compound.getDouble("mass");
+        interstage.height = compound.getInteger("height");
         return Optional.of(interstage);
     }
 

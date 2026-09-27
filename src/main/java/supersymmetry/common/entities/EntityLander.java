@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -62,6 +61,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.rocketry.ICargoInventory;
 import supersymmetry.api.rocketry.fuels.RocketFuelEntry;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.audio.MovingSoundDropPod;
@@ -79,7 +79,7 @@ import supersymmetry.modules.SuSyModules;
 public class EntityLander extends EntityAbstractRocket
                           implements
                           IAnimatable,
-                          IInventory,
+                          ICargoInventory,
                           IGuiHolder<EntityGuiData>,
                           IEntityAdditionalSpawnData {
 
@@ -224,27 +224,29 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     protected void act() {
         // Land on next planet
-        RocketConfiguration.MissionConfiguration next = InstrumentLander.getMissionConfiguration(this);
-        if (next == null) {
+        RocketConfiguration.MissionConfiguration mission = InstrumentLander
+                .getNextLanderConfig(this.getRocketConfiguration());
+        RocketConfiguration config = this.getRocketConfiguration().clipAt(mission);
+        if (mission == null) {
             SusyLog.logger.error(
                     "The next mission really should have been defined if the lander launched... welp, you deserve this NPE");
         }
-        Entity passenger = getPassengers().isEmpty() ? null : this.getPassengers().get(0);
-        // Cannot use TeleportHandler here because it doesn't get the new entity
-        Entity teleported = InstrumentLander.spawnLander(this, next, true);
-        if (passenger != null) {
-            EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, passenger));
+        if (this.getPassengers().isEmpty()) {
+            return;
         }
+        // Cannot use TeleportHandler here because it doesn't get the new entity
+        Entity teleported = InstrumentLander.spawnLander(this, config, mission, true);
+        EventHandlers.travellingPassengers.add(new DimensionRidingSwapData(teleported, this.getPassengers()));
     }
 
     @Override
-    public void startCountdown(int length) {
-        if (InstrumentLander.getMissionConfiguration(this) == null) {
+    protected boolean canStartCountdown() {
+        if (InstrumentLander.getNextLanderConfig(this.getRocketConfiguration()) == null) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
                 this.setDead();
             }
-            return;
+            return false;
         }
         double gravMult = GravityHandler.getGravityMultiplier(this.world);
         if (gravMult > 0.4) {
@@ -252,22 +254,13 @@ public class EntityLander extends EntityAbstractRocket
             if (cargo.isEmpty()) {
                 this.setDead();
             }
-            return;
+            return false;
         }
         if (getCargoMass() > MAX_LAUNCH_MASS) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.too_heavy"));
-            return;
+            return false;
         }
-
-        super.startCountdown(length);
-    }
-
-    public void sendMessageToPassengers(TextComponentTranslation translation) {
-        for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof EntityPlayer player) {
-                player.sendStatusMessage(translation, true);
-            }
-        }
+        return true;
     }
 
     @Override
@@ -315,7 +308,7 @@ public class EntityLander extends EntityAbstractRocket
                 this.handleCollidedBlocks(true);
             }
             if (this.posY > 1000 && isLaunched()) {
-                if (this.hasActed() && this.getPassengers().isEmpty()) {
+                if (this.hasActed()) {
                     this.setDead();
                 } else {
                     act();
@@ -342,6 +335,11 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     public RocketFuelEntry getFuel() {
         return null;
+    }
+
+    @Override
+    public double getTurnAltitude() {
+        return 9999999;
     }
 
     @Override
@@ -653,13 +651,13 @@ public class EntityLander extends EntityAbstractRocket
             if (passenger instanceof EntityPlayer player) {
                 mass += 70;
                 for (ItemStack stack : player.inventory.mainInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.armorInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 for (ItemStack stack : player.inventory.offHandInventory) {
-                    mass += (double) CargoItemStackHandler.getMassPerItem(stack) / 1000;
+                    mass += (double) CargoItemStackHandler.getMass(stack) / 1000;
                 }
                 if (ModuleManager.getInstance().isModuleEnabled(Supersymmetry.MODID, SuSyModules.MODULE_BAUBLES)) {
                     mass += (double) BaublesModule.getBaubleMass(player) / 1000;

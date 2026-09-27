@@ -7,19 +7,25 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.GTValues;
 import gregtech.api.block.machines.MachineItemBlock;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.unification.material.Material;
 import gregtech.api.util.GTUtility;
 import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
+import supersymmetry.common.item.SuSyMetaItems;
 
 public class SuSyUtility {
 
@@ -84,6 +90,7 @@ public class SuSyUtility {
     }
 
     public static final Map<String, Lubricant> lubricants;
+
     static {
         lubricants = new HashMap<>();
         lubricants.put("lubricating_oil", new Lubricant("LubricatingOil", 16, 1.0));
@@ -105,6 +112,7 @@ public class SuSyUtility {
     }
 
     public static final Map<String, Coolant> coolants;
+
     static {
         coolants = new HashMap<>();
         coolants.put("water", new Coolant("Water", 16));
@@ -133,6 +141,9 @@ public class SuSyUtility {
     }
 
     public static boolean isAllowedItemForSpace(ItemStack item) {
+        if (item.isEmpty()) {
+            return true;
+        }
         if (bannedSpaceItems == null) {
             loadBannedSpaceItems();
         }
@@ -140,6 +151,15 @@ public class SuSyUtility {
             return false;
         }
         if (item.getItem() instanceof MetaItem) {
+            return true;
+        }
+        if (item.getItem() instanceof IGTTool) {
+            return true;
+        }
+        if (item.getItem() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm().getItem()) {
+            return true;
+        }
+        if (item.getItem() instanceof ArmorMetaItem<?>) {
             return true;
         }
         if (item.getItem() instanceof MachineItemBlock mteBlock) {
@@ -151,5 +171,10 @@ public class SuSyUtility {
             }
         }
         return item.getTagCompound() == null || item.getTagCompound().isEmpty();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static String formatDouble(String key, String doubleFormat, Object... d) {
+        return I18n.format(key, Arrays.stream(d).map(dou -> String.format(doubleFormat, dou)).toArray());
     }
 }

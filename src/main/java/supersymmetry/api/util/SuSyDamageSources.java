@@ -10,7 +10,7 @@ public class SuSyDamageSources {
     private static final DamageSource CRUSHER = new DamageSource("crusher");
 
     public static final DamageSource PRESSURE = new DamageSource("pressure");
-    public static final DamageSource DEPRESSURIZATION = new DamageSource("depressurization");
+    public static final DamageSource DEPRESSURIZATION = new DamageSource("depressurization").setDamageBypassesArmor();
     public static final DamageSource IMPACT = new DamageSource("impact");
     public static final DamageSource VAPORIZATION = new DamageSource("vaporization").setFireDamage();
     public static final DamageSource ALPHA_RADIATION = new DamageSource("alpha_radiation");
@@ -25,6 +25,7 @@ public class SuSyDamageSources {
     public static final DamageSource REENTRY = new DamageSource("reentry").setDamageBypassesArmor().setFireDamage();
     // From the beneath.
     public static final DamageSource DARKNESS = new DamageSource("darkness").setDamageBypassesArmor();
+    public static final DamageSource ROCKET_EXHAUST = new DamageSource("rocket_exhaust").setFireDamage();
 
     public static DamageSource getSuffocationDamage() {
         return SUFFOCATION;

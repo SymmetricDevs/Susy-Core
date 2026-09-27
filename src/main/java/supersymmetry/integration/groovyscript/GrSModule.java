@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 
 import dev.tianmi.sussypatches.common.SusConfig;
@@ -36,6 +37,20 @@ public class GrSModule extends IntegrationSubmodule implements GroovyPlugin {
         if (SusConfig.API.recipeInfo) {
             ExpansionHelper.mixinClass(Material.class, SuSyExpansions.class);
             ExpansionHelper.mixinMethod(FluidBuilder.class, SuSyExpansions.class, "basic");
+        }
+    }
+
+    @NotNull @Override
+    public GroovyPropertyContainer createGroovyPropertyContainer() {
+        return new SuSyPropertyContainer();
+    }
+
+    public static class SuSyPropertyContainer extends GroovyPropertyContainer {
+
+        public final RocketCostRegistry rocketCosts = new RocketCostRegistry();
+
+        public SuSyPropertyContainer() {
+            addProperty(rocketCosts);
         }
     }
 }
