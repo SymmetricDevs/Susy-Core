@@ -210,9 +210,9 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
         return 38D;
     }
 
-    public Vec3d getCenter(AxisAlignedBB aabb)
-    {
-        return new Vec3d(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
+    public Vec3d getCenter(AxisAlignedBB aabb) {
+        return new Vec3d(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D,
+                aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
     }
 
     @Override
