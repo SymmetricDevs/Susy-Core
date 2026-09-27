@@ -3,20 +3,26 @@ package supersymmetry.mixins.icbmclassic;
 import icbm.classic.content.blast.gas.BlastGasBase;
 import ladysnake.gaspunk.GasPunkConfig;
 import ladysnake.gaspunk.item.ItemGasMask;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import supersymmetry.common.faction.EntityNativeGasResistance;
 
 /**
  * ICBM now respects gaspunk config file.
  *
  * reuses pre-existing protection system that was just here all this time apparently
  *
+ * Also respects the mob resistance whitelist (SusyGasPunkConfig.mobGasResistance)
+ * so whitelisted mobs get their built-in protection rating here too, even with nothing equipped,
+ * taking whichever of mask protection or mob resistance is higher.
  */
 @Mixin(value = BlastGasBase.class, remap = false)
 public abstract class BlastGasBase_GetProtectionRatingMixin {
@@ -29,15 +35,23 @@ public abstract class BlastGasBase_GetProtectionRatingMixin {
     )
     private void susy$injectGasPunkProtectionRating(EntityLivingBase entity,
                                                     CallbackInfoReturnable<Float> cir) {
+        float bestProtection = -1.0f; // sentinel: no match found yet
+
+        float mobResistance = susy$getMobResistance(entity);
+        if (mobResistance > bestProtection) {
+            bestProtection = mobResistance;
+        }
+
         // Fast path: vanilla GasPunk ItemGasMask.
         // uses default hard-coded value
         Item helmet = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
         if (helmet instanceof ItemGasMask) {
-            cir.setReturnValue(0.75f);
+            if (0.75f > bestProtection) {
+                bestProtection = 0.75f;
+            }
+            cir.setReturnValue(bestProtection);
             return;
         }
-
-        float bestProtection = -1.0f; // sentinel: no match found yet
 
         for (String alt : GasPunkConfig.otherGasMasks) {
             String slotsPart;
@@ -89,10 +103,41 @@ public abstract class BlastGasBase_GetProtectionRatingMixin {
             }
         }
 
-        // Only override if we matched something. Negative sentinel = fall through to ICBM.
+        // Only override if we matched something (mask, config entry, or mob whitelist).
+        // Negative sentinel = fall through to ICBM.
         if (bestProtection >= 0.0f) {
             cir.setReturnValue(bestProtection);
         }
+    }
+
+    private static float susy$getMobResistance(EntityLivingBase entity) {
+        ResourceLocation key = EntityList.getKey(entity);
+        if (key == null) return 0.0f;
+        String registryName = key.toString();
+
+        for (String entry : EntityNativeGasResistance.mobGasResistance) {
+            String namePart;
+            float resistance;
+
+            int eqIdx = entry.lastIndexOf('=');
+            if (eqIdx >= 0) {
+                namePart = entry.substring(0, eqIdx);
+                try {
+                    resistance = Float.parseFloat(entry.substring(eqIdx + 1).trim());
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            } else {
+                namePart = entry;
+                resistance = 1.0f;
+            }
+
+            if (namePart.trim().equals(registryName)) {
+                return resistance;
+            }
+        }
+
+        return 0.0f;
     }
 
     private static boolean susy$matchesSlot(String token, EntityLivingBase entity,

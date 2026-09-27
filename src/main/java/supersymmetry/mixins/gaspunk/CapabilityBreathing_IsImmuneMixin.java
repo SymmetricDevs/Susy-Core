@@ -7,10 +7,12 @@ import ladysnake.gaspunk.api.IGas;
 import ladysnake.gaspunk.api.event.GasEvent;
 import ladysnake.gaspunk.gas.core.CapabilityBreathing;
 import ladysnake.gaspunk.item.ItemGasMask;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,10 +20,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import supersymmetry.common.faction.EntityNativeGasResistance;
 
 /**
  * Replaces the config gas mask immunity logic in DefaultBreathingHandler#isImmune()
- * with two new features:
+ * with three new features:
  *
  *   1. Item metadata support = config entries can specify a damage/meta value after a second
  *      colon, e.g. "susy_armor:helmet:11=0.5" matches only that specific item meta.
@@ -36,6 +39,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *      meaning that unless configured they block the shitty tier gases such as carbon monoxide,
  *      but will fail at the stronger ones. Also the vanilla gaspunk gas mask now has a strength of 0.75
  *
+ *   3. Mob whitelist is in package supersymmetry.common.faction.EntityNativeGasResistance; It maps an entity registry name
+ *      (e.g. "techguns:attackhelicopter") to a built-in resistance value, using the exact same "=<float>"
+ *      strength semantics as masks. This resistance applies even with nothing equipped, and
+ *      stacks with (takes the max of) whatever mask protection the entity is also wearing, so a
+ *      resistant mob wearing a mask gets whichever protection is higher rather than the two
+ *      overriding each other.
+ *      Possible use is to make parasites and machine entities immune to the gas
  *
  * Config entry format (S:otherGasMasks in gaspunk.cfg):
  *   Single item:  "modid:itemname:meta=strength"       e.g. "susy_armor:cloth_hood:3=0.3"
@@ -45,7 +55,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *   No strength:  "modid:itemname"                     defaults to strength 1.0 (legacy)
  *
  * Strength semantics:
- *   immune = maskStrength >= maxPotencyOfGas
+ *   immune = max(maskStrength, mobResistance) >= maxPotencyOfGas
  */
 @Mixin(value = CapabilityBreathing.DefaultBreathingHandler.class, remap = false)
 public abstract class CapabilityBreathing_IsImmuneMixin {
@@ -72,6 +82,11 @@ public abstract class CapabilityBreathing_IsImmuneMixin {
                     }
                 }
             }
+
+        float mobResistance = susy$getMobResistance(this.owner);
+        if (mobResistance >= gasPotency) {
+            immune = true;
+        }
 
             Item helmet = this.owner.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
             float maskStrength;
@@ -140,6 +155,36 @@ public abstract class CapabilityBreathing_IsImmuneMixin {
         MinecraftForge.EVENT_BUS.post(event);
 
         cir.setReturnValue(event.isImmune());
+    }
+
+    private static float susy$getMobResistance(EntityLivingBase entity) {
+        ResourceLocation key = EntityList.getKey(entity);
+        if (key == null) return 0.0f;
+        String registryName = key.toString();
+
+        for (String entry : EntityNativeGasResistance.mobGasResistance) {
+            String namePart;
+            float resistance;
+
+            int eqIdx = entry.lastIndexOf('=');
+            if (eqIdx >= 0) {
+                namePart = entry.substring(0, eqIdx);
+                try {
+                    resistance = Float.parseFloat(entry.substring(eqIdx + 1).trim());
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            } else {
+                namePart = entry;
+                resistance = 1.0f;
+            }
+
+            if (namePart.trim().equals(registryName)) {
+                return resistance;
+            }
+        }
+
+        return 0.0f;
     }
 
     private static boolean susy$matchesSlot(String token, EntityLivingBase entity,

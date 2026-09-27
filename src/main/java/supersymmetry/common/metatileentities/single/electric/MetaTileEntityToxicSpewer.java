@@ -11,6 +11,7 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import ladysnake.gaspunk.GasPunkConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -35,6 +36,7 @@ import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import net.minecraft.network.PacketBuffer;
 import supersymmetry.client.renderer.particles.SusyParticleToxicPlume;
+import supersymmetry.common.faction.EntityNativeGasResistance;
 
 public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
 
@@ -175,6 +177,8 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
     //not sure if this is a good way of doing this or not, but I already have a working variant of this
     //in the mixins so imma just copy paste and call it a day
     private static boolean isProtectedAgainstSpewer(EntityLivingBase entity) {
+        if (spewer$getMobResistance(entity) >= SPEWER_IMMUNITY_THRESHOLD) return true;
+
         for (String alt : GasPunkConfig.otherGasMasks) {
             String slotsPart;
             float maskStrength;
@@ -224,6 +228,36 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
         }
 
         return false;
+    }
+
+    private static float spewer$getMobResistance(EntityLivingBase entity) {
+        ResourceLocation key = EntityList.getKey(entity);
+        if (key == null) return 0.0f;
+        String registryName = key.toString();
+
+        for (String entry : EntityNativeGasResistance.mobGasResistance) {
+            String namePart;
+            float resistance;
+
+            int eqIdx = entry.lastIndexOf('=');
+            if (eqIdx >= 0) {
+                namePart = entry.substring(0, eqIdx);
+                try {
+                    resistance = Float.parseFloat(entry.substring(eqIdx + 1).trim());
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            } else {
+                namePart = entry;
+                resistance = 1.0f;
+            }
+
+            if (namePart.trim().equals(registryName)) {
+                return resistance;
+            }
+        }
+
+        return 0.0f;
     }
 
     private static boolean spewer$matchesSlot(String token, EntityLivingBase entity,
