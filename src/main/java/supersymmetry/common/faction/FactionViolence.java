@@ -25,6 +25,8 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.potion.PotionDropPodSickness;
 
+import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RADIUS;
+
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
 
@@ -45,6 +47,9 @@ public class FactionViolence {
     private static final String TAG_COVER_Y = "coverY";
     private static final String TAG_COVER_Z = "coverZ";
     private static final String TAG_LAST_SEARCH_TIME = "lastSearchTime";
+
+    private static final double DANGER_AVOID_RADIUS = FLEE_TRIGGER_RADIUS;
+    private static final double DANGER_AVOID_SPEED = 1.2D;
 
     // ========================================================================
     // Smart AI: anti friendly fire, because fuck the playerbase
@@ -223,6 +228,16 @@ public class FactionViolence {
         boolean shouldStrafe = true;
         boolean isInCover = false;
         boolean isLowHealth = mob.getHealth() <= (mob.getMaxHealth() * 0.5F);
+
+        //cover from grenade
+        if (isSmart) {
+            Entity danger = findNearestDanger(mob);
+            if (danger != null) {
+                fleeFromDanger(mob, danger);
+                tag.setTag(TAG_ROOT, susyTag);
+                return;
+            }
+        }
 
         if (isSmart) {
             EntityLivingBase target = mob.getAttackTarget();
@@ -687,7 +702,7 @@ public class FactionViolence {
         return susyTag.getString(TAG_FACTION);
     }
 
-    private static boolean hasSmartAI(EntityLivingBase entity) {
+    public static boolean hasSmartAI(EntityLivingBase entity) {
         NBTTagCompound tag = entity.getEntityData();
         if (!tag.hasKey(TAG_ROOT)) return false;
         return tag.getCompoundTag(TAG_ROOT).getBoolean(TAG_SMART_AI);
@@ -695,5 +710,44 @@ public class FactionViolence {
 
     private static void clearNavigatorPath(EntityLiving mob) {
         mob.getNavigator().clearPath();
+    }
+
+    private static Entity findNearestDanger(EntityLiving mob) {
+        java.util.List<Entity> nearby = mob.world.getEntitiesWithinAABB(Entity.class,
+                mob.getEntityBoundingBox().grow(DANGER_AVOID_RADIUS));
+
+        Entity nearest = null;
+        double nearestDistSq = Double.MAX_VALUE;
+        for (Entity candidate : nearby) {
+            if (!EntityAIThrowGrenade.isDangerousEntity(candidate)) continue;
+            double distSq = mob.getDistanceSq(candidate);
+            if (distSq < nearestDistSq) {
+                nearestDistSq = distSq;
+                nearest = candidate;
+            }
+        }
+        return nearest;
+    }
+
+    private static void fleeFromDanger(EntityLiving mob, Entity danger) {
+        double dx = mob.posX - danger.posX;
+        double dz = mob.posZ - danger.posZ;
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        if (dist < 0.001D) { dx = 1.0D; dz = 0.0D; dist = 1.0D; }
+
+        double fleeX = mob.posX + (dx / dist) * DANGER_AVOID_RADIUS;
+        double fleeZ = mob.posZ + (dz / dist) * DANGER_AVOID_RADIUS;
+        BlockPos fleeTarget = new BlockPos(fleeX, mob.posY, fleeZ);
+
+        boolean needsRepath = mob.getNavigator().noPath() || mob.ticksExisted % 15 == 0;
+        if (needsRepath) {
+            FactionAStar astar = new FactionAStar(mob.world, mob);
+            net.minecraft.pathfinding.Path path = astar.findPath(mob.getPosition(), fleeTarget);
+            if (path != null && path.getCurrentPathLength() > 0) {
+                mob.getNavigator().setPath(path, DANGER_AVOID_SPEED);
+            } else {
+                mob.getNavigator().tryMoveToXYZ(fleeX, mob.posY, fleeZ, DANGER_AVOID_SPEED);
+            }
+        }
     }
 }
