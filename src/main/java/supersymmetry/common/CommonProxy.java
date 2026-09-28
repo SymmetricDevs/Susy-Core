@@ -100,17 +100,16 @@ public class CommonProxy {
                     if (!canaryFile.delete()) {
                         SusyLog.logger.warn("Failed to delete canary file: {}", canaryFile.getAbsolutePath());
                     }
+                    // Clean up Groovy cache
+                    File gameDir = Loader.instance().getConfigDir().getParentFile();
+                    File groovyCacheDir = new File(gameDir, "cache/groovy");
+                    if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
+                        SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
+                        deleteDirectory(groovyCacheDir);
+                    }
                 }
             } else {
                 SusyLog.logger.warn("Failed to access or create susy config directory");
-            }
-
-            // Clean up Groovy cache
-            File gameDir = Loader.instance().getConfigDir().getParentFile();
-            File groovyCacheDir = new File(gameDir, "cache/groovy");
-            if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
-                SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
-                deleteDirectory(groovyCacheDir);
             }
         } catch (Exception e) {
             SusyLog.logger.error("Error during cleanup operations", e);
