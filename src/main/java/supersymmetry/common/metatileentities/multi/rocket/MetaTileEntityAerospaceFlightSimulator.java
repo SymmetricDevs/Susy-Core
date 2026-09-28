@@ -327,7 +327,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
         }
         // after the blueprint, since which of the two inputs is read depends on it
         setFuelFromData();
-        this.stats.readFromBuffer(buf);
+        this.stats = AFSStats.readFromBuffer(buf);
         if (this.isWorkingEnabled)
             this.rocketBlueprintSlot.setLocked(true);
 
@@ -685,7 +685,6 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                 .aisle("IIIII             IIIII", "IVVVL             LVVVI", "IVVVL             LVVVI", "IVVVL             LVVVI", " III               III ")
                 .where('S', selfPredicate())
                 .where(' ', any())
-                .where('C', states(getCasingState()))
                 .where('P', SuSyPredicates.computation())
                 .where('L', states(MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS)))
                 .where('F', fluid(SusyMaterials.FC75.getFluid()))
@@ -697,6 +696,11 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                         .or(states(getCasingState())))
                 .where('V', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .build();
+    }
+
+    @Override
+    public boolean allowsExtendedFacing() {
+        return false;
     }
 
     @Override
