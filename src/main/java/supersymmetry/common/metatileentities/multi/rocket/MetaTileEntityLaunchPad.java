@@ -348,8 +348,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                 updateSelectedErector();
                 findRocket();
                 if (checkRocket()) {
-                    if (selectedRocket.isCountdownStarted() &&
-                            selectedRocket.getLaunchTime() <= this.getWorld().getTotalWorldTime()) {
+                    if (selectedRocket.isCountdownStarted()) {
                         this.setLaunchPadState(LaunchPadState.LAUNCHING);
                     } else {
                         this.setLaunchPadState(LaunchPadState.LOADED);

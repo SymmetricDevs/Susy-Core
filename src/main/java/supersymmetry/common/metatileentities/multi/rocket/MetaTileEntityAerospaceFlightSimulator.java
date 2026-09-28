@@ -672,28 +672,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
-                .aisle("        IIIIIII        ", "        IIIIIII        ", "        IIIIIII        ",
-                        "        IIIIIII        ", "                       ")
-                .aisle("      IIIIIIIIIII      ", "      IIPPPVPPPII      ", "      IIPPPVPPPII      ",
-                        "      IIFFFVFFFII      ", "        IIIIIII        ")
-                .aisle("    IIIIIIIIIIIIIII    ", "    IIPPFFFVFFFPPII    ", "    IIPPFFFVFFFPPII    ",
-                        "    IIFFFFFVFFFFFII    ", "      IIIIIIIIIII      ")
-                .aisle("   IIIIIIIIIIIIIIIII   ", "   IFFFFPPPVPPPFFFFI   ", "   IFFFFPPPVPPPFFFFI   ",
-                        "   IFFFFFFFVFFFFFFFI   ", "    IIIIIIIIIIIIIII    ")
-                .aisle("  IIIIIIIIISIIIIIIIII  ", "  IPPPPPLLLLLLLPPPPPI  ", "  IPPPPPLLLLLLLPPPPPI  ",
-                        "  IFFFFFLLLLLLLFFFFFI  ", "   IIIII       IIIII   ")
-                .aisle("  IIIIII       IIIIII  ", "  IFFFLL       LLFFFI  ", "  IFFFLL       LLFFFI  ",
-                        "  IFFFLL       LLFFFI  ", "   III           III   ")
-                .aisle(" IIIII           IIIII ", " IPPPL           LPPPI ", " IPPPL           LPPPI ",
-                        " IFFFL           LFFFI ", "  III             III  ")
-                .aisle(" IIIII           IIIII ", " IFFFL           LFFFI ", " IFFFL           LFFFI ",
-                        " IFFFL           LFFFI ", "  III             III  ")
-                .aisle("IIIII             IIIII", "IPPPL             LPPPI", "IPPPL             LPPPI",
-                        "IFFFL             LFFFI", " III               III ")
-                .aisle("IIIII             IIIII", "IFFFL             LFFFI", "IFFFL             LFFFI",
-                        "IFFFL             LFFFI", " III               III ")
-                .aisle("IIIII             IIIII", "IVVVL             LVVVI", "IVVVL             LVVVI",
-                        "IVVVL             LVVVI", " III               III ")
+                .aisle("        IIIIIII        ", "        IIIIIII        ", "        IIIIIII        ", "        IIIIIII        ", "                       ")
+                .aisle("      IIIIIIIIIII      ", "      IIPPPVPPPII      ", "      IIPPPVPPPII      ", "      IIFFFVFFFII      ", "        IIIIIII        ")
+                .aisle("    IIIIIIIIIIIIIII    ", "    IIPPFFFVFFFPPII    ", "    IIPPFFFVFFFPPII    ", "    IIFFFFFVFFFFFII    ", "      IIIIIIIIIII      ")
+                .aisle("   IIIIIIIIIIIIIIIII   ", "   IFFFFPPPVPPPFFFFI   ", "   IFFFFPPPVPPPFFFFI   ", "   IFFFFFFFVFFFFFFFI   ", "    IIIIIIIIIIIIIII    ")
+                .aisle("  IIIIIIIIISIIIIIIIII  ", "  IPPPPPLLLLLLLPPPPPI  ", "  IPPPPPLLLLLLLPPPPPI  ", "  IFFFFFLLLLLLLFFFFFI  ", "   IIIII       IIIII   ")
+                .aisle("  IIIIII       IIIIII  ", "  IFFFLL       LLFFFI  ", "  IFFFLL       LLFFFI  ", "  IFFFLL       LLFFFI  ", "   III           III   ")
+                .aisle(" IIIII           IIIII ", " IPPPL           LPPPI ", " IPPPL           LPPPI ", " IFFFL           LFFFI ", "  III             III  ")
+                .aisle(" IIIII           IIIII ", " IFFFL           LFFFI ", " IFFFL           LFFFI ", " IFFFL           LFFFI ", "  III             III  ")
+                .aisle("IIIII             IIIII", "IPPPL             LPPPI", "IPPPL             LPPPI", "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IFFFL             LFFFI", "IFFFL             LFFFI", "IFFFL             LFFFI", " III               III ")
+                .aisle("IIIII             IIIII", "IVVVL             LVVVI", "IVVVL             LVVVI", "IVVVL             LVVVI", " III               III ")
                 .where('S', selfPredicate())
                 .where(' ', any())
                 .where('C', states(getCasingState()))
@@ -884,12 +873,12 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     () -> I18n.format(getMetaName() + ".gui.sep_altitude",
                             j + 1, String.format("%.2f", this.stats.sepAltitudes().get(j) / 1000)),
                     0xffffff),
-                    () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+                    () -> this.stats.sepAltitudes().size() > j && this.isActive() && !this.stats.isNone() && this.fuel != null);
             workingGroup.addWidgetWithTest(new DynamicLabelWidget(xPoses[i], yPoses[i] + 11,
                     () -> I18n.format(getMetaName() + ".gui.sep_time",
                             j + 1, String.format("%.2f", this.stats.sepTimes().get(j))),
                     0xffffff),
-                    () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
+                    () -> this.stats.sepTimes().size() > j && this.isActive() && !this.stats.isNone() && this.fuel != null);
         }
         workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 30,
                 () -> I18n.format(getMetaName() + ".gui.burnout_speed",

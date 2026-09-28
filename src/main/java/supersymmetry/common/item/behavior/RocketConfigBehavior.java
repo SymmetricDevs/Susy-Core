@@ -106,7 +106,7 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
                     new ToggleButton().size(18).overlay(new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
                             .overlay(true, new ItemDrawable(planetoid.getDisplayItem()).asIcon().size(16))
                             .value(select(dimension, planetoid.getDimension()))
-                            .tooltip((tooltip) -> tooltip.addLine(I18n.format(planetoid.getTranslationKey()))));
+                            .tooltip((tooltip) -> tooltip.addLine(IKey.lang(planetoid.getTranslationKey()))));
         }
         rowFlow.child(planetoidsFlow);
         // Select destination type
@@ -114,11 +114,11 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         Flow destinationTypeFlow = new Row().coverChildren()
                 .child(new ToggleButton().size(18)
                         .value(select(destinationType, RocketConfiguration.DestinationType.Landing))
-                        .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.landing")))
+                        .tooltip((tooltip) -> tooltip.addLine(IKey.lang("susy.gui.rocket_programmer.landing")))
                         .overlay(SusyGuiTextures.ICON_LANDING))
                 .child(new ToggleButton().size(18)
                         .value(select(destinationType, RocketConfiguration.DestinationType.Orbit))
-                        .tooltip((tooltip) -> tooltip.addLine(I18n.format("susy.gui.rocket_programmer.orbit")))
+                        .tooltip((tooltip) -> tooltip.addLine(IKey.lang("susy.gui.rocket_programmer.orbit")))
                         .overlay(SusyGuiTextures.ICON_ORBIT));
         rowFlow.child(destinationTypeFlow);
 

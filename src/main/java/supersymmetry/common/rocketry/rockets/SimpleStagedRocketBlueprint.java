@@ -209,18 +209,19 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         int time = 0; // seconds
         double dryMass = cargoMass;
         double fuelMass = 0;
+        if (this.isSolidRocket()) {
+            // hardcode
+            return new SuccessCalculation.AFSStats(Math.clamp(getFuelVolume() / 2 - 5, 0, 1),
+                    10000, 100000, 10000, 0.01, Collections.emptyList(), Collections.emptyList(),
+                    10000, 10000);
+        }
+
         LinkedHashMap<RocketStage, Double> activeStages = new LinkedHashMap<>(); // stage, remaining fuel mass
         LinkedHashMap<RocketStage, Double> remainingStages = new LinkedHashMap<>();
         for (RocketStage stage : this.stages) {
             remainingStages.put(stage, stage.getFuelCapacity() * fuel.getDensity());
             dryMass += stage.getMass();
             fuelMass += stage.getFuelCapacity() * fuel.getDensity();
-        }
-        if (this.isSolidRocket()) {
-            // hardcode
-            return new SuccessCalculation.AFSStats(Math.clamp(getFuelVolume() / 2 - 5, 0, 1),
-                    dryMass, fuelMass, 10000, 0.01, Collections.emptyList(), Collections.emptyList(),
-                    10000, 10000);
         }
 
         double speed = 0; // m/s, speed along gravity direction

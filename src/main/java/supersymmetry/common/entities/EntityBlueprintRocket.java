@@ -345,12 +345,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     public void launchRocket() {
-        if (this.getFuel() == null || this.fueler == null) {
-            setLaunchTime(-1);
-            setCountdownStarted(false);
-            return;
-        }
-        fueler.launch();
         if (!world.isRemote) {
             if (this.getEntityData().hasKey("rocket")) {
                 NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
@@ -433,6 +427,14 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     protected boolean canStartCountdown() {
-        return fueler.isFuelingComplete();
+        return fueler != null && fueler.isFuelingComplete();
+    }
+
+    @Override
+    public void startCountdown(int length) {
+        super.startCountdown(length);
+        if (isCountdownStarted()) { // did it work?
+            fueler.launch();
+        }
     }
 }
