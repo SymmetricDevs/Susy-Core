@@ -39,9 +39,12 @@
         JAVA_HOME = "${zulu25}";
 
         shellHook = ''
-          export LD_LIBRARY_PATH="${x11LibPath}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-          grep -q "org.gradle.java.installations.paths" "$HOME/.gradle/gradle.properties" 2>/dev/null || \
-            echo "org.gradle.java.installations.paths=${zuluPaths}" >> "$HOME/.gradle/gradle.properties"
+        export LD_LIBRARY_PATH="${x11LibPath}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        gradleProps="$HOME/.gradle/gradle.properties"
+        mkdir -p "$(dirname "$gradleProps")"
+        touch "$gradleProps"
+        sed -i '/^org\.gradle\.java\.installations\.paths[=[:space:]]/d' "$gradleProps"
+        echo "org.gradle.java.installations.paths=${zuluPaths}" >> "$gradleProps"
         '';
       };
     };
