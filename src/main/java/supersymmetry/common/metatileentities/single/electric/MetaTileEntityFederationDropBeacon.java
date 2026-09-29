@@ -33,13 +33,14 @@ import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import supersymmetry.common.entities.EntityDropPod;
 
+import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
+
 public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
 
     private static final int INTEL_SAMPLES_REQUIRED = 10; //do not overdo this
     private static final double OUTLIER_THRESHOLD = 64.0;
     private static final int PODS_MIN = 2;
     private static final int PODS_MAX = 4;
-    private static final int POD_SPAWN_HEIGHT = 300;
     private static final int POD_SPREAD_RADIUS = 4;
     public static groovy.lang.Closure<?> fedPayloadProvider = null;
 
@@ -213,7 +214,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(target.x + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(target.z + Math.sin(angle) * radius) + 0.5;
-            double spawnY = POD_SPAWN_HEIGHT + (int)(Math.random() * 80);
+            double spawnY = spawnHeight + (int)(Math.random() * 80);
 
             EntityDropPod pod = new EntityDropPod(world, spawnX, spawnY, spawnZ);
             pod.canExplode(false);

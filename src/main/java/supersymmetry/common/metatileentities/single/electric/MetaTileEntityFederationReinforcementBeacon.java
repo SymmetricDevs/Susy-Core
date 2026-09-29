@@ -30,11 +30,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
+
 public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileEntity {
 
     private static final int PODS_MIN = 8;
     private static final int PODS_MAX = 12;
-    private static final int POD_SPAWN_HEIGHT = 300;
     private static final int POD_SPREAD_RADIUS = 2;
 
     public static Function<World, EntityLiving> fedPayloadProvider = null;
@@ -111,7 +112,7 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(targetX + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(targetZ + Math.sin(angle) * radius) + 0.5;
-            double spawnY = POD_SPAWN_HEIGHT + (int)(Math.random() * 80);
+            double spawnY = spawnHeight + (int)(Math.random() * 80);
 
             EntityDropPod pod = new EntityDropPod(world);
             pod.canExplode(false);

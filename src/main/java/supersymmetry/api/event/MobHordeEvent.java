@@ -53,6 +53,7 @@ public class MobHordeEvent {
     private ResourceLocation requiredAdvancement = null;
     private boolean runOnce = false;
     private boolean dropPodExplosions = true;
+    public static int spawnHeight = 1000;
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
                          String name) {
@@ -382,7 +383,7 @@ public class MobHordeEvent {
             // pattern offset
             Vec2 offset = pattern.apply(t);
             double x = centerX + offset.x;
-            double y = 350 + Math.random() * 200;
+            double y = spawnHeight + Math.random() * 200;
             double z = centerZ + offset.z;
 
             if (alignTheBlock) {
@@ -436,7 +437,7 @@ public class MobHordeEvent {
         EntityLiving mob = entitySupplier.apply(player);
 
         double x = player.posX + (Math.random() - 0.5) * 60;
-        double y = 350 + Math.random() * 200;
+        double y = spawnHeight + Math.random() * 200;
         double z = player.posZ + (Math.random() - 0.5) * 60;
 
         mob.setPosition(x, y, z);
