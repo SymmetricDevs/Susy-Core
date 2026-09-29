@@ -14,6 +14,8 @@ import supersymmetry.api.rocketry.fuels.LiquidRocketFuelEntry;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.rocketry.rockets.ComponentValidationResult;
 import supersymmetry.api.rocketry.rockets.RocketStage;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
+import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.common.rocketry.components.*;
 import supersymmetry.common.rocketry.rockets.SimpleStagedRocketBlueprint;
 

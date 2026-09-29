@@ -80,6 +80,8 @@ public class InstrumentLander implements Instrument {
         teleported.forceSpawn = true;
         if (withCargo && teleported instanceof EntityLander lander) {
             lander.setInventory(rocket.getInventory());
+        } else if (withCargo && teleported instanceof EntityEarthLandingSystem els) {
+            els.setInventory(rocket.getInventory());
         }
         teleported.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize()); // Rest
         return teleported;

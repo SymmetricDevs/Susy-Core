@@ -554,7 +554,8 @@ public class MetaTileEntityBlueprintAssembler extends MultiblockWithDisplayBase 
         buildDuration = Math.max(1, 1200 >> (tier - GTValues.MV));
         long energyPerTick = GTValues.V[tier];
 
-        if (hasNotEnoughEnergy && energyContainer.getInputPerSec() > 19L * energyPerTick) {
+        if (hasNotEnoughEnergy && energyContainer.getEnergyCapacity() >=
+                Math.min(energyContainer.getEnergyCapacity(), energyPerTick * 10)) {
             hasNotEnoughEnergy = false;
         }
         if (energyContainer.getEnergyStored() < energyPerTick || hasNotEnoughEnergy) {

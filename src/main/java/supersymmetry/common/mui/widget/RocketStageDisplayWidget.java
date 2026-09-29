@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -231,12 +233,10 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
             final DynamicLabelWidget label;
             final ComponentEntryWidget entry;
-            final int labelX;
 
-            RowLayoutEntry(DynamicLabelWidget label, ComponentEntryWidget entry, int labelX) {
+            RowLayoutEntry(DynamicLabelWidget label, ComponentEntryWidget entry) {
                 this.label = label;
                 this.entry = entry;
-                this.labelX = labelX;
             }
         }
 
@@ -284,17 +284,44 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             entry.setSize(new Size(90, 28));
             this.addWidget(entry);
 
+            int wholeWidth = this.getSize().width;
             // part name
-            String text = I18n.format(localizationKey);
-            int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-            int xPos = this.getSize().width - textWidth - 10;
 
-            DynamicLabelWidget textWidget = new DynamicLabelWidget(xPos, rowSkip + ROW_SEPARATION + scrollbarPadding,
-                    () -> text, 0xffffff);
+            DynamicLabelWidget textWidget = new DynamicLabelWidget(0, rowSkip + ROW_SEPARATION + scrollbarPadding,
+                    () -> I18n.format(localizationKey), 0xffffff) {
+                private String lastTextValue = "";
+                @SideOnly(Side.CLIENT)
+                private void updateSize() {
+                    FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+                    String resultText = lastTextValue;
+                    setSize(new Size(fontRenderer.getStringWidth(resultText), fontRenderer.FONT_HEIGHT));
+                    if (uiAccess != null) {
+                        uiAccess.notifySizeChange();
+                    }
+                }
+
+                @Override
+                public void drawInForeground(int mouseX, int mouseY) {
+                    String suppliedText = textSupplier.get();
+                    if (!suppliedText.equals(lastTextValue)) {
+                        this.lastTextValue = suppliedText;
+                        updateSize();
+                    }
+                    String[] split = textSupplier.get().split("\n");
+                    FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+                    Position position = getPosition();
+                    int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(suppliedText);
+                    int xPos = wholeWidth - textWidth - 10 + position.x;
+
+                    for (int i = 0; i < split.length; i++) {
+                        fontRenderer.drawString(split[i], xPos, position.y + (i * (fontRenderer.FONT_HEIGHT + 2)), 0xffffff);
+                    }
+                }
+            };
 
             this.addWidget(textWidget);
 
-            rowEntries.add(new RowLayoutEntry(textWidget, entry, xPos));
+            rowEntries.add(new RowLayoutEntry(textWidget, entry));
 
             components.put(entryName, entry);
             rowSkip += ROW_SEPARATION + scrollbarPadding;
@@ -387,15 +414,14 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             int[] validValues = (boundRow != null) ? boundRow.validMultiplierValues : new int[] { 1 };
 
             shortViewButton = new ToggleButtonWidget(itemList.getSize().width + 10, 0, 16, 16, this::isShortView,
-                    (isShort) -> {
-                        setShortView(isShort);
-                    }) {
+                    this::setShortView) {
 
                 @Override
                 @SideOnly(Side.CLIENT)
                 public boolean mouseClicked(int mouseX, int mouseY, int button) {
                     if (super.mouseClicked(mouseX, mouseY, button)) {
                         setShortView(this.isPressed);
+                        writeClientAction(4, buf -> buf.writeBoolean(this.isPressed));
                         return true;
                     }
                     return false;
@@ -465,7 +491,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             }
             selector.setActive(state);
             selector.setVisible(state);
-            writeClientAction(4, buf -> buf.writeBoolean(state));
+
         }
 
         @Override

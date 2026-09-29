@@ -16,6 +16,7 @@ import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 
@@ -203,6 +204,10 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        if (GregTechAPI.materialManager.getMaterial("rp_one") == null) {
+            Materials.Agar.setProperty(SuSyPropertyKey.SOLID_ROCKET_FUEL, new SolidRocketFuelProperty(1, 1, 200, 0));
+        }
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {

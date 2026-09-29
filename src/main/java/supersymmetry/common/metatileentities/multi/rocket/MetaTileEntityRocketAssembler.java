@@ -98,7 +98,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         signalActions.add(() -> {
             this.abortAssembly();
         });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
+        this.recipeMapWorkable = new RocketAssemblerLogic(this, true); // <-- recipes are generated here
     }
 
     @Override

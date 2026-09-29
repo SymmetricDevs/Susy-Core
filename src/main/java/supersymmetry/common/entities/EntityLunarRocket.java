@@ -2,9 +2,12 @@ package supersymmetry.common.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
@@ -83,9 +86,7 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
         if (this.world.isRemote)
             return;
         BlockSpacecraftInstrument.Type instrument = BlockSpacecraftInstrument.Type.LANDER;
-        if (instrument != null) {
-            instrument.act(1, this);
-        }
+        instrument.act(1, this);
         for (Entity passenger : this.getPassengers()) {
             if (!EventHandlers.isEntityTravelling(passenger)) {
                 if (passenger instanceof EntityLivingBase living) {
@@ -94,5 +95,11 @@ public class EntityLunarRocket extends EntityBlueprintRocket {
                 passenger.setDead();
             }
         }
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        this.cargo = new CargoItemStackHandler(this.getFuelVolume() / 100, Integer.MAX_VALUE);
     }
 }

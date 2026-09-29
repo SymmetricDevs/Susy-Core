@@ -104,7 +104,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                                               IRocketFueler {
 
     /** In liters per second, matching the launch pad. */
-    private static final int MAX_FUELING_SPEED = 8000;
+    private static final int MAX_FUELING_SPEED = 80000;
 
     private static final int ROCKET_OFFSET_BACK = 4;
     private static final int ROCKET_OFFSET_UP = 1;
@@ -159,51 +159,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 this.launchRequested = true;
             }
         });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this) {
-
-            // get rid of the electrode requirement
-            @Override
-            protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
-                                                          @NotNull IItemHandlerModifiable importInventory,
-                                                          @NotNull IMultipleTankHandler importFluids) {
-                if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
-                    return false;
-                }
-                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-                if (targetComponent == null) {
-                    return false;
-                }
-
-                return true;
-            }
-
-            @Override
-            public boolean checkRecipe(@NotNull Recipe recipe) {
-                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-                if (targetComponent == null) {
-                    return false;
-                }
-                return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
-            }
-
-            // set energy consumption to a reasonable level
-            @Override
-            public Recipe getRecipe(long maxVoltage) {
-                if (!assembler.isAssemblyWorking())
-                    return null;
-
-                if (assembler.getComponentCount() == assembler.getComponentIndex()) {
-                    return null;
-                }
-                AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-                if (targetComponent == null)
-                    return null;
-                List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
-                Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[HV])
-                        .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
-                return recipe;
-            }
-        };
+        this.recipeMapWorkable = new RocketAssemblerLogic(this, false);
     }
 
     @Override

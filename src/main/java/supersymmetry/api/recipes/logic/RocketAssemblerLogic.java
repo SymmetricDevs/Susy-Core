@@ -1,8 +1,5 @@
 package supersymmetry.api.recipes.logic;
 
-import static gregtech.api.GTValues.LuV;
-import static gregtech.api.GTValues.VA;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,16 +20,19 @@ import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
+import static gregtech.api.GTValues.*;
+
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
     private List<Integer> electrodeSlotCache = new ArrayList<>();
     public boolean hasEnoughElectrodes = true;
-
+    public final boolean usesElectrodes;
     public final IRocketAssemblyController assembler;
 
-    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
+    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler, boolean usesElectrodes) {
         super(assembler);
         this.assembler = assembler;
+        this.usesElectrodes = usesElectrodes;
     }
 
     public void setInputsValid() {
@@ -50,7 +50,7 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         if (targetComponent == null)
             return null;
         List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
-        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV])
+        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(usesElectrodes ? VA[LuV] : VA[EV])
                 .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
         return recipe;
     }
@@ -119,25 +119,26 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null)
             return false;
-        int requiredDamage = getRequiredDamage(recipe, targetComponent);
-        electrodeSlotCache.clear();
-        int totalUses = 0;
-        for (int i = 0; i < getInputInventory().getSlots(); i++) {
-            ItemStack stack = getInputInventory().getStackInSlot(i);
-            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
-                continue;
+        if (usesElectrodes) {
+            int requiredDamage = getRequiredDamage(recipe, targetComponent);
+            electrodeSlotCache.clear();
+            int totalUses = 0;
+            for (int i = 0; i < getInputInventory().getSlots(); i++) {
+                ItemStack stack = getInputInventory().getStackInSlot(i);
+                if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack)) {
+                    continue;
+                }
+                int remaining = ElectrodeDurabilityManager.getRemainingUses(stack);
+                if (remaining > 0) {
+                    electrodeSlotCache.add(i);
+                    totalUses += remaining;
+                }
             }
-            int remaining = ElectrodeDurabilityManager.getRemainingUses(stack);
-            if (remaining > 0) {
-                electrodeSlotCache.add(i);
-                totalUses += remaining;
+            if (totalUses < requiredDamage) {
+                hasEnoughElectrodes = false;
+                return false;
             }
         }
-        if (totalUses < requiredDamage) {
-            hasEnoughElectrodes = false;
-            return false;
-        }
-
         return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
     }
 
@@ -146,29 +147,33 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                   @NotNull IItemHandlerModifiable importInventory,
                                                   @NotNull IMultipleTankHandler importFluids) {
-        if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+        if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+            return false;
+        }
+        if (usesElectrodes && !hasEnoughElectrodes) {
             return false;
         }
         AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
         if (targetComponent == null)
             return false;
-        int requiredDamage = getRequiredDamage(recipe, targetComponent);
-        for (int slot : electrodeSlotCache) {
-            if (requiredDamage <= 0)
-                break;
-            ItemStack stack = importInventory.getStackInSlot(slot);
-            if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack))
-                continue;
-            int canTake = Math.min(ElectrodeDurabilityManager.getRemainingUses(stack), requiredDamage);
-            if (ElectrodeDurabilityManager.getRemainingUses(stack) == canTake) {
-                importInventory.setStackInSlot(slot, ItemStack.EMPTY);
-            } else {
-                ElectrodeDurabilityManager.setElectrodeDamage(stack,
-                        ElectrodeDurabilityManager.getElectrodeDamage(stack) + canTake);
+        if (usesElectrodes) {
+            int requiredDamage = getRequiredDamage(recipe, targetComponent);
+            for (int slot : electrodeSlotCache) {
+                if (requiredDamage <= 0)
+                    break;
+                ItemStack stack = importInventory.getStackInSlot(slot);
+                if (stack.isEmpty() || !SuSyMetaItems.TUNGSTEN_ELECTRODE.getStackForm().isItemEqual(stack))
+                    continue;
+                int canTake = Math.min(ElectrodeDurabilityManager.getRemainingUses(stack), requiredDamage);
+                if (ElectrodeDurabilityManager.getRemainingUses(stack) == canTake) {
+                    importInventory.setStackInSlot(slot, ItemStack.EMPTY);
+                } else {
+                    ElectrodeDurabilityManager.setElectrodeDamage(stack,
+                            ElectrodeDurabilityManager.getElectrodeDamage(stack) + canTake);
+                }
+                requiredDamage -= canTake;
             }
-            requiredDamage -= canTake;
         }
-
         return true;
     }
 
