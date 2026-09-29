@@ -218,8 +218,6 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         collectInfo(analysis, blocksConnected, tag);
 
         analysis.status = BuildStat.SUCCESS;
-        writeBlocksToNBT(blocksConnected, analysis.world);
-
         return Optional.of(tag);
     }
 }

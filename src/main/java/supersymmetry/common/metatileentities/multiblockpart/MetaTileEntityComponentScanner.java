@@ -124,9 +124,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4; // 5 being the
-        // minimum
-        // value
+        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4;
+        // 5 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -156,7 +155,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     getInventory().setNBT(t -> {
                         NBTTagCompound tag = scanResult.get();
                         tag.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
-                        component.writeToNBT(tag);
                         return tag;
                     });
                     updateErrorPos(null);

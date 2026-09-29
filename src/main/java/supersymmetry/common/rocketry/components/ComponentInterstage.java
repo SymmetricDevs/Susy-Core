@@ -36,13 +36,6 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-        tag.setDouble("mass", this.mass);
-        tag.setDouble("radius", this.radius);
-    }
-
-    @Override
     public Optional<ComponentInterstage> readFromNBT(NBTTagCompound compound) {
         if (!this.type.equals(compound.getString("type")) || !this.name.equals(compound.getString("name"))) {
             return Optional.empty();
@@ -142,11 +135,10 @@ public class ComponentInterstage extends AbstractComponent<ComponentInterstage> 
         this.radius = analysis.getRadius(analysis.getLowestLayer(hullBlocks));
 
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("radius", radius);
+        tag.setDouble("radius", radius); // override
 
         collectInfo(analysis, connectedBlocks, tag);
 
-        writeBlocksToNBT(connectedBlocks, analysis.world);
         analysis.status = BuildStat.SUCCESS;
         return Optional.of(tag);
     }

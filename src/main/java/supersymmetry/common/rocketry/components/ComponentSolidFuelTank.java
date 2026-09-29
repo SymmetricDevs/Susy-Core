@@ -35,8 +35,6 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
-        tag.setDouble("mass", this.mass);
         tag.setInteger("volume", this.volume);
     }
 
@@ -208,7 +206,6 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         tag.setDouble("area_ratio", computedAreaRatio);
 
         collectInfo(analysis, blocks, tag);
-        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 

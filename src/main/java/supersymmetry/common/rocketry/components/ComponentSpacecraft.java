@@ -82,7 +82,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
         tag.setDouble("guidanceMultiplier", this.guidanceMultiplier);
@@ -374,7 +373,7 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setDouble("collectionEfficiency", collectionEfficiency);
         tag.setDouble("redundancy", redundancy);
         this.mass = mass;
-        writeBlocksToNBT(blocksConnected, analysis.world);
+        writeBlocksToNBT(blocksConnected, analysis.world, tag);
         return Optional.of(tag);
     }
 

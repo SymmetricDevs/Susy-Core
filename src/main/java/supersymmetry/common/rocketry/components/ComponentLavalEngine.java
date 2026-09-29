@@ -107,7 +107,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
         tag.setDouble("area_ratio", this.areaRatio);
         tag.setDouble("throughput", this.fuelThroughput);
         tag.setDouble("chamber_pressure", this.chamberPressure);
@@ -354,7 +353,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         tag.setBoolean("has_match", !stickBlocks.isEmpty());
 
-        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 

@@ -110,7 +110,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         return new HashSet<>(registry);
     }
 
-    public void writeBlocksToNBT(Set<BlockPos> blocks, World world) {
+    public void writeBlocksToNBT(Set<BlockPos> blocks, World world, NBTTagCompound tag) {
         Map<ItemStack, Integer> blockCounts = new Object2IntOpenCustomHashMap<>(
                 ItemStackHashStrategy.comparingAllButCount());
         Map<ItemStack, Integer> coverCounts = new Object2IntOpenCustomHashMap<>(
@@ -134,12 +134,14 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             blockCounts.merge(key, 1, Integer::sum);
         }
 
+        NBTTagList list = new NBTTagList();
         for (Map.Entry<ItemStack, Integer> e : blockCounts.entrySet()) {
-            materials.add(new MaterialCost(e.getKey(), MaterialCost.SourceType.ITEM, e.getValue()));
+            list.appendTag(new MaterialCost(e.getKey(), MaterialCost.SourceType.ITEM, e.getValue()).toNBT());
         }
         for (Map.Entry<ItemStack, Integer> e : coverCounts.entrySet()) {
-            materials.add(new MaterialCost(e.getKey(), MaterialCost.SourceType.COVER, e.getValue()));
+            list.appendTag(new MaterialCost(e.getKey(), MaterialCost.SourceType.COVER, e.getValue()).toNBT());
         }
+        tag.setTag("materials", list);
     }
 
     public static double getMassOfBlock(IBlockState state) {
@@ -248,6 +250,7 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         tag.setDouble("mass", mass);
         tag.setString("type", type);
         tag.setString("name", name);
+        writeBlocksToNBT(connected, analysis.world, tag);
     }
 
     public void writeToNBT(NBTTagCompound tag) {

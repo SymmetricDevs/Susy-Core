@@ -37,8 +37,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
-        tag.setDouble("mass", this.mass);
         tag.setInteger("volume", this.volume);
     }
 
@@ -136,7 +134,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         tag.setInteger("volume", this.volume);
 
         collectInfo(analysis, blocks, tag);
-        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 
