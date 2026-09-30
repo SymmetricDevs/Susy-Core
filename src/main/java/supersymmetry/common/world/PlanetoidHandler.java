@@ -2,9 +2,7 @@ package supersymmetry.common.world;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
@@ -14,12 +12,13 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.world.biome.SuSyBiomeEntry;
 
 public class PlanetoidHandler {
 
-    private static final Map<Integer, PlanetoidHandler> HANDLERS = new HashMap<>();
+    private static final Int2ObjectOpenHashMap<PlanetoidHandler> HANDLERS = new Int2ObjectOpenHashMap<>();
 
     private final Planetoid planetoid;
     private int biomeSize = 5;

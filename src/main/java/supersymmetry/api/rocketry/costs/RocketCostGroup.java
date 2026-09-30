@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import net.minecraft.item.ItemStack;
 
 import gregtech.api.recipes.ingredients.GTRecipeInput;
+import supersymmetry.api.rocketry.AssemblyStep;
 
 /**
  * A named bundle of fixed materials that a rocket costs regardless of which
@@ -16,7 +17,7 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
  * splitting a blueprint's overhead across several groups is how you pace it and
  * keep any single step's ingredient list readable.
  */
-public class RocketCostGroup {
+public class RocketCostGroup implements AssemblyStep {
 
     public static final double DEFAULT_ASSEMBLY_DURATION = 10;
 
@@ -34,7 +35,13 @@ public class RocketCostGroup {
         return name;
     }
 
+    @Override
     public double getAssemblyDuration() {
+        return assemblyDuration;
+    }
+
+    @Override
+    public double getElectrodeDamageFactor() {
         return assemblyDuration;
     }
 
@@ -46,14 +53,9 @@ public class RocketCostGroup {
         return entries.isEmpty();
     }
 
-    /** The group's materials as recipe ingredients. */
-    public List<GTRecipeInput> toIngredients() {
+    @Override
+    public List<GTRecipeInput> getRecipeInputs() {
         return entries.stream().map(RocketCostEntry::toIngredient).collect(Collectors.toList());
-    }
-
-    /** Localized as {@code susy.rocketry.costs.<name>}. */
-    public String getLocalizationKey() {
-        return "susy.rocketry.costs." + name;
     }
 
     public static class Builder {

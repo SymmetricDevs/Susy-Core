@@ -14,17 +14,18 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -51,8 +52,6 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentScanner;
 
 public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
-
-    public MetaTileEntityComponentScanner scanner;
 
     public MetaTileEntityBuildingCleanroom(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -307,8 +306,8 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
 
     @Override
     public int getEnergyTier() {
-        return this.energyContainer == null ? 1 :
-                Math.max(4, GTUtility.getFloorTierByVoltage(this.energyContainer.getInputVoltage()));
+        return this.energyContainer == null ? GTValues.LV :
+                Math.max(GTValues.EV, GTUtility.getFloorTierByVoltage(this.energyContainer.getInputVoltage()));
     }
 
     protected TraceabilityPredicate scannerPredicate() {
@@ -415,27 +414,20 @@ public class MetaTileEntityBuildingCleanroom extends MetaTileEntityCleanroom {
         EnumFacing back = front.getOpposite();
         EnumFacing left = front.rotateYCCW();
         EnumFacing right = left.getOpposite();
-        Vec3i down = new Vec3i(0, -1, 0);
-        BlockPos frontleftdown = getPos().add(multiply(front.getDirectionVec(), fDist - 1))
-                .add(multiply(left.getDirectionVec(), lDist - 1))
-                .add(multiply(down, hDist - 1));
-        BlockPos backrightup = getPos().add(multiply(back.getDirectionVec(), bDist - 1))
-                .add(multiply(right.getDirectionVec(), rDist - 1));
+        BlockPos frontleftdown = getPos().offset(front, fDist - 1).offset(left, lDist - 1).down(hDist - 1);
+        BlockPos backrightup = getPos().offset(back, bDist - 1).offset(right, rDist - 1);
         AxisAlignedBB nearRet = new AxisAlignedBB(frontleftdown, backrightup);
         return new AxisAlignedBB(nearRet.minX, nearRet.minY, nearRet.minZ, nearRet.maxX + 1, nearRet.maxY,
                 nearRet.maxZ + 1); // here to be consistent with block analysis
     }
 
     @Override
-    public void invalidateStructure() {
-        super.invalidateStructure();
-        if (scanner != null) {
-            scanner.invalidate();
-        }
-    }
-
-    private Vec3i multiply(Vec3i bp, int val) {
-        return new Vec3i(bp.getX() * val, bp.getY() * val, bp.getZ() * val);
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        NBTTagCompound tag = super.writeToNBT(data);
+        int back = tag.getInteger("bDist");
+        tag.setInteger("bDist", tag.getInteger("fDist"));
+        tag.setInteger("fDist", back);
+        return tag;
     }
 
     public IEnergyContainer getEnergyContainer() {

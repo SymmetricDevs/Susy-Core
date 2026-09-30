@@ -1,5 +1,7 @@
 package supersymmetry.common.rocketry;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -7,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.items.itemhandlers.GTItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
-import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyMetaItems;
 
 /**
@@ -34,29 +35,20 @@ public class RocketConfigurerHandler extends GTItemStackHandler {
         return getStackInSlot(0).isEmpty() || getStackInSlot(0).getTagCompound() == null;
     }
 
-    /**
-     * Writes the held mission list onto a rocket, pruned to what it can reach from
-     * the dimension it stands in.
-     *
-     * @return false if missions had to be dropped to fit the budget
-     */
-    public boolean program(EntityAbstractRocket rocket) {
-        return program(rocket.getEntityData(), rocket.world.provider.getDimension());
+    public Optional<RocketConfiguration> read() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new RocketConfiguration(getStackInSlot(0).getTagCompound()));
     }
 
-    /**
-     * As {@link #program(EntityAbstractRocket)}, but onto a bare rocket NBT
-     * compound — the transporter erector carries one of those around until the
-     * launch pad copies it into the rocket it spawns.
-     *
-     * @return false if missions had to be dropped to fit the budget
-     */
-    public boolean program(NBTTagCompound rocketNBT, int startingDimension) {
-        if (isEmpty())
-            return true;
-        RocketConfiguration config = new RocketConfiguration(getStackInSlot(0).getTagCompound());
-        boolean withinBudget = config.setBudget(startingDimension, RocketConfiguration.DEFAULT_BUDGET);
-        rocketNBT.setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize());
-        return withinBudget;
+    public boolean program(int startingDimension, NBTTagCompound rocketData) {
+        return read()
+                .map(config -> {
+                    boolean withinBudget = config.setBudget(startingDimension, RocketConfiguration.DEFAULT_BUDGET);
+                    config.applyTo(rocketData);
+                    return withinBudget;
+                })
+                .orElse(true);
     }
 }

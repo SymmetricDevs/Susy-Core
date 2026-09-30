@@ -23,12 +23,12 @@ public class SusyRocketComponents {
     public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
-        AbstractComponent.registerComponent(new ComponentFairing());
-        AbstractComponent.registerComponent(new ComponentLavalEngine());
-        AbstractComponent.registerComponent(new ComponentInterstage());
-        AbstractComponent.registerComponent(new ComponentSpacecraft());
-        AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
-        AbstractComponent.registerComponent(new ComponentSolidFuelTank());
+        AbstractComponent.registerComponent(ComponentFairing::new);
+        AbstractComponent.registerComponent(ComponentLavalEngine::new);
+        AbstractComponent.registerComponent(ComponentInterstage::new);
+        AbstractComponent.registerComponent(ComponentSpacecraft::new);
+        AbstractComponent.registerComponent(ComponentLiquidFuelTank::new);
+        AbstractComponent.registerComponent(ComponentSolidFuelTank::new);
         AbstractComponent.lockRegistry();
 
         new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")

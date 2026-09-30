@@ -1,5 +1,6 @@
 package supersymmetry.common.mui.widget;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -9,8 +10,6 @@ import com.cleanroommc.modularui.value.sync.StringSyncValue;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldHandler;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldRenderer;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
-
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 // Copied from master branch of ceu
 public class HighlightedTextField extends TextFieldWidget {
@@ -83,7 +82,7 @@ public class HighlightedTextField extends TextFieldWidget {
 
     public static final class TextHighlighter extends TextFieldRenderer {
 
-        private final Map<String, String> cacheMap = new Object2ObjectOpenHashMap<>();
+        private final Map<String, String> cacheMap = new HashMap<>();
         private Function<String, String> highlightRule = string -> string;
 
         public TextHighlighter(TextFieldHandler handler) {

@@ -44,7 +44,7 @@ import supersymmetry.common.item.SuSyMetaItems;
 public class SuSyMaterialRecipeHandler {
 
     // For SUSY molds to be put into
-    public static final Map<OrePrefix, ItemStack> mapMolds = new HashMap<>();
+    public static final Map<OrePrefix, ItemStack> mapMolds = new LinkedHashMap<>();
 
     public static void init() {
         SusyOrePrefix.catalystBed.addProcessingHandler(PropertyKey.DUST, SuSyMaterialRecipeHandler::processCatalystBed);

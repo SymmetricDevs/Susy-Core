@@ -1,7 +1,5 @@
 package supersymmetry.api.space.dimension;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
@@ -14,6 +12,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.DimensionManager;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.space.CelestialObject;
 import supersymmetry.api.space.Orbit;
@@ -23,7 +22,7 @@ import supersymmetry.common.world.SuSyDimensions;
 
 public class WorldProviderSpace extends WorldProvider {
 
-    private static final Map<Integer, SpaceConfig> SPACE_CONFIGS = new HashMap<>();
+    private static final Int2ObjectOpenHashMap<SpaceConfig> SPACE_CONFIGS = new Int2ObjectOpenHashMap<>();
 
     private SpaceConfig config;
 

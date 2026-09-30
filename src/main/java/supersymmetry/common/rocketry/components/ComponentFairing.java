@@ -19,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -64,21 +63,11 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
     @Override
     public Optional<ComponentFairing> readFromNBT(NBTTagCompound compound) {
-        ComponentFairing fairing = new ComponentFairing();
-        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty())
+        if (!compound.hasKey("height", NBT.TAG_INT)) {
             return Optional.empty();
-        if (!compound.hasKey("height", Constants.NBT.TAG_INT))
-            return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST))
-            return Optional.empty();
-        compound.getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> fairing.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-        fairing.radius = compound.getDouble("radius");
-        fairing.mass = compound.getDouble("mass");
-        fairing.height = compound.getInteger("height");
-        return Optional.of(fairing);
+        }
+        var fairing = new ComponentFairing();
+        return fairing.readBaseFromNBT(compound) ? Optional.of(fairing) : Optional.empty();
     }
 
     @Override

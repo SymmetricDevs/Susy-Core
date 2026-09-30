@@ -20,8 +20,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import gregtech.api.block.VariantBlock;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.blocks.SuSyBlocks;
@@ -29,8 +31,11 @@ import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
 
-    public Map<String, Integer> parts = new HashMap<>();
-    public Map<String, Integer> instruments = new HashMap<>();
+    public static final String PARTS_KEY = "parts";
+    public static final String INSTRUMENTS_KEY = AbstractRocketBlueprint.INSTRUMENTS_KEY;
+
+    public Object2IntOpenHashMap<String> parts = new Object2IntOpenHashMap<>();
+    public Object2IntOpenHashMap<String> instruments = new Object2IntOpenHashMap<>();
     public boolean hasAir;
     public double volume;
     public double guidanceMultiplier;
@@ -101,48 +106,29 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
     @Override
     public Optional<ComponentSpacecraft> readFromNBT(NBTTagCompound compound) {
-        ComponentSpacecraft spacecraft = new ComponentSpacecraft();
-
-        if (!compound.getString("name").equals(spacecraft.name))
+        if (!compound.hasKey("hasAir") ||
+                (!compound.hasKey("volume", NBT.TAG_DOUBLE) && !compound.hasKey("volume", NBT.TAG_INT)) ||
+                !compound.hasKey(PARTS_KEY, NBT.TAG_COMPOUND) || !compound.hasKey(INSTRUMENTS_KEY, NBT.TAG_COMPOUND) ||
+                !compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE) ||
+                !compound.hasKey("redundancy", NBT.TAG_DOUBLE)) {
             return Optional.empty();
-        if (!compound.getString("type").equals(spacecraft.type))
+        }
+        var spacecraft = new ComponentSpacecraft();
+        if (!spacecraft.readBaseFromNBT(compound)) {
             return Optional.empty();
-        if (!compound.hasKey("radius", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("mass", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("hasAir"))
-            return Optional.empty();
-        if (!compound.hasKey("volume", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND))
-            return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND))
-            return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST))
-            return Optional.empty();
-        if (!compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("redundancy", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        compound.getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> spacecraft.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-
-        spacecraft.radius = compound.getDouble("radius");
-        spacecraft.mass = compound.getDouble("mass");
+        }
         spacecraft.volume = compound.getDouble("volume");
         spacecraft.hasAir = compound.getBoolean("hasAir");
         spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
-        spacecraft.height = compound.getInteger("height");
-        spacecraft.collectionEfficiency = compound.getInteger("collectionEfficiency");
+        spacecraft.collectionEfficiency = compound.getDouble("collectionEfficiency");
         spacecraft.redundancy = compound.getDouble("redundancy");
 
-        NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
+        NBTTagCompound instrumentsList = compound.getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
             spacecraft.instruments.put(key, instrumentsList.getInteger(key));
         }
 
-        NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);
+        NBTTagCompound partsList = compound.getCompoundTag(PARTS_KEY);
         for (String key : partsList.getKeySet()) {
             spacecraft.parts.put(key, partsList.getInteger(key));
         }
@@ -228,8 +214,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
         tag.setDouble("guidanceMultiplier",
                 SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
-        int volume = interior.size();
-        tag.setInteger("volume", volume);
+        this.volume = interior.size();
+        tag.setDouble("volume", this.volume);
         if (lifeSupports.isEmpty()) {
             // no airspace necessary
             if (!interior.isEmpty()) {
@@ -243,7 +229,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.HULL_FULL;
                 return Optional.empty();
             }
-            Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
             for (BlockPos air : interior) { // all air blocks must be enclosed by padding
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     BlockPos checkPos = air.offset(facing);
@@ -359,8 +344,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         }
 
         this.redundancy = Math.round(100 * redundancy) / 100.0;
-
-        this.radius = analysis.getRadius(blocksConnected);
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;

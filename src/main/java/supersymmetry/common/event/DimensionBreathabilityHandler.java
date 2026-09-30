@@ -3,9 +3,7 @@ package supersymmetry.common.event;
 import static net.minecraft.inventory.EntityEquipmentSlot.HEAD;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
@@ -13,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.common.item.SuSyArmorItem;
@@ -20,7 +19,7 @@ import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
 public final class DimensionBreathabilityHandler {
 
-    private static final Map<Integer, List<BreathabilityInfo>> dimensionBreathabilityMap = new HashMap<>();
+    private static final Int2ObjectOpenHashMap<List<BreathabilityInfo>> dimensionBreathabilityMap = new Int2ObjectOpenHashMap<>();
 
     private static final BreathabilityInfo SPACE = new BreathabilityInfo(SuSyDamageSources.DEPRESSURIZATION, 4);
     public static final int BENEATH_ID = 10;

@@ -58,6 +58,9 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
 
     public IRocketFueler fueler;
 
+    private AbstractRocketBlueprint cachedBlueprint;
+    private boolean blueprintParsed = false;
+
     public EntityBlueprintRocket(World worldIn) {
         super(worldIn);
         this.setSize(getRocketWidth(), getRocketHeight());
@@ -86,16 +89,14 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
-        if (!this.getEntityData().hasKey("rocket")) {
+        AbstractRocketBlueprint blueprint = getBlueprint();
+        if (blueprint != null) {
+            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(), Integer.MAX_VALUE);
+            this.maxFuelVolume = (int) blueprint.getFuelVolume();
+        } else {
             // Testing only
             this.cargo = new CargoItemStackHandler(10000, 10000);
             this.maxFuelVolume = 1;
-        } else {
-            NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-            AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
-            blueprint.readFromNBT(rocketNBT);
-            this.cargo = new CargoItemStackHandler((int) blueprint.getCargoVolume(), Integer.MAX_VALUE);
-            this.maxFuelVolume = (int) blueprint.getFuelVolume();
         }
     }
 
@@ -339,27 +340,26 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         if (!this.getEntityData().hasKey("rocket")) {
             return null;
         }
-        NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-        AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
-        return blueprint != null && blueprint.readFromNBT(rocketNBT) ? blueprint : null;
+        if (!blueprintParsed) {
+            blueprintParsed = true;
+            cachedBlueprint = AbstractRocketBlueprint.fromTag(this.getEntityData().getCompoundTag("rocket"));
+        }
+        return cachedBlueprint;
     }
 
     public void launchRocket() {
         if (!world.isRemote) {
-            if (this.getEntityData().hasKey("rocket")) {
-                NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
-                blueprint.readFromNBT(rocketNBT);
-                long augmentation = rocketNBT.getLong("AFSimprovement");
-                if (this.getPassengers().stream()
-                        .noneMatch((entity -> entity instanceof EntityPlayer player && player.isCreative()))) {
-                    this.setLaunchResult(blueprint.calculateSuccess(this, augmentation));
-                } else {
-                    this.setLaunchResult(SuccessCalculation.LaunchResult.LAUNCHES);
-                }
-            } else {
+            NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
+            AbstractRocketBlueprint blueprint = this.getEntityData().hasKey("rocket") ?
+                    AbstractRocketBlueprint.fromTag(rocketNBT) : null;
+            if (blueprint == null) {
                 this.setLaunchResult(SuccessCalculation.LaunchResult.EXPLODES);
-            }
+            } else if (this.getPassengers().stream()
+                    .noneMatch((entity -> entity instanceof EntityPlayer player && player.isCreative()))) {
+                        this.setLaunchResult(blueprint.calculateSuccess(this, rocketNBT.getLong("AFSimprovement")));
+                    } else {
+                        this.setLaunchResult(SuccessCalculation.LaunchResult.LAUNCHES);
+                    }
         }
         super.launchRocket();
     }
@@ -370,6 +370,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
+        this.blueprintParsed = false;
         this.setLaunched(compound.getBoolean("Launched"));
         this.setCountdownStarted(compound.getBoolean("CountdownStarted"));
         this.setAge(compound.getInteger("Age"));

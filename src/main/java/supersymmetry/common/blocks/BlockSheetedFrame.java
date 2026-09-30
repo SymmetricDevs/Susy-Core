@@ -1,5 +1,6 @@
 package supersymmetry.common.blocks;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -37,7 +38,6 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.GTUtility;
 import gregtech.common.blocks.properties.PropertyMaterial;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import supersymmetry.api.unification.material.info.SuSyMaterialIconType;
 
 public class BlockSheetedFrame extends Block {
@@ -374,7 +374,7 @@ public class BlockSheetedFrame extends Block {
     // function adapted by me from tictem's original implementation
     @SideOnly(Side.CLIENT)
     public void onModelRegister() {
-        Map<IBlockState, ModelResourceLocation> map = new Object2ObjectOpenHashMap<>();
+        Map<IBlockState, ModelResourceLocation> map = new HashMap<>();
         for (IBlockState state : this.getBlockState().getValidStates()) {
             Material material = getGtMaterial(state);
             map.put(state,

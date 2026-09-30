@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.base.Preconditions;
 import com.google.common.graph.ValueGraph;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 /// Provides a topological sort algorithm.
 ///
 /// While this algorithm is used for mod loading in forge, it can be utilized in other fashions, e.g. topology-based
@@ -51,7 +53,7 @@ public final class TopologicalSort {
         Preconditions.checkArgument(!graph.allowsSelfLoops(), "Cannot topologically sort a graph with self loops!");
 
         final Queue<T> queue = comparator == null ? new ArrayDeque<>() : new PriorityQueue<>(comparator);
-        final Map<T, Integer> degrees = new HashMap<>();
+        final Object2IntOpenHashMap<T> degrees = new Object2IntOpenHashMap<>();
         final List<T> results = new ArrayList<>();
 
         for (final T node : graph.nodes()) {

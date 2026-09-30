@@ -360,7 +360,7 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                 if (id == 3) {
                     selectedIndex = buffer.readVarInt();
                     if (boundRow != null) {
-                        boundRow.multiplierIndex = selectedIndex;
+                        boundRow.setMultiplierIndex(selectedIndex);
                         markDirty.run();
                     }
                 }

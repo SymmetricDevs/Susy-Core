@@ -83,9 +83,8 @@ public class RocketCostRegistry extends VirtualizedRegistry<RocketCostRegistry.S
             this.groupName = groupName;
         }
 
-        /** Seconds this group takes to assemble. */
-        public GroupBuilder duration(double seconds) {
-            this.duration = seconds;
+        public GroupBuilder duration(double ticks) {
+            this.duration = ticks;
             return this;
         }
 

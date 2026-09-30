@@ -47,14 +47,14 @@ import gregtech.api.util.Size;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
-import supersymmetry.api.SusyLog;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
 import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
+import supersymmetry.api.metatileentity.multiblock.SignalDispatch;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.logic.RocketAssemblerLogic;
-import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.AssemblyStep;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.DataStorageLoader;
 import supersymmetry.client.renderer.textures.SusyTextures;
@@ -72,30 +72,24 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            IRocketAssemblyController {
 
     public DataStorageLoader blueprintSlot = new DataStorageLoader(this, x -> {
-        if (x.hasTagCompound()) {
-            NBTTagCompound tag = x.getTagCompound();
-            AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-            if (bp != null && bp.readFromNBT(tag) && bp.isFullBlueprint()) {
-                return true;
-            }
-        }
-        return false;
+        var bp = AbstractRocketBlueprint.fromItem(x);
+        return bp != null && bp.isFullBlueprint();
     });
 
     // list of every component that has to be constructed.
-    public List<AbstractComponent<?>> componentList = new ArrayList<>();
+    public List<AssemblyStep> componentList = new ArrayList<>();
     public int componentIndex = 0;
     public boolean isAssemblyWorking = false;
-    private List<Runnable> signalActions = new ArrayList<>();
+    private final SignalDispatch signals = new SignalDispatch();
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-        signalActions.add(() -> {
+        signals.add(() -> {
             if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
                 this.startAssembly(this.getCurrentBlueprint());
             }
         });
-        signalActions.add(() -> {
+        signals.add(() -> {
             this.abortAssembly();
         });
         this.recipeMapWorkable = new RocketAssemblerLogic(this); // <-- recipes are generated here
@@ -117,7 +111,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         super.readFromNBT(data);
         NBTTagCompound stackdata = (NBTTagCompound) data.getTag("blueprint");
         this.isAssemblyWorking = data.getBoolean("isWorking");
-        if (stackdata != null && stackdata != new NBTTagCompound()) {
+        if (stackdata != null && stackdata.getSize() > 0) {
             ItemStack stack = new ItemStack(stackdata);
             this.blueprintSlot.setStackInSlot(0, stack);
             if (!this.blueprintSlot.isEmpty() && isAssemblyWorking) {
@@ -128,36 +122,17 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         this.blueprintSlot.setLocked(this.isAssemblyWorking);
     }
 
-    public List<Runnable> getSignalActions() {
-        return signalActions;
-    }
-
     @Override
-    public int getSignalCeiling() {
-        return signalActions.size() - 1;
-    }
-
-    @Override
-    public void pulse(int sig) {
-        this.signalActions.get(sig).run();
+    public SignalDispatch signalDispatch() {
+        return signals;
     }
 
     public AbstractRocketBlueprint getCurrentBlueprint() {
-        if (blueprintSlot.isEmpty())
-            return null;
-        NBTTagCompound tag = blueprintSlot.getStackInSlot(0).getTagCompound();
-        AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-        if (bp.readFromNBT(tag)) {
-            return bp;
-        } else {
-            SusyLog.logger.error("failed to read a blueprint {}", tag);
-            return null;
-            // hopefully never happens since its checked when the item is inserted
-        }
+        return blueprintSlot.getBlueprint();
     }
 
     public Recipe getCurrentRecipe() {
-        return isAssemblyWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getRecipe(100000) : null;
+        return isAssemblyWorking ? ((RocketAssemblerLogic) this.recipeMapWorkable).getCurrentRecipe() : null;
     }
 
     public void abortAssembly() {
@@ -175,17 +150,18 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     @Override
     public void finishAssembly() {
+        AbstractRocketBlueprint blueprint = getCurrentBlueprint();
         this.blueprintSlot.setLocked(false);
         this.isAssemblyWorking = false;
         this.componentIndex = 0;
         this.componentList.clear();
         EntityTransporterErector erector = findTransporterErector();
 
-        if (erector != null) {
+        if (erector != null && blueprint != null) {
             erector.setRocketLoaded(true);
             NBTTagCompound rocketNBT = erector.getRocketNBT();
             rocketNBT.setLong("assemblerPosition", this.getPos().toLong());
-            rocketNBT.setTag("rocket", this.getCurrentBlueprint().writeToNBT());
+            rocketNBT.setTag("rocket", blueprint.writeToNBT());
         }
     }
 
@@ -208,6 +184,10 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     public void startAssembly(AbstractRocketBlueprint bp) {
+        if (bp == null) {
+            abortAssembly();
+            return;
+        }
         ((RocketAssemblerLogic) this.recipeMapWorkable).setInputsValid();
         this.componentIndex = 0;
 
@@ -217,14 +197,11 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
     }
 
     @Override
-    public AbstractComponent<?> getCurrentCraftTarget() {
-        if (isAssemblyWorking && componentList.size() >= componentIndex + 1) {
-            return this.componentList.get(this.componentIndex);
-        } else {
-            abortAssembly();
+    public AssemblyStep getCurrentStep() {
+        if (!isAssemblyWorking || componentIndex >= componentList.size()) {
+            return null;
         }
-
-        return null;
+        return this.componentList.get(this.componentIndex);
     }
 
     // meant to be called after a recipe is done
@@ -734,13 +711,6 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                 .where('H', states(MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE)))
                 .where('V', states(MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STEEL_SOLID)))
                 .build();
-    }
-
-    protected @NotNull Widget getStopButton(int x, int y, int width, int height) {
-        return new ClickButtonWidget(x, y, width, height, "", (clickData -> {
-            this.abortAssembly();
-        })).setButtonTexture(SusyGuiTextures.ROCKET_ASSEMBLER_BUTTON_STOP)
-                .setTooltipText("susy.machine.rocket_assembler.gui.stop");
     }
 
     private AxisAlignedBB getInternalBB() {

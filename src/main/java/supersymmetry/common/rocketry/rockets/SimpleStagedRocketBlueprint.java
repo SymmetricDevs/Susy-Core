@@ -110,7 +110,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         tag.setDouble("maxCargoVolume", this.getCargoVolume());
         NBTTagCompound instrumentList = new NBTTagCompound();
         this.getInstruments().forEach(instrumentList::setInteger);
-        tag.setTag("instruments", instrumentList);
+        tag.setTag(INSTRUMENTS_KEY, instrumentList);
         tag.setBoolean("solidRocket", solidRocket);
 
         return tag;
@@ -138,7 +138,9 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             if (!ok)
                 return false;
         } else {
-            this.stages = new ArrayList<>(AbstractRocketBlueprint.getBlueprintsRegistry().get(name).stages);
+            for (RocketStage registered : AbstractRocketBlueprint.getRegistered(name).stages) {
+                this.stages.add((RocketStage) registered.clone());
+            }
         }
         this.setName(tag.getString("name"));
         this.AFSimprovement = tag.getLong("AFSimprovement");
@@ -153,7 +155,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
                                                                long augmentation) {
         SuccessCalculation.AFSStats initStats = simulateRocketTakeoff(planet, fuel, turnAltitude, cargoMass);
         double success = initStats.success();
-        success *= Math.pow(0.995, this.getComponentCount("engine"));
+        success *= Math.pow(0.995, this.getEngineCount());
 
         success *= this.getGuidanceMultiplier();
         double redundancyMult = Math.clamp(0.85 + 0.35 * Math.pow(this.getRedundancy(), 0.625), 0.85, 1.2);
@@ -172,7 +174,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         NBTTagCompound configTag = rocketnbt.getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY);
         double turnAltitude = configTag.getFloat("turn_altitude");
         Planetoid launchSite = EARTH;
-        if (rocket.world.provider instanceof WorldProviderPlanet planet) {
+        if (rocket.world.provider instanceof WorldProviderPlanet) {
             launchSite = Planetoid.PLANETOIDS.inverse().get(rocket.world.provider.getDimension());
         }
         SuccessCalculation.AFSStats stats = simulateRocketTakeoff(launchSite, rocket.getFuel(),
@@ -180,7 +182,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         double success = stats.success();
 
         // Number of engines
-        success *= Math.pow(0.995, this.getComponentCount("engine"));
+        success *= Math.pow(0.995, this.getEngineCount());
 
         // Guidance system
         double weatherChallenge = rocket.world.rainingStrength + rocket.world.thunderingStrength;
@@ -196,7 +198,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
         } else {
-            double engineActivity = stats.fuelMass() * this.getComponentCount("engine");
+            double engineActivity = stats.fuelMass() * this.getEngineCount();
             double chanceExplosion = 1 - Math.exp(-engineActivity / 10000000);
             return Math.random() < chanceExplosion ? SuccessCalculation.LaunchResult.EXPLODES :
                     SuccessCalculation.LaunchResult.CRASHES;
@@ -243,7 +245,7 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         List<Double> stageSepTimes = new ArrayList<>();
 
         while (!remainingStages.isEmpty() ||
-                (!activeStages.isEmpty() && activeStages.firstEntry().getKey().getComponentCount("engine") > 0)) { //
+                (!activeStages.isEmpty() && activeStages.firstEntry().getKey().getEngineCount() > 0)) { //
             // ignite stages when previous ones have burned out
             if (activeStages.isEmpty()) {
                 Map.Entry<RocketStage, Double> entry = remainingStages.pollFirstEntry();
@@ -261,9 +263,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
             double currentMass = cargoMass;
             List<Map.Entry<RocketStage, Double>> stagesToRemove = new ArrayList<>();
             for (Map.Entry<RocketStage, Double> currentStage : activeStages.entrySet()) {
-                currentThrust += currentStage.getKey().getThrust(fuel, "engine",
-                        planet.getPressureFromAltitude(altitude));
-                currentStage.setValue(currentStage.getValue() - currentStage.getKey().getFuelThroughput("engine"));
+                currentThrust += currentStage.getKey().getThrust(fuel, planet.getPressureFromAltitude(altitude));
+                currentStage.setValue(currentStage.getValue() - currentStage.getKey().getFuelThroughput());
                 currentMass += currentStage.getKey().getMass() + currentStage.getValue();
                 if (currentStage.getValue() <= 0) {
                     stagesToRemove.add(currentStage);

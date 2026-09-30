@@ -1,7 +1,5 @@
 package supersymmetry.common.rocketry.components;
 
-import static java.lang.Math.pow;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -17,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 
 import gregtech.api.block.VariantBlock;
+import supersymmetry.api.rocketry.NozzleFlow;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.util.StructAnalysis;
@@ -42,31 +41,14 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
     // for he knows their day is coming.
     @Override
     public Optional<ComponentSolidFuelTank> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+        if (!compound.hasKey("volume", Constants.NBT.TAG_INT)) {
             return Optional.empty();
         }
-        if (!compound.hasKey("mass")) {
+        var tank = new ComponentSolidFuelTank();
+        if (!tank.readBaseFromNBT(compound)) {
             return Optional.empty();
         }
-        if (!compound.hasKey("radius")) {
-            return Optional.empty();
-        }
-        if (!compound.hasKey("volume")) {
-            return Optional.empty();
-        }
-        if (!compound.hasKey("materials")) {
-            return Optional.empty();
-        }
-
-        ComponentSolidFuelTank tank = new ComponentSolidFuelTank();
-        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
-                .forEach(tag -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
-
         tank.volume = compound.getInteger("volume");
-        tank.radius = compound.getDouble("radius");
-        tank.mass = compound.getDouble("mass");
-        tank.height = compound.getInteger("height");
-
         return Optional.of(tank);
     }
 
@@ -106,7 +88,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
                 return Optional.empty();
             }
             double welzlRadius = analysis.getRadius(airLayer);
-            if (pow(welzlRadius, 2) * Math.PI - 2 > airLayer.size()) {
+            if (!StructAnalysis.isVaguelyCircular(airLayer, welzlRadius, 2)) {
                 // circular pattern
                 analysis.status = StructAnalysis.BuildStat.WEIRD_SHAPE;
                 int finalI = i;
@@ -162,7 +144,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
                 return Optional.empty();
             }
             double welzlRadius = analysis.getRadius(airLayer);
-            if (pow(welzlRadius, 2) * Math.PI - 2.5 > airLayer.size()) {
+            if (!StructAnalysis.isVaguelyCircular(airLayer, welzlRadius, 2.5)) {
                 // circular pattern
                 analysis.status = StructAnalysis.BuildStat.NOZZLE_MALFORMED;
                 int finalI = i;
@@ -170,22 +152,14 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
                 return analysis.errorPos(nozzleBlocks.stream().filter(b -> b.getY() == finalI)
                         .toList().getFirst());
             }
-            nozzleAreas.add((int) (airLayer.size() + welzlRadius * Math.PI));
+            nozzleAreas.add(NozzleFlow.stationArea(airLayer.size(), welzlRadius));
         }
 
-        int initial = nozzleAreas.get(0);
-        int fin = initial;
-
-        for (int a : nozzleAreas) {
-            if (fin <= a) {
-                fin = a;
-            } else {
-                analysis.status = StructAnalysis.BuildStat.NOT_LAVAL;
-                return Optional.empty();
-            }
+        if (!NozzleFlow.widensMonotonically(nozzleAreas)) {
+            analysis.status = StructAnalysis.BuildStat.NOT_LAVAL;
+            return Optional.empty();
         }
-
-        float computedAreaRatio = ((float) fin) / initial;
+        double computedAreaRatio = NozzleFlow.areaRatio(nozzleAreas);
         if (computedAreaRatio < 1.5) {
             analysis.status = StructAnalysis.BuildStat.NOT_LAVAL;
             return Optional.empty();

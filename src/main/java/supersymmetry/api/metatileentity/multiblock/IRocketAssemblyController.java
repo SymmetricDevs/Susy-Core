@@ -1,6 +1,6 @@
 package supersymmetry.api.metatileentity.multiblock;
 
-import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.AssemblyStep;
 
 /**
  * Implemented by multiblock controllers that build a rocket one component at a
@@ -16,12 +16,8 @@ public interface IRocketAssemblyController {
 
     boolean isAssemblyWorking();
 
-    /**
-     * The component currently being built, or null if there is nothing left to
-     * build. Implementors are allowed to abort the assembly as a side effect of
-     * this call when the index has run off the end of the list.
-     */
-    AbstractComponent<?> getCurrentCraftTarget();
+    /** The step currently being built, or null if there is nothing left to build. */
+    AssemblyStep getCurrentStep();
 
     /**
      * Advances to the next component. Called once the current component's recipe

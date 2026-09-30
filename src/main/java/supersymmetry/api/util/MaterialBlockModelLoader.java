@@ -6,6 +6,7 @@
  */
 package supersymmetry.api.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,7 +37,6 @@ import gregtech.api.GTValues;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.util.GTLog;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
@@ -45,7 +45,7 @@ public class MaterialBlockModelLoader {
     private static final Table<MaterialIconType, MaterialIconSet, ResourceLocation> BLOCKSTATES_CACHE = HashBasedTable
             .create();
 
-    private static final Object2ObjectOpenHashMap<Entry, ModelResourceLocation> ENTRIES = new Object2ObjectOpenHashMap<>();
+    private static final HashMap<Entry, ModelResourceLocation> ENTRIES = new HashMap<>();
 
     @NonNull public static ModelResourceLocation loadBlockModel(@NonNull MaterialIconType iconType,
                                                        @NonNull MaterialIconSet iconSet) {

@@ -1,9 +1,10 @@
 package supersymmetry.api.particle;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.util.ResourceLocation;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 
 public class Particle {
@@ -11,18 +12,15 @@ public class Particle {
     private final String name;
     private final double mass; // Thou shall enter the mass in MeV/c^2, or thy skin shall be forfeit
     private final double charge; // Thou shall enter the charge in multiples of e, or thy teeth shall fall
-    private final double spin; // Thou shall enter the spin in multiples of hbar, or thy nails shall commence
-                               // growing
+    private final double spin; // Thou shall enter the spin in multiples of hbar, or thy nails shall commence growing
                                // inwards
     private final double width; // Thou shall enter the width in MeV/c^2, or thy thyroid shall wither
-    private final boolean coloured; // Thou shall worship the boiling madness at the base of the universe, they are
-                                    // just
+    private final boolean coloured; // Thou shall worship the boiling madness at the base of the universe, they are just
                                     // colours...but they burn
-    private final boolean weakInt; // Thou shall be saved from having to learn weak hypercharge and weak isospin,
-                                   // for I
+    private final boolean weakInt; // Thou shall be saved from having to learn weak hypercharge and weak isospin, for I
                                    // am merciful
     private Particle antiParticle = this;
-    private HashMap<Particle, Integer> components = new HashMap<Particle, Integer>();
+    private Object2IntOpenHashMap<Particle> components = new Object2IntOpenHashMap<>();
     private final ResourceLocation texture;
 
     /**
@@ -110,10 +108,6 @@ public class Particle {
         return components.isEmpty();
     }
 
-    public void setComponents(HashMap<Particle, Integer> components) {
-        this.components = components;
-    }
-
     public void setComponent(Particle particle, int amount) {
         if (components.containsKey(particle)) {
             components.replace(particle, amount);
@@ -124,13 +118,13 @@ public class Particle {
 
     public void addComponent(Particle particle, int amount) {
         if (components.containsKey(particle)) {
-            components.replace(particle, components.get(particle) + amount);
+            components.replace(particle, components.getInt(particle) + amount);
         } else {
             components.put(particle, amount);
         }
     }
 
-    public HashMap<Particle, Integer> getComponents() {
+    public Map<Particle, Integer> getComponents() {
         return components;
     }
 

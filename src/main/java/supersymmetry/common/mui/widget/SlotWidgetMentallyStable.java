@@ -384,10 +384,11 @@ public class SlotWidgetMentallyStable extends Widget implements INativeWidget {
 
         @NotNull @Override
         public final ItemStack onTake(@NotNull EntityPlayer thePlayer, @NotNull ItemStack stack) {
+            ItemStack taken = super.onTake(thePlayer, stack);
             if (changeListener != null) {
                 changeListener.run();
             }
-            return onItemTake(thePlayer, super.onTake(thePlayer, stack), false);
+            return onItemTake(thePlayer, taken, false);
         }
 
         @Override

@@ -1,14 +1,16 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityBlueprintRocket;
 import supersymmetry.common.mui.widget.ConditionalWidget;
 import supersymmetry.common.rocketry.RocketConfiguration.*;
@@ -37,10 +40,6 @@ import supersymmetry.common.rocketry.SuccessCalculation.LaunchResult;
 public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase implements IDataStickIntractable {
 
     private UUID selectedRocketUuid;
-    // private MetaTileEntityGroundStation groundStation;
-    private final Map<Integer, String> dimensionNames = Map.of(
-            0, "Earth",
-            800, "Moon");
 
     public MetaTileEntityMissionControl(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -87,9 +86,8 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        UUID rocketUuid = data.getUniqueId("RocketUUID");
-        if (rocketUuid != null) {
-            selectedRocketUuid = rocketUuid;
+        if (data.hasUniqueId("RocketUUID")) {
+            selectedRocketUuid = data.getUniqueId("RocketUUID");
         }
     }
 
@@ -124,15 +122,20 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
          * this.groundStation = groundStation;
          */
 
-        UUID rocketUuid = tag.getUniqueId("RocketUUID");
-        if (rocketUuid != null) {
-            this.selectedRocketUuid = rocketUuid;
+        if (tag.hasUniqueId("RocketUUID")) {
+            this.selectedRocketUuid = tag.getUniqueId("RocketUUID");
         }
     }
 
     @Override
     public boolean onDataStickRightClick(EntityPlayer player, ItemStack dataStick) {
         return false;
+    }
+
+    private static ITextComponent dimensionName(int dimension) {
+        Planetoid planetoid = Planetoid.PLANETOIDS.inverse().get(dimension);
+        return planetoid == null ? new TextComponentString(String.valueOf(dimension)) :
+                new TextComponentTranslation(planetoid.getTranslationKey());
     }
 
     private EntityBlueprintRocket getRocket() {
@@ -143,7 +146,8 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
         if (!(this.getWorld() instanceof WorldServer worldServer)) {
             return null;
         }
-        return (EntityBlueprintRocket) worldServer.getEntityFromUuid(this.selectedRocketUuid);
+        return worldServer.getEntityFromUuid(this.selectedRocketUuid) instanceof EntityBlueprintRocket rocket ?
+                rocket : null;
     }
 
     @Override
@@ -154,7 +158,6 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
     private ModularUI.Builder createGUITemplate(EntityPlayer entityPlayer) {
         int width = 320;
         int height = 210;
-        EntityBlueprintRocket selectedRocket = getRocket();
 
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND, width, height);
         builder.image(4, 4, width - 8, height - 8, GuiTextures.DISPLAY);
@@ -164,27 +167,29 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
 
         // TODO: switch to lang
         mainGroup.addWidget(new AdvancedTextWidget(4, 4, (l) -> {
-            if (selectedRocket != null) {
-                l.add(new TextComponentString("Selected Rocket: " + selectedRocket.getName()));
+            var rocket = getRocket();
+            if (rocket != null) {
+                l.add(new TextComponentString("Selected Rocket: " + rocket.getName()));
             } else {
                 l.add(new TextComponentString("No Rocket Selected"));
             }
         }, 0xe38a0e));
         mainGroup.addWidget(new AdvancedTextWidget(4, 8 + 8, (l) -> {
-            if (selectedRocket != null) {
-                if (selectedRocket.isLaunched()) {
-                    if (selectedRocket.posY == selectedRocket.prevPosY) {
-                        LaunchResult result = selectedRocket.getLaunchResult();
+            var rocket = getRocket();
+            if (rocket != null) {
+                if (rocket.isLaunched()) {
+                    if (rocket.posY == rocket.prevPosY) {
+                        LaunchResult result = rocket.getLaunchResult();
                         if (result == LaunchResult.CRASHES) {
-                            l.add(new TextComponentString("Launch Status: Crashed, Position: " +
-                                    selectedRocket.getCrashPosition().toString()));
+                            BlockPos crash = rocket.getCrashPosition();
+                            l.add(new TextComponentString("Launch Status: Crashed" +
+                                    (crash == null ? "" : ", Position: " + crash)));
                         } else if (result == LaunchResult.EXPLODES) {
                             l.add(new TextComponentString("Launch Status: Exploded"));
                         } else {
-                            l.add(new TextComponentString("Launch Status: Unknown, rocket stopped moving up"));
+                            l.add(new TextComponentString("Launch Status: Launching"));
                         }
                     } else {
-                        // TODO: make sure it is actually launching, like not in orbit or smth
                         l.add(new TextComponentString("Launch Status: Launching"));
                     }
                 } else {
@@ -193,31 +198,30 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
             }
         }, 0xffffff));
 
-        mainGroup.addWidget(new AdvancedTextWidget(4, 12 + 16, (l) -> {
-            if (selectedRocket != null) {
-                l.add(new TextComponentString("Fuel: " + 0 + " kg"));
-            }
-        }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget(4, 16 + 24, (l) -> {
-            if (selectedRocket != null) {
-                l.add(new TextComponentString("Cargo: " + selectedRocket.getCargoMass() + " kg"));
+            var rocket = getRocket();
+            if (rocket != null) {
+                l.add(new TextComponentString("Cargo: " + rocket.getCargoMass() + " kg"));
             }
         }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget((width - 8) / 3, 12 + 16, (l) -> {
-            if (selectedRocket != null) {
-                l.add(new TextComponentString("Height: " + selectedRocket.getPosition().getY() + " m"));
+            var rocket = getRocket();
+            if (rocket != null) {
+                l.add(new TextComponentString("Height: " + rocket.getPosition().getY() + " m"));
             }
         }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget((width - 8) / 3, 16 + 24, (l) -> {
-            if (selectedRocket != null) {
-                double totalVelocity = Math.sqrt(Math.pow(selectedRocket.motionX, 2) +
-                        Math.pow(selectedRocket.motionY, 2) + Math.pow(selectedRocket.motionZ, 2));
+            var rocket = getRocket();
+            if (rocket != null) {
+                double totalVelocity = Math.sqrt(Math.pow(rocket.motionX, 2) +
+                        Math.pow(rocket.motionY, 2) + Math.pow(rocket.motionZ, 2));
                 l.add(new TextComponentString("Velocity: " + Math.round(totalVelocity * 20) + " m/s"));
             }
         }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget(4, 20 + 32, (l) -> {
-            if (selectedRocket != null) {
-                if (selectedRocket.hasActed()) {
+            var rocket = getRocket();
+            if (rocket != null) {
+                if (rocket.hasActed()) {
                     l.add(new TextComponentString("Action Status: Has acted"));
                 } else {
                     l.add(new TextComponentString("Action Status: Waiting to act"));
@@ -225,12 +229,14 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
             }
         }, 0xffffff));
         mainGroup.addWidget(new AdvancedTextWidget(4, 24 + 40, (l) -> {
-            if (selectedRocket != null) {
-                List<MissionConfiguration> missions = selectedRocket.getRocketConfiguration().getMissions();
+            var rocket = getRocket();
+            if (rocket != null) {
+                List<MissionConfiguration> missions = rocket.getRocketConfiguration().getMissions();
                 for (int i = 0; i < missions.size(); i++) {
                     MissionConfiguration mission = missions.get(i);
-                    l.add(new TextComponentString("Mission " + (i + 1) + ": " + dimensionNames.get(mission.dimension) +
-                            ", " + mission.destinationType.name()));
+                    l.add(new TextComponentString("Mission " + (i + 1) + ": "));
+                    l.add(dimensionName(mission.dimension));
+                    l.add(new TextComponentString(", " + mission.destinationType.name()));
                 }
                 if (missions.isEmpty()) {
                     l.add(new TextComponentString("No missions"));
@@ -241,8 +247,9 @@ public class MetaTileEntityMissionControl extends MultiblockWithDisplayBase impl
         // Debug stuff
         mainGroup.addWidget(new LabelWidget(4, 32 + 64, "[DEBUG]", 0xff0000));
         mainGroup.addWidget(new AdvancedTextWidget(4, 36 + 72, (l) -> {
-            if (selectedRocket != null) {
-                l.add(new TextComponentString("Launch Result: " + selectedRocket.getLaunchResult()));
+            var rocket = getRocket();
+            if (rocket != null) {
+                l.add(new TextComponentString("Launch Result: " + rocket.getLaunchResult()));
             }
         }, 0xff9999));
 
