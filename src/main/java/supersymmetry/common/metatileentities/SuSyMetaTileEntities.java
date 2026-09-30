@@ -662,7 +662,7 @@ public class SuSyMetaTileEntities {
 
         // Turbines: 17000-17002
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000,
-                new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 1,
+                new MetaTileEntitySUSYLargeTurbine(susyId("basic_steam_turbine"), SuSyRecipeMaps.LARGE_STEAM_TURBINE, 2,
                         3600, 1, 1,
                         MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_TURBINE_CASING),
                         SuSyBlocks.TURBINE_ROTOR.getState(BlockTurbineRotor.BlockTurbineRotorType.STEEL),
