@@ -1029,7 +1029,7 @@ public class SuSyMetaTileEntities {
         ALD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.EV];
+        SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         EVAPORATION_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
