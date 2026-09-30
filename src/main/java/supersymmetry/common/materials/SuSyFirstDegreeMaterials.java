@@ -135,7 +135,7 @@ public class SuSyFirstDegreeMaterials {
         MolybdenumDisilicide = new Material.Builder(8792, SuSyUtility.susyId("molybdenum_disilicide"))
                 .dust()
                 .liquid(new FluidBuilder().temperature(2300))
-                .flags(GENERATE_ROD, DISABLE_DECOMPOSITION)
+                .flags(GENERATE_ROD, DISABLE_DECOMPOSITION, GENERATE_SPRING)
                 .components(Molybdenum, 1, Silicon, 2)
                 .color(0x967BB6)
                 .build();

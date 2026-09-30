@@ -547,7 +547,7 @@ public class SuSyMetaTileEntities {
         registerSimpleMTE(SPUTTER_DEPOSITION, 12, 14755, "sputter_deposition",
                 SuSyRecipeMaps.SPUTTER_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
                 GTUtility.defaultTankSizeFunction);
-        registerSimpleMTE(SCREEN_PRINTER, 3, 19000, "screen_printer", SuSyRecipeMaps.SCREEN_PRINTER,
+        registerSimpleMTE(SCREEN_PRINTER, 12, 19000, "screen_printer", SuSyRecipeMaps.SCREEN_PRINTER,
                 SusyTextures.SCREEN_PRINTER_OVERLAY, true, GTUtility.defaultTankSizeFunction);
         registerSimpleMTE(EVAPORATION_DEPOSITION, 12, 19026, "evaporation_deposition",
                 SuSyRecipeMaps.EVAPORATION_DEPOSITION_RECIPES, SusyTextures.SPUTTER_DEPOSITION_OVERLAY, true,
@@ -1052,7 +1052,7 @@ public class SuSyMetaTileEntities {
         ALD = new SimpleMachineMetaTileEntity[GTValues.OpV];
         ION_IMPLANTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         SPUTTER_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
-        SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.EV];
+        SCREEN_PRINTER = new SimpleMachineMetaTileEntity[GTValues.OpV];
         EVAPORATION_DEPOSITION = new SimpleMachineMetaTileEntity[GTValues.OpV];
 
         FLUID_COMPRESSOR = new SimpleMachineMetaTileEntity[GTValues.OpV];
