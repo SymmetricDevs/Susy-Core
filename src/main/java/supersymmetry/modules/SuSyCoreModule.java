@@ -33,5 +33,6 @@ public class SuSyCoreModule implements IGregTechModule {
         GregTechAPI.networkHandler.registerPacket(SPacketSpeakerStop.class);
         GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastAudio.class);
         GregTechAPI.networkHandler.registerPacket(SPacketSpeakerBroadcastStop.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketDustFog.class);
     }
 }

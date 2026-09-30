@@ -1,0 +1,8 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "variant=flammableair": {
+      "model": "susy:air/flammable_air_double_face"
+    }
+  }
+}

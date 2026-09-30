@@ -1569,6 +1569,8 @@ metaitem.track_segment.length_info=§610 blocks §7worth of monorail track.
 metaitem.air_vent.tooltip.1=§bCollecting Rate: §f%,d L/s
 metaitem.orbital.scrap.earth.name=Earth Orbital Scrap
 metaitem.code_breacher.name=Code Breacher
+metaitem.code_breacher_dev.name=Creative Code Breacher
+metaitem.shape.mold.target=Sputtering Target Mold
 metaitem.air_disperser.name=Air Disperser
 metaitem.air_disperser.tooltip=Disperses Oxygen to Breathe (uses 100mB/s while filling)
 metaitem.location_card.name=Location Card
@@ -1902,6 +1904,7 @@ supersymmetry.subtitle.2=Vitals: §astable§r. Pod fuel: §e46%%§r.
 
 # Locked Crates
 chat.susy.crate.requires_code_breacher=This crate requires a code breacher!
+chat.susy.crate.unlocked=Crate unlocked!
 susy.machine.locked_crate.pe.name=Hermetically Sealed Crate
 susy.machine.locked_crate.wood.name=Wooden Crate
 susy.machine.locked_crate.bronze.name=Bronze Crate
@@ -2241,6 +2244,11 @@ tile.s6bmrf_blocks.s6bmrf16.name=BMRF-96
 #Items
 metaitem.entity_tagger.name=Factions Dev Tool
 metaitem.faction_radio.name=Universal Federation Radio
+metaitem.entity_promoter.name=Factions Promotion Tool
+
+item.susy.faction_radio.blank=No Faction Frequency
+item.susy.faction_radio.faction=Frequency tied to %s
+
 #Blocks
 tile.raid_flare_block.bandit_flare.name=Bandit Raid Flare
 tile.raid_flare_block.fed_flare.name=Former Federation Raid Flare
@@ -2256,6 +2264,73 @@ susy.command.faction.get=current HATE for %s: %s
 susy.command.faction.add=Added %s HATE to faction: %s
 susy.command.faction.set=Set %s HATE for faction: %s
 susy.command.faction.invalid=Invalid argument. Use get, add, or set.
+
+# Generic range warning
+susy.machine.generic.tooltip.radius_warning=Expands it's radius every completed cycle until destroyed.
+
+# Defoliator
+susy.machine.defoliator.lv.name=Basic Defoliator
+susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
+susy.machine.defoliator.tooltip.description=Destroys all plant life close to it without harming animals or people.
+
+#Interference Dynamo
+susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
+susy.machine.interference_dynamo.tooltip.info=A vampire on your factory.
+susy.machine.interference_dynamo.tooltip.description=Machines in it's range will fail to complete some recipes.
+susy.machine.interference_dynamo.tooltip.description1=§cWill reset the progress on all recipes back to 0 every 25 seconds!
+
+#Toxic Spewer
+susy.machine.toxic_spewer.lv.name=Basic Toxic Spewer
+susy.machine.toxic_spewer.tooltip.info=As for what's in the canister... It's best you don't ask.
+susy.machine.toxic_spewer.tooltip.description=Makes the nearby atmosphere poisonous to living creatures.
+susy.machine.toxic_spewer.tooltip.description1=Standing under the open sky while it's active will apply debilitating effects.
+
+#Hydrocarbon Saturator
+susy.machine.hydrocarbon_saturator.lv.name=Basic Hydrocarbon Saturator
+susy.machine.hydrocarbon_saturator.tooltip.info=It all starts with a spark!
+susy.machine.hydrocarbon_saturator.tooltip.description=Slowly releases highly flammable gasses from a internal ME component.
+susy.machine.hydrocarbon_saturator.tooltip.description1=Any open sources of fire can trigger spontaneous combustion and start wildfires.
+susy.machine.hydrocarbon_saturator.tooltip.description2=§cLetting this machine run for too long can result in a massive flashover!
+
+#Dust Agitator
+susy.machine.dust_agitator.lv.name=Basic Dust Agitator
+susy.machine.dust_agitator.tooltip.info=The Great Smog of London in a can
+susy.machine.dust_agitator.tooltip.description=Disturbs dust particles in the local area to dramatically reduce visibility
+
+#Federation Drop Beacon
+susy.machine.fed_beacon.lv.name=Federation Ordinance Drop Beacon
+susy.machine.fed_beacon.tooltip.info=Calls onto whatever remains of the orbital federation fleet to bring down their war machines.
+susy.machine.fed_beacon.tooltip.description=This one-time-use machine will cause problem causers to orbital drop right onto your base.
+susy.machine.fed_beacon.tooltip.description1=The machine destroys itself once it completes it's cycle.
+susy.machine.fed_beacon.tooltip.description2=§bBreaking this machine early will permanently sever it's uplink connection, but you may be able to salvage it's internal components.
+
+#Federation Troop Beacon
+susy.machine.fed_reinforcer.lv.name=Federation Troop Drop Beacon
+susy.machine.fed_reinforcer.tooltip.info=Step into your Hellpod, diver!
+susy.machine.fed_reinforcer.tooltip.description=This one-time-use machine will attract the attention of a rapid orbital response unit, causing federation soldiers to orbital drop right on top of it!
+susy.machine.fed_reinforcer.tooltip.description1=The machine destroys itself once after it completes it's cycle.
+susy.machine.fed_reinforcer.tooltip.description2=§bIf you can salvage this machine, it would allow you to §cinstantly call down federation soldiers §bto a desired location.
+
+#Flallable Air
+tile.flammable_air.flammableair.name=Flammable Air
+
+#Mercury
+tile.fluid_placer.mercury_fluid.name=Mercury Placer
+
+#Intel Card
+item.susy.intel_chip.blank=Unbound intel card
+item.susy.intel_chip.faction=Faction: %s
+item.susy.intel_chip.kills=Kills: %d out of %d
+
+item.susy.intel_chip_full.faction=Faction: %s
+item.susy.intel_chip_full.no_faction=No faction data
+
+metaitem.intel_chip.name=Intelligence gathering chip
+metaitem.intel_chip_full.name=Intelligence gathering chip
+
+metaitem.hyper_defoliant.name=Hyper Defoliant
+
+# end of problem causers
 
 chat.susy.location_card.x=X (%s)
 chat.susy.location_card.y=Y (%s)

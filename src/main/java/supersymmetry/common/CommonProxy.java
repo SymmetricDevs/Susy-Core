@@ -20,6 +20,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -62,8 +63,10 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.blocks.SusyStoneVariantBlock;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.HyperDefoliantBehavior;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.pipelike.tanklessfluid.ItemBlockTanklessFluidPipe;
+import supersymmetry.common.potion.PotionDropPodSickness;
 import supersymmetry.common.world.SuSyBiomes;
 import supersymmetry.common.world.SuSyDimensions;
 import supersymmetry.common.world.biome.BiomeLunarHighlands;
@@ -83,7 +86,7 @@ public class CommonProxy {
         Particles.init();
         Particles.register();
         CelestialObjects.init();
-    }
+   }
 
     /**
      * Checks for a canary file in the config directory and deletes it if found.
@@ -142,6 +145,7 @@ public class CommonProxy {
             new MobHordeEvent((p) -> new EntityZombie(p.world), 4, 8, "zombies").setMaximumDistanceUnderground(10)
                     .setNightOnly(true);
         }
+        HyperDefoliantBehavior.registerDispenserBehavior(new ItemStack(SuSyMetaItems.HYPER_DEFOLIANT.getMetaItem()));
     }
 
     public void postLoad() {
@@ -326,5 +330,10 @@ public class CommonProxy {
 
         SuSyDimensions.init();
         // ReEntryDimensions.init();
+    }
+
+    @SubscribeEvent
+    public static void registerPotions(@NotNull RegistryEvent.Register<Potion> event) {
+        event.getRegistry().register(PotionDropPodSickness.INSTANCE);
     }
 }
