@@ -178,7 +178,6 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
                 if (passenger instanceof EntityLivingBase living) {
                     living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
                 }
-                passenger.setDead();
             }
         }
     }

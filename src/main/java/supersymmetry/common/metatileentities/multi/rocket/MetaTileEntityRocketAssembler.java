@@ -65,6 +65,9 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityCompon
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
+import static gregtech.api.GTValues.EV;
+import static gregtech.api.GTValues.VA;
+
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            implements
                                            IProgressBarMultiblock,
@@ -92,7 +95,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         signals.add(() -> {
             this.abortAssembly();
         });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this, true); // <-- recipes are generated here
+        this.recipeMapWorkable = new RocketAssemblerLogic(this, VA[EV], true); // <-- recipes are generated here
     }
 
     @Override

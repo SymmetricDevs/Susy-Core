@@ -841,17 +841,17 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
                     () -> this.stats.sepTimes().size() > j && this.isActive() && !this.stats.isNone() &&
                             this.fuel != null);
         }
-        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 30,
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 8,
                 () -> I18n.format(getMetaName() + ".gui.burnout_speed",
                         String.format("%.2f", this.stats.burnoutSpeed())),
                 0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 41,
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 19,
                 () -> I18n.format(getMetaName() + ".gui.burnout_horizontal_speed",
                         String.format("%.2f", this.stats.burnoutHorizontalSpeed())),
                 0xffffff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
-        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 52,
+        workingGroup.addWidgetWithTest(new DynamicLabelWidget(width - 170, 30,
                 () -> I18n.format(getMetaName() + ".gui.improvement", this.getAugmentation()), 0x00eeff),
                 () -> this.isActive() && !this.stats.isNone() && this.fuel != null);
         return builder;
