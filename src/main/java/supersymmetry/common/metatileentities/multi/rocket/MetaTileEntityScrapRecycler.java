@@ -57,10 +57,14 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start().aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
+        return FactoryBlockPattern.start()
+                .aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
                 .where(' ', any()).where('A', air()).where('S', this.selfPredicate())
                 .where('P', states(getPipeCasingState())).where('C', states(getCasingState()))
                 .where('^', conveyorBelts(RelativeDirection.BACK)).where('V', conveyorBelts(RelativeDirection.FRONT))
@@ -70,7 +74,7 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
                 .where('O',
                         states(getCasingState()).or(this.autoAbilities(false, false, false, true, false, false, false)))
                 .where('D',
-                        states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, false, false)))
+                        states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, true, false)))
                 .build();
     }
 
