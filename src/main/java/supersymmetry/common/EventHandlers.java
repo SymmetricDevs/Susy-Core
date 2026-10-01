@@ -268,9 +268,11 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote || !(world.provider instanceof WorldProviderPlanet))
-            return;
-        AtmosphereWorldData data = AtmosphereWorldData.get(world);
+        if (world.isRemote || !(world.provider instanceof WorldProviderPlanet)) return;
+
+        AtmosphereWorldData data = AtmosphereWorldData.getIfPresent(world);
+        if (data == null) return; // fake world (e.g. LittleTiles animation). fixes crash https://discord.com/channels/881234100504109166/1350749915969490974/1554872016610402348
+
         if (data.getGraph().onBlockChanged(world, event.getPos())) {
             data.markDirty();
         }

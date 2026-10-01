@@ -9,22 +9,34 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.impl.NotifiableItemStackHandler;
 import gregtech.api.metatileentity.MetaTileEntity;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 
 public class DataStorageLoader extends NotifiableItemStackHandler {
 
     private ItemStack dataStorage = ItemStack.EMPTY;
     private boolean locked = false;
     private final Predicate<ItemStack> acceptableTypes;
+    private AbstractRocketBlueprint blueprint;
+    private boolean parsed = false;
     protected MetaTileEntity mte; // If GTItemStackHandler ever makes its mte's accessible, remove this
 
     public DataStorageLoader(MetaTileEntity mte, Predicate<ItemStack> predicate) {
         super(mte, 1, mte, false);
         this.mte = mte;
         acceptableTypes = predicate;
+    }
+
+    @Nullable public AbstractRocketBlueprint getBlueprint() {
+        if (!parsed) {
+            parsed = true;
+            blueprint = isEmpty() ? null : AbstractRocketBlueprint.fromItem(dataStorage);
+        }
+        return blueprint;
     }
 
     @Override
@@ -63,6 +75,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             if (!simulate) {
                 dataStorage = stack.copy();
                 dataStorage.setCount(1);
+                parsed = false;
             }
             return ret;
         }
@@ -76,6 +89,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             ItemStack ret = dataStorage;
             if (!simulate) {
                 dataStorage = ItemStack.EMPTY;
+                parsed = false;
             }
             return ret;
         }
@@ -104,6 +118,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
     public void clearNBT() {
         if (dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());
+            parsed = false;
         }
     }
 
@@ -112,6 +127,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             dataStorage.setTagCompound(new NBTTagCompound());
         }
         dataStorage.setTagCompound(consumer.apply(dataStorage.getTagCompound()));
+        parsed = false;
     }
 
     public void mutateItem(String key, String value) {
@@ -119,6 +135,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             dataStorage.setTagCompound(new NBTTagCompound());
         }
         dataStorage.getTagCompound().setTag(key, new NBTTagString(value)); // do not worry about warning
+        parsed = false;
     }
 
     public void setImageType(int id) {
@@ -126,12 +143,14 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             dataStorage.setTagCompound(new NBTTagCompound());
         }
         dataStorage.setItemDamage(id);
+        parsed = false;
     }
 
     @Override
     public void setStackInSlot(int slot, @NotNull ItemStack stack) {
         if (slot == 0) {
             dataStorage = stack;
+            parsed = false;
         }
     }
 }

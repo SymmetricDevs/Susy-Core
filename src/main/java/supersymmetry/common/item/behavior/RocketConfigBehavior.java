@@ -4,7 +4,6 @@ import static net.minecraft.util.EnumFacing.Axis.*;
 import static supersymmetry.api.gui.SusyGuiTextures.ICON_LEFT;
 import static supersymmetry.api.gui.SusyGuiTextures.ICON_RIGHT;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

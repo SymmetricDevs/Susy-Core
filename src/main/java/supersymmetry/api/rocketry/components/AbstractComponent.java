@@ -1,13 +1,14 @@
 package supersymmetry.api.rocketry.components;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -23,6 +24,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants.NBT;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -30,25 +32,21 @@ import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.util.ItemStackHashStrategy;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import supersymmetry.api.SusyLog;
+import supersymmetry.api.rocketry.AssemblyStep;
 import supersymmetry.api.rocketry.WeightedBlock;
 import supersymmetry.api.util.StructAnalysis;
-import supersymmetry.api.util.StructAnalysis.BuildStat;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
-public abstract class AbstractComponent<T extends AbstractComponent<T>> {
+public abstract class AbstractComponent<T extends AbstractComponent<T>> implements AssemblyStep {
 
-    protected static final String PARTS_KEY = "parts";
-    public static final String INSTRUMENTS_KEY = "instruments";
-    private static final Set<AbstractComponent<?>> registry = new HashSet<>();
+    private static final Map<String, Supplier<AbstractComponent<?>>> REGISTRY = new LinkedHashMap<>();
     private static boolean registryLock = false;
-    private static final Map<String, Class<? extends AbstractComponent<?>>> nameToComponentRegistry = new HashMap<>();
 
     protected String name;
     protected String type;
-    protected BuildStat status = BuildStat.ERROR;
     protected double mass;
     protected double radius;
-    public List<MaterialCost> materials = new ArrayList<>();
+    protected List<MaterialCost> materials = new ArrayList<>();
     protected int height;
 
     public AbstractComponent(String name, String type,
@@ -58,56 +56,38 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         this.type = type;
     }
 
-    public static Map<String, Class<? extends AbstractComponent<?>>> getNameRegistry() {
-        return new HashMap<>(nameToComponentRegistry);
-    }
-
-    public static boolean nameRegistered(String name) {
-        return nameToComponentRegistry.containsKey(name) && registry.stream().anyMatch(x -> x.getName().equals(name));
-    }
-
-    /**
-     * Does not throw an exception as to not completely obliterate old worlds.
-     * However, this does send back nulls now...
-     */
-    @Nullable public static AbstractComponent<?> getComponentFromName(String name) {
-        if (nameToComponentRegistry.containsKey(name)) {
-            try {
-                return nameToComponentRegistry.get(name).getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                SusyLog.logger.error("something horrible happened during component instantiation. {} {}",
-                        e.getMessage(), e.getStackTrace());
-            }
-        } else {
-            SusyLog.logger.warn("tried to get the unregistered component '{}'; it will be dropped", name);
-        }
-
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void registerComponent(AbstractComponent<?> component) {
-        if (!getRegistryLock()) {
-            nameToComponentRegistry.put(component.getName(),
-                    (Class<? extends AbstractComponent<?>>) component.getClass());
-            if (registry.stream().noneMatch(x -> x.getName().equals(component.getName()))) {
-                registry.add(component);
-            }
-        } else {
+    public static void registerComponent(Supplier<AbstractComponent<?>> factory) {
+        if (registryLock) {
             throw new IllegalStateException("tried to register a component after the registry was closed. dumbass.");
         }
+        AbstractComponent<?> component = factory.get();
+        REGISTRY.put(component.getName(), factory);
     }
 
     public static void lockRegistry() {
         registryLock = true;
     }
 
-    public static boolean getRegistryLock() {
-        return registryLock;
+    public static Collection<String> getRegisteredNames() {
+        return List.copyOf(REGISTRY.keySet());
     }
 
-    public static Set<AbstractComponent<?>> getRegistry() {
-        return new HashSet<>(registry);
+    public static List<AbstractComponent<?>> getRegistry() {
+        return REGISTRY.values().stream().map(Supplier::get).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Nullable public static AbstractComponent<?> getComponentFromName(String name) {
+        Supplier<AbstractComponent<?>> factory = REGISTRY.get(name);
+        if (factory == null) {
+            return null;
+        }
+        try {
+            return factory.get();
+        } catch (Exception e) {
+            SusyLog.logger.error("something horrible happened during component instantiation. {} {}",
+                    e.getMessage(), e.getStackTrace());
+            return null;
+        }
     }
 
     public void writeBlocksToNBT(Set<BlockPos> blocks, World world, NBTTagCompound tag) {
@@ -154,51 +134,35 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
 
     protected Predicate<Tuple<StructAnalysis, List<BlockPos>>> detectionPredicate;
 
-    // meant to verify the compatability between the component and the entire rocket
-    // stage so that you
-    // dont end up with a liquid fuel engine on a solid fuel tank, return true if
-    // everything is fine
-    protected Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate = t -> {
-        return true;
-    };
     // when in the aerospace flight simulator ui, this defines if a component can be
     // put into a row
     protected Predicate<String> componentSlotValidator = name -> name.equals(this.getType()) ||
             name.equals(this.getName());
 
-    public List<MaterialCost> getMaterials() {
-        return materials;
-    }
-
-    /**
-     * What the rocket assembler charges to build this component. Scanned
-     * components answer with the blocks they were made of; components whose cost
-     * is declared rather than measured — see
-     * {@link supersymmetry.common.rocketry.components.ComponentBlueprintOverhead} —
-     * override this, which is also how ore dictionary ingredients get in.
-     */
-    public List<GTRecipeInput> getRecipeInputs() {
-        return materials.stream().flatMap(m -> m.expandRecipe().stream()).collect(Collectors.toList());
-    }
-
-    public double getAssemblyDuration() {
-        return 200f;
-    }
-
-    public void setMaterials(List<MaterialCost> materials) {
-        this.materials = materials;
-    }
-
-    public String getLocalizationKey() {
-        return "susy.rocketry.components.name." + this.getName();
-    }
-
     public Predicate<String> getComponentSlotValidator() {
         return componentSlotValidator;
     }
 
-    public void setComponentSlotValidator(Predicate<String> componentSlotValidator) {
-        this.componentSlotValidator = componentSlotValidator;
+    public List<MaterialCost> getMaterials() {
+        return materials;
+    }
+
+    @Override
+    public List<GTRecipeInput> getRecipeInputs() {
+        return materials.stream().map(MaterialCost::toIngredient).collect(Collectors.toList());
+    }
+
+    public double getAssemblyDuration() {
+        return 200;
+    }
+
+    @Override
+    public double getElectrodeDamageFactor() {
+        return getAssemblyDuration() + getRadius();
+    }
+
+    public static String getLocalizationKey(String type) {
+        return String.format("susy.rocketry.components.%s.name", type);
     }
 
     public double getMass() {
@@ -217,39 +181,26 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
         return this.radius;
     }
 
-    public Predicate<Map<String, AbstractComponent<?>>> getCompatabilityValidationPredicate() {
-        return compatabilityValidationPredicate;
-    }
-
-    public void setCompatabilityValidationPredicate(
-                                                    Predicate<Map<String, AbstractComponent<?>>> compatabilityValidationPredicate) {
-        this.compatabilityValidationPredicate = compatabilityValidationPredicate;
-    }
-
     public Predicate<Tuple<StructAnalysis, List<BlockPos>>> getDetectionPredicate() {
         return this.detectionPredicate;
-    }
-
-    public void setDetectionPredicate(Predicate<Tuple<StructAnalysis, List<BlockPos>>> predicate) {
-        this.detectionPredicate = predicate;
     }
 
     public abstract Optional<NBTTagCompound> analyzePattern(StructAnalysis analysis, AxisAlignedBB aabb);
 
     public void collectInfo(StructAnalysis analysis, Set<BlockPos> connected, NBTTagCompound tag) {
-        // These are sometimes done separately.
+        this.mass = connected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block))).sum();
+        this.height = analysis.getHeight(connected);
+        tag.setDouble("mass", mass);
+        tag.setInteger("height", height);
+        tag.setString("type", type);
+        tag.setString("name", name);
+
         if (!tag.hasKey("radius")) {
             this.radius = analysis.getRadius(connected);
             tag.setDouble("radius", radius);
+        } else {
+            this.radius = tag.getDouble("radius");
         }
-        if (!tag.hasKey("height")) {
-            this.height = analysis.getHeight(connected);
-            tag.setInteger("height", height);
-        }
-        this.mass = connected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block))).sum();
-        tag.setDouble("mass", mass);
-        tag.setString("type", type);
-        tag.setString("name", name);
         writeBlocksToNBT(connected, analysis.world, tag);
     }
 
@@ -264,6 +215,22 @@ public abstract class AbstractComponent<T extends AbstractComponent<T>> {
             list.appendTag(material.toNBT());
         }
         tag.setTag("materials", list);
+    }
+
+    protected boolean readBaseFromNBT(NBTTagCompound compound) {
+        if (!this.type.equals(compound.getString("type")) || !this.name.equals(compound.getString("name"))) {
+            return false;
+        }
+        if (!compound.hasKey("mass", NBT.TAG_DOUBLE) || !compound.hasKey("radius", NBT.TAG_DOUBLE) ||
+                !compound.hasKey("materials", NBT.TAG_LIST)) {
+            return false;
+        }
+        this.mass = compound.getDouble("mass");
+        this.radius = compound.getDouble("radius");
+        this.height = compound.getInteger("height");
+        compound.getTagList("materials", NBT.TAG_COMPOUND)
+                .forEach(tag -> this.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
+        return true;
     }
 
     // used for subitem generation, false => no subitem

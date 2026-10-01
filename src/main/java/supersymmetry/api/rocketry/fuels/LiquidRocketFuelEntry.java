@@ -55,10 +55,10 @@ public class LiquidRocketFuelEntry implements RocketFuelEntry {
         }
     }
 
-    private static Map<String, LiquidRocketFuelEntry> FUEL_REGISTRY = new HashMap<>();
+    private static final Map<String, LiquidRocketFuelEntry> FUEL_REGISTRY = new TreeMap<>();
 
     public static Map<String, LiquidRocketFuelEntry> getFuelRegistry() {
-        return new HashMap<>(FUEL_REGISTRY);
+        return new TreeMap<>(FUEL_REGISTRY);
     }
 
     public static LiquidRocketFuelEntry getCopyOf(String name) {

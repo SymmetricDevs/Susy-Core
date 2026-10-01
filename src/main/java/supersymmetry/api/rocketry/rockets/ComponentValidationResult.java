@@ -20,8 +20,4 @@ public enum ComponentValidationResult {
     public String getName() {
         return this.name;
     }
-
-    public String getTranslationKey() {
-        return "susy.rocketry.components.validation_codes." + this.name;
-    }
 }

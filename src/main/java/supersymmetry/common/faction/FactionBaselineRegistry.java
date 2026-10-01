@@ -1,6 +1,5 @@
 package supersymmetry.common.faction;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.advancements.Advancement;
@@ -10,9 +9,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 public class FactionBaselineRegistry {
 
-    private static final Map<ResourceLocation, Integer> BASELINE_HATE = new HashMap<>();
+    private static final Object2IntOpenHashMap<ResourceLocation> BASELINE_HATE = new Object2IntOpenHashMap<>();
 
     public static void add(ResourceLocation advancement, int hate) {
         BASELINE_HATE.put(advancement, hate);

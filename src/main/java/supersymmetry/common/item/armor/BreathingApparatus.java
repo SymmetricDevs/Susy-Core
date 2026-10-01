@@ -150,13 +150,15 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     }
 
     double getOxygen(ItemStack stack) {
-        if (stack.getTagCompound() == null) {
-            return 1; // only nomex doesnt have it, everything else should be fine ish..
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("oxygen")) {
+            return stack.getTagCompound().getDouble("oxygen");
         }
-        if (!stack.getTagCompound().hasKey("oxygen")) {
-            stack.getTagCompound().setDouble("oxygen", getMaxOxygen(stack));
+        double maxOxygen = getMaxOxygen(stack);
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
         }
-        return stack.getTagCompound().getDouble("oxygen");
+        stack.getTagCompound().setDouble("oxygen", maxOxygen);
+        return maxOxygen;
     }
 
     double getMaxOxygen(ItemStack stack) {
@@ -170,11 +172,9 @@ public class BreathingApparatus implements IBreathingArmorLogic, IItemDurability
     }
 
     void changeOxygen(ItemStack stack, double oxygenChange) {
-        if (!stack.hasTagCompound()) {
-            return;
-        } // only nomex doesnt have it
+        double oxygen = Math.max(0, getOxygen(stack) + oxygenChange);
         NBTTagCompound compound = stack.getTagCompound();
-        compound.setDouble("oxygen", Math.max(0, getOxygen(stack) + oxygenChange));
+        compound.setDouble("oxygen", oxygen);
         stack.setTagCompound(compound);
     }
 

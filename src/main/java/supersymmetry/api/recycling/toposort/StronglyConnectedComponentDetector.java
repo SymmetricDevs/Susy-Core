@@ -8,6 +8,8 @@ import java.util.*;
 
 import com.google.common.graph.ValueGraph;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 /// An object that splits a graph into strongly connected components lazily with Tarjan's Strongly Connected Components
 /// Algorithm.
 ///
@@ -45,7 +47,7 @@ public class StronglyConnectedComponentDetector<T> {
     private void calculate() {
         components = new HashSet<>();
         int t = 0;
-        ids = new HashMap<>();
+        ids = new Object2IntOpenHashMap<>();
         Set<T> nodes = graph.nodes();
         elements = (T[]) new Object[nodes.size()];
         for (T node : nodes) {

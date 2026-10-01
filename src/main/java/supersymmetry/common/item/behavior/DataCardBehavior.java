@@ -3,46 +3,29 @@ package supersymmetry.common.item.behavior;
 import java.util.List;
 import java.util.function.Consumer;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import gregtech.api.items.metaitem.stats.ISubItemHandler;
-import gregtech.api.util.GTUtility;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
-
-    private final Consumer<List<String>> lines;
-    private final List<String> keys;
+public class DataCardBehavior extends AbstractCardBehavior {
 
     public DataCardBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
-        this.lines = lines;
-        this.keys = keys;
-    }
-
-    @Override
-    public String getItemSubType(ItemStack itemStack) {
-        var tag = GTUtility.getOrCreateNbtCompound(itemStack);
-        return tag.getString("name");
+        super(lines, keys);
     }
 
     @Override
     public void getSubItems(ItemStack itemStack, CreativeTabs creativeTab, NonNullList<ItemStack> subItems) {
         subItems.add(itemStack.copy());
         if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_ACTIVE.metaValue) {
-            for (String name : AbstractComponent.getNameRegistry().keySet()) {
+            for (String name : AbstractComponent.getRegisteredNames()) {
                 AbstractComponent<?> component = AbstractComponent.getComponentFromName(name);
-                if (component == null)
-                    continue;
-                if (!component.configureDefaults())
+                if (component == null || !component.configureDefaults())
                     continue;
                 ItemStack configured = itemStack.copy();
                 NBTTagCompound tag = new NBTTagCompound();
@@ -51,36 +34,5 @@ public class DataCardBehavior implements IItemBehaviour, ISubItemHandler {
                 subItems.add(configured);
             }
         }
-    }
-
-    @Override
-    public void addInformation(ItemStack itemStack, List<String> lines) {
-        this.lines.accept(lines);
-        NBTTagCompound tag = itemStack.getTagCompound();
-        if (tag == null)
-            return;
-
-        for (String key : this.keys) {
-            if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
-                lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
-                        getID(tag));
-            }
-        }
-
-        if (tag.hasKey("name", Constants.NBT.TAG_STRING)) {
-            String targetName = tag.getString("name");
-            for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
-                if (component.getName().equals(targetName)) {
-                    lines.addAll(component.getTooltipLines(tag));
-                    break;
-                }
-            }
-        }
-    }
-
-    private String getID(NBTTagCompound key) {
-        // Left pad
-        String fullID = String.format("%08x", key.hashCode());
-        return fullID.toUpperCase();
     }
 }

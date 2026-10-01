@@ -17,7 +17,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import gregtech.api.recipes.Recipe;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.rocketry.components.Instrument;
-import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.space.Planetoid;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
@@ -35,7 +34,6 @@ public class InstrumentRobotArm implements Instrument {
         }
         MissionConfiguration mission = config.getMissions().get(0);
         NBTTagCompound rocketNBT = rocket.getEntityData().getCompoundTag("rocket");
-        AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
         if (!(mission.destinationType == DestinationType.Orbit)) {
             return;
         }

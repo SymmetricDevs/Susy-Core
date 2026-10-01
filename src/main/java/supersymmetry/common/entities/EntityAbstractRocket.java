@@ -1,6 +1,6 @@
 package supersymmetry.common.entities;
 
-import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
+import static supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint.INSTRUMENTS_KEY;
 
 import java.util.Arrays;
 

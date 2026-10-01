@@ -1,5 +1,7 @@
 package supersymmetry.api.rocketry;
 
+import java.util.List;
+
 /**
  * Choked-flow model for the de Laval nozzles players build out of blocks.
  * <p>
@@ -311,5 +313,22 @@ public final class NozzleFlow {
      */
     public static double nozzleEfficiency(double areaRatio, double chamberPressure, double ambientPressure) {
         return thrustCoefficient(areaRatio, chamberPressure, ambientPressure) / REFERENCE_THRUST_COEFFICIENT;
+    }
+
+    public static double areaRatio(List<Integer> stations) {
+        return (double) stations.get(stations.size() - 1) / stations.get(0);
+    }
+
+    public static boolean widensMonotonically(List<Integer> stations) {
+        for (int i = 1; i < stations.size(); i++) {
+            if (stations.get(i) < stations.get(i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int stationArea(int airBlocks, double welzlRadius) {
+        return (int) (airBlocks + welzlRadius * Math.PI);
     }
 }

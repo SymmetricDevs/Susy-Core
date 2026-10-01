@@ -84,8 +84,11 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
 
     public void changeSignal(int delta) {
         if (this.getController() != null && this.getController() instanceof IRedstoneControllable controllable) {
-
-            int newsig = Math.floorMod(this.signal + delta, controllable.getSignalCeiling() + 1);
+            int ceiling = controllable.getSignalCeiling();
+            if (ceiling < 0) {
+                return;
+            }
+            int newsig = Math.floorMod(this.signal + delta, ceiling + 1);
             if (newsig != this.signal && newsig >= 0) {
                 this.writeCustomData(UPDATE_REDSTONE_SIGNAL, (buf) -> {
                     buf.writeInt(newsig);

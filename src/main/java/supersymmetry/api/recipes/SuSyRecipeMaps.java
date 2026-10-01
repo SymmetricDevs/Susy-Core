@@ -668,30 +668,35 @@ public class SuSyRecipeMaps {
                 recipeBuilder.material("Silicon Carbide");
             }
 
-            int totalTemperature = 0;
-            for (GTRecipeInput recipeInput : recipeBuilder.getInputs()) {
-                for (ItemStack input : recipeInput.getInputStacks()) {
-                    if (OreDictUnifier.getPrefix(input) != OrePrefix.dust &&
-                            OreDictUnifier.getPrefix(input) != OrePrefix.ingot)
-                        continue;
+            int duration = recipeBuilder.getDuration();
 
-                    MaterialStack matStack = OreDictUnifier.getMaterial(input);
-                    if (matStack == null || matStack.material == null ||
-                            !matStack.material.hasProperty(PropertyKey.FLUID))
-                        continue;
+            if (duration == 0) {
+                int totalTemperature = 0;
 
-                    int temperature = matStack.material.getFluid().getTemperature();
-                    int amount = input.getCount();
+                for (GTRecipeInput recipeInput : recipeBuilder.getInputs()) {
+                    for (ItemStack input : recipeInput.getInputStacks()) {
+                        if (OreDictUnifier.getPrefix(input) != OrePrefix.dust &&
+                                OreDictUnifier.getPrefix(input) != OrePrefix.ingot)
+                            continue;
 
-                    totalTemperature += temperature * amount;
+                        MaterialStack matStack = OreDictUnifier.getMaterial(input);
+                        if (matStack == null || matStack.material == null ||
+                                !matStack.material.hasProperty(PropertyKey.FLUID))
+                            continue;
 
-                    break;
+                        int temperature = matStack.material.getFluid().getTemperature();
+                        int amount = input.getCount();
+
+                        totalTemperature += temperature * amount;
+
+                        break;
+                    }
                 }
+
+                int dura = totalTemperature / 64;
+
+                recipeBuilder.duration(dura);
             }
-
-            int duration = totalTemperature / 64;
-
-            recipeBuilder.duration(duration);
         });
     }
 }

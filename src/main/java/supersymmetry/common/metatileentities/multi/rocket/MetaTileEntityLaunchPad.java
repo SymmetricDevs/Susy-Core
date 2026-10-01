@@ -65,6 +65,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.metatileentity.IAnimatableMTE;
 import supersymmetry.api.metatileentity.IRocketFueler;
@@ -356,10 +357,10 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                     break;
                 }
                 if (checkErector() && selectedErector.isRocketLoaded()) {
-                    this.setLaunchPadState(LaunchPadState.LOADING);
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.UP);
                 }
                 this.setLaunchPadState(LaunchPadState.EMPTY);
+                return;
             case EMPTY:
                 if (this.getOffsetTimer() % 5 == 0) {
                     updateSelectedErector();
@@ -397,7 +398,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                     this.selectedErector.setLiftingMode(EntityTransporterErector.LiftingMode.DOWN);
                 }
                 if (this.getOffsetTimer() % 4 == 0) {
-                    setConfigWithinBudget(this.configurerSlot.program(this.selectedRocket));
+                    setConfigWithinBudget(this.configurerSlot.program(getWorld().provider.getDimension(),
+                            this.selectedRocket.getEntityData()));
                 }
                 if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
                     break;
@@ -413,41 +415,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                 }
                 if (selectedRocket.isLaunched() && selectedRocket.posY - getLaunchPosition().y < 40 &&
                         selectedRocket.ticksExisted % 5 == 0) {
-
-                    net.minecraft.util.math.AxisAlignedBB searchBox = new net.minecraft.util.math.AxisAlignedBB(
-                            getLaunchPosition().x - 50, getLaunchPosition().y - 50,
-                            getLaunchPosition().z - 50,
-                            getLaunchPosition().x + 50, getLaunchPosition().y + 50,
-                            getLaunchPosition().z + 50);
-
-                    List<EntityLivingBase> entities = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class,
-                            searchBox);
-
-                    for (EntityLivingBase entity : entities) {
-                        if (!(entity instanceof EntityAbstractRocket ||
-                                entity.getRidingEntity() instanceof EntityAbstractRocket)) {
-                            float damage = (float) (100000 /
-                                    Math.pow(getLaunchPosition().distanceTo(entity.getPositionVector()), 3));
-                            if (damage >= 0.8) {
-                                entity.attackEntityFrom(SuSyDamageSources.ROCKET_EXHAUST, damage);
-                            }
-                        }
-                    }
-
-                    net.minecraft.util.math.AxisAlignedBB trainDamageBox = new net.minecraft.util.math.AxisAlignedBB(
-                            getLaunchPosition().x - 18, getLaunchPosition().y - 18,
-                            getLaunchPosition().z - 18,
-                            getLaunchPosition().x + 18, getLaunchPosition().y + 18,
-                            getLaunchPosition().z + 18);
-
-                    List<ModdedEntity> trains = getWorld().getEntitiesWithinAABB(ModdedEntity.class, trainDamageBox);
-
-                    if (!trains.isEmpty()) {
-                        for (ModdedEntity forgeTrainEntity : trains) {
-                            forgeTrainEntity.attackEntityFrom(DamageSource.causeExplosionDamage(selectedRocket), 20f);
-                        }
-                    }
-
+                    damageEntitiesNearExhaust();
                 }
                 this.supportAngle = Math.max(Math.PI / 4, this.supportAngle - (0.087 / 20));
                 if (this.supportAngle <= Math.PI / 4 && !this.selectedRocket.isCountdownStarted()) {
@@ -457,6 +425,32 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                     this.setLaunchPadState(LaunchPadState.EMPTY);
                 }
                 break;
+        }
+    }
+
+    private void damageEntitiesNearExhaust() {
+        Vec3d launch = getLaunchPosition();
+        AxisAlignedBB searchBox = new AxisAlignedBB(launch.x - 50, launch.y - 50, launch.z - 50, launch.x + 50,
+                launch.y + 50, launch.z + 50);
+
+        for (EntityLivingBase entity : this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, searchBox)) {
+            if (entity instanceof EntityAbstractRocket || entity.getRidingEntity() instanceof EntityAbstractRocket) {
+                continue;
+            }
+            double distance = launch.distanceTo(entity.getPositionVector());
+            if (distance <= 0) {
+                continue;
+            }
+            float damage = (float) (100000 / Math.pow(distance, 3));
+            if (damage >= 0.8) {
+                entity.attackEntityFrom(SuSyDamageSources.ROCKET_EXHAUST, damage);
+            }
+        }
+
+        AxisAlignedBB trainDamageBox = new AxisAlignedBB(launch.x - 18, launch.y - 18, launch.z - 18, launch.x + 18,
+                launch.y + 18, launch.z + 18);
+        for (ModdedEntity train : getWorld().getEntitiesWithinAABB(ModdedEntity.class, trainDamageBox)) {
+            train.attackEntityFrom(DamageSource.causeExplosionDamage(selectedRocket), 20f);
         }
     }
 
@@ -485,18 +479,17 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
             selectedRocket.setFuel(fuelEntry);
         }
         var composition = fuelEntry.getComposition();
-        // Round up for the composition
         int totalMBPerUnit = composition.stream().mapToInt(Tuple::getSecond).sum();
-        int maxFuelingProgress = selectedRocket.getFuelVolume() + totalMBPerUnit - 1;
-        int unitsDrained = Math.min(maxFuelingProgress - this.fuelingProgress, MAX_FUELING_SPEED / totalMBPerUnit);
+        if (totalMBPerUnit <= 0)
+            return false;
+        int remaining = selectedRocket.getFuelVolume() + totalMBPerUnit - 1 - this.fuelingProgress;
+        int unitsDrained = Math.min(remaining / totalMBPerUnit, MAX_FUELING_SPEED / totalMBPerUnit);
         for (var comp : composition) {
-            FluidStack tryToDrain = new FluidStack(comp.getFirst(), MAX_FUELING_SPEED);
-            FluidStack drained = inputFluidInventory.drain(tryToDrain, false);
+            FluidStack drained = inputFluidInventory.drain(new FluidStack(comp.getFirst(), MAX_FUELING_SPEED),
+                    false);
+            if (drained == null)
+                return false;
             // Intentional integer division moment
-            if (drained == null) {
-                unitsDrained = 0;
-                break;
-            }
             unitsDrained = Math.min(drained.amount / comp.getSecond(), unitsDrained);
         }
         setFuelingProgress(this.fuelingProgress + (unitsDrained * totalMBPerUnit));
@@ -526,11 +519,6 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
             this.configWithinBudget = withinBudget;
             writeCustomData(SuSyDataCodes.UPDATE_CAN_HANDLE_FULL_CONFIG, (buf) -> buf.writeBoolean(withinBudget));
         }
-    }
-
-    @Override
-    protected void initializeInventory() {
-        super.initializeInventory();
     }
 
     @Override
@@ -587,9 +575,19 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        this.state = LaunchPadState.valueOf(data.getString("state"));
+        this.state = readLaunchPadState(data);
         this.fuelingProgress = data.getInteger("fuelingProgress");
         this.configurerSlot.deserializeNBT(data.getCompoundTag("configurer"));
+    }
+
+    private static LaunchPadState readLaunchPadState(NBTTagCompound data) {
+        try {
+            return LaunchPadState.valueOf(data.getString("state"));
+        } catch (IllegalArgumentException e) {
+            SusyLog.logger.warn("unknown launch pad state {}. full nbt:\n{}", data.getString("state"),
+                    data);
+            return LaunchPadState.EMPTY;
+        }
     }
 
     @Override
@@ -801,9 +799,8 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
         if (!playerIn.world.isRemote && this.state == LaunchPadState.EMPTY && playerIn.isCreative() &&
                 playerIn.getHeldItem(hand).isItemEqual(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm())) {
             NBTTagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
-            if (tag != null) {
-                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-                bp.readFromNBT(tag);
+            AbstractRocketBlueprint bp = tag != null ? AbstractRocketBlueprint.fromTag(tag) : null;
+            if (bp != null) {
                 NBTTagCompound rocketTag = new NBTTagCompound();
                 rocketTag.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
                 rocketTag.setTag("rocket", bp.writeToNBT());

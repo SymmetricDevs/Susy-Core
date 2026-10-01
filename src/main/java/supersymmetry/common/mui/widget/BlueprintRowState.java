@@ -1,14 +1,16 @@
 package supersymmetry.common.mui.widget;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+
+import org.jetbrains.annotations.Nullable;
 
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.util.DataStorageLoader;
@@ -29,6 +31,10 @@ public class BlueprintRowState {
         return validMultiplierValues[multiplierIndex];
     }
 
+    public void setMultiplierIndex(int index) {
+        multiplierIndex = (index >= 0 && index < validMultiplierValues.length) ? index : 0;
+    }
+
     /**
      * Returns null on INVALID_CARD; empty list is a legitimate "no components"
      * result.
@@ -37,28 +43,23 @@ public class BlueprintRowState {
         if (shortView) {
             ItemStack firstItem = slots.isEmpty() ? ItemStack.EMPTY : slots.get(0).getStackInSlot(0);
             NBTTagCompound firstnbt = firstItem.hasTagCompound() ? firstItem.getTagCompound() : null;
-            if (firstnbt == null || !firstnbt.hasKey("name"))
+            if (firstnbt == null || !firstnbt.hasKey("name")) {
                 return null;
-            AbstractComponent<?> proto = AbstractComponent.getComponentFromName(firstnbt.getString("name"));
-            if (proto == null)
+            }
+            AbstractComponent<?> component = componentFrom(firstnbt);
+            if (component == null) {
                 return null;
-            Optional<?> templateOpt = proto.readFromNBT(firstnbt);
-            if (!templateOpt.isPresent())
-                return null;
-            @SuppressWarnings("unchecked")
-            AbstractComponent<?> template = (AbstractComponent<?>) templateOpt.get();
-            int count = validMultiplierValues[multiplierIndex];
-            return Stream.generate(() -> template).limit(count).collect(Collectors.toList());
-        } else {
-            return slots.stream().map(s -> s.getStackInSlot(0)).filter(ItemStack::hasTagCompound)
-                    .map(ItemStack::getTagCompound).filter(t -> t.hasKey("name")).map(t -> {
-                        AbstractComponent<?> proto = AbstractComponent.getComponentFromName(t.getString("name"));
-                        if (proto == null)
-                            return Optional.<AbstractComponent<?>>empty();
-                        return proto.readFromNBT(t);
-                    }).filter(Optional::isPresent).map(opt -> (AbstractComponent<?>) opt.get())
-                    .collect(Collectors.toList());
+            }
+            return IntStream.range(0, getMultiplier()).mapToObj(i -> component).collect(Collectors.toList());
         }
+        return slots.stream().map(s -> s.getStackInSlot(0)).filter(ItemStack::hasTagCompound)
+                .map(ItemStack::getTagCompound).filter(t -> t.hasKey("name")).map(this::componentFrom)
+                .filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    @Nullable private AbstractComponent<?> componentFrom(NBTTagCompound tag) {
+        AbstractComponent<?> proto = AbstractComponent.getComponentFromName(tag.getString("name"));
+        return proto == null ? null : proto.readFromNBT(tag).orElse(null);
     }
 
     public NBTTagCompound writeStateToNBT() {

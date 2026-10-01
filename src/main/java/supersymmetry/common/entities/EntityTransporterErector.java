@@ -186,11 +186,12 @@ public class EntityTransporterErector extends Freight implements IAlwaysRender {
                 .is(new ItemStack(SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.getStackForm()))) {
             TagCompound tag = playerIn.getHeldItem(hand).getTagCompound();
             if (tag != null) {
-                AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-                bp.readFromNBT(tag.internal);
-                this.rocketNBT.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
-                this.rocketNBT.internal.setTag("rocket", bp.writeToNBT());
-                this.setRocketLoaded(true);
+                AbstractRocketBlueprint bp = AbstractRocketBlueprint.fromTag(tag.internal);
+                if (bp != null) {
+                    this.rocketNBT.setLong("assemblerPosition", BlockPos.ORIGIN.toLong());
+                    this.rocketNBT.internal.setTag("rocket", bp.writeToNBT());
+                    this.setRocketLoaded(true);
+                }
             }
         }
         return super.onClick(playerIn, hand);

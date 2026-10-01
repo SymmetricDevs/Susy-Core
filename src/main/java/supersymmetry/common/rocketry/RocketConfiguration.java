@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
 import supersymmetry.api.space.Planetoid;
+import supersymmetry.common.entities.EntityAbstractRocket;
 
 /*
  * Treat this class like a record.
@@ -85,6 +86,10 @@ public class RocketConfiguration {
     public RocketConfiguration(List<MissionConfiguration> config) {
         this.missions.addAll(config);
         turnAltitude = 0;
+    }
+
+    public void applyTo(NBTTagCompound rocketData) {
+        rocketData.setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, serialize());
     }
 
     public NBTTagCompound serialize() {

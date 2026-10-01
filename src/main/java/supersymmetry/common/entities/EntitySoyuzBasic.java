@@ -106,10 +106,11 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
             return;
         }
         if (!world.isRemote) {
-            if (this.getEntityData().hasKey("rocket")) {
-                NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
-                AbstractRocketBlueprint blueprint = AbstractRocketBlueprint.getCopyOf(rocketNBT.getString("name"));
-                blueprint.readFromNBT(rocketNBT);
+            NBTTagCompound rocketNBT = this.getEntityData().getCompoundTag("rocket");
+            AbstractRocketBlueprint blueprint = getBlueprint();
+            if (blueprint == null) {
+                this.setLaunchResult(LaunchResult.EXPLODES);
+            } else {
                 BlockPos assemblerPosition = BlockPos.fromLong(this.getEntityData().getLong("assemblerPosition"));
                 if (!assemblerPosition.equals(BlockPos.NULL_VECTOR) &&
                         this.getPosition().distanceSq(assemblerPosition) < 100) {
@@ -124,8 +125,6 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
                         this.setLaunchResult(LaunchResult.LAUNCHES);
                     }
                 }
-            } else {
-                this.setLaunchResult(LaunchResult.EXPLODES);
             }
         }
         super.launchRocket();

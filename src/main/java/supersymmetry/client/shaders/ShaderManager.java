@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL43;
 
 import codechicken.lib.render.shader.ShaderObject;
 import codechicken.lib.render.shader.ShaderProgram;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 
@@ -36,7 +37,7 @@ public class ShaderManager {
     public static ShaderObject COMPOSITE_F;
 
     private static final Map<ShaderObject, ShaderProgram> FULL_IMAGE_PROGRAMS = new HashMap<>();
-    private static final Map<String, Integer> RAW_PROGRAM_CACHE = new HashMap<>();
+    private static final Object2IntOpenHashMap<String> RAW_PROGRAM_CACHE = new Object2IntOpenHashMap<>();
     private static boolean initialised = false;
     private static BooleanSupplier isShaderPackLoaded;
 

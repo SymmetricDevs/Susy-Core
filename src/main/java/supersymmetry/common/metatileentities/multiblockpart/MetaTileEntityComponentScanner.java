@@ -114,7 +114,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
         AxisAlignedBB interior = linkedCleanroom.getInteriorBB();
-        int solidBlocks = 0;
         ArrayList<BlockPos> blockList = struct.getBlocks(getWorld(), interior, true);
 
         if (blockList == null) { // error propagated
@@ -125,7 +124,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
         }
 
         scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4;
-        // 5 being the minimum value
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -136,17 +134,17 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        detectComponents(blockList);
+        detectComponents(blockList, interior);
         // if it wasnt changed after scanning, nothing matched
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
         }
     }
 
-    public void detectComponents(ArrayList<BlockPos> blockList) {
+    public void detectComponents(ArrayList<BlockPos> blockList, AxisAlignedBB interior) {
         for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
             if (component.getDetectionPredicate().test(new Tuple<>(struct, blockList))) {
-                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
+                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, interior);
                 if (scanResult.isPresent()) {
                     if (scanResult.get().hasKey("errorPos")) {
                         this.errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));

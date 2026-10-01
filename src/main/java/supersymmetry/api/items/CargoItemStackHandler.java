@@ -226,10 +226,9 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         }
 
         // deliberately set masses should override the generated ones, but still take fluids into account
-        if (ItemMassRegistry.getMass(item) != null) {
-            if (ItemMassRegistry.getMass(item) != 0) {
-                currentMass = ItemMassRegistry.getMass(item);
-            }
+        int mass = ItemMassRegistry.getMass(item);
+        if (mass != 0) {
+            currentMass = mass;
         }
 
         NBTTagCompound tag = item.getTagCompound();

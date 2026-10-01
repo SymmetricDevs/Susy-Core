@@ -468,6 +468,10 @@ public class StructAnalysis {
         return computeMinimalRadius(points);
     }
 
+    public static boolean isVaguelyCircular(Collection<BlockPos> airLayer, double welzlRadius, double tolerance) {
+        return Math.pow(welzlRadius, 2) * Math.PI - tolerance <= airLayer.size();
+    }
+
     public int getHeight(Collection<BlockPos> blocks) {
         // Get max and min at same time
         int min = Integer.MAX_VALUE;

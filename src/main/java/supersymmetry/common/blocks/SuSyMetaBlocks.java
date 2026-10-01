@@ -29,7 +29,6 @@ import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.client.model.SimpleStateMapper;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.val;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -40,7 +39,7 @@ public class SuSyMetaBlocks {
 
     public static final Map<Material, BlockSheetedFrame> SHEETED_FRAMES = new HashMap<>();
     public static final List<BlockSheetedFrame> SHEETED_FRAME_BLOCKS = new ArrayList<>();
-    public static final Map<String, BlockTanklessFluidPipe[]> TANKLESS_FLUID_PIPES = new Object2ObjectOpenHashMap<>();
+    public static final Map<String, BlockTanklessFluidPipe[]> TANKLESS_FLUID_PIPES = new HashMap<>();
 
     public SuSyMetaBlocks() {}
 
@@ -127,7 +126,8 @@ public class SuSyMetaBlocks {
         for (IBlockState state : block.getBlockState().getValidStates()) {
             if (!condition.test(state))
                 continue;
-            HashMap<IProperty<?>, Comparable<?>> stringProperties = new HashMap<>(state.getProperties());
+            HashMap<IProperty<?>, Comparable<?>> stringProperties = new HashMap<>(
+                    state.getProperties());
             stringProperties.putAll(stateOverrides);
             // noinspection ConstantConditions
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), block.getMetaFromState(state),
