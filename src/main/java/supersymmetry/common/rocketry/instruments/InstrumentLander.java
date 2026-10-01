@@ -33,7 +33,6 @@ public class InstrumentLander implements Instrument {
         int i = 0;
         List<Entity> passengersQueued = new ArrayList<>();
         for (Entity passenger : rocket.getPassengers()) {
-            i++;
             if (EventHandlers.isEntityTravelling(passenger))
                 continue;
             if (i > count)

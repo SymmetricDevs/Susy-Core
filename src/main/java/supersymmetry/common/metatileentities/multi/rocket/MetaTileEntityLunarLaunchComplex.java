@@ -504,7 +504,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
             ItemStack stack = imports.getStackInSlot(i);
             if (stack.isEmpty())
                 continue;
-            imports.setStackInSlot(i, ItemHandlerHelper.insertItemStacked(cargo, stack, false));
+            imports.setStackInSlot(i, cargo.insertItem(0, stack, false));
         }
     }
 

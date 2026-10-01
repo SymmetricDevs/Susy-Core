@@ -140,7 +140,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
 
     public CargoItemStackHandler(int maxVolume, int maxWeight) {
         this.maxVolume = maxVolume;
-        this.maxWeight = maxWeight;
+        this.maxWeight = Math.min(maxWeight, 128); // sorry
     }
 
     @Override
