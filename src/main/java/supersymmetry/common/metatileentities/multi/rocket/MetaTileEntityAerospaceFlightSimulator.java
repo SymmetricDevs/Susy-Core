@@ -432,7 +432,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
             FluidStack toDrain = new FluidStack(fluid, 1000);
             FluidStack drained = fluidInputs.drain(toDrain, false);
             if (drained != null && drained.amount != 0) {
-                if (drained.amount == 100) {
+                if (drained.amount == 1000) {
                     World world = this.getWorld();
                     BlockPos pos = toFill.get(0);
                     if (world.isBlockLoaded(pos) &&
