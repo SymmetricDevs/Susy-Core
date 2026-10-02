@@ -429,7 +429,7 @@ public class MetaTileEntityAerospaceFlightSimulator extends MultiblockWithDispla
 
     public void fillCoolant(List<BlockPos> toFill, Fluid fluid, IMultipleTankHandler fluidInputs) {
         if (fluidInputs != null) {
-            FluidStack toDrain = new FluidStack(fluid, 100);
+            FluidStack toDrain = new FluidStack(fluid, 1000);
             FluidStack drained = fluidInputs.drain(toDrain, false);
             if (drained != null && drained.amount != 0) {
                 if (drained.amount == 100) {
