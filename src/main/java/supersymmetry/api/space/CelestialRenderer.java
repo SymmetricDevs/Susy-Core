@@ -1,6 +1,7 @@
 package supersymmetry.api.space;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,9 @@ public class CelestialRenderer extends IRenderHandler {
 
         Map<CelestialObject, Vec3d> positions = computeAllPositions(candidates, worldTime);
 
+        candidates.sort(Comparator.comparingDouble((CelestialObject body) -> positions.get(body)
+                .subtract(viewerPos).length()).reversed());
+
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.disableFog();
         GlStateManager.disableLighting();
@@ -104,17 +108,17 @@ public class CelestialRenderer extends IRenderHandler {
             if (renderer == null) continue;
 
             Vec3d bodyPos = positions.get(body);
-            Vec3d relative = bodyPos.subtract(viewerPos);
-            double distAU = relative.length();
+            Vec3d rawRelative = bodyPos.subtract(viewerPos);
+            double distAU = rawRelative.length();
             if (distAU < 1e-15) continue;
 
-            if (spinAxis != null) relative = Orbit.rotateAboutAxis(relative, spinAxis, spinAngle);
+            Vec3d relative = spinAxis != null ? Orbit.rotateAboutAxis(rawRelative, spinAxis, spinAngle) : rawRelative;
             Vec3d mcDir = Orbit.normalizeSafe(Orbit.rotateToLocalFrame(relative, localUp));
             if (mcDir.lengthSquared() < 1e-12) continue;
 
             Vec3d lookVec = mc.player.getLook(partialTicks);
             if (mcDir.dotProduct(lookVec) < -0.1) continue;
-            if (isOccludedBySphere(viewerPos, relative, body, positions, candidates)) continue;
+            if (isOccludedBySphere(viewerPos, rawRelative, body, positions, candidates)) continue;
 
             double bodyRadiusAU = body.getRadiusAU();
             double angularRatio = Math.min(1.0, bodyRadiusAU / distAU);
