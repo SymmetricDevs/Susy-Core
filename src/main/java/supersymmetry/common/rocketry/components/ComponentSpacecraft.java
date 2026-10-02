@@ -93,22 +93,26 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         tag.setDouble("collectionEfficiency", this.collectionEfficiency);
         tag.setDouble("redundancy", this.redundancy);
         NBTTagCompound instrumentsTag = new NBTTagCompound();
-        NBTTagCompound partsTag = new NBTTagCompound();
-        for (Entry<String, Integer> part : this.parts.entrySet()) {
-            partsTag.setInteger(part.getKey(), part.getValue());
-        }
         for (Entry<String, Integer> instrument : this.instruments.entrySet()) {
             instrumentsTag.setInteger(instrument.getKey(), instrument.getValue());
         }
         tag.setTag(INSTRUMENTS_KEY, instrumentsTag);
-        tag.setTag(PARTS_KEY, partsTag);
+        tag.setTag(PARTS_KEY, partsTag());
+    }
+
+    private NBTTagCompound partsTag() {
+        NBTTagCompound partsTag = new NBTTagCompound();
+        for (Entry<String, Integer> part : this.parts.entrySet()) {
+            partsTag.setInteger(part.getKey(), part.getValue());
+        }
+        return partsTag;
     }
 
     @Override
     public Optional<ComponentSpacecraft> readFromNBT(NBTTagCompound compound) {
         if (!compound.hasKey("hasAir") ||
                 (!compound.hasKey("volume", NBT.TAG_DOUBLE) && !compound.hasKey("volume", NBT.TAG_INT)) ||
-                !compound.hasKey(PARTS_KEY, NBT.TAG_COMPOUND) || !compound.hasKey(INSTRUMENTS_KEY, NBT.TAG_COMPOUND) ||
+                !compound.hasKey(INSTRUMENTS_KEY, NBT.TAG_COMPOUND) ||
                 !compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE) ||
                 !compound.hasKey("redundancy", NBT.TAG_DOUBLE)) {
             return Optional.empty();
@@ -347,16 +351,11 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setString("type", type);
-        tag.setString("name", name);
         tag.setDouble("radius", radius);
-        double mass = blocksConnected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
-        tag.setDouble("mass", mass);
+        collectInfo(analysis, blocksConnected, tag);
         tag.setDouble("collectionEfficiency", collectionEfficiency);
         tag.setDouble("redundancy", redundancy);
-        this.mass = mass;
-        writeBlocksToNBT(blocksConnected, analysis.world, tag);
+        tag.setTag(PARTS_KEY, partsTag());
         return Optional.of(tag);
     }
 
