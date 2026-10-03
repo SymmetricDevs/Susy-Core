@@ -401,7 +401,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                     setConfigWithinBudget(this.configurerSlot.program(getWorld().provider.getDimension(),
                             this.selectedRocket.getEntityData()));
                 }
-                if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0) {
+                if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0 || this.selectedRocket.canStartCountdown()) {
                     break;
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);

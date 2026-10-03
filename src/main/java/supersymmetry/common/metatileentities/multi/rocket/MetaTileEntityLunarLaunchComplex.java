@@ -346,7 +346,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                     setConfigWithinBudget(this.configurerSlot.program(getWorld().provider.getDimension(),
                             this.selectedRocket.getEntityData()));
                 }
-                if (!loadCargo() || !isLaunchAuthorized()) {
+                if (!loadCargo() || !isLaunchAuthorized() || !this.selectedRocket.canStartCountdown()) {
                     break;
                 }
                 setComplexState(LaunchComplexState.LAUNCHING);

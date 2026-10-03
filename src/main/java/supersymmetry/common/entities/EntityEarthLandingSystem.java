@@ -164,7 +164,7 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
     protected void act() {}
 
     @Override
-    protected boolean canStartCountdown() {
+    public boolean canStartCountdown() {
         if (InstrumentLander.getNextLanderConfig(this.getRocketConfiguration()) == null) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {

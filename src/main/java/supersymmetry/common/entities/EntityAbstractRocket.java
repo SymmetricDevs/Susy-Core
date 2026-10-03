@@ -135,7 +135,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.setStartPos((float) this.posY);
     }
 
-    protected boolean canStartCountdown() {
+    public boolean canStartCountdown() {
         return true;
     }
 

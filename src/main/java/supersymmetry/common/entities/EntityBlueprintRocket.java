@@ -427,8 +427,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         return new AxisAlignedBB(radius, getRocketHeight(), radius, -radius, 0, -radius);
     }
 
-    protected boolean canStartCountdown() {
-        return fueler != null && fueler.isFuelingComplete();
+    public boolean canStartCountdown() {
+        return fueler != null && fueler.isFuelingComplete() && !this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY).isEmpty();
     }
 
     @Override
