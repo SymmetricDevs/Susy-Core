@@ -41,7 +41,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return slot == 0 && acceptableTypes.test(stack);
+        return slot == 0 && !locked && acceptableTypes.test(stack);
     }
 
     @Override
@@ -76,6 +76,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
                 dataStorage = stack.copy();
                 dataStorage.setCount(1);
                 parsed = false;
+                onContentsChanged(0);
             }
             return ret;
         }
@@ -90,6 +91,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
             if (!simulate) {
                 dataStorage = ItemStack.EMPTY;
                 parsed = false;
+                onContentsChanged(0);
             }
             return ret;
         }
@@ -119,6 +121,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
         if (dataStorage.hasTagCompound()) {
             dataStorage.setTagCompound(new NBTTagCompound());
             parsed = false;
+            onContentsChanged(0);
         }
     }
 
@@ -128,6 +131,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
         }
         dataStorage.setTagCompound(consumer.apply(dataStorage.getTagCompound()));
         parsed = false;
+        onContentsChanged(0);
     }
 
     public void mutateItem(String key, String value) {
@@ -136,6 +140,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
         }
         dataStorage.getTagCompound().setTag(key, new NBTTagString(value)); // do not worry about warning
         parsed = false;
+        onContentsChanged(0);
     }
 
     public void setImageType(int id) {
@@ -144,6 +149,7 @@ public class DataStorageLoader extends NotifiableItemStackHandler {
         }
         dataStorage.setItemDamage(id);
         parsed = false;
+        mte.markDirty();
     }
 
     @Override

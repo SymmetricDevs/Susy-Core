@@ -198,6 +198,10 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             return Optional.empty();
         }
 
+        if (gasGens.isEmpty()) {
+            analysis.status = BuildStat.NO_GAS_GEN;
+            return Optional.empty();
+        }
         IBlockState gasGen = analysis.world.getBlockState(gasGens.stream().toList().getFirst());
         double gasGenEfficiency = (SuSyBlocks.ROCKET_ENGINE_GAS_GENERATOR.getState(gasGen)).getEfficiency();
 

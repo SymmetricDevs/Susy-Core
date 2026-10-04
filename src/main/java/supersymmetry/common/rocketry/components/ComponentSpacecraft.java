@@ -356,9 +356,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
+        this.radius = analysis.getRadius(blocksConnected);
         collectInfo(analysis, blocksConnected, tag);
-        tag.setDouble("collectionEfficiency", collectionEfficiency);
-        tag.setDouble("redundancy", redundancy);
+        tag.setDouble("collectionEfficiency", this.collectionEfficiency);
+        tag.setDouble("redundancy", this.redundancy);
         tag.setTag(PARTS_KEY, partsTag());
         return Optional.of(tag);
     }

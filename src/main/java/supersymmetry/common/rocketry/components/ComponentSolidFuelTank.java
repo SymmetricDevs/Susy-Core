@@ -169,6 +169,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
         int calculatedHeight = (int) (analysis.getBB(blocks).maxY - analysis.getBB(blocks).minY);
         if (calculatedHeight < radius * 2) {
             analysis.status = StructAnalysis.BuildStat.TOO_SHORT;
+            return Optional.empty();
         }
         NBTTagCompound tag = new NBTTagCompound();
 

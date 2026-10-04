@@ -35,7 +35,7 @@ public class RocketStage implements Cloneable {
 
         public Builder type(String name) {
             lastComponentName = name;
-            compLimit.put(lastComponentName, new ArrayList<>());
+            compLimit.computeIfAbsent(lastComponentName, k -> new ArrayList<>());
             return this;
         }
 
@@ -320,6 +320,11 @@ public class RocketStage implements Cloneable {
                         Arrays.toString(limits.get(entry.getKey())), tag);
                 return false;
             }
+        }
+
+        if (limits.values().stream().anyMatch(arr -> arr.length == 0)) {
+            SusyLog.logger.error("stage {} has an empty limit array: {}", stageName, limits);
+            return false;
         }
 
         this.componentLimits.clear();

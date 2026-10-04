@@ -111,6 +111,10 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         }
 
         // Checks if all connectors are facing the same plane
+        if (connectorBlocks.isEmpty()) {
+            analysis.status = BuildStat.WEIRD_FAIRING;
+            return Optional.empty();
+        }
         BlockPos next = connectorBlocks.iterator().next();
         BlockPos start = next;
         EnumFacing dir = world.getBlockState(next).getValue(FACING);

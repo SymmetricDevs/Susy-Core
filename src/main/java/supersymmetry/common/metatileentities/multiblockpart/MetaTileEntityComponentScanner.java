@@ -195,8 +195,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     @Override
     public void setCleanroom(ICleanroomProvider iCleanroomProvider) {
-        if (iCleanroomProvider instanceof MetaTileEntityBuildingCleanroom)
-            linkedCleanroom = (MetaTileEntityBuildingCleanroom) iCleanroomProvider;
+        linkedCleanroom = iCleanroomProvider instanceof MetaTileEntityBuildingCleanroom cleanroom ? cleanroom : null;
     }
 
     @Override
@@ -348,7 +347,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     protected void addDisplayText(List<ITextComponent> textList) {
         MultiblockDisplayText.builder(textList, this.getCleanroom() != null)
                 .setWorkingStatus(this.isWorkingEnabled(), this.isActive())
-                .addEnergyUsageLine(linkedCleanroom.getEnergyContainer()).addCustom((tl) -> {
+                .addEnergyUsageLine(linkedCleanroom == null ? null : linkedCleanroom.getEnergyContainer())
+                .addCustom((tl) -> {
                     if (linkedCleanroom != null) {
                         TextComponentTranslation cleanState;
                         if (scannerLogic.isActive() || struct.status == BuildStat.SCANNING) {
