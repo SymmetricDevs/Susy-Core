@@ -71,8 +71,7 @@ public class SusyRocketComponents {
                         .type("tank").limit(2).type("interstage").limit(1).build())
                 .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
-                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
-                        .type("tank").limit(1).build())
+                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .componentValidationFunction(fairingCheck).build();
 
