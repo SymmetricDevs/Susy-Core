@@ -1,6 +1,7 @@
 package supersymmetry.common.blocks;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -40,8 +41,8 @@ public class BlockMercuryFluid extends GTFluidBlock {
 
     private static Material m = Materials.Mercury;
 
-    private static final Map<ResourceLocation, IBlockState> REPLACEMENTS = DefoliatorReplacements.getReplacements();
-    private static final Map<String, IBlockState> META_REPLACEMENTS = DefoliatorReplacements.getMetaReplacements();
+    private static final Map<ResourceLocation, IBlockState> REPLACEMENTS = buildReplacements();
+    private static final Map<String, IBlockState> META_REPLACEMENTS = buildMetaReplacements();
 
     static {
         m.getFluid().setDensity(13500);
@@ -160,9 +161,10 @@ public class BlockMercuryFluid extends GTFluidBlock {
     }
 
     private void poisonSurroundings(World world, BlockPos pos, Random rand) {
-        int dx = rand.nextInt(8) - rand.nextInt(8);
-        int dz = rand.nextInt(8) - rand.nextInt(8);
-        int dy = rand.nextInt(6) - rand.nextInt(2);
+        int r = rand.nextInt();
+        int dx = (r & 0xF) - 7;
+        int dz = ((r >>> 4) & 0xF) - 7;
+        int dy = ((r >>> 8) & 0x7) - 1;
 
         BlockPos target = pos.add(dx, dy, dz);
         if (target == pos) return;
@@ -191,5 +193,17 @@ public class BlockMercuryFluid extends GTFluidBlock {
             // SusyLog.logger.info(
             // "{} -> {} = {}", pos, target, replacement.getBlock().getLocalizedName());
         }
+    }
+
+    private static Map<ResourceLocation, IBlockState> buildReplacements() {
+        Map<ResourceLocation, IBlockState> map = new HashMap<>(DefoliatorReplacements.getReplacements());
+        map.remove(new ResourceLocation("minecraft", "water"));
+        return map;
+    }
+
+    private static Map<String, IBlockState> buildMetaReplacements() {
+        Map<String, IBlockState> map = new HashMap<>(DefoliatorReplacements.getMetaReplacements());
+        map.remove("biomesoplenty:coral:0");
+        return map;
     }
 }
