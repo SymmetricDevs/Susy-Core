@@ -82,7 +82,8 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
         }
         if (tag.hasKey("redundancy")) {
-            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.redundancy", "%.3f", tag.getDouble("redundancy")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.redundancy", "%.3f", tag.getDouble("redundancy")));
         }
 
         // not sure what hasAir means here so no tooltip for that

@@ -148,7 +148,7 @@ public class MetaTileEntityComponentRedstoneController extends MetaTileEntityMul
     public void updateInputRedstoneSignals() {
         super.updateInputRedstoneSignals();
         int val = this.getInputRedstoneSignal(this.frontFacing, true);
-        if (pulledUp ^ (val == 0)) { // Only one is true; they are not equal
+        if (pulledUp != (val != 0)) {
             if (val != 0) {
                 pulse();
             }

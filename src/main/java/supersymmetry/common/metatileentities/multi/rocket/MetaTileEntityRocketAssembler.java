@@ -1,5 +1,8 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
+import static gregtech.api.GTValues.EV;
+import static gregtech.api.GTValues.VA;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +68,6 @@ import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityCompon
 import supersymmetry.common.mui.widget.ItemCostWidget;
 import supersymmetry.common.mui.widget.SlotWidgetMentallyStable;
 
-import static gregtech.api.GTValues.EV;
-import static gregtech.api.GTValues.VA;
-
 public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
                                            implements
                                            IProgressBarMultiblock,
@@ -87,12 +87,12 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
 
     public MetaTileEntityRocketAssembler(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.ROCKET_ASSEMBLER);
-        signals.add(() -> {
+        signals.add("start_assembly", () -> {
             if (!this.blueprintSlot.isEmpty() && this.componentList.isEmpty()) {
                 this.startAssembly(this.getCurrentBlueprint());
             }
         });
-        signals.add(() -> {
+        signals.add("stop_assembly", () -> {
             this.abortAssembly();
         });
         this.recipeMapWorkable = new RocketAssemblerLogic(this, VA[EV], true); // <-- recipes are generated here

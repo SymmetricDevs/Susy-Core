@@ -428,7 +428,8 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
     }
 
     public boolean canStartCountdown() {
-        return fueler != null && fueler.isFuelingComplete() && !this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY).isEmpty();
+        return fueler != null && fueler.isFuelingComplete() &&
+                !this.getEntityData().getCompoundTag(EntityAbstractRocket.ROCKET_CONFIG_KEY).isEmpty();
     }
 
     @Override

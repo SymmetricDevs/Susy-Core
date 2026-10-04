@@ -64,7 +64,8 @@ public final class DimensionBreathabilityHandler {
                 }
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
                     if (AtmosphereWorldData.get(entity.getEntityWorld()).getGraph()
-                            .getOxygenation(entity.getPosition()) >= 0.1 || entity.getRidingEntity() instanceof EntityAbstractRocket) {
+                            .getOxygenation(entity.getPosition()) >= 0.1 ||
+                            entity.getRidingEntity() instanceof EntityAbstractRocket) {
                         continue;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {

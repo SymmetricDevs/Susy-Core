@@ -289,7 +289,9 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
 
             DynamicLabelWidget textWidget = new DynamicLabelWidget(0, rowSkip + ROW_SEPARATION + scrollbarPadding,
                     () -> I18n.format(localizationKey), 0xffffff) {
+
                 private String lastTextValue = "";
+
                 @SideOnly(Side.CLIENT)
                 private void updateSize() {
                     FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -310,11 +312,13 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
                     String[] split = textSupplier.get().split("\n");
                     FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
                     Position position = getPosition();
-                    int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer.getStringWidth(suppliedText);
+                    int textWidth = net.minecraft.client.Minecraft.getMinecraft().fontRenderer
+                            .getStringWidth(suppliedText);
                     int xPos = wholeWidth - textWidth - 10 + position.x;
 
                     for (int i = 0; i < split.length; i++) {
-                        fontRenderer.drawString(split[i], xPos, position.y + (i * (fontRenderer.FONT_HEIGHT + 2)), 0xffffff);
+                        fontRenderer.drawString(split[i], xPos, position.y + (i * (fontRenderer.FONT_HEIGHT + 2)),
+                                0xffffff);
                     }
                 }
             };
@@ -491,7 +495,6 @@ public class RocketStageDisplayWidget extends AbstractWidgetGroup {
             }
             selector.setActive(state);
             selector.setVisible(state);
-
         }
 
         @Override

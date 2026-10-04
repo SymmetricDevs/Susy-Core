@@ -6,8 +6,8 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 
 import org.jspecify.annotations.NonNull;
-
 import org.jspecify.annotations.Nullable;
+
 import supersymmetry.Supersymmetry;
 
 public class AtmosphereWorldData extends WorldSavedData {
