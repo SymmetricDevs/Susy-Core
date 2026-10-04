@@ -67,8 +67,6 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer ALD_OVERLAY = new OrientedOverlayRenderer("machines/ald");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/ion_implanter");
-    public static final OrientedOverlayRenderer SPIN_COATER_OVERLAY = new OrientedOverlayRenderer(
-            "machines/spin_coater");
     public static final OrientedOverlayRenderer SPUTTER_DEPOSITION_OVERLAY = new OrientedOverlayRenderer(
             "machines/sputter_deposition");
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer(
