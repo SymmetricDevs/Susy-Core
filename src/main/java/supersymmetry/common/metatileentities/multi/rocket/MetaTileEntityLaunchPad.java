@@ -402,7 +402,7 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
                             this.selectedRocket.getEntityData()));
                 }
                 if (!loadCargo() || this.getInputRedstoneSignal(this.getFrontFacing(), false) == 0 ||
-                        this.selectedRocket.canStartCountdown()) {
+                        !this.selectedRocket.canStartCountdown()) {
                     break;
                 }
                 this.setLaunchPadState(LaunchPadState.LAUNCHING);
