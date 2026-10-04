@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import supersymmetry.api.space.CelestialObjects;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
@@ -63,7 +64,7 @@ public final class DimensionBreathabilityHandler {
                 }
                 if (info.damageType == SuSyDamageSources.DEPRESSURIZATION) {
                     if (AtmosphereWorldData.get(entity.getEntityWorld()).getGraph()
-                            .getOxygenation(entity.getPosition()) >= 0.1) {
+                            .getOxygenation(entity.getPosition()) >= 0.1 || entity.getRidingEntity() instanceof EntityAbstractRocket) {
                         continue;
                     }
                 } else if (info.damageType == SuSyDamageSources.DARKNESS) {

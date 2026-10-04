@@ -26,6 +26,7 @@ import supersymmetry.api.rocketry.components.MaterialCost;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
@@ -68,6 +69,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         if (tag.hasKey("volume")) {
             lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
         }
+        if (tag.hasKey("height")) {
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.height", "%.3f", tag.getDouble("height")));
+        }
         if (tag.hasKey("hasAir") && tag.getBoolean("hasAir")) {
             lines.add(I18n.format("susy.rocketry.tooltip.life_supported"));
         } else {
@@ -78,8 +82,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
         }
         if (tag.hasKey("redundancy")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.redundancy", tag.getDouble("redundancy")));
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.redundancy", "%.3f", tag.getDouble("redundancy")));
         }
+
         // not sure what hasAir means here so no tooltip for that
         return lines;
     }
@@ -351,7 +356,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setDouble("radius", radius);
         collectInfo(analysis, blocksConnected, tag);
         tag.setDouble("collectionEfficiency", collectionEfficiency);
         tag.setDouble("redundancy", redundancy);
