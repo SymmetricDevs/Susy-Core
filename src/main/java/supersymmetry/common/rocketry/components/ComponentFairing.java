@@ -172,7 +172,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
             // Takes all orth neighbors which are blocks or are interior neighbors
             List<BlockPos> solidNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs).stream()
-                    .filter(pos -> !world.isBlockFullCube(pos)).collect(Collectors.toList());
+                    .filter(pos -> world.isBlockFullCube(pos)).collect(Collectors.toList());
             List<BlockPos> intAirNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs)
                     .stream().filter(intPartition::contains).collect(Collectors.toList());
             for (EnumFacing facing : EnumFacing.VALUES) {
