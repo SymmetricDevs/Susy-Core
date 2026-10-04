@@ -18,7 +18,8 @@ import supersymmetry.api.rocketry.AssemblyStep;
  * keep any single step's ingredient list readable.
  */
 public class RocketCostGroup implements AssemblyStep {
-    //its in ticks
+
+    // its in ticks
     public static final double DEFAULT_ASSEMBLY_DURATION = 200;
 
     private final String name;

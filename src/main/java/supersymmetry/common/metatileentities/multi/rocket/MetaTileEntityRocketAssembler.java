@@ -1,6 +1,6 @@
 package supersymmetry.common.metatileentities.multi.rocket;
 
-import static gregtech.api.GTValues.EV;
+import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class MetaTileEntityRocketAssembler extends RecipeMapMultiblockController
         signals.add("stop_assembly", () -> {
             this.abortAssembly();
         });
-        this.recipeMapWorkable = new RocketAssemblerLogic(this, VA[EV], true); // <-- recipes are generated here
+        this.recipeMapWorkable = new RocketAssemblerLogic(this, VA[LuV], true); // <-- recipes are generated here
     }
 
     @Override
