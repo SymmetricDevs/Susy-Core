@@ -31,8 +31,7 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
 
     public ComponentLiquidFuelTank() {
         super("fluid_tank", "tank", candidate -> candidate.getSecond().stream().anyMatch(
-                pos -> {Block b = candidate.getFirst().world.getBlockState(pos).getBlock();
-                    return b.equals(SuSyBlocks.TANK_SHELL) || b.equals(SuSyBlocks.TANK_SHELL1);}));
+                pos -> candidate.getFirst().world.getBlockState(pos).getBlock().equals(SuSyBlocks.TANK_SHELL)));
     }
 
     @Override
