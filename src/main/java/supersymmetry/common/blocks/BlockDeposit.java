@@ -37,7 +37,7 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
 
     @NotNull @Override
     protected ItemStack getSilkTouchDrop(@NotNull IBlockState state) {
-        return new ItemStack(Blocks.AIR, 1);
+        return this.getState(state) == ICE_CAP ? super.getSilkTouchDrop(state) : new ItemStack(Blocks.AIR, 1);
     }
 
     @NotNull @Override
@@ -49,7 +49,7 @@ public class BlockDeposit extends VariantBlock<BlockDeposit.DepositBlockType> {
     @Override
     public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
                                           float chance, int fortune) {
-        super.dropBlockAsItemWithChance(worldIn, pos, state, 0.0F, 0);
+        super.dropBlockAsItemWithChance(worldIn, pos, state, this.getState(state) == ICE_CAP ? 1F : 0.0F, 0);
     }
 
     @Deprecated
