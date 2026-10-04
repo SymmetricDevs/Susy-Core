@@ -22,13 +22,13 @@ public class SusyMetaEntities {
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "drone"), EntityDrone.class, "Drone",
                 2, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"),
-                EntitySoyuzBasic.class, "Rocket", 3, Supersymmetry.instance, 64, 3, true);
+                EntitySoyuzBasic.class, "Rocket", 3, Supersymmetry.instance, 768, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "lander"), EntityLander.class,
                 "Lander", 4, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "explosion"), EntityExplosion.class,
                 "Explosion", 5, Supersymmetry.instance, 64, 3, false);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "rocket_lunar"),
-                EntityLunarRocket.class, "Lunar Rocket", 6, Supersymmetry.instance, 64, 3, true);
+                EntityLunarRocket.class, "Lunar Rocket", 6, Supersymmetry.instance, 768, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "earth_landing_system"),
                 EntityEarthLandingSystem.class, "Earth Landing System", 7, Supersymmetry.instance, 64, 3, true);
     }
