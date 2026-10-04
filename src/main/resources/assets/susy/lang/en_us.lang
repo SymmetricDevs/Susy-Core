@@ -1052,6 +1052,15 @@ susy.machine.screen_printer.lv.name=Basic Screen Printer
 susy.machine.screen_printer.mv.name=Advanced Screen Printer
 susy.machine.screen_printer.hv.name=Advanced Screen Printer II
 susy.machine.screen_printer.ev.name=Advanced Screen Printer III
+susy.machine.screen_printer.iv.name=Elite Screen Printer
+susy.machine.screen_printer.luv.name=Elite Screen Printer II
+susy.machine.screen_printer.zpm.name=Elite Screen Printer III
+susy.machine.screen_printer.uv.name=Ultimate Screen Printer
+susy.machine.screen_printer.uhv.name=Epic Screen Printer
+susy.machine.screen_printer.uev.name=Epic Screen Printer II
+susy.machine.screen_printer.uiv.name=Epic Screen Printer III
+susy.machine.screen_printer.uxv.name=Epic Screen Printer IV
+susy.machine.screen_printer.opv.name=Legendary Screen Printer
 
 # Fluid Compressor
 susy.machine.fluid_compressor.jei.group=Fluid Compressor
