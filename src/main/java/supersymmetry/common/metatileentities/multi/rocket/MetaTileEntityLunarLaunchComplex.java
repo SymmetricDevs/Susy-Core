@@ -583,7 +583,7 @@ public class MetaTileEntityLunarLaunchComplex extends RecipeMapMultiblockControl
                 .aisle(selfp, edgee, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr, airrr)
                 .where('S', selfPredicate())
                 .where('C', states(getFoundationState()))
-                .where('E', states(getFoundationState()).setMinGlobalLimited(90).or(autoAbilities())
+                .where('E', states(getFoundationState()).setMinGlobalLimited(40).or(autoAbilities())
                         .or(MetaTileEntityComponentRedstoneController.controllerPredicate().setMaxGlobalLimited(2))
                         .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
                                 .setMaxGlobalLimited(2).setPreviewCount(1))

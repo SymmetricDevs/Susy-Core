@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.util.SuSyDamageSources;
+import supersymmetry.client.renderer.handler.IAlwaysRender;
 import supersymmetry.common.EventHandlers;
 import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
 
@@ -16,7 +17,7 @@ import supersymmetry.common.blocks.rocketry.BlockSpacecraftInstrument;
  * so this shares all of that rocket's behaviour (blueprint, cargo, fuel, flight
  * and success calculation) and only shrinks the hull to fit the ICBM model.
  */
-public class EntityLunarRocket extends EntityBlueprintRocket {
+public class EntityLunarRocket extends EntityBlueprintRocket implements IAlwaysRender {
 
     /** A single engine bell on the centreline, unlike the Soyuz's four boosters. */
     private static final double[][] ENGINE_OFFSETS = { { 0, 0 } };
