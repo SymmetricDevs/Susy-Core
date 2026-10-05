@@ -1,6 +1,7 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,10 +13,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import supersymmetry.common.faction.FactionHateManager;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import supersymmetry.common.faction.FactionHateManager;
 
 public class FactionRadioBehaviour implements IItemBehaviour {
 

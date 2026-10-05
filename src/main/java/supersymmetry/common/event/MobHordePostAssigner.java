@@ -3,8 +3,8 @@ package supersymmetry.common.event;
 import java.util.UUID;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,9 +17,9 @@ import supersymmetry.api.SusyLog;
 public class MobHordePostAssigner {
 
     /**
-    * this is here in case we summon new mobs during an invasion (such as reinforcements)
-    * currently used for helicopters spawned in the air cavalry riad, more soon to come
-    **/
+     * this is here in case we summon new mobs during an invasion (such as reinforcements)
+     * currently used for helicopters spawned in the air cavalry riad, more soon to come
+     **/
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -34,7 +34,6 @@ public class MobHordePostAssigner {
         NBTTagCompound susy = entityData.getCompoundTag("susy");
 
         if (!susy.hasKey("invasionOwner")) return;
-
 
         String ownerUUIDString = susy.getString("invasionOwner");
         UUID ownerUUID;
@@ -59,7 +58,8 @@ public class MobHordePostAssigner {
         }
 
         playerData.addEntity(entity.getPersistentID());
-        //to avoid spam
-        //SusyLog.logger.info("Registered command-spawned entity {} to invasion {} for player {}", entity.getName(), playerData.currentInvasion, player.getName());
+        // to avoid spam
+        // SusyLog.logger.info("Registered command-spawned entity {} to invasion {} for player {}", entity.getName(),
+        // playerData.currentInvasion, player.getName());
     }
 }

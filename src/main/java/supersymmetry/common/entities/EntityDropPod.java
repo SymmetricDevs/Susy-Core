@@ -60,7 +60,6 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
     private List<String> commandsOnLanding = new ArrayList<>();
     private List<String[]> payloadOptions = new ArrayList<>();
 
-
     @SideOnly(Side.CLIENT)
     private MovingSoundDropPod soundDropPod;
 
@@ -285,8 +284,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 MathHelper.floor(this.posY),
                 MathHelper.floor(this.posZ));
 
-        gregtech.api.metatileentity.MetaTileEntity mte =
-                gregtech.api.GregTechAPI.MTE_REGISTRY.getObjectById(meta);
+        gregtech.api.metatileentity.MetaTileEntity mte = gregtech.api.GregTechAPI.MTE_REGISTRY.getObjectById(meta);
 
         if (mte == null) {
             return;
@@ -296,8 +294,8 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
         IBlockState state = block.getStateFromMeta(0);
         boolean placed = this.world.setBlockState(placePos, state, 3);
 
-        gregtech.api.metatileentity.MetaTileEntityHolder holder =
-                (gregtech.api.metatileentity.MetaTileEntityHolder) this.world.getTileEntity(placePos);
+        gregtech.api.metatileentity.MetaTileEntityHolder holder = (gregtech.api.metatileentity.MetaTileEntityHolder) this.world
+                .getTileEntity(placePos);
 
         if (holder != null) {
             holder.setMetaTileEntity(mte);
@@ -350,9 +348,12 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                 if (!this.commandsOnLanding.isEmpty()) {
                     List<String> cmds = new ArrayList<>(this.commandsOnLanding);
                     // override since I don't want to bother adding in custom logic just for this.
-                    // for any kind of vanilla block, you could just get away with /setblock, however due to how gt stores it's blocks
-                    // our only options are either this or using RC as some kind of fucked up proxy where we store the gt block we are trying to make
-                    // and generate it as a 1x1x1 structure when the drop pod lands and executes a /#gen command. This would make it a pain in the ass to edit though
+                    // for any kind of vanilla block, you could just get away with /setblock, however due to how gt
+                    // stores it's blocks
+                    // our only options are either this or using RC as some kind of fucked up proxy where we store the
+                    // gt block we are trying to make
+                    // and generate it as a 1x1x1 structure when the drop pod lands and executes a /#gen command. This
+                    // would make it a pain in the ass to edit though
                     if (cmds.get(0).equals("blocklist")) {
                         List<String[]> payloadFromCommands = new ArrayList<>();
                         for (int i = 1; i < cmds.size(); i++) {
@@ -361,7 +362,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                             String blockName = parts[0];
                             String meta = parts.length >= 2 ? parts[1] : "0";
                             String nbt = parts.length >= 3 ? parts[2] : null;
-                            payloadFromCommands.add(new String[]{ blockName, meta, nbt != null ? nbt : "" });
+                            payloadFromCommands.add(new String[] { blockName, meta, nbt != null ? nbt : "" });
                         }
                         this.payloadOptions.addAll(payloadFromCommands);
                     } else {
@@ -370,7 +371,7 @@ public class EntityDropPod extends EntityLiving implements IAnimatable {
                                     .executeCommand(this.getCommandSender(), command);
                         }
                     }
-                    this.commandsOnLanding.clear(); //ensure they only run once
+                    this.commandsOnLanding.clear(); // ensure they only run once
                 }
                 if (!this.payloadOptions.isEmpty()) {
                     placeDownPayloadOnLanding();

@@ -126,7 +126,7 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
         SusyRocketComponents.init();
-        MetaTileEntityDefoliator.DefoliatorReplacements.init(); //appease GTFO
+        MetaTileEntityDefoliator.DefoliatorReplacements.init(); // appease GTFO
         proxy.postLoad();
     }
 

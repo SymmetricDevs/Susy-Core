@@ -1,21 +1,22 @@
 package supersymmetry.common.faction;
 
-import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerJoinedEvent;
-import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
-import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
-import net.minecraft.entity.player.EntityPlayerMP;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import supersymmetry.Supersymmetry;
+import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerJoinedEvent;
+import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
+import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 
-import java.util.List;
+import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionHate {

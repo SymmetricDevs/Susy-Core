@@ -11,14 +11,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DustFogRenderer {
 
-    private enum FogState { IDLE, RAMPING_UP, HOLDING, RAMPING_DOWN }
-    private static FogState state       = FogState.IDLE;
-    public  static float    fogStrength = 0.0f;
+    private enum FogState {
+        IDLE,
+        RAMPING_UP,
+        HOLDING,
+        RAMPING_DOWN
+    }
 
-    private static final int   RAMP   = 80; //ticks
-    private static final int   HOLD_TICKS      = 600; //30 sec, slightly more than the machine takes to cycle for seamless continuation
+    private static FogState state = FogState.IDLE;
+    public static float fogStrength = 0.0f;
+
+    private static final int RAMP = 80; // ticks
+    private static final int HOLD_TICKS = 600; // 30 sec, slightly more than the machine takes to cycle for seamless
+                                               // continuation
 
     private static int tickCounter = 0;
+
     public static void applyPacket() {
         switch (state) {
             case IDLE:
@@ -51,7 +59,7 @@ public class DustFogRenderer {
                 fogStrength = Math.min((float) tickCounter / RAMP, 1.0f);
                 if (tickCounter >= RAMP) {
                     fogStrength = 1.0f;
-                    state       = FogState.HOLDING;
+                    state = FogState.HOLDING;
                     tickCounter = 0;
                 }
                 break;
@@ -59,7 +67,7 @@ public class DustFogRenderer {
             case HOLDING:
                 tickCounter++;
                 if (tickCounter >= HOLD_TICKS) {
-                    state       = FogState.RAMPING_DOWN;
+                    state = FogState.RAMPING_DOWN;
                     tickCounter = 0;
                 }
                 break;
@@ -67,9 +75,10 @@ public class DustFogRenderer {
             case RAMPING_DOWN:
                 tickCounter++;
                 fogStrength = 1.0f - ((float) tickCounter / RAMP);
-                if (fogStrength <= 0.0f) {  // let the math decide when we're done + grace period for the game to actually catch up
+                if (fogStrength <= 0.0f) {  // let the math decide when we're done + grace period for the game to
+                                            // actually catch up
                     fogStrength = 0.0f;
-                    state       = FogState.IDLE;
+                    state = FogState.IDLE;
                     tickCounter = 0;
                 }
                 System.out.println(fogStrength);
@@ -91,8 +100,8 @@ public class DustFogRenderer {
         if (state == FogState.IDLE) return;
 
         float multiplier = 1.0f - (fogStrength * 0.85f);
-        event.setRed  (event.getRed()   * multiplier);
+        event.setRed(event.getRed() * multiplier);
         event.setGreen(event.getGreen() * multiplier);
-        event.setBlue (event.getBlue()  * multiplier);
+        event.setBlue(event.getBlue() * multiplier);
     }
 }

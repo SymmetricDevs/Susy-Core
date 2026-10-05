@@ -1,6 +1,9 @@
 package supersymmetry.mixins.icbmclassic;
 
-import icbm.classic.content.entity.EntityGrenade;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -9,9 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import icbm.classic.content.entity.EntityGrenade;
 
 @Mixin(value = EntityGrenade.class, remap = false)
 public abstract class EntityGrenadeMixin {
@@ -21,8 +22,7 @@ public abstract class EntityGrenadeMixin {
 
     private static final Set<String> LINGERING_GRENADE_NAMES = new HashSet<>(Arrays.asList(
             "icbm.grenade.icbmclassic:chemical",
-            "icbm.grenade.icbmclassic:debilitation"
-    ));
+            "icbm.grenade.icbmclassic:debilitation"));
 
     private static final int LINGER_TICKS = 600;
 
@@ -43,7 +43,7 @@ public abstract class EntityGrenadeMixin {
     }
 
     @Redirect(method = "triggerExplosion",
-            at = @At(value = "INVOKE", target = "Licbm/classic/content/entity/EntityGrenade;setDead()V"))
+              at = @At(value = "INVOKE", target = "Licbm/classic/content/entity/EntityGrenade;setDead()V"))
     private void supersymmetry$deferDeath(EntityGrenade self) {
         if (supersymmetry$lingerTicksRemaining < 0) {
             self.setDead();

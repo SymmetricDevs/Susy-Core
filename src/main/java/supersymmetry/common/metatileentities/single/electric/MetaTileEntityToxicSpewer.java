@@ -2,13 +2,6 @@ package supersymmetry.common.metatileentities.single.electric;
 
 import java.util.List;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
-import ladysnake.gaspunk.GasPunkConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityList;
@@ -18,23 +11,30 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import net.minecraft.network.PacketBuffer;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import ladysnake.gaspunk.GasPunkConfig;
 import supersymmetry.client.renderer.particles.SusyParticleToxicPlume;
 import supersymmetry.common.faction.EntityNativeGasResistance;
 
@@ -69,8 +69,7 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -174,8 +173,8 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
         }
     }
 
-    //not sure if this is a good way of doing this or not, but I already have a working variant of this
-    //in the mixins so imma just copy paste and call it a day
+    // not sure if this is a good way of doing this or not, but I already have a working variant of this
+    // in the mixins so imma just copy paste and call it a day
     private static boolean isProtectedAgainstSpewer(EntityLivingBase entity) {
         if (spewer$getMobResistance(entity) >= SPEWER_IMMUNITY_THRESHOLD) return true;
 
@@ -206,19 +205,19 @@ public class MetaTileEntityToxicSpewer extends TieredMetaTileEntity {
                     matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD);
                     break;
                 case 2:
-                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST);
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST);
                     break;
                 case 3:
-                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
-                            && spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS);
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST) &&
+                            spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS);
                     break;
                 case 4:
-                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
-                            && spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS)
-                            && spewer$matchesSlot(suit[3], entity, EntityEquipmentSlot.FEET);
+                    matches = spewer$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            spewer$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST) &&
+                            spewer$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS) &&
+                            spewer$matchesSlot(suit[3], entity, EntityEquipmentSlot.FEET);
                     break;
                 default:
                     continue;

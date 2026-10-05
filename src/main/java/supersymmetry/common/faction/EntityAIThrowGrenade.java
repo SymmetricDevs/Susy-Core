@@ -1,6 +1,11 @@
 package supersymmetry.common.faction;
 
-import com.google.common.base.Predicate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -14,11 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.google.common.base.Predicate;
 
 public class EntityAIThrowGrenade extends EntityAIBase {
 
@@ -28,7 +29,7 @@ public class EntityAIThrowGrenade extends EntityAIBase {
             "icbmclassic:item.grenade",
             "techguns:grenadeprojectile",
             "techguns:fraggrenadeprojectile"
-            //not items, actual grenade entities
+    // not items, actual grenade entities
     ));
 
     private static Set<Class<? extends Entity>> resolvedDangerousClasses = null;
@@ -45,14 +46,18 @@ public class EntityAIThrowGrenade extends EntityAIBase {
         return resolvedDangerousClasses;
     }
 
-    private static final Predicate<Entity> IS_DANGEROUS_ENTITY = entity ->
-            entity != null && getResolvedDangerousClasses().contains(entity.getClass());
+    private static final Predicate<Entity> IS_DANGEROUS_ENTITY = entity -> entity != null &&
+            getResolvedDangerousClasses().contains(entity.getClass());
 
     public static boolean isDangerousEntity(Entity entity) {
         return IS_DANGEROUS_ENTITY.apply(entity);
     }
 
-    private enum Phase { CHARGING, RECOVERING, FLEEING }
+    private enum Phase {
+        CHARGING,
+        RECOVERING,
+        FLEEING
+    }
 
     private static final int RECOVERY_TICKS = 30;
 
@@ -103,7 +108,10 @@ public class EntityAIThrowGrenade extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (cooldown > 0) { cooldown--; return false; }
+        if (cooldown > 0) {
+            cooldown--;
+            return false;
+        }
         EntityLivingBase target = mob.getAttackTarget();
         if (target == null || !target.isEntityAlive() || !isHoldingGrenade()) return false;
         return mob.getDistanceSq(target) <= throwRangeSq && mob.getEntitySenses().canSee(target);
@@ -152,9 +160,15 @@ public class EntityAIThrowGrenade extends EntityAIBase {
     @Override
     public void updateTask() {
         switch (phase) {
-            case CHARGING:    updateCharging();   break;
-            case RECOVERING:  updateRecovering(); break;
-            case FLEEING:     updateFleeing();    break;
+            case CHARGING:
+                updateCharging();
+                break;
+            case RECOVERING:
+                updateRecovering();
+                break;
+            case FLEEING:
+                updateFleeing();
+                break;
         }
     }
 
@@ -233,7 +247,11 @@ public class EntityAIThrowGrenade extends EntityAIBase {
                     double dx = mob.posX - danger.posX;
                     double dz = mob.posZ - danger.posZ;
                     double dist = Math.sqrt(dx * dx + dz * dz);
-                    if (dist < 0.001D) { dx = 1.0D; dz = 0.0D; dist = 1.0D; }
+                    if (dist < 0.001D) {
+                        dx = 1.0D;
+                        dz = 0.0D;
+                        dist = 1.0D;
+                    }
                     mob.getNavigator().tryMoveToXYZ(
                             mob.posX + (dx / dist) * FLEE_TRIGGER_RADIUS, mob.posY,
                             mob.posZ + (dz / dist) * FLEE_TRIGGER_RADIUS, FLEE_SPEED);

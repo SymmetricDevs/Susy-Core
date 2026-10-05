@@ -1,6 +1,7 @@
 package supersymmetry.common.item.behavior;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import java.util.Map;
+
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -16,9 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator.DefoliatorReplacements;
-
-import java.util.Map;
 
 public class HyperDefoliantBehavior implements IItemBehaviour {
 
@@ -42,18 +42,20 @@ public class HyperDefoliantBehavior implements IItemBehaviour {
     }
 
     public static void registerDispenserBehavior(ItemStack defoliantStack) {
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(defoliantStack.getItem(), new BehaviorDefaultDispenseItem() {
-            @Override
-            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-                World world = source.getWorld();
-                if (world.isRemote) return stack;
-                EnumFacing facing = source.getBlockState().getValue(BlockDispenser.FACING);
-                BlockPos targetPos = source.getBlockPos().offset(facing);
-                applyDefoliationStatic(world, targetPos);
-                stack.shrink(1);
-                return stack;
-            }
-        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(defoliantStack.getItem(),
+                new BehaviorDefaultDispenseItem() {
+
+                    @Override
+                    protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                        World world = source.getWorld();
+                        if (world.isRemote) return stack;
+                        EnumFacing facing = source.getBlockState().getValue(BlockDispenser.FACING);
+                        BlockPos targetPos = source.getBlockPos().offset(facing);
+                        applyDefoliationStatic(world, targetPos);
+                        stack.shrink(1);
+                        return stack;
+                    }
+                });
     }
 
     private void applyDefoliation(World world, BlockPos center) {
@@ -61,8 +63,8 @@ public class HyperDefoliantBehavior implements IItemBehaviour {
     }
 
     private static void applyDefoliationStatic(World world, BlockPos center) {
-        Map<ResourceLocation, IBlockState> replacements     = DefoliatorReplacements.getReplacements();
-        Map<String,           IBlockState> metaReplacements = DefoliatorReplacements.getMetaReplacements();
+        Map<ResourceLocation, IBlockState> replacements = DefoliatorReplacements.getReplacements();
+        Map<String, IBlockState> metaReplacements = DefoliatorReplacements.getMetaReplacements();
 
         for (int dx = -RADIUS; dx <= RADIUS; dx++) {
             for (int dy = -RADIUS; dy <= RADIUS; dy++) {

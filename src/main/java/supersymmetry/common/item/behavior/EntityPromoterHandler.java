@@ -15,12 +15,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
 
-
-//exact logic as tagger
+// exact logic as tagger
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class EntityPromoterHandler {
 
-    private static final String TAG_ROOT   = "susy";
+    private static final String TAG_ROOT = "susy";
     private static final String TAG_LEADER = "leader";
 
     private static final double GLOW_RADIUS = 32.0;
@@ -28,8 +27,8 @@ public class EntityPromoterHandler {
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         EntityPlayer player = event.getEntityPlayer();
-        ItemStack    stack  = event.getItemStack();
-        Entity       target = event.getTarget();
+        ItemStack stack = event.getItemStack();
+        Entity target = event.getTarget();
 
         if (stack.isEmpty()) return;
         if (SuSyMetaItems.isMetaItem(stack) != SuSyMetaItems.ENTITY_PROMOTER.metaValue) return;
@@ -37,7 +36,7 @@ public class EntityPromoterHandler {
 
         if (!player.world.isRemote) {
             NBTTagCompound entityTag = target.getEntityData();
-            NBTTagCompound susyTag   = entityTag.getCompoundTag(TAG_ROOT);
+            NBTTagCompound susyTag = entityTag.getCompoundTag(TAG_ROOT);
 
             boolean isLeader = susyTag.getBoolean(TAG_LEADER);
 
@@ -77,8 +76,8 @@ public class EntityPromoterHandler {
                 player.getEntityBoundingBox().grow(GLOW_RADIUS));
 
         for (EntityLivingBase entity : entities) {
-            NBTTagCompound susy     = entity.getEntityData().getCompoundTag(TAG_ROOT);
-            boolean        isLeader = susy.getBoolean(TAG_LEADER);
+            NBTTagCompound susy = entity.getEntityData().getCompoundTag(TAG_ROOT);
+            boolean isLeader = susy.getBoolean(TAG_LEADER);
             entity.setGlowing(holding && isLeader);
         }
     }

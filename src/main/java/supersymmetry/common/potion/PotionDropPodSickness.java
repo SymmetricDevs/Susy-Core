@@ -2,6 +2,7 @@ package supersymmetry.common.potion;
 
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
+
 import supersymmetry.Supersymmetry;
 
 public class PotionDropPodSickness extends Potion {

@@ -5,11 +5,13 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import supersymmetry.Supersymmetry;
 
 public class SusyParticleFlareSmoke extends Particle {
 
     private static final ResourceLocation PLUME_SPRITE = new ResourceLocation(Supersymmetry.MODID, "particle/plume");
+
     public SusyParticleFlareSmoke(World worldIn, double x, double y, double z, float R, float G, float B) {
         super(worldIn, x, y, z);
 
@@ -29,8 +31,7 @@ public class SusyParticleFlareSmoke extends Particle {
 
         this.setParticleTexture(
                 Minecraft.getMinecraft().getTextureMapBlocks()
-                        .getAtlasSprite(PLUME_SPRITE.toString())
-        );
+                        .getAtlasSprite(PLUME_SPRITE.toString()));
     }
 
     @Override

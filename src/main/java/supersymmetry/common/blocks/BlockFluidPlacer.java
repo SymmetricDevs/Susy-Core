@@ -1,7 +1,5 @@
 package supersymmetry.common.blocks;
 
-import gregtech.api.block.IStateHarvestLevel;
-import gregtech.api.block.VariantBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,7 +8,10 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-//appease ICBM
+import gregtech.api.block.IStateHarvestLevel;
+import gregtech.api.block.VariantBlock;
+
+// appease ICBM
 public class BlockFluidPlacer extends VariantBlock<BlockFluidPlacer.FluidType> {
 
     public BlockFluidPlacer() {
@@ -21,6 +22,7 @@ public class BlockFluidPlacer extends VariantBlock<BlockFluidPlacer.FluidType> {
     }
 
     public enum FluidType implements IStringSerializable, IStateHarvestLevel {
+
         MERCURY("mercury_fluid", 0);
 
         private final String name;

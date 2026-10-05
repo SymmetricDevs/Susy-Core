@@ -1,16 +1,9 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.GregtechTileCapabilities;
-import gregtech.api.capability.impl.*;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,19 +13,26 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
-import java.lang.reflect.Field;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.impl.*;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 
 public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
@@ -40,17 +40,17 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
     private static final Field PROGRESS_TIME_FIELD;
     private final OrientedOverlayRenderer overlay;
 
-    //make problem cauers immune
+    // make problem cauers immune
     private static final Set<Class<? extends MetaTileEntity>> WHITELIST = Set.of(
             MetaTileEntityDustAgitator.class,
             MetaTileEntityDefoliator.class,
             MetaTileEntityFederationDropBeacon.class,
             MetaTileEntityHydrocarbonSaturator.class,
             MetaTileEntityInterferenceDynamo.class,
-            MetaTileEntityToxicSpewer.class
-    );
+            MetaTileEntityToxicSpewer.class);
 
-    public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
+    public MetaTileEntityInterferenceDynamo(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay,
+                                            int tier) {
         super(metaTileEntityId, tier);
         this.overlay = overlay;
     }
@@ -71,8 +71,7 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -122,7 +121,6 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
         if (currentRadius < 32) currentRadius++;
     }
 
-
     static {
         try {
             PROGRESS_TIME_FIELD = AbstractRecipeLogic.class.getDeclaredField("progressTime");
@@ -150,17 +148,18 @@ public class MetaTileEntityInterferenceDynamo extends TieredMetaTileEntity {
 
                     if (WHITELIST.contains(mte.getClass())) continue;
 
-                    AbstractRecipeLogic logic = mte.getCapability(GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC, null);
-                    if (
-                            logic == null ||
-                                    logic.getProgress() <= 0 ||
-                                    !logic.consumesEnergy() || //exclude energy generators, no infinite power for you. Also handles things like radiator, hx, etc...
-                                    // exclude steam and primitive
-                                    logic instanceof PrimitiveRecipeLogic ||
-                                    logic instanceof SteamMultiblockRecipeLogic ||
-                                    logic instanceof RecipeLogicSteam ||
-                                    logic instanceof BoilerRecipeLogic
-                    ) continue;
+                    AbstractRecipeLogic logic = mte.getCapability(GregtechTileCapabilities.CAPABILITY_RECIPE_LOGIC,
+                            null);
+                    if (logic == null ||
+                            logic.getProgress() <= 0 ||
+                            !logic.consumesEnergy() || // exclude energy generators, no infinite power for you. Also
+                                                       // handles things like radiator, hx, etc...
+                            // exclude steam and primitive
+                            logic instanceof PrimitiveRecipeLogic ||
+                            logic instanceof SteamMultiblockRecipeLogic ||
+                            logic instanceof RecipeLogicSteam ||
+                            logic instanceof BoilerRecipeLogic)
+                        continue;
 
                     try {
                         PROGRESS_TIME_FIELD.setInt(logic, 1);

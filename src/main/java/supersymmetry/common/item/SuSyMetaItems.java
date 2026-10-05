@@ -1,14 +1,13 @@
 package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
-import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
+import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;

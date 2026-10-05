@@ -3,30 +3,29 @@ package supersymmetry.mixins.opencomputers;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import li.cil.oc.api.component.RackMountable;
-import li.cil.oc.api.network.Component;
-import li.cil.oc.api.network.Visibility;
-import li.cil.oc.common.tileentity.Rack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import li.cil.oc.api.component.RackMountable;
+import li.cil.oc.api.network.Component;
+import li.cil.oc.api.network.Visibility;
+import li.cil.oc.common.tileentity.Rack;
+
 @Mixin(value = Rack.class, remap = false)
 public abstract class RackMixin {
 
-    @Unique
-    private final Object[][] supersymmetry$cachedMappings = new Object[4][4];
+    @Unique private final Object[][] supersymmetry$cachedMappings = new Object[4][4];
 
-    @Unique
-    private static final Field supersymmetry$nodeMappingField;
+    @Unique private static final Field supersymmetry$nodeMappingField;
 
-    @Unique
-    private static final Method supersymmetry$connectMethod;
+    @Unique private static final Method supersymmetry$connectMethod;
 
     static {
         Field nmField = null;
@@ -41,12 +40,10 @@ public abstract class RackMixin {
                     break;
                 }
             }
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
         supersymmetry$nodeMappingField = nmField;
         supersymmetry$connectMethod = cMethod;
     }
-
 
     @Inject(method = "writeToNBTForServer", at = @At("RETURN"))
     private void supersymmetry$saveCacheToNBT(NBTTagCompound nbt, CallbackInfo ci) {
@@ -62,8 +59,7 @@ public abstract class RackMixin {
                             EnumFacing facing = (EnumFacing) opt.getClass().getMethod("get").invoke(opt);
                             flatCache[index] = facing.getIndex();
                         }
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 }
             }
         }
@@ -87,19 +83,19 @@ public abstract class RackMixin {
                                 supersymmetry$cachedMappings[slot][i] = noneObject;
                             } else {
                                 EnumFacing facing = facings[facingIndex];
-                                supersymmetry$cachedMappings[slot][i] = someClass.getConstructor(Object.class).newInstance(facing);
+                                supersymmetry$cachedMappings[slot][i] = someClass.getConstructor(Object.class)
+                                        .newInstance(facing);
                             }
                         }
                     }
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
             }
         }
     }
 
     @Inject(method = "onItemRemoved", at = @At("HEAD"))
     private void supersymmetry$cacheAndForceSave(int slot, ItemStack stack, CallbackInfo ci) {
-        Rack rack = (Rack)(Object)this;
+        Rack rack = (Rack) (Object) this;
         if (rack.getWorld() == null || rack.getWorld().isRemote) return;
 
         try {
@@ -162,8 +158,7 @@ public abstract class RackMixin {
                     supersymmetry$connectMethod.invoke(rack, slot, i - 1, cached);
                     if (i == 0) primaryConnected = true;
                 }
-            } catch (Throwable ignored) {
-            }
+            } catch (Throwable ignored) {}
         }
         // setVisibility(Network) was called inside DiskDriveMountable.load() while
         // the mountable was still isolated. Re-call it now that the bus connection
@@ -173,8 +168,7 @@ public abstract class RackMixin {
         }
     }
 
-    @Unique
-    private static void supersymmetry$reannounceComponentNodes(Rack rack, int slot) {
+    @Unique private static void supersymmetry$reannounceComponentNodes(Rack rack, int slot) {
         try {
             RackMountable mountable = rack.getMountable(slot);
             if (mountable == null) return;

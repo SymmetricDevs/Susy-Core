@@ -1,5 +1,7 @@
 package supersymmetry.common.faction;
 
+import java.util.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -11,19 +13,19 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import java.util.*;
-
 /**
- custom A* zalgorithm, the default vanilla algorithm does not work for our purposes
- the vanilla climber algorithm does not actually path towards the target in 3D, it just uses the ground algorithm
- with the ability to climb up walls and approach the target in a straight line after doing so, instead of the intricate 3D movements
- that we are trying to achieve here.
+ * custom A* zalgorithm, the default vanilla algorithm does not work for our purposes
+ * the vanilla climber algorithm does not actually path towards the target in 3D, it just uses the ground algorithm
+ * with the ability to climb up walls and approach the target in a straight line after doing so, instead of the
+ * intricate 3D movements
+ * that we are trying to achieve here.
  **/
 
 public class FactionAStar {
 
     private static final int MAX_NODES = 4096;
-    public static final int MAX_CLIMB_HEIGHT = 8; //misleading, not actually max climb height, more like how high does the check run. too lazy to refactor name good luck everyone else
+    public static final int MAX_CLIMB_HEIGHT = 8; // misleading, not actually max climb height, more like how high does
+                                                  // the check run. too lazy to refactor name good luck everyone else
     public static final int MAX_DROP_HEIGHT = 8;
 
     private final IBlockAccess world;
@@ -81,7 +83,7 @@ public class FactionAStar {
 
     private List<BlockPos> getNeighbors(BlockPos pos) {
         List<BlockPos> neighbors = new ArrayList<>();
-        int[][] cardinals = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int[][] cardinals = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
         if (isAdjacentToWall(pos) && isClearForEntity(pos.up())) {
             neighbors.add(pos.up());
@@ -146,7 +148,7 @@ public class FactionAStar {
         IBlockState state;
         return (state = world.getBlockState(pos.north())).getMaterial().isSolid() ||
                 (state = world.getBlockState(pos.south())).getMaterial().isSolid() ||
-                (state = world.getBlockState(pos.east())).getMaterial().isSolid()  ||
+                (state = world.getBlockState(pos.east())).getMaterial().isSolid() ||
                 (state = world.getBlockState(pos.west())).getMaterial().isSolid();
     }
 
@@ -209,9 +211,7 @@ public class FactionAStar {
     }
 
     private double heuristic(BlockPos a, BlockPos b) {
-        return Math.abs(a.getX() - b.getX())
-                + Math.abs(a.getY() - b.getY())
-                + Math.abs(a.getZ() - b.getZ());
+        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()) + Math.abs(a.getZ() - b.getZ());
     }
 
     private Path buildPath(Node end) {
@@ -235,6 +235,7 @@ public class FactionAStar {
     }
 
     private static class Node {
+
         final BlockPos pos;
         final Node parent;
         final double g;

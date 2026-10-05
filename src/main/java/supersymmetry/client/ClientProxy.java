@@ -71,11 +71,11 @@ import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
 import supersymmetry.api.util.RenderMaskManager;
-import supersymmetry.client.renderer.block.FlammableAirModelLoader;
-import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.event.MissingModelCreator;
+import supersymmetry.client.renderer.block.FlammableAirModelLoader;
+import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -112,8 +112,9 @@ public class ClientProxy extends CommonProxy {
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
         TanklessFluidPipeRenderer.INSTANCE.preInit();
-        ModelLoaderRegistry.registerLoader(FlammableAirModelLoader.INSTANCE); // can be moved somewhere else if necessary
-                                                                            // (I think)
+        ModelLoaderRegistry.registerLoader(FlammableAirModelLoader.INSTANCE); // can be moved somewhere else if
+                                                                              // necessary
+                                                                              // (I think)
     }
 
     @Override

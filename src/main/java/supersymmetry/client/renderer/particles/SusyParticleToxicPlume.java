@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import supersymmetry.Supersymmetry;
 
 @SideOnly(Side.CLIENT)
@@ -20,9 +21,9 @@ public class SusyParticleToxicPlume extends Particle {
         this.motionY = 0.1;
         this.motionZ = 0.0;
 
-        this.particleRed   = 0.0f;
+        this.particleRed = 0.0f;
         this.particleGreen = 0.75f;
-        this.particleBlue  = 0.0f;
+        this.particleBlue = 0.0f;
         this.particleAlpha = 0.9f;
 
         this.particleScale = 30.0f;
@@ -32,9 +33,7 @@ public class SusyParticleToxicPlume extends Particle {
 
         this.setParticleTexture(
                 Minecraft.getMinecraft().getTextureMapBlocks()
-                        .getAtlasSprite(PLUME_SPRITE.toString())
-        );
-
+                        .getAtlasSprite(PLUME_SPRITE.toString()));
     }
 
     @Override

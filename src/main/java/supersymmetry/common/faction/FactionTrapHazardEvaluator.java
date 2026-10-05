@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class FactionTrapHazardEvaluator {
+
     public static PathNodeType getHazardNodeType(IBlockAccess world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
 

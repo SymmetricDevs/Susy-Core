@@ -1,5 +1,7 @@
 package supersymmetry.common.item.behavior;
 
+import java.util.List;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,15 +11,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
-
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class IntelChipBehaviour implements IItemBehaviour {
@@ -32,7 +33,6 @@ public class IntelChipBehaviour implements IItemBehaviour {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @NotNull List<String> lines) {
-
         NBTTagCompound tag = stack.getSubCompound(TAG_ROOT);
 
         if (tag == null || tag.getString(TAG_FACTION).isEmpty()) {

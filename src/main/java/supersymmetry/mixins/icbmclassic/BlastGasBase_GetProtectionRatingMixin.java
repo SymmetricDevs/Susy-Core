@@ -1,18 +1,20 @@
 package supersymmetry.mixins.icbmclassic;
 
-import icbm.classic.content.blast.gas.BlastGasBase;
-import ladysnake.gaspunk.GasPunkConfig;
-import ladysnake.gaspunk.item.ItemGasMask;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import icbm.classic.content.blast.gas.BlastGasBase;
+import ladysnake.gaspunk.GasPunkConfig;
+import ladysnake.gaspunk.item.ItemGasMask;
 import supersymmetry.common.faction.EntityNativeGasResistance;
 
 /**
@@ -31,8 +33,7 @@ public abstract class BlastGasBase_GetProtectionRatingMixin {
             method = "getProtectionRating",
             at = @At("HEAD"),
             cancellable = true,
-            remap = false
-    )
+            remap = false)
     private void susy$injectGasPunkProtectionRating(EntityLivingBase entity,
                                                     CallbackInfoReturnable<Float> cir) {
         float bestProtection = -1.0f; // sentinel: no match found yet
@@ -80,19 +81,19 @@ public abstract class BlastGasBase_GetProtectionRatingMixin {
                     matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD);
                     break;
                 case 2:
-                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST);
+                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST);
                     break;
                 case 3:
-                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
-                            && susy$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS);
+                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST) &&
+                            susy$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS);
                     break;
                 case 4:
-                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD)
-                            && susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST)
-                            && susy$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS)
-                            && susy$matchesSlot(suit[3], entity, EntityEquipmentSlot.FEET);
+                    matches = susy$matchesSlot(suit[0], entity, EntityEquipmentSlot.HEAD) &&
+                            susy$matchesSlot(suit[1], entity, EntityEquipmentSlot.CHEST) &&
+                            susy$matchesSlot(suit[2], entity, EntityEquipmentSlot.LEGS) &&
+                            susy$matchesSlot(suit[3], entity, EntityEquipmentSlot.FEET);
                     break;
                 default:
                     continue;

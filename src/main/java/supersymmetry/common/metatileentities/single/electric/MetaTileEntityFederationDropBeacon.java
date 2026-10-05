@@ -1,15 +1,11 @@
 package supersymmetry.common.metatileentities.single.electric;
 
+import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,25 +15,29 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import supersymmetry.common.entities.EntityDropPod;
-
-import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
 
 public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
 
-    private static final int INTEL_SAMPLES_REQUIRED = 10; //do not overdo this
+    private static final int INTEL_SAMPLES_REQUIRED = 10; // do not overdo this
     private static final double OUTLIER_THRESHOLD = 64.0;
     private static final int PODS_MIN = 2;
     private static final int PODS_MAX = 4;
@@ -52,7 +52,8 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
     boolean launched = false;
     private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityFederationDropBeacon(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
+    public MetaTileEntityFederationDropBeacon(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay,
+                                              int tier) {
         super(metaTileEntityId, tier);
         this.overlay = overlay;
     }
@@ -73,8 +74,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
 
         onChargeCycleComplete(getWorld());
 
-        if (this.launched){
+        if (this.launched) {
             this.doExplosion(0);
         }
     }
@@ -180,7 +180,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
         double meanX = sumX / positionSamples.size();
         double meanZ = sumZ / positionSamples.size();
 
-        //small filter in case the player leaves the area which produces noise
+        // small filter in case the player leaves the area which produces noise
         List<Vec3d> filtered = new ArrayList<>();
         for (Vec3d v : positionSamples) {
             double dx = v.x - meanX;
@@ -214,7 +214,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(target.x + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(target.z + Math.sin(angle) * radius) + 0.5;
-            double spawnY = spawnHeight + (int)(Math.random() * 80);
+            double spawnY = spawnHeight + (int) (Math.random() * 80);
 
             EntityDropPod pod = new EntityDropPod(world, spawnX, spawnY, spawnZ);
             pod.canExplode(false);
@@ -234,7 +234,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
                         List<?> pair = (List<?>) entry;
                         if (pair.size() >= 1) {
                             String meta = pair.size() >= 2 ? pair.get(1).toString() : "0";
-                            options.add(new String[]{ pair.get(0).toString(), meta });
+                            options.add(new String[] { pair.get(0).toString(), meta });
                         }
                     }
                 }
@@ -245,7 +245,7 @@ public class MetaTileEntityFederationDropBeacon extends TieredMetaTileEntity {
         return options;
     }
 
-    //WIP
+    // WIP
     public void setTargetPlayerUUID(UUID uuid) {
         this.targetPlayerUUID = uuid;
         markDirty();

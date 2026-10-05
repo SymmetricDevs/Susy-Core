@@ -5,13 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.metatileentity.multiblock.IMaintenance;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -26,19 +19,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-
+import gregtech.api.metatileentity.multiblock.IMaintenance;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
@@ -78,8 +77,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -104,6 +102,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
         super.readFromNBT(data);
         currentRadius = data.getInteger("harmRadius");
     }
+
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing side) {
         if (capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER && side != null) {
@@ -159,14 +158,15 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
                     MetaTileEntity mte = ((IGregTechTileEntity) te).getMetaTileEntity();
                     if (mte == null) continue;
 
-                    boolean isSuSyGreenhouse = mte.getClass() == SuSyMetaTileEntities.GREENHOUSE.getClass(); //susy one
-                    boolean isGTFOGreenhouse = mte.getClass() == gregtechfoodoption.machines.multiblock.MetaTileEntityGreenhouse.class; //gtfo one
+                    boolean isSuSyGreenhouse = mte.getClass() == SuSyMetaTileEntities.GREENHOUSE.getClass(); // susy one
+                    boolean isGTFOGreenhouse = mte.getClass() ==
+                            gregtechfoodoption.machines.multiblock.MetaTileEntityGreenhouse.class; // gtfo one
 
                     if (!(isSuSyGreenhouse || isGTFOGreenhouse)) {
                         continue;
                     }
 
-                    if (mte instanceof IMaintenance) { //prob redundant to check
+                    if (mte instanceof IMaintenance) { // prob redundant to check
                         ((IMaintenance) mte).causeMaintenanceProblems();
                     }
                 }

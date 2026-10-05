@@ -1,6 +1,10 @@
 package supersymmetry.client.renderer.block;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.vecmath.Matrix4f;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -8,21 +12,21 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.vecmath.Matrix4f;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
-//code blatantly stolen from Mojang water rendering implementation
-//who the fuck was the funny guy that removed setRenderFromInside() after 1.7? do you see the kind of bullshit you've caused?
-//sincerely, Polska Spółka Gazownictwa (PSG)
+// code blatantly stolen from Mojang water rendering implementation
+// who the fuck was the funny guy that removed setRenderFromInside() after 1.7? do you see the kind of bullshit you've
+// caused?
+// sincerely, Polska Spółka Gazownictwa (PSG)
 
 public class FlammableAirBakedModel implements IBakedModel {
 
     private static final float[] CORNER_X = { 0, 0, 1, 1 };
     private static final float[] CORNER_Y = { 0, 1, 1, 0 };
-    //should stop z-fighting
+    // should stop z-fighting
     private static final float EPS = 1e-3f;
 
     private final TextureAtlasSprite sprite;
@@ -39,7 +43,7 @@ public class FlammableAirBakedModel implements IBakedModel {
 
         List<BakedQuad> quads = new ArrayList<>(2);
         quads.add(buildFaceQuad(side, false, EPS));
-        quads.add(buildFaceQuad(side, true,  EPS));
+        quads.add(buildFaceQuad(side, true, EPS));
         return quads;
     }
 
@@ -65,20 +69,44 @@ public class FlammableAirBakedModel implements IBakedModel {
 
         float x, y, z;
         switch (side) {
-            case UP:    x = cx;      y = 1f; z = cy;      break;
-            case DOWN:  x = cx;      y = 0f; z = 1f - cy; break;
-            case NORTH: x = 1f - cx; y = cy; z = 0f;      break;
-            case SOUTH: x = cx;      y = cy; z = 1f;       break;
-            case WEST:  x = 0f;      y = cy; z = cx;       break;
+            case UP:
+                x = cx;
+                y = 1f;
+                z = cy;
+                break;
+            case DOWN:
+                x = cx;
+                y = 0f;
+                z = 1f - cy;
+                break;
+            case NORTH:
+                x = 1f - cx;
+                y = cy;
+                z = 0f;
+                break;
+            case SOUTH:
+                x = cx;
+                y = cy;
+                z = 1f;
+                break;
+            case WEST:
+                x = 0f;
+                y = cy;
+                z = cx;
+                break;
             case EAST:
-            default:    x = 1f;      y = cy; z = 1f - cx;  break;
+            default:
+                x = 1f;
+                y = cy;
+                z = 1f - cx;
+                break;
         }
 
         x += side.getDirectionVec().getX() * -inwardOffset;
         y += side.getDirectionVec().getY() * -inwardOffset;
         z += side.getDirectionVec().getZ() * -inwardOffset;
 
-        return new float[]{ x, y, z };
+        return new float[] { x, y, z };
     }
 
     private void putVertex(UnpackedBakedQuad.Builder builder, EnumFacing normal,
@@ -111,15 +139,34 @@ public class FlammableAirBakedModel implements IBakedModel {
         }
     }
 
-    @Override public boolean isAmbientOcclusion() { return false; }
-    @Override public boolean isGui3d() { return false; }
-    @Override public boolean isBuiltInRenderer() { return false; }
-    @Override public TextureAtlasSprite getParticleTexture() { return sprite; }
-    @Override public ItemOverrideList getOverrides() { return ItemOverrideList.NONE; }
+    @Override
+    public boolean isAmbientOcclusion() {
+        return false;
+    }
+
+    @Override
+    public boolean isGui3d() {
+        return false;
+    }
+
+    @Override
+    public boolean isBuiltInRenderer() {
+        return false;
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return sprite;
+    }
+
+    @Override
+    public ItemOverrideList getOverrides() {
+        return ItemOverrideList.NONE;
+    }
 
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(
-            ItemCameraTransforms.TransformType type) {
+                                                                   ItemCameraTransforms.TransformType type) {
         return Pair.of(this, null);
     }
 }

@@ -2,13 +2,6 @@ package supersymmetry.common.metatileentities.single.electric;
 
 import java.util.List;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.GregTechAPI;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,14 +13,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.TieredMetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import supersymmetry.common.network.SPacketDustFog;
 
 public class MetaTileEntityDustAgitator extends TieredMetaTileEntity {
@@ -36,7 +37,7 @@ public class MetaTileEntityDustAgitator extends TieredMetaTileEntity {
 
     private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityDustAgitator(ResourceLocation metaTileEntityId,OrientedOverlayRenderer overlay, int tier) {
+    public MetaTileEntityDustAgitator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
         this.overlay = overlay;
     }
@@ -57,8 +58,7 @@ public class MetaTileEntityDustAgitator extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -123,12 +123,9 @@ public class MetaTileEntityDustAgitator extends TieredMetaTileEntity {
 
             GregTechAPI.networkHandler.sendTo(
                     new SPacketDustFog(fogStrength),
-                    (EntityPlayerMP) player
-            );
+                    (EntityPlayerMP) player);
         }
     }
-
-
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,

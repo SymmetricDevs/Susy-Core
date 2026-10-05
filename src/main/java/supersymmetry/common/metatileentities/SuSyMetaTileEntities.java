@@ -932,19 +932,24 @@ public class SuSyMetaTileEntities {
                 SusyTextures.WIRE_BONDER_OVERLAY, true);
 
         // Siege elements: 18600-18700
-        DEFOLIATOR[0] = registerMetaTileEntity(18600, new MetaTileEntityDefoliator(susyId("defoliator.lv"), SusyTextures.DEFOLIATOR_OVERLAY, 1));
+        DEFOLIATOR[0] = registerMetaTileEntity(18600,
+                new MetaTileEntityDefoliator(susyId("defoliator.lv"), SusyTextures.DEFOLIATOR_OVERLAY, 1));
         INTERFERENCE_DYNAMO[0] = registerMetaTileEntity(18610,
-                new MetaTileEntityInterferenceDynamo(susyId("interference_dynamo.lv"), SusyTextures.INTERFERENCE_DYNAMO_OVERLAY, 1));
-        TOXIC_SPEWER[0] = registerMetaTileEntity(18620, new MetaTileEntityToxicSpewer(susyId("toxic_spewer.lv"),SusyTextures.TOXIC_SPEWER_OVERLAY, 1));
+                new MetaTileEntityInterferenceDynamo(susyId("interference_dynamo.lv"),
+                        SusyTextures.INTERFERENCE_DYNAMO_OVERLAY, 1));
+        TOXIC_SPEWER[0] = registerMetaTileEntity(18620,
+                new MetaTileEntityToxicSpewer(susyId("toxic_spewer.lv"), SusyTextures.TOXIC_SPEWER_OVERLAY, 1));
         HYDROCARBON_SATURATOR[0] = registerMetaTileEntity(18630,
-                new MetaTileEntityHydrocarbonSaturator(susyId("hydrocarbon_saturator.lv"),SusyTextures.HYDROCARBON_SATURATOR_OVERLAY, 1));
+                new MetaTileEntityHydrocarbonSaturator(susyId("hydrocarbon_saturator.lv"),
+                        SusyTextures.HYDROCARBON_SATURATOR_OVERLAY, 1));
         DUST_AGITATOR[0] = registerMetaTileEntity(18640,
-                new MetaTileEntityDustAgitator(susyId("dust_agitator.lv"),SusyTextures.DUST_AGITATOR_OVERLAY, 1));
+                new MetaTileEntityDustAgitator(susyId("dust_agitator.lv"), SusyTextures.DUST_AGITATOR_OVERLAY, 1));
         FED_BEACON[0] = registerMetaTileEntity(18650,
-                new MetaTileEntityFederationDropBeacon(susyId("fed_beacon.lv"),SusyTextures.FEDERATION_DROP_OVERLAY, 1));
+                new MetaTileEntityFederationDropBeacon(susyId("fed_beacon.lv"), SusyTextures.FEDERATION_DROP_OVERLAY,
+                        1));
         FED_REINFORCER[0] = registerMetaTileEntity(18660,
-                new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),SusyTextures.FEDERATION_DROP_OVERLAY, 1));
-
+                new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),
+                        SusyTextures.FEDERATION_DROP_OVERLAY, 1));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,

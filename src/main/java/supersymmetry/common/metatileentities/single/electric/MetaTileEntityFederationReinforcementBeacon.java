@@ -1,16 +1,11 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,15 +17,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import supersymmetry.common.entities.EntityDropPod;
-
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import static supersymmetry.api.event.MobHordeEvent.spawnHeight;
 
 public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileEntity {
 
@@ -42,7 +44,8 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
     public static Consumer<EntityLiving> fedPostSpawnModifier = null;
     private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityFederationReinforcementBeacon(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
+    public MetaTileEntityFederationReinforcementBeacon(ResourceLocation metaTileEntityId,
+                                                       OrientedOverlayRenderer overlay, int tier) {
         super(metaTileEntityId, tier);
         this.overlay = overlay;
     }
@@ -63,8 +66,7 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
@@ -112,7 +114,7 @@ public class MetaTileEntityFederationReinforcementBeacon extends TieredMetaTileE
             double radius = GTValues.RNG.nextDouble() * POD_SPREAD_RADIUS;
             double spawnX = Math.floor(targetX + Math.cos(angle) * radius) + 0.5;
             double spawnZ = Math.floor(targetZ + Math.sin(angle) * radius) + 0.5;
-            double spawnY = spawnHeight + (int)(Math.random() * 80);
+            double spawnY = spawnHeight + (int) (Math.random() * 80);
 
             EntityDropPod pod = new EntityDropPod(world);
             pod.canExplode(false);

@@ -1,5 +1,8 @@
 package supersymmetry.common.faction;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityZombie;
@@ -12,21 +15,17 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import supersymmetry.Supersymmetry;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionZombies {
 
     private static final List<String> ZOMBIE_ATTACK_WHITELIST = Arrays.asList(
-            "techguns:bandit", //add humanoid mobs to here, make sure you replace this once tg gets zucked
+            "techguns:bandit", // add humanoid mobs to here, make sure you replace this once tg gets zucked
             "techguns:outcast",
             "techguns:armysoldier",
             "techguns:commando",
             "techguns:dictatordave",
             "techguns:psychosteve",
-            "techguns:stormtrooper"
-    );
+            "techguns:stormtrooper");
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -45,8 +44,7 @@ public class FactionZombies {
                     zombie,
                     targetClass,
                     true,
-                    false
-            ));
+                    false));
         }
     }
 

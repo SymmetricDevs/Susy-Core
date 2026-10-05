@@ -1,5 +1,7 @@
 package supersymmetry.common.faction;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,18 +11,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import supersymmetry.Supersymmetry;
 
-import java.util.List;
-
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionLeader {
 
-    private static final String TAG_ROOT     = "susy";
-    private static final String TAG_LEADER   = "leader";
-    private static final String TAG_FACTION  = "faction";
+    private static final String TAG_ROOT = "susy";
+    private static final String TAG_LEADER = "leader";
+    private static final String TAG_FACTION = "faction";
     private static final String TAG_SMART_AI = "smartAI";
 
     private static final double LEADER_RADIUS = 10.0;
-
 
     public static boolean isLeader(EntityLiving entity) {
         NBTTagCompound tag = entity.getEntityData();
@@ -48,7 +47,6 @@ public class FactionLeader {
         return tag.getCompoundTag(TAG_ROOT).getBoolean(TAG_SMART_AI);
     }
 
-
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return;
@@ -56,7 +54,6 @@ public class FactionLeader {
 
         EntityLiving mob = (EntityLiving) event.getEntity();
         if (!isLeader(mob)) return;
-
 
         if (!hasSmartAI(mob)) {
             markSmartAI(mob);
@@ -69,8 +66,7 @@ public class FactionLeader {
 
         List<EntityLiving> nearby = mob.world.getEntitiesWithinAABB(
                 EntityLiving.class,
-                mob.getEntityBoundingBox().grow(LEADER_RADIUS)
-        );
+                mob.getEntityBoundingBox().grow(LEADER_RADIUS));
 
         for (EntityLiving follower : nearby) {
             if (follower == mob) continue;

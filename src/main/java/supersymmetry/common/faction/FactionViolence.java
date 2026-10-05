@@ -1,5 +1,7 @@
 package supersymmetry.common.faction;
 
+import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RADIUS;
+
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAITasks;
@@ -25,8 +27,6 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.potion.PotionDropPodSickness;
 
-import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RADIUS;
-
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
 
@@ -36,7 +36,7 @@ public class FactionViolence {
     private static final double radius = 32.0;
 
     private static final double STRAFE_SPEED = 0.5D;
-    private static final double CHASE_SPEED  = 1.1D;
+    private static final double CHASE_SPEED = 1.1D;
     private static final double BACK_OFF_DIST_SQ = 16.0D * 16.0D;
 
     private static final String TAG_STRAFING_CLOCKWISE = "strafingClockwise";
@@ -85,7 +85,7 @@ public class FactionViolence {
         if (mobFaction.isEmpty()) return;
         if (!(mob instanceof IMob)) return;
 
-        //why do you keep attacking the drop pods bro?
+        // why do you keep attacking the drop pods bro?
         EntityLivingBase revengeTarget = mob.getRevengeTarget();
         if (revengeTarget instanceof EntityDropPod) {
             mob.setRevengeTarget(null);
@@ -105,8 +105,7 @@ public class FactionViolence {
                             EntityLiving.class,
                             mob,
                             customNav,
-                            "navigator", "field_70699_by"
-                    );
+                            "navigator", "field_70699_by");
                     boolean hasDoorAI = mob.tasks.taskEntries.stream()
                             .anyMatch(e -> e.action instanceof net.minecraft.entity.ai.EntityAIOpenDoor);
                     if (!hasDoorAI) {
@@ -148,7 +147,7 @@ public class FactionViolence {
         }
 
         // ====================================================================
-        //  Smart AI: wallhacking against players, because fuck the playerbase
+        // Smart AI: wallhacking against players, because fuck the playerbase
         // ====================================================================
 
         if (isSmart) {
@@ -222,14 +221,14 @@ public class FactionViolence {
         }
 
         // ====================================================================
-        //  Smart AI: Cover seeking when low on health, because fuck the playerbase
+        // Smart AI: Cover seeking when low on health, because fuck the playerbase
         // ====================================================================
 
         boolean shouldStrafe = true;
         boolean isInCover = false;
         boolean isLowHealth = mob.getHealth() <= (mob.getMaxHealth() * 0.5F);
 
-        //cover from grenade
+        // cover from grenade
         if (isSmart) {
             Entity danger = findNearestDanger(mob);
             if (danger != null) {
@@ -248,7 +247,8 @@ public class FactionViolence {
                 long gameTime = mob.world.getTotalWorldTime();
                 long lastSearchTime = susyTag.getLong(TAG_LAST_SEARCH_TIME);
                 double weaponRange = getWeaponRange(mob);
-                boolean hasCover = susyTag.hasKey(TAG_COVER_X) && susyTag.hasKey(TAG_COVER_Y) && susyTag.hasKey(TAG_COVER_Z);
+                boolean hasCover = susyTag.hasKey(TAG_COVER_X) && susyTag.hasKey(TAG_COVER_Y) &&
+                        susyTag.hasKey(TAG_COVER_Z);
 
                 if (hasCover) {
                     int cx = susyTag.getInteger(TAG_COVER_X);
@@ -337,11 +337,13 @@ public class FactionViolence {
 
                         double dX = target.posX - mob.posX;
                         double dZ = target.posZ - mob.posZ;
-                        double dY = (target.posY + (double) target.getEyeHeight()) - (mob.posY + (double) mob.getEyeHeight());
+                        double dY = (target.posY + (double) target.getEyeHeight()) -
+                                (mob.posY + (double) mob.getEyeHeight());
                         double horizontalDist = Math.sqrt(dX * dX + dZ * dZ);
                         float targetYaw = (float) (Math.atan2(dZ, dX) * (180.0D / Math.PI)) - 90.0F;
                         float targetPitch = (float) (-(Math.atan2(dY, horizontalDist) * (180.0D / Math.PI)));
-                        float smoothedYaw = MathHelper.wrapDegrees(mob.rotationYaw + MathHelper.wrapDegrees(targetYaw - mob.rotationYaw));
+                        float smoothedYaw = MathHelper
+                                .wrapDegrees(mob.rotationYaw + MathHelper.wrapDegrees(targetYaw - mob.rotationYaw));
                         mob.rotationYaw = smoothedYaw;
                         mob.rotationYawHead = smoothedYaw;
                         mob.renderYawOffset = smoothedYaw;
@@ -362,7 +364,7 @@ public class FactionViolence {
         }
 
         // ====================================================================
-        //  Smart AI: Strafing, because fuck the playerbase
+        // Smart AI: Strafing, because fuck the playerbase
         // ====================================================================
 
         if (shouldStrafe && isSmart) {
@@ -420,7 +422,7 @@ public class FactionViolence {
         }
 
         // ====================================================================
-        //  Smart AI: Wall climbing, because fuck the playerbase
+        // Smart AI: Wall climbing, because fuck the playerbase
         // ====================================================================
 
         if (isSmart && !isInCover) {
@@ -459,8 +461,8 @@ public class FactionViolence {
                         BlockPos adjacent = mobPos.offset(facing);
                         BlockPos adjacentBelow = adjacent.down();
 
-                        boolean isWallPresent = mob.world.getBlockState(adjacent).getMaterial().isSolid()
-                                || mob.world.getBlockState(adjacentBelow).getMaterial().isSolid();
+                        boolean isWallPresent = mob.world.getBlockState(adjacent).getMaterial().isSolid() ||
+                                mob.world.getBlockState(adjacentBelow).getMaterial().isSolid();
 
                         if (isWallPresent) {
                             double faceCenterX = adjacent.getX() + 0.5D - facing.getXOffset() * 0.5D;
@@ -473,8 +475,8 @@ public class FactionViolence {
                                 double topOfCurrentBlock = Math.ceil(currentY);
                                 double distToBlockTop = topOfCurrentBlock - currentY;
 
-                                if (atClimbPeak && distToBlockTop <= 0.4D && distToBlockTop > 0.0D
-                                        && nextNode.y <= MathHelper.floor(mob.posY) + 1) {
+                                if (atClimbPeak && distToBlockTop <= 0.4D && distToBlockTop > 0.0D &&
+                                        nextNode.y <= MathHelper.floor(mob.posY) + 1) {
                                     double vaultX = mob.posX + facing.getXOffset() * 0.35D;
                                     double vaultY = topOfCurrentBlock + 0.05D;
                                     double vaultZ = mob.posZ + facing.getZOffset() * 0.35D;
@@ -530,9 +532,11 @@ public class FactionViolence {
                     float attackRadius = ObfuscationReflectionHelper.getPrivateValue(
                             EntityAIAttackRanged.class,
                             (EntityAIAttackRanged) entry.action,
-                            "attackRadius", "field_82642_h"
-                    );
-                    if (attackRadius > 0) { range = attackRadius; break; }
+                            "attackRadius", "field_82642_h");
+                    if (attackRadius > 0) {
+                        range = attackRadius;
+                        break;
+                    }
                 } catch (Exception ignored) {}
             }
 
@@ -549,14 +553,20 @@ public class FactionViolence {
                     java.lang.reflect.Field f = rawClass.getDeclaredField("attackRange");
                     f.setAccessible(true);
                     float attackRange = (float) f.get(rawAction);
-                    if (attackRange > 0) { range = attackRange; break; }
+                    if (attackRange > 0) {
+                        range = attackRange;
+                        break;
+                    }
                 } catch (Exception ignored) {}
 
                 try {
                     java.lang.reflect.Field f = rawClass.getDeclaredField("maxAttackDistance");
                     f.setAccessible(true);
                     float maxDist = (float) f.get(rawAction);
-                    if (maxDist > 0) { range = maxDist; break; }
+                    if (maxDist > 0) {
+                        range = maxDist;
+                        break;
+                    }
                 } catch (Exception ignored) {}
             }
         }
@@ -620,8 +630,8 @@ public class FactionViolence {
         int searchRadius = (int) Math.min(weaponRange, 20.0D);
         double maxDistSq = weaponRange * weaponRange;
 
-        Vec3d targetEye    = target.getPositionVector().add(0, target.getEyeHeight(), 0);
-        Vec3d targetFeet   = target.getPositionVector().add(0, 0.1, 0);
+        Vec3d targetEye = target.getPositionVector().add(0, target.getEyeHeight(), 0);
+        Vec3d targetFeet = target.getPositionVector().add(0, 0.1, 0);
 
         BlockPos bestCover = null;
         double minCost = Double.MAX_VALUE;
@@ -640,8 +650,10 @@ public class FactionViolence {
                     if (candidate.distanceSq(targetPos) > maxDistSq) continue;
                     if (!isWalkable(world, candidate)) continue;
 
-                    Vec3d candidateFeet = new Vec3d(candidate.getX() + 0.5, candidate.getY() + 0.1, candidate.getZ() + 0.5);
-                    Vec3d candidateEye  = new Vec3d(candidate.getX() + 0.5, candidate.getY() + mob.getEyeHeight(), candidate.getZ() + 0.5);
+                    Vec3d candidateFeet = new Vec3d(candidate.getX() + 0.5, candidate.getY() + 0.1,
+                            candidate.getZ() + 0.5);
+                    Vec3d candidateEye = new Vec3d(candidate.getX() + 0.5, candidate.getY() + mob.getEyeHeight(),
+                            candidate.getZ() + 0.5);
 
                     boolean targetSeesMobFeet = hasLineOfSight(world, targetEye, candidateFeet);
                     if (targetSeesMobFeet) continue;
@@ -656,7 +668,7 @@ public class FactionViolence {
 
                     int pathLength = path.getCurrentPathLength();
                     double distToTarget = Math.sqrt(candidate.distanceSq(targetPos));
-                    double distFromMob  = Math.sqrt(candidate.distanceSq(mobPos));
+                    double distFromMob = Math.sqrt(candidate.distanceSq(mobPos));
                     double cost = pathLength + distFromMob * 0.5 - distToTarget * 0.1;
 
                     if (cost < minCost) {
@@ -670,7 +682,8 @@ public class FactionViolence {
         return bestCover;
     }
 
-    private static boolean isCoverValid(EntityLiving mob, EntityLivingBase target, BlockPos coverPos, double weaponRange) {
+    private static boolean isCoverValid(EntityLiving mob, EntityLivingBase target, BlockPos coverPos,
+                                        double weaponRange) {
         if (target == null || target.isDead || !target.isEntityAlive()) return false;
         if (!isWalkable(mob.world, coverPos)) return false;
         if (coverPos.distanceSq(target.getPosition()) > weaponRange * weaponRange) return false;
@@ -733,7 +746,11 @@ public class FactionViolence {
         double dx = mob.posX - danger.posX;
         double dz = mob.posZ - danger.posZ;
         double dist = Math.sqrt(dx * dx + dz * dz);
-        if (dist < 0.001D) { dx = 1.0D; dz = 0.0D; dist = 1.0D; }
+        if (dist < 0.001D) {
+            dx = 1.0D;
+            dz = 0.0D;
+            dist = 1.0D;
+        }
 
         double fleeX = mob.posX + (dx / dist) * DANGER_AVOID_RADIUS;
         double fleeZ = mob.posZ + (dz / dist) * DANGER_AVOID_RADIUS;

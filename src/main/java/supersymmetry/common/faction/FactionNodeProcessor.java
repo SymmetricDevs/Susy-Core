@@ -68,7 +68,7 @@ public class FactionNodeProcessor extends WalkNodeProcessor {
             count = addVerticalNeighbor(pathOptions, currentPoint, targetPoint, maxDistance, count, -1);
         }
 
-        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
         for (int[] dir : directions) {
             int dx = dir[0];

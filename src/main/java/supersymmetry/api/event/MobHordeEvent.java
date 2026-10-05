@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,10 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 
 import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
-import net.minecraft.world.chunk.Chunk;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;

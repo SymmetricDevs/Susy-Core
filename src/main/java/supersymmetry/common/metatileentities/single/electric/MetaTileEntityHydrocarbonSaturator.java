@@ -1,16 +1,7 @@
 package supersymmetry.common.metatileentities.single.electric;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Matrix4;
-import gregtech.api.GTValues;
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.TieredMetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import java.util.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -24,10 +15,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 
 public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
 
@@ -36,7 +38,8 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
     public static final int MAX_RADIUS = 32;
     private final OrientedOverlayRenderer overlay;
 
-    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
+    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay,
+                                              int tier) {
         super(metaTileEntityId, tier);
         this.overlay = overlay;
     }
@@ -57,15 +60,18 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
                 Cuboid6.full,
                 getFrontFacing(),
                 true,
-                true
-        );
+                true);
     }
 
     @Override
-    protected ModularUI createUI(EntityPlayer player) { return null; }
+    protected ModularUI createUI(EntityPlayer player) {
+        return null;
+    }
 
     @Override
-    protected boolean openGUIOnRightClick() { return false; }
+    protected boolean openGUIOnRightClick() {
+        return false;
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
@@ -128,9 +134,7 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
                 IBlockState state = world.getBlockState(neighbor);
                 if (state == null) continue;
 
-
                 Block block = state.getBlock();
-
 
                 if (block == FLAMMABLE_AIR.getBlock()) {
                     visited.add(neighbor);
@@ -163,7 +167,8 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.info"));
         tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description"));
         tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description1"));
@@ -172,5 +177,7 @@ public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
     }
 
     @Override
-    public boolean getIsWeatherOrTerrainResistant() { return true; }
+    public boolean getIsWeatherOrTerrainResistant() {
+        return true;
+    }
 }

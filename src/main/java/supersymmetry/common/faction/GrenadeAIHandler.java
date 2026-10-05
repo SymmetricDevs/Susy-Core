@@ -1,5 +1,8 @@
 package supersymmetry.common.faction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -9,10 +12,8 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import supersymmetry.Supersymmetry;
 
-import java.util.HashMap;
-import java.util.Map;
+import supersymmetry.Supersymmetry;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class GrenadeAIHandler {
@@ -22,7 +23,7 @@ public class GrenadeAIHandler {
         THROWABLE_ITEM_CHARGE_TICKS.put("gaspunk:grenade", 35);
         THROWABLE_ITEM_CHARGE_TICKS.put("icbmclassic:grenade", 50);
         THROWABLE_ITEM_CHARGE_TICKS.put("techguns:fraggrenade", 40);
-        //items that can be thrown (hold down right click and release)
+        // items that can be thrown (hold down right click and release)
     }
 
     private static final int DEFAULT_CHARGE_TICKS = 40;

@@ -257,7 +257,7 @@ public class SusyTextures {
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
 
-    //Problem causers
+    // Problem causers
 
     public static final OrientedOverlayRenderer TOXIC_SPEWER_OVERLAY = new OrientedOverlayRenderer(
             "machines/problem_causers/toxic_spewer");

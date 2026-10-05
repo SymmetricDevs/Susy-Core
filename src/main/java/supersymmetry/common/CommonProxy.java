@@ -86,7 +86,7 @@ public class CommonProxy {
         Particles.init();
         Particles.register();
         CelestialObjects.init();
-   }
+    }
 
     /**
      * Checks for a canary file in the config directory and deletes it if found.

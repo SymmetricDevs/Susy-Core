@@ -133,7 +133,7 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
 
         String path = metaTileEntityId.getPath().replace("locked_", "");
         MetaTileEntity unlockedPrototype = null;
-        for (String namespace : new String[]{"gregtech", "susy"}) {
+        for (String namespace : new String[] { "gregtech", "susy" }) {
             unlockedPrototype = gregtech.api.GregTechAPI.MTE_REGISTRY.getObject(
                     new ResourceLocation(namespace, path));
             if (unlockedPrototype != null) break;
@@ -169,7 +169,8 @@ public class MetaTileEntityLockedCrate extends MetaTileEntityCrate {
         world.notifyBlockUpdate(pos, blockState, blockState, 3);
 
         ItemStack held = playerIn.getHeldItem(hand);
-        net.minecraft.nbt.NBTTagCompound tag = held.hasTagCompound() ? held.getTagCompound() : new net.minecraft.nbt.NBTTagCompound();
+        net.minecraft.nbt.NBTTagCompound tag = held.hasTagCompound() ? held.getTagCompound() :
+                new net.minecraft.nbt.NBTTagCompound();
         int uses = tag.getInteger("Uses") + 1;
         if (uses >= BREACH_DURABILITY) {
             held.shrink(1);
