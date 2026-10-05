@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -163,11 +165,14 @@ public class SuSyUtility {
             return true;
         }
         if (item.getItem() instanceof MachineItemBlock mteBlock) {
-            if (GTUtility.getMetaTileEntity(item) instanceof MetaTileEntityCrate) {
+            MetaTileEntity mte = GTUtility.getMetaTileEntity(item);
+            if (mte instanceof MetaTileEntityCrate) {
                 NBTTagCompound tag = item.getTagCompound();
                 if (tag.hasKey("Inventory")) {
                     return false;
                 }
+            } else if (mte instanceof MetaTileEntityDrum) {
+                return true;
             }
         }
         return item.getTagCompound() == null || item.getTagCompound().isEmpty();

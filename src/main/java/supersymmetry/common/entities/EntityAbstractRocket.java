@@ -136,7 +136,7 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
     }
 
     public boolean canStartCountdown() {
-        return true;
+        return !isCountdownStarted();
     }
 
     public void sendMessageToPassengers(TextComponentTranslation translation) {
