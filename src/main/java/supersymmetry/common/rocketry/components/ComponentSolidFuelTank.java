@@ -175,8 +175,7 @@ public class ComponentSolidFuelTank extends AbstractComponent<ComponentSolidFuel
 
         // The scan is successful by this point
         analysis.status = StructAnalysis.BuildStat.SUCCESS;
-        // The center column of the rocket shouldn't be counted
-        this.volume = interiorAir - (int) (analysis.getBB(tankBlocks).maxY - analysis.getBB(tankBlocks).minY);
+        this.volume = interiorAir;
         tag.setInteger("volume", this.volume);
         tag.setDouble("area_ratio", computedAreaRatio);
 
