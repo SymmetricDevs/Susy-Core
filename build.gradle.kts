@@ -26,6 +26,10 @@ repositories {
         name = "ChickenBones"
         url = uri("https://chickenbones.net/maven/")
     }
+    maven {
+        name = "JitPack"
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
@@ -138,6 +142,19 @@ dependencies {
     //ICBM
     //temporary dep, will replace once we have our own missiles
     implementation(deps.icbm.deobf())
+
+    //DO NOT PUSH THIS SHIT TO GIT
+    //implementation(deps.techguns.deobf())
+
+    // Ladylib
+    compileOnly("com.github.Ladysnake:Ladylib:2.3.0")
+    runtimeOnly("com.github.Ladysnake:Ladylib:2.3.0")
+
+    // Gaspunk
+    implementation(deps.gaspunk.deobf())
+
+    // FTB Library Legacy
+    implementation(deps.ftblib.deobf())
 
     // # Optional dependencies. Uncomment the ones you need
     implementation(deps.cd4017beLib.deobf())

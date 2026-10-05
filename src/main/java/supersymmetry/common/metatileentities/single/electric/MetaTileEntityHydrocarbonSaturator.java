@@ -1,0 +1,176 @@
+package supersymmetry.common.metatileentities.single.electric;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Cuboid6;
+import codechicken.lib.vec.Matrix4;
+import gregtech.api.GTValues;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.TieredMetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+
+public class MetaTileEntityHydrocarbonSaturator extends TieredMetaTileEntity {
+
+    private int currentRadius = 0;
+    private final IBlockState FLAMMABLE_AIR = stateOf("susy", "flammable_air", 0);
+    public static final int MAX_RADIUS = 32;
+    private final OrientedOverlayRenderer overlay;
+
+    public MetaTileEntityHydrocarbonSaturator(ResourceLocation metaTileEntityId, OrientedOverlayRenderer overlay, int tier) {
+        super(metaTileEntityId, tier);
+        this.overlay = overlay;
+    }
+
+    @Override
+    public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tile) {
+        return new MetaTileEntityHydrocarbonSaturator(this.metaTileEntityId, this.overlay, this.getTier());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
+        super.renderMetaTileEntity(renderState, translation, pipeline);
+        this.overlay.renderOrientedState(
+                renderState,
+                translation,
+                pipeline,
+                Cuboid6.full,
+                getFrontFacing(),
+                true,
+                true
+        );
+    }
+
+    @Override
+    protected ModularUI createUI(EntityPlayer player) { return null; }
+
+    @Override
+    protected boolean openGUIOnRightClick() { return false; }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setInteger("harmRadius", currentRadius);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        currentRadius = data.getInteger("harmRadius");
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER && side != null) {
+            return null;
+        }
+        return super.getCapability(capability, side);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        this.energyContainer.changeEnergy(GTValues.VH[getTier() - 1]);
+
+        if (this.energyContainer.getEnergyStored() < this.energyContainer.getEnergyCapacity()) return;
+        if (getWorld().isRemote) return;
+
+        this.energyContainer.removeEnergy(this.energyContainer.getEnergyCapacity());
+        processFloodFill(getWorld(), getPos(), (int) GTValues.V[getTier()]);
+    }
+
+    private void processFloodFill(World world, BlockPos origin, int budget) {
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        Set<BlockPos> visited = new HashSet<>();
+
+        queue.add(origin);
+        visited.add(origin);
+
+        int filled = 0;
+
+        while (!queue.isEmpty()) {
+            BlockPos current = queue.poll();
+
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                BlockPos neighbor = current.offset(facing);
+
+                if (Math.abs(neighbor.getX() - origin.getX()) > MAX_RADIUS ||
+                        Math.abs(neighbor.getY() - origin.getY()) > MAX_RADIUS ||
+                        Math.abs(neighbor.getZ() - origin.getZ()) > MAX_RADIUS) {
+                    continue;
+                }
+
+                if (visited.contains(neighbor)) continue;
+                if (!world.isBlockLoaded(neighbor)) continue;
+
+                IBlockState state = world.getBlockState(neighbor);
+                if (state == null) continue;
+
+
+                Block block = state.getBlock();
+
+
+                if (block == FLAMMABLE_AIR.getBlock()) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                    continue;
+                }
+
+                if (world.isAirBlock(neighbor)) {
+                    if (filled >= budget) {
+                        return;
+                    }
+
+                    world.setBlockState(neighbor, FLAMMABLE_AIR, 3);
+
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                    filled++;
+
+                    if (filled >= budget) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private static IBlockState stateOf(String domain, String path, int meta) {
+        Block block = Block.REGISTRY.getObject(new ResourceLocation(domain, path));
+        return block != null ? block.getStateFromMeta(meta) : net.minecraft.init.Blocks.AIR.getDefaultState();
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.info"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description1"));
+        tooltip.add(I18n.format("susy.machine.hydrocarbon_saturator.tooltip.description2"));
+        tooltip.add(I18n.format("susy.machine.generic.tooltip.radius_warning"));
+    }
+
+    @Override
+    public boolean getIsWeatherOrTerrainResistant() { return true; }
+}

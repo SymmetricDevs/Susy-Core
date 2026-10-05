@@ -24,10 +24,14 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "projectred-core",
             "rs_ctr",
             "icbmclassic",
+            "gaspunk",
+            "icbmclassic",
             "appliedenergistics2",
             "universalmodcore",
             "dimstack",
             "visualores",
+            "gcym",
+            "opencomputers",
             "gcym",
             "immersiverailroading");
 

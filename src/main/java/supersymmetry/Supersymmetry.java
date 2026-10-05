@@ -30,6 +30,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
+import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 import supersymmetry.integration.opencomputers.DriverSpeaker;
@@ -108,11 +109,24 @@ public class Supersymmetry {
                 EnumDyeColor.GRAY,
                 () -> FileSystem.fromClass(Supersymmetry.class, "susy", "speaker_audio"),
                 true);
+
+        Items.registerFloppy(
+                "constructoid-M",
+                EnumDyeColor.RED,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "constructoid/constructoid_m"),
+                true);
+
+        Items.registerFloppy(
+                "constructoid-S",
+                EnumDyeColor.CYAN,
+                () -> FileSystem.fromClass(Supersymmetry.class, "susy", "constructoid/constructoid_s"),
+                true);
     }
 
     @Mod.EventHandler
     public void onPostInit(@NotNull FMLPostInitializationEvent event) {
         SusyRocketComponents.init();
+        MetaTileEntityDefoliator.DefoliatorReplacements.init(); //appease GTFO
         proxy.postLoad();
     }
 
