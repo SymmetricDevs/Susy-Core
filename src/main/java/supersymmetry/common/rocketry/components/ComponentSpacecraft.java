@@ -227,11 +227,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.volume = interior.size();
         tag.setDouble("volume", this.volume);
         if (lifeSupports.isEmpty()) {
-            // no airspace necessary
-            if (!interior.isEmpty()) {
-                analysis.status = BuildStat.SPACECRAFT_HOLLOW;
-                return Optional.empty();
-            }
             tag.setBoolean("hasAir", false);
             this.hasAir = false; // goog..?
         } else {
