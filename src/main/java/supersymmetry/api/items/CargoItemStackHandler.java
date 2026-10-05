@@ -176,7 +176,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             ItemStack currentStack = bucket.getLast();
             overflowAmount = currentStack.getCount() + stack.getCount() - currentStack.getMaxStackSize();
             if (overflowAmount > 0 && maxVolume <= currentVolume) {
-                maxAddition = Math.min(maxAddition, currentStack.getMaxStackSize() - currentStack.getCount());
+                maxAddition = Math.min(maxAddition, currentStack.getMaxStackSize() - stack.getCount());
             }
         }
 
