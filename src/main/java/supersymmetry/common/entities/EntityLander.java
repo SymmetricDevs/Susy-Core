@@ -346,9 +346,6 @@ public class EntityLander extends EntityAbstractRocket
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);
-            if (passenger instanceof EntityLiving living) {
-                living.setNoAI(false);
-            }
         }
     }
 
@@ -401,16 +398,6 @@ public class EntityLander extends EntityAbstractRocket
     @Override
     public AnimationFactory getFactory() {
         return factory;
-    }
-
-    @Override
-    protected void addPassenger(Entity passenger) {
-        if (this.getPassengers().isEmpty()) {
-            super.addPassenger(passenger);
-            if (passenger instanceof EntityLiving living) {
-                living.setNoAI(true);
-            }
-        }
     }
 
     @Override
@@ -627,7 +614,9 @@ public class EntityLander extends EntityAbstractRocket
             GuiFactories.entity().open(player, this);
             return true;
         }
-        player.startRiding(this);
+        if (!player.isRidingSameEntity(this)) {
+            player.startRiding(this);
+        }
         return false;
     }
 
