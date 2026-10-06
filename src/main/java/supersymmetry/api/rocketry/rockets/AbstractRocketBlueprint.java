@@ -160,7 +160,7 @@ public abstract class AbstractRocketBlueprint implements Cloneable {
 
     public double getGuidanceMultiplier() {
         var spacecrafts = getSpacecrafts();
-        return spacecrafts.isEmpty() ? 0 : spacecrafts.get(0).guidanceMultiplier;
+        return spacecrafts.isEmpty() ? 1 : spacecrafts.get(0).guidanceMultiplier;
     }
 
     public double getRedundancy() {
