@@ -17,6 +17,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -257,41 +258,47 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
         double dx = this.getCrashPosition().getX() + 0.5 - this.posX;
         double dy = this.getCrashPosition().getY() - this.posY;
         double dz = this.getCrashPosition().getZ() + 0.5 - this.posZ;
-        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+        Vec3d toTarget = new Vec3d(dx, dy, dz).normalize();
 
-        // Calculate target yaw and pitch
-        float targetYaw = 90 + (float) (Math.atan2(dz, dx) * 180.0 / Math.PI);
-        float targetPitch = 180 + (float) (-(Math.atan2(dy, horizontalDistance) * 180.0 / Math.PI));
-
-        // Gradually adjust yaw and pitch (semi-realistic curve)
-        float yawDiff = targetYaw - this.rotationYaw;
-        while (yawDiff > 180.0F)
-            yawDiff -= 360.0F;
-        while (yawDiff < -180.0F)
-            yawDiff += 360.0F;
-
-        float pitchDiff = targetPitch - this.rotationPitch;
-        while (pitchDiff > 180.0F)
-            pitchDiff -= 360.0F;
-        while (pitchDiff < -180.0F)
-            pitchDiff += 360.0F;
-
-        // Curve rate increases with flight time (rocket becomes more unstable)
-        float curveRate = Math.min(flightTime * flightTime * 0.000001F, 5.0F);
-        this.rotationYaw += yawDiff * curveRate;
-        this.rotationPitch += pitchDiff * curveRate * 0.05F;
-
-        // Apply lateral motion based on rotation
-        double speed = jerk * Math.pow(flightTime, 2) / 2;
+        // Current heading, using the same yaw/pitch basis as the renderer and updatePassenger
+        // (pitch is the angle from +Y, so a nose-down rocket has pitch > 90)
         double yawRad = Math.toRadians(this.rotationYaw);
         double pitchRad = Math.toRadians(this.rotationPitch);
+        Vec3d heading = new Vec3d(-Math.sin(yawRad) * Math.sin(pitchRad), Math.cos(pitchRad),
+                Math.cos(yawRad) * Math.sin(pitchRad));
 
-        this.motionX = -Math.sin(yawRad) * Math.sin(pitchRad) * speed;
-        this.motionZ = Math.cos(yawRad) * Math.sin(pitchRad) * speed;
-        this.motionY = Math.cos(pitchRad) * speed;
+        // Turn the heading towards the target by at most maxTurn per tick (constant-rate arc, no overshoot).
+        // Turn rate increases with flight time (rocket becomes more unstable)
+        double maxTurn = Math.toRadians(Math.min(1.0 + (flightTime - 240) * 0.02, 6.0));
+        double angle = Math.acos(MathHelper.clamp(heading.dotProduct(toTarget), -1.0, 1.0));
+        if (angle <= maxTurn) {
+            heading = toTarget;
+        } else if (Math.sin(angle) > 1e-6) {
+            // Slerp a fraction maxTurn / angle of the way
+            double sinAngle = Math.sin(angle);
+            double a = Math.sin(angle - maxTurn) / sinAngle;
+            double b = Math.sin(maxTurn) / sinAngle;
+            heading = heading.scale(a).add(toTarget.scale(b)).normalize();
+        } else {
+            // Pointing directly away from the target: tip over in the current yaw direction
+            heading = new Vec3d(-Math.sin(yawRad) * Math.sin(maxTurn), -Math.cos(maxTurn),
+                    Math.cos(yawRad) * Math.sin(maxTurn));
+        }
 
-        this.setPositionAndRotation(this.posX + this.motionX, this.posY + this.motionY,
-                this.posZ + this.motionZ, this.rotationYaw, this.rotationPitch);
+        // Convert back to yaw/pitch. Yaw is undefined when the heading is (nearly) vertical, so keep the old one
+        double horizontal = Math.sqrt(heading.x * heading.x + heading.z * heading.z);
+        if (horizontal > 1e-3) {
+            this.rotationYaw = (float) Math.toDegrees(Math.atan2(-heading.x, heading.z));
+        }
+        this.rotationPitch = (float) Math.toDegrees(Math.atan2(horizontal, heading.y));
+
+        double speed = Math.max(jerk * Math.pow(flightTime, 2) / 2, 20);
+        this.motionX = heading.x * speed;
+        this.motionY = heading.y * speed;
+        this.motionZ = heading.z * speed;
+
+        // Not setPositionAndRotation: it clamps pitch to [-90, 90], which would stop the nose from ever pointing down
+        this.setPosition(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
     }
 
     public int getFuelVolume() {
@@ -360,6 +367,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                     } else {
                         this.setLaunchResult(SuccessCalculation.LaunchResult.LAUNCHES);
                     }
+            this.setLaunchResult(SuccessCalculation.LaunchResult.CRASHES);
         }
         super.launchRocket();
     }
