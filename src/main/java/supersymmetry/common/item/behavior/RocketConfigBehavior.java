@@ -140,7 +140,8 @@ public class RocketConfigBehavior implements IItemBehaviour, IMui2Factory, ItemU
         Flow turnAltitudeFlow = new Row().coverChildren().setEnabledIf((w) -> pageNum == 0);
         FloatSyncValue turnAltitude = new FloatSyncValue(() -> getTurnAltitude(pageNum, stack),
                 v -> setTurnAltitude(pageNum, stack, v));
-        turnAltitudeFlow.child(new TextFieldWidget().height(16).setNumbersDouble(val -> Math.clamp(val, 0, 1000)).value(turnAltitude));
+        turnAltitudeFlow.child(
+                new TextFieldWidget().height(16).setNumbersDouble(val -> Math.clamp(val, 0, 1000)).value(turnAltitude));
         rowFlow.child(turnAltitudeFlow);
 
         return panel;
