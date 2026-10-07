@@ -243,7 +243,7 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                     entity.attackEntityFrom(DamageSource.FLY_INTO_WALL, (float) this.motionY * 10.f);
             }
 
-            if (this.posY > 1000 && this.getLaunchResult() == SuccessCalculation.LaunchResult.LAUNCHES) {
+            if (this.posY > 100000 && this.getLaunchResult() == SuccessCalculation.LaunchResult.LAUNCHES) {
                 if (this.hasActed()) {
                     this.setDead();
                 } else {
