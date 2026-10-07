@@ -67,8 +67,6 @@ public class SusyTextures {
     public static final OrientedOverlayRenderer ALD_OVERLAY = new OrientedOverlayRenderer("machines/ald");
     public static final OrientedOverlayRenderer ION_IMPLANTER_OVERLAY = new OrientedOverlayRenderer(
             "machines/ion_implanter");
-    public static final OrientedOverlayRenderer SPIN_COATER_OVERLAY = new OrientedOverlayRenderer(
-            "machines/spin_coater");
     public static final OrientedOverlayRenderer SPUTTER_DEPOSITION_OVERLAY = new OrientedOverlayRenderer(
             "machines/sputter_deposition");
     public static final OrientedOverlayRenderer PHASE_SEPARATOR_OVERLAY = new OrientedOverlayRenderer(
@@ -258,6 +256,22 @@ public class SusyTextures {
             "gregtech:blocks/casings/grinder_casing/abrasion_resistant_casing");
 
     public static final DrumRenderer PLASTIC_CAN = new DrumRenderer("storage/drums/plastic_can");
+
+    // Problem causers
+
+    public static final OrientedOverlayRenderer TOXIC_SPEWER_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/toxic_spewer");
+    public static final OrientedOverlayRenderer DEFOLIATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/defoliator");
+    public static final OrientedOverlayRenderer DUST_AGITATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/dust_agitator");
+    public static final OrientedOverlayRenderer INTERFERENCE_DYNAMO_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/interference_dynamo");
+    public static final OrientedOverlayRenderer HYDROCARBON_SATURATOR_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/hydrocarbon_saturator");
+
+    public static final OrientedOverlayRenderer FEDERATION_DROP_OVERLAY = new OrientedOverlayRenderer(
+            "machines/problem_causers/federation_drop");
 
     // Stock stuff
     // public static final SimpleCubeRenderer STOCK_MACHINE_CASING = new

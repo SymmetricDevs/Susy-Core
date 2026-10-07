@@ -106,6 +106,10 @@ public class EventHandlers {
         if (!gameRules.hasRule("factionViolence")) {
             gameRules.addGameRule("factionViolence", "true", GameRules.ValueType.BOOLEAN_VALUE);
         }
+
+        if (!gameRules.hasRule("factionTagger")) {
+            gameRules.addGameRule("factionTagger", "false", GameRules.ValueType.BOOLEAN_VALUE);
+        }
     }
 
     @SubscribeEvent

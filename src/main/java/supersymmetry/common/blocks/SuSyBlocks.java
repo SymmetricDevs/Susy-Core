@@ -17,8 +17,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.GTValues;
 import gregtech.api.block.VariantActiveBlock;
 import gregtech.api.block.VariantBlock;
+import gregtech.api.fluids.GTFluidRegistration;
 import gregtech.api.util.BlockUtility;
 import supersymmetry.common.blocks.active.BlockActiveAssemblyLine;
 import supersymmetry.common.blocks.active.BlockActiveBasicIntakeCasing;
@@ -139,6 +141,8 @@ public class SuSyBlocks {
     public static BlocksS16BMRF S16BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockGoog GOOG;
+    public static BlockFlammableAir BLOCKRADICALAIR;
+    public static BlockFluidPlacer BLOCKFLUIDPLACER;
     public static BlockSpeaker SPEAKER;
     public static BlockInductionCrucible INDUCTION_CRUCIBLE;
 
@@ -167,6 +171,7 @@ public class SuSyBlocks {
     public static BlockInvertedActiveEccentricRoll INVERTED_ACTIVE_ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
+    public static BlockMercuryFluid MERCURY_FLUID;
     public static BlockEDMElectrode EDM_ELECTRODE;
     public static BlockRobotArm ROBOT_ARM;
     public static BlockRobotArmLayup ROBOT_ARM_LAYUP;
@@ -222,6 +227,10 @@ public class SuSyBlocks {
         REGOLITH = new BlockRegolith();
         REGOLITH.setRegistryName("regolith");
         registerWalkingSpeedBonus();
+
+        MERCURY_FLUID = new BlockMercuryFluid();
+        MERCURY_FLUID.setRegistryName(GTValues.MODID, "fluid.mercury");
+        GTFluidRegistration.INSTANCE.registerFluidBlock(MERCURY_FLUID);
 
         SuSyTileEntities.register();
     }

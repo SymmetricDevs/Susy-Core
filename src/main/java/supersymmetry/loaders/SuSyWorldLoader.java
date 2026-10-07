@@ -12,6 +12,7 @@ public class SuSyWorldLoader {
             BOPBiomes.REG_INSTANCE.getPresentBiomes().forEach(biome -> {
                 IExtendedBiome actualBiome = BOPBiomes.REG_INSTANCE.getExtendedBiome(biome);
                 if (actualBiome != null) {
+                    actualBiome.getGenerationManager().removeGenerator("hive");
                     actualBiome.getGenerationManager().removeGenerator("malachite");
                     actualBiome.getGenerationManager().removeGenerator("amber");
                     actualBiome.getGenerationManager().removeGenerator("amethyst");

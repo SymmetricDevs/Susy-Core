@@ -1,10 +1,16 @@
 package supersymmetry.client.renderer.particles;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import supersymmetry.Supersymmetry;
+
 public class SusyParticleFlareSmoke extends Particle {
+
+    private static final ResourceLocation PLUME_SPRITE = new ResourceLocation(Supersymmetry.MODID, "particle/plume");
 
     public SusyParticleFlareSmoke(World worldIn, double x, double y, double z, float R, float G, float B) {
         super(worldIn, x, y, z);
@@ -17,12 +23,15 @@ public class SusyParticleFlareSmoke extends Particle {
         this.particleGreen = G;
         this.particleBlue = B;
 
-        this.particleScale = 10f;
-        this.multipleParticleScaleBy(3.0f); // MUCH larger final size
+        this.particleScale = 3f;
 
         this.particleMaxAge = 100;
 
         this.canCollide = false;
+
+        this.setParticleTexture(
+                Minecraft.getMinecraft().getTextureMapBlocks()
+                        .getAtlasSprite(PLUME_SPRITE.toString()));
     }
 
     @Override
@@ -41,6 +50,11 @@ public class SusyParticleFlareSmoke extends Particle {
 
         // Fade out slowly
         this.particleAlpha = 1.0f - ((float) this.particleAge / this.particleMaxAge);
+    }
+
+    @Override
+    public int getFXLayer() {
+        return 1;
     }
 
     @Override

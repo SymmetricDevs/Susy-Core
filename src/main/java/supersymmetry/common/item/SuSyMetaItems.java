@@ -2,6 +2,7 @@ package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
+import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -49,6 +51,7 @@ public class SuSyMetaItems {
     public static MetaValueItem EARTH_ORBITAL_SCRAP;
     public static MetaValueItem TUNGSTEN_ELECTRODE;
     public static MetaValueItem CODE_BREACHER;
+    public static MetaValueItem CODE_BREACHER_DEV;
     public static MetaValueItem SHAPE_MOLD_TARGET;
     public static MetaValueItem ENTITY_TAGGER;
     public static MetaValueItem FACTION_RADIO;
@@ -57,6 +60,10 @@ public class SuSyMetaItems {
     public static MetaValueItem LOCATION_CARD;
     public static MetaValueItem ELITE_CARGO_DRONE;
     public static MetaValueItem CLAY_GRAPHITE_CRUCIBLE;
+    public static MetaValueItem INTEL_CHIP;
+    public static MetaValueItem INTEL_CHIP_FULL;
+    public static MetaValueItem ENTITY_PROMOTER;
+    public static MetaValueItem HYPER_DEFOLIANT;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -145,7 +152,12 @@ public class SuSyMetaItems {
         RESTRICTIVE_FILTER = metaItem.addItem(6, "restrictive_filter");
         EARTH_ORBITAL_SCRAP = metaItem.addItem(7, "orbital.scrap.earth").setMaxStackSize(8);
 
-        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1);
+        CODE_BREACHER = metaItem.addItem(8, "code_breacher").setMaxStackSize(1)
+                .addComponents((IItemDurabilityManager) itemStack -> {
+                    int uses = itemStack.hasTagCompound() ? itemStack.getTagCompound().getInteger("Uses") : 0;
+                    return (double) (BREACH_DURABILITY - uses) / BREACH_DURABILITY;
+                });
+
         ENTITY_TAGGER = metaItem.addItem(9, "entity_tagger").setMaxStackSize(1);
 
         FACTION_RADIO = metaItem.addItem(10, "faction_radio").setMaxStackSize(1)
@@ -167,7 +179,7 @@ public class SuSyMetaItems {
         ROCKET_CONFIGURER = metaItem.addItem(15, "rocket_configurer").setMaxStackSize(1)
                 .addComponents(new RocketConfigBehavior());
 
-        // Free ID
+        CODE_BREACHER_DEV = metaItem.addItem(16, "code_breacher_dev").setMaxStackSize(1);
 
         SHAPE_MOLD_TARGET = metaItem.addItem(17, "shape.mold.target");
 
@@ -193,6 +205,16 @@ public class SuSyMetaItems {
 
         AIRLOCK = metaItem.addItem(25, "airlock")
                 .addComponents(new AirlockBehavior(SuSyBlocks.AIRLOCK_DOOR));
+
+        ENTITY_PROMOTER = metaItem.addItem(26, "entity_promoter").setMaxStackSize(1);
+
+        INTEL_CHIP = metaItem.addItem(27, "intel_chip").setMaxStackSize(1)
+                .addComponents(IntelChipBehaviour.INSTANCE);
+
+        INTEL_CHIP_FULL = metaItem.addItem(28, "intel_chip_full")
+                .addComponents(IntelChipFullBehaviour.INSTANCE);
+        HYPER_DEFOLIANT = metaItem.addItem(29, "hyper_defoliant")
+                .addComponents(new HyperDefoliantBehavior());
     }
 
     private static void addExtraBehaviours() {

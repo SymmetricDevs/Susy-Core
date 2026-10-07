@@ -32,7 +32,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -72,6 +74,8 @@ import supersymmetry.api.util.RenderMaskManager;
 import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.event.MissingModelCreator;
+import supersymmetry.client.renderer.block.FlammableAirModelLoader;
+import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
@@ -108,6 +112,9 @@ public class ClientProxy extends CommonProxy {
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
         TanklessFluidPipeRenderer.INSTANCE.preInit();
+        ModelLoaderRegistry.registerLoader(FlammableAirModelLoader.INSTANCE); // can be moved somewhere else if
+                                                                              // necessary
+                                                                              // (I think)
     }
 
     @Override
@@ -115,6 +122,7 @@ public class ClientProxy extends CommonProxy {
         super.load();
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
+        MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
     }
 
     @Override
@@ -248,6 +256,7 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "entities/earth_landing_system"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
+        map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/plume"));
         for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
             map.registerSprite(flame);
         }
@@ -373,6 +382,19 @@ public class ClientProxy extends CommonProxy {
             }
         }
     }
+
+    /*
+     * TODO for space 2.0: fix atmosphere renderer
+     *
+     * @SubscribeEvent
+     * public static void onWorldLoad(WorldEvent.Load event) {
+     * World world = event.getWorld();
+     * if (!world.isRemote) return;
+     * if (world.provider.getDimension() == 0 && world.provider.getSkyRenderer() == null) {
+     * world.provider.setSkyRenderer(CelestialObjects.RENDERER);
+     * }
+     * }
+     */
 
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event) {

@@ -16,8 +16,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.faction.FactionHateManager;
 
@@ -30,7 +28,7 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public int gracePeriod;
     public int ticksActive;
     public int timeoutPeriod;
-    public Object2IntMap<String> invasionTimers = new Object2IntOpenHashMap<>();
+    public int[] invasionTimers;
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
     public String currentInvasion = "";
@@ -39,15 +37,14 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public MobHordePlayerData() {
         this.gracePeriod = DEFAULT_GRACE_PERIOD;
         this.ticksUntilCanSpawn = DEFAULT_GRACE_PERIOD;
+        this.invasionTimers = new int[MobHordeEvent.EVENTS.size()];
     }
 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound result = new NBTTagCompound();
         result.setInteger("ticksUntilCanSpawn", ticksUntilCanSpawn);
-        NBTTagCompound timers = new NBTTagCompound();
-        invasionTimers.forEach((key, ticks) -> timers.setInteger(key, ticks));
-        result.setTag("invasionTimers", timers);
+        result.setIntArray("invasionTimers", invasionTimers);
         result.setBoolean("hasActiveInvasion", hasActiveInvasion);
         if (this.hasActiveInvasion && !this.invasionEntitiesUUIDs.isEmpty()) {
             result.setString("currentInvasion", currentInvasion);
@@ -73,11 +70,16 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         ticksUntilCanSpawn = nbt.getInteger("ticksUntilCanSpawn");
-        invasionTimers.clear();
-        NBTTagCompound timers = nbt.getCompoundTag("invasionTimers");
-        for (String key : timers.getKeySet()) {
-            invasionTimers.put(key, timers.getInteger(key));
+
+        int currentEventCount = MobHordeEvent.EVENTS.size();
+        int[] savedTimers = nbt.getIntArray("invasionTimers");
+
+        // oob fix
+        this.invasionTimers = new int[currentEventCount];
+        if (savedTimers.length > 0) {
+            System.arraycopy(savedTimers, 0, this.invasionTimers, 0, Math.min(savedTimers.length, currentEventCount));
         }
+
         hasActiveInvasion = nbt.getBoolean("hasActiveInvasion");
         if (hasActiveInvasion) {
             invasionEntitiesUUIDs.clear();
@@ -112,16 +114,25 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 return;
         }
         ticksUntilCanSpawn--;
-        invasionTimers.replaceAll((key, ticks) -> ticks - 1);
+        for (int i = 0; i < invasionTimers.length; i++) {
+            invasionTimers[i]--;
+        }
         if (ticksUntilCanSpawn <= 0 && Math.random() < 0.001) {
-            List<MobHordeEvent> doableEvents = MobHordeEvent.EVENTS.values().stream()
-                    .filter(event -> event.canRun(player) && invasionTimers.getInt(event.KEY) <= 0)
-                    .collect(Collectors.toList());
+            List<Integer> doableEvents = new ArrayList<>();
+            List<MobHordeEvent> events = MobHordeEvent.EVENTS.values().stream().collect(Collectors.toList());
+            MobHordeEvent event;
+            for (int i = 0; i < MobHordeEvent.EVENTS.values().size(); i++) {
+                event = events.get(i);
+                if (event.canRun(player) && invasionTimers[i] <= 0) {
+                    doableEvents.add(i);
+                }
+            }
             if (!doableEvents.isEmpty()) {
                 ticksUntilCanSpawn = gracePeriod;
-                MobHordeEvent event = doableEvents.get((int) (Math.random() * doableEvents.size()));
+                int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
+                event = events.get(index);
                 if (event.run(player, this::addEntity)) {
-                    invasionTimers.put(event.KEY, event.getNextDelay());
+                    invasionTimers[index] = event.getNextDelay();
 
                     this.setCurrentInvasion(event);
                 }
