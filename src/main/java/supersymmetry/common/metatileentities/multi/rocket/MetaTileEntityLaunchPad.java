@@ -127,22 +127,22 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
 
     @Override
     protected @NotNull BlockPattern createStructurePattern() {
-        String allD = "DDDDDDDDDDDDDDDDDDDDDDD"; // 23 D's
-        String dcTrack = "DDDDDDDDCCCCCCCDDDDDDDD"; // 8D + 7C + 8D = 23: launch surface
-        String dcHoleTrack = "DDDDDDDDCCC CCCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
-        String dcHoleTrackLarge = "DDDDDDDDCC   CCDDDDDDDD"; // 8D + 7C + 8D = 23: hole
-        String ctrlRow = "DDDDDDDDDDDSDDDDDDDDDDD"; // 11D + S + 11D = 23: self-row
-        String sp23 = "                       "; // 23 spaces
-        String ccc23 = "          CCC          "; // 10sp + 3C + 10sp = 23: reinforced foundation under track
-        String supp3 = "     CC   CCC   CC     "; // reinforced foundation under three supports
-        String rrr23 = "          RRR          "; // 10sp + 3R + 10sp = 23
-        String fff23 = "          LLL          "; // 10sp + 3F + 10sp = 23
-        String l23 = "     LL         LL     "; // 6sp + L + 9sp + L + 6sp = 23
-        String cSides = "   CCCC         CCCC   "; // reinforced foundation underneath sides
-        String dad23 = "DDDDDDDD       DDDDDDDD"; // 8C + 7sp + 8C = 23
-        String allC = "CCCCCCCCCCCCCCCCCCCCCCC"; // 23 reinforced foundation
-        String clasp = "     LLLLL   LLLLL     ";
-        String claspOut = "    lLLLLLLLLLLLLLl    ";
+        String allD = " DDDDDDDDDDDDDDDDDDDDDDD "; // 23 D's
+        String dcTrack = " DDDDDDDDCCCCCCCDDDDDDDD "; // 8D + 7C + 8D = 23: launch surface
+        String dcHoleTrack = " DDDDDDDDCC   CCDDDDDDDD "; // 8D + 7C + 8D = 23: hole
+        String dcHoleTrackLarge = " DDDDDDDDC     CDDDDDDDD "; // 8D + 7C + 8D = 23: hole
+        String ctrlRow = " DDDDDDDDDDDSDDDDDDDDDDD "; // 11D + S + 11D = 23: self-row
+        String sp23 = "                         "; // 23 spaces
+        String ccc23 = "           CCC           "; // 10sp + 3C + 10sp = 23: reinforced foundation under track
+        String supp3 = "      CC   CCC   CC      "; // reinforced foundation under three supports
+        String rrr23 = "           RRR           "; // 10sp + 3R + 10sp = 23
+        String fff23 = "           LLL           "; // 10sp + 3F + 10sp = 23
+        String l23 = "      LL         LL      "; // 6sp + L + 9sp + L + 6sp = 23
+        String cSides = "CC  CCCC         CCCC  CC"; // reinforced foundation underneath sides
+        String dad23 = " DDDDDDDD       DDDDDDDD "; // 8C + 7sp + 8C = 23
+        String allC = " CCCCCCCCCCCCCCCCCCCCCCC "; // 23 reinforced foundation
+        String clasp = "      LLLLL   LLLLL      ";
+        String claspOut = "     lLLLLLLLLLLLLLl     ";
 
         FactoryBlockPattern p = FactoryBlockPattern.start();
         // 10 erector approach aisles
@@ -175,17 +175,17 @@ public class MetaTileEntityLaunchPad extends MultiblockWithDisplayBase
         aisleWithSpace(p, sp23, allC, dad23, dad23, dad23, allD, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Main platform (front half)
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
-        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcHoleTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
                 sp23);
         // Main platform (center — support pillars)
-        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
                 cSides, l23, l23);
         aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
                 cSides, l23, l23);
-        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrack, cSides, cSides, cSides, cSides, cSides,
+        aisleWithClasp(p, l23, clasp, allC, sp23, sp23, sp23, dcHoleTrackLarge, cSides, cSides, cSides, cSides, cSides,
                 cSides, l23, l23);
         // Main platform (back half)
-        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
+        aisleWithClasp(p, sp23, claspOut, allC, sp23, sp23, sp23, dcHoleTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23,
                 sp23);
         aisleWithSpace(p, sp23, allC, sp23, sp23, sp23, dcTrack, sp23, sp23, sp23, sp23, sp23, sp23, sp23, sp23);
         // Transition
