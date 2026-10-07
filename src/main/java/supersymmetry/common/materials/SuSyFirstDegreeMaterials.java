@@ -150,6 +150,6 @@ public class SuSyFirstDegreeMaterials {
                 .color(0x3e563e)
                 .build();
 
-        Monel400.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(811, 2048, true, true, false, false));
+        Monel400.setProperty(PropertyKey.FLUID_PIPE, new FluidPipeProperties(811, 90, true, true, false, false));
     }
 }

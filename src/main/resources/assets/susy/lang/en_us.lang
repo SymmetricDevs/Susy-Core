@@ -2586,12 +2586,12 @@ tile.s16bmrf_blocks.s16bmrf15.name=BMRF-255
 tile.s16bmrf_blocks.s16bmrf16.name=BMRF-256
 
 #tanks controller
-susy.machine.tank.wood.name=Wooden Tank Controller
-susy.machine.tank.steel.name=Steel Tank Controller
-susy.machine.tank.monel_400.name=Monel Tank Controller
-susy.machine.tank.stainless_steel.name=Stainless Steel Tank Controller
-susy.machine.tank.titanium.name=Titanium Tank Controller
-susy.machine.tank.tungsten_steel.name=Tungstensteel Tank Controller
+susy.machine.tank.wood.name=Wooden Multiblock Tank
+susy.machine.tank.steel.name=Steel Multiblock Tank
+susy.machine.tank.monel_400.name=Monel Multiblock Tank
+susy.machine.tank.stainless_steel.name=Stainless Steel Multiblock Tank
+susy.machine.tank.titanium.name=Titanium Multiblock Tank
+susy.machine.tank.tungsten_steel.name=Tungstensteel Multiblock Tank
 
 #tanks valve
 susy.machine.tank_valve.monel_400.name=Monel Tank Valve
