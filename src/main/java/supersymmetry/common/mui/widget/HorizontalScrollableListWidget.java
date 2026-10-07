@@ -48,7 +48,7 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
     }
 
     private void addScrollOffset(int offset) {
-        this.scrollOffset = MathHelper.clamp(scrollOffset + offset, 0, totalListWidth - getSize().width);
+        this.scrollOffset = MathHelper.clamp(scrollOffset + offset, 0, Math.max(0, totalListWidth - getSize().width));
         updateElementPositions();
     }
 
@@ -144,6 +144,9 @@ public class HorizontalScrollableListWidget extends AbstractWidgetGroup {
     @Override
     public boolean mouseWheelMove(int mouseX, int mouseY, int wheelDelta) {
         if (isMouseOverElement(mouseX, mouseY)) {
+            if (!sliderActive) {
+                return false;
+            }
             int direction = -MathHelper.clamp(wheelDelta, -1, 1);
             int moveDelta = direction * (slotWidth / 2);
             addScrollOffset(moveDelta);

@@ -775,8 +775,7 @@ public class SuSyMetaTileEntities {
         ROCKET_PROGRAMMER = registerMetaTileEntity(18055,
                 new MetaTileEntityRocketProgrammer(susyId("rocket_programmer")));
 
-        SCRAP_RECYCLER = registerMetaTileEntity(18056, new MetaTileEntityScrapRecycler(susyId("scrap_recycler")));
-        // Free: 18057-8
+        // Free: 18056-8
         MISSION_CONTROL = registerMetaTileEntity(18057, new MetaTileEntityMissionControl(susyId("mission_control")));
         LAUNCH_PAD = registerMetaTileEntity(18059, new MetaTileEntityLaunchPad(susyId("launch_pad")));
         AEROSPACE_FLIGHT_SIMULATOR = registerMetaTileEntity(18060,

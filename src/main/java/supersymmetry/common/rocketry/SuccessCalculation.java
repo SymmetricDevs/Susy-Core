@@ -91,6 +91,7 @@ public class SuccessCalculation {
             int len = buf.readInt();
             for (int i = 0; i < len; i++) {
                 sepAltitudes.add(buf.readDouble());
+                sepTimes.add(buf.readDouble());
             }
             return new AFSStats(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(),
                     buf.readDouble(), sepAltitudes, sepTimes, buf.readDouble(), buf.readDouble());

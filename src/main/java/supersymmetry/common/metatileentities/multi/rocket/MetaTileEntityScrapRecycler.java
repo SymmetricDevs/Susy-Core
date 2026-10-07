@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -56,10 +57,14 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
     }
 
     protected BlockPattern createStructurePattern() {
-        return FactoryBlockPattern.start().aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
-                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ").aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
+        return FactoryBlockPattern.start()
+                .aisle(" CCC ", "CCCCC", "CCCCC", "CCCCC", " CCC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "P^RVP", "PAAAP", "PAAAP", " CDC ")
+                .aisle(" CCC ", "CISOC", "CCCCC", "PAAAP", " CCC ")
                 .where(' ', any()).where('A', air()).where('S', this.selfPredicate())
                 .where('P', states(getPipeCasingState())).where('C', states(getCasingState()))
                 .where('^', conveyorBelts(RelativeDirection.BACK)).where('V', conveyorBelts(RelativeDirection.FRONT))
@@ -69,7 +74,7 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
                 .where('O',
                         states(getCasingState()).or(this.autoAbilities(false, false, false, true, false, false, false)))
                 .where('D',
-                        states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, false, false)))
+                        states(getCasingState()).or(this.autoAbilities(true, true, false, false, false, true, false)))
                 .build();
     }
 
@@ -125,33 +130,23 @@ public class MetaTileEntityScrapRecycler extends RecipeMapMultiblockController {
         return shapeInfo;
     }
 
+    private void alignFacings(List<Pair<BlockPos, RelativeDirection>> blocks, Class<? extends Block> type,
+                              IProperty facingProperty) {
+        World world = getWorld();
+        for (Pair<BlockPos, RelativeDirection> posDirPair : blocks) {
+            EnumFacing facing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                    isFlipped());
+            BlockPos blockPos = posDirPair.getLeft();
+            IBlockState blockState = world.getBlockState(blockPos);
+            if (type.isInstance(blockState.getBlock()) && blockState.getValue(facingProperty) != facing) {
+                world.setBlockState(blockPos, blockState.withProperty(facingProperty, facing));
+            }
+        }
+    }
+
     protected void updateFormedValid() {
         super.updateFormedValid();
-
-        World world = getWorld();
-        for (Pair<BlockPos, RelativeDirection> posDirPair : conveyorBlocks) {
-            // RelativeDirection will take into account of the multi flipping pattern
-            EnumFacing conveyorFacing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                    isFlipped());
-
-            BlockPos blockPos = posDirPair.getLeft();
-            IBlockState blockState = world.getBlockState(blockPos);
-            Block conveyor = blockState.getBlock();
-            if (conveyor instanceof BlockConveyor && blockState.getValue(BlockConveyor.FACING) != conveyorFacing) {
-                world.setBlockState(blockPos, blockState.withProperty(BlockConveyor.FACING, conveyorFacing));
-            }
-        }
-        for (Pair<BlockPos, RelativeDirection> posDirPair : robotArmBlocks) {
-            // RelativeDirection will take into account of the multi flipping pattern
-            EnumFacing robotArmFacing = posDirPair.getRight().getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
-                    isFlipped());
-
-            BlockPos blockPos = posDirPair.getLeft();
-            IBlockState blockState = world.getBlockState(blockPos);
-            Block robotArm = blockState.getBlock();
-            if (robotArm instanceof BlockRobotArm && blockState.getValue(BlockRobotArm.FACING) != robotArmFacing) {
-                world.setBlockState(blockPos, blockState.withProperty(BlockRobotArm.FACING, robotArmFacing));
-            }
-        }
+        alignFacings(conveyorBlocks, BlockConveyor.class, BlockConveyor.FACING);
+        alignFacings(robotArmBlocks, BlockRobotArm.class, BlockRobotArm.FACING);
     }
 }

@@ -4,7 +4,6 @@ import static net.minecraftforge.common.BiomeDictionary.*;
 import static supersymmetry.common.blocks.SuSyBlocks.GOOG;
 import static supersymmetry.common.blocks.SuSyBlocks.REGOLITH;
 import static supersymmetry.common.blocks.SuSyBlocks.susyBlocks;
-import static supersymmetry.common.blocks.SuSyMetaBlocks.SHEETED_FRAMES;
 import static supersymmetry.common.blocks.SuSyMetaBlocks.TANKLESS_FLUID_PIPES;
 
 import java.io.File;
@@ -103,17 +102,16 @@ public class CommonProxy {
                     if (!canaryFile.delete()) {
                         SusyLog.logger.warn("Failed to delete canary file: {}", canaryFile.getAbsolutePath());
                     }
+                    // Clean up Groovy cache
+                    File gameDir = Loader.instance().getConfigDir().getParentFile();
+                    File groovyCacheDir = new File(gameDir, "cache/groovy");
+                    if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
+                        SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
+                        deleteDirectory(groovyCacheDir);
+                    }
                 }
             } else {
                 SusyLog.logger.warn("Failed to access or create susy config directory");
-            }
-
-            // Clean up Groovy cache
-            File gameDir = Loader.instance().getConfigDir().getParentFile();
-            File groovyCacheDir = new File(gameDir, "cache/groovy");
-            if (groovyCacheDir.exists() && groovyCacheDir.isDirectory()) {
-                SusyLog.logger.info("Cleaning up Groovy cache at: {}", groovyCacheDir.getAbsolutePath());
-                deleteDirectory(groovyCacheDir);
             }
         } catch (Exception e) {
             SusyLog.logger.error("Error during cleanup operations", e);
@@ -168,7 +166,7 @@ public class CommonProxy {
         registry.register(GOOG);
         registry.register(SuSyBlocks.AIRLOCK_DOOR);
 
-        SHEETED_FRAMES.values().stream().distinct().forEach(registry::register);
+        SuSyMetaBlocks.SHEETED_FRAME_BLOCKS.forEach(registry::register);
 
         for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
             for (val material : materialRegistry) {
@@ -195,7 +193,7 @@ public class CommonProxy {
         susyBlocks.stream().distinct().forEach(vb -> registry.register(createItemBlock(vb, VariantItemBlock::new)));
         registry.register(createItemBlock(REGOLITH, VariantItemBlockFalling::new));
         registry.register(createItemBlock(GOOG, ItemBlock::new));
-        SHEETED_FRAMES.values().stream().distinct().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
+        SuSyMetaBlocks.SHEETED_FRAME_BLOCKS.stream().map(block -> createItemBlock(block, SheetedFrameItemBlock::new))
                 .forEach(registry::register);
 
         for (val materialRegistry : GregTechAPI.materialManager.getRegistries()) {
@@ -329,7 +327,6 @@ public class CommonProxy {
         addTypes(SuSyBiomes.LUNAR_KREEP_TERRANE, Type.DEAD, Type.VOID, Type.NETHER);
 
         SuSyDimensions.init();
-        // ReEntryDimensions.init();
     }
 
     @SubscribeEvent

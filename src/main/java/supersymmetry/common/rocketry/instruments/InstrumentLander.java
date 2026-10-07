@@ -33,7 +33,6 @@ public class InstrumentLander implements Instrument {
         int i = 0;
         List<Entity> passengersQueued = new ArrayList<>();
         for (Entity passenger : rocket.getPassengers()) {
-            i++;
             if (EventHandlers.isEntityTravelling(passenger))
                 continue;
             if (i > count)
@@ -80,6 +79,8 @@ public class InstrumentLander implements Instrument {
         teleported.forceSpawn = true;
         if (withCargo && teleported instanceof EntityLander lander) {
             lander.setInventory(rocket.getInventory());
+        } else if (withCargo && teleported instanceof EntityEarthLandingSystem els) {
+            els.setInventory(rocket.getInventory());
         }
         teleported.getEntityData().setTag(EntityAbstractRocket.ROCKET_CONFIG_KEY, config.serialize()); // Rest
         return teleported;

@@ -20,17 +20,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import gregtech.api.block.VariantBlock;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.api.rocketry.components.AbstractComponent;
 import supersymmetry.api.rocketry.components.MaterialCost;
+import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.api.util.StructAnalysis;
 import supersymmetry.api.util.StructAnalysis.BuildStat;
+import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.tileentities.TileEntityCoverable;
 
 public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> {
 
-    public Map<String, Integer> parts = new HashMap<>();
-    public Map<String, Integer> instruments = new HashMap<>();
+    public static final String PARTS_KEY = "parts";
+    public static final String INSTRUMENTS_KEY = AbstractRocketBlueprint.INSTRUMENTS_KEY;
+
+    public Object2IntOpenHashMap<String> parts = new Object2IntOpenHashMap<>();
+    public Object2IntOpenHashMap<String> instruments = new Object2IntOpenHashMap<>();
     public boolean hasAir;
     public double volume;
     public double guidanceMultiplier;
@@ -63,6 +69,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         if (tag.hasKey("volume")) {
             lines.add(I18n.format("susy.rocketry.tooltip.volume", tag.getDouble("volume")));
         }
+        if (tag.hasKey("height")) {
+            lines.add(SuSyUtility.formatDouble("susy.rocketry.tooltip.height", "%.3f", tag.getDouble("height")));
+        }
         if (tag.hasKey("hasAir") && tag.getBoolean("hasAir")) {
             lines.add(I18n.format("susy.rocketry.tooltip.life_supported"));
         } else {
@@ -73,8 +82,10 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                     I18n.format("susy.rocketry.tooltip.collection_efficiency", tag.getDouble("collectionEfficiency")));
         }
         if (tag.hasKey("redundancy")) {
-            lines.add(I18n.format("susy.rocketry.tooltip.redundancy", tag.getDouble("redundancy")));
+            lines.add(
+                    SuSyUtility.formatDouble("susy.rocketry.tooltip.redundancy", "%.3f", tag.getDouble("redundancy")));
         }
+
         // not sure what hasAir means here so no tooltip for that
         return lines;
     }
@@ -82,68 +93,52 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
         tag.setDouble("volume", this.volume);
         tag.setBoolean("hasAir", this.hasAir);
         tag.setDouble("guidanceMultiplier", this.guidanceMultiplier);
         tag.setDouble("collectionEfficiency", this.collectionEfficiency);
         tag.setDouble("redundancy", this.redundancy);
         NBTTagCompound instrumentsTag = new NBTTagCompound();
-        NBTTagCompound partsTag = new NBTTagCompound();
-        for (Entry<String, Integer> part : this.parts.entrySet()) {
-            partsTag.setInteger(part.getKey(), part.getValue());
-        }
         for (Entry<String, Integer> instrument : this.instruments.entrySet()) {
             instrumentsTag.setInteger(instrument.getKey(), instrument.getValue());
         }
         tag.setTag(INSTRUMENTS_KEY, instrumentsTag);
-        tag.setTag(PARTS_KEY, partsTag);
+        tag.setTag(PARTS_KEY, partsTag());
+    }
+
+    private NBTTagCompound partsTag() {
+        NBTTagCompound partsTag = new NBTTagCompound();
+        for (Entry<String, Integer> part : this.parts.entrySet()) {
+            partsTag.setInteger(part.getKey(), part.getValue());
+        }
+        return partsTag;
     }
 
     @Override
     public Optional<ComponentSpacecraft> readFromNBT(NBTTagCompound compound) {
-        ComponentSpacecraft spacecraft = new ComponentSpacecraft();
-
-        if (!compound.getString("name").equals(spacecraft.name))
+        if (!compound.hasKey("hasAir") ||
+                (!compound.hasKey("volume", NBT.TAG_DOUBLE) && !compound.hasKey("volume", NBT.TAG_INT)) ||
+                !compound.hasKey(INSTRUMENTS_KEY, NBT.TAG_COMPOUND) ||
+                !compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE) ||
+                !compound.hasKey("redundancy", NBT.TAG_DOUBLE)) {
             return Optional.empty();
-        if (!compound.getString("type").equals(spacecraft.type))
+        }
+        var spacecraft = new ComponentSpacecraft();
+        if (!spacecraft.readBaseFromNBT(compound)) {
             return Optional.empty();
-        if (!compound.hasKey("radius", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("mass", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("hasAir"))
-            return Optional.empty();
-        if (!compound.hasKey("volume", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.PARTS_KEY, NBT.TAG_COMPOUND))
-            return Optional.empty();
-        if (!compound.hasKey(AbstractComponent.INSTRUMENTS_KEY, NBT.TAG_COMPOUND))
-            return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST))
-            return Optional.empty();
-        if (!compound.hasKey("collectionEfficiency", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("redundancy", NBT.TAG_DOUBLE))
-            return Optional.empty();
-        compound.getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> spacecraft.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-
-        spacecraft.radius = compound.getDouble("radius");
-        spacecraft.mass = compound.getDouble("mass");
+        }
         spacecraft.volume = compound.getDouble("volume");
         spacecraft.hasAir = compound.getBoolean("hasAir");
         spacecraft.guidanceMultiplier = compound.getDouble("guidanceMultiplier");
-        spacecraft.height = compound.getInteger("height");
-        spacecraft.collectionEfficiency = compound.getInteger("collectionEfficiency");
+        spacecraft.collectionEfficiency = compound.getDouble("collectionEfficiency");
         spacecraft.redundancy = compound.getDouble("redundancy");
 
-        NBTTagCompound instrumentsList = compound.getCompoundTag(AbstractComponent.INSTRUMENTS_KEY);
+        NBTTagCompound instrumentsList = compound.getCompoundTag(INSTRUMENTS_KEY);
         for (String key : instrumentsList.getKeySet()) {
             spacecraft.instruments.put(key, instrumentsList.getInteger(key));
         }
 
-        NBTTagCompound partsList = compound.getCompoundTag(AbstractComponent.PARTS_KEY);
+        NBTTagCompound partsList = compound.getCompoundTag(PARTS_KEY);
         for (String key : partsList.getKeySet()) {
             spacecraft.parts.put(key, partsList.getInteger(key));
         }
@@ -229,14 +224,9 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
         this.guidanceMultiplier = SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier();
         tag.setDouble("guidanceMultiplier",
                 SuSyBlocks.GUIDANCE_SYSTEM.getState(guidanceBlock).getSuccessChanceMultiplier());
-        int volume = interior.size();
-        tag.setInteger("volume", volume);
+        this.volume = interior.size();
+        tag.setDouble("volume", this.volume);
         if (lifeSupports.isEmpty()) {
-            // no airspace necessary
-            if (!interior.isEmpty()) {
-                analysis.status = BuildStat.SPACECRAFT_HOLLOW;
-                return Optional.empty();
-            }
             tag.setBoolean("hasAir", false);
             this.hasAir = false; // goog..?
         } else {
@@ -244,7 +234,6 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
                 analysis.status = BuildStat.HULL_FULL;
                 return Optional.empty();
             }
-            Set<BlockPos> container = analysis.getPerimeter(interior, StructAnalysis.orthVecs);
             for (BlockPos air : interior) { // all air blocks must be enclosed by padding
                 for (EnumFacing facing : EnumFacing.VALUES) {
                     BlockPos checkPos = air.offset(facing);
@@ -361,20 +350,13 @@ public class ComponentSpacecraft extends AbstractComponent<ComponentSpacecraft> 
 
         this.redundancy = Math.round(100 * redundancy) / 100.0;
 
-        this.radius = analysis.getRadius(blocksConnected);
-
         // The scan is successful by this point
         analysis.status = BuildStat.SUCCESS;
-        tag.setString("type", type);
-        tag.setString("name", name);
-        tag.setDouble("radius", radius);
-        double mass = blocksConnected.stream().mapToDouble(block -> getMassOfBlock(analysis.world.getBlockState(block)))
-                .sum();
-        tag.setDouble("mass", mass);
-        tag.setDouble("collectionEfficiency", collectionEfficiency);
-        tag.setDouble("redundancy", redundancy);
-        this.mass = mass;
-        writeBlocksToNBT(blocksConnected, analysis.world);
+        this.radius = analysis.getRadius(blocksConnected);
+        collectInfo(analysis, blocksConnected, tag);
+        tag.setDouble("collectionEfficiency", this.collectionEfficiency);
+        tag.setDouble("redundancy", this.redundancy);
+        tag.setTag(PARTS_KEY, partsTag());
         return Optional.of(tag);
     }
 

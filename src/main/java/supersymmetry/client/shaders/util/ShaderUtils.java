@@ -137,14 +137,4 @@ public class ShaderUtils {
         MAT_BUF.get(m);
         return m;
     }
-
-    public static float[] projectDirToNDC(float[] dir, float[] view, float[] proj) {
-        float vx = view[0] * dir[0] + view[4] * dir[1] + view[8] * dir[2];
-        float vy = view[1] * dir[0] + view[5] * dir[1] + view[9] * dir[2];
-        float vz = view[2] * dir[0] + view[6] * dir[1] + view[10] * dir[2];
-        if (vz >= 0) return new float[] { 0f, 0f };
-        float ndcX = proj[0] * vx / -vz;
-        float ndcY = proj[5] * vy / -vz;
-        return new float[] { ndcX, ndcY };
-    }
 }

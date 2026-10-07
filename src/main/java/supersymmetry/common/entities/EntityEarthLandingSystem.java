@@ -164,7 +164,7 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
     protected void act() {}
 
     @Override
-    protected boolean canStartCountdown() {
+    public boolean canStartCountdown() {
         if (InstrumentLander.getNextLanderConfig(this.getRocketConfiguration()) == null) {
             sendMessageToPassengers(new TextComponentTranslation("susy.rocket.msg.not_configured"));
             if (cargo.isEmpty()) {
@@ -233,9 +233,6 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
     protected void removePassenger(@NotNull Entity passenger) {
         if (this.canPlayerDismount()) {
             super.removePassenger(passenger);
-            if (passenger instanceof EntityLiving living) {
-                living.setNoAI(false);
-            }
         }
     }
 
@@ -495,7 +492,10 @@ public class EntityEarthLandingSystem extends EntityAbstractRocket
             GuiFactories.entity().open(player, this);
             return true;
         }
-        player.startRiding(this);
+        if (!player.isRidingSameEntity(this)) {
+            player.startRiding(this);
+            return true;
+        }
         return false;
     }
 

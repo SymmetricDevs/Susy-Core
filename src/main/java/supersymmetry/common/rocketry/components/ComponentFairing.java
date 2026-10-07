@@ -19,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import supersymmetry.api.rocketry.components.AbstractComponent;
@@ -64,21 +63,11 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
     @Override
     public Optional<ComponentFairing> readFromNBT(NBTTagCompound compound) {
-        ComponentFairing fairing = new ComponentFairing();
-        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty())
+        if (!compound.hasKey("height", NBT.TAG_INT)) {
             return Optional.empty();
-        if (!compound.hasKey("height", Constants.NBT.TAG_INT))
-            return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("materials", NBT.TAG_LIST))
-            return Optional.empty();
-        compound.getTagList("materials", NBT.TAG_COMPOUND)
-                .forEach(x -> fairing.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-        fairing.radius = compound.getDouble("radius");
-        fairing.mass = compound.getDouble("mass");
-        fairing.height = compound.getInteger("height");
-        return Optional.of(fairing);
+        }
+        var fairing = new ComponentFairing();
+        return fairing.readBaseFromNBT(compound) ? Optional.of(fairing) : Optional.empty();
     }
 
     @Override
@@ -122,6 +111,10 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         }
 
         // Checks if all connectors are facing the same plane
+        if (connectorBlocks.isEmpty()) {
+            analysis.status = BuildStat.WEIRD_FAIRING;
+            return Optional.empty();
+        }
         BlockPos next = connectorBlocks.iterator().next();
         BlockPos start = next;
         EnumFacing dir = world.getBlockState(next).getValue(FACING);
@@ -183,7 +176,7 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
 
             // Takes all orth neighbors which are blocks or are interior neighbors
             List<BlockPos> solidNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs).stream()
-                    .filter(pos -> !world.isAirBlock(pos)).collect(Collectors.toList());
+                    .filter(pos -> world.isBlockFullCube(pos)).collect(Collectors.toList());
             List<BlockPos> intAirNeighbors = analysis.getBlockNeighbors(bp, interiorBB, StructAnalysis.orthVecs)
                     .stream().filter(intPartition::contains).collect(Collectors.toList());
             for (EnumFacing facing : EnumFacing.VALUES) {
@@ -218,8 +211,6 @@ public class ComponentFairing extends AbstractComponent<ComponentFairing> {
         collectInfo(analysis, blocksConnected, tag);
 
         analysis.status = BuildStat.SUCCESS;
-        writeBlocksToNBT(blocksConnected, analysis.world);
-
         return Optional.of(tag);
     }
 }

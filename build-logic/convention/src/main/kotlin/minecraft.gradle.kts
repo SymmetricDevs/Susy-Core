@@ -189,6 +189,42 @@ if (useLwjgl3ify) {
     }
 }
 
+// The modded run tasks, i.e. everything except RFG's unmodded runVanilla* pair.
+val moddedRunTasks = tasks.withType<RunMinecraftTask>().matching { !it.name.contains("Vanilla") }
+
+// Give the client and the server their own working directory.
+//
+// RFG runs every task in "run/", so a simultaneous runClient + runServer share one directory.
+// That is not just untidy -- it segfaults. Mods that ship native libraries extract them into the
+// working directory and delete-and-recreate them on every launch (OpenComputers does this with
+// its three libjnlua .so files). Starting the second process therefore unlinks libraries the
+// first process still has dlopen()ed and replaces them with new inodes, leaving stale entries in
+// that process's loader link map. The next dlopen() walks the link map, dereferences a dangling
+// name pointer and dies inside ld.so's strcmp, with a stack going through
+// NativeLookup::lookup_critical_entry -> os::dll_load -> dlopen.
+//
+// Separating the directories also stops the two sides from sharing world/, logs/, config/,
+// crash-reports/ and .mixin.out/.
+if (separateRunDirectories) {
+    moddedRunTasks.configureEach {
+        val sideRunDir = layout.projectDirectory
+            .dir(if (side == Distribution.CLIENT) "run/client" else "run/server")
+            .asFile
+        workingDir = sideRunDir
+        doFirst { sideRunDir.mkdirs() }
+    }
+}
+
+// Belt and braces for the crash described above: critical natives are a JDK 8 JIT optimization
+// that dlopen()s the library a native method came from in order to probe for JavaCritical_*
+// symbols. Netty's epoll methods export them, so every epoll native that tiers up triggers a
+// dlopen at an unpredictable moment -- which is what turns a corrupted link map into a crash.
+// Disabling it costs nothing here. The flag was removed in JDK 18, so it must stay off the
+// modern-Java tasks, which launch on JetBrains Runtime 25.
+moddedRunTasks.matching { !it.name.endsWith("ModernJava") }.configureEach {
+    extraJvmArgs.add("-XX:-CriticalJNINatives")
+}
+
 // Have to be private to avoid ambiguity
 @Suppress("TaskMissingDescription")
 private inline fun <reified T : Task> TaskContainer.register(

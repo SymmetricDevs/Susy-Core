@@ -1,5 +1,6 @@
 package supersymmetry.mixins.gregtech;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -16,14 +17,13 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.stack.ItemAndMetadata;
 import gregtech.api.unification.stack.ItemMaterialInfo;
 import gregtech.api.unification.stack.MaterialStack;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import supersymmetry.loaders.recipes.handlers.RecyclingManager;
 
 @Mixin(value = OreDictUnifier.class, remap = false)
 public abstract class OreDictUnifierMixin {
 
     @Shadow
-    private static final Map<ItemAndMetadata, ItemMaterialInfo> materialUnificationInfo = new Object2ObjectOpenHashMap<>();
+    private static final Map<ItemAndMetadata, ItemMaterialInfo> materialUnificationInfo = new HashMap<>();
 
     /**
      * @author Tian_mi

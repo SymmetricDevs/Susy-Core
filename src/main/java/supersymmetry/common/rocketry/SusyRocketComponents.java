@@ -23,12 +23,12 @@ public class SusyRocketComponents {
     public static SimpleStagedRocketBlueprint ROCKET_LUNAR_BLUEPRINT_DEFAULT;
 
     public static void init() {
-        AbstractComponent.registerComponent(new ComponentFairing());
-        AbstractComponent.registerComponent(new ComponentLavalEngine());
-        AbstractComponent.registerComponent(new ComponentInterstage());
-        AbstractComponent.registerComponent(new ComponentSpacecraft());
-        AbstractComponent.registerComponent(new ComponentLiquidFuelTank());
-        AbstractComponent.registerComponent(new ComponentSolidFuelTank());
+        AbstractComponent.registerComponent(ComponentFairing::new);
+        AbstractComponent.registerComponent(ComponentLavalEngine::new);
+        AbstractComponent.registerComponent(ComponentInterstage::new);
+        AbstractComponent.registerComponent(ComponentSpacecraft::new);
+        AbstractComponent.registerComponent(ComponentLiquidFuelTank::new);
+        AbstractComponent.registerComponent(ComponentSolidFuelTank::new);
         AbstractComponent.lockRegistry();
 
         new LiquidRocketFuelEntry.RocketFuelEntryBuilder("Methane-LOX")
@@ -69,8 +69,7 @@ public class SusyRocketComponents {
                         .type("tank").limit(2).type("interstage").limit(1).build())
                 .stage(new RocketStage.Builder("block_F").type("engine").range(1, 4)
                         .type("tank").limit(2).type("interstage").limit(1).build())
-                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2)
-                        .type("tank").limit(1).build())
+                .stage(new RocketStage.Builder("payload").type("spacecraft").limit(1).type("fairing").limit(2).build())
                 .entityResourceLocation(new ResourceLocation(Supersymmetry.MODID, "rocket_basic"))
                 .componentValidationFunction(fairingCheck).build();
 

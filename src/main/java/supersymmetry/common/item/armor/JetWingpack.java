@@ -55,6 +55,7 @@ import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.util.ElytraFlyingUtils;
 import supersymmetry.client.audio.MovingSoundJetEngine;
 import supersymmetry.client.renderer.handler.JetWingpackModel;
+import supersymmetry.common.world.atmosphere.AtmosphereUtils;
 
 public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
 
@@ -123,6 +124,16 @@ public class JetWingpack extends ArmorLogicSuite implements IItemHUDProvider {
         boolean pressed = false;
         boolean wingActive = false;
         boolean engineActive = false;
+
+        if (!AtmosphereUtils.isPosOxygenated(player.getPosition(), world)) {
+            data.setByte("toggleTimer", toggleTimer);
+            data.setBoolean("pressed", pressed);
+            data.setBoolean("wingActive", wingActive);
+            data.setBoolean("engineActive", engineActive);
+
+            player.inventoryContainer.detectAndSendChanges();
+            return;
+        }
 
         if (data.hasKey("toggleTimer"))
             toggleTimer = data.getByte("toggleTimer");

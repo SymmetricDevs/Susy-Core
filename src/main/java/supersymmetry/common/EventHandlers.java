@@ -36,12 +36,16 @@ import gregtech.api.util.GTTeleporter;
 import gregtech.api.util.TeleportHandler;
 import gregtech.common.items.MetaItems;
 import gregtechfoodoption.item.GTFOMetaItem;
+import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
+import supersymmetry.api.rocketry.ICargoInventory;
+import supersymmetry.api.space.Planetoid;
 import supersymmetry.api.space.dimension.WorldProviderSpace;
 import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.entities.EntityEarthLandingSystem;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.event.DimensionRidingSwapData;
@@ -50,6 +54,7 @@ import supersymmetry.common.item.SuSyArmorItem;
 import supersymmetry.common.network.SPacketFirstJoin;
 import supersymmetry.common.rocketry.LanderSpawnEntry;
 import supersymmetry.common.rocketry.LanderSpawnQueue;
+import supersymmetry.common.world.PlanetoidHandler;
 import supersymmetry.common.world.WorldProviderPlanet;
 import supersymmetry.common.world.atmosphere.AtmosphereWorldData;
 
@@ -272,9 +277,12 @@ public class EventHandlers {
     @SubscribeEvent
     public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote || !(world.provider instanceof WorldProviderPlanet))
-            return;
-        AtmosphereWorldData data = AtmosphereWorldData.get(world);
+        if (world.isRemote || !(world.provider instanceof WorldProviderPlanet)) return;
+
+        AtmosphereWorldData data = AtmosphereWorldData.getIfPresent(world);
+        if (data == null) return; // fake world (e.g. LittleTiles animation). fixes crash
+                                  // https://discord.com/channels/881234100504109166/1350749915969490974/1554872016610402348
+
         if (data.getGraph().onBlockChanged(world, event.getPos())) {
             data.markDirty();
         }
@@ -346,7 +354,17 @@ public class EventHandlers {
             }
 
             // Create the lander entity
-            EntityLander lander = new EntityLander(targetWorld, entry.getX(), 350, entry.getZ());
+            ICargoInventory lander;
+            int dim = entry.getDimensionId();
+            Planetoid p = Planetoid.PLANETOIDS.inverse().get(dim);
+            double g = PlanetoidHandler.get(dim) == null ? SuSyValues.G0 :
+                    PlanetoidHandler.get(dim).gravity * SuSyValues.G0;
+            if (p.getSurfacePressure() > 10000 && g > 0.4) {
+                lander = new EntityEarthLandingSystem(targetWorld, entry.getX(), 350, entry.getZ());
+            } else {
+                lander = new EntityLander(targetWorld, entry.getX(), 350, entry.getZ());
+            }
+
             CargoItemStackHandler cargo = new CargoItemStackHandler(36, Integer.MAX_VALUE);
             lander.setInventory(cargo);
 
@@ -356,13 +374,13 @@ public class EventHandlers {
                 inventory.deserializeNBT(entry.getInventoryData());
 
                 // Copy items to lander's inventory
-                for (int i = 0; i < Math.min(inventory.getSlots(), lander.getInventory().getSlots()); i++) {
+                for (int i = 0; i < Math.min(inventory.getSlots(), cargo.getSlots()); i++) {
                     cargo.insertItem(0, inventory.getStackInSlot(i), false);
                 }
             }
 
             // Spawn the lander
-            targetWorld.spawnEntity(lander);
+            targetWorld.spawnEntity((Entity) lander);
 
             SusyLog.logger.info("Spawned lander at ({}, {}, {}) in dimension {}", entry.getX(), entry.getY(),
                     entry.getZ(), entry.getDimensionId());

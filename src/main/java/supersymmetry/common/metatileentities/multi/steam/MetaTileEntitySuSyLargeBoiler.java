@@ -1,9 +1,7 @@
 package supersymmetry.common.metatileentities.multi.steam;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -48,6 +46,7 @@ import gregtech.client.utils.TooltipHelper;
 import gregtech.core.sound.GTSoundEvents;
 import supersymmetry.api.capability.impl.SuSyBoilerLogic;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
+import supersymmetry.api.metatileentity.multiblock.SignalDispatch;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 
 public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
@@ -62,62 +61,31 @@ public class MetaTileEntitySuSyLargeBoiler extends MultiblockWithDisplayBase
     private FluidTankList steamOutputTank;
 
     private int throttlePercentage = 100;
-    private static final List<String> signalNames;
-    private static final List<Consumer<MetaTileEntitySuSyLargeBoiler>> signalOps;
-
-    static {
-        List<Integer> steps = List.of(1, 5, 10, 25);
-        signalNames = new ArrayList<>();
-        signalOps = new ArrayList<>();
-
-        signalNames.add("set25");
-        signalNames.add("set100");
-
-        signalOps.add((self) -> {
-            self.throttlePercentage = 25;
-        });
-        signalOps.add((self) -> {
-            self.throttlePercentage = 100;
-        });
-
-        for (Integer i : steps) {
-            signalNames.add(String.format("incr%d", i));
-            signalNames.add(String.format("dec%d", i));
-            signalOps.add((self) -> {
-                self.throttlePercentage = Math.clamp(self.throttlePercentage + i, 25, 100);
-            });
-            signalOps.add((self) -> {
-                self.throttlePercentage = Math.clamp(self.throttlePercentage - i, 25, 100);
-            });
-        }
-    }
+    private final SignalDispatch signals = new SignalDispatch();
 
     public MetaTileEntitySuSyLargeBoiler(ResourceLocation metaTileEntityId, SuSyBoilerType boilerType) {
         super(metaTileEntityId);
         this.boilerType = boilerType;
         this.recipeLogic = new SuSyBoilerLogic(this);
+        signals.add("set25", () -> this.throttlePercentage = 25);
+        signals.add("set100", () -> this.throttlePercentage = 100);
+        for (int step : List.of(1, 5, 10, 25)) {
+            signals.add(String.format("incr%d", step),
+                    () -> this.throttlePercentage = Math.clamp(this.throttlePercentage + step, 25, 100));
+            signals.add(String.format("dec%d", step),
+                    () -> this.throttlePercentage = Math.clamp(this.throttlePercentage - step, 25, 100));
+        }
         resetTileAbilities();
     }
 
     @Override
+    public SignalDispatch signalDispatch() {
+        return signals;
+    }
+
+    @Override
     public String getSignalTranslationKey(int sig) {
-        if (signalNames.size() > sig) {
-            return signalNames.get(sig);
-        } else {
-            return "";
-        }
-    }
-
-    @Override
-    public void pulse(int sig) {
-        if (signalOps.size() > sig) {
-            signalOps.get(sig).accept(this);
-        }
-    }
-
-    @Override
-    public int getSignalCeiling() {
-        return signalOps.size() - 1;
+        return signals.translationKey(sig);
     }
 
     @Override

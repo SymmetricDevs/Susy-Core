@@ -37,8 +37,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
-        tag.setDouble("mass", this.mass);
         tag.setInteger("volume", this.volume);
     }
 
@@ -46,30 +44,14 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
     // for he knows their day is coming.
     @Override
     public Optional<ComponentLiquidFuelTank> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+        if (!compound.hasKey("volume", Constants.NBT.TAG_INT)) {
             return Optional.empty();
         }
-        if (!compound.hasKey("mass")) {
+        var tank = new ComponentLiquidFuelTank();
+        if (!tank.readBaseFromNBT(compound)) {
             return Optional.empty();
         }
-        if (!compound.hasKey("radius")) {
-            return Optional.empty();
-        }
-        if (!compound.hasKey("volume")) {
-            return Optional.empty();
-        }
-        if (!compound.hasKey("materials")) {
-            return Optional.empty();
-        }
-
-        ComponentLiquidFuelTank tank = new ComponentLiquidFuelTank();
-        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
-                .forEach(tag -> tank.materials.add(MaterialCost.fromNBT((NBTTagCompound) tag)));
-
         tank.volume = compound.getInteger("volume");
-        tank.radius = compound.getDouble("radius");
-        tank.mass = compound.getDouble("mass");
-        tank.height = compound.getInteger("height");
         return Optional.of(tank);
     }
 
@@ -136,7 +118,6 @@ public class ComponentLiquidFuelTank extends AbstractComponent<ComponentLiquidFu
         tag.setInteger("volume", this.volume);
 
         collectInfo(analysis, blocks, tag);
-        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 

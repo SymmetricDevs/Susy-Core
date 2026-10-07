@@ -91,9 +91,7 @@ public class ConditionalWidget extends AbstractWidgetGroup {
             if (index >= widgets.size()) {
                 SusyLog.logger.error("widgets.size()->[{}]: tried to {} widget:{}", widgets.size(),
                         state ? "turn on" : "turn off", id);
-                // SusyLog.logger.info("client; wsize:{}, {}", widgets.size(), widgets);
-                // ui state
-                // writeClientAction(0xddd, (buf) -> {});
+                return;
             }
             Widget w = widgets.get(index);
             w.setActive(state);

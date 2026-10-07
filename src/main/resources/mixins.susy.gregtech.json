@@ -23,6 +23,7 @@
     "MultiblockControllerBaseMixin",
     "OreDictUnifierAccessor",
     "OreDictUnifierMixin",
+    "PowerlessJetpackMixin",
     "PrimitiveRecipeLogicMixin",
     "RecipeBuilderAccessor",
     "RecipeMapPrimitiveMultiblockControllerMixin",

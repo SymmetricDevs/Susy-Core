@@ -171,7 +171,9 @@ public class MetaTileEntitySolarPanel extends TieredMetaTileEntity {
                 multiplier = 1.33;
                 // according to wikipedia avg solar irradiation on a sunny day on earth is ~1000 W/m², on the moon it's
                 multiplier *= Math.clamp((this.getPos().getY() - 60) / 90, 0, 1); // 1361, rounded to produce 64 eu/t
-            }   // the moon base is on the south pole, so solars would be placed on high crater rims
+                // the moon base is on the south pole, so solars would be placed on high crater rims
+                multiplier *= Math.pow(0.5, getNumberOfNearbyPanels(world, this.getPos()));
+            }
         }
         return multiplier;
     }

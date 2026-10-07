@@ -1,6 +1,6 @@
 package supersymmetry.common.entities;
 
-import static supersymmetry.api.rocketry.components.AbstractComponent.INSTRUMENTS_KEY;
+import static supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint.INSTRUMENTS_KEY;
 
 import java.util.Arrays;
 
@@ -135,8 +135,8 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
         this.setStartPos((float) this.posY);
     }
 
-    protected boolean canStartCountdown() {
-        return true;
+    public boolean canStartCountdown() {
+        return !isCountdownStarted();
     }
 
     public void sendMessageToPassengers(TextComponentTranslation translation) {
@@ -178,7 +178,6 @@ public abstract class EntityAbstractRocket extends EntityLivingBase {
                 if (passenger instanceof EntityLivingBase living) {
                     living.attackEntityFrom(SuSyDamageSources.REENTRY, 100000000);
                 }
-                passenger.setDead();
             }
         }
     }

@@ -2,7 +2,7 @@ package supersymmetry.api.particle;
 
 import static supersymmetry.api.util.SuSyUtility.susyId;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.util.ResourceLocation;
@@ -13,7 +13,7 @@ import supersymmetry.api.SusyLog;
 
 public class Particles {
 
-    public static final Map<String, Particle> particleRegistry = new HashMap<String, Particle>();
+    public static final Map<String, Particle> particleRegistry = new LinkedHashMap<>();
 
     // Leptons
     public static Particle electronNeutrino;

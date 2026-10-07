@@ -43,8 +43,11 @@ import gregtech.common.blocks.MetaBlocks;
 import supersymmetry.api.capability.SuSyDataCodes;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.metatileentity.multiblock.IRedstoneControllable;
+import supersymmetry.api.metatileentity.multiblock.SignalDispatch;
+import supersymmetry.api.rocketry.ICargoInventory;
 import supersymmetry.common.blocks.BlockSuSyMultiblockCasing;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.entities.EntityAbstractRocket;
 import supersymmetry.common.entities.EntityLander;
 import supersymmetry.common.metatileentities.multiblockpart.MetaTileEntityComponentRedstoneController;
 
@@ -54,14 +57,14 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;
     protected IEnergyContainer energyContainer;
-    private List<Runnable> signalActions = new ArrayList<>();
+    private final SignalDispatch signals = new SignalDispatch();
     protected boolean extractItems;
 
     public MetaTileEntityLandingPad(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
-        signalActions.add(this::toggleExtractItems);
-        signalActions.add(this::launchLander);
-        signalActions.add(this::destroyLander);
+        signals.add(this::toggleExtractItems);
+        signals.add(this::launchLander);
+        signals.add(this::destroyLander);
     }
 
     @Override
@@ -87,7 +90,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
         super.invalidateStructure();
         this.inputInventory = null;
         this.outputInventory = null;
-        this.energyContainer = null;
+        this.energyContainer = new EnergyContainerList(new ArrayList<>());
     }
 
     @Override
@@ -103,21 +106,20 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
         return new ImageCycleButtonWidget(x, y, width, height, SusyGuiTextures.BUTTON_INSERT_EXTRACT, 2,
                 () -> this.extractItems ? 0 : 1, this::setExtractItems).setTooltipHoverString(
-                        mode -> mode == 0 ? "susy.landing_pad.extracting" : "susy.landing_pad.inserting");
+                mode -> mode == 0 ? "susy.landing_pad.extracting" : "susy.landing_pad.inserting");
     }
 
     @Override
     protected void updateFormedValid() {
-        EntityLander lander = getLander();
+        EntityAbstractRocket lander = getLander();
+        ICargoInventory cargo = (ICargoInventory) lander;
         if (lander != null && energyContainer.changeEnergy(-VA[LV]) == -VA[LV]) {
             if (extractItems) {
-                if (!lander.isEmpty()) {
+                if (!cargo.isEmpty()) {
                     GTTransferUtils.moveInventoryItems(lander.getInventory(), this.outputInventory);
-                    lander.markDirty();
                 }
             } else {
                 GTTransferUtils.moveInventoryItems(this.inputInventory, lander.getInventory());
-                lander.getInventory();
             }
             if (this.isBlockRedstonePowered() && !lander.isCountdownStarted()) {
                 lander.startCountdown(20);
@@ -126,16 +128,22 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     }
 
     protected void launchLander() {
-        EntityLander lander = getLander();
+        EntityAbstractRocket lander = getLander();
         if (lander != null && !getLander().isCountdownStarted()) {
             lander.startCountdown(20);
         }
     }
 
     protected void destroyLander() {
-        EntityLander lander = getLander();
-        if (lander != null && !getLander().isEmpty()) {
-            lander.setDead();
+        EntityAbstractRocket lander = getLander();
+        if (lander != null) {
+            if (lander instanceof ICargoInventory cargo) {
+                if (cargo.isEmpty()) {
+                    lander.setDead();
+                }
+            } else {
+                lander.setDead();
+            }
         }
     }
 
@@ -178,7 +186,8 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
                 this.isActive(), true);
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start()
                 .aisle("     CCCCC     ", "      CCC      ", "      CCC      ")
@@ -219,14 +228,15 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
         return true;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     protected ICubeRenderer getFrontOverlay() {
         return Textures.ASSEMBLER_OVERLAY;
     }
 
-    public EntityLander getLander() {
-        for (EntityLander entity : this.getWorld().getEntitiesWithinAABB(EntityLander.class, this.landingAreaBB)) {
-            if (entity.onGround) {
+    public EntityAbstractRocket getLander() {
+        for (EntityAbstractRocket entity : this.getWorld().getEntitiesWithinAABB(EntityAbstractRocket.class, this.landingAreaBB)) {
+            if (entity.onGround && entity instanceof ICargoInventory) {
                 return entity;
             }
         }
@@ -256,12 +266,7 @@ public class MetaTileEntityLandingPad extends MultiblockWithDisplayBase implemen
     }
 
     @Override
-    public int getSignalCeiling() {
-        return 3;
-    }
-
-    @Override
-    public void pulse(int sig) {
-        this.signalActions.get(sig).run();
+    public SignalDispatch signalDispatch() {
+        return signals;
     }
 }

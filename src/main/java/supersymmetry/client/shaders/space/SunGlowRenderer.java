@@ -3,6 +3,7 @@ package supersymmetry.client.shaders.space;
 import static supersymmetry.client.shaders.util.ShaderUtils.invertMat4;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import org.lwjgl.opengl.GL11;
@@ -16,9 +17,12 @@ import supersymmetry.client.shaders.util.ShaderUtils;
 
 public class SunGlowRenderer implements BodyRenderer {
 
-    public float[] sunColor = { 1.0f, 0.95f, 0.8f };
-    public float diskIntensity = 20.0f;
-    public float limbDarkening = 0.85f;
+    public float[] sunColor;
+    public float diskIntensity = 1.3f;
+    public float limbDarkening = 1.0f;
+    public float coronaScale = 0.8f;
+    public float detailFadeStart = 3.0f;
+    public float detailFadeEnd = 15.0f;
 
     @Override
     public void render(BodyRenderData data) {
@@ -31,10 +35,12 @@ public class SunGlowRenderer implements BodyRenderer {
         float[] projMat = data.projectionMatrix;
         if (viewMat == null || projMat == null) return;
 
-        Vec3d starColor = null;
-        if (data.source instanceof Star) starColor = ((Star) data.source).getColor();
-        float[] sunColor = starColor == null ? this.sunColor :
-                new float[] { (float) starColor.x, (float) starColor.y, (float) starColor.z };
+        float[] sunColor = this.sunColor;
+        if (sunColor == null) {
+            if (!(data.source instanceof Star)) return;
+            Vec3d starColor = ((Star) data.source).getColor();
+            sunColor = new float[] { (float) starColor.x, (float) starColor.y, (float) starColor.z };
+        }
 
         float[] sunDir = new float[] {
                 (float) data.direction.x,
@@ -47,6 +53,10 @@ public class SunGlowRenderer implements BodyRenderer {
 
         Minecraft mc = Minecraft.getMinecraft();
         float time = (float) (data.worldTime / 20f);
+        float detail = MathHelper.clamp(
+                ((float) Math.tan(angularRadius) * Math.abs(projMat[5]) * mc.displayHeight * 0.5f - detailFadeStart) /
+                        (detailFadeEnd - detailFadeStart),
+                0.0f, 1.0f);
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -65,11 +75,10 @@ public class SunGlowRenderer implements BodyRenderer {
         ShaderUtils.setUniform1f(progId, "u_diskIntensity", diskIntensity);
         ShaderUtils.setUniform1f(progId, "u_time", time);
         ShaderUtils.setUniform1f(progId, "u_limbDarkening", limbDarkening);
+        ShaderUtils.setUniform1f(progId, "u_coronaScale", coronaScale);
+        ShaderUtils.setUniform1f(progId, "u_detail", detail);
         ShaderUtils.setUniformMat4(progId, "u_invView", invertMat4(viewMat));
         ShaderUtils.setUniformMat4(progId, "u_invProjection", invertMat4(projMat));
-
-        float[] sunScreenPos = ShaderUtils.projectDirToNDC(sunDir, viewMat, projMat);
-        ShaderUtils.setUniform2f(progId, "u_sunScreenPos", sunScreenPos[0], sunScreenPos[1]);
 
         ShaderUtils.drawFullScreenQuad();
         GL20.glUseProgram(0);

@@ -19,82 +19,64 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import supersymmetry.api.metatileentity.multiblock.IRocketAssemblyController;
-import supersymmetry.api.rocketry.components.AbstractComponent;
+import supersymmetry.api.rocketry.AssemblyStep;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.ElectrodeDurabilityManager;
 
 public class RocketAssemblerLogic extends MultiblockRecipeLogic {
 
+    private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AssemblyStep step) {
+        return (int) ((double) recipe.getInputs().size() * step.getElectrodeDamageFactor());
+    }
+
     private List<Integer> electrodeSlotCache = new ArrayList<>();
+
     public boolean hasEnoughElectrodes = true;
 
     public final IRocketAssemblyController assembler;
 
+    private final int assemblyEUt;
+    private final boolean usesElectrodes;
+
     public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler) {
+        this(assembler, VA[LuV], true);
+    }
+
+    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler,
+                                                                                                      int assemblyEUt) {
+        this(assembler, assemblyEUt, true);
+    }
+
+    public <T extends RecipeMapMultiblockController & IRocketAssemblyController> RocketAssemblerLogic(T assembler,
+                                                                                                      int assemblyEUt,
+                                                                                                      boolean usesElectrodes) {
         super(assembler);
         this.assembler = assembler;
+        this.assemblyEUt = assemblyEUt;
+        this.usesElectrodes = usesElectrodes;
     }
 
     public void setInputsValid() {
         this.invalidInputsForRecipes = false;
     }
 
-    public Recipe getRecipe(long maxVoltage) {
+    public Recipe getCurrentRecipe() {
+        return getRecipe();
+    }
+
+    public Recipe getRecipe() {
         if (!assembler.isAssemblyWorking())
             return null;
 
-        if (assembler.getComponentCount() == assembler.getComponentIndex()) {
+        if (assembler.getComponentIndex() >= assembler.getComponentCount())
             return null;
-        }
-        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
-        if (targetComponent == null)
+
+        AssemblyStep step = assembler.getCurrentStep();
+        if (step == null)
             return null;
-        List<GTRecipeInput> flatExpandedInput = targetComponent.getRecipeInputs();
-        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(flatExpandedInput)).EUt(VA[LuV])
-                .duration((int) Math.ceil(targetComponent.getAssemblyDuration())).build().getResult();
+        Recipe recipe = getRecipeMap().recipeBuilder().inputIngredients(collapse(step.getRecipeInputs()))
+                .EUt(assemblyEUt).duration((int) Math.ceil(step.getAssemblyDuration())).build().getResult();
         return recipe;
-    }
-
-    @Override
-    protected @Nullable Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs,
-                                          IMultipleTankHandler fluidInputs) {
-        if (!assembler.isAssemblySiteAvailable())
-            return null;
-        return getRecipe(maxVoltage);
-    }
-
-    // mental illness n6: this runs when a recipe with nothing in it (findrecipe
-    // returns null) is
-    // "complete" too!
-    @Override
-    protected void completeRecipe() {
-        if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
-            assembler.nextComponent();
-        }
-        super.completeRecipe();
-    }
-
-    // The lists are null
-    @Override
-    protected void outputRecipeOutputs() {}
-
-    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch
-    // amperage draws
-    @Override
-    protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
-        return getEnergyStored() >= ((long) recipeEUt << 1);
-    }
-
-    // doesnt work for this multi
-    @Override
-    protected boolean checkPreviousRecipe() {
-        return false;
-    }
-
-    @Override
-    protected void trySearchNewRecipe() {
-        hasEnoughElectrodes = true;
-        super.trySearchNewRecipe();
     }
 
     @Override
@@ -116,9 +98,16 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
     // mostly taken from the ball mill logic
     @Override
     public boolean checkRecipe(@NotNull Recipe recipe) {
-        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (assembler.getComponentIndex() >= assembler.getComponentCount())
+            return false;
+
+        AssemblyStep targetComponent = assembler.getCurrentStep();
         if (targetComponent == null)
             return false;
+        if (!usesElectrodes) {
+            hasEnoughElectrodes = true;
+            return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
+        }
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
         electrodeSlotCache.clear();
         int totalUses = 0;
@@ -141,15 +130,62 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         return assembler.isAssemblySiteReady() && super.checkRecipe(recipe);
     }
 
+    @Override
+    protected @Nullable Recipe findRecipe(long maxVoltage, IItemHandlerModifiable inputs,
+                                          IMultipleTankHandler fluidInputs) {
+        if (!assembler.isAssemblySiteAvailable())
+            return null;
+        return getRecipe();
+    }
+
+    // mental illness n6: this runs when a recipe with nothing in it (findrecipe
+    // returns null) is "complete" too!
+    @Override
+    protected void completeRecipe() {
+        if (!(this.progressTime == 0 || this.maxProgressTime == 0)) {
+            assembler.nextComponent();
+        }
+        super.completeRecipe();
+    }
+
+    // The lists are null
+    @Override
+    protected void outputRecipeOutputs() {}
+
+    // Needs to be 2x the recipe EUt rather than 8x due to irregular energy hatch
+    // amperage draws
+    @Override
+    protected boolean hasEnoughPower(int @NotNull [] resultOverclock) {
+        return getEnergyStored() >= ((long) recipeEUt * 2);
+    }
+
+    // doesnt work for this multi
+    @Override
+    protected boolean checkPreviousRecipe() {
+        return false;
+    }
+
+    @Override
+    protected void trySearchNewRecipe() {
+        hasEnoughElectrodes = true;
+        super.trySearchNewRecipe();
+    }
+
     // mostly taken from the ball mill logic
     @Override
     protected boolean setupAndConsumeRecipeInputs(@NotNull Recipe recipe,
                                                   @NotNull IItemHandlerModifiable importInventory,
                                                   @NotNull IMultipleTankHandler importFluids) {
-        if (!hasEnoughElectrodes || !super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+        if (usesElectrodes && !hasEnoughElectrodes) {
             return false;
         }
-        AbstractComponent<?> targetComponent = assembler.getCurrentCraftTarget();
+        if (!super.setupAndConsumeRecipeInputs(recipe, importInventory, importFluids)) {
+            return false;
+        }
+        if (!usesElectrodes) {
+            return true;
+        }
+        AssemblyStep targetComponent = assembler.getCurrentStep();
         if (targetComponent == null)
             return false;
         int requiredDamage = getRequiredDamage(recipe, targetComponent);
@@ -179,34 +215,26 @@ public class RocketAssemblerLogic extends MultiblockRecipeLogic {
         assembler.onComponentSetup();
     }
 
-    // maybe this is a little too much
-    private static int getRequiredDamage(@NotNull Recipe recipe, @NotNull AbstractComponent<?> component) {
-        return (int) ((double) recipe.getInputs().size() * (component.getAssemblyDuration() + component.getRadius()));
-    }
-
-    /**
-     * Merges ingredients that ask for the same thing, summing their amounts.
-     * <p>
-     * Compares whole ingredients rather than flattening them into stacks: an ore
-     * dictionary ingredient stands for a <em>set</em> of acceptable stacks, and
-     * expanding it here would demand every member of that set at once.
-     */
     protected List<GTRecipeInput> collapse(List<GTRecipeInput> in) {
         List<GTRecipeInput> out = new ArrayList<>();
         for (GTRecipeInput input : in) {
-            boolean merged = false;
-            for (int i = 0; i < out.size(); i++) {
-                GTRecipeInput existing = out.get(i);
-                if (existing.equalIgnoreAmount(input)) {
-                    out.set(i, existing.copyWithAmount(existing.getAmount() + input.getAmount()));
-                    merged = true;
-                    break;
-                }
-            }
-            if (!merged) {
+            int match = indexOfMatch(out, input);
+            if (match < 0) {
                 out.add(input);
+                continue;
             }
+            GTRecipeInput existing = out.get(match);
+            out.set(match, existing.copyWithAmount(existing.getAmount() + input.getAmount()));
         }
         return out;
+    }
+
+    private static int indexOfMatch(List<GTRecipeInput> out, GTRecipeInput input) {
+        for (int i = 0; i < out.size(); i++) {
+            if (out.get(i).equalIgnoreAmount(input)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

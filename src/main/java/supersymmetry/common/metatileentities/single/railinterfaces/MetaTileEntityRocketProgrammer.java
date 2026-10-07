@@ -72,7 +72,7 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
 
         boolean withinBudget = true;
         if (this.stock instanceof EntityTransporterErector erector) {
-            withinBudget = this.circuitHolder.program(erector.getRocketNBT(), this.getWorld().provider.getDimension());
+            withinBudget = this.circuitHolder.program(getWorld().provider.getDimension(), erector.getRocketNBT());
         }
         // The lunar launch complex builds its rocket straight onto the pad, so there is
         // no erector passing through
@@ -82,7 +82,7 @@ public class MetaTileEntityRocketProgrammer extends MetaTileEntityStockInteracto
                 this.getInteractionBoundingBox())) {
             if (rocket.isLaunched())
                 continue;
-            withinBudget &= this.circuitHolder.program(rocket);
+            withinBudget &= this.circuitHolder.program(getWorld().provider.getDimension(), rocket.getEntityData());
         }
         setLowTierWarning(withinBudget);
     }

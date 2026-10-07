@@ -1,6 +1,5 @@
 package supersymmetry.common.rocketry.components;
 
-import static java.lang.Math.pow;
 import static supersymmetry.common.blocks.rocketry.BlockTurboPump.getTypeFromBlockstate;
 
 import java.util.*;
@@ -16,7 +15,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Constants.NBT;
 
 import gregtech.api.block.VariantBlock;
 import gregtech.api.unification.material.Materials;
@@ -107,7 +106,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setDouble("radius", this.radius);
         tag.setDouble("area_ratio", this.areaRatio);
         tag.setDouble("throughput", this.fuelThroughput);
         tag.setDouble("chamber_pressure", this.chamberPressure);
@@ -119,40 +117,23 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
     @Override
     public Optional<ComponentLavalEngine> readFromNBT(NBTTagCompound compound) {
-        if (compound.getString("type").isEmpty() || compound.getString("name").isEmpty()) {
+        if (!compound.hasKey("area_ratio", NBT.TAG_DOUBLE) || !compound.hasKey("throughput", NBT.TAG_DOUBLE)) {
             return Optional.empty();
         }
-        ComponentLavalEngine engine = new ComponentLavalEngine();
-        if (!compound.hasKey("mass", Constants.NBT.TAG_DOUBLE))
+        var engine = new ComponentLavalEngine();
+        if (!engine.readBaseFromNBT(compound)) {
             return Optional.empty();
-        if (!compound.hasKey("radius", Constants.NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("area_ratio", Constants.NBT.TAG_DOUBLE))
-            return Optional.empty();
-        if (!compound.hasKey("materials", Constants.NBT.TAG_LIST))
-            return Optional.empty();
-        if (!compound.hasKey("throughput", Constants.NBT.TAG_DOUBLE))
-            return Optional.empty();
-        compound.getTagList("materials", Constants.NBT.TAG_COMPOUND)
-                .forEach(x -> engine.materials.add(MaterialCost.fromNBT((NBTTagCompound) x)));
-
+        }
         engine.areaRatio = compound.getDouble("area_ratio");
-        engine.radius = compound.getDouble("radius");
-        engine.mass = compound.getDouble("mass");
         engine.fuelThroughput = compound.getDouble("throughput");
-        engine.height = compound.getInteger("height");
-
-        // not required: cards written before the nozzle got a flow model have none, and
-        // read back as a nozzle that is neither rewarded nor punished for its shape
         engine.chamberPressure = compound.getDouble("chamber_pressure");
-        engine.exitHalfAngle = compound.hasKey("exit_angle", Constants.NBT.TAG_DOUBLE) ?
+        engine.exitHalfAngle = compound.hasKey("exit_angle", NBT.TAG_DOUBLE) ?
                 compound.getDouble("exit_angle") : NozzleFlow.REFERENCE_EXIT_HALF_ANGLE;
-        engine.wettedAreaRatio = compound.hasKey("wetted_ratio", Constants.NBT.TAG_DOUBLE) ?
+        engine.wettedAreaRatio = compound.hasKey("wetted_ratio", NBT.TAG_DOUBLE) ?
                 compound.getDouble("wetted_ratio") : NozzleFlow.REFERENCE_WETTED_AREA_RATIO;
-        engine.contourTurning = compound.hasKey("turning", Constants.NBT.TAG_DOUBLE) ?
+        engine.contourTurning = compound.hasKey("turning", NBT.TAG_DOUBLE) ?
                 compound.getDouble("turning") : NozzleFlow.REFERENCE_CONTOUR_TURNING;
-        engine.efficiency = compound.hasKey("compound", Constants.NBT.TAG_DOUBLE) ?
-                compound.getDouble("compound") : 1.0;
+        engine.efficiency = compound.hasKey("efficiency", NBT.TAG_DOUBLE) ? compound.getDouble("efficiency") : 1.0;
 
         if (engine.materials.isEmpty()) {
             SusyLog.logger.warn("No materials were found in {}!", compound);
@@ -217,9 +198,12 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             return Optional.empty();
         }
 
-        double gasGenEfficiency = 1;
+        if (gasGens.isEmpty()) {
+            analysis.status = BuildStat.NO_GAS_GEN;
+            return Optional.empty();
+        }
         IBlockState gasGen = analysis.world.getBlockState(gasGens.stream().toList().getFirst());
-        gasGenEfficiency = (SuSyBlocks.ROCKET_ENGINE_GAS_GENERATOR.getState(gasGen)).getEfficiency();
+        double gasGenEfficiency = (SuSyBlocks.ROCKET_ENGINE_GAS_GENERATOR.getState(gasGen)).getEfficiency();
 
         // Analyze turbopumps
         IBlockState chamberState = analysis.world.getBlockState(cChamber);
@@ -251,7 +235,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 return Optional.empty();
             }
             double welzlRadius = analysis.getRadius(airLayer);
-            if (pow(welzlRadius, 2) * Math.PI - 1.5 > airLayer.size()) {
+            if (!StructAnalysis.isVaguelyCircular(airLayer, welzlRadius, 1.5)) {
                 // circular pattern
                 analysis.status = StructAnalysis.BuildStat.NOZZLE_MALFORMED;
                 int finalI = i;
@@ -265,7 +249,7 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
                 throatRadius = welzlRadius;
             }
             wallRadii.add(NozzleFlow.wallRadius(welzlRadius));
-            areas.add((int) (airLayer.size() + welzlRadius * Math.PI));
+            areas.add(NozzleFlow.stationArea(airLayer.size(), welzlRadius));
         }
 
         // For all rocket nozzles, the air layer list should be increasing. 3 blocks
@@ -280,18 +264,11 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
             return Optional.empty();
         }
 
-        int initial = areas.get(0);
-        int fin = initial;
-
-        for (int a : areas) {
-            if (fin <= a) {
-                fin = a;
-            } else {
-                analysis.status = BuildStat.NOT_LAVAL;
-                return Optional.empty();
-            }
+        if (!NozzleFlow.widensMonotonically(areas)) {
+            analysis.status = BuildStat.NOT_LAVAL;
+            return Optional.empty();
         }
-        float computedAreaRatio = ((float) fin) / initial;
+        double computedAreaRatio = NozzleFlow.areaRatio(areas);
         if (computedAreaRatio < 1.5) {
             analysis.status = BuildStat.NOT_LAVAL;
             return Optional.empty();
@@ -354,7 +331,6 @@ public class ComponentLavalEngine extends AbstractComponent<ComponentLavalEngine
 
         tag.setBoolean("has_match", !stickBlocks.isEmpty());
 
-        writeBlocksToNBT(blocks, analysis.world);
         return Optional.of(tag);
     }
 

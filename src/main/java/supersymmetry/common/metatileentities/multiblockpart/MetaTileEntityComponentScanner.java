@@ -114,7 +114,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
         AxisAlignedBB interior = linkedCleanroom.getInteriorBB();
-        int solidBlocks = 0;
         ArrayList<BlockPos> blockList = struct.getBlocks(getWorld(), interior, true);
 
         if (blockList == null) { // error propagated
@@ -124,9 +123,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4; // 5 being the
-        // minimum
-        // value
+        scanDuration = (int) (blockList.size() / (Math.pow(2, linkedCleanroom.getEnergyTier() - 1))) + 4;
         scannerLogic.setGoalTime(scanDuration);
 
         Set<BlockPos> blocksConnected = struct.getBlockConn(interior, blockList.get(0));
@@ -137,17 +134,17 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
             return;
         }
 
-        detectComponents(blockList);
+        detectComponents(blockList, interior);
         // if it wasnt changed after scanning, nothing matched
         if (struct.status == BuildStat.SCANNING) {
             struct.status = BuildStat.UNRECOGNIZED;
         }
     }
 
-    public void detectComponents(ArrayList<BlockPos> blockList) {
+    public void detectComponents(ArrayList<BlockPos> blockList, AxisAlignedBB interior) {
         for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
             if (component.getDetectionPredicate().test(new Tuple<>(struct, blockList))) {
-                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, linkedCleanroom.getInteriorBB());
+                Optional<NBTTagCompound> scanResult = component.analyzePattern(struct, interior);
                 if (scanResult.isPresent()) {
                     if (scanResult.get().hasKey("errorPos")) {
                         this.errorPos = BlockPos.fromLong(scanResult.get().getLong("errorPos"));
@@ -156,7 +153,6 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
                     getInventory().setNBT(t -> {
                         NBTTagCompound tag = scanResult.get();
                         tag.setInteger("dataid", (int) (Math.random() * Integer.MAX_VALUE));
-                        component.writeToNBT(tag);
                         return tag;
                     });
                     updateErrorPos(null);
@@ -199,8 +195,7 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
 
     @Override
     public void setCleanroom(ICleanroomProvider iCleanroomProvider) {
-        if (iCleanroomProvider instanceof MetaTileEntityBuildingCleanroom)
-            linkedCleanroom = (MetaTileEntityBuildingCleanroom) iCleanroomProvider;
+        linkedCleanroom = iCleanroomProvider instanceof MetaTileEntityBuildingCleanroom cleanroom ? cleanroom : null;
     }
 
     @Override
@@ -352,7 +347,8 @@ public class MetaTileEntityComponentScanner extends MetaTileEntityMultiblockPart
     protected void addDisplayText(List<ITextComponent> textList) {
         MultiblockDisplayText.builder(textList, this.getCleanroom() != null)
                 .setWorkingStatus(this.isWorkingEnabled(), this.isActive())
-                .addEnergyUsageLine(linkedCleanroom.getEnergyContainer()).addCustom((tl) -> {
+                .addEnergyUsageLine(linkedCleanroom == null ? null : linkedCleanroom.getEnergyContainer())
+                .addCustom((tl) -> {
                     if (linkedCleanroom != null) {
                         TextComponentTranslation cleanState;
                         if (scannerLogic.isActive() || struct.status == BuildStat.SCANNING) {

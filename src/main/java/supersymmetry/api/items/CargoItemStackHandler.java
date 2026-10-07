@@ -55,7 +55,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         nbt.setInteger("maxWeight", maxWeight);
 
         List<List<ItemStack>> cargoList = new ArrayList<>(cargo);
-        for (int i = 0; i < cargo.size(); i++) {
+        for (int i = 0; i < Math.min(cargo.size(), maxVolume); i++) {
             List<ItemStack> itemType = cargoList.get(i);
             NBTTagCompound itemNbt = new NBTTagCompound();
             itemNbt.setInteger("size", itemType.size());
@@ -78,7 +78,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         this.loading = nbt.getBoolean("loading");
         this.cargo.clear();
 
-        for (int i = 0; i < nbt.getInteger("cargoSize"); i++) {
+        for (int i = 0; i < Math.min(nbt.getInteger("cargoSize"), maxVolume); i++) {
             NBTTagCompound itemNbt = nbt.getCompoundTag("entry" + i);
             int size = itemNbt.getInteger("size");
             List<ItemStack> itemType = new ArrayList<>();
@@ -139,7 +139,7 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
     }
 
     public CargoItemStackHandler(int maxVolume, int maxWeight) {
-        this.maxVolume = maxVolume;
+        this.maxVolume = Math.min(maxVolume, 128); // sorry
         this.maxWeight = maxWeight;
     }
 
@@ -176,11 +176,11 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
             ItemStack currentStack = bucket.getLast();
             overflowAmount = currentStack.getCount() + stack.getCount() - currentStack.getMaxStackSize();
             if (overflowAmount > 0 && maxVolume <= currentVolume) {
-                maxAddition = Math.min(maxAddition, currentStack.getMaxStackSize() - currentStack.getCount());
+                maxAddition = Math.min(maxAddition, currentStack.getMaxStackSize() - stack.getCount());
             }
         }
 
-        if (!simulate) {
+        if (!simulate && maxAddition > 0) {
             if (overflowAmount > 0) {
                 // Fill up the last bucket, and add a new one for overflow
                 bucket.getLast().setCount(bucket.getLast().getMaxStackSize());
@@ -226,10 +226,9 @@ public class CargoItemStackHandler implements IItemHandler, INBTSerializable<NBT
         }
 
         // deliberately set masses should override the generated ones, but still take fluids into account
-        if (ItemMassRegistry.getMass(item) != null) {
-            if (ItemMassRegistry.getMass(item) != 0) {
-                currentMass = ItemMassRegistry.getMass(item);
-            }
+        int mass = ItemMassRegistry.getMass(item);
+        if (mass != 0) {
+            currentMass = mass;
         }
 
         NBTTagCompound tag = item.getTagCompound();

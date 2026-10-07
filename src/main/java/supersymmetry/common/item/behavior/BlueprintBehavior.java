@@ -1,9 +1,9 @@
 package supersymmetry.common.item.behavior;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,32 +14,24 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import gregtech.api.items.metaitem.stats.ISubItemHandler;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.util.GTUtility;
-import supersymmetry.api.rocketry.components.AbstractComponent;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import supersymmetry.api.rocketry.AssemblyStep;
 import supersymmetry.api.rocketry.rockets.AbstractRocketBlueprint;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
-
-    private final Consumer<List<String>> lines;
-    private final List<String> keys;
+public class BlueprintBehavior extends AbstractCardBehavior {
 
     public BlueprintBehavior(@NotNull Consumer<List<String>> lines, List<String> keys) {
-        this.lines = lines;
-        this.keys = keys;
+        super(lines, keys);
     }
 
     @Override
-    public String getItemSubType(ItemStack itemStack) {
-        var tag = GTUtility.getOrCreateNbtCompound(itemStack);
-        return tag.getString("name");
+    protected boolean showCardId(NBTTagCompound tag) {
+        return tag.hasKey("stages");
     }
 
     @Override
@@ -48,46 +40,10 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
         if (itemStack.getMetadata() == SuSyMetaItems.DATA_CARD_MASTER_BLUEPRINT.metaValue) {
             for (AbstractRocketBlueprint blueprint : AbstractRocketBlueprint.getBlueprintsRegistry().values()) {
                 ItemStack configured = itemStack.copy();
-                NBTTagCompound tag = blueprint.writeToNBT();
-                configured.setTagCompound(tag);
+                configured.setTagCompound(blueprint.writeToNBT());
                 subItems.add(configured);
             }
         }
-    }
-
-    @Override
-    public void addInformation(ItemStack itemStack, List<String> lines) {
-        this.lines.accept(lines);
-        NBTTagCompound tag = itemStack.getTagCompound();
-        if (tag == null)
-            return;
-
-        for (String key : this.keys) {
-            if (tag.hasKey(key, Constants.NBT.TAG_STRING)) {
-                if (tag.hasKey("stages")) {
-                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)) + " ID: " +
-                            getID(tag));
-                } else {
-                    lines.add(I18n.format(itemStack.getTranslationKey() + ".tag." + tag.getString(key)));
-                }
-            }
-        }
-
-        if (tag.hasKey("name", Constants.NBT.TAG_STRING)) {
-            String targetName = tag.getString("name");
-            for (AbstractComponent<?> component : AbstractComponent.getRegistry()) {
-                if (component.getName().equals(targetName)) {
-                    lines.addAll(component.getTooltipLines(tag));
-                    break;
-                }
-            }
-        }
-    }
-
-    private String getID(NBTTagCompound key) {
-        // Left pad
-        String fullID = String.format("%08x", key.hashCode());
-        return fullID.toUpperCase();
     }
 
     @Override
@@ -95,24 +51,22 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
         ItemStack stack = player.getHeldItem(hand);
 
         if (player.world.isRemote)
-            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+            return super.onItemRightClick(world, player, hand);
 
         if (!stack.hasTagCompound()) {
-            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+            return super.onItemRightClick(world, player, hand);
         }
-        NBTTagCompound tag = stack.getTagCompound();
-        AbstractRocketBlueprint bp = AbstractRocketBlueprint.getCopyOf(tag.getString("name"));
-        if (bp == null || !bp.readFromNBT(tag)) {
-            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+        AbstractRocketBlueprint bp = AbstractRocketBlueprint.fromTag(stack.getTagCompound());
+        if (bp == null) {
+            return super.onItemRightClick(world, player, hand);
         }
 
         // The assembly sequence, not just the stages: it carries the blueprint's fixed
         // cost groups too, which are otherwise invisible until the assembler asks for
         // them.
-        List<AbstractComponent<?>> componentList = bp.getAssemblySequence();
-        HashMap<String, Integer> totalItemList = new HashMap<>();
-        for (AbstractComponent<?> currentComponent : componentList) {
-            for (GTRecipeInput ingredient : currentComponent.getRecipeInputs()) {
+        Object2IntOpenHashMap<String> totalItemList = new Object2IntOpenHashMap<>();
+        for (AssemblyStep step : bp.getAssemblySequence()) {
+            for (GTRecipeInput ingredient : step.getRecipeInputs()) {
                 ItemStack[] matching = ingredient.getInputStacks();
                 if (matching.length == 0)
                     continue;
@@ -124,7 +78,7 @@ public class BlueprintBehavior implements IItemBehaviour, ISubItemHandler {
         }
 
         if (totalItemList.isEmpty()) {
-            return IItemBehaviour.super.onItemRightClick(world, player, hand);
+            return super.onItemRightClick(world, player, hand);
         }
 
         player.sendStatusMessage(new TextComponentTranslation("chat.susy.rocket_blueprint.item_list"), false);

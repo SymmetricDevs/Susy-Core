@@ -1,7 +1,6 @@
 package supersymmetry.common.materials;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +13,10 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlag;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.*;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.unification.material.info.SuSyMaterialFlags;
+import supersymmetry.api.unification.material.properties.SolidRocketFuelProperty;
 import supersymmetry.api.unification.material.properties.SuSyPropertyKey;
 import supersymmetry.api.unification.material.properties.TanklessFluidPipeProperties;
 
@@ -203,6 +204,10 @@ public class SusyMaterials {
         Materials.Electrum.setProperty(PropertyKey.ORE, new OreProperty());
 
         Materials.Hydrogen.addFlags(MaterialFlags.FLAMMABLE);
+
+        if (GregTechAPI.materialManager.getMaterial("rp_one") == null) {
+            Materials.Agar.setProperty(SuSyPropertyKey.SOLID_ROCKET_FUEL, new SolidRocketFuelProperty(1, 1, 200, 0));
+        }
     }
 
     private static void removeProperty(PropertyKey<?> key, Material material) {
@@ -274,7 +279,7 @@ public class SusyMaterials {
         }
     }
 
-    private static final Map<Material, Integer> MOLTEN_TEMPERATURES = new HashMap<>();
+    private static final Object2IntOpenHashMap<Material> MOLTEN_TEMPERATURES = new Object2IntOpenHashMap<>();
 
     static {
         MOLTEN_TEMPERATURES.put(Materials.Aluminium, 933);

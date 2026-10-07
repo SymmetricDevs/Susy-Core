@@ -6,6 +6,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import supersymmetry.Supersymmetry;
 
@@ -14,6 +15,12 @@ public class AtmosphereWorldData extends WorldSavedData {
     private static final String DATA_NAME = Supersymmetry.MODID + "_AtmosphereData";
     private AtmosphereRegionGraph graph;
     private NBTTagCompound pendingNbt;
+
+    public static @Nullable AtmosphereWorldData getIfPresent(World world) {
+        if (world.isRemote) return null;
+        MapStorage storage = world.getMapStorage();
+        return storage == null ? null : get(world);
+    }
 
     public AtmosphereWorldData(int dimension) {
         this(DATA_NAME + dimension);

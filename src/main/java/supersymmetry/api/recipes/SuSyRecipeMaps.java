@@ -393,7 +393,7 @@ public class SuSyRecipeMaps {
             0, 0, new PrimitiveRecipeBuilder(), false).setSlotOverlay(false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSlotOverlay(true, false, GuiTextures.FURNACE_OVERLAY_2).setSound(GTSoundEvents.FURNACE);
 
-    public static final RecipeMap<SimpleRecipeBuilder> SCRAP_RECYCLER = new RecipeMap<>("scrap_recycler", 2, 9, 0, 3,
+    public static final RecipeMap<SimpleRecipeBuilder> SCRAP_RECYCLER = new RecipeMap<>("scrap_recycler", 2, 16, 0, 3,
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ASSEMBLER);
 
     public static final RecipeMap<SimpleRecipeBuilder> ROCKET_ASSEMBLER = new RecipeMap<>("rocket_assembler", 25, 2, 5,

@@ -1,13 +1,8 @@
 package supersymmetry.api.rocketry.components;
 
-import java.util.Collections;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.GTRecipeItemInput;
 
@@ -15,18 +10,8 @@ public class MaterialCost {
 
     public enum SourceType {
 
-        ITEM(RecipeMaps.ASSEMBLER_RECIPES),
-        COVER(RecipeMaps.BENDER_RECIPES);
-
-        private final RecipeMap<?> recipeMap;
-
-        SourceType(RecipeMap<?> recipeMap) {
-            this.recipeMap = recipeMap;
-        }
-
-        public RecipeMap<?> getRecipeMap() {
-            return recipeMap;
-        }
+        ITEM,
+        COVER;
     }
 
     private final ItemStack stack; // count=1, identity only
@@ -66,9 +51,5 @@ public class MaterialCost {
 
     public GTRecipeInput toIngredient() {
         return new GTRecipeItemInput(stack.copy(), count);
-    }
-
-    public List<GTRecipeInput> expandRecipe() {
-        return Collections.singletonList(toIngredient());
     }
 }
