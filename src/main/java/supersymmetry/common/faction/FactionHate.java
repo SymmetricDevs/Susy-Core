@@ -2,10 +2,12 @@ package supersymmetry.common.faction;
 
 import java.util.List;
 
+import com.feed_the_beast.ftblib.events.team.ForgeTeamDataEvent;
+import com.feed_the_beast.ftblib.events.team.ForgeTeamDeletedEvent;
+import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerLeftEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -105,64 +107,49 @@ public class FactionHate {
         cloneData.setTag(TAG_ROOT, susyData.copy());
     }
 
+    // migration: HATE system for teams is now handled by storing it in actual ftb team data
+    // instead of syncing NBT tags across people in the same team
+    // this removes weird desync issues like we've seen in: https://discord.com/channels/881234100504109166/1094752913139707927/1558124632391950336
+    @SubscribeEvent
+    public static void onTeamData(ForgeTeamDataEvent event) {
+        event.register(new TeamHateData(event.getTeam()));
+    }
+
     @SubscribeEvent
     public static void onTeamJoin(ForgeTeamPlayerJoinedEvent event) {
         ForgePlayer joining = event.getPlayer();
-
-        if (!joining.isOnline())
-            return;
-
         ForgeTeam team = joining.team;
-        if (team == null || !team.isValid())
-            return;
+        if (team == null || !team.isValid()) return;
 
-        NBTTagCompound maxHates = new NBTTagCompound();
-        for (ForgePlayer member : team.getMembers()) {
-            if (member.getId().equals(joining.getId()))
-                continue;
-
-            NBTTagCompound memberHate = getMemberHateNBT(member);
-            for (String faction : memberHate.getKeySet()) {
-                int memberValue = memberHate.getInteger(faction);
-                int currentMax = maxHates.getInteger(faction);
-                if (memberValue > currentMax) {
-                    maxHates.setInteger(faction, memberValue);
-                }
-            }
+        TeamHateData data = TeamHateData.get(team);
+        NBTTagCompound personal = FactionHateManager.getPersonalHateTag(joining);
+        for (String faction : personal.getKeySet()) {
+            data.setHate(faction, Math.max(data.getHate(faction), personal.getInteger(faction)));
         }
-
-        NBTTagCompound joiningHate = getMemberHateNBT(joining);
-        for (String faction : joiningHate.getKeySet()) {
-            int joiningValue = joiningHate.getInteger(faction);
-            int currentMax = maxHates.getInteger(faction);
-            if (joiningValue > currentMax) {
-                maxHates.setInteger(faction, joiningValue);
-            }
-        }
-
-        if (maxHates.getSize() == 0)
-            return;
-
-        EntityPlayerMP joiningPlayer = joining.getPlayer();
-        for (String faction : maxHates.getKeySet()) {
-            int trueMax = maxHates.getInteger(faction);
-            FactionHateManager.setHate(joiningPlayer, faction, trueMax);
-            for (ForgePlayer member : team.getMembers()) {
-                if (member.getId().equals(joining.getId()))
-                    continue;
-                FactionHateManager.writeHateToForgePlayer(member, faction, trueMax);
-            }
+        if (joining.isOnline()) {
+            data.raiseBaseline(FactionBaselineRegistry.getBaseline(joining.getPlayer()));
         }
     }
 
-    private static NBTTagCompound getMemberHateNBT(ForgePlayer member) {
-        if (member.isOnline()) {
-            NBTTagCompound root = member.getPlayer().getEntityData().getCompoundTag(TAG_ROOT);
-            return root.getCompoundTag(TAG_HATE);
+    @SubscribeEvent
+    public static void onTeamLeave(ForgeTeamPlayerLeftEvent event) {
+        ForgePlayer leaving = event.getPlayer();
+        ForgeTeam team = leaving.team;
+        if (team == null || !team.isValid()) return;
+
+        TeamHateData data = TeamHateData.get(team);
+        if (data == null) return;
+        FactionHateManager.writePersonalHate(leaving, data.getAll());
+    }
+
+    @SubscribeEvent
+    public static void onTeamDeleted(ForgeTeamDeletedEvent event) {
+        ForgeTeam team = event.getTeam();
+        TeamHateData data = TeamHateData.get(team);
+        if (data == null || data.getAll().isEmpty()) return;
+
+        for (ForgePlayer member : team.getMembers()) {
+            FactionHateManager.writePersonalHate(member, data.getAll());
         }
-        NBTTagCompound playerNBT = member.getPlayerNBT();
-        NBTTagCompound forgeData = playerNBT.getCompoundTag(FORGE_DATA);
-        NBTTagCompound root = forgeData.getCompoundTag(TAG_HATE);
-        return root.getCompoundTag(TAG_HATE);
     }
 }
