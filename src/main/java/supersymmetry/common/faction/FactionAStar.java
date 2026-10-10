@@ -174,23 +174,30 @@ public class FactionAStar {
     }
 
     private boolean isPassable(BlockPos pos) {
-        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(world, pos);
+        IBlockState state = world.getBlockState(pos);
+        IBlockState below = world.getBlockState(pos.down());
+
+        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(state, below);
         if (hazard == PathNodeType.BLOCKED) return false;
 
-        if (isDoor(pos)) return true;
+        if (isDoor(state)) return true;
 
-        return !world.getBlockState(pos).getMaterial().isSolid();
-    }
-
-    private boolean isDoor(BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
-        return block instanceof BlockDoor && block != Blocks.IRON_DOOR;
+        return !state.getMaterial().isSolid();
     }
 
     private boolean isSolidAt(BlockPos pos) {
-        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(world, pos);
+        IBlockState state = world.getBlockState(pos);
+        IBlockState below = world.getBlockState(pos.down());
+
+        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(state, below);
         if (hazard == PathNodeType.BLOCKED) return true;
-        return world.getBlockState(pos).getMaterial().isSolid();
+
+        return state.getMaterial().isSolid();
+    }
+
+    private boolean isDoor(IBlockState state) {
+        Block block = state.getBlock();
+        return block instanceof BlockDoor && block != Blocks.IRON_DOOR;
     }
 
     private boolean isLadderAt(BlockPos pos) {
@@ -210,8 +217,6 @@ public class FactionAStar {
         } else if (dy < 0) {
             cost += Math.abs(dy) * 0.5;
         }
-
-        if (isDoor(to) || isDoor(to.down())) cost += 2.0;
 
         return cost;
     }
