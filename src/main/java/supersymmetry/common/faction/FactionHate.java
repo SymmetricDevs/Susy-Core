@@ -2,9 +2,6 @@ package supersymmetry.common.faction;
 
 import java.util.List;
 
-import com.feed_the_beast.ftblib.events.team.ForgeTeamDataEvent;
-import com.feed_the_beast.ftblib.events.team.ForgeTeamDeletedEvent;
-import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerLeftEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +11,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.feed_the_beast.ftblib.events.team.ForgeTeamDataEvent;
+import com.feed_the_beast.ftblib.events.team.ForgeTeamDeletedEvent;
 import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerJoinedEvent;
+import com.feed_the_beast.ftblib.events.team.ForgeTeamPlayerLeftEvent;
 import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
 import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 
@@ -109,7 +109,8 @@ public class FactionHate {
 
     // migration: HATE system for teams is now handled by storing it in actual ftb team data
     // instead of syncing NBT tags across people in the same team
-    // this removes weird desync issues like we've seen in: https://discord.com/channels/881234100504109166/1094752913139707927/1558124632391950336
+    // this removes weird desync issues like we've seen in:
+    // https://discord.com/channels/881234100504109166/1094752913139707927/1558124632391950336
     @SubscribeEvent
     public static void onTeamData(ForgeTeamDataEvent event) {
         event.register(new TeamHateData(event.getTeam()));

@@ -6,10 +6,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
+import org.jspecify.annotations.Nullable;
+
 import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
 import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 import com.feed_the_beast.ftblib.lib.data.Universe;
-import org.jspecify.annotations.Nullable;
 
 public class FactionHateManager {
 
@@ -17,8 +18,7 @@ public class FactionHateManager {
     private static final String TAG_HATE = "hate";
     private static final String FORGE_DATA = "ForgeData";
 
-    @Nullable
-    public static ForgeTeam getTeam(EntityPlayer player) {
+    @Nullable public static ForgeTeam getTeam(EntityPlayer player) {
         Universe universe = Universe.get();
         if (universe == null) return null;
         ForgePlayer fp = universe.getPlayer(player.getGameProfile().getId());
