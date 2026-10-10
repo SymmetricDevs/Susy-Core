@@ -12,6 +12,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * custom A* zalgorithm, the default vanilla algorithm does not work for our purposes
@@ -39,6 +40,11 @@ public class FactionAStar {
     }
 
     public Path findPath(BlockPos start, BlockPos end) {
+
+        if (!FactionPathBudget.tryAcquire(entity.world)) {
+            return null;
+        }
+
         Map<BlockPos, Node> allNodes = new HashMap<>();
         PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(n -> n.f));
         Set<BlockPos> closed = new HashSet<>();
@@ -248,6 +254,22 @@ public class FactionAStar {
             this.g = g;
             this.heuristic = heuristic;
             this.f = g + heuristic;
+        }
+    }
+
+    public final class FactionPathBudget {
+        private static long tick = -1;
+        private static int used = 0;
+
+        public static boolean tryAcquire(World world) {
+            long now = world.getTotalWorldTime();
+            if (now != tick) {
+                tick = now;
+                used = 0;
+            }
+            if (used >= 6) return false;
+            used++;
+            return true;
         }
     }
 }
