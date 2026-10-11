@@ -1,0 +1,8 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "variant=dead_water" : {
+      "model" : "susy:dead_water/dead_water_overlay"
+    }
+  }
+}

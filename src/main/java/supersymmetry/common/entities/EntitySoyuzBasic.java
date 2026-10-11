@@ -215,6 +215,11 @@ public class EntitySoyuzBasic extends EntityBlueprintRocket implements IAlwaysRe
     }
 
     @Override
+    public boolean hasNoGravity() {
+        return true;
+    }
+
+    @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
         AxisAlignedBB aabb = new AxisAlignedBB(passenger.getPosition()).grow(5, 1, 5);

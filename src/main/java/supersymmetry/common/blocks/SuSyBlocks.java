@@ -142,6 +142,7 @@ public class SuSyBlocks {
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockGoog GOOG;
     public static BlockFlammableAir BLOCKRADICALAIR;
+    public static BlockDeadWater DEADWATER;
     public static BlockFluidPlacer BLOCKFLUIDPLACER;
     public static BlockSpeaker SPEAKER;
     public static BlockInductionCrucible INDUCTION_CRUCIBLE;
