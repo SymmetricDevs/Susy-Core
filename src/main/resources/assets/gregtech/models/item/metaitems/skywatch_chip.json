@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": { "layer0": "gregtech:items/metaitems/skywatch_chip" },
+  "overrides": [
+    { "predicate": { "susy:skywatch_alert": 1 }, "model": "gregtech:item/metaitems/skywatch_chip.alert" }
+  ]
+}

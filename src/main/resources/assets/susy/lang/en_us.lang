@@ -2340,6 +2340,9 @@ metaitem.intel_chip_full.name=Intelligence gathering chip
 
 metaitem.hyper_defoliant.name=Hyper Defoliant
 
+metaitem.skywatch_chip.name=Skywatch Chip
+metaitem.skywatch_chip.tooltip=A rag-tag detector that constantly watches your skies
+
 # end of problem causers
 
 chat.susy.location_card.x=X (%s)
