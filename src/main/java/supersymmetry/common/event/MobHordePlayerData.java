@@ -16,6 +16,9 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
+import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
+
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.faction.FactionHateManager;
 
@@ -132,9 +135,10 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
                 event = events.get(index);
                 if (event.run(player, this::addEntity)) {
-                    invasionTimers[index] = event.getNextDelay();
-
+                    int delay = event.getNextDelay();
+                    invasionTimers[index] = Math.max(invasionTimers[index], delay);
                     this.setCurrentInvasion(event);
+                    resetTeamInvasionTimer(player, index, DEFAULT_GRACE_PERIOD);
                 }
             }
         }
@@ -153,6 +157,30 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 this.finishInvasion();
             }
         }
+    }
+
+    private void resetTeamInvasionTimer(EntityPlayerMP player, int eventIndex, int ticks) {
+        if (eventIndex < this.invasionTimers.length) {
+            this.invasionTimers[eventIndex] = ticks;
+        }
+
+        ForgeTeam team = FactionHateManager.getTeam(player);
+        if (team == null) return;
+
+        MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
+        UUID selfId = player.getPersistentID();
+
+        for (ForgePlayer member : team.getMembers()) {
+            UUID memberId = member.getId();
+            if (memberId == null || memberId.equals(selfId)) continue;
+
+            MobHordePlayerData memberData = worldData.getPlayerData(memberId);
+            if (eventIndex >= memberData.invasionTimers.length) continue;
+
+            memberData.invasionTimers[eventIndex] = ticks;
+        }
+
+        worldData.markDirty();
     }
 
     public void setCurrentInvasion(MobHordeEvent event) {
