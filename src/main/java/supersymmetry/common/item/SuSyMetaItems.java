@@ -6,9 +6,11 @@ import static supersymmetry.common.metatileentities.storage.MetaTileEntityLocked
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
@@ -64,6 +66,8 @@ public class SuSyMetaItems {
     public static MetaValueItem INTEL_CHIP_FULL;
     public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem HYPER_DEFOLIANT;
+    public static MetaValueItem TEST_GUN;
+    public static MetaValueItem TEST_AMMO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -215,6 +219,9 @@ public class SuSyMetaItems {
                 .addComponents(IntelChipFullBehaviour.INSTANCE);
         HYPER_DEFOLIANT = metaItem.addItem(29, "hyper_defoliant")
                 .addComponents(new HyperDefoliantBehavior());
+        TEST_GUN = metaItem.addItem(30, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior(12, 3000, List.of(TEST_AMMO.getStackForm()), 0.9));
+        TEST_AMMO = metaItem.addItem(31, "test_ammo");
+
     }
 
     private static void addExtraBehaviours() {
