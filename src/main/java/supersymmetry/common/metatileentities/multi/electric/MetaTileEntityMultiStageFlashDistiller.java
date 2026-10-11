@@ -69,12 +69,12 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+        /*if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
             var ability = abilityPart.getAbility();
             if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
                 return Textures.CLEAN_STAINLESS_STEEL_CASING;
             }
-        }
+        }*/
         return Textures.SOLID_STEEL_CASING;
     }
 
