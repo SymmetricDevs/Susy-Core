@@ -14,9 +14,7 @@ import org.jspecify.annotations.Nullable;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
@@ -69,12 +67,14 @@ public class MetaTileEntityMultiStageFlashDistiller extends RecipeMapMultiblockC
     }
 
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        /*if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
-            var ability = abilityPart.getAbility();
-            if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
-                return Textures.CLEAN_STAINLESS_STEEL_CASING;
-            }
-        }*/
+        /*
+         * if (part instanceof IMultiblockAbilityPart<?> abilityPart) {
+         * var ability = abilityPart.getAbility();
+         * if (ability == MultiblockAbility.MAINTENANCE_HATCH || ability == MultiblockAbility.INPUT_ENERGY) {
+         * return Textures.CLEAN_STAINLESS_STEEL_CASING;
+         * }
+         * }
+         */
         return Textures.SOLID_STEEL_CASING;
     }
 
