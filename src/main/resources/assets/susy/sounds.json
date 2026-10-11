@@ -71,6 +71,15 @@
       }
     ]
   },
+  "music.main_menu": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "susy:music/main_menu",
+        "stream": true
+      }
+    ]
+  },
   "item.oxygen_sensor_beep" : {
     "category" : "player",
     "sounds" : [
