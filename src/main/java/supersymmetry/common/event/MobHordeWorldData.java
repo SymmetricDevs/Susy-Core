@@ -98,4 +98,9 @@ public class MobHordeWorldData extends WorldSavedData implements Function<UUID, 
         }
         return false;
     }
+
+    public UUID getCurrentInvasionId(UUID playerId) {
+        MobHordePlayerData data = this.playerDataMap.get(playerId);
+        return data == null ? null : data.currentInvasionId;
+    }
 }

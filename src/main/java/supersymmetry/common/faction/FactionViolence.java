@@ -64,6 +64,7 @@ public class FactionViolence {
     private static final long DANGER_SCAN_INTERVAL = 5L;
 
     private static final String TAG_INVASION_ID = "invasionId";
+    private static final String TAG_INVASION_OWNER = "invasionOwner";
     private static final int ORPHAN_CHECK_INTERVAL = 100; // ticks, ~5s per mob
 
     // ========================================================================
@@ -88,8 +89,8 @@ public class FactionViolence {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return;
-        if (event.getEntity() instanceof EntityLiving &&
-                despawnIfOrphaned((EntityLiving) event.getEntity())) {
+        if (event.getEntity() instanceof EntityLivingBase && !(event.getEntity() instanceof EntityPlayer) &&
+                despawnIfOrphaned((EntityLivingBase) event.getEntity())) {
             return;
         }
         if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
@@ -829,18 +830,39 @@ public class FactionViolence {
         }
     }
 
-    private static boolean despawnIfOrphaned(EntityLiving mob) {
+    private static boolean despawnIfOrphaned(EntityLivingBase mob) {
         if ((mob.ticksExisted + mob.getEntityId()) % ORPHAN_CHECK_INTERVAL != 0) return false;
 
         NBTTagCompound root = mob.getEntityData();
         if (!root.hasKey(TAG_ROOT)) return false;
         NBTTagCompound susy = root.getCompoundTag(TAG_ROOT);
-        if (!susy.hasKey(TAG_INVASION_ID)) return false;
 
         UUID invasionId;
-        try {
-            invasionId = UUID.fromString(susy.getString(TAG_INVASION_ID));
-        } catch (IllegalArgumentException e) {
+
+        if (susy.hasKey(TAG_INVASION_ID)) {
+            try {
+                invasionId = UUID.fromString(susy.getString(TAG_INVASION_ID));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        } else if (susy.hasKey(TAG_INVASION_OWNER)) {
+            UUID ownerId;
+            try {
+                ownerId = UUID.fromString(susy.getString(TAG_INVASION_OWNER));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+
+            UUID ownerInvasion = MobHordeWorldData.get(mob.world).getCurrentInvasionId(ownerId);
+            if (ownerInvasion == null) {
+                mob.setDead();
+                return true;
+            }
+
+            susy.setString(TAG_INVASION_ID, ownerInvasion.toString());
+            root.setTag(TAG_ROOT, susy);
+            return false;
+        } else {
             return false;
         }
 
