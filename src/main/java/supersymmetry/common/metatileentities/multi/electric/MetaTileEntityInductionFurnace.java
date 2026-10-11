@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -50,6 +51,8 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import supersymmetry.api.capability.SuSyDataCodes;
+import supersymmetry.api.capability.impl.InductionFurnaceRecipeLogic;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.InductionCrucibleMaterialProperty;
@@ -72,9 +75,12 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
 
     private int heat = 25;
     private int activeTicks;
+    private FluidStack pendingCoolant;
+    private boolean coolingBlocked;
 
     public MetaTileEntityInductionFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.INDUCTION_FURNACE);
+        this.recipeMapWorkable = new InductionFurnaceRecipeLogic(this);
     }
 
     @Override
@@ -95,9 +101,10 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
             return;
         }
 
-        if (activeTicks > 0 || heat > 25) {
+        if (activeTicks > 0 || heat > 25 || pendingCoolant != null) {
             updateCooling(activeTicks);
             activeTicks = 0;
+            markDirty();
         }
     }
 
@@ -130,17 +137,53 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
             return;
         }
 
+        if (pendingCoolant != null) {
+            if (((InductionFurnaceRecipeLogic) recipeMapWorkable).canOutputCoolant(pendingCoolant)) {
+                int accepted = outputFluidInventory.fill(pendingCoolant.copy(), true);
+                pendingCoolant.amount -= accepted;
+                if (pendingCoolant.amount <= 0) pendingCoolant = null;
+            }
+            if (pendingCoolant != null) {
+                setCoolingBlocked(true);
+                updateUncooledHeat(isRunning, operationFraction);
+                return;
+            }
+            if (!isRunning && heat == 25) {
+                setCoolingBlocked(false);
+                return;
+            }
+        }
+
         if (waterToConsume > 0) {
             FluidStack actualWater = Materials.Water.getFluid(waterToConsume);
             FluidStack actualHeatedWater = SusyMaterials.HotSoftenedWater.getFluid(waterToConsume);
 
-            boolean hasOutputSpace = outputFluidInventory.fill(actualHeatedWater, false) >= waterToConsume;
+            boolean hasOutputSpace = ((InductionFurnaceRecipeLogic) recipeMapWorkable)
+                    .canOutputCoolant(actualHeatedWater);
+
+            setCoolingBlocked(!hasOutputSpace);
 
             if (hasOutputSpace) {
-                inputFluidInventory.drain(actualWater, true);
-                outputFluidInventory.fill(actualHeatedWater, true);
+                FluidStack drained = inputFluidInventory.drain(actualWater, true);
+                if (drained == null || drained.amount == 0) {
+                    updateUncooledHeat(isRunning, operationFraction);
+                    return;
+                }
+                actualHeatedWater.amount = drained.amount;
+                int accepted = outputFluidInventory.fill(actualHeatedWater.copy(), true);
+                if (accepted < drained.amount) {
+                    pendingCoolant = actualHeatedWater.copy();
+                    pendingCoolant.amount -= accepted;
+                    setCoolingBlocked(true);
+                }
+                markDirty();
 
-                double waterFraction = waterToConsume / (double) waterRequired;
+                double waterFraction = accepted / (double) waterRequired;
+
+                if (accepted == 0) {
+                    updateUncooledHeat(isRunning, operationFraction);
+                    return;
+                }
 
                 if (isRunning) {
                     int activeCooling = (int) Math.round(BASE_COOL_DOWN_RATE * 2 * operationFraction * waterFraction);
@@ -159,10 +202,26 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
             }
         }
 
+        if (waterToConsume == 0) setCoolingBlocked(false);
+        updateUncooledHeat(isRunning, operationFraction);
+    }
+
+    private void updateUncooledHeat(boolean isRunning, double operationFraction) {
         if (isRunning) {
             heat = Math.min(1000, heat + (int) Math.ceil(HEAT_UP_RATE * operationFraction));
         } else {
             heat = Math.max(25, heat - BASE_COOL_DOWN_RATE);
+        }
+    }
+
+    public boolean hasPendingCoolant() {
+        return pendingCoolant != null;
+    }
+
+    private void setCoolingBlocked(boolean blocked) {
+        if (coolingBlocked != blocked) {
+            coolingBlocked = blocked;
+            writeCustomData(SuSyDataCodes.UPDATE_FURNACE_COOLING, buf -> buf.writeBoolean(blocked));
         }
     }
 
@@ -175,6 +234,14 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     protected void addWarningText(List<ITextComponent> textList) {
         super.addWarningText(textList);
         if (isStructureFormed()) {
+            if (((InductionFurnaceRecipeLogic) recipeMapWorkable).isWaitingForOutputs()) {
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                        "susy.multiblock.induction_furnace.waiting_outputs"));
+            }
+            if (coolingBlocked) {
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
+                        "susy.multiblock.induction_furnace.cooling_blocked"));
+            }
             double heatPercentage = heat / (double) MELTING_HEAT;
             int[] waterAmount = getWaterAmount();
 
@@ -327,13 +394,35 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data.setInteger("CoilHeat", heat);
+        if (pendingCoolant != null)
+            data.setTag("FurnacePendingCoolant", pendingCoolant.writeToNBT(new NBTTagCompound()));
         return super.writeToNBT(data);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         heat = data.getInteger("CoilHeat");
+        pendingCoolant = FluidStack.loadFluidStackFromNBT(data.getCompoundTag("FurnacePendingCoolant"));
+        if (pendingCoolant != null && pendingCoolant.amount <= 0) pendingCoolant = null;
         super.readFromNBT(data);
+    }
+
+    @Override
+    public void writeInitialSyncData(PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(coolingBlocked);
+    }
+
+    @Override
+    public void receiveInitialSyncData(PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        coolingBlocked = buf.readBoolean();
+    }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        if (dataId == SuSyDataCodes.UPDATE_FURNACE_COOLING) coolingBlocked = buf.readBoolean();
+        else super.receiveCustomData(dataId, buf);
     }
 
     @Override
