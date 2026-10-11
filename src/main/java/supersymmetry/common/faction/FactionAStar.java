@@ -1,7 +1,6 @@
 package supersymmetry.common.faction;
 
-import java.util.*;
-
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +11,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 /**
  * custom A* zalgorithm, the default vanilla algorithm does not work for our purposes
@@ -23,231 +23,360 @@ import net.minecraft.world.IBlockAccess;
 
 public class FactionAStar {
 
-    private static final int MAX_NODES = 4096;
-    public static final int MAX_CLIMB_HEIGHT = 8; // misleading, not actually max climb height, more like how high does
-                                                  // the check run. too lazy to refactor name good luck everyone else
+    private static final int MAX_NODES = 2048;
+    private static final int HEAP_CAPACITY = MAX_NODES * 4;
+    private static final int MAX_NEIGHBORS = 32;
+
+    public static final int MAX_CLIMB_HEIGHT = 8;
     public static final int MAX_DROP_HEIGHT = 8;
+
+    private static final int[] CARDINAL_DX = { 1, -1, 0, 0 };
+    private static final int[] CARDINAL_DZ = { 0, 0, 1, -1 };
 
     private final IBlockAccess world;
     private final EntityLiving entity;
     private final int entityHeight;
 
+    private final Long2IntOpenHashMap indexByPos = new Long2IntOpenHashMap(MAX_NODES);
+    private final int[] nodeX = new int[MAX_NODES];
+    private final int[] nodeY = new int[MAX_NODES];
+    private final int[] nodeZ = new int[MAX_NODES];
+    private final int[] nodeParent = new int[MAX_NODES];
+    private final double[] nodeG = new double[MAX_NODES];
+    private final double[] nodeH = new double[MAX_NODES];
+    private final double[] nodeF = new double[MAX_NODES];
+    private final boolean[] nodeClosed = new boolean[MAX_NODES];
+    private int nodeCount;
+
+    private final int[] heapIdx = new int[HEAP_CAPACITY];
+    private final double[] heapF = new double[HEAP_CAPACITY];
+    private int heapSize;
+
+    private final int[] neighborX = new int[MAX_NEIGHBORS];
+    private final int[] neighborY = new int[MAX_NEIGHBORS];
+    private final int[] neighborZ = new int[MAX_NEIGHBORS];
+    private int neighborCount;
+
     public FactionAStar(IBlockAccess world, EntityLiving entity) {
         this.world = world;
         this.entity = entity;
         this.entityHeight = (int) Math.ceil(entity.height);
+        this.indexByPos.defaultReturnValue(-1);
     }
 
     public Path findPath(BlockPos start, BlockPos end) {
-        Map<BlockPos, Node> allNodes = new HashMap<>();
-        PriorityQueue<Node> open = new PriorityQueue<>(Comparator.comparingDouble(n -> n.f));
-        Set<BlockPos> closed = new HashSet<>();
+        if (!FactionPathBudget.tryAcquire(entity.world)) {
+            return null;
+        }
 
-        Node startNode = new Node(start, null, 0, heuristic(start, end));
-        allNodes.put(start, startNode);
-        open.add(startNode);
+        reset();
 
+        int startIdx = createNode(start.getX(), start.getY(), start.getZ(), -1, 0.0,
+                heuristic(start.getX(), start.getY(), start.getZ(), end));
+        heapPush(startIdx, nodeF[startIdx]);
+
+        int bestIdx = startIdx;
         int iterations = 0;
-        Node closest = startNode;
 
-        while (!open.isEmpty() && iterations++ < MAX_NODES) {
-            Node current = open.poll();
+        while (heapSize > 0 && iterations++ < MAX_NODES) {
+            int currentIdx = heapPop();
 
-            if (closed.contains(current.pos)) continue;
-            closed.add(current.pos);
+            if (nodeClosed[currentIdx]) continue;
+            nodeClosed[currentIdx] = true;
 
-            if (current.heuristic < closest.heuristic) {
-                closest = current;
+            if (nodeH[currentIdx] < nodeH[bestIdx]) {
+                bestIdx = currentIdx;
             }
 
-            if (current.pos.equals(end)) {
-                return buildPath(current);
+            int cx = nodeX[currentIdx];
+            int cy = nodeY[currentIdx];
+            int cz = nodeZ[currentIdx];
+
+            if (cx == end.getX() && cy == end.getY() && cz == end.getZ()) {
+                return buildPath(currentIdx);
             }
 
-            for (BlockPos neighbor : getNeighbors(current.pos)) {
-                if (closed.contains(neighbor)) continue;
+            collectNeighbors(cx, cy, cz);
 
-                double moveCost = current.g + moveCost(current.pos, neighbor);
-                Node existing = allNodes.get(neighbor);
+            for (int i = 0; i < neighborCount; i++) {
+                int nx = neighborX[i];
+                int ny = neighborY[i];
+                int nz = neighborZ[i];
 
-                if (existing == null || moveCost < existing.g) {
-                    Node next = new Node(neighbor, current, moveCost, heuristic(neighbor, end));
-                    allNodes.put(neighbor, next);
-                    open.add(next);
+                long key = packPos(nx, ny, nz);
+                int existingIdx = indexByPos.get(key);
+                if (existingIdx >= 0 && nodeClosed[existingIdx]) continue;
+
+                double tentativeG = nodeG[currentIdx] + moveCost(cx, cy, cz, nx, ny, nz);
+
+                if (existingIdx >= 0) {
+                    if (tentativeG >= nodeG[existingIdx]) continue;
+                    nodeG[existingIdx] = tentativeG;
+                    nodeF[existingIdx] = tentativeG + nodeH[existingIdx];
+                    heapPush(existingIdx, nodeF[existingIdx]);
+                } else {
+                    if (nodeCount >= MAX_NODES) continue;
+                    int newIdx = createNode(nx, ny, nz, currentIdx, tentativeG, heuristic(nx, ny, nz, end));
+                    heapPush(newIdx, nodeF[newIdx]);
                 }
             }
         }
 
-        return buildPath(closest);
+        return buildPath(bestIdx);
     }
 
-    private List<BlockPos> getNeighbors(BlockPos pos) {
-        List<BlockPos> neighbors = new ArrayList<>();
-        int[][] cardinals = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    private void reset() {
+        indexByPos.clear();
+        nodeCount = 0;
+        heapSize = 0;
+        neighborCount = 0;
+    }
 
-        if (isAdjacentToWall(pos) && isClearForEntity(pos.up())) {
-            neighbors.add(pos.up());
+    private int createNode(int x, int y, int z, int parent, double g, double h) {
+        int idx = nodeCount++;
+        nodeX[idx] = x;
+        nodeY[idx] = y;
+        nodeZ[idx] = z;
+        nodeParent[idx] = parent;
+        nodeG[idx] = g;
+        nodeH[idx] = h;
+        nodeF[idx] = g + h;
+        nodeClosed[idx] = false;
+        indexByPos.put(packPos(x, y, z), idx);
+        return idx;
+    }
+
+    private void heapPush(int idx, double f) {
+        if (heapSize >= HEAP_CAPACITY) return;
+        int i = heapSize++;
+        heapIdx[i] = idx;
+        heapF[i] = f;
+        while (i > 0) {
+            int parent = (i - 1) >> 1;
+            if (heapF[parent] <= heapF[i]) break;
+            swapHeap(i, parent);
+            i = parent;
+        }
+    }
+
+    private int heapPop() {
+        int result = heapIdx[0];
+        heapSize--;
+        if (heapSize > 0) {
+            heapIdx[0] = heapIdx[heapSize];
+            heapF[0] = heapF[heapSize];
+            int i = 0;
+            while (true) {
+                int left = (i << 1) + 1;
+                int right = left + 1;
+                int smallest = i;
+                if (left < heapSize && heapF[left] < heapF[smallest]) smallest = left;
+                if (right < heapSize && heapF[right] < heapF[smallest]) smallest = right;
+                if (smallest == i) break;
+                swapHeap(i, smallest);
+                i = smallest;
+            }
+        }
+        return result;
+    }
+
+    private void swapHeap(int a, int b) {
+        int ti = heapIdx[a];
+        heapIdx[a] = heapIdx[b];
+        heapIdx[b] = ti;
+        double tf = heapF[a];
+        heapF[a] = heapF[b];
+        heapF[b] = tf;
+    }
+
+    private void collectNeighbors(int cx, int cy, int cz) {
+        neighborCount = 0;
+
+        // Climb up if adjacent to a wall.
+        if (isAdjacentToWall(cx, cy, cz) && isClearForEntity(cx, cy + 1, cz)) {
+            addNeighbor(cx, cy + 1, cz);
         }
 
-        for (int[] dir : cardinals) {
-            int dx = dir[0], dz = dir[1];
+        for (int d = 0; d < 4; d++) {
+            int dx = CARDINAL_DX[d];
+            int dz = CARDINAL_DZ[d];
 
-            BlockPos flat = pos.add(dx, 0, dz);
-            if (isWalkable(flat)) {
-                neighbors.add(flat);
+            // Flat walk
+            if (isWalkable(cx + dx, cy, cz + dz)) {
+                addNeighbor(cx + dx, cy, cz + dz);
                 continue;
             }
 
-            BlockPos stepUp = pos.add(dx, 1, dz);
-            if (isWalkable(stepUp) && isClearAt(pos.up(entityHeight))) {
-                neighbors.add(stepUp);
+            // Step up (1 block)
+            if (isWalkable(cx + dx, cy + 1, cz + dz) && isClearAt(cx, cy + entityHeight, cz)) {
+                addNeighbor(cx + dx, cy + 1, cz + dz);
                 continue;
             }
 
+            // Wall climb
             for (int h = 2; h <= MAX_CLIMB_HEIGHT; h++) {
                 boolean headroomClear = true;
                 for (int ch = 0; ch < h + entityHeight - 1; ch++) {
-                    if (!isClearAt(pos.up(1 + ch))) {
+                    if (!isClearAt(cx, cy + 1 + ch, cz)) {
                         headroomClear = false;
                         break;
                     }
                 }
                 if (!headroomClear) break;
 
-                BlockPos wallTop = pos.add(dx, h, dz);
-                if (isWalkable(wallTop)) {
-                    neighbors.add(wallTop);
+                if (isWalkable(cx + dx, cy + h, cz + dz)) {
+                    addNeighbor(cx + dx, cy + h, cz + dz);
                     break;
                 }
             }
 
+            // Drop
             for (int drop = 1; drop <= MAX_DROP_HEIGHT; drop++) {
-                BlockPos dropPos = pos.add(dx, -drop, dz);
-                if (!isClearForEntity(pos.add(dx, -drop + 1, dz))) break;
-
-                if (isWalkable(dropPos)) {
-                    neighbors.add(dropPos);
+                if (!isClearForEntity(cx + dx, cy - drop + 1, cz + dz)) break;
+                if (isWalkable(cx + dx, cy - drop, cz + dz)) {
+                    addNeighbor(cx + dx, cy - drop, cz + dz);
                     break;
                 }
             }
         }
 
-        if (isLadderAt(pos) || isLadderAt(pos.up())) {
-            BlockPos up = pos.up();
-            if (isClearAt(up)) neighbors.add(up);
+        // Ladders
+        boolean ladderHere = isLadderAt(cx, cy, cz);
+        if (ladderHere || isLadderAt(cx, cy + 1, cz)) {
+            if (isClearAt(cx, cy + 1, cz)) {
+                addNeighbor(cx, cy + 1, cz);
+            }
         }
-        if (isLadderAt(pos) || isLadderAt(pos.down())) {
-            BlockPos down = pos.down();
-            if (!isSolidAt(down)) neighbors.add(down);
+        if (ladderHere || isLadderAt(cx, cy - 1, cz)) {
+            if (!isSolidAt(cx, cy - 1, cz)) {
+                addNeighbor(cx, cy - 1, cz);
+            }
         }
-
-        return neighbors;
     }
 
-    private boolean isAdjacentToWall(BlockPos pos) {
-        IBlockState state;
-        return (state = world.getBlockState(pos.north())).getMaterial().isSolid() ||
-                (state = world.getBlockState(pos.south())).getMaterial().isSolid() ||
-                (state = world.getBlockState(pos.east())).getMaterial().isSolid() ||
-                (state = world.getBlockState(pos.west())).getMaterial().isSolid();
+    private void addNeighbor(int x, int y, int z) {
+        if (neighborCount >= MAX_NEIGHBORS) return;
+        neighborX[neighborCount] = x;
+        neighborY[neighborCount] = y;
+        neighborZ[neighborCount] = z;
+        neighborCount++;
     }
 
-    private boolean isWalkable(BlockPos pos) {
-        return isSolidAt(pos.down()) && isClearForEntity(pos);
+    private boolean isAdjacentToWall(int x, int y, int z) {
+        return isSolidBlock(x, y, z - 1)
+                || isSolidBlock(x, y, z + 1)
+                || isSolidBlock(x + 1, y, z)
+                || isSolidBlock(x - 1, y, z);
     }
 
-    private boolean isClearForEntity(BlockPos pos) {
+    private boolean isSolidBlock(int x, int y, int z) {
+        return world.getBlockState(new BlockPos(x, y, z)).getMaterial().isSolid();
+    }
+
+    private boolean isWalkable(int x, int y, int z) {
+        return isSolidAt(x, y - 1, z) && isClearForEntity(x, y, z);
+    }
+
+    private boolean isClearForEntity(int x, int y, int z) {
         for (int i = 0; i < entityHeight; i++) {
-            if (!isPassable(pos.up(i))) return false;
+            if (!isPassable(x, y + i, z)) return false;
         }
         return true;
     }
 
-    private boolean isClearAt(BlockPos pos) {
-        return isPassable(pos);
+    private boolean isClearAt(int x, int y, int z) {
+        return isPassable(x, y, z);
     }
 
-    private boolean isPassable(BlockPos pos) {
-        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(world, pos);
+    private boolean isPassable(int x, int y, int z) {
+        BlockPos pos = new BlockPos(x, y, z);
+        IBlockState state = world.getBlockState(pos);
+        IBlockState below = world.getBlockState(new BlockPos(x, y - 1, z));
+
+        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(state, below);
         if (hazard == PathNodeType.BLOCKED) return false;
 
-        if (isDoor(pos)) return true;
+        if (isDoor(state)) return true;
 
-        return !world.getBlockState(pos).getMaterial().isSolid();
+        return !state.getMaterial().isSolid();
     }
 
-    private boolean isDoor(BlockPos pos) {
-        Block block = world.getBlockState(pos).getBlock();
+    private boolean isSolidAt(int x, int y, int z) {
+        IBlockState state = world.getBlockState(new BlockPos(x, y, z));
+        IBlockState below = world.getBlockState(new BlockPos(x, y - 1, z));
+
+        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(state, below);
+        if (hazard == PathNodeType.BLOCKED) return true;
+
+        return state.getMaterial().isSolid();
+    }
+
+    private boolean isDoor(IBlockState state) {
+        Block block = state.getBlock();
         return block instanceof BlockDoor && block != Blocks.IRON_DOOR;
     }
 
-    private boolean isSolidAt(BlockPos pos) {
-        PathNodeType hazard = FactionTrapHazardEvaluator.getHazardNodeType(world, pos);
-        if (hazard == PathNodeType.BLOCKED) return true;
-        return world.getBlockState(pos).getMaterial().isSolid();
-    }
-
-    private boolean isLadderAt(BlockPos pos) {
+    private boolean isLadderAt(int x, int y, int z) {
+        BlockPos pos = new BlockPos(x, y, z);
         IBlockState state = world.getBlockState(pos);
         return state.getBlock().isLadder(state, world, pos, null);
     }
 
-    private double moveCost(BlockPos from, BlockPos to) {
-        int dx = Math.abs(to.getX() - from.getX());
-        int dy = to.getY() - from.getY();
-        int dz = Math.abs(to.getZ() - from.getZ());
+    private double moveCost(int fx, int fy, int fz, int tx, int ty, int tz) {
+        int dx = Math.abs(tx - fx);
+        int dy = ty - fy;
+        int dz = Math.abs(tz - fz);
 
         double cost = dx + dz;
-
         if (dy > 0) {
             cost += dy * 1.2;
         } else if (dy < 0) {
             cost += Math.abs(dy) * 0.5;
         }
-
-        if (isDoor(to) || isDoor(to.down())) cost += 2.0;
-
         return cost;
     }
 
-    private double heuristic(BlockPos a, BlockPos b) {
-        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()) + Math.abs(a.getZ() - b.getZ());
+    private double heuristic(int ax, int ay, int az, BlockPos b) {
+        return Math.abs(ax - b.getX()) + Math.abs(ay - b.getY()) + Math.abs(az - b.getZ());
     }
 
-    private Path buildPath(Node end) {
-        List<Node> nodes = new ArrayList<>();
-        Node current = end;
-        while (current != null) {
-            nodes.add(current);
-            current = current.parent;
-        }
-        Collections.reverse(nodes);
+    private Path buildPath(int endIdx) {
+        int length = 0;
+        for (int cur = endIdx; cur >= 0; cur = nodeParent[cur]) length++;
 
-        PathPoint[] points = new PathPoint[nodes.size()];
-        for (int i = 0; i < nodes.size(); i++) {
-            BlockPos p = nodes.get(i).pos;
-            PathPoint pp = new PathPoint(p.getX(), p.getY(), p.getZ());
+        PathPoint[] points = new PathPoint[length];
+        int cur = endIdx;
+        for (int i = length - 1; i >= 0; i--) {
+            PathPoint pp = new PathPoint(nodeX[cur], nodeY[cur], nodeZ[cur]);
             pp.index = i;
             points[i] = pp;
+            cur = nodeParent[cur];
         }
 
         return new Path(points);
     }
 
-    private static class Node {
+    private static long packPos(int x, int y, int z) {
+        long xi = (long) (x & 0x3FFFFFF);
+        long yi = (long) (y & 0xFFF);
+        long zi = (long) (z & 0x3FFFFFF);
+        return xi << 38 | yi << 26 | zi;
+    }
 
-        final BlockPos pos;
-        final Node parent;
-        final double g;
-        final double heuristic;
-        final double f;
+    public static final class FactionPathBudget {
+        private static final int MAX_PER_TICK = 6;
+        private static long tick = -1;
+        private static int used = 0;
 
-        Node(BlockPos pos, Node parent, double g, double heuristic) {
-            this.pos = pos;
-            this.parent = parent;
-            this.g = g;
-            this.heuristic = heuristic;
-            this.f = g + heuristic;
+        public static boolean tryAcquire(World world) {
+            long now = world.getTotalWorldTime();
+            if (now != tick) {
+                tick = now;
+                used = 0;
+            }
+            if (used >= MAX_PER_TICK) return false;
+            used++;
+            return true;
         }
     }
 }
