@@ -367,7 +367,6 @@ public abstract class EntityBlueprintRocket extends EntityAbstractRocket impleme
                     } else {
                         this.setLaunchResult(SuccessCalculation.LaunchResult.LAUNCHES);
                     }
-            this.setLaunchResult(SuccessCalculation.LaunchResult.CRASHES);
         }
         super.launchRocket();
     }
