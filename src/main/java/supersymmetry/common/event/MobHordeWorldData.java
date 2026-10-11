@@ -91,4 +91,11 @@ public class MobHordeWorldData extends WorldSavedData implements Function<UUID, 
 
         return tag;
     }
+
+    public boolean isInvasionActive(UUID invasionId) {
+        for (MobHordePlayerData data : this.playerDataMap.values()) {
+            if (invasionId.equals(data.currentInvasionId)) return true;
+        }
+        return false;
+    }
 }
