@@ -4,6 +4,7 @@ import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RAD
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -30,6 +31,8 @@ import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.potion.PotionDropPodSickness;
+
+import supersymmetry.common.event.MobHordeWorldData;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
@@ -60,6 +63,10 @@ public class FactionViolence {
     private static final long TARGET_SCAN_INTERVAL = 5L;
     private static final long DANGER_SCAN_INTERVAL = 5L;
 
+    private static final String TAG_INVASION_ID = "invasionId";
+    private static final String TAG_INVASION_OWNER = "invasionOwner";
+    private static final int ORPHAN_CHECK_INTERVAL = 100; // ticks, ~5s per mob
+
     // ========================================================================
     // Smart AI: anti friendly fire, because fuck the playerbase
     // ========================================================================
@@ -82,6 +89,10 @@ public class FactionViolence {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return;
+        if (event.getEntity() instanceof EntityLivingBase && !(event.getEntity() instanceof EntityPlayer) &&
+                despawnIfOrphaned((EntityLivingBase) event.getEntity())) {
+            return;
+        }
         if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
         if (!(event.getEntity() instanceof EntityLiving)) return;
 
@@ -817,5 +828,47 @@ public class FactionViolence {
                 mob.getNavigator().tryMoveToXYZ(fleeX, mob.posY, fleeZ, DANGER_AVOID_SPEED);
             }
         }
+    }
+
+    private static boolean despawnIfOrphaned(EntityLivingBase mob) {
+        if ((mob.ticksExisted + mob.getEntityId()) % ORPHAN_CHECK_INTERVAL != 0) return false;
+
+        NBTTagCompound root = mob.getEntityData();
+        if (!root.hasKey(TAG_ROOT)) return false;
+        NBTTagCompound susy = root.getCompoundTag(TAG_ROOT);
+
+        UUID invasionId;
+
+        if (susy.hasKey(TAG_INVASION_ID)) {
+            try {
+                invasionId = UUID.fromString(susy.getString(TAG_INVASION_ID));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        } else if (susy.hasKey(TAG_INVASION_OWNER)) {
+            UUID ownerId;
+            try {
+                ownerId = UUID.fromString(susy.getString(TAG_INVASION_OWNER));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+
+            UUID ownerInvasion = MobHordeWorldData.get(mob.world).getCurrentInvasionId(ownerId);
+            if (ownerInvasion == null) {
+                mob.setDead();
+                return true;
+            }
+
+            susy.setString(TAG_INVASION_ID, ownerInvasion.toString());
+            root.setTag(TAG_ROOT, susy);
+            return false;
+        } else {
+            return false;
+        }
+
+        if (MobHordeWorldData.get(mob.world).isInvasionActive(invasionId)) return false;
+
+        mob.setDead();
+        return true;
     }
 }
