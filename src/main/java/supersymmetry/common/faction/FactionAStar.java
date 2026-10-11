@@ -1,6 +1,5 @@
 package supersymmetry.common.faction;
 
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +11,8 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 
 /**
  * custom A* zalgorithm, the default vanilla algorithm does not work for our purposes
@@ -263,10 +264,8 @@ public class FactionAStar {
     }
 
     private boolean isAdjacentToWall(int x, int y, int z) {
-        return isSolidBlock(x, y, z - 1)
-                || isSolidBlock(x, y, z + 1)
-                || isSolidBlock(x + 1, y, z)
-                || isSolidBlock(x - 1, y, z);
+        return isSolidBlock(x, y, z - 1) || isSolidBlock(x, y, z + 1) || isSolidBlock(x + 1, y, z) ||
+                isSolidBlock(x - 1, y, z);
     }
 
     private boolean isSolidBlock(int x, int y, int z) {
@@ -364,6 +363,7 @@ public class FactionAStar {
     }
 
     public static final class FactionPathBudget {
+
         private static final int MAX_PER_TICK = 6;
         private static long tick = -1;
         private static int used = 0;

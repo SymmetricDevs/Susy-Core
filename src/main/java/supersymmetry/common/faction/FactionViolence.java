@@ -2,7 +2,9 @@ package supersymmetry.common.faction;
 
 import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RADIUS;
 
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAITasks;
@@ -24,12 +26,10 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.potion.PotionDropPodSickness;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
@@ -157,7 +157,7 @@ public class FactionViolence {
             mob.setAttackTarget(null);
         }
 
-        //storage
+        // storage
         long lastTargetScan = susyTag.getLong(TAG_LAST_TARGET_SCAN);
         boolean shouldScanTarget = (gameTime - lastTargetScan) >= TARGET_SCAN_INTERVAL;
         // ====================================================================
