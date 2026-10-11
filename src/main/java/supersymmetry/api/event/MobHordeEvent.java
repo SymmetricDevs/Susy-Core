@@ -22,6 +22,9 @@ import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.faction.FactionHateManager;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+
 public class MobHordeEvent {
 
     private Function<EntityPlayer, EntityLiving> entitySupplier;
@@ -53,10 +56,13 @@ public class MobHordeEvent {
     private boolean runOnce = false;
     private boolean dropPodExplosions = true;
     public static int spawnHeight = 1000;
+    private static int invasionrange = 128;
+
+    public static final String TAG_INVASION_ID = "invasionId";
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
                          String name) {
-        this(entitySupplier, quantityMin, quantityMax, name, 18000);
+        this(entitySupplier, quantityMin, quantityMax, name, 36000);
     }
 
     public MobHordeEvent(Function<EntityPlayer, EntityLiving> entitySupplier, int quantityMin, int quantityMax,
@@ -82,10 +88,17 @@ public class MobHordeEvent {
     public boolean run(EntityPlayer player) throws NBTException {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
-        return run(player, playerData::addEntity);
+        UUID invasionId = playerData.getOrCreateInvasionId();
+        worldData.markDirty();
+        return run(player, invasionId, playerData::addEntity);
     }
 
+    // Old signature kept for other callers: mobs spawned this way are untagged and never auto-despawned.
     public boolean run(EntityPlayer player, Consumer<UUID> uuidConsumer) throws NBTException {
+        return run(player, null, uuidConsumer);
+    }
+
+    public boolean run(EntityPlayer player, UUID invasionId, Consumer<UUID> uuidConsumer) throws NBTException {
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         if (quantity <= 0) quantity = 1;
 
@@ -98,10 +111,10 @@ public class MobHordeEvent {
                 return false;
             }
             for (int i = 0; i < quantity; i++) {
-                didSpawn |= spawnMobWithoutPod(player, uuidConsumer, spawnPos);
+                didSpawn |= spawnMobWithoutPod(player, uuidConsumer, spawnPos, invasionId);
             }
         } else {
-            didSpawn |= spawnMobWithPod(player, uuidConsumer, quantity);
+            didSpawn |= spawnMobWithPod(player, uuidConsumer, quantity, invasionId);
         }
 
         return didSpawn;
@@ -242,6 +255,10 @@ public class MobHordeEvent {
     }
 
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity) {
+        return spawnMobWithPod(player, uuidConsumer, quantity, null);
+    }
+
+    public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity, UUID invasionId) {
         boolean finishSpawning = false;
 
         int patternsCount = patternFunctions.size();
@@ -249,7 +266,7 @@ public class MobHordeEvent {
         if (patternsCount == 0) {
             // NO PATTERN normal spawn like before
             for (int i = 0; i < quantity; i++) {
-                finishSpawning |= spawnMobWithoutPattern(player, uuidConsumer);
+                finishSpawning |= spawnMobWithoutPattern(player, uuidConsumer, invasionId);
             }
         } else {
             // WITH PATTERNS new code
@@ -312,8 +329,8 @@ public class MobHordeEvent {
                 }
             }
 
-            Double offsetx = player.posX + (Math.random() - 0.5) * 200;
-            Double offsetz = player.posZ + (Math.random() - 0.5) * 200;
+            Double offsetx = player.posX + (Math.random() - 0.5) * invasionrange;
+            Double offsetz = player.posZ + (Math.random() - 0.5) * invasionrange;
 
             for (int i = 0; i < patternsCount; i++) {
                 int qtyForThisPattern = quantitiesPerPattern[i];
@@ -336,7 +353,8 @@ public class MobHordeEvent {
                         supplierOverride,
                         patternModifier,
                         offsetx,
-                        offsetz);
+                        offsetz,
+                        invasionId);
             }
         }
 
@@ -349,7 +367,8 @@ public class MobHordeEvent {
                                         List<String> commands,
                                         Function<EntityPlayer, EntityLiving> supplierOverride,
                                         Function<EntityLiving, EntityLiving> patternModifier,
-                                        Double centerX, Double centerZ) {
+                                        Double centerX, Double centerZ,
+                                        UUID invasionId) {
         boolean didSpawn = false;
 
         int spawned = 0;
@@ -413,6 +432,7 @@ public class MobHordeEvent {
                 } else if (this.postSpawnModifier != null) {
                     this.postSpawnModifier.apply(passenger);
                 }
+                tagInvasion(passenger, invasionId);
                 player.world.spawnEntity(passenger);
                 passenger.enablePersistence();
                 uuidConsumer.accept(passenger.getPersistentID());
@@ -428,7 +448,7 @@ public class MobHordeEvent {
     }
 
     // moved over bru's old code
-    private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer) {
+    private boolean spawnMobWithoutPattern(EntityPlayer player, Consumer<UUID> uuidConsumer, UUID invasionId) {
         EntityDropPod pod = new EntityDropPod(player.world);
         pod.canExplode(this.dropPodExplosions);
         pod.rotationYaw = (float) (Math.random() * 360);
@@ -447,6 +467,7 @@ public class MobHordeEvent {
         if (this.postSpawnModifier != null) {
             this.postSpawnModifier.apply(mob);
         }
+        tagInvasion(mob, invasionId);
 
         GTTeleporter teleporter = new GTTeleporter((WorldServer) player.world, x, y, z);
         TeleportHandler.teleport(mob, player.dimension, teleporter, x, y, z);
@@ -471,6 +492,11 @@ public class MobHordeEvent {
     }
 
     public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer, BlockPos spawnPos) {
+        return spawnMobWithoutPod(player, uuidConsumer, spawnPos, null);
+    }
+
+    public boolean spawnMobWithoutPod(EntityPlayer player, Consumer<UUID> uuidConsumer, BlockPos spawnPos,
+                                      UUID invasionId) {
         EntityLiving mob = entitySupplier.apply(player);
         mob.setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.01, spawnPos.getZ() + 0.5);
 
@@ -478,6 +504,7 @@ public class MobHordeEvent {
         mob.motionZ = (Math.random() - 0.5) * 0.4;
         mob.motionY = 0.1;
 
+        tagInvasion(mob, invasionId);
         player.world.spawnEntity(mob);
         mob.enablePersistence();
         uuidConsumer.accept(mob.getPersistentID());
@@ -516,5 +543,13 @@ public class MobHordeEvent {
 
     public static void baseline(ResourceLocation advancement, int hate) {
         supersymmetry.common.faction.FactionBaselineRegistry.add(advancement, hate);
+    }
+
+    private static void tagInvasion(Entity entity, UUID invasionId) {
+        if (invasionId == null) return;
+        NBTTagCompound root = entity.getEntityData();
+        NBTTagCompound susy = root.getCompoundTag("susy");
+        susy.setString(TAG_INVASION_ID, invasionId.toString());
+        root.setTag("susy", susy);
     }
 }
