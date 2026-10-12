@@ -210,17 +210,16 @@ public class FactionViolence {
                         mob.getEntityBoundingBox().grow(radius))) {
                     if (target == mob) continue;
                     if (target instanceof EntityPlayer) continue;
-                    if (!mob.canEntityBeSeen(target)) continue;
                     String targetFaction = getFaction(target);
                     boolean isUnaligned = targetFaction.isEmpty();
                     boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
                     boolean shouldAttack = (isUnaligned && target instanceof IMob) || isOpposingFaction;
                     if (!shouldAttack) continue;
                     double distSq = mob.getDistanceSq(target);
-                    if (distSq < nearestDistSq) {
-                        nearestDistSq = distSq;
-                        bestSmartTarget = target;
-                    }
+                    if (distSq >= nearestDistSq) continue;
+                    if (!mob.canEntityBeSeen(target)) continue;
+                    nearestDistSq = distSq;
+                    bestSmartTarget = target;
                 }
 
                 if (bestSmartTarget != null) {
@@ -235,7 +234,6 @@ public class FactionViolence {
                 for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
                         mob.getEntityBoundingBox().grow(radius))) {
                     if (target == mob) continue;
-                    if (!mob.canEntityBeSeen(target)) continue;
                     String targetFaction = getFaction(target);
                     boolean isUnaligned = targetFaction.isEmpty();
                     boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
@@ -252,10 +250,10 @@ public class FactionViolence {
                     }
                     if (!shouldAttack) continue;
                     double distSq = mob.getDistanceSq(target);
-                    if (distSq < bestDistanceSq) {
-                        bestDistanceSq = distSq;
-                        bestTarget = target;
-                    }
+                    if (distSq >= bestDistanceSq) continue;
+                    if (!mob.canEntityBeSeen(target)) continue;
+                    bestDistanceSq = distSq;
+                    bestTarget = target;
                 }
                 if (bestTarget != null) mob.setAttackTarget(bestTarget);
             }
