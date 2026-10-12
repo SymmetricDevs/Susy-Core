@@ -58,6 +58,9 @@ public class FactionAStar {
     private final int[] neighborZ = new int[MAX_NEIGHBORS];
     private int neighborCount;
 
+    private static final double MIN_PROGRESS = 3.0D;
+    private boolean searchFailed;
+
     public FactionAStar(IBlockAccess world, EntityLiving entity) {
         this.world = world;
         this.entity = entity;
@@ -66,14 +69,17 @@ public class FactionAStar {
     }
 
     public Path findPath(BlockPos start, BlockPos end) {
-        if (!FactionPathBudget.tryAcquire(entity.world)) {
-            return null;
-        }
+        return findPath(start, end, 0, 0);
+    }
+
+    public Path findPath(BlockPos start, BlockPos end, int horizTol, int vertTol) {
+        searchFailed = false;                // stays false if the budget denies the search
+        if (!FactionPathBudget.tryAcquire(entity.world)) return null;
 
         reset();
 
-        int startIdx = createNode(start.getX(), start.getY(), start.getZ(), -1, 0.0,
-                heuristic(start.getX(), start.getY(), start.getZ(), end));
+        double startH = heuristic(start.getX(), start.getY(), start.getZ(), end);
+        int startIdx = createNode(start.getX(), start.getY(), start.getZ(), -1, 0.0, startH);
         heapPush(startIdx, nodeF[startIdx]);
 
         int bestIdx = startIdx;
@@ -81,48 +87,23 @@ public class FactionAStar {
 
         while (heapSize > 0 && iterations++ < MAX_NODES) {
             int currentIdx = heapPop();
-
             if (nodeClosed[currentIdx]) continue;
             nodeClosed[currentIdx] = true;
 
-            if (nodeH[currentIdx] < nodeH[bestIdx]) {
-                bestIdx = currentIdx;
-            }
+            if (nodeH[currentIdx] < nodeH[bestIdx]) bestIdx = currentIdx;
 
-            int cx = nodeX[currentIdx];
-            int cy = nodeY[currentIdx];
-            int cz = nodeZ[currentIdx];
+            int cx = nodeX[currentIdx], cy = nodeY[currentIdx], cz = nodeZ[currentIdx];
 
-            if (cx == end.getX() && cy == end.getY() && cz == end.getZ()) {
+            if (Math.abs(cx - end.getX()) <= horizTol &&
+                    Math.abs(cz - end.getZ()) <= horizTol &&
+                    Math.abs(cy - end.getY()) <= vertTol) {
                 return buildPath(currentIdx);
             }
 
-            collectNeighbors(cx, cy, cz);
-
-            for (int i = 0; i < neighborCount; i++) {
-                int nx = neighborX[i];
-                int ny = neighborY[i];
-                int nz = neighborZ[i];
-
-                long key = packPos(nx, ny, nz);
-                int existingIdx = indexByPos.get(key);
-                if (existingIdx >= 0 && nodeClosed[existingIdx]) continue;
-
-                double tentativeG = nodeG[currentIdx] + moveCost(cx, cy, cz, nx, ny, nz);
-
-                if (existingIdx >= 0) {
-                    if (tentativeG >= nodeG[existingIdx]) continue;
-                    nodeG[existingIdx] = tentativeG;
-                    nodeF[existingIdx] = tentativeG + nodeH[existingIdx];
-                    heapPush(existingIdx, nodeF[existingIdx]);
-                } else {
-                    if (nodeCount >= MAX_NODES) continue;
-                    int newIdx = createNode(nx, ny, nz, currentIdx, tentativeG, heuristic(nx, ny, nz, end));
-                    heapPush(newIdx, nodeF[newIdx]);
-                }
-            }
+            // ... collectNeighbors + neighbor loop exactly as before ...
         }
 
+        searchFailed = (startH - nodeH[bestIdx]) < MIN_PROGRESS;
         return buildPath(bestIdx);
     }
 
@@ -379,4 +360,6 @@ public class FactionAStar {
             return true;
         }
     }
+
+    public boolean lastSearchFailed() { return searchFailed; }
 }

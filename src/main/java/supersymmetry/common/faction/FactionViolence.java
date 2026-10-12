@@ -187,6 +187,13 @@ public class FactionViolence {
                 EntityLivingBase bestSmartTarget = null;
                 double nearestDistSq = Double.MAX_VALUE;
 
+                EntityLivingBase cur = mob.getAttackTarget();
+                if (cur instanceof EntityPlayer &&
+                        FactionUnreachableTargets.isIgnored((EntityPlayer) cur, gameTime) &&
+                        !mob.canEntityBeSeen(cur)) {
+                    mob.setAttackTarget(null);
+                }
+
                 for (EntityPlayer player : mob.world.getEntitiesWithinAABB(EntityPlayer.class,
                         mob.getEntityBoundingBox().grow(radius))) {
                     if (player.isCreative() || player.isSpectator()) continue;
