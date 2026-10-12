@@ -30,9 +30,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
-import supersymmetry.common.potion.PotionDropPodSickness;
-
 import supersymmetry.common.event.MobHordeWorldData;
+import supersymmetry.common.potion.PotionDropPodSickness;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public class FactionViolence {
@@ -289,7 +288,8 @@ public class FactionViolence {
                         susyTag.hasKey(TAG_COVER_Z);
 
                 if (hasCover) {
-                    coverPos = new BlockPos(susyTag.getInteger(TAG_COVER_X), susyTag.getInteger(TAG_COVER_Y), susyTag.getInteger(TAG_COVER_Z));
+                    coverPos = new BlockPos(susyTag.getInteger(TAG_COVER_X), susyTag.getInteger(TAG_COVER_Y),
+                            susyTag.getInteger(TAG_COVER_Z));
                     coverValid = isCoverValid(mob, target, coverPos, weaponRange);
 
                     boolean stale = false;
@@ -755,7 +755,8 @@ public class FactionViolence {
         return bestCover;
     }
 
-    private static boolean isCoverValid(EntityLiving mob, EntityLivingBase target, BlockPos coverPos, double weaponRange) {
+    private static boolean isCoverValid(EntityLiving mob, EntityLivingBase target, BlockPos coverPos,
+                                        double weaponRange) {
         if (target == null || target.isDead || !target.isEntityAlive()) return false;
         if (!isWalkable(mob.world, coverPos)) return false;
         if (coverPos.distanceSq(target.getPosition()) > weaponRange * weaponRange) return false;
@@ -817,7 +818,7 @@ public class FactionViolence {
         Vec3d targetFeet = target.getPositionVector().add(0, 0.1D, 0);
 
         // hidden: target can't see the mob's feet OR torso
-        Vec3d feet  = new Vec3d(x, pos.getY() + 0.1D, z);
+        Vec3d feet = new Vec3d(x, pos.getY() + 0.1D, z);
         Vec3d torso = new Vec3d(x, pos.getY() + mobEyeHeight * 0.5D, z);
         if (hasLineOfSight(world, targetEye, feet) || hasLineOfSight(world, targetEye, torso)) return false;
 

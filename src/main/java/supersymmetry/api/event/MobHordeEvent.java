@@ -4,10 +4,12 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,9 +23,6 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.faction.FactionHateManager;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class MobHordeEvent {
 

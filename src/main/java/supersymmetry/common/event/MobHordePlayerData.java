@@ -99,8 +99,8 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             System.arraycopy(savedTimers, 0, this.invasionTimers, 0, Math.min(savedTimers.length, currentEventCount));
         }
 
-        currentInvasionId = nbt.hasKey("currentInvasionId")
-                ? UUID.fromString(nbt.getString("currentInvasionId")) : null;
+        currentInvasionId = nbt.hasKey("currentInvasionId") ? UUID.fromString(nbt.getString("currentInvasionId")) :
+                null;
         hasRaidCenter = nbt.getBoolean("hasRaidCenter");
         raidCenterX = nbt.getDouble("raidCenterX");
         raidCenterZ = nbt.getDouble("raidCenterZ");

@@ -25,7 +25,6 @@ public class SkywatchHudHandler {
     private static final double BELOW_CROSSHAIR = 0.6D;
     private static final float SCALE = 0.9F;
 
-
     @SubscribeEvent
     public static void onRenderWorld(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
