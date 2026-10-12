@@ -113,4 +113,41 @@ class PlanetGrowthPolicyTest {
         assertThrows(NullPointerException.class, () -> moon.setGrowthPolicy(null));
         assertTrue(PlanetGrowthPolicy.forDimension(800).suppressRandomTick(Blocks.WHEAT));
     }
+
+    @Test
+    void atmosphericPolicyAllowsGrowthAndBonemealOnlyWithLocalOxygen() {
+        PlanetGrowthPolicy policy = PlanetGrowthPolicy.ATMOSPHERE_REQUIRED;
+        assertTrue(policy.requiresAtmosphere());
+        assertTrue(policy.suppressRandomTick(Blocks.WHEAT, false));
+        assertTrue(policy.suppressRandomTick(Blocks.SAPLING, false));
+        assertTrue(policy.suppressBonemeal(null, false));
+        assertFalse(policy.suppressRandomTick(Blocks.WHEAT, true));
+        assertFalse(policy.suppressRandomTick(Blocks.SAPLING, true));
+        assertFalse(policy.suppressBonemeal(null, true));
+    }
+
+    @Test
+    void fixedPoliciesKeepTheirMeaningWhenOxygenIsPresent() {
+        assertFalse(PlanetGrowthPolicy.UNRESTRICTED.requiresAtmosphere());
+        assertFalse(PlanetGrowthPolicy.MACHINE_ONLY.requiresAtmosphere());
+        assertFalse(PlanetGrowthPolicy.UNRESTRICTED.suppressRandomTick(Blocks.WHEAT, false));
+        assertTrue(PlanetGrowthPolicy.MACHINE_ONLY.suppressRandomTick(Blocks.WHEAT, true));
+        assertTrue(PlanetGrowthPolicy.MACHINE_ONLY.suppressBonemeal(null, true));
+    }
+
+    @Test
+    void atmosphericPolicyKeepsUnrelatedRandomTicksInVacuum() {
+        for (Block block : new Block[] { Blocks.LEAVES, Blocks.FARMLAND, Blocks.ICE, Blocks.FIRE }) {
+            assertFalse(PlanetGrowthPolicy.ATMOSPHERE_REQUIRED.suppressRandomTick(block, false));
+        }
+    }
+
+    @Test
+    void atmosphericPolicyFollowsTheExistingPlanetRegistry() {
+        Planetoid moon = planet("moon", 800).setGrowthPolicy(PlanetGrowthPolicy.ATMOSPHERE_REQUIRED);
+        assertSame(PlanetGrowthPolicy.ATMOSPHERE_REQUIRED, PlanetGrowthPolicy.forDimension(800));
+        moon.setDimension(805);
+        assertSame(PlanetGrowthPolicy.UNRESTRICTED, PlanetGrowthPolicy.forDimension(800));
+        assertSame(PlanetGrowthPolicy.ATMOSPHERE_REQUIRED, PlanetGrowthPolicy.forDimension(805));
+    }
 }

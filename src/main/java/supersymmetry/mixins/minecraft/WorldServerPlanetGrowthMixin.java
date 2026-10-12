@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 
-import supersymmetry.api.space.PlanetGrowthPolicy;
+import supersymmetry.common.util.PlanetGrowthRules;
 
 @Mixin(WorldServer.class)
 public abstract class WorldServerPlanetGrowthMixin {
@@ -28,6 +28,6 @@ public abstract class WorldServerPlanetGrowthMixin {
                        allow = 1)
     private boolean susy$allowPlanetRandomTick(Block block, World world, BlockPos pos, IBlockState state,
                                                Random random) {
-        return !PlanetGrowthPolicy.forDimension(world.provider.getDimension()).suppressRandomTick(block);
+        return !PlanetGrowthRules.suppressRandomTick(world, pos, state);
     }
 }

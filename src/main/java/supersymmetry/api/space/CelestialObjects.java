@@ -57,7 +57,7 @@ public class CelestialObjects {
                 .setLowOrbitAltitude(300000).setRotationPeriod(1);
 
         MOON = new Planetoid("moon", 0.0123, 0., 1., 0., 0., EARTH, PlanetType.TERRESTRIAL)
-                .setDimension(800).setGrowthPolicy(PlanetGrowthPolicy.MACHINE_ONLY)
+                .setDimension(800).setGrowthPolicy(PlanetGrowthPolicy.ATMOSPHERE_REQUIRED)
                 .setLowOrbitAltitude(100000).setRotationPeriod(27.321661);
         MOON.setRadius(0.2724);
 
