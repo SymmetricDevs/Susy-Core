@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -101,7 +102,15 @@ public class MetaTileEntitySuSyTankValve extends MetaTileEntityMultiblockPart
         super.removeFromMultiBlock(controller);
         initializeDummyInventory();
     }
-
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            MultiblockControllerBase controller = getController();
+            return controller == null ? null :
+                    CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(controller.getFluidInventory());
+        }
+        return super.getCapability(capability, side);
+    }
     @Override
     protected ModularUI createUI(EntityPlayer player) {
         return null;
