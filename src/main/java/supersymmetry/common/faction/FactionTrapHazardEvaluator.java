@@ -12,8 +12,10 @@ import net.minecraft.world.IBlockAccess;
 public class FactionTrapHazardEvaluator {
 
     public static PathNodeType getHazardNodeType(IBlockAccess world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+        return getHazardNodeType(world.getBlockState(pos), world.getBlockState(pos.down()));
+    }
 
+    public static PathNodeType getHazardNodeType(IBlockState state, IBlockState stateBelow) {
         if (state.getBlock() instanceof BlockBasePressurePlate) {
             return PathNodeType.BLOCKED;
         }
@@ -23,9 +25,6 @@ public class FactionTrapHazardEvaluator {
             return PathNodeType.BLOCKED;
         }
 
-        BlockPos posBelow = pos.down();
-
-        IBlockState stateBelow = world.getBlockState(posBelow);
         if (stateBelow.getBlock() instanceof BlockTrapDoor) {
             return PathNodeType.BLOCKED;
         }

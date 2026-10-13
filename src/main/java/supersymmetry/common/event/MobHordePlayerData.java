@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,9 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
+import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 
 import supersymmetry.api.event.MobHordeEvent;
 import supersymmetry.common.faction.FactionHateManager;
@@ -32,7 +36,13 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
     public boolean hasActiveInvasion = false;
     public List<UUID> invasionEntitiesUUIDs = new ArrayList<>();
     public String currentInvasion = "";
+    public UUID currentInvasionId = null;   // NEW
     public Set<String> completedScriptedEvents = new HashSet<>();
+
+    public boolean hasRaidCenter = false;
+    public double raidCenterX;
+    public double raidCenterZ;
+    public int raidDimension;
 
     public MobHordePlayerData() {
         this.gracePeriod = DEFAULT_GRACE_PERIOD;
@@ -53,6 +63,15 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             NBTTagList tagList = new NBTTagList();
             invasionEntitiesUUIDs.stream().forEach(uuid -> tagList.appendTag(NBTUtil.createUUIDTag(uuid)));
             result.setTag("invasionEntitiesUUIDs", tagList);
+        }
+        if (currentInvasionId != null) {
+            result.setString("currentInvasionId", currentInvasionId.toString());
+            if (hasRaidCenter) {
+                result.setBoolean("hasRaidCenter", true);
+                result.setDouble("raidCenterX", raidCenterX);
+                result.setDouble("raidCenterZ", raidCenterZ);
+                result.setInteger("raidDimension", raidDimension);
+            }
         }
         NBTTagList scriptedList = new NBTTagList();
         for (String key : completedScriptedEvents) {
@@ -79,6 +98,13 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         if (savedTimers.length > 0) {
             System.arraycopy(savedTimers, 0, this.invasionTimers, 0, Math.min(savedTimers.length, currentEventCount));
         }
+
+        currentInvasionId = nbt.hasKey("currentInvasionId") ? UUID.fromString(nbt.getString("currentInvasionId")) :
+                null;
+        hasRaidCenter = nbt.getBoolean("hasRaidCenter");
+        raidCenterX = nbt.getDouble("raidCenterX");
+        raidCenterZ = nbt.getDouble("raidCenterZ");
+        raidDimension = nbt.getInteger("raidDimension");
 
         hasActiveInvasion = nbt.getBoolean("hasActiveInvasion");
         if (hasActiveInvasion) {
@@ -131,10 +157,13 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
                 ticksUntilCanSpawn = gracePeriod;
                 int index = doableEvents.get((int) (Math.random() * doableEvents.size()));
                 event = events.get(index);
-                if (event.run(player, this::addEntity)) {
-                    invasionTimers[index] = event.getNextDelay();
-
-                    this.setCurrentInvasion(event);
+                UUID invasionId = UUID.randomUUID();
+                if (event.run(player, invasionId, this::addEntity)) {
+                    int delay = event.getNextDelay();
+                    invasionTimers[index] = Math.max(invasionTimers[index], delay);
+                    this.setCurrentInvasion(event, invasionId);
+                    recordRaidCenter(event, player);
+                    resetTeamInvasionTimer(player, index, DEFAULT_GRACE_PERIOD);
                 }
             }
         }
@@ -155,10 +184,52 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
         }
     }
 
+    private void resetTeamInvasionTimer(EntityPlayerMP player, int eventIndex, int ticks) {
+        if (eventIndex < this.invasionTimers.length) {
+            this.invasionTimers[eventIndex] = ticks;
+        }
+
+        ForgeTeam team = FactionHateManager.getTeam(player);
+        if (team == null) return;
+
+        MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
+        UUID selfId = player.getPersistentID();
+
+        for (ForgePlayer member : team.getMembers()) {
+            UUID memberId = member.getId();
+            if (memberId == null || memberId.equals(selfId)) continue;
+
+            MobHordePlayerData memberData = worldData.getPlayerData(memberId);
+            if (eventIndex >= memberData.invasionTimers.length) continue;
+
+            memberData.invasionTimers[eventIndex] = ticks;
+        }
+
+        worldData.markDirty();
+    }
+
     public void setCurrentInvasion(MobHordeEvent event) {
+        setCurrentInvasion(event, getOrCreateInvasionId());
+    }
+
+    public void setCurrentInvasion(MobHordeEvent event, UUID invasionId) {
         this.currentInvasion = event.KEY;
+        this.currentInvasionId = invasionId;
         this.timeoutPeriod = event.timeoutPeriod;
         this.hasActiveInvasion = true;
+        this.ticksActive = 0;
+    }
+
+    public UUID getOrCreateInvasionId() {   // for scripted events
+        if (currentInvasionId == null) currentInvasionId = UUID.randomUUID();
+        return currentInvasionId;
+    }
+
+    public void finishInvasion() {
+        this.hasActiveInvasion = false;
+        this.currentInvasion = "";
+        this.currentInvasionId = null;
+        this.hasRaidCenter = false;
         this.ticksActive = 0;
     }
 
@@ -168,12 +239,6 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
 
     private void removeDeadEntity(UUID deadEntityUUID) {
         this.invasionEntitiesUUIDs.remove(deadEntityUUID);
-    }
-
-    public void finishInvasion() {
-        this.hasActiveInvasion = false;
-        this.currentInvasion = "";
-        this.ticksActive = 0;
     }
 
     public void stopInvasion(EntityPlayerMP player) {
@@ -220,6 +285,15 @@ public class MobHordePlayerData implements INBTSerializable<NBTTagCompound> {
             // Will get called implicitly from onEntityDeath, but I am doing it again just
             // to be sure
             this.finishInvasion();
+        }
+    }
+
+    public void recordRaidCenter(MobHordeEvent event, EntityPlayer player) {
+        this.hasRaidCenter = event.lastRunUsedPods;
+        if (this.hasRaidCenter) {
+            this.raidCenterX = event.lastRunCenterX;
+            this.raidCenterZ = event.lastRunCenterZ;
+            this.raidDimension = player.dimension;
         }
     }
 }

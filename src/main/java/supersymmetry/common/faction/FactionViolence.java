@@ -2,6 +2,10 @@ package supersymmetry.common.faction;
 
 import static supersymmetry.common.faction.EntityAIThrowGrenade.FLEE_TRIGGER_RADIUS;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.UUID;
+
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAITasks;
@@ -23,8 +27,10 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.entities.EntityDropPod;
+import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.potion.PotionDropPodSickness;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -51,6 +57,21 @@ public class FactionViolence {
     private static final double DANGER_AVOID_RADIUS = FLEE_TRIGGER_RADIUS;
     private static final double DANGER_AVOID_SPEED = 1.2D;
 
+    private static final String TAG_LAST_TARGET_SCAN = "lastTargetScan";
+    private static final String TAG_LAST_DANGER_SCAN = "lastDangerScan";
+    private static final long TARGET_SCAN_INTERVAL = 5L;
+    private static final long DANGER_SCAN_INTERVAL = 5L;
+
+    private static final String TAG_COVER_ANCHOR_X = "coverAnchorX";
+    private static final String TAG_COVER_ANCHOR_Z = "coverAnchorZ";
+    private static final double COVER_RESEARCH_MOVE_SQ = 4.0D * 4.0D; // target moved 4+ blocks since cover was picked
+    private static final double COVER_TOO_CLOSE_SQ = 6.0D * 6.0D;     // target close enough to rush the cover
+    private static final long COVER_SEARCH_COOLDOWN = 10L;            // was 40
+
+    private static final String TAG_INVASION_ID = "invasionId";
+    private static final String TAG_INVASION_OWNER = "invasionOwner";
+    private static final int ORPHAN_CHECK_INTERVAL = 100; // ticks, ~5s per mob
+
     // ========================================================================
     // Smart AI: anti friendly fire, because fuck the playerbase
     // ========================================================================
@@ -73,6 +94,10 @@ public class FactionViolence {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntity().world.isRemote) return;
+        if (event.getEntity() instanceof EntityLivingBase && !(event.getEntity() instanceof EntityPlayer) &&
+                despawnIfOrphaned((EntityLivingBase) event.getEntity())) {
+            return;
+        }
         if (!FactionViolenceManager.isEnabled(event.getEntity().world)) return;
         if (!(event.getEntity() instanceof EntityLiving)) return;
 
@@ -84,6 +109,8 @@ public class FactionViolence {
         String mobFaction = susyTag.getString(TAG_FACTION);
         if (mobFaction.isEmpty()) return;
         if (!(mob instanceof IMob)) return;
+
+        long gameTime = mob.world.getTotalWorldTime();
 
         // why do you keep attacking the drop pods bro?
         EntityLivingBase revengeTarget = mob.getRevengeTarget();
@@ -146,78 +173,85 @@ public class FactionViolence {
             mob.setAttackTarget(null);
         }
 
+        // storage
+        long lastTargetScan = susyTag.getLong(TAG_LAST_TARGET_SCAN);
+        boolean shouldScanTarget = (gameTime - lastTargetScan) >= TARGET_SCAN_INTERVAL;
         // ====================================================================
         // Smart AI: wallhacking against players, because fuck the playerbase
         // ====================================================================
 
-        if (isSmart) {
-            EntityLivingBase bestSmartTarget = null;
-            double nearestDistSq = Double.MAX_VALUE;
+        if (shouldScanTarget) {
+            susyTag.setLong(TAG_LAST_TARGET_SCAN, gameTime);
+            tag.setTag(TAG_ROOT, susyTag);
+            if (isSmart) {
+                EntityLivingBase bestSmartTarget = null;
+                double nearestDistSq = Double.MAX_VALUE;
 
-            for (EntityPlayer player : mob.world.getEntitiesWithinAABB(EntityPlayer.class,
-                    mob.getEntityBoundingBox().grow(radius))) {
-                if (player.isCreative() || player.isSpectator()) continue;
-                String playerFaction = getFaction(player);
-                if (!playerFaction.isEmpty() && mobFaction.equals(playerFaction)) continue;
-                double distSq = mob.getDistanceSq(player);
-                if (distSq < nearestDistSq) {
-                    nearestDistSq = distSq;
-                    bestSmartTarget = player;
+                for (EntityPlayer player : mob.world.getEntitiesWithinAABB(EntityPlayer.class,
+                        mob.getEntityBoundingBox().grow(radius))) {
+                    if (player.isCreative() || player.isSpectator()) continue;
+                    String playerFaction = getFaction(player);
+                    if (!playerFaction.isEmpty() && mobFaction.equals(playerFaction)) continue;
+                    double distSq = mob.getDistanceSq(player);
+                    if (distSq < nearestDistSq) {
+                        nearestDistSq = distSq;
+                        bestSmartTarget = player;
+                    }
+                }
+
+                for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
+                        mob.getEntityBoundingBox().grow(radius))) {
+                    if (target == mob) continue;
+                    if (target instanceof EntityPlayer) continue;
+                    if (!mob.canEntityBeSeen(target)) continue;
+                    String targetFaction = getFaction(target);
+                    boolean isUnaligned = targetFaction.isEmpty();
+                    boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
+                    boolean shouldAttack = (isUnaligned && target instanceof IMob) || isOpposingFaction;
+                    if (!shouldAttack) continue;
+                    double distSq = mob.getDistanceSq(target);
+                    if (distSq < nearestDistSq) {
+                        nearestDistSq = distSq;
+                        bestSmartTarget = target;
+                    }
+                }
+
+                if (bestSmartTarget != null) {
+                    mob.setAttackTarget(bestSmartTarget);
                 }
             }
 
-            for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
-                    mob.getEntityBoundingBox().grow(radius))) {
-                if (target == mob) continue;
-                if (target instanceof EntityPlayer) continue;
-                if (!mob.canEntityBeSeen(target)) continue;
-                String targetFaction = getFaction(target);
-                boolean isUnaligned = targetFaction.isEmpty();
-                boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
-                boolean shouldAttack = (isUnaligned && target instanceof IMob) || isOpposingFaction;
-                if (!shouldAttack) continue;
-                double distSq = mob.getDistanceSq(target);
-                if (distSq < nearestDistSq) {
-                    nearestDistSq = distSq;
-                    bestSmartTarget = target;
-                }
-            }
-
-            if (bestSmartTarget != null) {
-                mob.setAttackTarget(bestSmartTarget);
-            }
-        }
-
-        // default
-        if (!isSmart) {
-            EntityLivingBase bestTarget = null;
-            double bestDistanceSq = Double.MAX_VALUE;
-            for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
-                    mob.getEntityBoundingBox().grow(radius))) {
-                if (target == mob) continue;
-                if (!mob.canEntityBeSeen(target)) continue;
-                String targetFaction = getFaction(target);
-                boolean isUnaligned = targetFaction.isEmpty();
-                boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
-                boolean shouldAttack = false;
-                if (isUnaligned) {
-                    if (target instanceof IMob ||
-                            (target instanceof EntityPlayer &&
-                                    !((EntityPlayer) target).isCreative() &&
-                                    !((EntityPlayer) target).isSpectator())) {
+            // default
+            if (!isSmart) {
+                EntityLivingBase bestTarget = null;
+                double bestDistanceSq = Double.MAX_VALUE;
+                for (EntityLivingBase target : mob.world.getEntitiesWithinAABB(EntityLivingBase.class,
+                        mob.getEntityBoundingBox().grow(radius))) {
+                    if (target == mob) continue;
+                    if (!mob.canEntityBeSeen(target)) continue;
+                    String targetFaction = getFaction(target);
+                    boolean isUnaligned = targetFaction.isEmpty();
+                    boolean isOpposingFaction = !isUnaligned && !mobFaction.equals(targetFaction);
+                    boolean shouldAttack = false;
+                    if (isUnaligned) {
+                        if (target instanceof IMob ||
+                                (target instanceof EntityPlayer &&
+                                        !((EntityPlayer) target).isCreative() &&
+                                        !((EntityPlayer) target).isSpectator())) {
+                            shouldAttack = true;
+                        }
+                    } else if (isOpposingFaction) {
                         shouldAttack = true;
                     }
-                } else if (isOpposingFaction) {
-                    shouldAttack = true;
+                    if (!shouldAttack) continue;
+                    double distSq = mob.getDistanceSq(target);
+                    if (distSq < bestDistanceSq) {
+                        bestDistanceSq = distSq;
+                        bestTarget = target;
+                    }
                 }
-                if (!shouldAttack) continue;
-                double distSq = mob.getDistanceSq(target);
-                if (distSq < bestDistanceSq) {
-                    bestDistanceSq = distSq;
-                    bestTarget = target;
-                }
+                if (bestTarget != null) mob.setAttackTarget(bestTarget);
             }
-            if (bestTarget != null) mob.setAttackTarget(bestTarget);
         }
 
         // ====================================================================
@@ -230,11 +264,15 @@ public class FactionViolence {
 
         // cover from grenade
         if (isSmart) {
-            Entity danger = findNearestDanger(mob);
-            if (danger != null) {
-                fleeFromDanger(mob, danger);
-                tag.setTag(TAG_ROOT, susyTag);
-                return;
+            long lastDangerScan = susyTag.getLong(TAG_LAST_DANGER_SCAN);
+            if ((gameTime - lastDangerScan) >= DANGER_SCAN_INTERVAL) {
+                susyTag.setLong(TAG_LAST_DANGER_SCAN, gameTime);
+                Entity danger = findNearestDanger(mob);
+                if (danger != null) {
+                    tag.setTag(TAG_ROOT, susyTag);
+                    fleeFromDanger(mob, danger);
+                    return;
+                }
             }
         }
 
@@ -244,25 +282,45 @@ public class FactionViolence {
             boolean coverValid = false;
 
             if (target != null && isLowHealth) {
-                long gameTime = mob.world.getTotalWorldTime();
                 long lastSearchTime = susyTag.getLong(TAG_LAST_SEARCH_TIME);
                 double weaponRange = getWeaponRange(mob);
                 boolean hasCover = susyTag.hasKey(TAG_COVER_X) && susyTag.hasKey(TAG_COVER_Y) &&
                         susyTag.hasKey(TAG_COVER_Z);
 
                 if (hasCover) {
-                    int cx = susyTag.getInteger(TAG_COVER_X);
-                    int cy = susyTag.getInteger(TAG_COVER_Y);
-                    int cz = susyTag.getInteger(TAG_COVER_Z);
-                    coverPos = new BlockPos(cx, cy, cz);
+                    coverPos = new BlockPos(susyTag.getInteger(TAG_COVER_X), susyTag.getInteger(TAG_COVER_Y),
+                            susyTag.getInteger(TAG_COVER_Z));
                     coverValid = isCoverValid(mob, target, coverPos, weaponRange);
+
+                    boolean stale = false;
+                    if (coverValid) {
+                        double adx = target.posX - susyTag.getDouble(TAG_COVER_ANCHOR_X);
+                        double adz = target.posZ - susyTag.getDouble(TAG_COVER_ANCHOR_Z);
+                        boolean targetMoved = (adx * adx + adz * adz) > COVER_RESEARCH_MOVE_SQ;
+                        boolean targetClose = mob.getDistanceSq(target) < COVER_TOO_CLOSE_SQ;
+                        boolean cooldownOk = (gameTime - lastSearchTime) > COVER_SEARCH_COOLDOWN;
+                        stale = cooldownOk && (targetMoved || targetClose);
+                    }
                     if (!coverValid) {
                         clearStoredCover(susyTag, tag);
                         coverPos = null;
+                    } else if (stale) {
+                        susyTag.setDouble(TAG_COVER_ANCHOR_X, target.posX);
+                        susyTag.setDouble(TAG_COVER_ANCHOR_Z, target.posZ);
+                        BlockPos better = findCoverPosition(mob, target, weaponRange);
+                        susyTag.setLong(TAG_LAST_SEARCH_TIME, gameTime);
+                        if (better != null && !better.equals(coverPos)) {
+                            coverPos = better;
+                            susyTag.setInteger(TAG_COVER_X, better.getX());
+                            susyTag.setInteger(TAG_COVER_Y, better.getY());
+                            susyTag.setInteger(TAG_COVER_Z, better.getZ());
+                            susyTag.setBoolean("wasInCover", false);
+                        }
+                        tag.setTag(TAG_ROOT, susyTag);
                     }
                 }
 
-                boolean cooldownExpired = (gameTime - lastSearchTime) > 40;
+                boolean cooldownExpired = (gameTime - lastSearchTime) > COVER_SEARCH_COOLDOWN;
 
                 if (!coverValid && cooldownExpired) {
                     BlockPos newCover = findCoverPosition(mob, target, weaponRange);
@@ -273,6 +331,8 @@ public class FactionViolence {
                         susyTag.setInteger(TAG_COVER_X, newCover.getX());
                         susyTag.setInteger(TAG_COVER_Y, newCover.getY());
                         susyTag.setInteger(TAG_COVER_Z, newCover.getZ());
+                        susyTag.setDouble(TAG_COVER_ANCHOR_X, target.posX);
+                        susyTag.setDouble(TAG_COVER_ANCHOR_Z, target.posZ);
                     }
                     tag.setTag(TAG_ROOT, susyTag);
                 }
@@ -627,55 +687,68 @@ public class FactionViolence {
         World world = mob.world;
         BlockPos mobPos = mob.getPosition();
         BlockPos targetPos = target.getPosition();
-        int searchRadius = (int) Math.min(weaponRange, 20.0D);
+
+        int searchRadius = Math.min(16, (int) weaponRange);
         double maxDistSq = weaponRange * weaponRange;
 
-        Vec3d targetEye = target.getPositionVector().add(0, target.getEyeHeight(), 0);
-        Vec3d targetFeet = target.getPositionVector().add(0, 0.1, 0);
+        // BFS from mob. Max 2048 reachable nodes is plenty.
+        Long2IntOpenHashMap reachable = new Long2IntOpenHashMap();
+        ArrayDeque<BlockPos> queue = new ArrayDeque<>();
+        ArrayList<BlockPos> candidates = new ArrayList<>();
+
+        reachable.put(mobPos.toLong(), 0);
+        queue.add(mobPos);
+
+        while (!queue.isEmpty() && reachable.size() < 2048) {
+            BlockPos p = queue.poll();
+            int cost = reachable.get(p.toLong());
+
+            if (cost > searchRadius * 3) continue;
+
+            if (p.distanceSq(targetPos) <= maxDistSq) {
+                candidates.add(p);
+            }
+
+            for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+                BlockPos n = p.offset(facing);
+
+                // Allow 1 block step up/down during BFS.
+                if (!isWalkable(world, n)) {
+                    if (isWalkable(world, n.up())) {
+                        n = n.up();
+                    } else if (isWalkable(world, n.down())) {
+                        n = n.down();
+                    } else {
+                        continue;
+                    }
+                }
+
+                long key = n.toLong();
+                if (reachable.containsKey(key)) continue;
+
+                reachable.put(key, cost + 1);
+                queue.add(n);
+            }
+        }
 
         BlockPos bestCover = null;
         double minCost = Double.MAX_VALUE;
+        int losChecks = 0;
+        float eyeHeight = mob.getEyeHeight();
 
-        FactionAStar astar = new FactionAStar(world, mob);
+        for (BlockPos candidate : candidates) {
+            if (++losChecks > 64) break;
 
-        for (int dx = -searchRadius; dx <= searchRadius; dx++) {
-            for (int dz = -searchRadius; dz <= searchRadius; dz++) {
-                int x = mobPos.getX() + dx;
-                int z = mobPos.getZ() + dz;
-                if (x == targetPos.getX() && z == targetPos.getZ()) continue;
+            // Same test isCoverValid uses, so search and validation can't disagree.
+            if (!providesCover(world, target, candidate, eyeHeight)) continue;
 
-                for (int dy = -3; dy <= 3; dy++) {
-                    BlockPos candidate = new BlockPos(x, mobPos.getY() + dy, z);
+            int pathCost = reachable.get(candidate.toLong());
+            double distToTarget = Math.sqrt(candidate.distanceSq(targetPos));
+            double cost = pathCost + distToTarget * 0.1;
 
-                    if (candidate.distanceSq(targetPos) > maxDistSq) continue;
-                    if (!isWalkable(world, candidate)) continue;
-
-                    Vec3d candidateFeet = new Vec3d(candidate.getX() + 0.5, candidate.getY() + 0.1,
-                            candidate.getZ() + 0.5);
-                    Vec3d candidateEye = new Vec3d(candidate.getX() + 0.5, candidate.getY() + mob.getEyeHeight(),
-                            candidate.getZ() + 0.5);
-
-                    boolean targetSeesMobFeet = hasLineOfSight(world, targetEye, candidateFeet);
-                    if (targetSeesMobFeet) continue;
-
-                    boolean mobSeesTarget = hasLineOfSight(world, candidateEye, targetFeet);
-                    if (!mobSeesTarget) continue;
-
-                    net.minecraft.pathfinding.Path path = astar.findPath(mobPos, candidate);
-                    if (path == null || path.getCurrentPathLength() == 0) {
-                        continue;
-                    }
-
-                    int pathLength = path.getCurrentPathLength();
-                    double distToTarget = Math.sqrt(candidate.distanceSq(targetPos));
-                    double distFromMob = Math.sqrt(candidate.distanceSq(mobPos));
-                    double cost = pathLength + distFromMob * 0.5 - distToTarget * 0.1;
-
-                    if (cost < minCost) {
-                        minCost = cost;
-                        bestCover = candidate;
-                    }
-                }
+            if (cost < minCost) {
+                minCost = cost;
+                bestCover = candidate;
             }
         }
 
@@ -687,12 +760,7 @@ public class FactionViolence {
         if (target == null || target.isDead || !target.isEntityAlive()) return false;
         if (!isWalkable(mob.world, coverPos)) return false;
         if (coverPos.distanceSq(target.getPosition()) > weaponRange * weaponRange) return false;
-        Vec3d targetEye = target.getPositionVector().add(0, 1.5, 0);
-        Vec3d targetBottom = target.getPositionVector().add(0, 0.5, 0);
-        Vec3d coverBottom = new Vec3d(coverPos.getX() + 0.5, coverPos.getY() + 0.5, coverPos.getZ() + 0.5);
-        Vec3d coverEye = new Vec3d(coverPos.getX() + 0.5, coverPos.getY() + 1.5, coverPos.getZ() + 0.5);
-        if (hasLineOfSight(mob.world, targetEye, coverBottom)) return false;
-        return hasLineOfSight(mob.world, coverEye, targetBottom);
+        return providesCover(mob.world, target, coverPos, mob.getEyeHeight());
     }
 
     private static boolean isWalkable(World world, BlockPos pos) {
@@ -703,6 +771,8 @@ public class FactionViolence {
         susyTag.removeTag(TAG_COVER_X);
         susyTag.removeTag(TAG_COVER_Y);
         susyTag.removeTag(TAG_COVER_Z);
+        susyTag.removeTag(TAG_COVER_ANCHOR_X);
+        susyTag.removeTag(TAG_COVER_ANCHOR_Z);
         susyTag.removeTag("wasInCover");
         tag.setTag(TAG_ROOT, susyTag);
     }
@@ -742,6 +812,21 @@ public class FactionViolence {
         return nearest;
     }
 
+    private static boolean providesCover(World world, EntityLivingBase target, BlockPos pos, float mobEyeHeight) {
+        double x = pos.getX() + 0.5D, z = pos.getZ() + 0.5D;
+        Vec3d targetEye = target.getPositionVector().add(0, target.getEyeHeight(), 0);
+        Vec3d targetFeet = target.getPositionVector().add(0, 0.1D, 0);
+
+        // hidden: target can't see the mob's feet OR torso
+        Vec3d feet = new Vec3d(x, pos.getY() + 0.1D, z);
+        Vec3d torso = new Vec3d(x, pos.getY() + mobEyeHeight * 0.5D, z);
+        if (hasLineOfSight(world, targetEye, feet) || hasLineOfSight(world, targetEye, torso)) return false;
+
+        // can shoot back from eye height at the target's feet or head
+        Vec3d eye = new Vec3d(x, pos.getY() + mobEyeHeight, z);
+        return hasLineOfSight(world, eye, targetFeet) || hasLineOfSight(world, eye, targetEye);
+    }
+
     private static void fleeFromDanger(EntityLiving mob, Entity danger) {
         double dx = mob.posX - danger.posX;
         double dz = mob.posZ - danger.posZ;
@@ -766,5 +851,47 @@ public class FactionViolence {
                 mob.getNavigator().tryMoveToXYZ(fleeX, mob.posY, fleeZ, DANGER_AVOID_SPEED);
             }
         }
+    }
+
+    private static boolean despawnIfOrphaned(EntityLivingBase mob) {
+        if ((mob.ticksExisted + mob.getEntityId()) % ORPHAN_CHECK_INTERVAL != 0) return false;
+
+        NBTTagCompound root = mob.getEntityData();
+        if (!root.hasKey(TAG_ROOT)) return false;
+        NBTTagCompound susy = root.getCompoundTag(TAG_ROOT);
+
+        UUID invasionId;
+
+        if (susy.hasKey(TAG_INVASION_ID)) {
+            try {
+                invasionId = UUID.fromString(susy.getString(TAG_INVASION_ID));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+        } else if (susy.hasKey(TAG_INVASION_OWNER)) {
+            UUID ownerId;
+            try {
+                ownerId = UUID.fromString(susy.getString(TAG_INVASION_OWNER));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+
+            UUID ownerInvasion = MobHordeWorldData.get(mob.world).getCurrentInvasionId(ownerId);
+            if (ownerInvasion == null) {
+                mob.setDead();
+                return true;
+            }
+
+            susy.setString(TAG_INVASION_ID, ownerInvasion.toString());
+            root.setTag(TAG_ROOT, susy);
+            return false;
+        } else {
+            return false;
+        }
+
+        if (MobHordeWorldData.get(mob.world).isInvasionActive(invasionId)) return false;
+
+        mob.setDead();
+        return true;
     }
 }

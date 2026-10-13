@@ -66,6 +66,7 @@ public class SuSyMetaItems {
     public static MetaValueItem INTEL_CHIP_FULL;
     public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem HYPER_DEFOLIANT;
+    public static MetaValueItem SKYWATCH_CHIP;
     public static MetaValueItem TEST_GUN;
     public static MetaValueItem TEST_AMMO;
 
@@ -219,8 +220,10 @@ public class SuSyMetaItems {
                 .addComponents(IntelChipFullBehaviour.INSTANCE);
         HYPER_DEFOLIANT = metaItem.addItem(29, "hyper_defoliant")
                 .addComponents(new HyperDefoliantBehavior());
-        TEST_GUN = metaItem.addItem(30, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior(12, 3000, List.of(TEST_AMMO.getStackForm()), 0.9));
-        TEST_AMMO = metaItem.addItem(31, "test_ammo");
+        SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
+                .addComponents(SkywatchChipBehaviour.INSTANCE);
+        TEST_GUN = metaItem.addItem(31, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior(12, 3000, List.of(TEST_AMMO.getStackForm()), 0.9));
+        TEST_AMMO = metaItem.addItem(32, "test_ammo");
 
     }
 
