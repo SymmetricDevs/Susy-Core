@@ -101,7 +101,15 @@ public class MetaTileEntitySuSyTankValve extends MetaTileEntityMultiblockPart
         super.removeFromMultiBlock(controller);
         initializeDummyInventory();
     }
-
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            MultiblockControllerBase controller = getController();
+            return controller == null ? null :
+                    CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(controller.getFluidInventory());
+        }
+        return super.getCapability(capability, side);
+    }
     @Override
     protected ModularUI createUI(EntityPlayer player) {
         return null;
