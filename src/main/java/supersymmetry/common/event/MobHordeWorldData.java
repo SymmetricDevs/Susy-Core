@@ -103,4 +103,20 @@ public class MobHordeWorldData extends WorldSavedData implements Function<UUID, 
         MobHordePlayerData data = this.playerDataMap.get(playerId);
         return data == null ? null : data.currentInvasionId;
     }
+
+    public double[] findNearestPodRaid(int dimension, double x, double z, double range) {
+        double best = range * range;
+        double[] result = null;
+        for (MobHordePlayerData data : this.playerDataMap.values()) {
+            if (!data.hasRaidCenter || data.currentInvasionId == null || data.raidDimension != dimension) continue;
+            double dx = data.raidCenterX - x;
+            double dz = data.raidCenterZ - z;
+            double distSq = dx * dx + dz * dz;
+            if (distSq <= best) {
+                best = distSq;
+                result = new double[] { data.raidCenterX, data.raidCenterZ };
+            }
+        }
+        return result;
+    }
 }
