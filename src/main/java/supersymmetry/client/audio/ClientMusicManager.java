@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -129,7 +130,8 @@ public final class ClientMusicManager {
     }
 
     private static Context getContext(Minecraft minecraft) {
-        return minecraft.world == null && minecraft.getAmbientMusicType() == MusicTicker.MusicType.MENU ? Context.MAIN_MENU :
+        return minecraft.world == null && minecraft.getAmbientMusicType() == MusicTicker.MusicType.MENU ?
+                Context.MAIN_MENU :
                 Context.NONE;
     }
 
