@@ -9,6 +9,7 @@ import static gregtech.api.unification.ore.OrePrefix.*;
 import static supersymmetry.api.unification.ore.SusyOrePrefix.*;
 
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.ore.OrePrefix;
 import lombok.val;
@@ -63,6 +64,10 @@ public class SuSyTanklessFluidPipeRecipeHandler {
             return;
         }
 
+        if ((material == Materials.Wood || material == Materials.TreatedWood) &&
+                (sourcePipe == pipeTinyFluid || sourcePipe == pipeHugeFluid)) {
+            return;
+        }
         // 1 normal fluid pipe + 2 screws -> 1 tankless pipe
         ASSEMBLER_RECIPES.recipeBuilder()
                 .input(sourcePipe, material, 1)

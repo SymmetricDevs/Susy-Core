@@ -14,7 +14,11 @@ public class FactionPathNavigator extends PathNavigateGround {
 
     private BlockPos lastTargetPos = null;
     private long lastPathCalculationTime = 0;
+    private long lastFailedPathTime = -9999;
     private static final long REPATH_COOLDOWN_TICKS = 100;
+    private static final long FAILED_REPATH_COOLDOWN_TICKS = 20;
+
+    private FactionAStar astar;
 
     public FactionPathNavigator(EntityLiving entity, World world) {
         super(entity, world);
@@ -41,6 +45,13 @@ public class FactionPathNavigator extends PathNavigateGround {
         }
     }
 
+    private FactionAStar getAstar() {
+        if (this.astar == null) {
+            this.astar = new FactionAStar(this.world, this.entity);
+        }
+        return this.astar;
+    }
+
     @Override
     public Path getPathToEntityLiving(Entity entityIn) {
         BlockPos targetPos = new BlockPos(
@@ -49,6 +60,11 @@ public class FactionPathNavigator extends PathNavigateGround {
                 MathHelper.floor(entityIn.posZ));
 
         long gameTime = this.world.getTotalWorldTime();
+
+        // If we recently failed to find a path, do not hammer A* again.
+        if ((gameTime - this.lastFailedPathTime) < FAILED_REPATH_COOLDOWN_TICKS) {
+            return this.currentPath;
+        }
 
         if (this.currentPath != null && !this.noPath()) {
             boolean targetMoved = this.lastTargetPos == null || this.lastTargetPos.distanceSq(targetPos) > 9.0;
@@ -65,8 +81,12 @@ public class FactionPathNavigator extends PathNavigateGround {
                 MathHelper.floor(this.entity.posY),
                 MathHelper.floor(this.entity.posZ));
 
-        FactionAStar astar = new FactionAStar(this.world, this.entity);
-        Path path = astar.findPath(start, targetPos);
+        Path path = getAstar().findPath(start, targetPos);
+
+        if (path == null || path.getCurrentPathLength() == 0) {
+            this.lastFailedPathTime = gameTime;
+            return null;
+        }
 
         this.lastTargetPos = targetPos;
         this.lastPathCalculationTime = gameTime;
@@ -77,6 +97,11 @@ public class FactionPathNavigator extends PathNavigateGround {
     @Override
     public Path getPathToPos(BlockPos pos) {
         long gameTime = this.world.getTotalWorldTime();
+
+        // If we recently failed to find a path, do not hammer A* again.
+        if ((gameTime - this.lastFailedPathTime) < FAILED_REPATH_COOLDOWN_TICKS) {
+            return this.currentPath;
+        }
 
         if (this.currentPath != null && !this.noPath()) {
             boolean targetMoved = this.lastTargetPos == null || this.lastTargetPos.distanceSq(pos) > 9.0;
@@ -93,8 +118,12 @@ public class FactionPathNavigator extends PathNavigateGround {
                 MathHelper.floor(this.entity.posY),
                 MathHelper.floor(this.entity.posZ));
 
-        FactionAStar astar = new FactionAStar(this.world, this.entity);
-        Path path = astar.findPath(start, pos);
+        Path path = getAstar().findPath(start, pos);
+
+        if (path == null || path.getCurrentPathLength() == 0) {
+            this.lastFailedPathTime = gameTime;
+            return null;
+        }
 
         this.lastTargetPos = pos;
         this.lastPathCalculationTime = gameTime;

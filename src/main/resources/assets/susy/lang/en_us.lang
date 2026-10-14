@@ -2283,7 +2283,7 @@ susy.machine.generic.tooltip.radius_warning=Expands it's radius every completed 
 susy.machine.defoliator.lv.name=Basic Defoliator
 susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
 susy.machine.defoliator.tooltip.description=Destroys all plant life close to it without harming animals or people.
-tile.dead_water.dead_water.name=Dead Water
+tile.dead_water.dead_water.name=Still Water
 
 #Interference Dynamo
 susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
@@ -2341,6 +2341,9 @@ metaitem.intel_chip.name=Intelligence gathering chip
 metaitem.intel_chip_full.name=Intelligence gathering chip
 
 metaitem.hyper_defoliant.name=Hyper Defoliant
+
+metaitem.skywatch_chip.name=Skywatch Chip
+metaitem.skywatch_chip.tooltip=A rag-tag detector that constantly watches your skies
 
 # end of problem causers
 
