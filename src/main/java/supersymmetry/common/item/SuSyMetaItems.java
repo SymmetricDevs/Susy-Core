@@ -6,11 +6,9 @@ import static supersymmetry.common.metatileentities.storage.MetaTileEntityLocked
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 
@@ -222,9 +220,8 @@ public class SuSyMetaItems {
                 .addComponents(new HyperDefoliantBehavior());
         SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
                 .addComponents(SkywatchChipBehaviour.INSTANCE);
-        TEST_GUN = metaItem.addItem(31, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior(12, 3000, List.of(TEST_AMMO.getStackForm()), 0.9));
+        TEST_GUN = metaItem.addItem(31, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior());
         TEST_AMMO = metaItem.addItem(32, "test_ammo");
-
     }
 
     private static void addExtraBehaviours() {
