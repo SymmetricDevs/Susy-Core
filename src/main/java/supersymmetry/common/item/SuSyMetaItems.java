@@ -65,8 +65,14 @@ public class SuSyMetaItems {
     public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem HYPER_DEFOLIANT;
     public static MetaValueItem SKYWATCH_CHIP;
-    public static MetaValueItem TEST_GUN;
-    public static MetaValueItem TEST_AMMO;
+    public static MetaValueItem PISTOL;
+    public static MetaValueItem PISTOL_AMMO;
+    public static MetaValueItem RIFLE;
+    public static MetaValueItem RIFLE_AMMO;
+    public static MetaValueItem SHOTGUN;
+    public static MetaValueItem SHOTGUN_AMMO;
+    public static MetaValueItem SMG;
+    public static MetaValueItem SMG_AMMO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -220,8 +226,22 @@ public class SuSyMetaItems {
                 .addComponents(new HyperDefoliantBehavior());
         SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
                 .addComponents(SkywatchChipBehaviour.INSTANCE);
-        TEST_GUN = metaItem.addItem(31, "test_gun").setMaxStackSize(1).addComponents(new SuSyGunBehavior());
-        TEST_AMMO = metaItem.addItem(32, "test_ammo");
+        PISTOL = metaItem.addItem(31, "pistol")
+                .setMaxStackSize(1)
+                .addComponents(new SuSyGunBehavior(20.0, 1.5));
+        PISTOL_AMMO = metaItem.addItem(32, "pistol_ammo");
+        RIFLE = metaItem.addItem(33, "rifle")
+                .setMaxStackSize(1)
+                .addComponents(new SuSyGunBehavior(60.0, 0.13));
+        RIFLE_AMMO = metaItem.addItem(34, "rifle_ammo");
+        SHOTGUN = metaItem.addItem(35, "shotgun")
+                .setMaxStackSize(1)
+                .addComponents(new SuSyGunBehavior(30.0, 10));
+        SHOTGUN_AMMO = metaItem.addItem(36, "shotgun_ammo");
+        SMG = metaItem.addItem(37, "smg")
+                .setMaxStackSize(1)
+                .addComponents(new SuSyGunBehavior(30.0, 1));
+        SMG_AMMO = metaItem.addItem(38, "smg_ammo");
     }
 
     private static void addExtraBehaviours() {

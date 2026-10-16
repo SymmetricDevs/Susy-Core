@@ -26,6 +26,14 @@ import supersymmetry.client.renderer.particles.SusyParticleFlame;
 
 public class SuSyGunBehavior implements IItemBehaviour {
 
+    private final double muzzleVelocity;
+    private final double accuracy;
+
+    public SuSyGunBehavior(double muzzleVelocity, double accuracy) {
+        this.muzzleVelocity = muzzleVelocity;
+        this.accuracy = accuracy;
+    }
+
     public boolean fire(World world, Vec3d firePos, double yaw, double pitch) {
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
@@ -127,9 +135,4 @@ public class SuSyGunBehavior implements IItemBehaviour {
         // Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFlareSmoke(world, pos.x, pos.y, pos.z, 1,
         // 0, 1));
     }
-
-    public SuSyGunBehavior() {}
-
-    double muzzleVelocity = 100;
-    double accuracy = 0.5;
 }
