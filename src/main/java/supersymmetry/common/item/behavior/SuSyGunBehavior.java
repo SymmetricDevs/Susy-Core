@@ -27,13 +27,29 @@ import supersymmetry.client.renderer.particles.SusyParticleFlame;
 public class SuSyGunBehavior implements IItemBehaviour {
 
     private final double muzzleVelocity;
-    private final double accuracy;
+    private final double spread;
+    private final int pellets;
+    private final float damage;
+    private final int cooldownTicks;
+    private final GunFireMode fireMode;
+    private final int burstCount;
+    private final int burstIntervalTicks;
 
-    public SuSyGunBehavior(double muzzleVelocity, double accuracy) {
-        this.muzzleVelocity = muzzleVelocity;
-        this.accuracy = accuracy;
+    public SuSyGunBehavior(double muzzleVelocity, double spread, int pellets, float damage,
+                           int cooldownTicks, GunFireMode fireMode, int burstCount, int burstIntervalTicks) {
+        this.muzzleVelocity = Math.max(muzzleVelocity, 0.1);
+        this.spread = spread;
+        this.pellets = Math.max(pellets, 1); // projectiles fired at the same instant per shot
+        this.damage = damage;
+        this.fireMode = java.util.Objects.requireNonNull(fireMode, "fireMode");
+    t   his.burstCount = Math.max(burstCount, 1);
+        this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
+        // The cooldown can never be shorter than the burst 
+        int burstDuration = (this.burstCount - 1) * this.burstIntervalTicks + 1;
+        this.cooldownTicks = Math.max(Math.max(cooldownTicks, 0), burstDuration);
     }
 
+    //has poor readability
     public boolean fire(World world, Vec3d firePos, double yaw, double pitch) {
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
@@ -103,8 +119,8 @@ public class SuSyGunBehavior implements IItemBehaviour {
         }
         Random random = new Random();
         for (int i = 0; i < 1; i++) {
-            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * accuracy / 2;
-            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * accuracy / 2;
+            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
+            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
             fire(world, new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
                     player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset);
         }

@@ -228,19 +228,19 @@ public class SuSyMetaItems {
                 .addComponents(SkywatchChipBehaviour.INSTANCE);
         PISTOL = metaItem.addItem(31, "pistol")
                 .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(20.0, 1.5));
+                .addComponents(new SuSyGunBehavior(20.0, 1.5, 1, 6f, 8, GunFireMode.SEMI_AUTO, 1, 1));
         PISTOL_AMMO = metaItem.addItem(32, "pistol_ammo");
         RIFLE = metaItem.addItem(33, "rifle")
                 .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(60.0, 0.13));
+                .addComponents(new SuSyGunBehavior(60.0, 0.13, 1, 12f, 20, GunFireMode.BOLT_ACTION, 1, 1));
         RIFLE_AMMO = metaItem.addItem(34, "rifle_ammo");
         SHOTGUN = metaItem.addItem(35, "shotgun")
                 .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(30.0, 10));
+                .addComponents(new SuSyGunBehavior(30.0, 10, 8, 4f, 20, GunFireMode.SEMI_AUTO, 1, 1));
         SHOTGUN_AMMO = metaItem.addItem(36, "shotgun_ammo");
         SMG = metaItem.addItem(37, "smg")
                 .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(30.0, 1));
+                .addComponents(new SuSyGunBehavior(30.0, 1, 1, 4f, 4, GunFireMode.FULL_AUTO, 1, 1));
         SMG_AMMO = metaItem.addItem(38, "smg_ammo");
     }
 
