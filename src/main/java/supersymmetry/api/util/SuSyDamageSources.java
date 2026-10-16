@@ -26,6 +26,7 @@ public class SuSyDamageSources {
     // From the beneath.
     public static final DamageSource DARKNESS = new DamageSource("darkness").setDamageBypassesArmor();
     public static final DamageSource ROCKET_EXHAUST = new DamageSource("rocket_exhaust").setFireDamage();
+    public static final DamageSource BULLET = new DamageSource("bullet");
 
     public static DamageSource getSuffocationDamage() {
         return SUFFOCATION;
