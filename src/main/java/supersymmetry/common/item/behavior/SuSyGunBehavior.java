@@ -37,14 +37,14 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final int pellets;
     private final float damage;
     private final int cooldownTicks;
-    private final GunFireMode fireMode;
+    private final GunFireMode fireMode = GunFireMode.SEMI_AUTO;
     private final int burstCount;
     private final int burstIntervalTicks;
-    
+
     private List<GunFireMode> fireModes;
     public final double bulletCheckSpeed = 1; // not meant to be set by the constructor
 
-    public SuSyGunBehavior(GunType p) {
+    public SuSyGunBehavior(SuSyGunType p) {
         this.muzzleVelocity = Math.max(p.muzzleVelocity(), 0.1);
         this.spread = p.spread();
         this.pellets = Math.max(p.pellets(), 1);
@@ -57,7 +57,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
         this.cooldownTicks = Math.max(Math.max(p.cooldownTicks(), 0), burstDuration);
     }
 
-    ublic GunFireMode getSelectedMode(ItemStack stack) {
+    public GunFireMode getSelectedMode(ItemStack stack) {
         NBTTagCompound tag = stack.getSubCompound(NBT_GUN);
         if (tag != null && tag.hasKey(NBT_FIRE_MODE, Constants.NBT.TAG_STRING)) {
             try {

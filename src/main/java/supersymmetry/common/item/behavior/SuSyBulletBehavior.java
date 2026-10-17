@@ -15,7 +15,7 @@ public class SuSyBulletBehavior implements IItemBehaviour {
         return bulletType;
     }
 
-TODO: gotta add the way to get variable from SuSyBulletType
+    // TODO: gotta add the way to get variable from SuSyBulletType
 
 }
 

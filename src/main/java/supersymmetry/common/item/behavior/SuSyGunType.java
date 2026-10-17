@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public final class GunType {
+public final class SuSyGunType {
 
     private final double muzzleVelocity;
     private final double spread;
@@ -17,14 +17,14 @@ public final class GunType {
     private final int burstIntervalTicks;
 
     // no burst gun shortcut
-    public GunType(double muzzleVelocity, double spread, int pellets, float damage,
-                   int cooldownTicks, GunFireMode... fireModes) {
+    public SuSyGunType(double muzzleVelocity, double spread, int pellets, float damage,
+                       int cooldownTicks, GunFireMode... fireModes) {
         this(muzzleVelocity, spread, pellets, damage, cooldownTicks, 1, 1, fireModes);
     }
 
-    public GunType(double muzzleVelocity, double spread, int pellets, float damage,
-                   int cooldownTicks, int burstCount, int burstIntervalTicks,
-                   GunFireMode... fireModes) {
+    public SuSyGunType(double muzzleVelocity, double spread, int pellets, float damage,
+                       int cooldownTicks, int burstCount, int burstIntervalTicks,
+                       GunFireMode... fireModes) {
         if (fireModes.length == 0) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -88,9 +88,9 @@ public final class GunType {
 
     // Catalog
     // velocity, spread, pellets, damage, cooldown (ticks), mode(s)
-    public static final GunType PISTOL  = new GunType(20.0, 1.5, 1, 6f, 8,  GunFireMode.SEMI_AUTO);
-    public static final GunType RIFLE   = new GunType(60.0, 0.13, 1, 12f, 20, GunFireMode.BOLT_ACTION);
-    public static final GunType SHOTGUN = new GunType(30.0, 10, 8, 4f, 20, GunFireMode.SEMI_AUTO);
-    public static final GunType SMG     = new GunType(30.0, 1, 1, 4f, 4, 3, 2, GunFireMode.FULL_AUTO, GunFireMode.BURST, GunFireMode.SEMI_AUTO);
+    public static final SuSyGunType PISTOL  = new SuSyGunType(20.0, 1.5, 1, 6f, 8,  GunFireMode.SEMI_AUTO);
+    public static final SuSyGunType RIFLE   = new SuSyGunType(60.0, 0.13, 1, 12f, 20, GunFireMode.BOLT_ACTION);
+    public static final SuSyGunType SHOTGUN = new SuSyGunType(30.0, 10, 8, 4f, 20, GunFireMode.SEMI_AUTO);
+    public static final SuSyGunType SMG     = new SuSyGunType(30.0, 1, 1, 4f, 4, 3, 2, GunFireMode.FULL_AUTO, GunFireMode.BURST, GunFireMode.SEMI_AUTO);
 
 }
