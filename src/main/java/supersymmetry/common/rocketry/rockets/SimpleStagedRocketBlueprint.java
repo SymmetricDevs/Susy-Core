@@ -164,6 +164,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success = augmentSuccess(success, augmentation);
         success *= redundancyMult;
 
+        success = Math.clamp(success, 0.0, 1.0);
+
         return new SuccessCalculation.AFSStats(success, initStats.mass(), initStats.fuelMass(), initStats.deltaV(),
                 initStats.dragCoefficient(), initStats.sepAltitudes(), initStats.sepTimes(),
                 initStats.burnoutSpeed(), initStats.burnoutHorizontalSpeed());
@@ -194,6 +196,8 @@ public class SimpleStagedRocketBlueprint extends AbstractRocketBlueprint impleme
         success = Math.max(0, success);
         success = augmentSuccess(success, augmentation);
         success *= redundancyMult; // afs can't fix technical unreliabilities :tr:
+
+        success = Math.clamp(success, 0.0, 1.0);
 
         if (Math.random() < success) {
             return SuccessCalculation.LaunchResult.LAUNCHES;
