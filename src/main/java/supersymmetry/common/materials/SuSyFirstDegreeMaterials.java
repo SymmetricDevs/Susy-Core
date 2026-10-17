@@ -147,6 +147,7 @@ public class SuSyFirstDegreeMaterials {
                 .ingot()
                 .liquid(new FluidBuilder().temperature(811))
                 .flags(GENERATE_FRAME, GENERATE_ROD, GENERATE_PLATE, GENERATE_RING, GENERATE_BOLT_SCREW)
+                .components(Nickel, 2, Copper, 1)
                 .color(0x3e563e)
                 .build();
 
