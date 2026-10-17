@@ -2,6 +2,7 @@ package supersymmetry.common.faction;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
@@ -17,6 +18,8 @@ public class FactionPathNavigator extends PathNavigateGround {
     private long lastFailedPathTime = -9999;
     private static final long REPATH_COOLDOWN_TICKS = 100;
     private static final long FAILED_REPATH_COOLDOWN_TICKS = 20;
+    private long budgetDeniedTime = -9999;
+    private static final long BUDGET_RETRY_TICKS = 5;
 
     private FactionAStar astar;
 
@@ -54,12 +57,24 @@ public class FactionPathNavigator extends PathNavigateGround {
 
     @Override
     public Path getPathToEntityLiving(Entity entityIn) {
+        long gameTime = this.world.getTotalWorldTime();
+        EntityPlayer player = entityIn instanceof EntityPlayer ? (EntityPlayer) entityIn : null;
+
+        // Known-unreachable player and no line of sight: don't wallhack toward them.
+        if (player != null && FactionUnreachableTargets.isIgnored(player, gameTime) &&
+                !this.entity.canEntityBeSeen(player)) {
+            return null;
+        }
+
+        // The global per-tick budget said no recently; wait a few ticks instead of asking every tick.
+        if ((gameTime - this.budgetDeniedTime) < BUDGET_RETRY_TICKS) {
+            return this.currentPath;
+        }
+
         BlockPos targetPos = new BlockPos(
                 MathHelper.floor(entityIn.posX),
                 MathHelper.floor(entityIn.posY),
                 MathHelper.floor(entityIn.posZ));
-
-        long gameTime = this.world.getTotalWorldTime();
 
         // If we recently failed to find a path, do not hammer A* again.
         if ((gameTime - this.lastFailedPathTime) < FAILED_REPATH_COOLDOWN_TICKS) {
@@ -81,9 +96,23 @@ public class FactionPathNavigator extends PathNavigateGround {
                 MathHelper.floor(this.entity.posY),
                 MathHelper.floor(this.entity.posZ));
 
-        Path path = getAstar().findPath(start, targetPos);
+        // Tolerance of 1 horizontal / 2 vertical so jumping or swimming players count as reached.
+        FactionAStar astar = getAstar();
+        Path path = astar.findPath(start, targetPos, 1, 2);
 
-        if (path == null || path.getCurrentPathLength() == 0) {
+        // findPath only returns null when the global budget denied the search.
+        // That is not a path failure, so don't start the failed-path cooldown or flag the player.
+        if (path == null) {
+            this.budgetDeniedTime = gameTime;
+            return this.currentPath;
+        }
+
+        // Goal not reached and barely any progress toward it: flag the player as unreachable.
+        if (player != null && astar.lastSearchFailed()) {
+            FactionUnreachableTargets.mark(player, gameTime);
+        }
+
+        if (path.getCurrentPathLength() == 0) {
             this.lastFailedPathTime = gameTime;
             return null;
         }

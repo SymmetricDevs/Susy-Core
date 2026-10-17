@@ -220,7 +220,6 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
 
             // no metadata
             IBlockState AIR         = stateOf("minecraft", "air",      0);
-            IBlockState WATER       = stateOf("minecraft", "water",    0);
             IBlockState COARSE_DIRT = stateOf("minecraft", "dirt",     1);
             IBlockState DEAD_WATER  = stateOf("susy",    "dead_water", 0);
             IBlockState LOAMY_DIRT  = stateOf("biomesoplenty", "dirt", 8);
@@ -246,6 +245,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             map.put(new ResourceLocation("minecraft", "leaves"),               AIR);
             map.put(new ResourceLocation("minecraft", "leaves2"),              AIR);
             map.put(new ResourceLocation("minecraft", "sapling"),              AIR);
+            map.put(new ResourceLocation("minecraft", "cocoa"),                AIR);
             map.put(new ResourceLocation("minecraft", "grass"),                COARSE_DIRT);
             map.put(new ResourceLocation("minecraft", "farmland"),             COARSE_DIRT);
             map.put(new ResourceLocation("minecraft", "grass_path"),           COARSE_DIRT);
@@ -293,7 +293,7 @@ public class MetaTileEntityDefoliator extends TieredMetaTileEntity {
             // metadata
             Map<String, IBlockState> metaMap = new HashMap<>();
 
-            metaMap.put("biomesoplenty:coral:0",  WATER);
+            metaMap.put("biomesoplenty:coral:0",  DEAD_WATER);
             metaMap.put("biomesoplenty:grass:2",  LOAMY_DIRT);
             metaMap.put("biomesoplenty:grass:3",  SANDY_DIRT);
             metaMap.put("biomesoplenty:grass:4",  SILTY_DIRT);
