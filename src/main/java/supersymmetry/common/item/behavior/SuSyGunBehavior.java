@@ -4,7 +4,10 @@ import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntit
 
 import java.util.List;
 import java.util.Random;
+import java.util.Locale;
 
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +29,9 @@ import supersymmetry.client.renderer.particles.SusyParticleFlame;
 
 public class SuSyGunBehavior implements IItemBehaviour {
 
+    private static final String NBT_GUN = "SuSyGun";
+    private static final String NBT_FIRE_MODE = "FireMode";
+
     private final double muzzleVelocity;
     private final double spread;
     private final int pellets;
@@ -34,20 +40,48 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final GunFireMode fireMode;
     private final int burstCount;
     private final int burstIntervalTicks;
+    
+    private List<GunFireMode> fireModes;
     public final double bulletCheckSpeed = 1; // not meant to be set by the constructor
 
-    public SuSyGunBehavior(double muzzleVelocity, double spread, int pellets, float damage,
-                           int cooldownTicks, GunFireMode fireMode, int burstCount, int burstIntervalTicks) {
-        this.muzzleVelocity = Math.max(muzzleVelocity, 0.1);
-        this.spread = spread;
-        this.pellets = Math.max(pellets, 1); // projectiles fired at the same instant per shot
-        this.damage = damage;
-        this.fireMode = java.util.Objects.requireNonNull(fireMode, "fire mode must not be null");
-        this.burstCount = Math.max(burstCount, 1);
-        this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
-        // The cooldown can never be shorter than the burst 
+    public SuSyGunBehavior(GunType p) {
+        this.muzzleVelocity = Math.max(p.muzzleVelocity(), 0.1);
+        this.spread = p.spread();
+        this.pellets = Math.max(p.pellets(), 1);
+        this.damage = p.damage();
+        this.fireModes = p.fireModes();
+        this.burstCount = Math.max(p.burstCount(), 1);
+        this.burstIntervalTicks = Math.max(p.burstIntervalTicks(), 1);
+
         int burstDuration = (this.burstCount - 1) * this.burstIntervalTicks + 1;
-        this.cooldownTicks = Math.max(Math.max(cooldownTicks, 0), burstDuration);
+        this.cooldownTicks = Math.max(Math.max(p.cooldownTicks(), 0), burstDuration);
+    }
+
+    ublic GunFireMode getSelectedMode(ItemStack stack) {
+        NBTTagCompound tag = stack.getSubCompound(NBT_GUN);
+        if (tag != null && tag.hasKey(NBT_FIRE_MODE, Constants.NBT.TAG_STRING)) {
+            try {
+                GunFireMode mode = GunFireMode.valueOf(tag.getString(NBT_FIRE_MODE));
+                if (fireModes.contains(mode)) {
+                    return mode;
+                }
+            } catch (IllegalArgumentException ignored) {
+                // Se il nome non e valido, si fa il fallback
+            }
+        }
+        return fireModes.get(0);
+    }
+
+    public void cycleMode(EntityPlayer player, ItemStack stack) {
+        if (fireModes.size() <= 1) return;
+
+        GunFireMode current = getSelectedMode(stack);
+        int nextIndex = (fireModes.indexOf(current) + 1) % fireModes.size();
+        GunFireMode next = fireModes.get(nextIndex);
+
+        stack.getOrCreateSubCompound(NBT_GUN).setString(NBT_FIRE_MODE, next.name());
+        player.sendStatusMessage(new TextComponentTranslation(
+                "susy.gun.fire_mode." + next.name().toLowerCase(Locale.ROOT)), true);
     }
 
     /// Fires a single bullet from the specified position

@@ -130,3 +130,5 @@ public enum SuSyKeyBind {
         }
     }
 }
+
+// TODO: add keybind for cycling the fire mode
