@@ -268,7 +268,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
                 .aisle(" XXX ", " XSX ", " XXX ")
                 .where('S', selfPredicate())
                 .where('X', states(MetaBlocks.METAL_CASING.getState(MetalCasingType.STEEL_SOLID))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setExactLimit(1))
+                        .or(autoAbilities(true, false, false, false, false, false, false))
                         .or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setExactLimit(1))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setMinGlobalLimited(2))
