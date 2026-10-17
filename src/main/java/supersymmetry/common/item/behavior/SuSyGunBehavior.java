@@ -34,6 +34,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final GunFireMode fireMode;
     private final int burstCount;
     private final int burstIntervalTicks;
+    public final double bulletCheckSpeed = 1; // not meant to be set by the constructor
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, int pellets, float damage,
                            int cooldownTicks, GunFireMode fireMode, int burstCount, int burstIntervalTicks) {
@@ -41,45 +42,50 @@ public class SuSyGunBehavior implements IItemBehaviour {
         this.spread = spread;
         this.pellets = Math.max(pellets, 1); // projectiles fired at the same instant per shot
         this.damage = damage;
-        this.fireMode = java.util.Objects.requireNonNull(fireMode, "fireMode");
-    t   his.burstCount = Math.max(burstCount, 1);
+        this.fireMode = java.util.Objects.requireNonNull(fireMode, "fire mode must not be null");
+        this.burstCount = Math.max(burstCount, 1);
         this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
         // The cooldown can never be shorter than the burst 
         int burstDuration = (this.burstCount - 1) * this.burstIntervalTicks + 1;
         this.cooldownTicks = Math.max(Math.max(cooldownTicks, 0), burstDuration);
     }
 
-    //has poor readability
+    /// Fires a single bullet from the specified position
     public boolean fire(World world, Vec3d firePos, double yaw, double pitch) {
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
         yaw = yaw % 360;
-        double motionY = MathHelper.sin((float) (-pitch * 0.0174532922)) * this.muzzleVelocity;
+        // projections of the total speed onto the X, Y and Z axes
+        double motionY = MathHelper.sin((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
         double motionX = -MathHelper.sin((float) (yaw * 0.0174532922)) *
-                MathHelper.cos((float) (-pitch * 0.0174532922)) * this.muzzleVelocity;
+                MathHelper.cos((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
         double motionZ = MathHelper.cos((float) (yaw * 0.0174532922)) *
-                MathHelper.cos((float) (-pitch * 0.0174532922)) * this.muzzleVelocity;
+                MathHelper.cos((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
         int i = 0;
+        // total number of iterations is limited
         while (i < 100000) {
             currentPos = new Vec3d(currentPos.x + motionX, currentPos.y + motionY, currentPos.z + motionZ);
-            motionX *= 0.99900000095367432D;
-            motionY -= 0.002348776121; // random number yay
+            motionX *= 0.99900000095367432D; // air resistance (tm)
+            motionY -= 0.002348776121; // gravity dropoff, random number yay
             motionZ *= 0.99900000095367432D;
-            spawnWorkingParticles(world, currentPos);
+            spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
+            // check if we hit any blocks
             RayTraceResult rayTraceResult = world.rayTraceBlocks(oldPos, currentPos, false, true, false);
             List<EntityLivingBase> potentialHitEntities = world.getEntitiesWithinAABB(EntityLivingBase.class,
-                    new AxisAlignedBB(oldPos, currentPos));
+                    new AxisAlignedBB(oldPos, currentPos)); // check for entities that could have been hit in the BB between old and new pos
             if (!potentialHitEntities.isEmpty()) {
                 for (EntityLivingBase potentialHitEntity : potentialHitEntities) {
                     RayTraceResult entityRTR = potentialHitEntity.getEntityBoundingBox().calculateIntercept(oldPos,
-                            currentPos);
+                            currentPos); // this is used to find the exact hit position
                     if (entityRTR != null) {
                         if (world.rayTraceBlocks(oldPos, entityRTR.hitVec) == null) { // check for obstructing blocks to
                                                                                       // prevent shooting through walls
+
+                            // this is kinda dumb :skull:
                             List<EntityLivingBase> hitEntities = world.getEntitiesWithinAABB(EntityLivingBase.class,
-                                    new AxisAlignedBB(entityRTR.hitVec,
-                                            new Vec3d(entityRTR.hitVec.x + 0.0001, entityRTR.hitVec.y + 0.0001,
-                                                    entityRTR.hitVec.z + 0.0001)));
+                                    new AxisAlignedBB(entityRTR.hitVec, new Vec3d(entityRTR.hitVec.x + 0.0001,
+                                            entityRTR.hitVec.y + 0.0001, entityRTR.hitVec.z + 0.0001)));
+
                             for (EntityLivingBase elb : hitEntities) {
                                 elb.attackEntityFrom(SuSyDamageSources.BULLET, 10f);
                             }
@@ -88,7 +94,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
                 }
             }
             if (rayTraceResult != null) {
-                break;
+                break; // if we hit a block
             }
             oldPos = currentPos;
             i++;
@@ -107,8 +113,8 @@ public class SuSyGunBehavior implements IItemBehaviour {
 
         double yaw = player.rotationYaw % 360;
         // since the player shoots from the hand
-        double handXOffset = -0.5 * MathHelper.cos((float) (yaw * 0.0174532922));
-        double handZOffset = -0.5 * MathHelper.sin((float) (yaw * 0.0174532922));
+        double handXOffset = -0.35 * MathHelper.cos((float) (yaw * 0.0174532922));
+        double handZOffset = -0.35 * MathHelper.sin((float) (yaw * 0.0174532922));
         if (player.getPrimaryHand() == EnumHandSide.LEFT) {
             handXOffset *= -1;
             handZOffset *= -1;
@@ -118,7 +124,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
             handZOffset *= -1;
         }
         Random random = new Random();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < pellets; i++) {
             double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
             double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
             fire(world, new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
@@ -128,7 +134,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
     }
 
     @Override
-    public void addInformation(ItemStack itemStack, List<String> lines) {
+    public void addInformation(ItemStack itemStack, List<String> lines) { // to be changed
         if (itemStack.hasTagCompound()) {
             NBTTagCompound tag = itemStack.getSubCompound(TAG_ROOT);
             if (tag.hasKey(TAG_X) && tag.hasKey(TAG_Y) && tag.hasKey(TAG_Z)) {
@@ -143,7 +149,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
     }
 
     @SideOnly(Side.CLIENT)
-    public void spawnWorkingParticles(World world, Vec3d pos) {
+    public void spawnWorkingParticles(World world, Vec3d pos) { // debug
         SusyParticleFlame spark = new SusyParticleFlame(world,
                 pos.x, pos.y, pos.z,
                 0, 0, 0);
