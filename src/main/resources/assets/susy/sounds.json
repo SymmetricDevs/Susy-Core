@@ -71,6 +71,65 @@
       }
     ]
   },
+  "music.main_menu": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "susy:music/main_menu",
+        "stream": true
+      }
+    ]
+  },
+  "music.quest_trigger": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "susy:music/lv_milestone",
+        "stream": true
+      }
+    ]
+  },
+  "music.quest": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "susy:music/lv_milestone",
+        "stream": true
+      }
+    ]
+  },
+  "music.quest_trigger_mv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/mv_milestone", "stream": true }]
+  },
+  "music.quest_mv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/mv_milestone", "stream": true }]
+  },
+  "music.quest_trigger_hv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/hv_milestone", "stream": true }]
+  },
+  "music.quest_hv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/hv_milestone", "stream": true }]
+  },
+  "music.quest_trigger_ev": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/ev_milestone", "stream": true }]
+  },
+  "music.quest_ev": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/ev_milestone", "stream": true }]
+  },
+  "music.quest_trigger_iv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/iv_milestone", "stream": true }]
+  },
+  "music.quest_iv": {
+    "category": "music",
+    "sounds": [{ "name": "susy:music/iv_milestone", "stream": true }]
+  },
   "item.oxygen_sensor_beep" : {
     "category" : "player",
     "sounds" : [

@@ -4,10 +4,12 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,9 +23,6 @@ import supersymmetry.common.entities.EntityDropPod;
 import supersymmetry.common.event.MobHordePlayerData;
 import supersymmetry.common.event.MobHordeWorldData;
 import supersymmetry.common.faction.FactionHateManager;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class MobHordeEvent {
 
@@ -56,7 +55,11 @@ public class MobHordeEvent {
     private boolean runOnce = false;
     private boolean dropPodExplosions = true;
     public static int spawnHeight = 1000;
-    private static int invasionrange = 128;
+    private static int invasionrange = 150;
+
+    public boolean lastRunUsedPods = false;
+    public double lastRunCenterX;
+    public double lastRunCenterZ;
 
     public static final String TAG_INVASION_ID = "invasionId";
 
@@ -89,8 +92,10 @@ public class MobHordeEvent {
         MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
         MobHordePlayerData playerData = worldData.getPlayerData(player.getPersistentID());
         UUID invasionId = playerData.getOrCreateInvasionId();
+        boolean ok = run(player, invasionId, playerData::addEntity);
+        if (ok) playerData.recordRaidCenter(this, player);
         worldData.markDirty();
-        return run(player, invasionId, playerData::addEntity);
+        return ok;
     }
 
     // Old signature kept for other callers: mobs spawned this way are untagged and never auto-despawned.
@@ -99,6 +104,7 @@ public class MobHordeEvent {
     }
 
     public boolean run(EntityPlayer player, UUID invasionId, Consumer<UUID> uuidConsumer) throws NBTException {
+        lastRunUsedPods = false;
         int quantity = (int) (Math.random() * (quantityMax - quantityMin) + quantityMin);
         if (quantity <= 0) quantity = 1;
 
@@ -115,6 +121,12 @@ public class MobHordeEvent {
             }
         } else {
             didSpawn |= spawnMobWithPod(player, uuidConsumer, quantity, invasionId);
+        }
+
+        if (didSpawn) {
+            MobHordeWorldData worldData = MobHordeWorldData.get(player.world);
+            worldData.getPlayerData(player.getPersistentID()).recordRaidCenter(this, player);
+            worldData.markDirty();
         }
 
         return didSpawn;
@@ -261,6 +273,10 @@ public class MobHordeEvent {
     public boolean spawnMobWithPod(EntityPlayer player, Consumer<UUID> uuidConsumer, int quantity, UUID invasionId) {
         boolean finishSpawning = false;
 
+        lastRunUsedPods = true;
+        lastRunCenterX = player.posX;
+        lastRunCenterZ = player.posZ;
+
         int patternsCount = patternFunctions.size();
 
         if (patternsCount == 0) {
@@ -331,6 +347,9 @@ public class MobHordeEvent {
 
             Double offsetx = player.posX + (Math.random() - 0.5) * invasionrange;
             Double offsetz = player.posZ + (Math.random() - 0.5) * invasionrange;
+
+            lastRunCenterX = offsetx;
+            lastRunCenterZ = offsetz;
 
             for (int i = 0; i < patternsCount; i++) {
                 int qtyForThisPattern = quantitiesPerPattern[i];

@@ -89,6 +89,8 @@ private fun downgradeSourceSet(name: String): TaskProvider<DowngradeFiles> {
     return tasks.register<DowngradeFiles>("downgrade${capitalizedName}") {
         description = "Downgrade the $name sourceSet"
         inputCollection = objects.fileCollection().from(sourceSets.named(name).classesDirs)
+        // Class directories may not exist yet; register outputs before compilation.
+        outputs.dirs(outputMap.values)
     }
 }
 

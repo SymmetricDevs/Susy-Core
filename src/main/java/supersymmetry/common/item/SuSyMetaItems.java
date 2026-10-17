@@ -64,6 +64,7 @@ public class SuSyMetaItems {
     public static MetaValueItem INTEL_CHIP_FULL;
     public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem HYPER_DEFOLIANT;
+    public static MetaValueItem SKYWATCH_CHIP;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -215,6 +216,8 @@ public class SuSyMetaItems {
                 .addComponents(IntelChipFullBehaviour.INSTANCE);
         HYPER_DEFOLIANT = metaItem.addItem(29, "hyper_defoliant")
                 .addComponents(new HyperDefoliantBehavior());
+        SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
+                .addComponents(SkywatchChipBehaviour.INSTANCE);
     }
 
     private static void addExtraBehaviours() {

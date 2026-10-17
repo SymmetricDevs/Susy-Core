@@ -1269,6 +1269,8 @@ susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
 
 susy.multiblock.induction_furnace.crucible_material=Crucible Material: %s
+susy.multiblock.induction_furnace.waiting_outputs=Finished products are waiting for output space
+susy.multiblock.induction_furnace.cooling_blocked=Cooling exhaust is blocked; temperature will rise while operating
 
 # Sputtering Machine
 susy.machine.sputter_deposition.jei.group=Sputtering Machine
@@ -2281,7 +2283,7 @@ susy.machine.generic.tooltip.radius_warning=Expands it's radius every completed 
 susy.machine.defoliator.lv.name=Basic Defoliator
 susy.machine.defoliator.tooltip.info=Global warning has never been this easy!
 susy.machine.defoliator.tooltip.description=Destroys all plant life close to it without harming animals or people.
-tile.dead_water.dead_water.name=Dead Water
+tile.dead_water.dead_water.name=Still Water
 
 #Interference Dynamo
 susy.machine.interference_dynamo.lv.name=Basic Interference Dynamo
@@ -2339,6 +2341,9 @@ metaitem.intel_chip.name=Intelligence gathering chip
 metaitem.intel_chip_full.name=Intelligence gathering chip
 
 metaitem.hyper_defoliant.name=Hyper Defoliant
+
+metaitem.skywatch_chip.name=Skywatch Chip
+metaitem.skywatch_chip.tooltip=A rag-tag detector that constantly watches your skies
 
 # end of problem causers
 
