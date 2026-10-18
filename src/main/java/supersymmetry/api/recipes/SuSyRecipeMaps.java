@@ -172,7 +172,7 @@ public class SuSyRecipeMaps {
             new SusyRecipeBuilder(), false).setSound(GTSoundEvents.COMBUSTION);
 
     public static final RecipeMap<SimpleRecipeBuilder> VACUUM_DISTILLATION_RECIPES = new RecipeMap<>(
-            "vacuum_distillation", 1, true, 1, true, 2, true, 12, false, new SimpleRecipeBuilder(), false)
+            "vacuum_distillation", 1, true, 2, true, 2, true, 12, false, new SimpleRecipeBuilder(), false)
             .setSound(GTSoundEvents.CHEMICAL_REACTOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> SIEVE_DISTILLATION_RECIPES = new RecipeMap<>(
@@ -198,7 +198,7 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>(
-            "sputter_deposition", 6, 1, 2, 2, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ELECTROLYZER);
+            "sputter_deposition", 6, 2, 2, 2, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ELECTROLYZER);
 
     public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_DEPOSITION_RECIPES = new RecipeMap<>(
             "evaporation_deposition", 4, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
@@ -504,7 +504,7 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> ELECTRON_BEAM_LITHOGRAPHY = new RecipeMap<>(
-            "electron_beam_lithography", 1, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
+            "electron_beam_lithography", 2, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> WIRE_BONDING = new RecipeMap<>("wire_bonding", 3, 1, 1, 0,
             new SimpleRecipeBuilder(), false);
