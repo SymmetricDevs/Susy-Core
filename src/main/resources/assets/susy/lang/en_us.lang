@@ -240,6 +240,7 @@ tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mi
 tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
 tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
 tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
+title.sealed_door.stainless_steel.name=Stainless Steel Vacuum-Sealed Door
 
 tile.engine_casing.piston_block.name=Engine Block
 
@@ -271,6 +272,7 @@ tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
 tile.crucible.alumina.name=Alumina Crucible
 tile.crucible.magnesia.name=Magnesia Crucible
 tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
+tile.crucible.copper.name=Water-Cooled Copper Crucible
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -1244,6 +1246,7 @@ tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
 tile.susy_multiblock_casing2.monel_400_casing.name=Resistant Monel 400 Casing
+tile.susy_multiblock_casing2.stainless_steel_casing_pipe.name=Clean Stainless Steel Pipe Casing
 
 susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell

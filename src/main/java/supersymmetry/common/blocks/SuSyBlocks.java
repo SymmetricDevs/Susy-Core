@@ -172,6 +172,7 @@ public class SuSyBlocks {
     public static BlockInvertedActiveEccentricRoll INVERTED_ACTIVE_ECCENTRIC_ROLL;
     public static BlockGrinderCasing GRINDER_CASING;
     public static BlockGirthGearTooth GIRTH_GEAR_TOOTH;
+    public static BlockSealedDoor SEALED_DOOR;
     public static BlockMercuryFluid MERCURY_FLUID;
     public static BlockEDMElectrode EDM_ELECTRODE;
     public static BlockRobotArm ROBOT_ARM;
