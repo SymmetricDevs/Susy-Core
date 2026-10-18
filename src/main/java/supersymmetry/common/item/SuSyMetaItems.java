@@ -3,6 +3,8 @@ package supersymmetry.common.item;
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
+import static supersymmetry.common.item.behavior.GunFireMode.*;
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.gun;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -226,26 +228,22 @@ public class SuSyMetaItems {
                 .addComponents(new HyperDefoliantBehavior());
         SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
                 .addComponents(SkywatchChipBehaviour.INSTANCE);
-        PISTOL = metaItem.addItem(31, "pistol")
-                .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(SuSyGunType.PISTOL));
+        PISTOL = metaItem.addItem(31, "pistol").setMaxStackSize(1)
+                .addComponents(gun(20.0, 1.5, 6f, 8).build());
         PISTOL_AMMO = metaItem.addItem(32, "pistol_ammo")
                 .addComponents(new SuSyBulletBehavior(SuSyBulletType.PISTOL));
 
-        RIFLE = metaItem.addItem(33, "rifle")
-                .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(SuSyGunType.RIFLE));
+        RIFLE = metaItem.addItem(33, "rifle").setMaxStackSize(1)
+                .addComponents(gun(60.0, 0.13, 12f, 20).modes(BOLT_ACTION).build());
         RIFLE_AMMO = metaItem.addItem(34, "rifle_ammo")
                 .addComponents(new SuSyBulletBehavior(SuSyBulletType.RIFLE));
 
-        SHOTGUN = metaItem.addItem(35, "shotgun")
-                .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(SuSyGunType.SHOTGUN));
+        SHOTGUN = metaItem.addItem(35, "shotgun").setMaxStackSize(1)
+                .addComponents(gun(30.0, 10, 4f, 20).pellets(8).build());
         SHOTGUN_AMMO = metaItem.addItem(36, "shotgun_ammo")
                 .addComponents(new SuSyBulletBehavior(SuSyBulletType.SHOTGUN));
-        SMG = metaItem.addItem(37, "smg")
-                .setMaxStackSize(1)
-                .addComponents(new SuSyGunBehavior(SuSyGunType.SMG));
+        SMG = metaItem.addItem(37, "smg").setMaxStackSize(1)
+                .addComponents(gun(30.0, 1, 4f, 4).burst(3, 2).modes(FULL_AUTO, BURST, SEMI_AUTO).build());
         SMG_AMMO = metaItem.addItem(38, "smg_ammo")
                 .addComponents(new SuSyBulletBehavior(SuSyBulletType.SMG));
     }
