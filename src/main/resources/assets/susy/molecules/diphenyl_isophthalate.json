@@ -1,0 +1,158 @@
+{
+  "contents": [
+    {
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "x0": 0.0,
+      "y0": 0.0,
+      "x1": 0.0,
+      "y1": -1.0,
+      "angle": 0.0,
+      "type": "benzene"
+    },
+    {
+      "index": 6,
+      "element": "O",
+      "x": 2.598076,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 7,
+      "element": "",
+      "x": 3.4641016,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "O",
+      "x": 3.4641016,
+      "y": -1.0,
+      "type": "atom"
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 6,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 7,
+      "b": 8,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "indices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "x0": 4.3301272,
+      "y0": 1.5,
+      "x1": 4.3301272,
+      "y1": 0.5,
+      "angle": 0.0,
+      "type": "benzene"
+    },
+    {
+      "a": 7,
+      "b": 10,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "index": 15,
+      "element": "",
+      "x": 6.928203,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 16,
+      "element": "O",
+      "x": 6.928203,
+      "y": -1.0,
+      "type": "atom"
+    },
+    {
+      "index": 17,
+      "element": "O",
+      "x": 7.7942286,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "a": 12,
+      "b": 15,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 15,
+      "b": 17,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "indices": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "x0": 8.6602545,
+      "y0": 0.0,
+      "x1": 8.6602545,
+      "y1": -1.0,
+      "angle": 0.0,
+      "type": "benzene"
+    },
+    {
+      "a": 17,
+      "b": 18,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

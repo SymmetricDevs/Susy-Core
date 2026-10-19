@@ -1,0 +1,664 @@
+{
+    "molecules": [
+        {
+            "material": "gregtech:12_crown_4",
+            "file": "12_crown_4.json"
+        },
+        {
+            "material": "gregtech:12_crown_4_li",
+            "file": "12_crown_4_li.json"
+        },
+        {
+            "material": "gregtech:12_dibromoethane",
+            "file": "12_dibromoethane.json"
+        },
+        {
+            "material": "gregtech:14_butanediol",
+            "file": "14_butanediol.json"
+        },
+        {
+            "material": "gregtech:15_crown_5",
+            "file": "15_crown_5.json"
+        },
+        {
+            "material": "gregtech:15_crown_5_na",
+            "file": "15_crown_5_na.json"
+        },
+        {
+            "material": "gregtech:18_crown_6",
+            "file": "18_crown_6.json"
+        },
+        {
+            "material": "gregtech:18_crown_6_k",
+            "file": "18_crown_6_k.json"
+        },
+        {
+            "material": "gregtech:1_4_dichlorobutadiene",
+            "file": "1_4_dichlorobutadiene.json"
+        },
+        {
+            "material": "gregtech:34_ethylenedioxythiophene",
+            "file": "34_ethylenedioxythiophene.json"
+        },
+        {
+            "material": "gregtech:3_4_dichlorobutadiene",
+            "file": "3_4_dichlorobutadiene.json"
+        },
+        {
+            "material": "gregtech:44_difluorobenzophenone",
+            "file": "44_difluorobenzophenone.json"
+        },
+        {
+            "material": "gregtech:4_4_oxydianiline_pyromellitimide",
+            "file": "4_4_oxydianiline_pyromellitimide.json"
+        },
+        {
+            "material": "gregtech:4_fluorobenzoyl_chloride",
+            "file": "4_fluorobenzoyl_chloride.json"
+        },
+        {
+            "material": "gregtech:4_toluenesulfonyl_chloride",
+            "file": "4_toluenesulfonyl_chloride.json"
+        },
+        {
+            "material": "gregtech:acetic_acid",
+            "file": "acetic_acid.json"
+        },
+        {
+            "material": "gregtech:acetic_anhydride",
+            "file": "acetic_anhydride.json"
+        },
+        {
+            "material": "gregtech:acetone",
+            "file": "acetone.json"
+        },
+        {
+            "material": "gregtech:acetone_azine",
+            "file": "acetone_azine.json"
+        },
+        {
+            "material": "gregtech:acetone_cyanohydrin",
+            "file": "acetone_cyanohydrin.json"
+        },
+        {
+            "material": "gregtech:acetylene",
+            "file": "acetylene.json"
+        },
+        {
+            "material": "gregtech:adipic_acid",
+            "file": "adipic_acid.json"
+        },
+        {
+            "material": "gregtech:adiponitrile",
+            "file": "adiponitrile.json"
+        },
+        {
+            "material": "gregtech:allyl_chloride",
+            "file": "allyl_chloride.json"
+        },
+        {
+            "material": "gregtech:aminophenol",
+            "file": "aminophenol.json"
+        },
+        {
+            "material": "gregtech:ammonium_formate",
+            "file": "ammonium_formate.json"
+        },
+        {
+            "material": "gregtech:ammonium_oxalate",
+            "file": "ammonium_oxalate.json"
+        },
+        {
+            "material": "gregtech:aniline",
+            "file": "aniline.json"
+        },
+        {
+            "material": "gregtech:anthracene",
+            "file": "anthracene.json"
+        },
+        {
+            "material": "gregtech:benzene",
+            "file": "benzene.json"
+        },
+        {
+            "material": "gregtech:benzotrichloride",
+            "file": "benzotrichloride.json"
+        },
+        {
+            "material": "gregtech:benzoyl_chloride",
+            "file": "benzoyl_chloride.json"
+        },
+        {
+            "material": "gregtech:benzoyl_peroxide",
+            "file": "benzoyl_peroxide.json"
+        },
+        {
+            "material": "gregtech:bisphenol_a",
+            "file": "bisphenol_a.json"
+        },
+        {
+            "material": "gregtech:butadiene",
+            "file": "butadiene.json"
+        },
+        {
+            "material": "gregtech:butane",
+            "file": "butane.json"
+        },
+        {
+            "material": "gregtech:butanol",
+            "file": "butanol.json"
+        },
+        {
+            "material": "gregtech:butene",
+            "file": "butene.json"
+        },
+        {
+            "material": "gregtech:butyraldehyde",
+            "file": "butyraldehyde.json"
+        },
+        {
+            "material": "gregtech:caprolactam",
+            "file": "caprolactam.json"
+        },
+        {
+            "material": "gregtech:chloroacetate",
+            "file": "chloroacetate.json"
+        },
+        {
+            "material": "gregtech:chlorobenzene",
+            "file": "chlorobenzene.json"
+        },
+        {
+            "material": "gregtech:chloroethane",
+            "file": "chloroethane.json"
+        },
+        {
+            "material": "gregtech:chloroform",
+            "file": "chloroform.json"
+        },
+        {
+            "material": "gregtech:chloromethane",
+            "file": "chloromethane.json"
+        },
+        {
+            "material": "gregtech:chloroprene",
+            "file": "chloroprene.json"
+        },
+        {
+            "material": "gregtech:cryptand",
+            "file": "cryptand.json"
+        },
+        {
+            "material": "gregtech:cryptand_k",
+            "file": "cryptand_k.json"
+        },
+        {
+            "material": "gregtech:cryptand_li",
+            "file": "cryptand_li.json"
+        },
+        {
+            "material": "gregtech:cryptand_na",
+            "file": "cryptand_na.json"
+        },
+        {
+            "material": "gregtech:crystal_methamphetamine",
+            "file": "crystal_methamphetamine.json"
+        },
+        {
+            "material": "gregtech:cumene",
+            "file": "cumene.json"
+        },
+        {
+            "material": "gregtech:cyanoacetic_acid",
+            "file": "cyanoacetic_acid.json"
+        },
+        {
+            "material": "gregtech:cyclohexane",
+            "file": "cyclohexane.json"
+        },
+        {
+            "material": "gregtech:cyclohexanone_oxime",
+            "file": "cyclohexanone_oxime.json"
+        },
+        {
+            "material": "gregtech:diaminobenzidine",
+            "file": "diaminobenzidine.json"
+        },
+        {
+            "material": "gregtech:dichlorobenzene",
+            "file": "dichlorobenzene.json"
+        },
+        {
+            "material": "gregtech:dichlorobenzidine",
+            "file": "dichlorobenzidine.json"
+        },
+        {
+            "material": "gregtech:dichloroethane",
+            "file": "dichloroethane.json"
+        },
+        {
+            "material": "gregtech:diethylene_glycol",
+            "file": "diethylene_glycol.json"
+        },
+        {
+            "material": "gregtech:diethylenetriamine",
+            "file": "diethylenetriamine.json"
+        },
+        {
+            "material": "gregtech:diethylenetriamine_pentaacetonitrile",
+            "file": "diethylenetriamine_pentaacetonitrile.json"
+        },
+        {
+            "material": "gregtech:diethylenetriaminepentaacetic_acid",
+            "file": "diethylenetriaminepentaacetic_acid.json"
+        },
+        {
+            "material": "gregtech:dimethyl_maleate",
+            "file": "dimethyl_maleate.json"
+        },
+        {
+            "material": "gregtech:dimethyl_succinate",
+            "file": "dimethyl_succinate.json"
+        },
+        {
+            "material": "gregtech:dimethyl_sulfide",
+            "file": "dimethyl_sulfide.json"
+        },
+        {
+            "material": "gregtech:dimethyl_sulfoxide",
+            "file": "dimethyl_sulfoxide.json"
+        },
+        {
+            "material": "gregtech:dimethylbenzene",
+            "file": "dimethylbenzene.json"
+        },
+        {
+            "material": "gregtech:dimethyldichlorosilane",
+            "file": "dimethyldichlorosilane.json"
+        },
+        {
+            "material": "gregtech:dimethylformamide",
+            "file": "dimethylformamide.json"
+        },
+        {
+            "material": "gregtech:dimethylhydrazine",
+            "file": "dimethylhydrazine.json"
+        },
+        {
+            "material": "gregtech:diphenyl_isophthalate",
+            "file": "diphenyl_isophthalate.json"
+        },
+        {
+            "material": "gregtech:disodium_salt_of_hydroquinone",
+            "file": "disodium_salt_of_hydroquinone.json"
+        },
+        {
+            "material": "gregtech:durene",
+            "file": "durene.json"
+        },
+        {
+            "material": "gregtech:epichlorohydrin",
+            "file": "epichlorohydrin.json"
+        },
+        {
+            "material": "gregtech:ethane",
+            "file": "ethane.json"
+        },
+        {
+            "material": "gregtech:ethanol",
+            "file": "ethanol.json"
+        },
+        {
+            "material": "gregtech:ethyl_anthra_hydro_quinone",
+            "file": "ethyl_anthra_hydro_quinone.json"
+        },
+        {
+            "material": "gregtech:ethyl_anthra_quinone",
+            "file": "ethyl_anthra_quinone.json"
+        },
+        {
+            "material": "gregtech:ethyl_cyanoacetate",
+            "file": "ethyl_cyanoacetate.json"
+        },
+        {
+            "material": "gregtech:ethyl_cyanoacrylate",
+            "file": "ethyl_cyanoacrylate.json"
+        },
+        {
+            "material": "gregtech:ethyl_tertbutyl_ether",
+            "file": "ethyl_tertbutyl_ether.json"
+        },
+        {
+            "material": "gregtech:ethylanthraquinone",
+            "file": "ethylanthraquinone.json"
+        },
+        {
+            "material": "gregtech:ethylbenzene",
+            "file": "ethylbenzene.json"
+        },
+        {
+            "material": "gregtech:ethylene",
+            "file": "ethylene.json"
+        },
+        {
+            "material": "gregtech:ethylene_dichloride",
+            "file": "ethylene_dichloride.json"
+        },
+        {
+            "material": "gregtech:ethylene_glycol",
+            "file": "ethylene_glycol.json"
+        },
+        {
+            "material": "gregtech:ethylene_oxide",
+            "file": "ethylene_oxide.json"
+        },
+        {
+            "material": "gregtech:ethylene_thiourea",
+            "file": "ethylene_thiourea.json"
+        },
+        {
+            "material": "gregtech:ethylenediamine",
+            "file": "ethylenediamine.json"
+        },
+        {
+            "material": "gregtech:ferrocene",
+            "file": "ferrocene.json"
+        },
+        {
+            "material": "gregtech:fluorinated_ethylene_propylene",
+            "file": "fluorinated_ethylene_propylene.json"
+        },
+        {
+            "material": "gregtech:fluorobenzene",
+            "file": "fluorobenzene.json"
+        },
+        {
+            "material": "gregtech:formaldehyde",
+            "file": "formaldehyde.json"
+        },
+        {
+            "material": "gregtech:formamide",
+            "file": "formamide.json"
+        },
+        {
+            "material": "gregtech:formic_acid",
+            "file": "formic_acid.json"
+        },
+        {
+            "material": "gregtech:glycerol",
+            "file": "glycerol.json"
+        },
+        {
+            "material": "gregtech:glyceryl_trinitrate",
+            "file": "glyceryl_trinitrate.json"
+        },
+        {
+            "material": "gregtech:glycolonitrile",
+            "file": "glycolonitrile.json"
+        },
+        {
+            "material": "gregtech:hexafluorobutadiene",
+            "file": "hexafluorobutadiene.json"
+        },
+        {
+            "material": "gregtech:hexamethylenediamine",
+            "file": "hexamethylenediamine.json"
+        },
+        {
+            "material": "gregtech:hydroquinone",
+            "file": "hydroquinone.json"
+        },
+        {
+            "material": "gregtech:isoprene",
+            "file": "isoprene.json"
+        },
+        {
+            "material": "gregtech:ka_oil",
+            "file": "ka_oil.json"
+        },
+        {
+            "material": "gregtech:kapton_k",
+            "file": "kapton_k.json"
+        },
+        {
+            "material": "gregtech:maleic_anhydride",
+            "file": "maleic_anhydride.json"
+        },
+        {
+            "material": "gregtech:methane",
+            "file": "methane.json"
+        },
+        {
+            "material": "gregtech:methanol",
+            "file": "methanol.json"
+        },
+        {
+            "material": "gregtech:methyl_acetate",
+            "file": "methyl_acetate.json"
+        },
+        {
+            "material": "gregtech:methyl_formate",
+            "file": "methyl_formate.json"
+        },
+        {
+            "material": "gregtech:methyl_hydrazine",
+            "file": "methyl_hydrazine.json"
+        },
+        {
+            "material": "gregtech:methyl_methacrylate",
+            "file": "methyl_methacrylate.json"
+        },
+        {
+            "material": "gregtech:methylamine",
+            "file": "methylamine.json"
+        },
+        {
+            "material": "gregtech:n-butanol",
+            "file": "n-butanol.json"
+        },
+        {
+            "material": "gregtech:naphthalene",
+            "file": "naphthalene.json"
+        },
+        {
+            "material": "gregtech:neoprene",
+            "file": "neoprene.json"
+        },
+        {
+            "material": "gregtech:nitrobenzene",
+            "file": "nitrobenzene.json"
+        },
+        {
+            "material": "gregtech:nitrochlorobenzene",
+            "file": "nitrochlorobenzene.json"
+        },
+        {
+            "material": "gregtech:nylon_6_6",
+            "file": "nylon_6_6.json"
+        },
+        {
+            "material": "gregtech:octane",
+            "file": "octane.json"
+        },
+        {
+            "material": "gregtech:ortho_xylene",
+            "file": "ortho_xylene.json"
+        },
+        {
+            "material": "gregtech:oxalic_acid",
+            "file": "oxalic_acid.json"
+        },
+        {
+            "material": "gregtech:oxydianiline",
+            "file": "oxydianiline.json"
+        },
+        {
+            "material": "gregtech:perfluoroelastomer_rubber",
+            "file": "perfluoroelastomer_rubber.json"
+        },
+        {
+            "material": "gregtech:perfluoromethyl_vinyl_ether",
+            "file": "perfluoromethyl_vinyl_ether.json"
+        },
+        {
+            "material": "gregtech:phenol",
+            "file": "phenol.json"
+        },
+        {
+            "material": "gregtech:phenylacetic_acid",
+            "file": "phenylacetic_acid.json"
+        },
+        {
+            "material": "gregtech:phenylacetone",
+            "file": "phenylacetone.json"
+        },
+        {
+            "material": "gregtech:phthalic_acid",
+            "file": "phthalic_acid.json"
+        },
+        {
+            "material": "gregtech:phthalic_anhydride",
+            "file": "phthalic_anhydride.json"
+        },
+        {
+            "material": "gregtech:poly_34_ethylenedioxythiophene",
+            "file": "poly_34_ethylenedioxythiophene.json"
+        },
+        {
+            "material": "gregtech:poly_amic_acid",
+            "file": "poly_amic_acid.json"
+        },
+        {
+            "material": "gregtech:polybenzimidazole",
+            "file": "polybenzimidazole.json"
+        },
+        {
+            "material": "gregtech:polycaprolactam",
+            "file": "polycaprolactam.json"
+        },
+        {
+            "material": "gregtech:polydimethylsiloxane",
+            "file": "polydimethylsiloxane.json"
+        },
+        {
+            "material": "gregtech:polyether_ether_ketone",
+            "file": "polyether_ether_ketone.json"
+        },
+        {
+            "material": "gregtech:polyethylene",
+            "file": "polyethylene.json"
+        },
+        {
+            "material": "gregtech:polymethyl_methacrylate",
+            "file": "polymethyl_methacrylate.json"
+        },
+        {
+            "material": "gregtech:polyphenylene_sulfide",
+            "file": "polyphenylene_sulfide.json"
+        },
+        {
+            "material": "gregtech:polytetrafluoroethylene",
+            "file": "polytetrafluoroethylene.json"
+        },
+        {
+            "material": "gregtech:polyvinyl_acetate",
+            "file": "polyvinyl_acetate.json"
+        },
+        {
+            "material": "gregtech:polyvinyl_butyral",
+            "file": "polyvinyl_butyral.json"
+        },
+        {
+            "material": "gregtech:polyvinyl_chloride",
+            "file": "polyvinyl_chloride.json"
+        },
+        {
+            "material": "gregtech:propane",
+            "file": "propane.json"
+        },
+        {
+            "material": "gregtech:propene",
+            "file": "propene.json"
+        },
+        {
+            "material": "gregtech:pyromellitic_dianhydride",
+            "file": "pyromellitic_dianhydride.json"
+        },
+        {
+            "material": "gregtech:raw_perfluoroelastomer_rubber",
+            "file": "raw_perfluoroelastomer_rubber.json"
+        },
+        {
+            "material": "gregtech:raw_rubber",
+            "file": "raw_rubber.json"
+        },
+        {
+            "material": "gregtech:raw_styrene_butadiene_rubber",
+            "file": "raw_styrene_butadiene_rubber.json"
+        },
+        {
+            "material": "gregtech:rubber",
+            "file": "rubber.json"
+        },
+        {
+            "material": "gregtech:silicone_rubber",
+            "file": "silicone_rubber.json"
+        },
+        {
+            "material": "gregtech:sorbitol",
+            "file": "sorbitol.json"
+        },
+        {
+            "material": "gregtech:styrene",
+            "file": "styrene.json"
+        },
+        {
+            "material": "gregtech:styrene_butadiene_rubber",
+            "file": "styrene_butadiene_rubber.json"
+        },
+        {
+            "material": "gregtech:sugar",
+            "file": "sugar.json"
+        },
+        {
+            "material": "gregtech:tetrachloroethylene",
+            "file": "tetrachloroethylene.json"
+        },
+        {
+            "material": "gregtech:tetrafluoroethylene",
+            "file": "tetrafluoroethylene.json"
+        },
+        {
+            "material": "gregtech:tetranitromethane",
+            "file": "tetranitromethane.json"
+        },
+        {
+            "material": "gregtech:thiophene",
+            "file": "thiophene.json"
+        },
+        {
+            "material": "gregtech:toluene",
+            "file": "toluene.json"
+        },
+        {
+            "material": "gregtech:tributyl_phosphate",
+            "file": "tributyl_phosphate.json"
+        },
+        {
+            "material": "gregtech:triethylene_glycol",
+            "file": "triethylene_glycol.json"
+        },
+        {
+            "material": "gregtech:triglycol_dichloride",
+            "file": "triglycol_dichloride.json"
+        },
+        {
+            "material": "gregtech:vinyl_acetate",
+            "file": "vinyl_acetate.json"
+        },
+        {
+            "material": "gregtech:vinyl_chloride",
+            "file": "vinyl_chloride.json"
+        }
+    ]
+}

@@ -1,0 +1,812 @@
+{
+    "alloys": [
+        {
+            "material": "gregtech:abyssal_alloy",
+            "file": "abyssal_alloy.json"
+        },
+        {
+            "material": "gregtech:advanced_soldering_alloy",
+            "file": "advanced_soldering_alloy.json"
+        },
+        {
+            "material": "gregtech:aerorelient_steel",
+            "file": "aerorelient_steel.json"
+        },
+        {
+            "material": "gregtech:altaite",
+            "file": "altaite.json"
+        },
+        {
+            "material": "gregtech:aluminium_silicate",
+            "file": "aluminium_silicate.json"
+        },
+        {
+            "material": "gregtech:ancient_runicalium",
+            "file": "ancient_runicalium.json"
+        },
+        {
+            "material": "gregtech:andesite_alloy",
+            "file": "andesite_alloy.json"
+        },
+        {
+            "material": "gregtech:annealed_manasteel",
+            "file": "annealed_manasteel.json"
+        },
+        {
+            "material": "gregtech:astatine_bis_tritelluride_cobo_selenium",
+            "file": "astatine_bis_tritelluride_cobo_selenium.json"
+        },
+        {
+            "material": "gregtech:astatine_bis_tritelluride_cobo_selenium_over_iron_titanium_oxide",
+            "file": "astatine_bis_tritelluride_cobo_selenium_over_iron_titanium_oxide.json"
+        },
+        {
+            "material": "gregtech:astatium_bioselex_carbonite",
+            "file": "astatium_bioselex_carbonite.json"
+        },
+        {
+            "material": "gregtech:astazine-e",
+            "file": "astazine-e.json"
+        },
+        {
+            "material": "gregtech:astrenaloy_nx",
+            "file": "astrenaloy_nx.json"
+        },
+        {
+            "material": "gregtech:auralloy-omega",
+            "file": "auralloy-omega.json"
+        },
+        {
+            "material": "gregtech:austenitic_stainless_steel_304",
+            "file": "austenitic_stainless_steel_304.json"
+        },
+        {
+            "material": "gregtech:axiom-re",
+            "file": "axiom-re.json"
+        },
+        {
+            "material": "gregtech:battery_alloy",
+            "file": "battery_alloy.json"
+        },
+        {
+            "material": "gregtech:beryllium_aluminium_alloy",
+            "file": "beryllium_aluminium_alloy.json"
+        },
+        {
+            "material": "gregtech:beryllium_bronze",
+            "file": "beryllium_bronze.json"
+        },
+        {
+            "material": "gregtech:berzelianite",
+            "file": "berzelianite.json"
+        },
+        {
+            "material": "gregtech:birmabright",
+            "file": "birmabright.json"
+        },
+        {
+            "material": "gregtech:bismuth_bronze",
+            "file": "bismuth_bronze.json"
+        },
+        {
+            "material": "gregtech:bismuth_iridate",
+            "file": "bismuth_iridate.json"
+        },
+        {
+            "material": "gregtech:black_bronze",
+            "file": "black_bronze.json"
+        },
+        {
+            "material": "gregtech:black_matter",
+            "file": "black_matter.json"
+        },
+        {
+            "material": "gregtech:black_steel",
+            "file": "black_steel.json"
+        },
+        {
+            "material": "gregtech:blue_alloy",
+            "file": "blue_alloy.json"
+        },
+        {
+            "material": "gregtech:blue_steel",
+            "file": "blue_steel.json"
+        },
+        {
+            "material": "gregtech:borealic_steel",
+            "file": "borealic_steel.json"
+        },
+        {
+            "material": "gregtech:brass",
+            "file": "brass.json"
+        },
+        {
+            "material": "gregtech:bronze",
+            "file": "bronze.json"
+        },
+        {
+            "material": "gregtech:calaverite",
+            "file": "calaverite.json"
+        },
+        {
+            "material": "gregtech:cast_iron",
+            "file": "cast_iron.json"
+        },
+        {
+            "material": "gregtech:cerium_tritelluride",
+            "file": "cerium_tritelluride.json"
+        },
+        {
+            "material": "gregtech:certus_quartz_skystone_alloy",
+            "file": "certus_quartz_skystone_alloy.json"
+        },
+        {
+            "material": "gregtech:chaotixic_alloy",
+            "file": "chaotixic_alloy.json"
+        },
+        {
+            "material": "gregtech:clausthalite",
+            "file": "clausthalite.json"
+        },
+        {
+            "material": "gregtech:cobalt_brass",
+            "file": "cobalt_brass.json"
+        },
+        {
+            "material": "gregtech:conductive_alloy",
+            "file": "conductive_alloy.json"
+        },
+        {
+            "material": "gregtech:cupronickel",
+            "file": "cupronickel.json"
+        },
+        {
+            "material": "gregtech:darconite",
+            "file": "darconite.json"
+        },
+        {
+            "material": "gregtech:dark_soularium",
+            "file": "dark_soularium.json"
+        },
+        {
+            "material": "gregtech:dark_steel",
+            "file": "dark_steel.json"
+        },
+        {
+            "material": "gregtech:desh",
+            "file": "desh.json"
+        },
+        {
+            "material": "gregtech:desnium",
+            "file": "desnium.json"
+        },
+        {
+            "material": "gregtech:diamond_skystone_alloy",
+            "file": "diamond_skystone_alloy.json"
+        },
+        {
+            "material": "gregtech:draco_abyssal",
+            "file": "draco_abyssal.json"
+        },
+        {
+            "material": "gregtech:draconyallium",
+            "file": "draconyallium.json"
+        },
+        {
+            "material": "gregtech:dragonsteel",
+            "file": "dragonsteel.json"
+        },
+        {
+            "material": "gregtech:duralumin",
+            "file": "duralumin.json"
+        },
+        {
+            "material": "gregtech:echoing_fluxum_steel",
+            "file": "echoing_fluxum_steel.json"
+        },
+        {
+            "material": "gregtech:echolumium",
+            "file": "echolumium.json"
+        },
+        {
+            "material": "gregtech:electrical_steel",
+            "file": "electrical_steel.json"
+        },
+        {
+            "material": "gregtech:electrum",
+            "file": "electrum.json"
+        },
+        {
+            "material": "gregtech:electrum_flux",
+            "file": "electrum_flux.json"
+        },
+        {
+            "material": "gregtech:elgiloy",
+            "file": "elgiloy.json"
+        },
+        {
+            "material": "gregtech:end_steel",
+            "file": "end_steel.json"
+        },
+        {
+            "material": "gregtech:enderium",
+            "file": "enderium.json"
+        },
+        {
+            "material": "gregtech:energetic_alloy",
+            "file": "energetic_alloy.json"
+        },
+        {
+            "material": "gregtech:energite",
+            "file": "energite.json"
+        },
+        {
+            "material": "gregtech:enriched_naquadah_trinium_europium_duranide",
+            "file": "enriched_naquadah_trinium_europium_duranide.json"
+        },
+        {
+            "material": "gregtech:expeditalloy_d_17",
+            "file": "expeditalloy_d_17.json"
+        },
+        {
+            "material": "gregtech:flesh_alloy",
+            "file": "flesh_alloy.json"
+        },
+        {
+            "material": "gregtech:fluix",
+            "file": "fluix.json"
+        },
+        {
+            "material": "gregtech:fluix_steel",
+            "file": "fluix_steel.json"
+        },
+        {
+            "material": "gregtech:gallium_arsenide",
+            "file": "gallium_arsenide.json"
+        },
+        {
+            "material": "gregtech:galvanized_ethersteel",
+            "file": "galvanized_ethersteel.json"
+        },
+        {
+            "material": "gregtech:gold_skystone_alloy",
+            "file": "gold_skystone_alloy.json"
+        },
+        {
+            "material": "gregtech:hafnide_ceramic_base",
+            "file": "hafnide_ceramic_base.json"
+        },
+        {
+            "material": "gregtech:hafnide_ito_ceramic",
+            "file": "hafnide_ito_ceramic.json"
+        },
+        {
+            "material": "gregtech:hastelloy_c_276",
+            "file": "hastelloy_c_276.json"
+        },
+        {
+            "material": "gregtech:hastelloy_x",
+            "file": "hastelloy_x.json"
+        },
+        {
+            "material": "gregtech:hessite",
+            "file": "hessite.json"
+        },
+        {
+            "material": "gregtech:hsla_steel",
+            "file": "hsla_steel.json"
+        },
+        {
+            "material": "gregtech:hssd",
+            "file": "hssd.json"
+        },
+        {
+            "material": "gregtech:hsse",
+            "file": "hsse.json"
+        },
+        {
+            "material": "gregtech:hssg",
+            "file": "hssg.json"
+        },
+        {
+            "material": "gregtech:hsss",
+            "file": "hsss.json"
+        },
+        {
+            "material": "gregtech:hvga_steel",
+            "file": "hvga_steel.json"
+        },
+        {
+            "material": "gregtech:hydronalium",
+            "file": "hydronalium.json"
+        },
+        {
+            "material": "gregtech:igneous_bronze",
+            "file": "igneous_bronze.json"
+        },
+        {
+            "material": "gregtech:incoloy_ma_956",
+            "file": "incoloy_ma_956.json"
+        },
+        {
+            "material": "gregtech:indium_gallium_phosphide",
+            "file": "indium_gallium_phosphide.json"
+        },
+        {
+            "material": "gregtech:indium_tin_barium_titanium_cuprate",
+            "file": "indium_tin_barium_titanium_cuprate.json"
+        },
+        {
+            "material": "gregtech:indium_tin_lead_cadmium_soldering_alloy",
+            "file": "indium_tin_lead_cadmium_soldering_alloy.json"
+        },
+        {
+            "material": "gregtech:invar",
+            "file": "invar.json"
+        },
+        {
+            "material": "gregtech:iron_titanium_oxide",
+            "file": "iron_titanium_oxide.json"
+        },
+        {
+            "material": "gregtech:kanthal",
+            "file": "kanthal.json"
+        },
+        {
+            "material": "gregtech:kovar",
+            "file": "kovar.json"
+        },
+        {
+            "material": "gregtech:lanthanum_gold_cadmium_curium_sulfate",
+            "file": "lanthanum_gold_cadmium_curium_sulfate.json"
+        },
+        {
+            "material": "gregtech:lepton_coalescing_superalloy",
+            "file": "lepton_coalescing_superalloy.json"
+        },
+        {
+            "material": "gregtech:lumium",
+            "file": "lumium.json"
+        },
+        {
+            "material": "gregtech:magically_manifested_mechanical",
+            "file": "magically_manifested_mechanical.json"
+        },
+        {
+            "material": "gregtech:magmada_alloy",
+            "file": "magmada_alloy.json"
+        },
+        {
+            "material": "gregtech:magnalium",
+            "file": "magnalium.json"
+        },
+        {
+            "material": "gregtech:magnesium_diboride",
+            "file": "magnesium_diboride.json"
+        },
+        {
+            "material": "gregtech:manasteel",
+            "file": "manasteel.json"
+        },
+        {
+            "material": "gregtech:manganese_phosphide",
+            "file": "manganese_phosphide.json"
+        },
+        {
+            "material": "gregtech:manyullyn",
+            "file": "manyullyn.json"
+        },
+        {
+            "material": "gregtech:mar_m_200_steel",
+            "file": "mar_m_200_steel.json"
+        },
+        {
+            "material": "gregtech:maraging_steel_300",
+            "file": "maraging_steel_300.json"
+        },
+        {
+            "material": "gregtech:mechanical_stainless",
+            "file": "mechanical_stainless.json"
+        },
+        {
+            "material": "gregtech:melastrium_mox",
+            "file": "melastrium_mox.json"
+        },
+        {
+            "material": "gregtech:melodium",
+            "file": "melodium.json"
+        },
+        {
+            "material": "gregtech:mercury_barium_calcium_cuprate",
+            "file": "mercury_barium_calcium_cuprate.json"
+        },
+        {
+            "material": "gregtech:microversium",
+            "file": "microversium.json"
+        },
+        {
+            "material": "gregtech:molybdenum_disilicide",
+            "file": "molybdenum_disilicide.json"
+        },
+        {
+            "material": "gregtech:mythril",
+            "file": "mythril.json"
+        },
+        {
+            "material": "gregtech:mythrolic_alloy",
+            "file": "mythrolic_alloy.json"
+        },
+        {
+            "material": "gregtech:mythrotight_carbide_steel",
+            "file": "mythrotight_carbide_steel.json"
+        },
+        {
+            "material": "gregtech:naquadah_alloy",
+            "file": "naquadah_alloy.json"
+        },
+        {
+            "material": "gregtech:naquated_soldering_alloy",
+            "file": "naquated_soldering_alloy.json"
+        },
+        {
+            "material": "gregtech:neptunium_palladium_aluminium",
+            "file": "neptunium_palladium_aluminium.json"
+        },
+        {
+            "material": "gregtech:netherite_certus_quartz_skystone_alloy",
+            "file": "netherite_certus_quartz_skystone_alloy.json"
+        },
+        {
+            "material": "gregtech:netherite_gold_skystone_alloy",
+            "file": "netherite_gold_skystone_alloy.json"
+        },
+        {
+            "material": "gregtech:neutronium_silicon_carbide",
+            "file": "neutronium_silicon_carbide.json"
+        },
+        {
+            "material": "gregtech:nexus_steel",
+            "file": "nexus_steel.json"
+        },
+        {
+            "material": "gregtech:nichrome",
+            "file": "nichrome.json"
+        },
+        {
+            "material": "gregtech:nickel_zinc_ferrite",
+            "file": "nickel_zinc_ferrite.json"
+        },
+        {
+            "material": "gregtech:niobium_titanium",
+            "file": "niobium_titanium.json"
+        },
+        {
+            "material": "gregtech:nitinol",
+            "file": "nitinol.json"
+        },
+        {
+            "material": "gregtech:nyanium",
+            "file": "nyanium.json"
+        },
+        {
+            "material": "gregtech:ohmderblux_alloy",
+            "file": "ohmderblux_alloy.json"
+        },
+        {
+            "material": "gregtech:osmiridium",
+            "file": "osmiridium.json"
+        },
+        {
+            "material": "gregtech:osmium_steel",
+            "file": "osmium_steel.json"
+        },
+        {
+            "material": "gregtech:ostrum",
+            "file": "ostrum.json"
+        },
+        {
+            "material": "gregtech:ostrum_iodide",
+            "file": "ostrum_iodide.json"
+        },
+        {
+            "material": "gregtech:pentarch-v",
+            "file": "pentarch-v.json"
+        },
+        {
+            "material": "gregtech:permendur",
+            "file": "permendur.json"
+        },
+        {
+            "material": "gregtech:polonium_bismide",
+            "file": "polonium_bismide.json"
+        },
+        {
+            "material": "gregtech:polonium_flux",
+            "file": "polonium_flux.json"
+        },
+        {
+            "material": "gregtech:potin",
+            "file": "potin.json"
+        },
+        {
+            "material": "gregtech:prismalium",
+            "file": "prismalium.json"
+        },
+        {
+            "material": "gregtech:purified_netherite",
+            "file": "purified_netherite.json"
+        },
+        {
+            "material": "gregtech:red_alloy",
+            "file": "red_alloy.json"
+        },
+        {
+            "material": "gregtech:red_steel",
+            "file": "red_steel.json"
+        },
+        {
+            "material": "gregtech:rhenate_w",
+            "file": "rhenate_w.json"
+        },
+        {
+            "material": "gregtech:rhenium_super_composite_alloy",
+            "file": "rhenium_super_composite_alloy.json"
+        },
+        {
+            "material": "gregtech:rhodipalladic-desnite",
+            "file": "rhodipalladic-desnite.json"
+        },
+        {
+            "material": "gregtech:rhodium_plated_palladium",
+            "file": "rhodium_plated_palladium.json"
+        },
+        {
+            "material": "gregtech:rocket_alloy_t1",
+            "file": "rocket_alloy_t1.json"
+        },
+        {
+            "material": "gregtech:rocket_alloy_t2",
+            "file": "rocket_alloy_t2.json"
+        },
+        {
+            "material": "gregtech:rose_gold",
+            "file": "rose_gold.json"
+        },
+        {
+            "material": "gregtech:rtm_alloy",
+            "file": "rtm_alloy.json"
+        },
+        {
+            "material": "gregtech:ruridit",
+            "file": "ruridit.json"
+        },
+        {
+            "material": "gregtech:ruthenium_trinium_americium_neutronate",
+            "file": "ruthenium_trinium_americium_neutronate.json"
+        },
+        {
+            "material": "gregtech:samarium_iron_arsenic_oxide",
+            "file": "samarium_iron_arsenic_oxide.json"
+        },
+        {
+            "material": "gregtech:seaborgium_palladium_enriched_estalt_flevorium_alloy",
+            "file": "seaborgium_palladium_enriched_estalt_flevorium_alloy.json"
+        },
+        {
+            "material": "gregtech:shellite",
+            "file": "shellite.json"
+        },
+        {
+            "material": "gregtech:signalum",
+            "file": "signalum.json"
+        },
+        {
+            "material": "gregtech:silicon_bronze",
+            "file": "silicon_bronze.json"
+        },
+        {
+            "material": "gregtech:sky_steel",
+            "file": "sky_steel.json"
+        },
+        {
+            "material": "gregtech:sodium_lead_alloy",
+            "file": "sodium_lead_alloy.json"
+        },
+        {
+            "material": "gregtech:soldering_alloy",
+            "file": "soldering_alloy.json"
+        },
+        {
+            "material": "gregtech:soul_ascendant_cuperite",
+            "file": "soul_ascendant_cuperite.json"
+        },
+        {
+            "material": "gregtech:source_attuned_copper",
+            "file": "source_attuned_copper.json"
+        },
+        {
+            "material": "gregtech:stainless_steel",
+            "file": "stainless_steel.json"
+        },
+        {
+            "material": "gregtech:starium_alloy",
+            "file": "starium_alloy.json"
+        },
+        {
+            "material": "gregtech:steel",
+            "file": "steel.json"
+        },
+        {
+            "material": "gregtech:stellarium",
+            "file": "stellarium.json"
+        },
+        {
+            "material": "gregtech:stellite_100",
+            "file": "stellite_100.json"
+        },
+        {
+            "material": "gregtech:sterling_silver",
+            "file": "sterling_silver.json"
+        },
+        {
+            "material": "gregtech:tainted_titanium",
+            "file": "tainted_titanium.json"
+        },
+        {
+            "material": "gregtech:tainted_zircalloy",
+            "file": "tainted_zircalloy.json"
+        },
+        {
+            "material": "gregtech:tantalum_carbide",
+            "file": "tantalum_carbide.json"
+        },
+        {
+            "material": "gregtech:thacoloy_nq_42x",
+            "file": "thacoloy_nq_42x.json"
+        },
+        {
+            "material": "gregtech:thorium_plut_duranide_241",
+            "file": "thorium_plut_duranide_241.json"
+        },
+        {
+            "material": "gregtech:tiemannite",
+            "file": "tiemannite.json"
+        },
+        {
+            "material": "gregtech:tin_alloy",
+            "file": "tin_alloy.json"
+        },
+        {
+            "material": "gregtech:titan_steel",
+            "file": "titan_steel.json"
+        },
+        {
+            "material": "gregtech:titanium_carbide",
+            "file": "titanium_carbide.json"
+        },
+        {
+            "material": "gregtech:titanium_tungsten_carbide",
+            "file": "titanium_tungsten_carbide.json"
+        },
+        {
+            "material": "gregtech:transplatine",
+            "file": "transplatine.json"
+        },
+        {
+            "material": "gregtech:transuranic_naquadrium",
+            "file": "transuranic_naquadrium.json"
+        },
+        {
+            "material": "gregtech:transuranic_naquadrium_alloy",
+            "file": "transuranic_naquadrium_alloy.json"
+        },
+        {
+            "material": "gregtech:tri-osmic_matrix",
+            "file": "tri-osmic_matrix.json"
+        },
+        {
+            "material": "gregtech:trikoductive_neutro_steel",
+            "file": "trikoductive_neutro_steel.json"
+        },
+        {
+            "material": "gregtech:trinaquadalloy",
+            "file": "trinaquadalloy.json"
+        },
+        {
+            "material": "gregtech:tumbaga",
+            "file": "tumbaga.json"
+        },
+        {
+            "material": "gregtech:tungsten_carbide",
+            "file": "tungsten_carbide.json"
+        },
+        {
+            "material": "gregtech:tungsten_steel",
+            "file": "tungsten_steel.json"
+        },
+        {
+            "material": "gregtech:twinite",
+            "file": "twinite.json"
+        },
+        {
+            "material": "gregtech:ultimet",
+            "file": "ultimet.json"
+        },
+        {
+            "material": "gregtech:ultispestalloy_cmsh",
+            "file": "ultispestalloy_cmsh.json"
+        },
+        {
+            "material": "gregtech:uranium_rhodium_dinaquadide",
+            "file": "uranium_rhodium_dinaquadide.json"
+        },
+        {
+            "material": "gregtech:uranium_triplatinum",
+            "file": "uranium_triplatinum.json"
+        },
+        {
+            "material": "gregtech:vanadium_gallium",
+            "file": "vanadium_gallium.json"
+        },
+        {
+            "material": "gregtech:vanadium_steel",
+            "file": "vanadium_steel.json"
+        },
+        {
+            "material": "gregtech:vastaqalloy_cr_4200x",
+            "file": "vastaqalloy_cr_4200x.json"
+        },
+        {
+            "material": "gregtech:vibrant_alloy",
+            "file": "vibrant_alloy.json"
+        },
+        {
+            "material": "gregtech:vintanium",
+            "file": "vintanium.json"
+        },
+        {
+            "material": "gregtech:void",
+            "file": "void.json"
+        },
+        {
+            "material": "gregtech:watertight_steel",
+            "file": "watertight_steel.json"
+        },
+        {
+            "material": "gregtech:weapon_grade_naquadah",
+            "file": "weapon_grade_naquadah.json"
+        },
+        {
+            "material": "gregtech:wizarding_steel",
+            "file": "wizarding_steel.json"
+        },
+        {
+            "material": "gregtech:yttrium_barium_cuprate",
+            "file": "yttrium_barium_cuprate.json"
+        },
+        {
+            "material": "gregtech:zalloy",
+            "file": "zalloy.json"
+        },
+        {
+            "material": "gregtech:zamak",
+            "file": "zamak.json"
+        },
+        {
+            "material": "gregtech:zerodic_trinate_steel",
+            "file": "zerodic_trinate_steel.json"
+        },
+        {
+            "material": "gregtech:zeron_100",
+            "file": "zeron_100.json"
+        },
+        {
+            "material": "gregtech:zircalloy_4",
+            "file": "zircalloy_4.json"
+        },
+        {
+            "material": "gregtech:zirconium_selenide_diiodide",
+            "file": "zirconium_selenide_diiodide.json"
+        }
+    ]
+}

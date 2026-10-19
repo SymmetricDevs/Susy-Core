@@ -1,0 +1,402 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "O",
+      "x": 1.763,
+      "y": -0.647,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "",
+      "x": 2.543,
+      "y": -0.003,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "",
+      "x": 4.16,
+      "y": -0.003,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 4.952,
+      "y": -0.647,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "",
+      "x": 5.956,
+      "y": -0.647,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "",
+      "x": 6.502,
+      "y": -1.324,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "N",
+      "x": 5.69,
+      "y": -1.929,
+      "type": "atom"
+    },
+    {
+      "index": 7,
+      "element": "",
+      "x": 6.691,
+      "y": -2.08,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "",
+      "x": 5.851,
+      "y": -2.629,
+      "type": "atom"
+    },
+    {
+      "index": 9,
+      "element": "O",
+      "x": 4.952,
+      "y": -2.276,
+      "type": "atom"
+    },
+    {
+      "index": 10,
+      "element": "",
+      "x": 4.16,
+      "y": -2.904,
+      "type": "atom"
+    },
+    {
+      "index": 11,
+      "element": "",
+      "x": 2.543,
+      "y": -2.904,
+      "type": "atom"
+    },
+    {
+      "index": 12,
+      "element": "O",
+      "x": 1.763,
+      "y": -2.276,
+      "type": "atom"
+    },
+    {
+      "index": 13,
+      "element": "",
+      "x": 0.853,
+      "y": -2.629,
+      "type": "atom"
+    },
+    {
+      "index": 14,
+      "element": "",
+      "x": 0.023,
+      "y": -2.08,
+      "type": "atom"
+    },
+    {
+      "index": 15,
+      "element": "N",
+      "x": 1.013,
+      "y": -1.929,
+      "type": "atom"
+    },
+    {
+      "index": 16,
+      "element": "",
+      "x": 0.201,
+      "y": -1.324,
+      "type": "atom"
+    },
+    {
+      "index": 17,
+      "element": "",
+      "x": 0.748,
+      "y": -0.647,
+      "type": "atom"
+    },
+    {
+      "index": 18,
+      "element": "",
+      "x": 6.312,
+      "y": -2.866,
+      "type": "atom"
+    },
+    {
+      "index": 19,
+      "element": "",
+      "x": 5.509,
+      "y": -3.446,
+      "type": "atom"
+    },
+    {
+      "index": 20,
+      "element": "O",
+      "x": 4.614,
+      "y": -3.105,
+      "type": "atom"
+    },
+    {
+      "index": 21,
+      "element": "",
+      "x": 3.859,
+      "y": -3.773,
+      "type": "atom"
+    },
+    {
+      "index": 22,
+      "element": "",
+      "x": 2.848,
+      "y": -3.773,
+      "type": "atom"
+    },
+    {
+      "index": 23,
+      "element": "O",
+      "x": 2.101,
+      "y": -3.105,
+      "type": "atom"
+    },
+    {
+      "index": 24,
+      "element": "",
+      "x": 1.195,
+      "y": -3.446,
+      "type": "atom"
+    },
+    {
+      "index": 25,
+      "element": "",
+      "x": 0.392,
+      "y": -2.866,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 6,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 7,
+      "b": 8,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 8,
+      "b": 9,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 9,
+      "b": 10,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 10,
+      "b": 11,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 11,
+      "b": 12,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 12,
+      "b": 13,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 13,
+      "b": 14,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 14,
+      "b": 15,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 15,
+      "b": 16,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 16,
+      "b": 17,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 17,
+      "b": 0,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 6,
+      "b": 18,
+      "lines": [
+        "outward"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 18,
+      "b": 19,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 19,
+      "b": 20,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 20,
+      "b": 21,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 21,
+      "b": 22,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 22,
+      "b": 23,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 23,
+      "b": 24,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 24,
+      "b": 25,
+      "lines": [
+        "thick"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 15,
+      "b": 25,
+      "lines": [
+        "outward"
+      ],
+      "type": "bond"
+    }
+  ]
+}

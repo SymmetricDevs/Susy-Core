@@ -1,0 +1,12 @@
+{
+    "components": [
+        [
+            "gregtech:iron",
+            39
+        ],
+        [
+            "gregtech:carbon",
+            5
+        ]
+    ]
+}

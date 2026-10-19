@@ -1,0 +1,106 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "F",
+      "x": 0.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "x0": 0.8660254,
+      "y0": 1.5,
+      "x1": 0.8660254,
+      "y1": 0.5,
+      "angle": 0.0,
+      "type": "benzene"
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "index": 7,
+      "element": "",
+      "x": 3.4641016,
+      "y": 2.0,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "O",
+      "x": 3.4641016,
+      "y": 3.0,
+      "type": "atom"
+    },
+    {
+      "a": 5,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 7,
+      "b": 8,
+      "centered": true,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "indices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "x0": 4.3301272,
+      "y0": 1.5,
+      "x1": 4.3301272,
+      "y1": 0.5,
+      "angle": 0.0,
+      "type": "benzene"
+    },
+    {
+      "index": 15,
+      "element": "F",
+      "x": 6.928203,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "a": 7,
+      "b": 9,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 12,
+      "b": 15,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}
