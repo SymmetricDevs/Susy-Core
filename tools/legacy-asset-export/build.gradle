@@ -1,0 +1,59 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+def sourceAssets = file(project.findProperty('upstreamAssets') ?: '../../../gregtech-molecule-drawings/src/generated/resources/assets')
+def targetAssets = file(project.findProperty('targetAssets') ?: '../../src/main/resources/assets/susy')
+
+tasks.register('exportLegacyAssets') {
+    doLast {
+        def unmapped = []
+        ['molecules', 'alloys'].each { kind ->
+            def sourceDir = new File(sourceAssets, "gtceu/${kind}")
+            def targetDir = new File(targetAssets, kind)
+            if (!sourceDir.isDirectory()) return
+
+            targetDir.mkdirs()
+            def entries = []
+            sourceDir.eachFileMatch(~/.*\.json/) { sourceFile ->
+                def id = sourceFile.name.substring(0, sourceFile.name.length() - 5)
+                new File(targetDir, sourceFile.name).bytes = sourceFile.bytes
+                entries << [material: "gregtech:${id}", file: sourceFile.name]
+                if (kind == 'alloys') {
+                    def alloy = new JsonSlurper().parse(sourceFile)
+                    if (alloy.components instanceof List) {
+                        alloy.components.eachWithIndex { component, componentIndex ->
+                            if (component instanceof String && component.startsWith('gtceu:')) {
+                                alloy.components[componentIndex] = component.replaceFirst('^gtceu:', 'gregtech:')
+                            } else if (component instanceof List && component.size() > 0 &&
+                                    component[0] instanceof String && component[0].startsWith('gtceu:')) {
+                                component[0] = component[0].replaceFirst('^gtceu:', 'gregtech:')
+                            }
+                        }
+                        new File(targetDir, sourceFile.name).text = JsonOutput.prettyPrint(JsonOutput.toJson(alloy)) + '\n'
+                    }
+                }
+            }
+            entries.sort { a, b -> a.material <=> b.material }
+            new File(targetDir, 'index.json').text = JsonOutput.prettyPrint(JsonOutput.toJson([(kind): entries])) + '\n'
+
+            sourceAssets.eachDir { namespaceDir ->
+                if (namespaceDir.name != 'gtceu') {
+                    def otherDir = new File(namespaceDir, kind)
+                    if (otherDir.isDirectory()) otherDir.eachFileMatch(~/.*\.json/) { f ->
+                        unmapped << "${namespaceDir.name}/${kind}/${f.name}"
+                    }
+                }
+            }
+        }
+
+        new File(targetAssets, 'UPSTREAM.txt').text = '''Geometry and composition data adapted from GregTech Molecule Drawings by Ruben Vergauwen.
+Source: https://github.com/RubenVerg/gregtech-molecule-drawings
+Upstream license: GNU Lesser General Public License version 3; see LICENSE-MOLDRAW.md at the Susy-Core repository root.
+GTCEu IDs are exported under the legacy gregtech namespace and resolved against the 1.12 material registry at runtime.
+'''
+        new File(targetAssets, 'unmapped-source-assets.txt').text =
+                'Source generated molecule/alloy assets outside the GTCEu namespace are not mapped by this exporter:\n' +
+                unmapped.unique().sort().join('\n') + '\n'
+        println "Exported GTCEu molecules and alloys to ${targetAssets}; ${unmapped.unique().size()} other assets listed as unmapped."
+    }
+}
