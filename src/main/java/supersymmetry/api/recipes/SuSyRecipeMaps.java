@@ -198,7 +198,7 @@ public class SuSyRecipeMaps {
             new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<SimpleRecipeBuilder> SPUTTER_DEPOSITION_RECIPES = new RecipeMap<>(
-            "sputter_deposition", 6, 2, 2, 2, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ELECTROLYZER);
+            "sputter_deposition", 6, 4, 2, 2, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ELECTROLYZER);
 
     public static final RecipeMap<SimpleRecipeBuilder> EVAPORATION_DEPOSITION_RECIPES = new RecipeMap<>(
             "evaporation_deposition", 4, 1, 0, 0, new SimpleRecipeBuilder(), false).setSound(GTSoundEvents.ARC);
