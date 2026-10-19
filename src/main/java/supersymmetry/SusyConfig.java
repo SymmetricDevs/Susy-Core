@@ -34,4 +34,20 @@ public class SusyConfig {
             "Default: false" })
     @Config.RequiresMcRestart
     public static boolean enableMissingModelGen = false;
+
+    @Config.Comment("Enable MolDraw features in GregTech material and fluid tooltips.")
+    @Config.Name("molecule_drawings")
+    public static boolean enableMoleculeDrawings = true;
+
+    @Config.Comment("Require Shift to be held before molecule diagrams or alloy charts are shown.")
+    @Config.Name("molecule_drawings_shift_only")
+    public static boolean moleculeDrawingsShiftOnly = false;
+
+    @Config.Comment("Enable alloy composition charts in GregTech material tooltips.")
+    @Config.Name("alloy_tooltips")
+    public static boolean enableAlloyTooltips = true;
+
+    @Config.Comment("Use element colors for the chemical formula in GregTech material tooltips.")
+    @Config.Name("moldraw_formula_colors")
+    public static boolean enableMoleculeFormulaColors = true;
 }

@@ -1,0 +1,4 @@
+Geometry and composition data adapted from GregTech Molecule Drawings by Ruben Vergauwen.
+Source: https://github.com/RubenVerg/gregtech-molecule-drawings
+Upstream license: GNU Lesser General Public License version 3; see LICENSE-MOLDRAW.md at the Susy-Core repository root.
+GTCEu IDs are exported under the legacy gregtech namespace and resolved against the 1.12 material registry at runtime.

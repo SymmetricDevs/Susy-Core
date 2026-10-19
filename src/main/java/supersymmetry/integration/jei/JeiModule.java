@@ -12,6 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -47,6 +49,20 @@ import supersymmetry.modules.SuSyModules;
                 name = "SuSy JEI Integration",
                 description = "SuSy JEI Integration Module")
 public class JeiModule extends IntegrationSubmodule implements IModPlugin {
+
+    private static volatile IJeiRuntime runtime;
+
+    @Override
+    public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+        runtime = jeiRuntime;
+    }
+
+    public static FluidStack getHoveredFluid() {
+        IJeiRuntime current = runtime;
+        if (current == null || current.getIngredientListOverlay() == null) return null;
+        Object hovered = current.getIngredientListOverlay().getIngredientUnderMouse();
+        return hovered instanceof FluidStack ? (FluidStack) hovered : null;
+    }
 
     @Override
     public void registerSubtypes(@NotNull ISubtypeRegistry subtypeRegistry) {

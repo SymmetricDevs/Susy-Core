@@ -1,0 +1,9 @@
+GregTech Molecule Drawings attribution
+
+Portions of the molecule drawing feature and molecule data were adapted from
+GregTech Molecule Drawings by RubenVerg and contributors:
+https://github.com/RubenVerg/gregtech-molecule-drawings
+
+Original license: GNU Lesser General Public License version 3.
+See LICENSE-MOLDRAW.md. This 1.12.2 integration is modified for Susy-Core.
+Susy-Core as a whole is distributed under GNU General Public License version 3.
