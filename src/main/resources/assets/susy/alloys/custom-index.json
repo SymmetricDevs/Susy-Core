@@ -65,6 +65,10 @@
       "file": "custom/derive.json"
     },
     {
+      "material": "susy:aluminosilicate_mix",
+      "file": "custom/aluminosilicate_mix.json"
+    },
+    {
       "material": "susy:amblygonite",
       "file": "custom/derive.json"
     },
@@ -625,6 +629,10 @@
       "file": "custom/derive.json"
     },
     {
+      "material": "susy:mo_si_precursor",
+      "file": "custom/mo_si_precursor.json"
+    },
+    {
       "material": "susy:mottramite",
       "file": "custom/derive.json"
     },
@@ -1079,6 +1087,10 @@
     {
       "material": "susy:thoriated_tungsten",
       "file": "custom/derive.json"
+    },
+    {
+      "material": "susy:thoriated_tungsten_mixture",
+      "file": "custom/thoriated_tungsten_mixture.json"
     },
     {
       "material": "susy:thorium_chloride",

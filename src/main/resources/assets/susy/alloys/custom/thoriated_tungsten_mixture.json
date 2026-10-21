@@ -1,0 +1,16 @@
+{
+  "components": [
+    [
+      "susy:tungsten_trioxide",
+      396
+    ],
+    [
+      "susy:thorium_dioxide",
+      2
+    ],
+    [
+      "susy:rhenium_heptoxide",
+      9
+    ]
+  ]
+}

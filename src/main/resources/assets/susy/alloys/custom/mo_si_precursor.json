@@ -1,0 +1,16 @@
+{
+  "components": [
+    [
+      "susy:aluminosilicate_mix",
+      1
+    ],
+    [
+      "gregtech:molybdenum",
+      8
+    ],
+    [
+      "gregtech:silicon",
+      16
+    ]
+  ]
+}

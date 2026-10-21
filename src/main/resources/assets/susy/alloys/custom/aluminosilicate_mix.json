@@ -1,0 +1,28 @@
+{
+  "components": [
+    [
+      "gregtech:silicon_dioxide",
+      270
+    ],
+    [
+      "susy:alumina",
+      27
+    ],
+    [
+      "gregtech:magnesia",
+      18
+    ],
+    [
+      "susy:sodium_oxide",
+      9
+    ],
+    [
+      "gregtech:quicklime",
+      7
+    ],
+    [
+      "susy:iron_iii_oxide",
+      2
+    ]
+  ]
+}
