@@ -95,6 +95,7 @@ import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
+import supersymmetry.api.input.SuSyKeyBind;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
@@ -108,6 +109,7 @@ public class ClientProxy extends CommonProxy {
         super.preLoad();
         GeckoLib.initialize();
         SpeakerCodec.register();
+        SuSyKeyBind.init();
         SusyMetaEntities.initRenderers();
         SuSyIRLoader.initEntityRenderers();
         VariantCoverableBlockRenderer.preInit();
