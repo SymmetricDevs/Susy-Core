@@ -120,7 +120,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
             motionX *= (1 - muzzleVelocity * 0.000001); // air resistance (tm)
             motionY -= 2 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
             motionZ *= (1 - muzzleVelocity * 0.000001);
-            // spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
+            spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
             // check if we hit any blocks
             RayTraceResult rayTraceResult = world.rayTraceBlocks(oldPos, currentPos, false, true, false);
             List<EntityLivingBase> potentialHitEntities = world.getEntitiesWithinAABB(EntityLivingBase.class,
@@ -249,14 +249,14 @@ public class SuSyGunBehavior implements IItemBehaviour {
 
         if (stack.getItem() == SuSyMetaItems.PISTOL.getStackForm().getItem() &&
                 stack.getMetadata() == SuSyMetaItems.PISTOL.getStackForm().getMetadata()) {
-            ammoType = RED_TRACER;
+            ammoType = FULL_METAL_JACKET;
         } else if (stack.getItem() == SuSyMetaItems.RIFLE.getStackForm().getItem() &&
                 stack.getMetadata() == SuSyMetaItems.RIFLE.getStackForm().getMetadata()) {
-                    ammoType = GREEN_TRACER;
+                    ammoType = ARMOR_PIERCING_INCENDIARY;
                 } else
             if (stack.getItem() == SuSyMetaItems.SMG.getStackForm().getItem() &&
                     stack.getMetadata() == SuSyMetaItems.SMG.getStackForm().getMetadata()) {
-                        ammoType = BLUE_TRACER;
+                        ammoType = SABOT;
                     } else
                 if (stack.getItem() == SuSyMetaItems.SHOTGUN.getStackForm().getItem() &&
                         stack.getMetadata() == SuSyMetaItems.SHOTGUN.getStackForm().getMetadata()) {
@@ -286,9 +286,18 @@ public class SuSyGunBehavior implements IItemBehaviour {
             handZOffset *= -1;
         }
         Random random = player.getRNG();
+        double currentSpeed = Math.sqrt(Math.pow(player.posX - player.prevPosX, 2) + Math.pow(player.posY - player.prevPosY, 2) + Math.pow(player.posZ - player.prevPosZ, 2));
+        double spreadModifier = 100 * currentSpeed;
+        if (player.isSneaking()) {
+            spreadModifier -= 0.15;
+        }
+        
+        if (player.isSprinting()) {
+            spreadModifier += 1;
+        }
         for (int i = 0; i < ammoType.numPellets; i++) {
-            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
-            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2;
+            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * (1 + spreadModifier);
+            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * (1 + spreadModifier);
             fire(player.getEntityWorld(), player,
                     new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
                     player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
