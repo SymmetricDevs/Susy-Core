@@ -1,26 +1,27 @@
 package supersymmetry.mixins.gregtech;
 
+import java.util.function.DoubleSupplier;
+
+import net.minecraftforge.items.IItemHandlerModifiable;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import gregtech.api.gui.ModularUI;
 import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.gui.ModularUI;
 import gregtech.api.recipes.RecipeMap;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import supersymmetry.api.gui.MachineGuiLayout;
-
-import java.util.function.DoubleSupplier;
 
 @Mixin(value = RecipeMap.class, remap = false)
 public abstract class RecipeMapCircuitAssemblerGuiMixin {
 
     @ModifyArgs(method = "addInventorySlotGroup",
-               at = @At(value = "INVOKE",
-                        target = "Lgregtech/api/recipes/RecipeMap;addSlot(Lgregtech/api/gui/ModularUI$Builder;IIILnet/minecraftforge/items/IItemHandlerModifiable;Lgregtech/api/capability/impl/FluidTankList;ZZ)V"),
-               remap = false)
+                at = @At(value = "INVOKE",
+                         target = "Lgregtech/api/recipes/RecipeMap;addSlot(Lgregtech/api/gui/ModularUI$Builder;IIILnet/minecraftforge/items/IItemHandlerModifiable;Lgregtech/api/capability/impl/FluidTankList;ZZ)V"),
+                remap = false)
     private void susy$placeMachineSlots(Args args, ModularUI.Builder builder,
                                         IItemHandlerModifiable itemHandler,
                                         FluidTankList fluidHandler, boolean isOutputs,
@@ -55,10 +56,10 @@ public abstract class RecipeMapCircuitAssemblerGuiMixin {
                index = 0,
                remap = false)
     private int susy$extendCircuitAssemblerBackground(int yOffset, DoubleSupplier progressSupplier,
-                                                       IItemHandlerModifiable importItems,
-                                                       IItemHandlerModifiable exportItems,
-                                                       FluidTankList importFluids,
-                                                       FluidTankList exportFluids, int recipeYOffset) {
+                                                      IItemHandlerModifiable importItems,
+                                                      IItemHandlerModifiable exportItems,
+                                                      FluidTankList importFluids,
+                                                      FluidTankList exportFluids, int recipeYOffset) {
         RecipeMap<?> recipeMap = (RecipeMap<?>) (Object) this;
         if ("circuit_assembler".equals(recipeMap.unlocalizedName) ||
                 "crystallizer".equals(recipeMap.unlocalizedName)) {
