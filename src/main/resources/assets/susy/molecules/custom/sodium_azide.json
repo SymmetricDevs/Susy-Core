@@ -1,0 +1,52 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Na",
+      "x": 2.5979,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "N",
+      "x": 0.8659,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "N",
+      "x": 0.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "N",
+      "x": 1.732,
+      "y": 0.9999,
+      "type": "atom"
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

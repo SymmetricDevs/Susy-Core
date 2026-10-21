@@ -1,0 +1,98 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "U",
+      "x": 0.0,
+      "y": 1.8239,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "U",
+      "x": 2.5,
+      "y": 3.0739,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 5.2869,
+      "y": 0.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 8.0739,
+      "y": 3.0739,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 4,
+      "element": "O",
+      "x": 0.0,
+      "y": 4.3239,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 5,
+      "element": "O",
+      "x": 2.5,
+      "y": 5.5739,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 6,
+      "element": "O",
+      "x": 5.2869,
+      "y": 2.5,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 7,
+      "element": "O",
+      "x": 8.0739,
+      "y": 5.5739,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 8,
+      "element": "O",
+      "x": 0.0,
+      "y": 6.8239,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 9,
+      "element": "N",
+      "x": 5.5369,
+      "y": 5.5369,
+      "type": "atom",
+      "above": [
+        "H",
+        4
+      ],
+      "below": "+"
+    },
+    {
+      "index": 10,
+      "element": "N",
+      "x": 5.5369,
+      "y": 8.6108,
+      "type": "atom",
+      "above": [
+        "H",
+        4
+      ],
+      "below": "+"
+    }
+  ]
+}

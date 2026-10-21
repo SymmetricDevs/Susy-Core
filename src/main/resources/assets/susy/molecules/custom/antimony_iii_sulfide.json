@@ -1,0 +1,75 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Sb",
+      "x": 4.5981,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Sb",
+      "x": 2.866,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "S",
+      "x": 3.732,
+      "y": -0.25,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "S",
+      "x": 5.4641,
+      "y": -0.25,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "S",
+      "x": 2.0,
+      "y": -0.25,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

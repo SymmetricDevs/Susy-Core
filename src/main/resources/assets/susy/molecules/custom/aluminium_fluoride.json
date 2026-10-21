@@ -1,0 +1,59 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Al",
+      "x": 0.866,
+      "y": 1.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "F",
+      "x": 1.7321,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "F",
+      "x": 0.0,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "F",
+      "x": 0.866,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    }
+  ]
+}

@@ -1,1 +1,2184 @@
-{"molecules":[]}
+{
+  "molecules": [
+    {
+      "material": "susy:acanthite",
+      "file": "custom/silver_sulfide.json"
+    },
+    {
+      "material": "susy:acetamide",
+      "file": "custom/acetamide.json"
+    },
+    {
+      "material": "susy:acetanilide",
+      "file": "custom/acetanilide.json"
+    },
+    {
+      "material": "susy:acetone_cyanohydrin",
+      "file": "acetone_cyanohydrin.json"
+    },
+    {
+      "material": "susy:acetylene",
+      "file": "acetylene.json"
+    },
+    {
+      "material": "susy:acid_washed_silicon_dioxide",
+      "file": "custom/acid_washed_silicon_dioxide.json"
+    },
+    {
+      "material": "susy:activated_carbon",
+      "file": "custom/activated_carbon.json"
+    },
+    {
+      "material": "susy:activated_raney_cobalt",
+      "file": "custom/activated_raney_cobalt.json"
+    },
+    {
+      "material": "susy:activated_raney_copper",
+      "file": "custom/activated_raney_copper.json"
+    },
+    {
+      "material": "susy:activated_raney_nickel",
+      "file": "custom/activated_raney_nickel.json"
+    },
+    {
+      "material": "susy:adamantane",
+      "file": "custom/adamantane.json"
+    },
+    {
+      "material": "susy:adamantanone",
+      "file": "custom/adamantanone.json"
+    },
+    {
+      "material": "susy:adipic_acid",
+      "file": "adipic_acid.json"
+    },
+    {
+      "material": "susy:alumina",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:aluminium_chloride",
+      "file": "custom/aluminium_chloride.json"
+    },
+    {
+      "material": "susy:aluminium_chloride_hexahydrate",
+      "file": "custom/aluminium_chloride_hexahydrate.json"
+    },
+    {
+      "material": "susy:aluminium_fluoride",
+      "file": "custom/aluminium_fluoride.json"
+    },
+    {
+      "material": "susy:aluminium_hydroxide",
+      "file": "custom/aluminium_hydroxide.json"
+    },
+    {
+      "material": "susy:aluminium_isopropoxide",
+      "file": "custom/aluminium_isopropoxide.json"
+    },
+    {
+      "material": "susy:aluminium_nitride",
+      "file": "custom/aluminium_nitride.json"
+    },
+    {
+      "material": "susy:aluminium_phenolate",
+      "file": "custom/aluminium_phenolate.json"
+    },
+    {
+      "material": "susy:aluminium_phosphate",
+      "file": "custom/aluminium_phosphate.json"
+    },
+    {
+      "material": "susy:aluminium_sulfate",
+      "file": "custom/aluminium_sulfate.json"
+    },
+    {
+      "material": "susy:ammonium_alum",
+      "file": "custom/ammonium_alum.json"
+    },
+    {
+      "material": "susy:ammonium_bifluoride",
+      "file": "custom/ammonium_bifluoride.json"
+    },
+    {
+      "material": "susy:ammonium_bisulfate",
+      "file": "custom/ammonium_bisulfate.json"
+    },
+    {
+      "material": "susy:ammonium_carbonate",
+      "file": "custom/ammonium_carbonate.json"
+    },
+    {
+      "material": "susy:ammonium_dihydrogen_phosphate",
+      "file": "custom/ammonium_dihydrogen_phosphate.json"
+    },
+    {
+      "material": "susy:ammonium_dimolybdate",
+      "file": "custom/ammonium_dimolybdate.json"
+    },
+    {
+      "material": "susy:ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:ammonium_fluoride",
+      "file": "custom/ammonium_fluoride.json"
+    },
+    {
+      "material": "susy:ammonium_hexachloroiridate",
+      "file": "custom/ammonium_hexachloroiridate.json"
+    },
+    {
+      "material": "susy:ammonium_hexachloroplatinate",
+      "file": "custom/ammonium_hexachloroplatinate.json"
+    },
+    {
+      "material": "susy:ammonium_hexachlororhodate",
+      "file": "custom/ammonium_hexachlororhodate.json"
+    },
+    {
+      "material": "susy:ammonium_hexachlororuthenate",
+      "file": "custom/ammonium_hexachlororuthenate.json"
+    },
+    {
+      "material": "susy:ammonium_iodide",
+      "file": "custom/ammonium_iodide.json"
+    },
+    {
+      "material": "susy:ammonium_iron_ii_sulfate",
+      "file": "custom/ammonium_iron_ii_sulfate.json"
+    },
+    {
+      "material": "susy:ammonium_metavanadate",
+      "file": "custom/ammonium_metavanadate.json"
+    },
+    {
+      "material": "susy:ammonium_nitrate",
+      "file": "custom/ammonium_nitrate.json"
+    },
+    {
+      "material": "susy:ammonium_perrhenate",
+      "file": "custom/ammonium_perrhenate.json"
+    },
+    {
+      "material": "susy:ammonium_persulfate",
+      "file": "custom/ammonium_persulfate.json"
+    },
+    {
+      "material": "susy:ammonium_sulfate",
+      "file": "custom/ammonium_sulfate.json"
+    },
+    {
+      "material": "susy:ammonium_thiocyanate",
+      "file": "custom/ammonium_thiocyanate.json"
+    },
+    {
+      "material": "susy:amoco_isophthalic_acid",
+      "file": "custom/amoco_isophthalic_acid.json"
+    },
+    {
+      "material": "susy:amoco_terephthalic_acid",
+      "file": "custom/amoco_terephthalic_acid.json"
+    },
+    {
+      "material": "susy:amorphous_boron",
+      "file": "custom/electrolytic_boron.json"
+    },
+    {
+      "material": "susy:anglesite",
+      "file": "custom/anglesite.json"
+    },
+    {
+      "material": "susy:anthracene",
+      "file": "anthracene.json"
+    },
+    {
+      "material": "susy:antimony_iii_sulfide",
+      "file": "custom/antimony_iii_sulfide.json"
+    },
+    {
+      "material": "susy:antimony_trichloride",
+      "file": "custom/antimony_trichloride.json"
+    },
+    {
+      "material": "susy:antimony_v_oxide",
+      "file": "custom/antimony_v_oxide.json"
+    },
+    {
+      "material": "susy:arsenic_iii_sulfide",
+      "file": "custom/arsenic_iii_sulfide.json"
+    },
+    {
+      "material": "susy:arsenic_v_oxide",
+      "file": "custom/arsenic_v_oxide.json"
+    },
+    {
+      "material": "susy:arsenic_v_sulfide",
+      "file": "custom/arsenic_v_sulfide.json"
+    },
+    {
+      "material": "susy:arsenopyrite",
+      "file": "custom/arsenopyrite.json"
+    },
+    {
+      "material": "susy:azobisisobutyronitrile",
+      "file": "custom/azobisisobutyronitrile.json"
+    },
+    {
+      "material": "susy:azurite",
+      "file": "custom/azurite.json"
+    },
+    {
+      "material": "susy:baddeleyite",
+      "file": "custom/baddeleyite.json"
+    },
+    {
+      "material": "susy:baked_carbon",
+      "file": "custom/baked_carbon.json"
+    },
+    {
+      "material": "susy:barium_carbonate",
+      "file": "custom/barium_carbonate.json"
+    },
+    {
+      "material": "susy:barium_chloride",
+      "file": "custom/barium_chloride.json"
+    },
+    {
+      "material": "susy:barium_fluoride",
+      "file": "custom/barium_fluoride.json"
+    },
+    {
+      "material": "susy:barium_nitrate",
+      "file": "custom/barium_nitrate.json"
+    },
+    {
+      "material": "susy:barium_oxide",
+      "file": "custom/barium_oxide.json"
+    },
+    {
+      "material": "susy:benzotriazole",
+      "file": "custom/benzotriazole.json"
+    },
+    {
+      "material": "susy:beryllium_chloride",
+      "file": "custom/beryllium_chloride.json"
+    },
+    {
+      "material": "susy:beryllium_fluoride",
+      "file": "custom/beryllium_fluoride.json"
+    },
+    {
+      "material": "susy:beryllium_hydroxide",
+      "file": "custom/beryllium_hydroxide.json"
+    },
+    {
+      "material": "susy:beryllium_oxide",
+      "file": "custom/beryllium_oxide.json"
+    },
+    {
+      "material": "susy:beta_spodumene",
+      "file": "custom/beta_spodumene.json"
+    },
+    {
+      "material": "susy:bis_benzonitrile_palladium_ii_chloride",
+      "file": "custom/bis_benzonitrile_palladium_ii_chloride.json"
+    },
+    {
+      "material": "susy:biscyclooctadienenickel_zero",
+      "file": "custom/biscyclooctadienenickel_zero.json"
+    },
+    {
+      "material": "susy:bismuth_copper",
+      "file": "custom/bismuth_copper.json"
+    },
+    {
+      "material": "susy:bismuth_iii_oxide",
+      "file": "custom/bismuth_iii_oxide.json"
+    },
+    {
+      "material": "susy:bismuthinite",
+      "file": "custom/bismuthinite.json"
+    },
+    {
+      "material": "susy:boehmite",
+      "file": "custom/boehmite.json"
+    },
+    {
+      "material": "susy:boric_acid",
+      "file": "custom/boric_acid.json"
+    },
+    {
+      "material": "susy:boron_carbide",
+      "file": "custom/boron_carbide.json"
+    },
+    {
+      "material": "susy:boron_nitride",
+      "file": "custom/boron_nitride.json"
+    },
+    {
+      "material": "susy:boron_trioxide",
+      "file": "custom/boron_trioxide.json"
+    },
+    {
+      "material": "susy:cadmium_oxide",
+      "file": "custom/cadmium_oxide.json"
+    },
+    {
+      "material": "susy:caesium_alum",
+      "file": "custom/caesium_alum.json"
+    },
+    {
+      "material": "susy:caesium_chloride",
+      "file": "custom/caesium_chloride.json"
+    },
+    {
+      "material": "susy:calcium_acetate",
+      "file": "custom/calcium_acetate.json"
+    },
+    {
+      "material": "susy:calcium_cyanamide",
+      "file": "custom/calcium_cyanamide.json"
+    },
+    {
+      "material": "susy:calcium_hydroxide",
+      "file": "custom/calcium_hydroxide.json"
+    },
+    {
+      "material": "susy:calcium_metaphosphate",
+      "file": "custom/calcium_metaphosphate.json"
+    },
+    {
+      "material": "susy:calcium_metasilicate",
+      "file": "custom/calcium_metasilicate.json"
+    },
+    {
+      "material": "susy:calcium_oxalate",
+      "file": "custom/calcium_oxalate.json"
+    },
+    {
+      "material": "susy:calcium_salicylate",
+      "file": "custom/calcium_salicylate.json"
+    },
+    {
+      "material": "susy:calcium_sulfate",
+      "file": "custom/calcium_sulfate.json"
+    },
+    {
+      "material": "susy:calcium_sulfide",
+      "file": "custom/calcium_sulfide.json"
+    },
+    {
+      "material": "susy:calcium_sulfite",
+      "file": "custom/calcium_sulfite.json"
+    },
+    {
+      "material": "susy:calcium_zirconate",
+      "file": "custom/calcium_zirconate.json"
+    },
+    {
+      "material": "susy:caliche",
+      "file": "custom/caliche.json"
+    },
+    {
+      "material": "susy:caprolactam_oxime",
+      "file": "custom/caprolactam_oxime.json"
+    },
+    {
+      "material": "susy:capsaicin",
+      "file": "custom/capsaicin.json"
+    },
+    {
+      "material": "susy:carbon_tetrabromide",
+      "file": "custom/carbon_tetrabromide.json"
+    },
+    {
+      "material": "susy:carnallite",
+      "file": "custom/carnallite.json"
+    },
+    {
+      "material": "susy:celestine",
+      "file": "custom/celestine.json"
+    },
+    {
+      "material": "susy:cerium_iii_carbonate",
+      "file": "custom/cerium_iii_carbonate.json"
+    },
+    {
+      "material": "susy:cerium_iii_chloride",
+      "file": "custom/cerium_iii_chloride.json"
+    },
+    {
+      "material": "susy:cerium_iii_fluoride",
+      "file": "custom/cerium_iii_fluoride.json"
+    },
+    {
+      "material": "susy:cerium_iii_oxide",
+      "file": "custom/cerium_iii_oxide.json"
+    },
+    {
+      "material": "susy:cerium_iv_hydroxide",
+      "file": "custom/cerium_iv_hydroxide.json"
+    },
+    {
+      "material": "susy:cerium_iv_oxide",
+      "file": "custom/cerium_iv_oxide.json"
+    },
+    {
+      "material": "susy:cerussite",
+      "file": "custom/cerussite.json"
+    },
+    {
+      "material": "susy:chlorargyrite",
+      "file": "custom/chlorargyrite.json"
+    },
+    {
+      "material": "susy:chloroacetic_anhydride",
+      "file": "custom/chloroacetic_anhydride.json"
+    },
+    {
+      "material": "susy:chloroauric_acid",
+      "file": "custom/chloroauric_acid.json"
+    },
+    {
+      "material": "susy:chloroethane",
+      "file": "chloroethane.json"
+    },
+    {
+      "material": "susy:chloroprene",
+      "file": "chloroprene.json"
+    },
+    {
+      "material": "susy:chromium_iii_carbonate",
+      "file": "custom/chromium_iii_carbonate.json"
+    },
+    {
+      "material": "susy:chromium_iii_oxide",
+      "file": "custom/chromium_iii_oxide.json"
+    },
+    {
+      "material": "susy:chromium_iii_sulfate",
+      "file": "custom/chromium_iii_sulfate.json"
+    },
+    {
+      "material": "susy:cobalt_aluminate",
+      "file": "custom/cobalt_aluminate.json"
+    },
+    {
+      "material": "susy:cobalt_ii_acetate_tetrahydrate",
+      "file": "custom/cobalt_ii_acetate_tetrahydrate.json"
+    },
+    {
+      "material": "susy:cobalt_sulfate",
+      "file": "custom/cobalt_sulfate.json"
+    },
+    {
+      "material": "susy:copper_i_oxide",
+      "file": "custom/copper_i_oxide.json"
+    },
+    {
+      "material": "susy:copper_i_sulfide",
+      "file": "custom/copper_i_sulfide.json"
+    },
+    {
+      "material": "susy:copper_ii_acetate_monohydrate",
+      "file": "custom/copper_ii_acetate_monohydrate.json"
+    },
+    {
+      "material": "susy:copper_ii_chloride",
+      "file": "custom/copper_ii_chloride.json"
+    },
+    {
+      "material": "susy:copper_ii_nitrate",
+      "file": "custom/copper_ii_nitrate.json"
+    },
+    {
+      "material": "susy:copper_ii_sulfide",
+      "file": "custom/copper_ii_sulfide.json"
+    },
+    {
+      "material": "susy:copper_monosulfide",
+      "file": "custom/copper_monosulfide.json"
+    },
+    {
+      "material": "susy:copper_sulfate",
+      "file": "custom/copper_sulfate.json"
+    },
+    {
+      "material": "susy:corundum",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:crude_dimethyl_terephthalate",
+      "file": "custom/crude_dimethyl_terephthalate.json"
+    },
+    {
+      "material": "susy:crude_scandium_hydroxide",
+      "file": "custom/crude_scandium_hydroxide.json"
+    },
+    {
+      "material": "susy:cryolite",
+      "file": "custom/cryolite.json"
+    },
+    {
+      "material": "susy:cyanamide",
+      "file": "custom/cyanamide.json"
+    },
+    {
+      "material": "susy:depleted_ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:depleted_uranium_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:diamminedichloropalladium",
+      "file": "custom/diamminedichloropalladium.json"
+    },
+    {
+      "material": "susy:diammonium_hydrogen_phosphate",
+      "file": "custom/diammonium_hydrogen_phosphate.json"
+    },
+    {
+      "material": "susy:dichlorodiphenyl_sulfone",
+      "file": "custom/dichlorodiphenyl_sulfone.json"
+    },
+    {
+      "material": "susy:dicyanamide",
+      "file": "custom/dicyanamide.json"
+    },
+    {
+      "material": "susy:dicyandiamide",
+      "file": "custom/dicyanamide.json"
+    },
+    {
+      "material": "susy:didodecylbenzene",
+      "file": "custom/didodecylbenzene.json"
+    },
+    {
+      "material": "susy:diethylammonium_chloride",
+      "file": "custom/diethylammonium_chloride.json"
+    },
+    {
+      "material": "susy:diethylene_glycol",
+      "file": "diethylene_glycol.json"
+    },
+    {
+      "material": "susy:diethylenetriamine",
+      "file": "diethylenetriamine.json"
+    },
+    {
+      "material": "susy:diiodobenzene",
+      "file": "custom/diiodobenzene.json"
+    },
+    {
+      "material": "susy:dimethyl_sulfide",
+      "file": "dimethyl_sulfide.json"
+    },
+    {
+      "material": "susy:dimethyl_sulfoxide",
+      "file": "dimethyl_sulfoxide.json"
+    },
+    {
+      "material": "susy:dimethyl_terephthalate",
+      "file": "custom/crude_dimethyl_terephthalate.json"
+    },
+    {
+      "material": "susy:dimethylformamide",
+      "file": "dimethylformamide.json"
+    },
+    {
+      "material": "susy:dinonylnaphthalene",
+      "file": "custom/dinonylnaphthalene.json"
+    },
+    {
+      "material": "susy:diphenyl_sulfide",
+      "file": "custom/diphenyl_sulfide.json"
+    },
+    {
+      "material": "susy:diphenyl_sulfone",
+      "file": "custom/diphenyl_sulfone.json"
+    },
+    {
+      "material": "susy:diphenyl_sulfoxide",
+      "file": "custom/diphenyl_sulfoxide.json"
+    },
+    {
+      "material": "susy:dipotassium_phosphate",
+      "file": "custom/dipotassium_phosphate.json"
+    },
+    {
+      "material": "susy:disodium_phosphate",
+      "file": "custom/disodium_phosphate.json"
+    },
+    {
+      "material": "susy:distilled_graphene",
+      "file": "custom/distilled_graphene.json"
+    },
+    {
+      "material": "susy:dodecylbenzene",
+      "file": "custom/dodecylbenzene.json"
+    },
+    {
+      "material": "susy:dodecylphenol",
+      "file": "custom/dodecylphenol.json"
+    },
+    {
+      "material": "susy:dried_graphene",
+      "file": "custom/dried_graphene.json"
+    },
+    {
+      "material": "susy:durene",
+      "file": "durene.json"
+    },
+    {
+      "material": "susy:dysprosium_chloride",
+      "file": "custom/dysprosium_chloride.json"
+    },
+    {
+      "material": "susy:dysprosium_fluoride",
+      "file": "custom/dysprosium_fluoride.json"
+    },
+    {
+      "material": "susy:electrolytic_boron",
+      "file": "custom/electrolytic_boron.json"
+    },
+    {
+      "material": "susy:electrolytic_chromium",
+      "file": "custom/electrolytic_chromium.json"
+    },
+    {
+      "material": "susy:epsomite",
+      "file": "custom/epsomite.json"
+    },
+    {
+      "material": "susy:erbium_fluoride",
+      "file": "custom/erbium_fluoride.json"
+    },
+    {
+      "material": "susy:erbium_sulfate",
+      "file": "custom/erbium_sulfate.json"
+    },
+    {
+      "material": "susy:ethylene_glycol",
+      "file": "ethylene_glycol.json"
+    },
+    {
+      "material": "susy:ethylene_oxide",
+      "file": "ethylene_oxide.json"
+    },
+    {
+      "material": "susy:ethylenediamine",
+      "file": "ethylenediamine.json"
+    },
+    {
+      "material": "susy:europium_iii_oxide",
+      "file": "custom/europium_iii_oxide.json"
+    },
+    {
+      "material": "susy:ferrocene",
+      "file": "ferrocene.json"
+    },
+    {
+      "material": "susy:fine_gamma_alumina",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:fluorobenzene",
+      "file": "fluorobenzene.json"
+    },
+    {
+      "material": "susy:formaldehyde",
+      "file": "formaldehyde.json"
+    },
+    {
+      "material": "susy:formic_acid",
+      "file": "formic_acid.json"
+    },
+    {
+      "material": "susy:four_aminophenol",
+      "file": "custom/four_aminophenol.json"
+    },
+    {
+      "material": "susy:four_chloronitrobenzene",
+      "file": "custom/four_chloronitrobenzene.json"
+    },
+    {
+      "material": "susy:four_four_difluorobenzophenone",
+      "file": "custom/four_four_difluorobenzophenone.json"
+    },
+    {
+      "material": "susy:four_four_oxydianiline",
+      "file": "custom/four_four_oxydianiline.json"
+    },
+    {
+      "material": "susy:four_nitro_n_methyl_phthalimide",
+      "file": "custom/four_nitro_n_methyl_phthalimide.json"
+    },
+    {
+      "material": "susy:four_nitroaniline",
+      "file": "custom/four_nitroaniline.json"
+    },
+    {
+      "material": "susy:four_nitrophenol",
+      "file": "custom/four_nitrophenol.json"
+    },
+    {
+      "material": "susy:four_nonylphenoxyacetic_acid",
+      "file": "custom/four_nonylphenoxyacetic_acid.json"
+    },
+    {
+      "material": "susy:fused_zirconia",
+      "file": "custom/fused_zirconia.json"
+    },
+    {
+      "material": "susy:gadolinium_carbonate",
+      "file": "custom/gadolinium_carbonate.json"
+    },
+    {
+      "material": "susy:gadolinium_chloride",
+      "file": "custom/gadolinium_chloride.json"
+    },
+    {
+      "material": "susy:gadolinium_fluoride",
+      "file": "custom/gadolinium_fluoride.json"
+    },
+    {
+      "material": "susy:gallic_acid",
+      "file": "custom/gallic_acid.json"
+    },
+    {
+      "material": "susy:gallium_trioxide",
+      "file": "custom/gallium_trioxide.json"
+    },
+    {
+      "material": "susy:gamma_alumina",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:germanium_dioxide",
+      "file": "custom/germanium_dioxide.json"
+    },
+    {
+      "material": "susy:goethite",
+      "file": "custom/goethite.json"
+    },
+    {
+      "material": "susy:green_carbon",
+      "file": "custom/green_carbon.json"
+    },
+    {
+      "material": "susy:guanidinium_chloride",
+      "file": "custom/guanidinium_chloride.json"
+    },
+    {
+      "material": "susy:guanidinium_nitrate",
+      "file": "custom/guanidinium_nitrate.json"
+    },
+    {
+      "material": "susy:hafnium_dioxide",
+      "file": "custom/hafnium_dioxide.json"
+    },
+    {
+      "material": "susy:hafnium_iodide",
+      "file": "custom/hafnium_iodide.json"
+    },
+    {
+      "material": "susy:hafnium_tetrachloride",
+      "file": "custom/hafnium_tetrachloride.json"
+    },
+    {
+      "material": "susy:haleu_235",
+      "file": "custom/haleu_235.json"
+    },
+    {
+      "material": "susy:haleu_235_ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:haleu_235_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:hematite",
+      "file": "custom/hematite.json"
+    },
+    {
+      "material": "susy:heu_235",
+      "file": "custom/heu_235.json"
+    },
+    {
+      "material": "susy:heu_235_ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:heu_235_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:hexachloroethane",
+      "file": "custom/hexachloroethane.json"
+    },
+    {
+      "material": "susy:hexamethylenetetramine",
+      "file": "custom/hexamethylenetetramine.json"
+    },
+    {
+      "material": "susy:high_purity_cobalt_oxide",
+      "file": "custom/high_purity_cobalt_oxide.json"
+    },
+    {
+      "material": "susy:holmium_chloride",
+      "file": "custom/holmium_chloride.json"
+    },
+    {
+      "material": "susy:holmium_fluoride",
+      "file": "custom/holmium_fluoride.json"
+    },
+    {
+      "material": "susy:hydrogen_dodecyl_sulfate",
+      "file": "custom/hydrogen_dodecyl_sulfate.json"
+    },
+    {
+      "material": "susy:hydroquinone",
+      "file": "hydroquinone.json"
+    },
+    {
+      "material": "susy:hydroxyapatite",
+      "file": "custom/hydroxyapatite.json"
+    },
+    {
+      "material": "susy:indium_chloride",
+      "file": "custom/indium_chloride.json"
+    },
+    {
+      "material": "susy:indium_hydroxide",
+      "file": "custom/indium_hydroxide.json"
+    },
+    {
+      "material": "susy:indium_oxide",
+      "file": "custom/indium_oxide.json"
+    },
+    {
+      "material": "susy:iridium_iii_chloride_trihydrate",
+      "file": "custom/iridium_iii_chloride_trihydrate.json"
+    },
+    {
+      "material": "susy:iron_carbonate",
+      "file": "custom/iron_carbonate.json"
+    },
+    {
+      "material": "susy:iron_ii_chloride",
+      "file": "custom/iron_ii_chloride.json"
+    },
+    {
+      "material": "susy:iron_ii_hydroxide",
+      "file": "custom/iron_ii_hydroxide.json"
+    },
+    {
+      "material": "susy:iron_ii_oxide",
+      "file": "custom/iron_ii_oxide.json"
+    },
+    {
+      "material": "susy:iron_ii_sulfide",
+      "file": "custom/iron_ii_sulfide.json"
+    },
+    {
+      "material": "susy:iron_iii_hydroxide",
+      "file": "custom/iron_iii_hydroxide.json"
+    },
+    {
+      "material": "susy:iron_iii_oxide",
+      "file": "custom/hematite.json"
+    },
+    {
+      "material": "susy:iron_iii_sulfate",
+      "file": "custom/iron_iii_sulfate.json"
+    },
+    {
+      "material": "susy:iron_oxalate_dihydrate",
+      "file": "custom/iron_oxalate_dihydrate.json"
+    },
+    {
+      "material": "susy:iron_sulfate",
+      "file": "custom/iron_sulfate.json"
+    },
+    {
+      "material": "susy:iron_two_three_oxide",
+      "file": "custom/iron_two_three_oxide.json"
+    },
+    {
+      "material": "susy:isophthalic_acid",
+      "file": "custom/amoco_isophthalic_acid.json"
+    },
+    {
+      "material": "susy:isophthaloyl_chloride",
+      "file": "custom/isophthaloyl_chloride.json"
+    },
+    {
+      "material": "susy:kainite",
+      "file": "custom/kainite.json"
+    },
+    {
+      "material": "susy:kapton_k",
+      "file": "kapton_k.json"
+    },
+    {
+      "material": "susy:kieserite",
+      "file": "custom/kieserite.json"
+    },
+    {
+      "material": "susy:lactic_acid",
+      "file": "custom/lactic_acid.json"
+    },
+    {
+      "material": "susy:langbeinite",
+      "file": "custom/langbeinite.json"
+    },
+    {
+      "material": "susy:lanthanum_carbonate",
+      "file": "custom/lanthanum_carbonate.json"
+    },
+    {
+      "material": "susy:lanthanum_fluoride",
+      "file": "custom/lanthanum_fluoride.json"
+    },
+    {
+      "material": "susy:lanthanum_nitrate",
+      "file": "custom/lanthanum_nitrate.json"
+    },
+    {
+      "material": "susy:lanthanum_oxide",
+      "file": "custom/lanthanum_oxide.json"
+    },
+    {
+      "material": "susy:lauterite",
+      "file": "custom/lauterite.json"
+    },
+    {
+      "material": "susy:leached_cassiterite_concentrate",
+      "file": "custom/leached_cassiterite_concentrate.json"
+    },
+    {
+      "material": "susy:lead_chloride",
+      "file": "custom/lead_chloride.json"
+    },
+    {
+      "material": "susy:lead_chromate",
+      "file": "custom/lead_chromate.json"
+    },
+    {
+      "material": "susy:lead_ii_hydroxide",
+      "file": "custom/lead_ii_hydroxide.json"
+    },
+    {
+      "material": "susy:lead_ii_oxide",
+      "file": "custom/lead_ii_oxide.json"
+    },
+    {
+      "material": "susy:lead_iv_oxide",
+      "file": "custom/lead_iv_oxide.json"
+    },
+    {
+      "material": "susy:lead_nitrate",
+      "file": "custom/lead_nitrate.json"
+    },
+    {
+      "material": "susy:leu_235",
+      "file": "custom/leu_235.json"
+    },
+    {
+      "material": "susy:leu_235_ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:leu_235_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:linoleic_acid",
+      "file": "custom/linoleic_acid.json"
+    },
+    {
+      "material": "susy:lithium_bromide",
+      "file": "custom/lithium_bromide.json"
+    },
+    {
+      "material": "susy:lithium_cobalt_oxide",
+      "file": "custom/lithium_cobalt_oxide.json"
+    },
+    {
+      "material": "susy:lithium_fluoride",
+      "file": "custom/lithium_fluoride.json"
+    },
+    {
+      "material": "susy:lithium_hexafluorophosphate",
+      "file": "custom/lithium_hexafluorophosphate.json"
+    },
+    {
+      "material": "susy:lithium_hydride",
+      "file": "custom/lithium_hydride.json"
+    },
+    {
+      "material": "susy:lithium_hydroxide",
+      "file": "custom/lithium_hydroxide.json"
+    },
+    {
+      "material": "susy:lithium_hydroxide_monohydrate",
+      "file": "custom/lithium_hydroxide_monohydrate.json"
+    },
+    {
+      "material": "susy:lithium_niobate",
+      "file": "custom/lithium_niobate.json"
+    },
+    {
+      "material": "susy:lithium_nitrate",
+      "file": "custom/lithium_nitrate.json"
+    },
+    {
+      "material": "susy:lithium_oxide",
+      "file": "custom/lithium_oxide.json"
+    },
+    {
+      "material": "susy:lithium_peroxide",
+      "file": "custom/lithium_peroxide.json"
+    },
+    {
+      "material": "susy:lithium_sulfate",
+      "file": "custom/lithium_sulfate.json"
+    },
+    {
+      "material": "susy:lithium_tetrafluoroborate",
+      "file": "custom/lithium_tetrafluoroborate.json"
+    },
+    {
+      "material": "susy:lunar_manganese_ii_oxide",
+      "file": "custom/manganese_ii_oxide.json"
+    },
+    {
+      "material": "susy:lunar_rutile",
+      "file": "custom/lunar_rutile.json"
+    },
+    {
+      "material": "susy:lutetium_fluoride",
+      "file": "custom/lutetium_fluoride.json"
+    },
+    {
+      "material": "susy:magnesium_carbonate",
+      "file": "custom/magnesium_carbonate.json"
+    },
+    {
+      "material": "susy:magnesium_fluoride",
+      "file": "custom/magnesium_fluoride.json"
+    },
+    {
+      "material": "susy:magnesium_hydroxide",
+      "file": "custom/magnesium_hydroxide.json"
+    },
+    {
+      "material": "susy:magnesium_nitrate",
+      "file": "custom/magnesium_nitrate.json"
+    },
+    {
+      "material": "susy:magnesium_sulfate",
+      "file": "custom/magnesium_sulfate.json"
+    },
+    {
+      "material": "susy:maleic_anhydride",
+      "file": "maleic_anhydride.json"
+    },
+    {
+      "material": "susy:manganese_dioxide",
+      "file": "custom/manganese_dioxide.json"
+    },
+    {
+      "material": "susy:manganese_ii_carbonate",
+      "file": "custom/manganese_ii_carbonate.json"
+    },
+    {
+      "material": "susy:manganese_ii_chloride",
+      "file": "custom/manganese_ii_chloride.json"
+    },
+    {
+      "material": "susy:manganese_ii_hydroxide",
+      "file": "custom/manganese_ii_hydroxide.json"
+    },
+    {
+      "material": "susy:manganese_ii_nitrate",
+      "file": "custom/manganese_ii_nitrate.json"
+    },
+    {
+      "material": "susy:manganese_ii_oxide",
+      "file": "custom/manganese_ii_oxide.json"
+    },
+    {
+      "material": "susy:manganese_ii_sulfate",
+      "file": "custom/manganese_ii_sulfate.json"
+    },
+    {
+      "material": "susy:melamine",
+      "file": "custom/melamine.json"
+    },
+    {
+      "material": "susy:mercaptobenzothiazole",
+      "file": "custom/mercaptobenzothiazole.json"
+    },
+    {
+      "material": "susy:mercury_ii_chloride",
+      "file": "custom/mercury_ii_chloride.json"
+    },
+    {
+      "material": "susy:mercury_ii_oxide",
+      "file": "custom/mercury_ii_oxide.json"
+    },
+    {
+      "material": "susy:meta_chloroperoxybenzoic_acid",
+      "file": "custom/meta_chloroperoxybenzoic_acid.json"
+    },
+    {
+      "material": "susy:meta_phenylenediamine",
+      "file": "custom/meta_phenylenediamine.json"
+    },
+    {
+      "material": "susy:methacrylamide_sulfate",
+      "file": "custom/methacrylamide_sulfate.json"
+    },
+    {
+      "material": "susy:methyl_methacrylate",
+      "file": "methyl_methacrylate.json"
+    },
+    {
+      "material": "susy:methylaluminoxane",
+      "file": "custom/methylaluminoxane.json"
+    },
+    {
+      "material": "susy:methylamine",
+      "file": "methylamine.json"
+    },
+    {
+      "material": "susy:methylene_diphenyl_diisocyanate",
+      "file": "custom/methylene_diphenyl_diisocyanate.json"
+    },
+    {
+      "material": "susy:methylenedianiline",
+      "file": "custom/methylenedianiline.json"
+    },
+    {
+      "material": "susy:methyltrioctylammonium_chloride",
+      "file": "custom/methyltrioctylammonium_chloride.json"
+    },
+    {
+      "material": "susy:mimetite",
+      "file": "custom/mimetite.json"
+    },
+    {
+      "material": "susy:molybdenum_disulfide",
+      "file": "custom/molybdenum_disulfide.json"
+    },
+    {
+      "material": "susy:molybdenum_trioxide",
+      "file": "custom/molybdenum_trioxide.json"
+    },
+    {
+      "material": "susy:molybdenum_trisulfide",
+      "file": "custom/molybdenum_trisulfide.json"
+    },
+    {
+      "material": "susy:monocalcium_phosphate",
+      "file": "custom/monocalcium_phosphate.json"
+    },
+    {
+      "material": "susy:n_acetylsulfanilyl_chloride",
+      "file": "custom/n_acetylsulfanilyl_chloride.json"
+    },
+    {
+      "material": "susy:n_hexadecylamine",
+      "file": "custom/n_hexadecylamine.json"
+    },
+    {
+      "material": "susy:n_hydroxyethyl_ethylenediaminetriacetic_acid",
+      "file": "custom/n_hydroxyethyl_ethylenediaminetriacetic_acid.json"
+    },
+    {
+      "material": "susy:n_methyl_phthalimide",
+      "file": "custom/n_methyl_phthalimide.json"
+    },
+    {
+      "material": "susy:n_phenyl_one_naphthylamine",
+      "file": "custom/n_phenyl_one_naphthylamine.json"
+    },
+    {
+      "material": "susy:natural_uranium",
+      "file": "custom/natural_uranium.json"
+    },
+    {
+      "material": "susy:neodymium_fluoride",
+      "file": "custom/neodymium_fluoride.json"
+    },
+    {
+      "material": "susy:neodymium_hydroxide",
+      "file": "custom/neodymium_hydroxide.json"
+    },
+    {
+      "material": "susy:neodymium_oxide",
+      "file": "custom/neodymium_oxide.json"
+    },
+    {
+      "material": "susy:neoprene",
+      "file": "neoprene.json"
+    },
+    {
+      "material": "susy:nickel_chloride",
+      "file": "custom/nickel_chloride.json"
+    },
+    {
+      "material": "susy:nickel_hydroxide",
+      "file": "custom/nickel_hydroxide.json"
+    },
+    {
+      "material": "susy:nickel_ii_nitrate",
+      "file": "custom/nickel_ii_nitrate.json"
+    },
+    {
+      "material": "susy:nickel_ii_oxide",
+      "file": "custom/nickel_ii_oxide.json"
+    },
+    {
+      "material": "susy:nickel_sulfate",
+      "file": "custom/nickel_sulfate.json"
+    },
+    {
+      "material": "susy:niobium_oxide",
+      "file": "custom/niobium_oxide.json"
+    },
+    {
+      "material": "susy:niobium_pentachloride",
+      "file": "custom/niobium_pentachloride.json"
+    },
+    {
+      "material": "susy:nonylphenol",
+      "file": "custom/nonylphenol.json"
+    },
+    {
+      "material": "susy:norbornene",
+      "file": "custom/norbornene.json"
+    },
+    {
+      "material": "susy:octyl_hydroxamic_acid",
+      "file": "custom/octyl_hydroxamic_acid.json"
+    },
+    {
+      "material": "susy:oleic_acid",
+      "file": "custom/oleic_acid.json"
+    },
+    {
+      "material": "susy:one_bromoadamantane",
+      "file": "custom/one_bromoadamantane.json"
+    },
+    {
+      "material": "susy:one_five_naphthalenedisulfonic_acid",
+      "file": "custom/one_five_naphthalenedisulfonic_acid.json"
+    },
+    {
+      "material": "susy:one_hydroxyadamantane",
+      "file": "custom/one_hydroxyadamantane.json"
+    },
+    {
+      "material": "susy:one_naphthol",
+      "file": "custom/one_naphthol.json"
+    },
+    {
+      "material": "susy:one_naphthylamine",
+      "file": "custom/one_naphthylamine.json"
+    },
+    {
+      "material": "susy:one_nitronaphthalene",
+      "file": "custom/one_nitronaphthalene.json"
+    },
+    {
+      "material": "susy:one_three_dinitrobenzene",
+      "file": "custom/one_three_dinitrobenzene.json"
+    },
+    {
+      "material": "susy:one_two_dichlorobenzene",
+      "file": "custom/one_two_dichlorobenzene.json"
+    },
+    {
+      "material": "susy:orpiment",
+      "file": "custom/arsenic_iii_sulfide.json"
+    },
+    {
+      "material": "susy:ortho_phenylenediamine",
+      "file": "custom/ortho_phenylenediamine.json"
+    },
+    {
+      "material": "susy:ortho_xylene",
+      "file": "ortho_xylene.json"
+    },
+    {
+      "material": "susy:oxalic_acid",
+      "file": "oxalic_acid.json"
+    },
+    {
+      "material": "susy:palladium_chloride",
+      "file": "custom/palladium_chloride.json"
+    },
+    {
+      "material": "susy:palladium_chloride_dihydrate",
+      "file": "custom/palladium_chloride_dihydrate.json"
+    },
+    {
+      "material": "susy:palmitic_acid",
+      "file": "custom/palmitic_acid.json"
+    },
+    {
+      "material": "susy:para_aminobenzaldehyde",
+      "file": "custom/para_aminobenzaldehyde.json"
+    },
+    {
+      "material": "susy:para_aminobenzoic_acid",
+      "file": "custom/para_aminobenzoic_acid.json"
+    },
+    {
+      "material": "susy:para_aminobenzyl_ethyl_ester",
+      "file": "custom/para_aminobenzyl_ethyl_ester.json"
+    },
+    {
+      "material": "susy:para_azidobenzaldehyde",
+      "file": "custom/para_azidobenzaldehyde.json"
+    },
+    {
+      "material": "susy:para_diisopropylbenzene_dihydroperoxide",
+      "file": "custom/para_diisopropylbenzene_dihydroperoxide.json"
+    },
+    {
+      "material": "susy:para_ethylbenzenesulfonic_acid",
+      "file": "custom/para_ethylbenzenesulfonic_acid.json"
+    },
+    {
+      "material": "susy:para_ethylphenol",
+      "file": "custom/para_ethylphenol.json"
+    },
+    {
+      "material": "susy:para_fluorobenzoic_acid",
+      "file": "custom/para_fluorobenzoic_acid.json"
+    },
+    {
+      "material": "susy:para_fluorobenzoic_acid_ethyl_ester",
+      "file": "custom/para_fluorobenzoic_acid_ethyl_ester.json"
+    },
+    {
+      "material": "susy:para_nitrobenzoic_acid",
+      "file": "custom/para_nitrobenzoic_acid.json"
+    },
+    {
+      "material": "susy:para_nitrotoluene",
+      "file": "custom/para_nitrotoluene.json"
+    },
+    {
+      "material": "susy:para_phenylenediamine",
+      "file": "custom/para_phenylenediamine.json"
+    },
+    {
+      "material": "susy:para_toluic_acid",
+      "file": "custom/para_toluic_acid.json"
+    },
+    {
+      "material": "susy:para_vinylphenol",
+      "file": "custom/para_vinylphenol.json"
+    },
+    {
+      "material": "susy:para_xylene",
+      "file": "custom/para_xylene.json"
+    },
+    {
+      "material": "susy:pentaerythritol",
+      "file": "custom/pentaerythritol.json"
+    },
+    {
+      "material": "susy:pentaerythritol_tetranitrate",
+      "file": "custom/pentaerythritol_tetranitrate.json"
+    },
+    {
+      "material": "susy:pentetic_acid",
+      "file": "custom/pentetic_acid.json"
+    },
+    {
+      "material": "susy:perfluorooctanoic_acid",
+      "file": "custom/perfluorooctanoic_acid.json"
+    },
+    {
+      "material": "susy:phosphorus_pentachloride",
+      "file": "custom/phosphorus_pentachloride.json"
+    },
+    {
+      "material": "susy:phthalic_anhydride",
+      "file": "phthalic_anhydride.json"
+    },
+    {
+      "material": "susy:phthalimide",
+      "file": "custom/phthalimide.json"
+    },
+    {
+      "material": "susy:picric_acid",
+      "file": "custom/picric_acid.json"
+    },
+    {
+      "material": "susy:polyether_ether_ketone",
+      "file": "polyether_ether_ketone.json"
+    },
+    {
+      "material": "susy:potassium_alum",
+      "file": "custom/potassium_alum.json"
+    },
+    {
+      "material": "susy:potassium_amyl_xanthate",
+      "file": "custom/potassium_amyl_xanthate.json"
+    },
+    {
+      "material": "susy:potassium_bisulfate",
+      "file": "custom/potassium_bisulfate.json"
+    },
+    {
+      "material": "susy:potassium_butyl_xanthate",
+      "file": "custom/potassium_butyl_xanthate.json"
+    },
+    {
+      "material": "susy:potassium_carbonate",
+      "file": "custom/potassium_carbonate.json"
+    },
+    {
+      "material": "susy:potassium_chlorate",
+      "file": "custom/potassium_chlorate.json"
+    },
+    {
+      "material": "susy:potassium_ethyl_xanthate",
+      "file": "custom/potassium_ethyl_xanthate.json"
+    },
+    {
+      "material": "susy:potassium_fluoride",
+      "file": "custom/potassium_fluoride.json"
+    },
+    {
+      "material": "susy:potassium_heptafluorotantalate",
+      "file": "custom/potassium_heptafluorotantalate.json"
+    },
+    {
+      "material": "susy:potassium_hydroxide",
+      "file": "custom/potassium_hydroxide.json"
+    },
+    {
+      "material": "susy:potassium_iodate",
+      "file": "custom/potassium_iodate.json"
+    },
+    {
+      "material": "susy:potassium_iodide",
+      "file": "custom/potassium_iodide.json"
+    },
+    {
+      "material": "susy:potassium_isopropyl_xanthate",
+      "file": "custom/potassium_isopropyl_xanthate.json"
+    },
+    {
+      "material": "susy:potassium_manganate",
+      "file": "custom/potassium_manganate.json"
+    },
+    {
+      "material": "susy:potassium_methoxide",
+      "file": "custom/potassium_methoxide.json"
+    },
+    {
+      "material": "susy:potassium_permanganate",
+      "file": "custom/potassium_permanganate.json"
+    },
+    {
+      "material": "susy:potassium_persulfate",
+      "file": "custom/potassium_persulfate.json"
+    },
+    {
+      "material": "susy:potassium_phthalimide",
+      "file": "custom/potassium_phthalimide.json"
+    },
+    {
+      "material": "susy:potassium_sulfate",
+      "file": "custom/potassium_sulfate.json"
+    },
+    {
+      "material": "susy:potassium_tert_butoxide",
+      "file": "custom/potassium_tert_butoxide.json"
+    },
+    {
+      "material": "susy:potassium_tetrafluoroborate",
+      "file": "custom/potassium_tetrafluoroborate.json"
+    },
+    {
+      "material": "susy:praseodymium_iii_fluoride",
+      "file": "custom/praseodymium_iii_fluoride.json"
+    },
+    {
+      "material": "susy:praseodymium_iii_nitrate",
+      "file": "custom/praseodymium_iii_nitrate.json"
+    },
+    {
+      "material": "susy:praseodymium_iv_oxide",
+      "file": "custom/praseodymium_iv_oxide.json"
+    },
+    {
+      "material": "susy:propane_one_three_sultone",
+      "file": "custom/propane_one_three_sultone.json"
+    },
+    {
+      "material": "susy:purified_antimony_trioxide",
+      "file": "custom/purified_antimony_trioxide.json"
+    },
+    {
+      "material": "susy:purified_beryllium_chloride",
+      "file": "custom/beryllium_chloride.json"
+    },
+    {
+      "material": "susy:purified_beryllium_hydroxide",
+      "file": "custom/beryllium_hydroxide.json"
+    },
+    {
+      "material": "susy:purified_beryllium_oxide",
+      "file": "custom/beryllium_oxide.json"
+    },
+    {
+      "material": "susy:purified_iron_iii_oxide",
+      "file": "custom/hematite.json"
+    },
+    {
+      "material": "susy:purified_iron_two_three_oxide",
+      "file": "custom/iron_two_three_oxide.json"
+    },
+    {
+      "material": "susy:purified_magnesium_chloride",
+      "file": "custom/purified_magnesium_chloride.json"
+    },
+    {
+      "material": "susy:purified_molybdenum_trioxide",
+      "file": "custom/molybdenum_trioxide.json"
+    },
+    {
+      "material": "susy:purified_tin_ii_oxide",
+      "file": "custom/purified_tin_ii_oxide.json"
+    },
+    {
+      "material": "susy:pyrazine",
+      "file": "custom/pyrazine.json"
+    },
+    {
+      "material": "susy:pyridinium_tosylate",
+      "file": "custom/pyridinium_tosylate.json"
+    },
+    {
+      "material": "susy:pyrocatechol",
+      "file": "custom/pyrocatechol.json"
+    },
+    {
+      "material": "susy:pyromellitic_dianhydride",
+      "file": "pyromellitic_dianhydride.json"
+    },
+    {
+      "material": "susy:pyromorphite",
+      "file": "custom/pyromorphite.json"
+    },
+    {
+      "material": "susy:rdx",
+      "file": "custom/rdx.json"
+    },
+    {
+      "material": "susy:reactive_alumina",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:reactor_grade_plutonium",
+      "file": "custom/reactor_grade_plutonium.json"
+    },
+    {
+      "material": "susy:reprocessed_uranium_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:reprocessed_uranium_tetrafluoride",
+      "file": "custom/reprocessed_uranium_tetrafluoride.json"
+    },
+    {
+      "material": "susy:reprocessed_uranium_trioxide",
+      "file": "custom/reprocessed_uranium_trioxide.json"
+    },
+    {
+      "material": "susy:reprocessed_uranyl_nitrate",
+      "file": "custom/reprocessed_uranyl_nitrate.json"
+    },
+    {
+      "material": "susy:rhenium_heptoxide",
+      "file": "custom/rhenium_heptoxide.json"
+    },
+    {
+      "material": "susy:rhenium_pentachloride",
+      "file": "custom/rhenium_pentachloride.json"
+    },
+    {
+      "material": "susy:rhodium_iii_chloride_trihydrate",
+      "file": "custom/rhodium_iii_chloride_trihydrate.json"
+    },
+    {
+      "material": "susy:roasted_sperrylite",
+      "file": "custom/roasted_sperrylite.json"
+    },
+    {
+      "material": "susy:rubidium_hydroxide",
+      "file": "custom/rubidium_hydroxide.json"
+    },
+    {
+      "material": "susy:ruthenium_iii_chloride",
+      "file": "custom/ruthenium_iii_chloride.json"
+    },
+    {
+      "material": "susy:ruthenium_iv_oxide",
+      "file": "custom/ruthenium_iv_oxide.json"
+    },
+    {
+      "material": "susy:salicylidene_ethylenediamine",
+      "file": "custom/salicylidene_ethylenediamine.json"
+    },
+    {
+      "material": "susy:salicylidene_one_two_propanediamine",
+      "file": "custom/salicylidene_one_two_propanediamine.json"
+    },
+    {
+      "material": "susy:samarium_hydroxide",
+      "file": "custom/samarium_hydroxide.json"
+    },
+    {
+      "material": "susy:samarium_oxide",
+      "file": "custom/samarium_oxide.json"
+    },
+    {
+      "material": "susy:scandium_iii_fluoride",
+      "file": "custom/scandium_iii_fluoride.json"
+    },
+    {
+      "material": "susy:scandium_oxide",
+      "file": "custom/scandium_oxide.json"
+    },
+    {
+      "material": "susy:selenium_dioxide",
+      "file": "custom/selenium_dioxide.json"
+    },
+    {
+      "material": "susy:silica_gel",
+      "file": "custom/acid_washed_silicon_dioxide.json"
+    },
+    {
+      "material": "susy:silicon_carbide",
+      "file": "custom/silicon_carbide.json"
+    },
+    {
+      "material": "susy:silver_chloride",
+      "file": "custom/chlorargyrite.json"
+    },
+    {
+      "material": "susy:silver_free_lead",
+      "file": "custom/silver_free_lead.json"
+    },
+    {
+      "material": "susy:silver_nitrate",
+      "file": "custom/silver_nitrate.json"
+    },
+    {
+      "material": "susy:silver_oxide",
+      "file": "custom/silver_oxide.json"
+    },
+    {
+      "material": "susy:silver_sulfadiazine",
+      "file": "custom/silver_sulfadiazine.json"
+    },
+    {
+      "material": "susy:silver_sulfide",
+      "file": "custom/silver_sulfide.json"
+    },
+    {
+      "material": "susy:smithsonite",
+      "file": "custom/smithsonite.json"
+    },
+    {
+      "material": "susy:sodium_alum",
+      "file": "custom/sodium_alum.json"
+    },
+    {
+      "material": "susy:sodium_aluminate",
+      "file": "custom/sodium_aluminate.json"
+    },
+    {
+      "material": "susy:sodium_amide",
+      "file": "custom/sodium_amide.json"
+    },
+    {
+      "material": "susy:sodium_arsenate",
+      "file": "custom/sodium_arsenate.json"
+    },
+    {
+      "material": "susy:sodium_arsenide",
+      "file": "custom/sodium_arsenide.json"
+    },
+    {
+      "material": "susy:sodium_azide",
+      "file": "custom/sodium_azide.json"
+    },
+    {
+      "material": "susy:sodium_bismuthate",
+      "file": "custom/sodium_bismuthate.json"
+    },
+    {
+      "material": "susy:sodium_borohydride",
+      "file": "custom/sodium_borohydride.json"
+    },
+    {
+      "material": "susy:sodium_bromide",
+      "file": "custom/sodium_bromide.json"
+    },
+    {
+      "material": "susy:sodium_cyanide",
+      "file": "custom/sodium_cyanide.json"
+    },
+    {
+      "material": "susy:sodium_cyanoborohydride",
+      "file": "custom/sodium_cyanoborohydride.json"
+    },
+    {
+      "material": "susy:sodium_dichromate",
+      "file": "custom/sodium_dichromate.json"
+    },
+    {
+      "material": "susy:sodium_dithionite",
+      "file": "custom/sodium_dithionite.json"
+    },
+    {
+      "material": "susy:sodium_dodecyl_sulfate",
+      "file": "custom/sodium_dodecyl_sulfate.json"
+    },
+    {
+      "material": "susy:sodium_ethoxide",
+      "file": "custom/sodium_ethoxide.json"
+    },
+    {
+      "material": "susy:sodium_ethyl_xanthate",
+      "file": "custom/sodium_ethyl_xanthate.json"
+    },
+    {
+      "material": "susy:sodium_fluoride",
+      "file": "custom/sodium_fluoride.json"
+    },
+    {
+      "material": "susy:sodium_fluorosilicate",
+      "file": "custom/sodium_fluorosilicate.json"
+    },
+    {
+      "material": "susy:sodium_formate",
+      "file": "custom/sodium_formate.json"
+    },
+    {
+      "material": "susy:sodium_hexafluoroantimonate",
+      "file": "custom/sodium_hexafluoroantimonate.json"
+    },
+    {
+      "material": "susy:sodium_hydride",
+      "file": "custom/sodium_hydride.json"
+    },
+    {
+      "material": "susy:sodium_hydrosulfide",
+      "file": "custom/sodium_hydrosulfide.json"
+    },
+    {
+      "material": "susy:sodium_isobutyl_xanthate",
+      "file": "custom/sodium_isobutyl_xanthate.json"
+    },
+    {
+      "material": "susy:sodium_methoxide",
+      "file": "custom/sodium_methoxide.json"
+    },
+    {
+      "material": "susy:sodium_naphthalene_two_sulfonate",
+      "file": "custom/sodium_naphthalene_two_sulfonate.json"
+    },
+    {
+      "material": "susy:sodium_nitrate",
+      "file": "custom/sodium_nitrate.json"
+    },
+    {
+      "material": "susy:sodium_nitrite",
+      "file": "custom/sodium_nitrite.json"
+    },
+    {
+      "material": "susy:sodium_one_naphthol_five_sulfonate",
+      "file": "custom/sodium_one_naphthol_five_sulfonate.json"
+    },
+    {
+      "material": "susy:sodium_oxalate",
+      "file": "custom/sodium_oxalate.json"
+    },
+    {
+      "material": "susy:sodium_oxide",
+      "file": "custom/sodium_oxide.json"
+    },
+    {
+      "material": "susy:sodium_phosphate",
+      "file": "custom/sodium_phosphate.json"
+    },
+    {
+      "material": "susy:sodium_silicate",
+      "file": "custom/sodium_silicate.json"
+    },
+    {
+      "material": "susy:sodium_sulfadiazine",
+      "file": "custom/sodium_sulfadiazine.json"
+    },
+    {
+      "material": "susy:sodium_sulfite",
+      "file": "custom/sodium_sulfite.json"
+    },
+    {
+      "material": "susy:sodium_tetraborate",
+      "file": "custom/sodium_tetraborate.json"
+    },
+    {
+      "material": "susy:sodium_thiosulfate",
+      "file": "custom/sodium_thiosulfate.json"
+    },
+    {
+      "material": "susy:sodium_triflate",
+      "file": "custom/sodium_triflate.json"
+    },
+    {
+      "material": "susy:softened_lead",
+      "file": "custom/softened_lead.json"
+    },
+    {
+      "material": "susy:spent_activated_carbon",
+      "file": "custom/spent_activated_carbon.json"
+    },
+    {
+      "material": "susy:strontianite",
+      "file": "custom/strontianite.json"
+    },
+    {
+      "material": "susy:strontium_carbonate",
+      "file": "custom/strontianite.json"
+    },
+    {
+      "material": "susy:strontium_hydroxide",
+      "file": "custom/strontium_hydroxide.json"
+    },
+    {
+      "material": "susy:strontium_oxide",
+      "file": "custom/strontium_oxide.json"
+    },
+    {
+      "material": "susy:sulfamic_acid",
+      "file": "custom/sulfamic_acid.json"
+    },
+    {
+      "material": "susy:sulfolene",
+      "file": "custom/sulfolene.json"
+    },
+    {
+      "material": "susy:tabular_alumina",
+      "file": "custom/alumina.json"
+    },
+    {
+      "material": "susy:tantalum_fluoride",
+      "file": "custom/tantalum_fluoride.json"
+    },
+    {
+      "material": "susy:tantalum_nitride",
+      "file": "custom/tantalum_nitride.json"
+    },
+    {
+      "material": "susy:tantalum_pentachloride",
+      "file": "custom/tantalum_pentachloride.json"
+    },
+    {
+      "material": "susy:tellurium_dioxide",
+      "file": "custom/tellurium_dioxide.json"
+    },
+    {
+      "material": "susy:terbium_fluoride",
+      "file": "custom/terbium_fluoride.json"
+    },
+    {
+      "material": "susy:terephthalic_acid",
+      "file": "custom/amoco_terephthalic_acid.json"
+    },
+    {
+      "material": "susy:terephthaloyl_chloride",
+      "file": "custom/terephthaloyl_chloride.json"
+    },
+    {
+      "material": "susy:tetrabromobisphenol_a",
+      "file": "custom/tetrabromobisphenol_a.json"
+    },
+    {
+      "material": "susy:tetramethylammonium_chloride",
+      "file": "custom/tetramethylammonium_chloride.json"
+    },
+    {
+      "material": "susy:tetramethylammonium_hydroxide",
+      "file": "custom/tetramethylammonium_hydroxide.json"
+    },
+    {
+      "material": "susy:tetrapropylammonium_bromide",
+      "file": "custom/tetrapropylammonium_bromide.json"
+    },
+    {
+      "material": "susy:thallium_i_chloride",
+      "file": "custom/thallium_i_chloride.json"
+    },
+    {
+      "material": "susy:thorium_dioxide",
+      "file": "custom/thorium_dioxide.json"
+    },
+    {
+      "material": "susy:thulium_fluoride",
+      "file": "custom/thulium_fluoride.json"
+    },
+    {
+      "material": "susy:tin_iv_oxide",
+      "file": "custom/tin_iv_oxide.json"
+    },
+    {
+      "material": "susy:titanium_dioxide",
+      "file": "custom/lunar_rutile.json"
+    },
+    {
+      "material": "susy:titanium_iodide",
+      "file": "custom/titanium_iodide.json"
+    },
+    {
+      "material": "susy:tnt",
+      "file": "custom/tnt.json"
+    },
+    {
+      "material": "susy:tributyl_phosphate",
+      "file": "tributyl_phosphate.json"
+    },
+    {
+      "material": "susy:triethylene_glycol",
+      "file": "triethylene_glycol.json"
+    },
+    {
+      "material": "susy:triethylenediamine",
+      "file": "custom/triethylenediamine.json"
+    },
+    {
+      "material": "susy:trimellitic_acid",
+      "file": "custom/trimellitic_acid.json"
+    },
+    {
+      "material": "susy:trimellitic_anhydride",
+      "file": "custom/trimellitic_anhydride.json"
+    },
+    {
+      "material": "susy:trimethylolpropane",
+      "file": "custom/trimethylolpropane.json"
+    },
+    {
+      "material": "susy:triphenylphosphine",
+      "file": "custom/triphenylphosphine.json"
+    },
+    {
+      "material": "susy:triphenylphosphine_dichloride",
+      "file": "custom/triphenylphosphine_dichloride.json"
+    },
+    {
+      "material": "susy:triphenylphosphine_oxide",
+      "file": "custom/triphenylphosphine_oxide.json"
+    },
+    {
+      "material": "susy:tungsten_trioxide",
+      "file": "custom/tungsten_trioxide.json"
+    },
+    {
+      "material": "susy:two_amino_one_naphthol",
+      "file": "custom/two_amino_one_naphthol.json"
+    },
+    {
+      "material": "susy:two_aminoanthracene",
+      "file": "custom/two_aminoanthracene.json"
+    },
+    {
+      "material": "susy:two_aminoanthraquinone",
+      "file": "custom/two_aminoanthraquinone.json"
+    },
+    {
+      "material": "susy:two_aminopyrimidine",
+      "file": "custom/two_aminopyrimidine.json"
+    },
+    {
+      "material": "susy:two_chloroanthraquinone",
+      "file": "custom/two_chloroanthraquinone.json"
+    },
+    {
+      "material": "susy:two_chloronitrobenzene",
+      "file": "custom/two_chloronitrobenzene.json"
+    },
+    {
+      "material": "susy:two_ethylanthraquinone",
+      "file": "custom/two_ethylanthraquinone.json"
+    },
+    {
+      "material": "susy:two_methyl_two_adamantanol",
+      "file": "custom/two_methyl_two_adamantanol.json"
+    },
+    {
+      "material": "susy:two_methylimidazole",
+      "file": "custom/two_methylimidazole.json"
+    },
+    {
+      "material": "susy:two_naphthol",
+      "file": "custom/two_naphthol.json"
+    },
+    {
+      "material": "susy:two_nitro_one_naphthol",
+      "file": "custom/two_nitro_one_naphthol.json"
+    },
+    {
+      "material": "susy:two_three_four_trihydroxybenzophenone",
+      "file": "custom/two_three_four_trihydroxybenzophenone.json"
+    },
+    {
+      "material": "susy:two_two_dichlorohydrazobenzene",
+      "file": "custom/two_two_dichlorohydrazobenzene.json"
+    },
+    {
+      "material": "susy:ulexite",
+      "file": "custom/ulexite.json"
+    },
+    {
+      "material": "susy:uranium_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:uranium_tetrafluoride",
+      "file": "custom/reprocessed_uranium_tetrafluoride.json"
+    },
+    {
+      "material": "susy:urea",
+      "file": "custom/urea.json"
+    },
+    {
+      "material": "susy:vanadium_pentoxide",
+      "file": "custom/vanadium_pentoxide.json"
+    },
+    {
+      "material": "susy:washed_activated_carbon",
+      "file": "custom/washed_activated_carbon.json"
+    },
+    {
+      "material": "susy:washed_graphene",
+      "file": "custom/washed_graphene.json"
+    },
+    {
+      "material": "susy:weapons_grade_ammonium_diuranate",
+      "file": "custom/ammonium_diuranate.json"
+    },
+    {
+      "material": "susy:weapons_grade_uranium",
+      "file": "custom/weapons_grade_uranium.json"
+    },
+    {
+      "material": "susy:weapons_grade_uranium_dioxide",
+      "file": "custom/depleted_uranium_dioxide.json"
+    },
+    {
+      "material": "susy:wet_antimony_trifluoride",
+      "file": "custom/wet_antimony_trifluoride.json"
+    },
+    {
+      "material": "susy:wet_isophthalic_acid",
+      "file": "custom/amoco_isophthalic_acid.json"
+    },
+    {
+      "material": "susy:wet_silica_gel",
+      "file": "custom/acid_washed_silicon_dioxide.json"
+    },
+    {
+      "material": "susy:wet_terephthalic_acid",
+      "file": "custom/amoco_terephthalic_acid.json"
+    },
+    {
+      "material": "susy:witherite",
+      "file": "custom/barium_carbonate.json"
+    },
+    {
+      "material": "susy:wustite_catalyst",
+      "file": "custom/wustite_catalyst.json"
+    },
+    {
+      "material": "susy:ytterbium_hydroxide",
+      "file": "custom/ytterbium_hydroxide.json"
+    },
+    {
+      "material": "susy:ytterbium_oxide",
+      "file": "custom/ytterbium_oxide.json"
+    },
+    {
+      "material": "susy:yttrium_chloride",
+      "file": "custom/yttrium_chloride.json"
+    },
+    {
+      "material": "susy:yttrium_hydroxide",
+      "file": "custom/yttrium_hydroxide.json"
+    },
+    {
+      "material": "susy:yttrium_nitrate",
+      "file": "custom/yttrium_nitrate.json"
+    },
+    {
+      "material": "susy:yttrium_oxide",
+      "file": "custom/yttrium_oxide.json"
+    },
+    {
+      "material": "susy:zinc_carbonate",
+      "file": "custom/smithsonite.json"
+    },
+    {
+      "material": "susy:zinc_chloride",
+      "file": "custom/zinc_chloride.json"
+    },
+    {
+      "material": "susy:zinc_hydroxide",
+      "file": "custom/zinc_hydroxide.json"
+    },
+    {
+      "material": "susy:zinc_nitrate",
+      "file": "custom/zinc_nitrate.json"
+    },
+    {
+      "material": "susy:zinc_oxide",
+      "file": "custom/zinc_oxide.json"
+    },
+    {
+      "material": "susy:zinc_oxide_fume",
+      "file": "custom/zinc_oxide.json"
+    },
+    {
+      "material": "susy:zirconium_dioxide",
+      "file": "custom/baddeleyite.json"
+    },
+    {
+      "material": "susy:zirconium_iodide",
+      "file": "custom/zirconium_iodide.json"
+    },
+    {
+      "material": "susy:zirconium_tetrachloride",
+      "file": "custom/zirconium_tetrachloride.json"
+    },
+    {
+      "material": "susy:zirconocene_dichloride",
+      "file": "custom/zirconocene_dichloride.json"
+    }
+  ]
+}

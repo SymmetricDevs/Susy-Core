@@ -1,0 +1,97 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Fe",
+      "x": 5.643,
+      "y": 0.5878,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "O",
+      "x": 4.8339,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 5.3339,
+      "y": 1.5388,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 3.0739,
+      "y": 0.2788,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "O",
+      "x": 3.7462,
+      "y": 2.3479,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "",
+      "x": 4.0249,
+      "y": 0.5878,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "",
+      "x": 4.3339,
+      "y": 1.5388,
+      "type": "atom"
+    },
+    {
+      "a": 1,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 2,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

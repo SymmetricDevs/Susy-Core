@@ -1,0 +1,39 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Bi",
+      "x": 2.866,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Bi",
+      "x": 4.5981,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "S",
+      "x": 3.7321,
+      "y": 0.75,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "S",
+      "x": 2.0,
+      "y": 0.75,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "S",
+      "x": 2.866,
+      "y": -0.75,
+      "type": "atom"
+    }
+  ]
+}

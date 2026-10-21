@@ -1,0 +1,26 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Tl",
+      "x": 3.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Cl",
+      "x": 2.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

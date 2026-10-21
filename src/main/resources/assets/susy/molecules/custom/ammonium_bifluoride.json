@@ -1,0 +1,30 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "F",
+      "x": 2.5369,
+      "y": 0.0,
+      "type": "atom",
+      "above": "H"
+    },
+    {
+      "index": 1,
+      "element": "F",
+      "x": 0.0,
+      "y": 1.5369,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "N",
+      "x": 3.0369,
+      "y": 3.0369,
+      "type": "atom",
+      "above": [
+        "H",
+        4
+      ]
+    }
+  ]
+}

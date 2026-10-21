@@ -1,0 +1,44 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Au",
+      "x": 0.866,
+      "y": 3.5,
+      "type": "atom",
+      "below": "+"
+    },
+    {
+      "index": 1,
+      "element": "Cl",
+      "x": 1.366,
+      "y": 0.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 2,
+      "element": "Cl",
+      "x": 1.7321,
+      "y": 4.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 3,
+      "element": "Cl",
+      "x": 0.0,
+      "y": 4.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 4,
+      "element": "Cl",
+      "x": 0.866,
+      "y": 2.5,
+      "type": "atom",
+      "below": "-"
+    }
+  ]
+}

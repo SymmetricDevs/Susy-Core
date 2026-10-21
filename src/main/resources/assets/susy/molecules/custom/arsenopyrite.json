@@ -1,0 +1,35 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "As",
+      "x": 0.25,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Fe",
+      "x": 0.0,
+      "y": 2.5,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "S",
+      "x": 1.0,
+      "y": 2.5,
+      "type": "atom"
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

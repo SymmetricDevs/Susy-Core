@@ -1,0 +1,264 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Cl",
+      "x": 0.0,
+      "y": 0.62,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "O",
+      "x": 2.5982,
+      "y": 4.1201,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 0.866,
+      "y": 4.1201,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 2.5982,
+      "y": 5.1201,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "C",
+      "x": 1.7321,
+      "y": 2.6201,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "C",
+      "x": 0.866,
+      "y": 2.12,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "C",
+      "x": 2.5982,
+      "y": 2.12,
+      "type": "atom"
+    },
+    {
+      "index": 7,
+      "element": "C",
+      "x": 0.866,
+      "y": 1.12,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "C",
+      "x": 2.5982,
+      "y": 1.12,
+      "type": "atom"
+    },
+    {
+      "index": 9,
+      "element": "C",
+      "x": 1.7321,
+      "y": 0.62,
+      "type": "atom"
+    },
+    {
+      "index": 10,
+      "element": "C",
+      "x": 1.7321,
+      "y": 3.6201,
+      "type": "atom"
+    },
+    {
+      "index": 11,
+      "element": "H",
+      "x": 0.3291,
+      "y": 2.4301,
+      "type": "atom"
+    },
+    {
+      "index": 12,
+      "element": "H",
+      "x": 3.1351,
+      "y": 2.4301,
+      "type": "atom"
+    },
+    {
+      "index": 13,
+      "element": "H",
+      "x": 3.1351,
+      "y": 0.81,
+      "type": "atom"
+    },
+    {
+      "index": 14,
+      "element": "H",
+      "x": 1.7321,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 15,
+      "element": "H",
+      "x": 3.1351,
+      "y": 5.4301,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 1,
+      "b": 10,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 2,
+      "b": 10,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 3,
+      "b": 15,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 4,
+      "b": 10,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 5,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 5,
+      "b": 11,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 6,
+      "b": 8,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 6,
+      "b": 12,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 7,
+      "b": 9,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 8,
+      "b": 9,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 8,
+      "b": 13,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    },
+    {
+      "a": 9,
+      "b": 14,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond",
+      "centered": false
+    }
+  ]
+}

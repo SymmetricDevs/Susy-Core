@@ -1,0 +1,25 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Ba",
+      "x": 2.866,
+      "y": -0.25,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Cl",
+      "x": 3.7321,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "Cl",
+      "x": 2.0,
+      "y": 0.25,
+      "type": "atom"
+    }
+  ]
+}

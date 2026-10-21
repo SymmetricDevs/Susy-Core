@@ -1,0 +1,55 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "S",
+      "x": 1.7321,
+      "y": 1.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "N",
+      "x": 0.866,
+      "y": 3.5369,
+      "type": "atom",
+      "above": [
+        "H",
+        4
+      ]
+    },
+    {
+      "index": 2,
+      "element": "N",
+      "x": 0.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "",
+      "x": 0.866,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "lines": [
+        "solid",
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

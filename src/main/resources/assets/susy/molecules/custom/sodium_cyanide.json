@@ -1,0 +1,36 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Na",
+      "x": 2.0,
+      "y": -0.5,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "N",
+      "x": 3.7321,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "",
+      "x": 2.866,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "lines": [
+        "solid",
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

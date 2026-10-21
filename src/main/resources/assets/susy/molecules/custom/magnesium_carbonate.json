@@ -1,0 +1,65 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Mg",
+      "x": 3.7071,
+      "y": -0.8536,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "O",
+      "x": 2.7071,
+      "y": -0.8536,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 3.7071,
+      "y": 0.1464,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 2.0,
+      "y": 0.8536,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "",
+      "x": 2.7071,
+      "y": 0.1464,
+      "type": "atom"
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 2,
+      "b": 4,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

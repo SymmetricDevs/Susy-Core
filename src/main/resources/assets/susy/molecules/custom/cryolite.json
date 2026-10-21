@@ -1,0 +1,122 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Al",
+      "x": 0.866,
+      "y": 1.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Na",
+      "x": 3.732,
+      "y": 0.75,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "Na",
+      "x": 3.732,
+      "y": 3.25,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "Na",
+      "x": 0.616,
+      "y": 4.0,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "F",
+      "x": 1.732,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "F",
+      "x": 0.0,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "F",
+      "x": 0.0,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 7,
+      "element": "F",
+      "x": 0.866,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "F",
+      "x": 0.866,
+      "y": 2.0,
+      "type": "atom"
+    },
+    {
+      "index": 9,
+      "element": "F",
+      "x": 1.732,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 4,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 8,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 9,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

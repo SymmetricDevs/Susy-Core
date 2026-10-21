@@ -1,0 +1,29 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "N",
+      "x": 3.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "B",
+      "x": 2.0,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "lines": [
+        "solid",
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

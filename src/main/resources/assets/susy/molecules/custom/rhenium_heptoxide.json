@@ -1,0 +1,74 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Re",
+      "x": 5.0,
+      "y": 2.5,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Re",
+      "x": 5.0,
+      "y": 5.0,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 0.0,
+      "y": 0.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 0.0,
+      "y": 2.5,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 4,
+      "element": "O",
+      "x": 2.5,
+      "y": 0.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 5,
+      "element": "O",
+      "x": 2.5,
+      "y": 2.5,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 6,
+      "element": "O",
+      "x": 2.5,
+      "y": 5.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 7,
+      "element": "O",
+      "x": 0.0,
+      "y": 5.0,
+      "type": "atom",
+      "below": "-"
+    },
+    {
+      "index": 8,
+      "element": "O",
+      "x": 5.0,
+      "y": 0.0,
+      "type": "atom",
+      "below": "-"
+    }
+  ]
+}

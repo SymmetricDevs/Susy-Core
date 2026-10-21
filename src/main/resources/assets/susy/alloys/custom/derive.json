@@ -1,0 +1,5 @@
+{
+  "derive": true,
+  "min_components": 2,
+  "max_components": 11
+}

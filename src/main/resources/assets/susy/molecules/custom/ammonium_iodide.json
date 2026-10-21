@@ -1,0 +1,22 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "I",
+      "x": 0.2869,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "N",
+      "x": 0.5369,
+      "y": 3.0369,
+      "type": "atom",
+      "above": [
+        "H",
+        4
+      ]
+    }
+  ]
+}

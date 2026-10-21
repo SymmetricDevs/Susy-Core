@@ -1,0 +1,20 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Bi",
+      "x": 0.0,
+      "y": 2.5,
+      "type": "atom",
+      "below": "+"
+    },
+    {
+      "index": 1,
+      "element": "Cu",
+      "x": 0.0,
+      "y": 0.0,
+      "type": "atom",
+      "below": "+"
+    }
+  ]
+}

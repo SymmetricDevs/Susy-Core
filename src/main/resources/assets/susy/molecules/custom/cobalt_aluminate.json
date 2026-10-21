@@ -1,0 +1,53 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Co",
+      "x": 1.799,
+      "y": 3.5,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Al",
+      "x": 0.866,
+      "y": 1.0,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "Al",
+      "x": 2.5981,
+      "y": 1.0,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 1.7321,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "O",
+      "x": 0.0,
+      "y": 1.5,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "O",
+      "x": 0.866,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "O",
+      "x": 0.799,
+      "y": 3.5,
+      "type": "atom"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "P",
+      "x": 3.403,
+      "y": -0.433,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Na",
+      "x": 5.135,
+      "y": -0.433,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "Na",
+      "x": 3.403,
+      "y": 1.299,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 2.5369,
+      "y": -0.933,
+      "type": "atom",
+      "left": "H"
+    },
+    {
+      "index": 4,
+      "element": "O",
+      "x": 4.269,
+      "y": 0.067,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "O",
+      "x": 2.903,
+      "y": 0.433,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "O",
+      "x": 3.903,
+      "y": -1.299,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 4,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 0,
+      "b": 6,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    }
+  ]
+}

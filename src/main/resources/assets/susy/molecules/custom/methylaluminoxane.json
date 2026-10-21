@@ -1,0 +1,43 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "Al",
+      "x": 2.866,
+      "y": -0.25,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "O",
+      "x": 3.732,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "",
+      "x": 2.0,
+      "y": 0.25,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "lines": [
+        "solid",
+        "solid"
+      ],
+      "type": "bond",
+      "centered": true
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

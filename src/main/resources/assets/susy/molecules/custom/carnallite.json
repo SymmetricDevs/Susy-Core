@@ -1,0 +1,39 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "K",
+      "x": 0.366,
+      "y": 1.25,
+      "type": "atom"
+    },
+    {
+      "index": 1,
+      "element": "Cl",
+      "x": 1.366,
+      "y": 1.25,
+      "type": "atom"
+    },
+    {
+      "index": 2,
+      "element": "Cl",
+      "x": 1.7321,
+      "y": 4.25,
+      "type": "atom"
+    },
+    {
+      "index": 3,
+      "element": "Cl",
+      "x": 0.0,
+      "y": 4.25,
+      "type": "atom"
+    },
+    {
+      "index": 4,
+      "element": "Mg",
+      "x": 0.866,
+      "y": 3.75,
+      "type": "atom"
+    }
+  ]
+}

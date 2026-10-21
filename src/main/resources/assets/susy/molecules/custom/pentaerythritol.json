@@ -1,0 +1,135 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "O",
+      "x": 2.5369,
+      "y": -0.0,
+      "type": "atom",
+      "left": "H"
+    },
+    {
+      "index": 1,
+      "element": "O",
+      "x": 6.001,
+      "y": 0.0,
+      "type": "atom",
+      "right": "H"
+    },
+    {
+      "index": 2,
+      "element": "O",
+      "x": 4.269,
+      "y": 1.7321,
+      "type": "atom",
+      "above": "H"
+    },
+    {
+      "index": 3,
+      "element": "O",
+      "x": 4.269,
+      "y": -1.7321,
+      "type": "atom",
+      "below": "H"
+    },
+    {
+      "index": 4,
+      "element": "",
+      "x": 4.269,
+      "y": 0.0,
+      "type": "atom"
+    },
+    {
+      "index": 5,
+      "element": "",
+      "x": 3.403,
+      "y": -0.5,
+      "type": "atom"
+    },
+    {
+      "index": 6,
+      "element": "",
+      "x": 5.135,
+      "y": 0.5,
+      "type": "atom"
+    },
+    {
+      "index": 7,
+      "element": "",
+      "x": 3.769,
+      "y": 0.866,
+      "type": "atom"
+    },
+    {
+      "index": 8,
+      "element": "",
+      "x": 4.769,
+      "y": -0.866,
+      "type": "atom"
+    },
+    {
+      "a": 0,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 1,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 2,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 3,
+      "b": 8,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 4,
+      "b": 7,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    },
+    {
+      "a": 4,
+      "b": 8,
+      "lines": [
+        "solid"
+      ],
+      "type": "bond"
+    }
+  ]
+}

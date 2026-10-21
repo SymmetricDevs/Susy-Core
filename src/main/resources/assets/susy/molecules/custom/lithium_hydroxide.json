@@ -1,0 +1,19 @@
+{
+  "contents": [
+    {
+      "index": 0,
+      "element": "O",
+      "x": 2.866,
+      "y": 0.25,
+      "type": "atom",
+      "above": "H"
+    },
+    {
+      "index": 1,
+      "element": "Li",
+      "x": 2.0,
+      "y": -0.25,
+      "type": "atom"
+    }
+  ]
+}
