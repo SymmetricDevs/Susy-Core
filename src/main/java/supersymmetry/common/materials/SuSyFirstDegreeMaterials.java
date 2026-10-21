@@ -116,19 +116,19 @@ public class SuSyFirstDegreeMaterials {
         AluminiumAlloy6061 = new Material.Builder(8759, SuSyUtility.susyId("aluminium_alloy_6061")).ingot()
                 .liquid(new FluidBuilder().temperature(923)).color(0x8aa1e5)
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
-                .components(Aluminium, 634, Magnesium, 8, Silicon, 4, Copper, 1, Chrome, 1).build();
+                .components(Aluminium, 1247, Magnesium, 17, Silicon, 9, Copper, 2, Chrome, 1).build();
         AluminiumAlloy6061.addFlags(GENERATE_FINE_WIRE);
 
         AluminiumAlloy7075 = new Material.Builder(8760, SuSyUtility.susyId("aluminium_alloy_7075")).ingot()
                 .liquid(new FluidBuilder().temperature(913)).color(0x9fe9ef)
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST)
-                .components(Aluminium, 678, Zinc, 17, Magnesium, 20, Copper, 4, Chrome, 1).build();
+                .components(Aluminium, 622, Zinc, 17, Magnesium, 18, Copper, 5, Chrome, 1).build();
         AluminiumAlloy7075.addFlags(GENERATE_FINE_WIRE);
 
         AluminiumAlloyMg6 = new Material.Builder(27151, SuSyUtility.susyId("aluminium_alloy_Mg_6")).ingot()
                 .liquid(new FluidBuilder().temperature(960)).color(0xAceAf1)
                 .flags(DISABLE_DECOMPOSITION, CONTINUOUSLY_CAST, GENERATE_PLATE)
-                .components(Aluminium, 934, Magnesium, 60, Manganese, 6).build();
+                .components(Aluminium, 5869, Magnesium, 421, Manganese, 17, Titanium, 1, Beryllium, 1).build();
 
         // Coil Materials
 
