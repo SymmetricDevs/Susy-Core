@@ -476,6 +476,11 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<InductionFurnaceRecipeBuilder> EBCHM = new RecipeMap<>(
+            "electron_beam_cold_hearth_melter", 9, 2, 2, 2, new InductionFurnaceRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
     public static final RecipeMap<ResistanceFurnaceRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>(
             "resistance_furnace", 6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
             .setSound(GTSoundEvents.FURNACE);

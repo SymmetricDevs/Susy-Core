@@ -336,6 +336,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityBeamLineHatch BEAM_EXPORT;
 
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
+    public static MetaTileEntityElectronBeamColdHearthMelter EBCHM;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
     public static MetaTileEntityMissionControl MISSION_CONTROL;
@@ -667,6 +668,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityArcFurnaceComplex(susyId("arc_furnace_complex")));
         METALLURGICAL_CONVERTER = registerMetaTileEntity(16612,
                 new MetaTileEntityMetallurgicalConverter(susyId("metallurgical_converter")));
+        EBCHM = registerMetaTileEntity(16613,
+                new MetaTileEntityElectronBeamColdHearthMelter(susyId("electron_beam_cold_hearth_melter")));
 
         // Turbines: 17000-17002
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000,
@@ -867,6 +870,7 @@ public class SuSyMetaTileEntities {
 
         registerSimpleMTE(RESISTANCE_FURNACE, 12, 18503, "resistance_furnace", SuSyRecipeMaps.RESISTANCE_FURNACE,
                 Textures.ELECTRIC_FURNACE_OVERLAY, true, GTUtility.defaultTankSizeFunction);
+
         LARGE_RES = registerMetaTileEntity(18520,
                 new MetaTileEntityLargeRES(susyId("large_railroad_engineering_station")));
         LAYUP_MACHINE = registerMetaTileEntity(18521, new MetaTileEntityLayupMachine(susyId("layup_machine")));

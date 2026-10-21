@@ -240,6 +240,7 @@ tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mi
 tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
 tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
 tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
+title.sealed_door.stainless_steel.name=Stainless Steel Vacuum-Sealed Door
 
 tile.engine_casing.piston_block.name=Engine Block
 
@@ -271,6 +272,7 @@ tile.crucible.silicon_carbide.name=Silicon Carbide Crucible
 tile.crucible.alumina.name=Alumina Crucible
 tile.crucible.magnesia.name=Magnesia Crucible
 tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
+tile.crucible.copper.name=Water-Cooled Copper Crucible
 
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
@@ -1237,6 +1239,7 @@ susy.multiblock.strand_mold.tooltip=Takes in 2592L of molten metal per operation
 susy.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meters thick from various compatible types of molten metal, including steel, aluminium, and copper. After the slab has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Dense Plate (0.5-1 m thick), Double Plate (0.2-0.33 m thick), Plate (0.1-0.125 m thick), Foil (0.025-0.031 m thick). A dense plate technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
 susy.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
 susy.machine.gas_atomizer.name=Gas Atomizer
+susy.machine.electron_beam_cold_hearth_melter.name=Electron Beam Cold Hearth Melter
 tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
 tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
 tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing
@@ -1244,6 +1247,8 @@ tile.metallurgy.hydraulic_cylinder.name=Hydraulic Cylinder
 tile.metallurgy_2.flying_shear_saw.name=Flying Shear Saw
 tile.metallurgy_roll.roll.name=Roll
 tile.susy_multiblock_casing2.monel_400_casing.name=Resistant Monel 400 Casing
+tile.susy_multiblock_casing2.stainless_steel_casing_pipe.name=Clean Stainless Steel Pipe Casing
+tile.susy_multiblock_casing2.electron_beam_casing.name=Electron Beam Unit
 
 susy.machine.fuel_cell.ev.name=Low Temperature Fuel Cell
 susy.machine.fuel_cell.iv.name=High Temperature Fuel Cell

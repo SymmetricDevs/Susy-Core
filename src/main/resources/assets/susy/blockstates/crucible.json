@@ -12,6 +12,9 @@
     },
     "variant=hp_alumina" : {
       "model" : "susy:crucible/alumina"
+    },
+    "variant=copper" : {
+      "model" : "susy:crucible/copper"
     }
   }
 }

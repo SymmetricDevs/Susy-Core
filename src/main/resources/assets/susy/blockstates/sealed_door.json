@@ -1,0 +1,21 @@
+{
+  "forge_marker" : 1,
+  "variants" : {
+    "facing=north,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default"
+    },
+    "facing=south,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
+      "y" : 180
+    },
+    "facing=west,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
+      "y" : 270
+    },
+    "facing=east,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
+      "y" : 90
+    }
+  }
+}
+

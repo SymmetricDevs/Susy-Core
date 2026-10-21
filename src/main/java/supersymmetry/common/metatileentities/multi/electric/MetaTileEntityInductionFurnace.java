@@ -52,7 +52,8 @@ import gregtech.common.blocks.BlockMetalCasing.MetalCasingType;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import supersymmetry.api.capability.SuSyDataCodes;
-import supersymmetry.api.capability.impl.InductionFurnaceRecipeLogic;
+import supersymmetry.api.capability.impl.WatercooledMultiRecipeLogic;
+import supersymmetry.api.capability.impl.WatercooledMultiRecipeLogic.IWatercooledMultiblock;
 import supersymmetry.api.gui.SusyGuiTextures;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
 import supersymmetry.api.recipes.properties.InductionCrucibleMaterialProperty;
@@ -62,7 +63,8 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.materials.SusyMaterials;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
-public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockController implements IProgressBarMultiblock {
+public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockController
+                                            implements IProgressBarMultiblock, IWatercooledMultiblock {
 
     private String material;
 
@@ -80,7 +82,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
 
     public MetaTileEntityInductionFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, SuSyRecipeMaps.INDUCTION_FURNACE);
-        this.recipeMapWorkable = new InductionFurnaceRecipeLogic(this);
+        this.recipeMapWorkable = new WatercooledMultiRecipeLogic(this);
     }
 
     @Override
@@ -138,7 +140,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
         }
 
         if (pendingCoolant != null) {
-            if (((InductionFurnaceRecipeLogic) recipeMapWorkable).canOutputCoolant(pendingCoolant)) {
+            if (((WatercooledMultiRecipeLogic) recipeMapWorkable).canOutputCoolant(pendingCoolant)) {
                 int accepted = outputFluidInventory.fill(pendingCoolant.copy(), true);
                 pendingCoolant.amount -= accepted;
                 if (pendingCoolant.amount <= 0) pendingCoolant = null;
@@ -158,7 +160,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
             FluidStack actualWater = Materials.Water.getFluid(waterToConsume);
             FluidStack actualHeatedWater = SusyMaterials.HotSoftenedWater.getFluid(waterToConsume);
 
-            boolean hasOutputSpace = ((InductionFurnaceRecipeLogic) recipeMapWorkable)
+            boolean hasOutputSpace = ((WatercooledMultiRecipeLogic) recipeMapWorkable)
                     .canOutputCoolant(actualHeatedWater);
 
             setCoolingBlocked(!hasOutputSpace);
@@ -234,7 +236,7 @@ public class MetaTileEntityInductionFurnace extends RecipeMapMultiblockControlle
     protected void addWarningText(List<ITextComponent> textList) {
         super.addWarningText(textList);
         if (isStructureFormed()) {
-            if (((InductionFurnaceRecipeLogic) recipeMapWorkable).isWaitingForOutputs()) {
+            if (((WatercooledMultiRecipeLogic) recipeMapWorkable).isWaitingForOutputs()) {
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.YELLOW,
                         "susy.multiblock.induction_furnace.waiting_outputs"));
             }

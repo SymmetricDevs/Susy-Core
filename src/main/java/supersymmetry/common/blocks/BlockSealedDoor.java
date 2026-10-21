@@ -1,0 +1,57 @@
+package supersymmetry.common.blocks;
+
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving.SpawnPlacementType;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+
+import org.jetbrains.annotations.NotNull;
+
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
+
+public class BlockSealedDoor extends VariantHorizontalRotatableBlock<BlockSealedDoor.SealedDoorType> {
+
+    public BlockSealedDoor() {
+        super(Material.IRON);
+        setTranslationKey("sealed_door");
+        setHardness(5.0f);
+        setResistance(10.0f);
+        setSoundType(SoundType.METAL);
+        setHarvestLevel("wrench", 2);
+        setDefaultState(getState(SealedDoorType.STAINLESS_STEEL));
+    }
+
+    @Override
+    public boolean canCreatureSpawn(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos,
+                                    @NotNull SpawnPlacementType type) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isTranslucent(IBlockState state) {
+        return true;
+    }
+
+    public enum SealedDoorType implements IStringSerializable {
+
+        STAINLESS_STEEL("stainless_steel"),;
+
+        private final String name;
+
+        SealedDoorType(String name) {
+            this.name = name;
+        }
+
+        @NotNull public String getName() {
+            return name;
+        }
+    }
+}
