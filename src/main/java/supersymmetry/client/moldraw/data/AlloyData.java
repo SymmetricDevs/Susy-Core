@@ -125,6 +125,9 @@ public final class AlloyData implements IResourceManagerReloadListener {
         if (object.has("derive") && object.get("derive").getAsBoolean()) {
             Map<Material, Long> derived = new LinkedHashMap<Material, Long>();
             derive(material, 1L, new HashSet<Material>(), derived);
+            int minimum = object.has("min_components") ? object.get("min_components").getAsInt() : 1;
+            int maximum = object.has("max_components") ? object.get("max_components").getAsInt() : Integer.MAX_VALUE;
+            if (derived.size() < minimum || derived.size() > maximum) return null;
             return toComponents(derived);
         }
         if (!object.has("components") || !object.get("components").isJsonArray()) return null;
