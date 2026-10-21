@@ -117,9 +117,9 @@ public class SuSyGunBehavior implements IItemBehaviour {
         // total number of iterations is limited
         while (i < 10000) {
             currentPos = new Vec3d(currentPos.x + motionX, currentPos.y + motionY, currentPos.z + motionZ);
-            motionX *= (1 - 1.1 / muzzleVelocity); // air resistance (tm)
-            motionY -= 4 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
-            motionZ *= (1 - 1.1 / muzzleVelocity);
+            motionX *= (1 - muzzleVelocity * 0.000001); // air resistance (tm)
+            motionY -= 2 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
+            motionZ *= (1 - muzzleVelocity * 0.000001);
             // spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
             // check if we hit any blocks
             RayTraceResult rayTraceResult = world.rayTraceBlocks(oldPos, currentPos, false, true, false);
@@ -160,7 +160,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
                 }
             }
             if (i > 2) {
-                ammoType.spawnParticles(world, oldPos, currentPos, i / 5);
+                ammoType.spawnParticles(world, oldPos, currentPos, i / 10);
             }
             if (rayTraceResult != null) {
                 ammoType.onBlockHit(world, rayTraceResult, rayTraceResult.getBlockPos().offset(rayTraceResult.sideHit));
@@ -252,13 +252,15 @@ public class SuSyGunBehavior implements IItemBehaviour {
             ammoType = RED_TRACER;
         } else if (stack.getItem() == SuSyMetaItems.RIFLE.getStackForm().getItem() &&
                 stack.getMetadata() == SuSyMetaItems.RIFLE.getStackForm().getMetadata()) {
-            ammoType = GREEN_TRACER;
-        } else if (stack.getItem() == SuSyMetaItems.SMG.getStackForm().getItem() &&
-                stack.getMetadata() == SuSyMetaItems.SMG.getStackForm().getMetadata()) {
-            ammoType = BLUE_TRACER;
-        } else if (stack.getItem() == SuSyMetaItems.SHOTGUN.getStackForm().getItem() &&
-                stack.getMetadata() == SuSyMetaItems.SHOTGUN.getStackForm().getMetadata()) {
-            ammoType = BUCKSHOT;
+                    ammoType = GREEN_TRACER;
+                } else
+            if (stack.getItem() == SuSyMetaItems.SMG.getStackForm().getItem() &&
+                    stack.getMetadata() == SuSyMetaItems.SMG.getStackForm().getMetadata()) {
+                        ammoType = BLUE_TRACER;
+                    } else
+                if (stack.getItem() == SuSyMetaItems.SHOTGUN.getStackForm().getItem() &&
+                        stack.getMetadata() == SuSyMetaItems.SHOTGUN.getStackForm().getMetadata()) {
+                            ammoType = BUCKSHOT;
                         }
         shootOnce(player, hand, ammoType);
 

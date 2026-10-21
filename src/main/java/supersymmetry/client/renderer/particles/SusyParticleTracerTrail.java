@@ -11,7 +11,7 @@ import supersymmetry.Supersymmetry;
 public class SusyParticleTracerTrail extends Particle {
 
     private static final ResourceLocation TRACER_SPRITE = new ResourceLocation(Supersymmetry.MODID, "particle/tracer");
-    private static final int realMaxAge = 3;
+    private static final int realMaxAge = 2;
 
     public SusyParticleTracerTrail(World worldIn, double x, double y, double z, float R, float G, float B, int delay) {
         super(worldIn, x, y, z);
