@@ -34,7 +34,8 @@ public class BlockSuSyMultiblockCasing2 extends VariantBlock<BlockSuSyMultiblock
 
         LIGHT_STAINLESS_CASING("light_stainless_casing"),
         MONEL_400_CASING("monel_400_casing"),
-        STAINLESS_STEEL_PIPE("stainless_steel_casing_pipe");
+        STAINLESS_STEEL_PIPE("stainless_steel_casing_pipe"),
+        ELECTRON_BEAM_CASING("electron_beam_casing");
 
         private final String name;
 

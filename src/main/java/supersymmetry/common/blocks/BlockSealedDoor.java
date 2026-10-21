@@ -10,9 +10,9 @@ import net.minecraft.world.IBlockAccess;
 
 import org.jetbrains.annotations.NotNull;
 
-import supersymmetry.api.blocks.VariantAxialRotatableBlock;
+import supersymmetry.api.blocks.VariantHorizontalRotatableBlock;
 
-public class BlockSealedDoor extends VariantAxialRotatableBlock<BlockSealedDoor.Type> {
+public class BlockSealedDoor extends VariantHorizontalRotatableBlock<BlockSealedDoor.SealedDoorType> {
 
     public BlockSealedDoor() {
         super(Material.IRON);
@@ -21,7 +21,7 @@ public class BlockSealedDoor extends VariantAxialRotatableBlock<BlockSealedDoor.
         setResistance(10.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 2);
-        setDefaultState(getState(Type.STAINLESS_STEEL));
+        setDefaultState(getState(SealedDoorType.STAINLESS_STEEL));
     }
 
     @Override
@@ -40,13 +40,13 @@ public class BlockSealedDoor extends VariantAxialRotatableBlock<BlockSealedDoor.
         return true;
     }
 
-    public enum Type implements IStringSerializable {
+    public enum SealedDoorType implements IStringSerializable {
 
         STAINLESS_STEEL("stainless_steel"),;
 
         private final String name;
 
-        Type(String name) {
+        SealedDoorType(String name) {
             this.name = name;
         }
 

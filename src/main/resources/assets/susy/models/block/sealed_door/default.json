@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side",
+    "up": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side",
+    "north": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_front",
+    "east": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side",
+    "south": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_front",
+    "west": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side",
+    "particle": "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side"
+  }
+}

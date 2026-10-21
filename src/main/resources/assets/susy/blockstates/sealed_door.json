@@ -1,29 +1,21 @@
 {
   "forge_marker" : 1,
   "variants" : {
-    "axis=y,variant=stainless_steel" : {
-      "model" : "minecraft:cube_column",
-      "textures" : {
-        "end" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_front",
-        "side" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side"
-      }
+    "facing=north,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default"
     },
-    "axis=z,variant=stainless_steel" : {
-      "model" : "minecraft:cube_column",
-      "textures" : {
-        "end" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_front",
-        "side" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side"
-      },
-      "x" : 90
+    "facing=south,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
+      "y" : 180
     },
-    "axis=x,variant=stainless_steel" : {
-      "model" : "minecraft:cube_column",
-      "textures" : {
-        "end" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_front",
-        "side" : "gregtech:blocks/casings/sealed_door/sealed_door_stainless_side"
-      },
-      "x" : 90,
+    "facing=west,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
+      "y" : 270
+    },
+    "facing=east,variant=stainless_steel" : {
+      "model" : "susy:sealed_door/default",
       "y" : 90
     }
   }
 }
+

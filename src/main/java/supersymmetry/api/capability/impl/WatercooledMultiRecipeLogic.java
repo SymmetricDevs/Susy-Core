@@ -10,27 +10,37 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
+import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.util.OverlayedFluidHandler;
 import supersymmetry.api.capability.SuSyDataCodes;
-import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityInductionFurnace;
 
-/** Keeps the furnace's auxiliary cooling reaction from taking its current batch's output space. */
-public class InductionFurnaceRecipeLogic extends MultiblockRecipeLogic {
+public class WatercooledMultiRecipeLogic extends MultiblockRecipeLogic {
+
+    public interface IWatercooledMultiblock {
+
+        boolean hasPendingCoolant();
+    }
 
     private static final String DELIVERY = "FurnaceDelivery";
-    private final MetaTileEntityInductionFurnace furnace;
+
+    private final RecipeMapMultiblockController furnace;
+    private final IWatercooledMultiblock cooling;
     private final List<FluidStack> pendingFluids = new ArrayList<>();
     private final List<ItemStack> pendingItems = new ArrayList<>();
     private boolean waitingForOutputs;
 
-    public InductionFurnaceRecipeLogic(MetaTileEntityInductionFurnace furnace) {
+    public <T extends RecipeMapMultiblockController & IWatercooledMultiblock> WatercooledMultiRecipeLogic(T furnace) {
         super(furnace);
         this.furnace = furnace;
+        this.cooling = furnace;
     }
 
     @Override
@@ -43,20 +53,16 @@ public class InductionFurnaceRecipeLogic extends MultiblockRecipeLogic {
 
     @Override
     protected boolean shouldSearchForRecipes() {
-        return !hasPendingOutputs() && !furnace.hasPendingCoolant() && super.shouldSearchForRecipes();
+        return !hasPendingOutputs() && !cooling.hasPendingCoolant() && super.shouldSearchForRecipes();
     }
 
     @Override
-    public boolean prepareRecipe(gregtech.api.recipes.Recipe recipe,
-                                 net.minecraftforge.items.IItemHandlerModifiable items,
-                                 gregtech.api.capability.IMultipleTankHandler fluids) {
-        return !hasPendingOutputs() && !furnace.hasPendingCoolant() && super.prepareRecipe(recipe, items, fluids);
+    public boolean prepareRecipe(Recipe recipe, IItemHandlerModifiable items, IMultipleTankHandler fluids) {
+        return !hasPendingOutputs() && !cooling.hasPendingCoolant() && super.prepareRecipe(recipe, items, fluids);
     }
 
     @Override
     protected void outputRecipeOutputs() {
-        // The parent completion (including the configured SussyPatches overwrite)
-        // runs once. Its ordinary clearing is safe after ownership moves here.
         if (fluidOutputs != null) {
             for (FluidStack output : fluidOutputs) pendingFluids.add(output.copy());
         }
@@ -115,7 +121,7 @@ public class InductionFurnaceRecipeLogic extends MultiblockRecipeLogic {
         return canOutputCoolant(getOutputTank(), coolant, products, furnace.canVoidRecipeFluidOutputs());
     }
 
-    static boolean canOutputCoolant(gregtech.api.capability.IMultipleTankHandler destination, FluidStack coolant,
+    static boolean canOutputCoolant(IMultipleTankHandler destination, FluidStack coolant,
                                     List<FluidStack> products, boolean canVoid) {
         OverlayedFluidHandler overlay = new OverlayedFluidHandler(destination);
         if (overlay.insertFluid(coolant, coolant.amount) != coolant.amount) return false;

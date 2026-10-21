@@ -26,6 +26,14 @@
       "textures" : {
         "all" : "gregtech:blocks/multiblock_casing/stainless_steel_casing_pipe"
       }
+    },
+    "variant=electron_beam_casing" : {
+      "model": "minecraft:cube_bottom_top",
+      "textures" : {
+        "bottom" : "gregtech:blocks/rocketry/guidance_system/soyuz_bottom",
+        "top" : "gregtech:blocks/rocketry/guidance_system/soyuz_top",
+        "side" : "gregtech:blocks/rocketry/guidance_system/soyuz_side"
+      }
     }
   }
 }
