@@ -1,10 +1,10 @@
 package supersymmetry.api.input;
 
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTLog;
-import gregtech.core.network.packets.PacketKeysPressed;
-import net.minecraft.client.Minecraft;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.WeakHashMap;
+import java.util.function.Supplier;
+
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,20 +17,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import supersymmetry.api.SusyLog;
 import supersymmetry.common.network.SuSyPacketKeysPressed;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.WeakHashMap;
-import java.util.function.Supplier;
-
 public enum SuSyKeyBind {
 
-    RELOAD_GUN("susy.key.reload_gun", KeyConflictContext.IN_GAME, Keyboard.KEY_R);
+    RELOAD_GUN("susy.key.reload_gun", KeyConflictContext.IN_GAME, Keyboard.KEY_R),
+    CYCLE_FIRE_MODE("susy.key.cycle_fire_mode", KeyConflictContext.IN_GAME, Keyboard.KEY_G);
 
     public static final SuSyKeyBind[] VALUES = values();
 
@@ -58,6 +57,7 @@ public enum SuSyKeyBind {
             GregTechAPI.networkHandler.sendToServer(new SuSyPacketKeysPressed(updating));
         }
     }
+
     @SideOnly(Side.CLIENT)
     private KeyBinding keybinding;
     @SideOnly(Side.CLIENT)

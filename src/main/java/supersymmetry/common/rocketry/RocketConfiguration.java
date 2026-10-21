@@ -30,7 +30,6 @@ public class RocketConfiguration {
         Orbit
     }
 
-    // FIXME: add turn altitude selector (in km)
     public static class MissionConfiguration {
 
         public final int dimension;

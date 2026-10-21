@@ -1,16 +1,15 @@
 package supersymmetry.common.network;
 
-import gregtech.api.network.IPacket;
-import gregtech.api.network.IServerExecutor;
-import gregtech.api.util.input.KeyBind;
+import java.util.List;
 
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 
 import org.apache.commons.lang3.tuple.Pair;
-import supersymmetry.api.input.SuSyKeyBind;
 
-import java.util.List;
+import gregtech.api.network.IPacket;
+import gregtech.api.network.IServerExecutor;
+import supersymmetry.api.input.SuSyKeyBind;
 
 public class SuSyPacketKeysPressed implements IPacket, IServerExecutor {
 
