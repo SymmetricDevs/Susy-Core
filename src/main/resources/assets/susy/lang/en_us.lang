@@ -1269,6 +1269,8 @@ susy.multiblock.cooling.explosion_risk=Will explode if provided with Water
 susy.multiblock.cooling.heat_bar_hover=Temperature: %s °C
 
 susy.multiblock.induction_furnace.crucible_material=Crucible Material: %s
+susy.multiblock.induction_furnace.waiting_outputs=Finished products are waiting for output space
+susy.multiblock.induction_furnace.cooling_blocked=Cooling exhaust is blocked; temperature will rise while operating
 
 # Sputtering Machine
 susy.machine.sputter_deposition.jei.group=Sputtering Machine

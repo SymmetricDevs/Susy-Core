@@ -2,6 +2,8 @@ package supersymmetry.api.space;
 
 import static supersymmetry.api.rocketry.NozzleFlow.GAS_CONSTANT;
 
+import java.util.Objects;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +19,7 @@ public class Planetoid extends CelestialObject {
 
     private PlanetType planetType;
     private int dimension;
+    private PlanetGrowthPolicy growthPolicy = PlanetGrowthPolicy.UNRESTRICTED;
     /** Ambient pressure at the surface, in Pa. Zero, an airless body, unless said otherwise. */
     private double surfacePressure;
     private double atmosphereMolarMass;
@@ -60,6 +63,15 @@ public class Planetoid extends CelestialObject {
 
     public int getDimension() {
         return dimension;
+    }
+
+    public PlanetGrowthPolicy getGrowthPolicy() {
+        return growthPolicy;
+    }
+
+    public Planetoid setGrowthPolicy(PlanetGrowthPolicy growthPolicy) {
+        this.growthPolicy = Objects.requireNonNull(growthPolicy, "growthPolicy");
+        return this;
     }
 
     public Planetoid setAtmosphereStats(double surfacePressure, double atmosphereMolarMass,
