@@ -1244,6 +1244,7 @@ susy.multiblock.billet_mold.description=Creates a slab one third of a meter wide
 susy.machine.gas_atomizer.name=Gas Atomizer
 susy.machine.electron_beam_cold_hearth_melter.name=Electron Beam Cold Hearth Melter
 susy.machine.vacuum_arc_remelting_furnace.name=Vacuum Arc Remelting Furnace
+susy.machine.electroslag_remelting_furnace.name=Electroslag Remelting Furnace
 tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
 tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
 tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing

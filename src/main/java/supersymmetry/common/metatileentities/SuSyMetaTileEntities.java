@@ -44,6 +44,7 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
+import supersymmetry.common.metatileentities.multi.electric.MetaTileEntityElectroslagRemeltingFurnace;
 import supersymmetry.common.metatileentities.multi.electric.strand.*;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCoagulationTank;
 import supersymmetry.common.metatileentities.multi.primitive.MetaTileEntityCupolaFurnace;
@@ -338,6 +339,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityElectronBeamColdHearthMelter EBCHM;
     public static MetaTileEntityVacuumArcRemeltingFurnace VAR;
+    public static MetaTileEntityElectroslagRemeltingFurnace ESR;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
     public static MetaTileEntityMissionControl MISSION_CONTROL;
@@ -673,6 +675,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityElectronBeamColdHearthMelter(susyId("electron_beam_cold_hearth_melter")));
         VAR = registerMetaTileEntity(16614,
                 new MetaTileEntityVacuumArcRemeltingFurnace(susyId("vacuum_arc_remelting_furnace")));
+        ESR = registerMetaTileEntity(16615,
+                new MetaTileEntityElectroslagRemeltingFurnace(susyId("electroslag_remelting_furnace")));
 
         // Turbines: 17000-17002
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000,
