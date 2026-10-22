@@ -337,6 +337,7 @@ public class SuSyMetaTileEntities {
 
     public static MetaTileEntityInductionFurnace INDUCTION_FURNACE;
     public static MetaTileEntityElectronBeamColdHearthMelter EBCHM;
+    public static MetaTileEntityVacuumArcRemeltingFurnace VAR;
     public static MetaTileEntityAerospaceFlightSimulator AEROSPACE_FLIGHT_SIMULATOR;
     public static MetaTileEntityBlueprintAssembler BLUEPRINT_ASSEMBLER;
     public static MetaTileEntityMissionControl MISSION_CONTROL;
@@ -670,6 +671,8 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityMetallurgicalConverter(susyId("metallurgical_converter")));
         EBCHM = registerMetaTileEntity(16613,
                 new MetaTileEntityElectronBeamColdHearthMelter(susyId("electron_beam_cold_hearth_melter")));
+        VAR = registerMetaTileEntity(16614,
+                new MetaTileEntityVacuumArcRemeltingFurnace(susyId("vacuum_arc_remelting_furnace")));
 
         // Turbines: 17000-17002
         BASIC_STEAM_TURBINE = registerMetaTileEntity(17000,

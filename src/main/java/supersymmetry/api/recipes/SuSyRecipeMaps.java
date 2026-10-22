@@ -481,6 +481,11 @@ public class SuSyRecipeMaps {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTSoundEvents.ARC);
 
+    public static final RecipeMap<InductionFurnaceRecipeBuilder> VAR = new RecipeMap<>(
+            "vacuum_arc_remelting_furnace", 9, 2, 2, 2, new InductionFurnaceRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressWidget.MoveType.HORIZONTAL)
+            .setSound(GTSoundEvents.ARC);
+
     public static final RecipeMap<ResistanceFurnaceRecipeBuilder> RESISTANCE_FURNACE = new RecipeMap<>(
             "resistance_furnace", 6, 2, 1, 1, new ResistanceFurnaceRecipeBuilder(), false)
             .setSound(GTSoundEvents.FURNACE);

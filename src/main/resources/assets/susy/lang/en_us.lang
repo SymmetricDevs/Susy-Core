@@ -274,6 +274,9 @@ tile.crucible.magnesia.name=Magnesia Crucible
 tile.crucible.hp_alumina.name=High-Performance Alumina Crucible
 tile.crucible.copper.name=Water-Cooled Copper Crucible
 
+tile.wiring.copper.name=Copper Wiring Assembly
+tile.vacuum_pump.stainless_steel.name=Stainless Steel Vacuum Pump Unit
+
 # Rocks
 tile.susy_stone_smooth.gabbro.name=Gabbro
 tile.susy_stone_smooth.gneiss.name=Gneiss
@@ -1240,6 +1243,7 @@ susy.multiblock.slab_mold.description=Creates a slab 2 meters wide and 0.5 meter
 susy.multiblock.billet_mold.description=Creates a slab one third of a meter wide and thick from various compatible types of molten metal, including steel, aluminium, and copper. After the billet has been created, it must be turned using a turning zone. Then, it may be rolled into these material types: Ingot (0.2-0.25 m thick), Rod (0.28-0.37 m thick). A rod technically does not require any rolling to produce. Finally, use a flying shear saw and a strand cooler to collect the finished products.
 susy.machine.gas_atomizer.name=Gas Atomizer
 susy.machine.electron_beam_cold_hearth_melter.name=Electron Beam Cold Hearth Melter
+susy.machine.vacuum_arc_remelting_furnace.name=Vacuum Arc Remelting Furnace
 tile.susy_multiblock_casing.monel_casing.name=Cryogenic Monel 500 Casing
 tile.susy_multiblock_casing.monel_casing_pipe.name=Cryogenic Monel 500 Pipe Casing
 tile.susy_multiblock_casing.copper_casing_pipe.name=Conductive Copper Pipe Casing

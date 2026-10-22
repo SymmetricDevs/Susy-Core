@@ -189,6 +189,8 @@ public class SuSyBlocks {
     public static BlockLunarConcrete LUNAR_CONCRETE;
     public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
     public static BlockAirlockDoor AIRLOCK_DOOR;
+    public static BlockWiring WIRING;
+    public static BlockVacuumPump VACUUM_PUMP;
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
