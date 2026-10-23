@@ -99,6 +99,8 @@ public class JeiModule extends IntegrationSubmodule implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new RocketFuelCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new StrandCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new InductionMeltingCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new ResistanceMeltingCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
