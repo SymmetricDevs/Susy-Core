@@ -37,7 +37,7 @@ public enum SuSyTankType {
             Textures.WOOD_WALL,
             STEAM_CASING.getItemVariant(WOOD_WALL),
             Wood),
-    STEEL("steel", false, 25000, 4,
+    STEEL("steel", true, 25000, 4,
             METAL_CASING.getState(STEEL_SOLID),
             Textures.SOLID_STEEL_CASING,
             METAL_CASING.getItemVariant(STEEL_SOLID),
