@@ -361,5 +361,7 @@ public class FactionAStar {
         }
     }
 
-    public boolean lastSearchFailed() { return searchFailed; }
+    public boolean lastSearchFailed() {
+        return searchFailed;
+    }
 }
