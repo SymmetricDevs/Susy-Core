@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "StructureTileList_GetTileEntity_GuardMixin"
+    "StructureTileList_GetTileEntity_GuardMixin",
+    "LittleRenderChunkSuppilier_FinalizeMixin"
   ]
 }
