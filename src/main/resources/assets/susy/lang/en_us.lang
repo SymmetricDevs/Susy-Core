@@ -1401,7 +1401,7 @@ susy.top.solar_panel.producing=Producing
 susy.machine.simple_condenser.name=Simple Condenser
 susy.machine.simple_condenser.tooltip.info=Requires five-block-deep regolith below to function.
 
-
+susy.machine.susy_furnace.name=Furnace
 
 # Recipemaps
 recipemap.coagulation_tank.name=Coagulation

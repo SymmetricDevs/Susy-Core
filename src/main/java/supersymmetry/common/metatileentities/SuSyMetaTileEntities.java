@@ -30,10 +30,7 @@ import gregtech.common.metatileentities.storage.MetaTileEntityCrate;
 import gregtech.common.metatileentities.storage.MetaTileEntityDrum;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.fluids.SuSyFluidAttributes;
-import supersymmetry.api.metatileentity.CatalystMachineMetaTileEntity;
-import supersymmetry.api.metatileentity.ContinuousMachineMetaTileEntity;
-import supersymmetry.api.metatileentity.PseudoMultiMachineMetaTileEntity;
-import supersymmetry.api.metatileentity.PseudoMultiSteamMachineMetaTileEntity;
+import supersymmetry.api.metatileentity.*;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicator;
 import supersymmetry.api.metatileentity.steam.SuSySteamProgressIndicators;
 import supersymmetry.api.recipes.SuSyRecipeMaps;
@@ -75,6 +72,7 @@ import supersymmetry.common.metatileentities.storage.MetaTileEntityDroneDepositB
 import supersymmetry.common.metatileentities.storage.MetaTileEntityFluidSamplesStorage;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityPlasticCan;
+import supersymmetry.common.metatileentities.unpowered.SuSyFurnace;
 
 public class SuSyMetaTileEntities {
 
@@ -372,6 +370,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityDustAgitator[] DUST_AGITATOR = new MetaTileEntityDustAgitator[8];
     public static MetaTileEntityFederationDropBeacon[] FED_BEACON = new MetaTileEntityFederationDropBeacon[8];
     public static MetaTileEntityFederationReinforcementBeacon[] FED_REINFORCER = new MetaTileEntityFederationReinforcementBeacon[8];
+    public static UnpoweredMetaTileEntity[] SUSY_FURNACE  = new SuSyFurnace[1];;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -960,6 +959,10 @@ public class SuSyMetaTileEntities {
         FED_REINFORCER[0] = registerMetaTileEntity(18660,
                 new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),
                         SusyTextures.FEDERATION_DROP_OVERLAY, 1));
+
+        SUSY_FURNACE[0] = registerMetaTileEntity(18661,
+                new SuSyFurnace(susyId("susy_furnace"), Textures.STEAM_CASING_STEEL,
+                        Textures.COAL_BOILER_OVERLAY));
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
