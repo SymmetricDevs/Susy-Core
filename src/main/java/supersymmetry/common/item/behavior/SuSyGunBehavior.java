@@ -2,7 +2,6 @@ package supersymmetry.common.item.behavior;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -13,7 +12,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -21,7 +19,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.*;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
@@ -48,18 +46,18 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final List<GunFireMode> fireModes;
     private final int burstCount;
     private final int burstIntervalTicks;
+    private final int magazineSize;
+    private final int reloadTicks;
 
-    private static final String NBT_NEXT_SHOT = "SuSyGunNextShot";
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
+    private static final String NBT_AMMO = "SuSyGunAmmo";
     public static final String NBT_AMMO_TYPE = "SuSyGunAmmoType";
-    private static final boolean DEBUG_TRAJECTORY = false;
 
-    private static final List<PendingBurst> PENDING_BURSTS = new ArrayList<>();
-    private static boolean initialized = false;
+    private static final boolean DEBUG_TRAJECTORY = false;
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
-                           int burstIntervalTicks) {
+                           int burstIntervalTicks, int magazineSize, int reloadTicks) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -79,6 +77,9 @@ public class SuSyGunBehavior implements IItemBehaviour {
                     "BURST needs burstCount > 1, guns without BURST need burstCount == 1 (got " +
                             modes + ", " + burstCount + ")");
         }
+        if (reloadTicks < 0) {
+            throw new IllegalArgumentException("reloadTicks must be >= 0");
+        }
 
         this.muzzleVelocity = muzzleVelocity;
         this.spread = spread;
@@ -86,21 +87,77 @@ public class SuSyGunBehavior implements IItemBehaviour {
         this.cooldownTicks = Math.max(cooldownTicks, 0);
         this.fireModes = Collections.unmodifiableList(modes);
         this.burstCount = burstCount;
-        this.burstIntervalTicks = burstIntervalTicks;
+        this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
+        this.magazineSize = Math.max(magazineSize, 0);
+        this.reloadTicks = reloadTicks;
     }
 
-    public static void init() {
-        if (initialized) return;
-        initialized = true;
-        MinecraftForge.EVENT_BUS.register(new BurstHandler());
-    }
+    public static void init() {}
 
     public static Builder gun(double muzzleVelocity, double spread, float damage, int cooldownTicks) {
         return new Builder(muzzleVelocity, spread, damage, cooldownTicks);
     }
 
+    public int getBurstCount() {
+        return burstCount;
+    }
+
+    public int getBurstIntervalTicks() {
+        return burstIntervalTicks;
+    }
+
+    public int getReloadTicks() {
+        return reloadTicks;
+    }
+
+    public int getCooldownTicks(GunFireMode mode) {
+        return mode == GunFireMode.BURST ? Math.max(cooldownTicks, burstDuration()) : cooldownTicks;
+    }
+
+    private int burstDuration() {
+        return (burstCount - 1) * burstIntervalTicks + 1;
+    }
+
+    //  magazine
+
+    public int getAmmo(ItemStack stack) {
+        if (magazineSize <= 0) return Integer.MAX_VALUE;
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null || !tag.hasKey(NBT_AMMO)) return magazineSize;
+        return tag.getInteger(NBT_AMMO);
+    }
+
+    public boolean isFull(ItemStack stack) {
+        return magazineSize <= 0 || getAmmo(stack) >= magazineSize;
+    }
+
+    public boolean consumeRound(ItemStack stack) {
+        if (magazineSize <= 0) return true;
+        int ammo = getAmmo(stack);
+        if (ammo <= 0) return false;
+        getOrCreateTag(stack).setInteger(NBT_AMMO, ammo - 1);
+        return true;
+    }
+
+    // TODO: take rounds from the player's inventory instead of refilling for free
+    public void refill(ItemStack stack) {
+        if (magazineSize <= 0) return;
+        getOrCreateTag(stack).setInteger(NBT_AMMO, magazineSize);
+    }
+
+    private static NBTTagCompound getOrCreateTag(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            stack.setTagCompound(tag);
+        }
+        return tag;
+    }
+
+    // balistic
     /// Fires a single bullet from the specified position
     public void fire(World world, Entity shooter, Vec3d firePos, double yaw, double pitch, SuSyAmmoType ammoType) {
+        if (world.isRemote) return;
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
         yaw = yaw % 360;
@@ -171,6 +228,54 @@ public class SuSyGunBehavior implements IItemBehaviour {
         }
     }
 
+    public void shootOnce(EntityPlayer player, EnumHand hand, ItemStack stack, boolean aim) {
+    SuSyAmmoType ammoType = resolveAmmoType(stack);
+    if (ammoType == null) 
+        return;
+
+    double yaw = player.rotationYaw % 360;
+    
+    double handXOffset = 0.0;
+    double handZOffset = 0.0;
+
+    if (!aim) {
+        handXOffset = -0.35 * MathHelper.cos((float) (yaw * 0.0174532922));
+        handZOffset = -0.35 * MathHelper.sin((float) (yaw * 0.0174532922));
+
+        if (player.getPrimaryHand() == EnumHandSide.LEFT) {
+            handXOffset *= -1;
+            handZOffset *= -1;
+        }
+        if (hand == EnumHand.OFF_HAND) {
+            handXOffset *= -1;
+            handZOffset *= -1;
+        }
+    }
+
+    Random random = player.getRNG();
+    double currentSpeed = Math.sqrt(Math.pow(player.posX - player.prevPosX, 2) + Math.pow(player.posY - player.prevPosY, 2) + Math.pow(player.posZ - player.prevPosZ, 2));
+    double spreadModifier = 100 * currentSpeed;
+
+    if (aim) {
+        spreadModifier -= 0.5;
+    } else if (player.isSneaking()) {
+        spreadModifier -= 0.15;
+    }
+
+    if (player.isSprinting()) {
+        spreadModifier += 1;
+    }
+
+    for (int i = 0; i < ammoType.numPellets; i++) {
+        double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * Math.max(0.1, 1 + spreadModifier);
+        double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * Math.max(0.1, 1 + spreadModifier);
+        
+        fire(player.getEntityWorld(), player,
+                new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
+                player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
+    }
+}
+
     public SuSyAmmoType getCurrentAmmoType(ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey(NBT_AMMO_TYPE)) {
@@ -184,6 +289,28 @@ public class SuSyGunBehavior implements IItemBehaviour {
         return null;
     }
 
+    private SuSyAmmoType resolveAmmoType(ItemStack stack) {
+        SuSyAmmoType ammoType = getCurrentAmmoType(stack);
+        if (ammoType != null) return ammoType;
+
+        if (isSameItem(stack, SuSyMetaItems.PISTOL.getStackForm())) {
+            return RED_TRACER;
+        } else if (isSameItem(stack, SuSyMetaItems.RIFLE.getStackForm())) {
+            return GREEN_TRACER;
+        } else if (isSameItem(stack, SuSyMetaItems.SMG.getStackForm())) {
+            return BLUE_TRACER;
+        } else if (isSameItem(stack, SuSyMetaItems.SHOTGUN.getStackForm())) {
+            return BUCKSHOT;
+        }
+        return FULL_METAL_JACKET;
+    }
+
+    private static boolean isSameItem(ItemStack stack, ItemStack reference) {
+        return stack.getItem() == reference.getItem() && stack.getMetadata() == reference.getMetadata();
+    }
+
+    //  fire modes
+
     public GunFireMode getSelectedMode(ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey(NBT_FIRE_MODE)) {
@@ -192,116 +319,25 @@ public class SuSyGunBehavior implements IItemBehaviour {
                 return fireModes.get(index);
             }
         }
-        return fireModes.getFirst();
+        return fireModes.get(0);
     }
 
     public void cycleMode(EntityPlayer player, ItemStack stack) {
         if (fireModes.size() <= 1) return;
-        NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-            stack.setTagCompound(tag);
-        }
+        NBTTagCompound tag = getOrCreateTag(stack);
         int current = tag.getInteger(NBT_FIRE_MODE);
         int next = (current + 1) % fireModes.size();
         tag.setInteger(NBT_FIRE_MODE, next);
-        player.sendMessage(new TextComponentString("susy.gun.fire_mode." + fireModes.get(next).name().toLowerCase()));
+        player.sendMessage(new TextComponentTranslation(
+                "susy.gun.fire_mode." + fireModes.get(next).name().toLowerCase(Locale.ROOT)));
     }
+
+    //  item behaviour
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        ActionResult<ItemStack> success = ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        ActionResult<ItemStack> fail = ActionResult.newResult(EnumActionResult.FAIL, stack);
-
-        if (player.world.isRemote) {
-            return fail;
-        }
-
-        if (player.isSneaking() && fireModes.size() > 1) {
-            cycleMode(player, stack);
-            return success;
-        }
-
-        boolean fireSuccess = tryFire(player, hand, stack);
-        return fireSuccess ? success : fail;
-    }
-
-    private int burstDuration() {
-        return (burstCount - 1) * burstIntervalTicks + 1;
-    }
-
-    private int cooldownFor(GunFireMode mode) {
-        return mode == GunFireMode.BURST ? Math.max(cooldownTicks, burstDuration()) : cooldownTicks;
-    }
-
-    private boolean tryFire(EntityPlayer player, EnumHand hand, ItemStack stack) {
-        long now = player.world.getTotalWorldTime();
-        NBTTagCompound data = player.getEntityData();
-
-        if (now < data.getLong(NBT_NEXT_SHOT)) return false;
-
-        GunFireMode mode = getSelectedMode(stack);
-        data.setLong(NBT_NEXT_SHOT, now + cooldownFor(mode));
-
-        SuSyAmmoType ammoType = getCurrentAmmoType(stack);
-        ammoType = (ammoType == null ? FULL_METAL_JACKET : ammoType);
-
-        if (stack.getItem() == SuSyMetaItems.PISTOL.getStackForm().getItem() &&
-                stack.getMetadata() == SuSyMetaItems.PISTOL.getStackForm().getMetadata()) {
-            ammoType = FULL_METAL_JACKET;
-        } else if (stack.getItem() == SuSyMetaItems.RIFLE.getStackForm().getItem() &&
-                stack.getMetadata() == SuSyMetaItems.RIFLE.getStackForm().getMetadata()) {
-                    ammoType = ARMOR_PIERCING_INCENDIARY;
-                } else
-            if (stack.getItem() == SuSyMetaItems.SMG.getStackForm().getItem() &&
-                    stack.getMetadata() == SuSyMetaItems.SMG.getStackForm().getMetadata()) {
-                        ammoType = SABOT;
-                    } else
-                if (stack.getItem() == SuSyMetaItems.SHOTGUN.getStackForm().getItem() &&
-                        stack.getMetadata() == SuSyMetaItems.SHOTGUN.getStackForm().getMetadata()) {
-                            ammoType = BUCKSHOT;
-                        }
-        shootOnce(player, hand, ammoType);
-
-        if (mode == GunFireMode.BURST && burstCount > 1) {
-            PENDING_BURSTS
-                    .add(new PendingBurst(this, player, hand, stack, burstCount - 1, burstIntervalTicks, ammoType));
-        }
-        return true;
-    }
-
-    private void shootOnce(EntityPlayer player, EnumHand hand, SuSyAmmoType ammoType) {
-        double yaw = player.rotationYaw % 360;
-        // since the player shoots from the hand
-        double handXOffset = -0.35 * MathHelper.cos((float) (yaw * 0.0174532922));
-        double handZOffset = -0.35 * MathHelper.sin((float) (yaw * 0.0174532922));
-
-        if (player.getPrimaryHand() == EnumHandSide.LEFT) {
-            handXOffset *= -1;
-            handZOffset *= -1;
-        }
-        if (hand == EnumHand.OFF_HAND) {
-            handXOffset *= -1;
-            handZOffset *= -1;
-        }
-        Random random = player.getRNG();
-        double currentSpeed = Math.sqrt(Math.pow(player.posX - player.prevPosX, 2) + Math.pow(player.posY - player.prevPosY, 2) + Math.pow(player.posZ - player.prevPosZ, 2));
-        double spreadModifier = 100 * currentSpeed;
-        if (player.isSneaking()) {
-            spreadModifier -= 0.15;
-        }
-        
-        if (player.isSprinting()) {
-            spreadModifier += 1;
-        }
-        for (int i = 0; i < ammoType.numPellets; i++) {
-            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * (1 + spreadModifier);
-            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * (1 + spreadModifier);
-            fire(player.getEntityWorld(), player,
-                    new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
-                    player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
-        }
+        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
@@ -313,66 +349,6 @@ public class SuSyGunBehavior implements IItemBehaviour {
         }
     }
 
-    private static final class PendingBurst {
-
-        final SuSyGunBehavior gun;
-        final EntityPlayer player;
-        final EnumHand hand;
-        final Item item;
-        final int meta;
-        int shotsLeft;
-        int ticksLeft;
-        final SuSyAmmoType ammoType;
-
-        PendingBurst(SuSyGunBehavior gun, EntityPlayer player, EnumHand hand, ItemStack stack,
-                     int shotsLeft, int interval, SuSyAmmoType ammoType) {
-            this.gun = gun;
-            this.player = player;
-            this.hand = hand;
-            this.item = stack.getItem();
-            this.meta = stack.getMetadata();
-            this.shotsLeft = shotsLeft;
-            this.ticksLeft = interval;
-            this.ammoType = ammoType;
-        }
-    }
-
-    public static final class BurstHandler {
-
-        @SubscribeEvent
-        public void onServerTick(TickEvent.ServerTickEvent event) {
-            if (event.phase != TickEvent.Phase.END || PENDING_BURSTS.isEmpty()) return;
-
-            Iterator<PendingBurst> it = PENDING_BURSTS.iterator();
-            while (it.hasNext()) {
-                PendingBurst burst = it.next();
-                ItemStack held = burst.player.getHeldItem(burst.hand);
-
-                if (burst.player.isDead || held.isEmpty() || held.getItem() != burst.item ||
-                        held.getMetadata() != burst.meta) {
-                    it.remove();
-                    continue;
-                }
-
-                if (--burst.ticksLeft > 0) continue;
-
-                burst.gun.shootOnce(burst.player, burst.hand, burst.ammoType);
-                if (--burst.shotsLeft <= 0) {
-                    it.remove();
-                } else {
-                    burst.ticksLeft = burst.gun.burstIntervalTicks;
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public void onWorldUnload(WorldEvent.Unload event) {
-            if (!event.getWorld().isRemote && event.getWorld().provider.getDimension() == 0) {
-                PENDING_BURSTS.clear();
-            }
-        }
-    }
-
     public static final class Builder {
 
         private final double muzzleVelocity;
@@ -381,6 +357,8 @@ public class SuSyGunBehavior implements IItemBehaviour {
         private final int cooldownTicks;
         private int burstCount = 1;
         private int burstIntervalTicks = 1;
+        private int magazineSize = 0;
+        private int reloadTicks = 0;
         private final List<GunFireMode> modes = new ArrayList<>();
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks) {
@@ -402,13 +380,19 @@ public class SuSyGunBehavior implements IItemBehaviour {
             return this;
         }
 
+        public Builder magazine(int size, int reloadTicks) {
+            this.magazineSize = size;
+            this.reloadTicks = reloadTicks;
+            return this;
+        }
+
         public SuSyGunBehavior build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
-            return new SuSyGunBehavior(muzzleVelocity, spread, damage,
-                    cooldownTicks, resolvedModes, burstCount, burstIntervalTicks);
+            return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
+                    burstCount, burstIntervalTicks, magazineSize, reloadTicks);
         }
     }
 
@@ -436,7 +420,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
     public static final SuSyAmmoType ARMOR_PIERCING_EXPLOSIVE = new ExplosiveBullet(1.0, 2.5,
             "armor_piercing_explosive");
 
-    public static final List<SuSyAmmoType> ammoTypes = new ArrayList<>(List.of(
+    public static final List<SuSyAmmoType> ammoTypes = new ArrayList<>(java.util.Arrays.asList(
             FULL_METAL_JACKET,
             HOLLOW_POINT,
             ARMOR_PIERCING,

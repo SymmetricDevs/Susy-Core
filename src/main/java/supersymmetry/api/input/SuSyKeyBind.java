@@ -1,10 +1,10 @@
 package supersymmetry.api.input;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.WeakHashMap;
-import java.util.function.Supplier;
-
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTLog;
+import gregtech.core.network.packets.PacketKeysPressed;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,53 +17,31 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.lwjgl.input.Keyboard;
-
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
+import org.lwjgl.input.Mouse;
 import supersymmetry.api.SusyLog;
-import supersymmetry.common.network.SuSyPacketKeysPressed;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 public enum SuSyKeyBind {
 
     RELOAD_GUN("susy.key.reload_gun", KeyConflictContext.IN_GAME, Keyboard.KEY_R),
-    CYCLE_FIRE_MODE("susy.key.cycle_fire_mode", KeyConflictContext.IN_GAME, Keyboard.KEY_G);
+    CYCLE_FIRE_MODE("susy.key.cycle_fire_mode", KeyConflictContext.IN_GAME, Keyboard.KEY_B),
+    AIM("susy.key.aim", KeyConflictContext.IN_GAME, -99);
 
     public static final SuSyKeyBind[] VALUES = values();
 
     public static void init() {
+        if (FMLCommonHandler.instance().getSide().isClient()) return;
         SusyLog.logger.info("Registering KeyBinds");
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            MinecraftForge.EVENT_BUS.register(SuSyKeyBind.class);
-        }
-    }
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public static void onInputEvent(InputEvent.KeyInputEvent event) {
-        List<SuSyKeyBind> updating = new ArrayList<>();
-        for (SuSyKeyBind keybind : VALUES) {
-            boolean previousPressed = keybind.isPressed;
-            boolean previousKeyDown = keybind.isKeyDown;
-            keybind.isPressed = keybind.isPressed();
-            keybind.isKeyDown = keybind.isKeyDown();
-            if (previousPressed != keybind.isPressed || previousKeyDown != keybind.isKeyDown) {
-                updating.add(keybind);
-            }
-        }
-        if (!updating.isEmpty()) {
-            GregTechAPI.networkHandler.sendToServer(new SuSyPacketKeysPressed(updating));
-        }
     }
 
     @SideOnly(Side.CLIENT)
     private KeyBinding keybinding;
-    @SideOnly(Side.CLIENT)
-    private boolean isPressed, isKeyDown;
-
-    private final WeakHashMap<EntityPlayerMP, MutablePair<Boolean, Boolean>> mapping = new WeakHashMap<>();
 
     // For Vanilla/Other Mod keybinds
     // Double Supplier to keep client classes from loading
@@ -101,34 +79,4 @@ public enum SuSyKeyBind {
     public boolean isKeyDown() {
         return this.keybinding.isKeyDown();
     }
-
-    public void update(boolean pressed, boolean keyDown, EntityPlayerMP player) {
-        MutablePair<Boolean, Boolean> pair = this.mapping.get(player);
-        if (pair == null) {
-            this.mapping.put(player, MutablePair.of(pressed, keyDown));
-        } else {
-            pair.left = pressed;
-            pair.right = keyDown;
-        }
-    }
-
-    public boolean isPressed(EntityPlayer player) {
-        if (player.world.isRemote) {
-            return isPressed();
-        } else {
-            MutablePair<Boolean, Boolean> pair = this.mapping.get((EntityPlayerMP) player);
-            return pair != null && pair.left;
-        }
-    }
-
-    public boolean isKeyDown(EntityPlayer player) {
-        if (player.world.isRemote) {
-            return isKeyDown();
-        } else {
-            MutablePair<Boolean, Boolean> pair = this.mapping.get((EntityPlayerMP) player);
-            return pair != null && pair.right;
-        }
-    }
 }
-
-// TODO: add keybind for cycling the fire mode
