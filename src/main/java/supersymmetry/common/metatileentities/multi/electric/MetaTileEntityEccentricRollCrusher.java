@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
@@ -39,7 +40,6 @@ import gregtech.common.blocks.BlockTurbineCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 import supersymmetry.api.blocks.IAnimatablePartBlock;
 import supersymmetry.api.metatileentity.multiblock.SuSyPredicates;
 import supersymmetry.client.renderer.textures.SusyTextures;
