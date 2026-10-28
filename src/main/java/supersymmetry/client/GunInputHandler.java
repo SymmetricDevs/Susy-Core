@@ -1,16 +1,18 @@
 package supersymmetry.client;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
@@ -18,25 +20,23 @@ import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.network.CPacketGunInput;
 
-import java.util.Objects;
-
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
 public final class GunInputHandler {
 
     private static InputState lastState = null;
 
     // X, Y, Z, Scale
-    private static final float[] DEFAULT = new float[]{-0.56f, 0.19f, 0.10f, 1.0f};
+    private static final float[] DEFAULT = new float[] { -0.56f, 0.19f, 0.10f, 1.0f };
     private static final float[][] SPECIFIC = new float[100][4];
 
     static {
         for (int i = 0; i < SPECIFIC.length; i++) {
             SPECIFIC[i] = DEFAULT;
         }
-        SPECIFIC[31] = new float[]{-0.56f, 0.19f, 0.10f, 1.0f};
-        SPECIFIC[33] = new float[]{-0.60f, 0.28f, 0.12f, 1.1f};
-        SPECIFIC[35] = new float[]{-0.58f, 0.25f, 0.10f, 1.0f};
-        SPECIFIC[37] = new float[]{-0.56f, 0.19f, 0.08f, 1.0f};
+        SPECIFIC[31] = new float[] { -0.56f, 0.19f, 0.10f, 1.0f };
+        SPECIFIC[33] = new float[] { -0.60f, 0.28f, 0.12f, 1.1f };
+        SPECIFIC[35] = new float[] { -0.58f, 0.25f, 0.10f, 1.0f };
+        SPECIFIC[37] = new float[] { -0.56f, 0.19f, 0.08f, 1.0f };
     }
 
     private GunInputHandler() {}
@@ -91,9 +91,7 @@ public final class GunInputHandler {
 
         if (SuSyKeyBind.AIM.isKeyDown() && mc.currentScreen == null) {
             int meta = stack.getMetadata();
-            float[] value = (meta >= 0 && meta < SPECIFIC.length)
-                    ? SPECIFIC[meta]
-                    : DEFAULT;
+            float[] value = (meta >= 0 && meta < SPECIFIC.length) ? SPECIFIC[meta] : DEFAULT;
 
             float handSide = (event.getHand() == EnumHand.MAIN_HAND) ? 1.0F : -1.0F;
 
@@ -132,7 +130,7 @@ public final class GunInputHandler {
     private static EnumHand findGunHand(EntityPlayerSP player) {
         if (isGun(player.getHeldItem(EnumHand.MAIN_HAND)))
             return EnumHand.MAIN_HAND;
-        if (isGun(player.getHeldItem(EnumHand.OFF_HAND))) 
+        if (isGun(player.getHeldItem(EnumHand.OFF_HAND)))
             return EnumHand.OFF_HAND;
         return null;
     }
@@ -161,7 +159,7 @@ public final class GunInputHandler {
                 return false;
 
             InputState other = (InputState) o;
-            
+
             return trigger == other.trigger && aim == other.aim && hand == other.hand;
         }
 

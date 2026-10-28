@@ -1,31 +1,19 @@
 package supersymmetry.api.input;
 
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.util.GTLog;
-import gregtech.core.network.packets.PacketKeysPressed;
-import net.minecraft.client.Minecraft;
+import java.util.function.Supplier;
+
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import supersymmetry.api.SusyLog;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.WeakHashMap;
-import java.util.function.Supplier;
+import org.lwjgl.input.Keyboard;
+
+import gregtech.api.GTValues;
+import supersymmetry.api.SusyLog;
 
 public enum SuSyKeyBind {
 

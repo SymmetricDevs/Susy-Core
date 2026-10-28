@@ -67,6 +67,7 @@ import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
+import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
@@ -95,7 +96,6 @@ import supersymmetry.common.network.SPacketSpeakerAudio;
 import supersymmetry.common.network.SpeakerCodec;
 import supersymmetry.loaders.SuSyFluidTooltipLoader;
 import supersymmetry.loaders.SuSyIRLoader;
-import supersymmetry.api.input.SuSyKeyBind;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)

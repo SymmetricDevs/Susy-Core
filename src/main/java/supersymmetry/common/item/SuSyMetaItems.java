@@ -24,8 +24,8 @@ import gregtech.api.items.metaitem.*;
 import gregtech.api.items.metaitem.ElectricStats;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
 import gregtech.api.items.metaitem.MetaOreDictItem.OreDictValueItem;
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.registry.MaterialRegistry;
@@ -262,20 +262,20 @@ public class SuSyMetaItems {
     }
 
     public static SuSyGunBehavior getGunBehaviour(ItemStack stack) {
-    if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof MetaItem)) {
-        return null;
-    }
-    MetaItem<?>.MetaValueItem valueItem = ((MetaItem<?>) stack.getItem()).getItem(stack);
-    if (valueItem == null) {
-        return null;
-    }
-    for (IItemBehaviour behaviour : valueItem.getBehaviours()) {
-        if (behaviour instanceof SuSyGunBehavior) {
-            return (SuSyGunBehavior) behaviour;
+        if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof MetaItem)) {
+            return null;
         }
+        MetaItem<?>.MetaValueItem valueItem = ((MetaItem<?>) stack.getItem()).getItem(stack);
+        if (valueItem == null) {
+            return null;
+        }
+        for (IItemBehaviour behaviour : valueItem.getBehaviours()) {
+            if (behaviour instanceof SuSyGunBehavior) {
+                return (SuSyGunBehavior) behaviour;
+            }
+        }
+        return null;
     }
-    return null;
-}
 
     public static int isMetaItem(ItemStack i) {
         return (i.getItem() instanceof MetaItem<?>) && (i.getItem().equals(metaItem)) ?

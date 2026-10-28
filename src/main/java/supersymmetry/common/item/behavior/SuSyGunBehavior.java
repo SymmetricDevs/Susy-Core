@@ -21,14 +21,11 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import lombok.Getter;
 import supersymmetry.api.guns.SuSyAmmoType;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
@@ -44,9 +41,12 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final float damage;
     private final int cooldownTicks;
     private final List<GunFireMode> fireModes;
+    @Getter
     private final int burstCount;
+    @Getter
     private final int burstIntervalTicks;
     private final int magazineSize;
+    @Getter
     private final int reloadTicks;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
@@ -98,18 +98,6 @@ public class SuSyGunBehavior implements IItemBehaviour {
         return new Builder(muzzleVelocity, spread, damage, cooldownTicks);
     }
 
-    public int getBurstCount() {
-        return burstCount;
-    }
-
-    public int getBurstIntervalTicks() {
-        return burstIntervalTicks;
-    }
-
-    public int getReloadTicks() {
-        return reloadTicks;
-    }
-
     public int getCooldownTicks(GunFireMode mode) {
         return mode == GunFireMode.BURST ? Math.max(cooldownTicks, burstDuration()) : cooldownTicks;
     }
@@ -118,7 +106,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
         return (burstCount - 1) * burstIntervalTicks + 1;
     }
 
-    //  magazine
+    // magazine
 
     public int getAmmo(ItemStack stack) {
         if (magazineSize <= 0) return Integer.MAX_VALUE;
@@ -229,52 +217,55 @@ public class SuSyGunBehavior implements IItemBehaviour {
     }
 
     public void shootOnce(EntityPlayer player, EnumHand hand, ItemStack stack, boolean aim) {
-    SuSyAmmoType ammoType = resolveAmmoType(stack);
-    if (ammoType == null) 
-        return;
+        SuSyAmmoType ammoType = resolveAmmoType(stack);
+        if (ammoType == null)
+            return;
 
-    double yaw = player.rotationYaw % 360;
-    
-    double handXOffset = 0.0;
-    double handZOffset = 0.0;
+        double yaw = player.rotationYaw % 360;
 
-    if (!aim) {
-        handXOffset = -0.35 * MathHelper.cos((float) (yaw * 0.0174532922));
-        handZOffset = -0.35 * MathHelper.sin((float) (yaw * 0.0174532922));
+        double handXOffset = 0.0;
+        double handZOffset = 0.0;
 
-        if (player.getPrimaryHand() == EnumHandSide.LEFT) {
-            handXOffset *= -1;
-            handZOffset *= -1;
+        if (!aim) {
+            handXOffset = -0.35 * MathHelper.cos((float) (yaw * 0.0174532922));
+            handZOffset = -0.35 * MathHelper.sin((float) (yaw * 0.0174532922));
+
+            if (player.getPrimaryHand() == EnumHandSide.LEFT) {
+                handXOffset *= -1;
+                handZOffset *= -1;
+            }
+            if (hand == EnumHand.OFF_HAND) {
+                handXOffset *= -1;
+                handZOffset *= -1;
+            }
         }
-        if (hand == EnumHand.OFF_HAND) {
-            handXOffset *= -1;
-            handZOffset *= -1;
+
+        Random random = player.getRNG();
+        double currentSpeed = Math.sqrt(Math.pow(player.posX - player.prevPosX, 2) +
+                Math.pow(player.posY - player.prevPosY, 2) + Math.pow(player.posZ - player.prevPosZ, 2));
+        double spreadModifier = 100 * currentSpeed;
+
+        if (aim) {
+            spreadModifier -= 0.5;
+        } else if (player.isSneaking()) {
+            spreadModifier -= 0.15;
+        }
+
+        if (player.isSprinting()) {
+            spreadModifier += 1;
+        }
+
+        for (int i = 0; i < ammoType.numPellets; i++) {
+            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 *
+                    Math.max(0.1, 1 + spreadModifier);
+            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 *
+                    Math.max(0.1, 1 + spreadModifier);
+
+            fire(player.getEntityWorld(), player,
+                    new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
+                    player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
         }
     }
-
-    Random random = player.getRNG();
-    double currentSpeed = Math.sqrt(Math.pow(player.posX - player.prevPosX, 2) + Math.pow(player.posY - player.prevPosY, 2) + Math.pow(player.posZ - player.prevPosZ, 2));
-    double spreadModifier = 100 * currentSpeed;
-
-    if (aim) {
-        spreadModifier -= 0.5;
-    } else if (player.isSneaking()) {
-        spreadModifier -= 0.15;
-    }
-
-    if (player.isSprinting()) {
-        spreadModifier += 1;
-    }
-
-    for (int i = 0; i < ammoType.numPellets; i++) {
-        double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * Math.max(0.1, 1 + spreadModifier);
-        double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 * Math.max(0.1, 1 + spreadModifier);
-        
-        fire(player.getEntityWorld(), player,
-                new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
-                player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
-    }
-}
 
     public SuSyAmmoType getCurrentAmmoType(ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
@@ -309,7 +300,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
         return stack.getItem() == reference.getItem() && stack.getMetadata() == reference.getMetadata();
     }
 
-    //  fire modes
+    // fire modes
 
     public GunFireMode getSelectedMode(ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
@@ -332,7 +323,7 @@ public class SuSyGunBehavior implements IItemBehaviour {
                 "susy.gun.fire_mode." + fireModes.get(next).name().toLowerCase(Locale.ROOT)));
     }
 
-    //  item behaviour
+    // item behaviour
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

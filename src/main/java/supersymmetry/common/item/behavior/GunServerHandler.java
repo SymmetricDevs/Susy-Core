@@ -67,9 +67,8 @@ public final class GunServerHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END
-                || event.side != Side.SERVER
-                || !(event.player instanceof EntityPlayerMP)) {
+        if (event.phase != TickEvent.Phase.END || event.side != Side.SERVER ||
+                !(event.player instanceof EntityPlayerMP)) {
             return;
         }
 
