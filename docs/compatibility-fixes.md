@@ -25,4 +25,4 @@ Compatibility modules load only when their target mods are present.
 
 Deferred indicators change population timing; order-dependent generation can change future terrain. Corrected placement checks can restore structures previously skipped. The adaptive cache improves sparse allocation but temporarily holds both representations during promotion and had about 4% dense-access overhead in the recorded microbenchmark. These changes do not establish that every generation stall or native-memory growth issue is fixed. Dedicated-server and long-session validation remain separate work.
 
-License notices for the LGPL worldgen helpers and MIT Recurrent Complex/IvToolkit code are included under `META-INF/licenses`. Corresponding source is supplied with distributed review builds.
+License notices for the LGPL worldgen helpers and MIT Recurrent Complex/IvToolkit code are included under `META-INF/licenses`. Corresponding source is supplied with distributed review builds. No recipe or progression changes are included.
