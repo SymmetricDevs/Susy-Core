@@ -101,6 +101,8 @@ dependencies {
     // # Recurrent Complex dependencies
     compileOnly(deps.recurrentComplex.deobf())
     compileOnly(deps.ivToolkit.deobf())
+    testImplementation(deps.recurrentComplex.deobf())
+    testImplementation(deps.ivToolkit.deobf())
 
     compileOnly(deps.fluidloggedApi)
 

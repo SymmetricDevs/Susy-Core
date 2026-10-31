@@ -1,10 +1,10 @@
 {
-  "package" : "supersymmetry.mixins.minecraft",
-  "refmap" : "mixins.susy.refmap.json",
-  "target" : "@env(DEFAULT)",
-  "minVersion" : "0.8",
-  "compatibilityLevel" : "JAVA_8",
-  "mixins" : [
+  "package": "supersymmetry.mixins.minecraft",
+  "refmap": "mixins.susy.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
     "BlockFireMixin",
     "EntityElytraMixin",
     "EntityFallingBlockMixin",
@@ -12,13 +12,16 @@
     "EntityMixin",
     "EntityPlayerMixin",
     "EntityTNTPrimedMixin",
-    "WorldServerPlanetGrowthMixin"
+    "WorldServerPlanetGrowthMixin",
+    "LoadedChunksMixin",
+    "AnvilPendingAccessor"
   ],
-  "client" : [
+  "client": [
     "BlockModelRendererMixin",
     "RenderChunkMixin",
     "TileEntityRendererDispatcherMixin",
     "RenderGlobalMixin",
-    "WorldMixin"
+    "WorldMixin",
+    "ClientPacketsMixin"
   ]
 }

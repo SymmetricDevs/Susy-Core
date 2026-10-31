@@ -1,0 +1,6 @@
+Worldgen helpers and cache implementation adapted from Supersymmetry Worldgen Fixes.
+Copyright 2026 Marsietiss. Licensed under LGPL-3.0, incorporated into GPL-3.0 Susy-Core.
+GregTech surface-indicator eligibility logic is derived from GregTech CEu v2.8.10
+(commit 9fe140febe8747bbe2f06dfd570421331ec06f4b), LGPL-3.0.
+Recurrent Complex and IvToolkit notices are included alongside this notice.
+The benchmark harness and diagnostic request/auto-load hooks are not included.
