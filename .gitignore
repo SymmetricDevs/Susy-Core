@@ -10,7 +10,7 @@ logs/
 ### Gradle ###
 .gradle/
 .gradle-user-home/
-!gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 !**/src/main/**/out/
