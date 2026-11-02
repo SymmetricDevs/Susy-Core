@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -34,7 +35,7 @@ import supersymmetry.common.guns.bullettypes.IncendiaryBullet;
 import supersymmetry.common.guns.bullettypes.TracerBullet;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class SuSyGunBehavior implements IItemBehaviour {
+public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     private final double muzzleVelocity;
     private final double spread;
@@ -50,8 +51,9 @@ public class SuSyGunBehavior implements IItemBehaviour {
     private final int reloadTicks;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
-    private static final String NBT_AMMO = "SuSyGunAmmo";
+    public static final String NBT_AMMO = "SuSyGunAmmo";
     public static final String NBT_AMMO_TYPE = "SuSyGunAmmoType";
+    public static final String NBT_CALIBER = "SuSyCaliber";
 
     private static final boolean DEBUG_TRAJECTORY = false;
 
@@ -140,6 +142,12 @@ public class SuSyGunBehavior implements IItemBehaviour {
             stack.setTagCompound(tag);
         }
         return tag;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack itemStack) {
+        if (!getOrCreateTag(itemStack).hasKey(NBT_AMMO)) return 0;
+        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) / magazineSize;
     }
 
     // balistic

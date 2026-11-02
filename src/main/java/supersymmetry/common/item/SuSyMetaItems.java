@@ -77,6 +77,16 @@ public class SuSyMetaItems {
     public static MetaValueItem SMG;
     public static MetaValueItem SMG_AMMO;
 
+    public static MetaValueItem DATA_CARD;
+    public static MetaValueItem DATA_CARD_ACTIVE;
+    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
+    public static MetaValueItem ROCKET_CONFIGURER;
+
+    public static MetaValueItem AIR_DISPERSER;
+    public static MetaValueItem OXYGEN_SENSOR;
+    public static MetaValueItem AIRLOCK;
+
+
     public static MetaValueItem FLINTLOCK_PISTOL;
     public static MetaValueItem MUSKET;
     public static MetaValueItem BLUNDERBUSS;
@@ -110,14 +120,13 @@ public class SuSyMetaItems {
     public static MetaValueItem IMPROVED_LMG;
     public static MetaValueItem BASIC_GPMG;
 
-    public static MetaValueItem DATA_CARD;
-    public static MetaValueItem DATA_CARD_ACTIVE;
-    public static MetaValueItem DATA_CARD_MASTER_BLUEPRINT;
-    public static MetaValueItem ROCKET_CONFIGURER;
-
-    public static MetaValueItem AIR_DISPERSER;
-    public static MetaValueItem OXYGEN_SENSOR;
-    public static MetaValueItem AIRLOCK;
+    public static MetaValueItem MAGAZINE_5;
+    public static MetaValueItem MAGAZINE_10;
+    public static MetaValueItem MAGAZINE_15;
+    public static MetaValueItem MAGAZINE_20;
+    public static MetaValueItem MAGAZINE_30;
+    public static MetaValueItem MAGAZINE_50;
+    public static MetaValueItem MAGAZINE_200;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -291,7 +300,7 @@ public class SuSyMetaItems {
         DOUBLE_BARREL_SHOTGUN = metaItem.addItem(105, "double_barrel_shotgun").setMaxStackSize(1)
                 .addComponents(gun(300, 30, 15f, 400).modes(BOLT_ACTION).build());
         BASIC_PISTOL = metaItem.addItem(106, "basic_pistol").setMaxStackSize(1)
-                .addComponents(gun(250, 9, 6f, 15).modes(SEMI_AUTO).build());
+                .addComponents(gun(250, 9, 6f, 15).modes(SEMI_AUTO).magazine(12, 100).build());
         BOLT_ACTION_RIFLE = metaItem.addItem(107, "bolt_action_rifle").setMaxStackSize(1)
                 .addComponents(gun(850, 1, 12f, 40).modes(BOLT_ACTION).build());
         PUMP_SHOTGUN = metaItem.addItem(108, "pump_shotgun").setMaxStackSize(1)
@@ -342,6 +351,15 @@ public class SuSyMetaItems {
                 .addComponents(gun(900, 1.5, 11f, 1).modes(FULL_AUTO).build());
         BASIC_GPMG = metaItem.addItem(131, "basic_gpmg").setMaxStackSize(1)
                 .addComponents(gun(850, 1.5, 15f, 2).modes(FULL_AUTO).build());
+
+        // 200-300: ammo
+        MAGAZINE_5 = metaItem.addItem(200, "magazine_5").setMaxStackSize(1).addComponents(new GunMagazineBehavior(5, 0.5));
+        MAGAZINE_10 = metaItem.addItem(201, "magazine_10").setMaxStackSize(1).addComponents(new GunMagazineBehavior(10, 1.0));
+        MAGAZINE_15 = metaItem.addItem(202, "magazine_15").setMaxStackSize(1).addComponents(new GunMagazineBehavior(15, 1.5));
+        MAGAZINE_20 = metaItem.addItem(203, "magazine_20").setMaxStackSize(1).addComponents(new GunMagazineBehavior(20, 2.0));
+        MAGAZINE_30 = metaItem.addItem(204, "magazine_30").setMaxStackSize(1).addComponents(new GunMagazineBehavior(30, 3.0));
+        MAGAZINE_50 = metaItem.addItem(205, "magazine_50").setMaxStackSize(1).addComponents(new GunMagazineBehavior(50, 5.0));
+        MAGAZINE_200 = metaItem.addItem(206, "magazine_200").setMaxStackSize(1).addComponents(new GunMagazineBehavior(200, 1.0));
     }
 
     private static void addExtraBehaviours() {
