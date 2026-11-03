@@ -552,16 +552,16 @@ susy.caliber.13x100mm=§c13x100mm Heavy§c
 susy.caliber.6.8x50mm=§a6.8x50mm High-pressure§a
 
 susy.ammo_type.full_metal_jacket=Full Metal Jacket
-susy.ammo_type.hollow_point=Hollow-Point
-susy.ammo_type.armor_piercing=Armor-Piercing
-susy.ammo_type.sabot=Sabot
-susy.ammo_type.buckshot=Buckshot
-susy.ammo_type.red_tracer=Red Tracer
-susy.ammo_type.green_tracer=Green Tracer
-susy.ammo_type.blue_tracer=Blue Tracer
-susy.ammo_type.incendiary=Incendiary
-susy.ammo_type.armor_piercing_incendiary=Armor-Piercing Incendiary
-susy.ammo_type.armor_piercing_explosive=Armor-Piercing Explosive
+susy.ammo_type.hollow_point=§fHollow-Point§f
+susy.ammo_type.armor_piercing=§8Armor-Piercing§8
+susy.ammo_type.sabot=§5Sabot§5
+susy.ammo_type.buckshot=§bBuckshot§b
+susy.ammo_type.red_tracer=§cRed Tracer§c
+susy.ammo_type.green_tracer=§2Green Tracer§2
+susy.ammo_type.blue_tracer=§1Blue Tracer§1
+susy.ammo_type.incendiary=§eIncendiary§e
+susy.ammo_type.armor_piercing_incendiary=§6Armor-Piercing Incendiary§6
+susy.ammo_type.armor_piercing_explosive=§4Armor-Piercing Explosive§4
 
 susy.gun.fire_mode.bolt_action=Manual Action
 susy.gun.fire_mode.semi_auto=Semi-Auto
@@ -571,6 +571,8 @@ susy.gun.fire_mode.burst=Burst
 susy.gun.tooltip.damage=Damage: %s
 susy.gun.tooltip.caliber=Caliber: %s
 susy.gun.tooltip.switch_mode=Press %s to switch fire mode
+susy.gun.tooltip.magazine.bullet_type=Ammunition Type: %s
+susy.gun.tooltip.magazine.caliber=Caliber: %s
 
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s

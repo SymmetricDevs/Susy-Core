@@ -1,7 +1,6 @@
 package supersymmetry.common.item.behavior;
 
 import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
-import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 
 import java.util.List;
 
@@ -28,12 +27,16 @@ public class GunMagazineBehavior implements IItemBehaviour, IItemDurabilityManag
     public void addInformation(ItemStack itemStack, List<String> lines) {
         if (itemStack.hasTagCompound()) {
             NBTTagCompound tag = itemStack.getTagCompound();
-            if (tag.hasKey(NBT_CALIBER) && tag.hasKey(NBT_AMMO_TYPE)) {
-                lines.add(I18n.format("susy.caliber." + tag.getString(NBT_CALIBER)) + " (" +
-                        I18n.format("susy.ammo_type." + tag.getString(NBT_AMMO_TYPE)) + ")");
+            if (tag.hasKey(NBT_AMMO_TYPE)) {
+                String ammoType = tag.getString(NBT_AMMO_TYPE);
+                lines.add(I18n.format("susy.gun.tooltip.magazine.bullet_type", I18n.format("susy.ammo_type." + ammoType)));
+            }
+            if (tag.hasKey(NBT_CALIBER)) {
+                String caliber = tag.getString(NBT_CALIBER);
+                lines.add(I18n.format("susy.gun.tooltip.magazine.caliber", I18n.format("susy.caliber." + caliber)));
             }
             if (tag.hasKey(NBT_AMMO)) {
-                lines.add(tag.getString(NBT_AMMO) + "/" + this.maxCapacity);
+                lines.add(tag.getInteger(NBT_AMMO) + "/" + this.maxCapacity);
             }
         }
     }
