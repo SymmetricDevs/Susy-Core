@@ -1,13 +1,7 @@
 package supersymmetry.common.item.behavior;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
-import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -26,8 +20,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
+import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import lombok.Getter;
 import supersymmetry.api.guns.SuSyAmmoType;
+import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.common.guns.bullettypes.ExplosiveBullet;
@@ -49,6 +45,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final int magazineSize;
     @Getter
     private final int reloadTicks;
+    @Getter
+    private final String caliber;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
@@ -59,7 +57,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
-                           int burstIntervalTicks, int magazineSize, int reloadTicks) {
+                           int burstIntervalTicks, int magazineSize, int reloadTicks, String caliber) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -92,12 +90,13 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
         this.magazineSize = Math.max(magazineSize, 0);
         this.reloadTicks = reloadTicks;
+        this.caliber = caliber;
     }
 
     public static void init() {}
 
-    public static Builder gun(double muzzleVelocity, double spread, float damage, int cooldownTicks) {
-        return new Builder(muzzleVelocity, spread, damage, cooldownTicks);
+    public static Builder gun(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
+        return new Builder(muzzleVelocity, spread, damage, cooldownTicks, caliber);
     }
 
     public int getCooldownTicks(GunFireMode mode) {
@@ -342,9 +341,11 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     @Override
     public void addInformation(ItemStack itemStack, List<String> lines) {
         lines.add(I18n.format("susy.gun.tooltip.damage", damage));
+        lines.add(I18n.format("susy.gun.tooltip.caliber", I18n.format("susy.caliber." + caliber)));
         lines.add(I18n.format("susy.gun.fire_mode." + getSelectedMode(itemStack).name().toLowerCase(Locale.ROOT)));
         if (fireModes.size() > 1) {
-            lines.add(I18n.format("susy.gun.tooltip.switch_mode"));
+            lines.add(
+                    I18n.format("susy.gun.tooltip.switch_mode", SuSyKeyBind.RELOAD_GUN.toMinecraft().getDisplayName()));
         }
     }
 
@@ -358,13 +359,15 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private int burstIntervalTicks = 1;
         private int magazineSize = 0;
         private int reloadTicks = 0;
+        private String caliber;
         private final List<GunFireMode> modes = new ArrayList<>();
 
-        private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks) {
+        private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
             this.muzzleVelocity = muzzleVelocity;
             this.spread = spread;
             this.damage = damage;
             this.cooldownTicks = cooldownTicks;
+            this.caliber = caliber;
         }
 
         public Builder burst(int count, int intervalTicks) {
@@ -391,7 +394,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
             return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
-                    burstCount, burstIntervalTicks, magazineSize, reloadTicks);
+                    burstCount, burstIntervalTicks, magazineSize, reloadTicks, caliber);
         }
     }
 
@@ -418,17 +421,50 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             "armor_piercing_incendiary");
     public static final SuSyAmmoType ARMOR_PIERCING_EXPLOSIVE = new ExplosiveBullet(1.0, 2.5,
             "armor_piercing_explosive");
+    // if adding ammo types make sure to adjust modelamount for magazines
 
     public static final List<SuSyAmmoType> ammoTypes = new ArrayList<>(java.util.Arrays.asList(
-            FULL_METAL_JACKET,
-            HOLLOW_POINT,
-            ARMOR_PIERCING,
-            SABOT,
-            BUCKSHOT,
-            RED_TRACER,
-            GREEN_TRACER,
-            BLUE_TRACER,
-            INCENDIARY,
-            ARMOR_PIERCING_INCENDIARY,
-            ARMOR_PIERCING_EXPLOSIVE));
+            FULL_METAL_JACKET, // gray
+            HOLLOW_POINT, // white
+            ARMOR_PIERCING, // black
+            SABOT, // purple
+            BUCKSHOT, // aqua
+            RED_TRACER, // pink
+            GREEN_TRACER, // green
+            BLUE_TRACER, // blue
+            INCENDIARY, // yellow
+            ARMOR_PIERCING_INCENDIARY, // orange
+            ARMOR_PIERCING_EXPLOSIVE // red
+    ));
+
+    public static final String CALIBER_PAPER_CARTRIDGE = "paper_cartridge"; // generic umbrella for all pre-metal
+                                                                            // cartridge firearms
+    public static final String CALIBER_11x24_BP = "11x24mm_bp"; // .45 ACP (black powder)
+    public static final String CALIBER_13x45_BP = "13x45mmR_bp"; // .50-70 Government (black powder)
+    public static final String CALIBER_18_SHOTGUN_BP = "18mm_shotgun_bp"; // 12-gauge shotgun (black powder)
+    public static final String CALIBER_11x24 = "11x24mm"; // .45 ACP
+    public static final String CALIBER_7_5x55 = "7.5x55mm"; // 7.62x51mm NATO, .308 Winchester, .30-06 Springfield,
+                                                            // 7.62x54mmR, etc
+    public static final String CALIBER_18_SHOTGUN = "18mm_shotgun"; // 12-gauge shotgun
+    public static final String CALIBER_5_5x30 = "5.5x30mm"; // FN 5.7x28
+    public static final String CALIBER_5_5x45 = "5.5x45mm"; // 5.56x45mm NATO, 5.45x39mm
+    public static final String CALIBER_8_6x70 = "8.6x70mm"; // .338 Lapua Magnum
+    public static final String CALIBER_13x30 = "13x30mm"; // .50 AE
+    public static final String CALIBER_13x100 = "13x100mm"; // .50 BMG
+    public static final String CALIBER_6_8x50 = "6.8x50mm"; // .277 Fury
+
+    public static final List<String> calibers = new ArrayList<>(Arrays.asList(
+            CALIBER_PAPER_CARTRIDGE,
+            CALIBER_11x24_BP,
+            CALIBER_13x45_BP,
+            CALIBER_18_SHOTGUN_BP,
+            CALIBER_11x24,
+            CALIBER_7_5x55,
+            CALIBER_18_SHOTGUN,
+            CALIBER_5_5x30,
+            CALIBER_5_5x45,
+            CALIBER_8_6x70,
+            CALIBER_13x30,
+            CALIBER_13x100,
+            CALIBER_6_8x50));
 }

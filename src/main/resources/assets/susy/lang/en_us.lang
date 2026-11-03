@@ -536,6 +536,42 @@ tile.spacecraft_room_padding.padding.name=Spacecraft Room Padding
 susy.rocketry.soyuz.name=Soyuz FG
 susy.rocketry.lunar.name=Lunar-sized Rocket
 
+
+susy.caliber.paper_cartridge=§fPaper Cartridge§f
+susy.caliber.11x24mm_bp=§811x24mm (Black Powder)§8
+susy.caliber.13x45mmR_bp=§813x45mmR (Black Powder)§8
+susy.caliber.18mm_shotgun_bp=§818mm Shotgun (Black Powder)§8
+susy.caliber.11x24mm=§211x24mm Pistol§2
+susy.caliber.7.5x55mm=§67.5x55mm Full-power§6
+susy.caliber.18mm_shotgun=§d18mm Shotgun§d
+susy.caliber.5.5x30mm=§35.5x30mm Armor-piercing§3
+susy.caliber.5.5x45mm=§b5.5x45mm Intermediate§b
+susy.caliber.8.6x70mm=§48.6x70mm Sniper§4
+susy.caliber.13x30mm=§e13x30mm Magnum§e
+susy.caliber.13x100mm=§c13x100mm Heavy§c
+susy.caliber.6.8x50mm=§a6.8x50mm High-pressure§a
+
+susy.ammo_type.full_metal_jacket=Full Metal Jacket
+susy.ammo_type.hollow_point=Hollow-Point
+susy.ammo_type.armor_piercing=Armor-Piercing
+susy.ammo_type.sabot=Sabot
+susy.ammo_type.buckshot=Buckshot
+susy.ammo_type.red_tracer=Red Tracer
+susy.ammo_type.green_tracer=Green Tracer
+susy.ammo_type.blue_tracer=Blue Tracer
+susy.ammo_type.incendiary=Incendiary
+susy.ammo_type.armor_piercing_incendiary=Armor-Piercing Incendiary
+susy.ammo_type.armor_piercing_explosive=Armor-Piercing Explosive
+
+susy.gun.fire_mode.bolt_action=Manual Action
+susy.gun.fire_mode.semi_auto=Semi-Auto
+susy.gun.fire_mode.full_auto=Full-Auto
+susy.gun.fire_mode.burst=Burst
+
+susy.gun.tooltip.damage=Damage: %s
+susy.gun.tooltip.caliber=Caliber: %s
+susy.gun.tooltip.switch_mode=Press %s to switch fire mode
+
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 
