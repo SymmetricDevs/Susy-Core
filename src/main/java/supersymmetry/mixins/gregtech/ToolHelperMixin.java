@@ -16,6 +16,10 @@ import supersymmetry.common.item.ItemToolbelt;
  * Substitutes the selected tool for a toolbelt stack at the head of GT's static tool helpers,
  * the same way GTCEu-Reloaded's ToolHelper.toolbeltPassthrough does. This is what makes AoE
  * work: getMaxAoEDefinition reads the behaviours tag of the stack it is given.
+ * <p>
+ * The AoE routine also writes the belt's inventory back into its NBT when it returns, since the
+ * damage it applies goes to the tool stack inside the belt. Belt methods that delegate to the
+ * selected tool do the same; see ItemToolbelt.onBlockDestroyed.
  */
 @Mixin(value = ToolHelper.class, remap = false)
 public class ToolHelperMixin {
@@ -48,9 +52,8 @@ public class ToolHelperMixin {
     private static void susy$persistAfterAoe(ItemStack stack, EntityPlayerMP player,
                                              CallbackInfoReturnable<Boolean> cir) {
         ItemStack beltStack = SUSY_BELT.get();
-        if (beltStack != null) {
-            if (beltStack.getItem() instanceof ItemToolbelt belt) belt.getHandler(beltStack).persist();
-            SUSY_BELT.remove();
-        }
+        if (beltStack == null) return;
+        SUSY_BELT.remove();
+        if (beltStack.getItem() instanceof ItemToolbelt belt) belt.getHandler(beltStack).persist();
     }
 }

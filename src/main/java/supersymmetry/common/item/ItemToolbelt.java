@@ -207,8 +207,10 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     public boolean hitEntity(@NotNull ItemStack stack, @NotNull EntityLivingBase target,
                              @NotNull EntityLivingBase attacker) {
         ItemStack selected = getSelectedTool(stack);
-        return !selected.isEmpty() ? selected.getItem().hitEntity(selected, target, attacker) :
-                definition$hitEntity(stack, target, attacker);
+        if (selected.isEmpty()) return definition$hitEntity(stack, target, attacker);
+        boolean result = selected.getItem().hitEntity(selected, target, attacker);
+        getHandler(stack).persist();
+        return result;
     }
 
     @Override
@@ -222,8 +224,12 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     public boolean onBlockDestroyed(@NotNull ItemStack stack, @NotNull World world, @NotNull IBlockState state,
                                     @NotNull BlockPos pos, @NotNull EntityLivingBase entity) {
         ItemStack selected = getSelectedTool(stack);
-        return !selected.isEmpty() ? selected.getItem().onBlockDestroyed(selected, world, state, pos, entity) :
-                definition$onBlockDestroyed(stack, world, state, pos, entity);
+        if (selected.isEmpty()) return definition$onBlockDestroyed(stack, world, state, pos, entity);
+        boolean result = selected.getItem().onBlockDestroyed(selected, world, state, pos, entity);
+        // The tool lives in the belt's NBT: without this write-back the wear stays in memory and the
+        // belt's bars only move when something else persists it, which used to mean reselecting.
+        getHandler(stack).persist();
+        return result;
     }
 
     @Override
@@ -332,23 +338,29 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     @Override
     public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         ItemStack selected = getSelectedTool(wrench);
-        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) tool.wrenchUsed(player, hand, selected,
-                rayTrace);
-        else super.wrenchUsed(player, hand, wrench, rayTrace);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            tool.wrenchUsed(player, hand, selected, rayTrace);
+            getHandler(wrench).persist();
+        } else super.wrenchUsed(player, hand, wrench, rayTrace);
     }
 
     @Override
     public void toolUsed(ItemStack item, EntityLivingBase user, BlockPos pos) {
         ItemStack selected = getSelectedTool(item);
-        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) tool.toolUsed(selected, user, pos);
-        else super.toolUsed(item, user, pos);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            tool.toolUsed(selected, user, pos);
+            getHandler(item).persist();
+        } else super.toolUsed(item, user, pos);
     }
 
     @Override
     public void used(@NotNull EnumHand hand, @NotNull EntityPlayer player, @NotNull BlockPos pos) {
-        ItemStack selected = getSelectedTool(player.getHeldItem(hand));
-        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) tool.used(hand, player, pos);
-        else super.used(hand, player, pos);
+        ItemStack belt = player.getHeldItem(hand);
+        ItemStack selected = getSelectedTool(belt);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            tool.used(hand, player, pos);
+            getHandler(belt).persist();
+        } else super.used(hand, player, pos);
     }
 
     @Override
