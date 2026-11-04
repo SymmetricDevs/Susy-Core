@@ -48,6 +48,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.toolitem.IGTTool;
@@ -55,6 +56,8 @@ import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
 import gregtech.api.items.toolitem.ToolHelper;
 import gregtech.api.items.toolitem.aoe.AoESymmetrical;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.material.properties.ToolProperty;
 import gregtech.api.util.LocalizationUtils;
 import gregtech.api.util.TextFormattingUtil;
@@ -118,11 +121,21 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         return getHandler(belt).getSelectedStack();
     }
 
-    /** Slot count grows with the tool material, as in the fork (2 + harvest level, capped at 8). */
+    /**
+     * Slot count grows with the tool material, as in the fork (2 + harvest level, capped at 8).
+     * Reads the tool NBT directly: going through getToolProperty would call ToolHelper.getToolTag,
+     * which our passthrough mixin routes back here and would recurse.
+     */
     public int getSlotCount(@NotNull ItemStack stack) {
-        ToolProperty property = getToolProperty(stack);
-        if (property == null) return SLOTS;
-        return Math.min(8, 2 + property.getToolHarvestLevel());
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null || !tag.hasKey(ToolHelper.TOOL_TAG_KEY)) return SLOTS;
+
+        String materialName = tag.getCompoundTag(ToolHelper.TOOL_TAG_KEY).getString(ToolHelper.MATERIAL_KEY);
+        Material material = GregTechAPI.materialManager.getMaterial(materialName);
+        if (material == null) return SLOTS;
+
+        ToolProperty property = material.getProperty(PropertyKey.TOOL);
+        return property == null ? SLOTS : Math.min(8, 2 + property.getToolHarvestLevel());
     }
 
     public @NotNull ItemStack getToolInSlot(@NotNull ItemStack stack, int slot) {
