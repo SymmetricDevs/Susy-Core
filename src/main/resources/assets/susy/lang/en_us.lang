@@ -568,9 +568,11 @@ susy.gun.fire_mode.semi_auto=Semi-Auto
 susy.gun.fire_mode.full_auto=Full-Auto
 susy.gun.fire_mode.burst=Burst
 
+susy.gun.tooltip.empty=§fEmpty§f
 susy.gun.tooltip.damage=Damage: %s
 susy.gun.tooltip.caliber=Caliber: %s
 susy.gun.tooltip.switch_mode=Press %s to switch fire mode
+susy.gun.tooltip.bullet_type=Ammunition Type: %s
 susy.gun.tooltip.magazine.bullet_type=Ammunition Type: %s
 susy.gun.tooltip.magazine.caliber=Caliber: %s
 

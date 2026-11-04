@@ -1,5 +1,7 @@
 package supersymmetry.common.item.behavior;
 
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -7,6 +9,7 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -102,8 +105,24 @@ public final class GunServerHandler {
         if (state.reloading) {
             state.fireRequested = false;
             if (now >= state.reloadEnd) {
-                gun.refill(stack);
-                state.reloading = false;
+                ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
+                if (mag != null) {
+                    player.sendStatusMessage(
+                            new TextComponentTranslation("mag_ammo: " + mag.getTagCompound().getInteger(NBT_AMMO)),
+                            false);
+                    player.sendStatusMessage(
+                            new TextComponentTranslation("mag_caliber: " + mag.getTagCompound().getString(NBT_CALIBER)),
+                            false);
+                    player.sendStatusMessage(
+                            new TextComponentTranslation("mag_type: " + mag.getTagCompound().getString(NBT_AMMO_TYPE)),
+                            false);
+                    gun.reload(player, stack, mag);
+                    state.reloading = false;
+                } else {
+                    player.sendStatusMessage(new TextComponentTranslation("none"), false);
+                    return;
+                }
+
             }
             return;
         }
@@ -151,7 +170,22 @@ public final class GunServerHandler {
 
     private static void startReload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
         if (gun.getReloadTicks() <= 0) {
-            gun.refill(stack);
+            ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
+            if (mag != null) {
+                player.sendStatusMessage(
+                        new TextComponentTranslation("mag_ammo: " + mag.getTagCompound().getInteger(NBT_AMMO)), false);
+                player.sendStatusMessage(
+                        new TextComponentTranslation("mag_caliber: " + mag.getTagCompound().getString(NBT_CALIBER)),
+                        false);
+                player.sendStatusMessage(
+                        new TextComponentTranslation("mag_type: " + mag.getTagCompound().getString(NBT_AMMO_TYPE)),
+                        false);
+                gun.reload(player, stack, mag);
+            } else {
+                player.sendStatusMessage(new TextComponentTranslation("none"), false);
+                return;
+            }
+
             return;
         }
         state.reloading = true;

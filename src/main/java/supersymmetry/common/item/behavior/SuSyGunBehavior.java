@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,6 +54,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public static final String NBT_AMMO = "SuSyGunAmmo";
     public static final String NBT_AMMO_TYPE = "SuSyGunAmmoType";
     public static final String NBT_CALIBER = "SuSyCaliber";
+    public static final String NBT_MAGAZINE_SIZE = "SuSyMagazineSize";
 
     private static final boolean DEBUG_TRAJECTORY = false;
 
@@ -113,12 +115,15 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public int getAmmo(ItemStack stack) {
         if (maxMagazineSize <= 0) return Integer.MAX_VALUE;
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null || !tag.hasKey(NBT_AMMO)) return maxMagazineSize;
+        if (tag == null || !tag.hasKey(NBT_AMMO)) return 0;
         return tag.getInteger(NBT_AMMO);
     }
 
     public boolean isFull(ItemStack stack) {
-        return maxMagazineSize <= 0 || getAmmo(stack) >= maxMagazineSize;
+        if (!stack.hasTagCompound()) return false;
+        NBTTagCompound tag = stack.getTagCompound();
+        if (!tag.hasKey(NBT_AMMO) || !tag.hasKey(NBT_MAGAZINE_SIZE)) return false;
+        return tag.getInteger(NBT_MAGAZINE_SIZE) <= 0 || getAmmo(stack) >= tag.getInteger(NBT_MAGAZINE_SIZE);
     }
 
     public boolean consumeRound(ItemStack stack) {
@@ -129,10 +134,50 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         return true;
     }
 
-    // TODO: take rounds from the player's inventory instead of refilling for free
-    public void refill(ItemStack stack) {
-        if (maxMagazineSize <= 0) return;
-        getOrCreateTag(stack).setInteger(NBT_AMMO, maxMagazineSize);
+    public void reload(EntityPlayer player, ItemStack gun, ItemStack magazine) {
+        unload(player, gun);
+        if (!magazine.hasTagCompound()) return;
+        NBTTagCompound magTag = magazine.getTagCompound();
+        if (!magTag.hasKey(NBT_AMMO) || !magTag.hasKey(NBT_AMMO_TYPE) || !magTag.hasKey(NBT_CALIBER)) return;
+        if (GunMagazineBehavior.getMagBehavior(magazine) == null) return;
+        GunMagazineBehavior magBehavior = GunMagazineBehavior.getMagBehavior(magazine);
+        int ammo = magTag.getInteger(NBT_AMMO);
+        String caliber = magTag.getString(NBT_CALIBER);
+        if (SuSyMetaItems.getGunBehaviour(gun) == null) return;
+        if (!SuSyMetaItems.getGunBehaviour(gun).getCaliber().equals(caliber)) return;
+        String ammoType = magTag.getString(NBT_AMMO_TYPE);
+        NBTTagCompound gunTag = getOrCreateTag(gun);
+        gunTag.setInteger(NBT_AMMO, ammo);
+        gunTag.setString(NBT_AMMO_TYPE, ammoType);
+        gunTag.setInteger(NBT_MAGAZINE_SIZE, magBehavior.getMaxCapacity());
+        magazine.shrink(1);
+    }
+
+    public void unload(EntityPlayer player, ItemStack gun) {
+        if (!gun.hasTagCompound()) return;
+        NBTTagCompound gunTag = gun.getTagCompound();
+        if (!gunTag.hasKey(NBT_AMMO) || !gunTag.hasKey(NBT_AMMO_TYPE) || !gunTag.hasKey(NBT_MAGAZINE_SIZE)) return;
+        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        if (gunBehavior == null) return;
+        String caliber = gunBehavior.getCaliber();
+        int ammo = gunTag.getInteger(NBT_AMMO);
+        String ammoType = gunTag.getString(NBT_AMMO_TYPE);
+        int magSize = gunTag.getInteger(NBT_MAGAZINE_SIZE);
+        ItemStack mag = GunMagazineBehavior.getMagFromSize(magSize);
+        if (mag == null) return;
+        NBTTagCompound magTag = getOrCreateTag(mag);
+        if (ammo > 0) {
+            magTag.setString(NBT_CALIBER, caliber);
+            magTag.setString(NBT_AMMO_TYPE, ammoType);
+        }
+        magTag.setInteger(NBT_AMMO, ammo);
+        gunTag.removeTag(NBT_AMMO_TYPE);
+        gunTag.removeTag(NBT_AMMO);
+        gunTag.removeTag(NBT_MAGAZINE_SIZE);
+        if (!player.inventory.addItemStackToInventory(mag)) {
+            EntityItem dropped = new EntityItem(player.world, player.posX, player.posY, player.posZ, mag);
+            player.world.spawnEntity(dropped);
+        }
     }
 
     private static NBTTagCompound getOrCreateTag(ItemStack stack) {
@@ -146,8 +191,10 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
-        if (!getOrCreateTag(itemStack).hasKey(NBT_AMMO)) return 0;
-        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) / maxMagazineSize;
+        if (!getOrCreateTag(itemStack).hasKey(NBT_AMMO) || !getOrCreateTag(itemStack).hasKey(NBT_MAGAZINE_SIZE))
+            return 0;
+        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) /
+                getOrCreateTag(itemStack).getInteger(NBT_MAGAZINE_SIZE);
     }
 
     /// Fires a single bullet from the specified position
@@ -224,9 +271,9 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     }
 
     public void shootOnce(EntityPlayer player, EnumHand hand, ItemStack stack, boolean aim) {
-        SuSyAmmoType ammoType = resolveAmmoType(stack);
+        SuSyAmmoType ammoType = getCurrentAmmoType(stack);
         if (ammoType == null)
-            return;
+            ammoType = FULL_METAL_JACKET;
 
         double yaw = player.rotationYaw % 360;
 
@@ -287,27 +334,6 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         return null;
     }
 
-    // FIXME: yeet this, it was just temporary debug :skull:
-    private SuSyAmmoType resolveAmmoType(ItemStack stack) {
-        SuSyAmmoType ammoType = getCurrentAmmoType(stack);
-        if (ammoType != null) return ammoType;
-
-        if (isSameItem(stack, SuSyMetaItems.PISTOL.getStackForm())) {
-            return RED_TRACER;
-        } else if (isSameItem(stack, SuSyMetaItems.RIFLE.getStackForm())) {
-            return GREEN_TRACER;
-        } else if (isSameItem(stack, SuSyMetaItems.SMG.getStackForm())) {
-            return BLUE_TRACER;
-        } else if (isSameItem(stack, SuSyMetaItems.SHOTGUN.getStackForm())) {
-            return BUCKSHOT;
-        }
-        return FULL_METAL_JACKET;
-    }
-
-    private static boolean isSameItem(ItemStack stack, ItemStack reference) {
-        return stack.getItem() == reference.getItem() && stack.getMetadata() == reference.getMetadata();
-    }
-
     // fire modes
 
     public GunFireMode getSelectedMode(ItemStack stack) {
@@ -343,11 +369,24 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public void addInformation(ItemStack itemStack, List<String> lines) {
         lines.add(I18n.format("susy.gun.tooltip.damage", damage));
         lines.add(I18n.format("susy.gun.tooltip.caliber", I18n.format("susy.caliber." + caliber)));
+        if (itemStack.hasTagCompound()) {
+            NBTTagCompound tag = itemStack.getTagCompound();
+            if (!tag.hasKey(NBT_AMMO) || tag.getInteger(NBT_AMMO) <= 0) {
+                lines.add(I18n.format("susy.gun.tooltip.empty"));
+            } else {
+                if (tag.hasKey(NBT_MAGAZINE_SIZE)) {
+                    lines.add(I18n.format(tag.getInteger(NBT_AMMO) + "/" + tag.getInteger(NBT_MAGAZINE_SIZE)));
+                }
+                if (tag.hasKey(NBT_AMMO_TYPE)) {
+                    lines.add(I18n.format("susy.gun.tooltip.bullet_type",
+                            I18n.format("susy.ammo_type." + tag.getString(NBT_AMMO_TYPE))));
+                }
+            }
+        }
         lines.add(I18n.format("susy.gun.fire_mode." + getSelectedMode(itemStack).name().toLowerCase(Locale.ROOT)));
         if (fireModes.size() > 1) {
-            lines.add(
-                    I18n.format("susy.gun.tooltip.switch_mode",
-                            SuSyKeyBind.CYCLE_FIRE_MODE.toMinecraft().getDisplayName()));
+            lines.add(I18n.format("susy.gun.tooltip.switch_mode",
+                    SuSyKeyBind.CYCLE_FIRE_MODE.toMinecraft().getDisplayName()));
         }
     }
 
