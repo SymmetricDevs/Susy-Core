@@ -25,12 +25,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +48,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
 import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
@@ -60,6 +58,7 @@ import gregtech.api.unification.material.properties.ToolProperty;
 import gregtech.api.util.LocalizationUtils;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.utils.TooltipHelper;
+import gregtech.common.items.behaviors.ColorSprayBehaviour;
 import supersymmetry.api.items.IDyeableItem;
 
 /**
@@ -81,33 +80,12 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 null, false, new HashSet<>(), "toolbelt", new ArrayList<>(), () -> ItemStack.EMPTY);
     }
 
+    /** The inventory lives in the stack's own NBT, so copies never share it. */
     public @NotNull ToolStackHandler getHandler(@NotNull ItemStack stack) {
-        if (stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-                null) instanceof ToolStackHandler handler) {
-            return handler;
-        }
-        return FALLBACK;
-    }
-
-    private static final ToolStackHandler FALLBACK = new ToolStackHandler(0);
-
-    @Override
-    public @NotNull ICapabilityProvider initCapabilities(@NotNull ItemStack stack, NBTTagCompound nbt) {
-        return new ToolbeltCapabilityProvider(this, stack);
-    }
-
-    @Override
-    public NBTTagCompound getNBTShareTag(ItemStack stack) {
-        NBTTagCompound tag = new NBTTagCompound();
-        if (stack.getTagCompound() != null) tag.setTag("NBT", stack.getTagCompound());
-        tag.setTag("Cap", getHandler(stack).serializeNBT());
-        return tag;
-    }
-
-    @Override
-    public void readNBTShareTag(ItemStack stack, NBTTagCompound nbt) {
-        stack.setTagCompound(nbt == null ? null : (nbt.hasKey("NBT") ? nbt.getCompoundTag("NBT") : null));
-        if (nbt != null && nbt.hasKey("Cap")) getHandler(stack).deserializeNBT(nbt.getCompoundTag("Cap"));
+        ToolStackHandler handler = new ToolStackHandler(stack, getSlotCount(stack));
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey("Belt")) handler.deserializeNBT(tag.getCompoundTag("Belt"));
+        return handler;
     }
 
     // ---------------------------------------------------------------- selection
@@ -472,6 +450,35 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 .bindPlayerInventory();
     }
 
+    /**
+     * Sound pass-through. Not in the fork: getSound() is item-level and the belt has none, so
+     * playSound is forwarded to the selected tool, whose own getSound() is used.
+     */
+    @Override
+    public boolean playSoundOnBlockDestroy() {
+        return true;
+    }
+
+    @Override
+    public void playSound(@NotNull EntityPlayer player) {
+        ItemStack selected = getSelectedTool(player.getHeldItemMainhand());
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            tool.playSound(player);
+            return;
+        }
+        super.playSound(player);
+    }
+
+    @Override
+    public void playCraftingSound(@NotNull EntityPlayer player, @NotNull ItemStack stack) {
+        ItemStack selected = getSelectedTool(stack);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            tool.playCraftingSound(player, selected);
+            return;
+        }
+        super.playCraftingSound(player, stack);
+    }
+
     /** Sneak + hotbar key selection; the fork redirects Minecraft's hotbar key handling for this. */
     @SideOnly(Side.CLIENT)
     public void changeSelectedToolHotkey(int slot, @NotNull ItemStack stack) {
@@ -533,12 +540,26 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         private boolean passthrough = true;
         private final Set<String> toolClasses = new HashSet<>();
 
-        public ToolStackHandler(int size) {
+        private final ItemStack owner;
+
+        public ToolStackHandler(ItemStack owner, int size) {
             super(size);
+            this.owner = owner;
+        }
+
+        private void persist() {
+            if (owner == null) return;
+            NBTTagCompound tag = owner.getTagCompound();
+            if (tag == null) {
+                tag = new NBTTagCompound();
+                owner.setTagCompound(tag);
+            }
+            tag.setTag("Belt", serializeNBT());
         }
 
         public void setSelectedSlot(int slot) {
             this.selectedSlot = (slot < 0 || slot >= getSlots()) ? -1 : slot;
+            persist();
         }
 
         public int getSelectedSlot() {
@@ -591,7 +612,21 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             if (stack.getItem() instanceof ItemToolbelt) return false;
+            return isTool(stack) || isSpraycan(stack);
+        }
+
+        private static boolean isTool(@NotNull ItemStack stack) {
             return stack.getItem() instanceof IGTTool || stack.getItem() instanceof ItemTool;
+        }
+
+        /** Mirrors the fork's ToolHelper.isSpraycan: any metaitem carrying a colour spray behaviour. */
+        private static boolean isSpraycan(@NotNull ItemStack stack) {
+            if (stack.getItem() instanceof MetaItem<?> meta) {
+                for (IItemBehaviour behaviour : meta.getBehaviours(stack)) {
+                    if (behaviour instanceof ColorSprayBehaviour) return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -623,47 +658,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         @Override
         protected void onContentsChanged(int slot) {
             toolClasses.clear();
-        }
-    }
-
-    public static class ToolbeltCapabilityProvider implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
-
-        private final ItemToolbelt belt;
-        private final ItemStack stack;
-        private ToolStackHandler handler;
-
-        public ToolbeltCapabilityProvider(ItemToolbelt belt, ItemStack stack) {
-            this.belt = belt;
-            this.stack = stack;
-        }
-
-        private @NotNull ToolStackHandler getHandler() {
-            int size = belt.getSlotCount(stack);
-            if (handler == null) handler = new ToolStackHandler(size);
-            else if (handler.getSlots() != size) handler.setSize(size);
-            return handler;
-        }
-
-        @Override
-        public boolean hasCapability(@NotNull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-        }
-
-        @Override
-        public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing facing) {
-            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(getHandler());
-            return null;
-        }
-
-        @Override
-        public NBTTagCompound serializeNBT() {
-            return getHandler().serializeNBT();
-        }
-
-        @Override
-        public void deserializeNBT(NBTTagCompound nbt) {
-            getHandler().deserializeNBT(nbt.copy());
+            persist();
         }
     }
 }
