@@ -36,6 +36,7 @@
     "TileEntityFluidPipeMixin",
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
+    "ToolHelperMixin",
     "ToolItemsMixin"
   ],
   "client": [
