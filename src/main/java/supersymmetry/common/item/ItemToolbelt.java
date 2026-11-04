@@ -141,7 +141,9 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
         if (match != -1) {
             getHandler(stack).setSelectedSlot(match);
             EntityPlayerMP player = lastPlayer.get();
-            if (player != null && player.openContainer != null) player.openContainer.detectAndSendChanges();
+            if (player != null) {
+                supersymmetry.network.PacketToolbeltSelectionChange.toClient(match, lastSlot.get(), player);
+            }
         }
     }
 
