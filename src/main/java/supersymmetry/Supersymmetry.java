@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
+import gregtech.api.GTValues;
 import li.cil.oc.api.Driver;
 import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Items;
@@ -28,6 +29,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.command.*;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.item.ItemToolbelt;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
@@ -83,6 +85,11 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
+
+        ItemToolbelt.TOOLBELT = (ItemToolbelt) new ItemToolbelt(GTValues.MODID, "toolbelt")
+                .setRegistryName(GTValues.MODID, "toolbelt");
+        net.minecraftforge.fml.common.registry.GameRegistry.findRegistry(net.minecraft.item.Item.class)
+                .register(ItemToolbelt.TOOLBELT);
 
         SusyMetaEntities.init();
         SusyCriteriaTriggers.init();

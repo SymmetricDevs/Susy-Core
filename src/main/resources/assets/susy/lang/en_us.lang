@@ -2604,3 +2604,11 @@ susy.machine.tank_valve.monel_400.name=Monel Tank Valve
 susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
 susy.machine.tank_valve.titanium.name=Titanium Tank Valve
 susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve
+
+# Toolbelt
+susy.toolbelt=Toolbelt
+susy.toolbelt.select=%s Toolbelt (%s)
+item.susy.toolbelt.size=Slots: %s
+item.susy.toolbelt.tooltip=Open to store tools. Click a number to select the tool in that slot.
+item.susy.toolbelt.tool=%d: %s
+item.susy.toolbelt.selected=%d: %s (selected)
