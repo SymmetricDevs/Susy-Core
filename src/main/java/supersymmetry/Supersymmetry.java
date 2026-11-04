@@ -30,6 +30,7 @@ import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
 import supersymmetry.common.item.ItemToolbelt;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.ToolbeltGuiFactory;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
@@ -87,6 +88,7 @@ public class Supersymmetry {
 
         // ItemGTTool's constructor already sets the registry name from domain + id.
         ItemToolbelt.TOOLBELT = new ItemToolbelt("susy", "toolbelt");
+        ToolbeltGuiFactory.register();
         net.minecraftforge.fml.common.registry.GameRegistry.findRegistry(net.minecraft.item.Item.class)
                 .register(ItemToolbelt.TOOLBELT);
 
