@@ -337,34 +337,20 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     }
 
     /**
-     * GT tools return false from showDurabilityBar because they draw their own bar; the belt has no
-     * such renderer, so surface the selected tool's durability or charge through the vanilla bar.
+     * GT never uses the vanilla durability bar: its ASM hook calls RenderItemHooks.renderElectricBar
+     * for every IGTTool and ToolChargeBarRenderer reads this value as the fraction that is <em>left</em>
+     * (1.0 = full). Vanilla items report the fraction that is damaged, so those get inverted.
+     * <p>
+     * RenderItemHooksMixin hands the selected tool's own bars (durability and, for electric tools,
+     * the blue charge bar) to GT's renderer, so the belt looks exactly like the tool it holds.
      */
-    @Override
-    public boolean showDurabilityBar(@NotNull ItemStack stack) {
-        ItemStack selected = getSelectedTool(stack);
-        if (selected.isEmpty()) return super.showDurabilityBar(stack);
-        if (selected.getItem() instanceof IGTTool tool) {
-            if (tool.isElectric()) return tool.getCharge(selected) < tool.getMaxCharge(selected);
-            return selected.getItem().isDamaged(selected);
-        }
-        return selected.getItem().showDurabilityBar(selected);
-    }
-
     @Override
     public double getDurabilityForDisplay(@NotNull ItemStack stack) {
         ItemStack selected = getSelectedTool(stack);
-        if (!selected.isEmpty()) {
-            if (selected.getItem() instanceof IGTTool tool && tool.isElectric()) {
-                long max = tool.getMaxCharge(selected);
-                long charge = tool.getCharge(selected);
-                return max <= 0 ? 0.0 : 1.0 - (double) charge / (double) max;
-            }
-            double display = selected.getItem().getDurabilityForDisplay(selected);
-            if (selected.getItem() instanceof ItemTool) display = 1 - display;
-            return display;
-        }
-        return definition$getDurabilityForDisplay(stack);
+        if (selected.isEmpty()) return definition$getDurabilityForDisplay(stack);
+        double display = selected.getItem().getDurabilityForDisplay(selected);
+        if (!(selected.getItem() instanceof IGTTool)) display = 1 - display;
+        return display;
     }
 
     @Override
@@ -399,9 +385,13 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     }
 
     /**
-     * Spray cans act through Item.onItemUse, which reads the held stack, so they need the can in
-     * hand. Scoped to spray cans only: tool interactions go through GT's helpers instead, and no
-     * tool is ever swapped, which is what used to lose the belt on shift-right-click.
+     * Right-clicking a block with a selected tool belongs to that tool, never to the belt. The click
+     * is consumed on both sides so the client does not fall through to onItemRightClick, which is
+     * what sent a second packet and opened the screen on top of the action.
+     * <p>
+     * Spray cans act through Item.onItemUse, which reads the held stack, so the can is put in hand
+     * for that one call on the server. Every other tool is handled by GT itself, through the
+     * ToolHelper passthrough, and never has its stack moved.
      */
     @Override
     public @NotNull EnumActionResult onItemUse(@NotNull EntityPlayer player, @NotNull World world,
@@ -409,21 +399,28 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                                                @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack belt = player.getHeldItem(hand);
         ItemStack selected = getSelectedTool(belt);
-        if (!world.isRemote && !selected.isEmpty() && ToolStackHandler.isSpraycan(selected)) {
-            player.setHeldItem(hand, selected);
-            try {
-                EnumActionResult result = selected.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY,
-                        hitZ);
-                if (result != EnumActionResult.PASS) return result;
-            } finally {
-                getHandler(belt).persist();
-                player.setHeldItem(hand, belt);
-            }
-        }
-        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
-    }
+        if (selected.isEmpty()) return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 
-    /** Runs an action with the selected tool temporarily in hand, then restores the belt. */
+        // The client only predicts; the server decides. Returning SUCCESS keeps the belt screen shut.
+        if (world.isRemote) return EnumActionResult.SUCCESS;
+        if (!ToolStackHandler.isSpraycan(selected)) return EnumActionResult.SUCCESS;
+
+        ToolStackHandler handler = getHandler(belt);
+        int slot = handler.getSelectedSlot();
+        player.setHeldItem(hand, selected);
+        try {
+            EnumActionResult result = selected.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY,
+                    hitZ);
+            // A spray can that runs out of uses replaces the held stack with an empty can.
+            ItemStack after = player.getHeldItem(hand);
+            if (after != selected && slot >= 0) handler.setStackInSlot(slot, after);
+            if (result != EnumActionResult.PASS) return result;
+        } finally {
+            handler.persist();
+            player.setHeldItem(hand, belt);
+        }
+        return EnumActionResult.SUCCESS;
+    }
 
     // ---------------------------------------------------------------- display
 
