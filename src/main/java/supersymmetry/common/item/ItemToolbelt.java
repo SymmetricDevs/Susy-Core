@@ -388,41 +388,10 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                                                     float hitY, float hitZ, @NotNull EnumHand hand) {
         EnumActionResult dyed = IDyeableItem.super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
         if (dyed != EnumActionResult.PASS) return dyed;
-        EnumActionResult delegated = withSelectedTool(player, hand,
-                tool -> tool.getItem().onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand));
-        if (delegated != EnumActionResult.PASS) return delegated;
         return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
     }
 
-    @Override
-    public @NotNull EnumActionResult onItemUse(@NotNull EntityPlayer player, @NotNull World world,
-                                               @NotNull BlockPos pos, @NotNull EnumHand hand,
-                                               @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        EnumActionResult delegated = withSelectedTool(player, hand,
-                tool -> tool.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ));
-        if (delegated != EnumActionResult.PASS) return delegated;
-        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
-    }
-
     /** Runs an action with the selected tool temporarily in hand, then restores the belt. */
-    private EnumActionResult withSelectedTool(EntityPlayer player, EnumHand hand,
-                                              java.util.function.Function<ItemStack, EnumActionResult> action) {
-        ItemStack belt = player.getHeldItem(hand);
-        // client-side swapping desyncs the hand and can drop the belt; the server decides
-        if (player.world.isRemote) return EnumActionResult.PASS;
-        if (!(belt.getItem() instanceof ItemToolbelt toolbelt)) return EnumActionResult.PASS;
-        ItemStack selected = toolbelt.getSelectedTool(belt);
-        if (selected.isEmpty()) return EnumActionResult.PASS;
-
-        player.setHeldItem(hand, selected);
-        try {
-            return action.apply(selected);
-        } finally {
-            // the delegated call may have damaged the tool; persist before restoring the belt
-            if (belt.getItem() instanceof ItemToolbelt b) b.getHandler(belt).persist();
-            player.setHeldItem(hand, belt);
-        }
-    }
 
     // ---------------------------------------------------------------- display
 
@@ -586,33 +555,10 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
         // The fork iterates the selected tool's behaviours before the belt's own OpenGUIBehavior,
         // so a selected tool gets the click and only a pass opens the screen.
-        if (!getSelectedTool(stack).isEmpty()) {
-            ActionResult<ItemStack> delegated = withSelectedToolResult(player, hand,
-                    tool -> tool.getItem().onItemRightClick(world, player, hand));
-            if (delegated.getType() != EnumActionResult.PASS) return delegated;
-        }
-
         if (!world.isRemote && player instanceof EntityPlayerMP serverPlayer) {
             com.cleanroommc.modularui.factory.ItemGuiFactory.INSTANCE.open(serverPlayer, hand);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-    }
-
-    private ActionResult<ItemStack> withSelectedToolResult(EntityPlayer player, EnumHand hand,
-                                                           java.util.function.Function<ItemStack, ActionResult<ItemStack>> action) {
-        ItemStack belt = player.getHeldItem(hand);
-        if (!(belt.getItem() instanceof ItemToolbelt toolbelt)) return new ActionResult<>(EnumActionResult.PASS, belt);
-        ItemStack selected = toolbelt.getSelectedTool(belt);
-        if (selected.isEmpty()) return new ActionResult<>(EnumActionResult.PASS, belt);
-
-        player.setHeldItem(hand, selected);
-        try {
-            return action.apply(selected);
-        } finally {
-            // the delegated call may have damaged the tool; persist before restoring the belt
-            if (belt.getItem() instanceof ItemToolbelt b) b.getHandler(belt).persist();
-            player.setHeldItem(hand, belt);
-        }
     }
 
     // ---------------------------------------------------------------- handler
