@@ -9,7 +9,6 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -27,7 +26,7 @@ public final class GunServerHandler {
     private GunServerHandler() {}
 
     public static void onInput(EntityPlayerMP player, boolean trigger, boolean aim, boolean reload,
-                               boolean cycleMode, EnumHand hand) {
+                               boolean cycleMode, boolean unload, EnumHand hand) {
         if (player == null || !player.isEntityAlive() || player.isSpectator()) {
             return;
         }
@@ -53,13 +52,18 @@ public final class GunServerHandler {
         state.hand = hand;
         state.slot = slot;
         state.aim = aim;
+        state.unload = unload;
 
         if (cycleMode && !state.reloading && state.burstLeft == 0) {
             gun.cycleMode(player, stack);
         }
 
-        if (reload && !state.reloading && state.burstLeft == 0 && !gun.isFull(stack)) {
+        if (reload && !state.reloading && !state.unloading && state.burstLeft == 0 && !gun.isFull(stack)) {
             startReload(player, state, gun, stack);
+        }
+
+        if (unload && !state.unloading && !state.reloading && state.burstLeft == 0) {
+            startUnload(player, state, gun, stack);
         }
 
         if (trigger && !state.trigger) {
@@ -107,22 +111,22 @@ public final class GunServerHandler {
             if (now >= state.reloadEnd) {
                 ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
                 if (mag != null) {
-                    player.sendStatusMessage(
-                            new TextComponentTranslation("mag_ammo: " + mag.getTagCompound().getInteger(NBT_AMMO)),
-                            false);
-                    player.sendStatusMessage(
-                            new TextComponentTranslation("mag_caliber: " + mag.getTagCompound().getString(NBT_CALIBER)),
-                            false);
-                    player.sendStatusMessage(
-                            new TextComponentTranslation("mag_type: " + mag.getTagCompound().getString(NBT_AMMO_TYPE)),
-                            false);
                     gun.reload(player, stack, mag);
                     state.reloading = false;
                 } else {
-                    player.sendStatusMessage(new TextComponentTranslation("none"), false);
+                    state.reloading = false;
                     return;
                 }
 
+            }
+            return;
+        }
+
+        if (state.unloading) {
+            state.fireRequested = false;
+            if (now >= state.unloadEnd) {
+                gun.unload(player, stack);
+                state.reloading = false;
             }
             return;
         }
@@ -172,26 +176,31 @@ public final class GunServerHandler {
         if (gun.getReloadTicks() <= 0) {
             ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
             if (mag != null) {
-                player.sendStatusMessage(
-                        new TextComponentTranslation("mag_ammo: " + mag.getTagCompound().getInteger(NBT_AMMO)), false);
-                player.sendStatusMessage(
-                        new TextComponentTranslation("mag_caliber: " + mag.getTagCompound().getString(NBT_CALIBER)),
-                        false);
-                player.sendStatusMessage(
-                        new TextComponentTranslation("mag_type: " + mag.getTagCompound().getString(NBT_AMMO_TYPE)),
-                        false);
                 gun.reload(player, stack, mag);
             } else {
-                player.sendStatusMessage(new TextComponentTranslation("none"), false);
                 return;
             }
 
             return;
         }
-        state.reloading = true;
+        ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
+        if (mag != null) {
+            state.reloading = true;
+            state.burstLeft = 0;
+            state.fireRequested = false;
+            state.reloadEnd = player.world.getTotalWorldTime() + gun.getReloadTicks();
+        }
+    }
+
+    private static void startUnload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
+        if (gun.getReloadTicks() <= 0) {
+            gun.unload(player, stack);
+            return;
+        }
+        state.unloading = true;
         state.burstLeft = 0;
         state.fireRequested = false;
-        state.reloadEnd = player.world.getTotalWorldTime() + gun.getReloadTicks();
+        state.unloadEnd = player.world.getTotalWorldTime() + gun.getReloadTicks() / 2;
     }
 
     private static int slotOf(EntityPlayerMP player, EnumHand hand) {
@@ -211,6 +220,7 @@ public final class GunServerHandler {
         private boolean trigger;
         private boolean aim;
         private boolean fireRequested;
+        private boolean unload;
 
         private long nextShot;
         private long burstNext;
@@ -218,11 +228,14 @@ public final class GunServerHandler {
 
         private boolean reloading;
         private long reloadEnd;
+        private boolean unloading;
+        private long unloadEnd;
 
         private void reset() {
             fireRequested = false;
             burstLeft = 0;
             reloading = false;
+            unloading = false;
         }
     }
 }

@@ -49,6 +49,10 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final int reloadTicks;
     @Getter
     private final String caliber;
+    @Getter
+    private final boolean beltFed;
+    @Getter
+    private final boolean integralMagazine;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
@@ -60,7 +64,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
-                           int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber) {
+                           int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber,
+                           boolean beltFed, boolean integralMagazine) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -94,6 +99,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.maxMagazineSize = Math.max(maxMagazineSize, 0);
         this.reloadTicks = reloadTicks;
         this.caliber = caliber;
+        this.beltFed = beltFed;
+        this.integralMagazine = integralMagazine;
     }
 
     public static void init() {}
@@ -138,49 +145,82 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         unload(player, gun);
         if (!magazine.hasTagCompound()) return;
         NBTTagCompound magTag = magazine.getTagCompound();
-        if (!magTag.hasKey(NBT_AMMO) || !magTag.hasKey(NBT_AMMO_TYPE) || !magTag.hasKey(NBT_CALIBER)) return;
-        if (GunMagazineBehavior.getMagBehavior(magazine) == null) return;
-        GunMagazineBehavior magBehavior = GunMagazineBehavior.getMagBehavior(magazine);
-        int ammo = magTag.getInteger(NBT_AMMO);
-        String caliber = magTag.getString(NBT_CALIBER);
-        if (SuSyMetaItems.getGunBehaviour(gun) == null) return;
-        if (!SuSyMetaItems.getGunBehaviour(gun).getCaliber().equals(caliber)) return;
-        String ammoType = magTag.getString(NBT_AMMO_TYPE);
-        NBTTagCompound gunTag = getOrCreateTag(gun);
-        gunTag.setInteger(NBT_AMMO, ammo);
-        gunTag.setString(NBT_AMMO_TYPE, ammoType);
-        gunTag.setInteger(NBT_MAGAZINE_SIZE, magBehavior.getMaxCapacity());
-        magazine.shrink(1);
+        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        if (!gunBehavior.isIntegralMagazine()) {
+            if (!magTag.hasKey(NBT_AMMO) || !magTag.hasKey(NBT_AMMO_TYPE) || !magTag.hasKey(NBT_CALIBER)) return;
+            if (GunMagazineBehavior.getMagBehavior(magazine) == null) return;
+            GunMagazineBehavior magBehavior = GunMagazineBehavior.getMagBehavior(magazine);
+            int ammo = magTag.getInteger(NBT_AMMO);
+            String caliber = magTag.getString(NBT_CALIBER);
+            if (SuSyMetaItems.getGunBehaviour(gun) == null) return;
+            if (!SuSyMetaItems.getGunBehaviour(gun).getCaliber().equals(caliber)) return;
+            String ammoType = magTag.getString(NBT_AMMO_TYPE);
+            NBTTagCompound gunTag = getOrCreateTag(gun);
+            gunTag.setInteger(NBT_AMMO, ammo);
+            gunTag.setString(NBT_AMMO_TYPE, ammoType);
+            gunTag.setInteger(NBT_MAGAZINE_SIZE, magBehavior.getMaxCapacity());
+            magazine.shrink(1);
+        } else {
+            if (!magTag.hasKey(NBT_CALIBER)) return;
+            if (!magTag.getString(NBT_CALIBER).equals(gunBehavior.getCaliber())) return;
+            NBTTagCompound gunTag = getOrCreateTag(gun);
+            int currentAmmo = gunBehavior.getAmmo(gun);
+            int ammo = magazine.getCount() + currentAmmo;
+            if (ammo > gunBehavior.getMaxMagazineSize()) ammo = gunBehavior.getMaxMagazineSize();
+            gunTag.setInteger(NBT_AMMO, ammo);
+            gunTag.setString(NBT_AMMO_TYPE, FULL_METAL_JACKET.name);
+            gunTag.setInteger(NBT_MAGAZINE_SIZE, gunBehavior.getMaxMagazineSize());
+            magazine.shrink(gunBehavior.getMaxMagazineSize() - currentAmmo);
+        }
     }
 
     public void unload(EntityPlayer player, ItemStack gun) {
         if (!gun.hasTagCompound()) return;
         NBTTagCompound gunTag = gun.getTagCompound();
-        if (!gunTag.hasKey(NBT_AMMO) || !gunTag.hasKey(NBT_AMMO_TYPE) || !gunTag.hasKey(NBT_MAGAZINE_SIZE)) return;
         SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
         if (gunBehavior == null) return;
-        String caliber = gunBehavior.getCaliber();
-        int ammo = gunTag.getInteger(NBT_AMMO);
-        String ammoType = gunTag.getString(NBT_AMMO_TYPE);
-        int magSize = gunTag.getInteger(NBT_MAGAZINE_SIZE);
-        ItemStack mag = GunMagazineBehavior.getMagFromSize(magSize);
-        if (mag == null) return;
-        NBTTagCompound magTag = getOrCreateTag(mag);
-        if (ammo > 0) {
-            magTag.setString(NBT_CALIBER, caliber);
-            magTag.setString(NBT_AMMO_TYPE, ammoType);
-        }
-        magTag.setInteger(NBT_AMMO, ammo);
-        gunTag.removeTag(NBT_AMMO_TYPE);
-        gunTag.removeTag(NBT_AMMO);
-        gunTag.removeTag(NBT_MAGAZINE_SIZE);
-        if (!player.inventory.addItemStackToInventory(mag)) {
-            EntityItem dropped = new EntityItem(player.world, player.posX, player.posY, player.posZ, mag);
-            player.world.spawnEntity(dropped);
+        if (!gunBehavior.isIntegralMagazine()) {
+            if (!gunTag.hasKey(NBT_AMMO) || !gunTag.hasKey(NBT_AMMO_TYPE) || !gunTag.hasKey(NBT_MAGAZINE_SIZE)) return;
+            String caliber = gunBehavior.getCaliber();
+            int ammo = gunTag.getInteger(NBT_AMMO);
+            String ammoType = gunTag.getString(NBT_AMMO_TYPE);
+            int magSize = gunTag.getInteger(NBT_MAGAZINE_SIZE);
+            if (!gunBehavior.isBeltFed() || ammo > 0) {
+                ItemStack mag = GunMagazineBehavior.getMagFromSize(magSize);
+                if (mag == null) return;
+                NBTTagCompound magTag = getOrCreateTag(mag);
+                if (ammo > 0) {
+                    magTag.setString(NBT_CALIBER, caliber);
+                    magTag.setString(NBT_AMMO_TYPE, ammoType);
+                }
+                magTag.setInteger(NBT_AMMO, ammo);
+
+                if (!player.inventory.addItemStackToInventory(mag)) {
+                    EntityItem dropped = new EntityItem(player.world, player.posX, player.posY, player.posZ, mag);
+                    player.world.spawnEntity(dropped);
+                }
+            }
+            gunTag.removeTag(NBT_AMMO_TYPE);
+            gunTag.removeTag(NBT_AMMO);
+            gunTag.removeTag(NBT_MAGAZINE_SIZE);
+        } else {
+            if (!gunTag.hasKey(NBT_AMMO)) return;
+            String caliber = gunBehavior.getCaliber();
+            int ammo = gunTag.getInteger(NBT_AMMO);
+            if (ammo == 0) return;
+            ItemStack bullet = GunMagazineBehavior.getBulletFromCaliber(caliber, ammo);
+            if (bullet == null) return;
+            if (!player.inventory.addItemStackToInventory(bullet)) {
+                EntityItem dropped = new EntityItem(player.world, player.posX, player.posY, player.posZ, bullet);
+                player.world.spawnEntity(dropped);
+            }
+            gunTag.removeTag(NBT_AMMO_TYPE);
+            gunTag.removeTag(NBT_AMMO);
+            gunTag.removeTag(NBT_MAGAZINE_SIZE);
         }
     }
 
-    private static NBTTagCompound getOrCreateTag(ItemStack stack) {
+    public static NBTTagCompound getOrCreateTag(ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         if (tag == null) {
             tag = new NBTTagCompound();
@@ -326,7 +366,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         if (tag != null && tag.hasKey(NBT_AMMO_TYPE)) {
             String name = tag.getString(NBT_AMMO_TYPE);
             for (SuSyAmmoType type : ammoTypes) {
-                if (name.equals(type.name)) {
+                if (name.equals(type.name.toLowerCase(Locale.ROOT))) {
                     return type;
                 }
             }
@@ -401,6 +441,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private int maxMagazineSize = 0;
         private int reloadTicks = 0;
         private final String caliber;
+        private boolean beltFed = false;
+        private boolean integralMagazine = false;
         private final List<GunFireMode> modes = new ArrayList<>();
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
@@ -429,13 +471,23 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             return this;
         }
 
+        public Builder beltFed() {
+            this.beltFed = true;
+            return this;
+        }
+
+        public Builder integralMagazine() {
+            this.integralMagazine = true;
+            return this;
+        }
+
         public SuSyGunBehavior build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
             return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
-                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber);
+                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine);
         }
     }
 
@@ -506,5 +558,6 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             CALIBER_8_6x70,
             CALIBER_13x30,
             CALIBER_13x100,
-            CALIBER_6_8x50));
+            CALIBER_6_8x50)
+    );
 }

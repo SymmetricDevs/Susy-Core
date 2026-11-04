@@ -53,26 +53,40 @@ public class GunMagazineBehavior implements IItemBehaviour, IItemDurabilityManag
     }
 
     /// Finds the first non-empty magazine fitting the given gun (in terms of caliber and max mag size). The mag is
-    /// guaranteed to have caliber, ammo, and ammo type NBT tags. Returns null if no valid mag exists.
+    /// guaranteed to have caliber, ammo, and ammo type NBT tags. Returns null if no valid mag exists. Finds any item
+    /// with an NBT_CALIBER tag matching the gun if the gun has an integral magazine.
     @Nullable public static ItemStack findValidMagazine(EntityPlayer player, ItemStack gun) {
         if (gun.getItem() instanceof MetaItem metaItem) {
             if (metaItem.getBehaviours(gun).getFirst() instanceof SuSyGunBehavior gunBehavior) {
                 int maxMagSize = gunBehavior.getMaxMagazineSize();
                 String caliber = gunBehavior.getCaliber();
-                for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-                    ItemStack checkedItem = player.inventory.getStackInSlot(i);
-                    if (checkedItem.getItem() instanceof MetaItem metaItem1 &&
-                            !metaItem1.getBehaviours(checkedItem).isEmpty()) {
-                        if (metaItem1.getBehaviours(checkedItem)
-                                .getFirst() instanceof GunMagazineBehavior magBehavior &&
-                                checkedItem.hasTagCompound()) {
-                            if (magBehavior.getMaxCapacity() <= maxMagSize &&
-                                    checkedItem.getTagCompound().hasKey(NBT_CALIBER) &&
-                                    checkedItem.getTagCompound().hasKey(NBT_AMMO) &&
-                                    checkedItem.getTagCompound().hasKey(NBT_AMMO_TYPE)) {
-                                if (checkedItem.getTagCompound().getString(NBT_CALIBER).equals(caliber) &&
-                                        checkedItem.getTagCompound().getInteger(NBT_AMMO) > 0)
-                                    return checkedItem;
+                if (!gunBehavior.isIntegralMagazine()) {
+                    for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                        ItemStack checkedItem = player.inventory.getStackInSlot(i);
+                        if (checkedItem.getItem() instanceof MetaItem metaItem1 &&
+                                !metaItem1.getBehaviours(checkedItem).isEmpty()) {
+                            if (metaItem1.getBehaviours(checkedItem)
+                                    .getFirst() instanceof GunMagazineBehavior magBehavior &&
+                                    checkedItem.hasTagCompound()) {
+                                if (magBehavior.getMaxCapacity() <= maxMagSize &&
+                                        checkedItem.getTagCompound().hasKey(NBT_CALIBER) &&
+                                        checkedItem.getTagCompound().hasKey(NBT_AMMO) &&
+                                        checkedItem.getTagCompound().hasKey(NBT_AMMO_TYPE)) {
+                                    if (checkedItem.getTagCompound().getString(NBT_CALIBER).equals(caliber) &&
+                                            checkedItem.getTagCompound().getInteger(NBT_AMMO) > 0 &&
+                                            (!gunBehavior.isBeltFed() || magBehavior.getMaxCapacity() > MIN_BELT_SIZE))
+                                        return checkedItem;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                        ItemStack checkedItem = player.inventory.getStackInSlot(i);
+                        if (checkedItem.hasTagCompound()) {
+                            NBTTagCompound tag = checkedItem.getTagCompound();
+                            if (tag.hasKey(NBT_CALIBER)) {
+                                if (tag.getString(NBT_CALIBER).equals(caliber)) return checkedItem;
                             }
                         }
                     }
@@ -103,6 +117,9 @@ public class GunMagazineBehavior implements IItemBehaviour, IItemDurabilityManag
         return (double) tag.getInteger(NBT_AMMO) / this.maxCapacity;
     }
 
+    // "magazines" below this capacity will be magazines, ones above will be belts
+    public static final int MIN_BELT_SIZE = 101;
+
     @Nullable public static ItemStack getMagFromSize(int size) {
         if (size == 5) return MAGAZINE_5.getStackForm();
         if (size == 10) return MAGAZINE_10.getStackForm();
@@ -110,8 +127,20 @@ public class GunMagazineBehavior implements IItemBehaviour, IItemDurabilityManag
         if (size == 20) return MAGAZINE_20.getStackForm();
         if (size == 30) return MAGAZINE_30.getStackForm();
         if (size == 50) return MAGAZINE_50.getStackForm();
-        if (size == 200) return MAGAZINE_200.getStackForm();
+        if (size == 200) return BELT_200.getStackForm();
 
         return null;
+    }
+
+    /// Finds a bullet (not magazine) matching the given caliber. Intended to only be used for paper and black powder
+    /// cartridges for now. Returns a stack of the given size, or null if nothing was found.
+    @Nullable public static ItemStack getBulletFromCaliber(String caliber, int stackSize) {
+        ItemStack stack = null;
+        if (caliber.equals(CALIBER_PAPER_CARTRIDGE)) stack = PAPER_CARTRIDGE.getStackForm(stackSize);
+        if (caliber.equals(CALIBER_11x24_BP)) stack = GUNPOWDER_CARTRIDGE.getStackForm(stackSize);
+        if (caliber.equals(CALIBER_13x45_BP)) stack = GUNPOWDER_CARTRIDGE.getStackForm(stackSize);
+        if (caliber.equals(CALIBER_18_SHOTGUN_BP)) stack = GUNPOWDER_CARTRIDGE.getStackForm(stackSize);
+        if (stack != null) getOrCreateTag(stack).setString(NBT_CALIBER, caliber);
+        return stack;
     }
 }

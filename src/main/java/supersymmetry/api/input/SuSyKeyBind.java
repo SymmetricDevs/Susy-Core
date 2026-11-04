@@ -19,6 +19,7 @@ public enum SuSyKeyBind {
 
     RELOAD_GUN("susy.key.reload_gun", KeyConflictContext.IN_GAME, Keyboard.KEY_R),
     CYCLE_FIRE_MODE("susy.key.cycle_fire_mode", KeyConflictContext.IN_GAME, Keyboard.KEY_B),
+    UNLOAD_GUN("susy.key.unload_gun", KeyConflictContext.IN_GAME, Keyboard.KEY_H),
     AIM("susy.key.aim", KeyConflictContext.IN_GAME, -99);
 
     public static final SuSyKeyBind[] VALUES = values();

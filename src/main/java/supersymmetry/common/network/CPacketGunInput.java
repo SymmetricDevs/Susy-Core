@@ -15,15 +15,18 @@ public class CPacketGunInput implements IPacket, IServerExecutor {
     private boolean aim;
     private boolean reload;
     private boolean cycleMode;
+    private boolean unload;
     private EnumHand hand = EnumHand.MAIN_HAND;
 
     public CPacketGunInput() {}
 
-    public CPacketGunInput(boolean trigger, boolean aim, boolean reload, boolean cycleMode, EnumHand hand) {
+    public CPacketGunInput(boolean trigger, boolean aim, boolean reload, boolean cycleMode, boolean unload,
+                           EnumHand hand) {
         this.trigger = trigger;
         this.aim = aim;
         this.reload = reload;
         this.cycleMode = cycleMode;
+        this.unload = unload;
         this.hand = hand;
     }
 
@@ -33,6 +36,7 @@ public class CPacketGunInput implements IPacket, IServerExecutor {
         buf.writeBoolean(aim);
         buf.writeBoolean(reload);
         buf.writeBoolean(cycleMode);
+        buf.writeBoolean(unload);
         buf.writeByte(hand.ordinal());
     }
 
@@ -42,6 +46,7 @@ public class CPacketGunInput implements IPacket, IServerExecutor {
         aim = buf.readBoolean();
         reload = buf.readBoolean();
         cycleMode = buf.readBoolean();
+        unload = buf.readBoolean();
 
         int handId = buf.readUnsignedByte();
         EnumHand[] hands = EnumHand.values();
@@ -51,6 +56,6 @@ public class CPacketGunInput implements IPacket, IServerExecutor {
     @Override
     public void executeServer(NetHandlerPlayServer handler) {
         EntityPlayerMP player = handler.player;
-        GunServerHandler.onInput(player, trigger, aim, reload, cycleMode, hand);
+        GunServerHandler.onInput(player, trigger, aim, reload, cycleMode, unload, hand);
     }
 }

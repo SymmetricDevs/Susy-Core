@@ -53,6 +53,7 @@ public final class GunInputHandler {
             return;
         }
 
+        boolean unloadPressed = SuSyKeyBind.UNLOAD_GUN.isPressed();
         boolean reloadPressed = SuSyKeyBind.RELOAD_GUN.isPressed();
         boolean cyclePressed = SuSyKeyBind.CYCLE_FIRE_MODE.isPressed();
 
@@ -66,15 +67,16 @@ public final class GunInputHandler {
         boolean inputAllowed = mc.currentScreen == null;
         boolean trigger = inputAllowed && mc.gameSettings.keyBindAttack.isKeyDown();
         boolean aim = inputAllowed && SuSyKeyBind.AIM.isKeyDown();
+        boolean unload = inputAllowed && unloadPressed;
         boolean reload = inputAllowed && reloadPressed;
         boolean cycleMode = inputAllowed && cyclePressed;
 
-        InputState current = new InputState(trigger, aim, hand);
-        boolean pulse = reload || cycleMode;
+        InputState current = new InputState(trigger, aim, unload, hand);
+        boolean pulse = reload || cycleMode || unload;
 
         if (pulse || !current.equals(lastState)) {
             GregTechAPI.networkHandler.sendToServer(
-                    new CPacketGunInput(trigger, aim, reload, cycleMode, hand));
+                    new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand));
             lastState = current;
         }
     }
@@ -123,7 +125,7 @@ public final class GunInputHandler {
         if (lastState == null)
             return;
         GregTechAPI.networkHandler.sendToServer(
-                new CPacketGunInput(false, false, false, false, lastState.hand));
+                new CPacketGunInput(false, false, false, false, false, lastState.hand));
         lastState = null;
     }
 
@@ -143,12 +145,14 @@ public final class GunInputHandler {
 
         private final boolean trigger;
         private final boolean aim;
+        private final boolean unload;
         private final EnumHand hand;
 
-        private InputState(boolean trigger, boolean aim, EnumHand hand) {
+        private InputState(boolean trigger, boolean aim, boolean unload, EnumHand hand) {
             this.trigger = trigger;
             this.aim = aim;
             this.hand = hand;
+            this.unload = unload;
         }
 
         @Override
@@ -160,12 +164,12 @@ public final class GunInputHandler {
 
             InputState other = (InputState) o;
 
-            return trigger == other.trigger && aim == other.aim && hand == other.hand;
+            return trigger == other.trigger && aim == other.aim && hand == other.hand && unload == other.unload;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(trigger, aim, hand);
+            return Objects.hash(trigger, aim, unload, hand);
         }
     }
 }
