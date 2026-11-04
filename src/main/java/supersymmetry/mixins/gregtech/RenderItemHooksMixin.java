@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.asm.hooks.RenderItemHooks;
 import gregtech.client.utils.ToolChargeBarRenderer;
@@ -18,8 +19,9 @@ import supersymmetry.common.item.ItemToolbelt;
  * the bars of the stack in the slot. A toolbelt is an IGTTool but is not electric and has no
  * durability of its own, so GT would ask the belt and draw nothing for the tool inside it.
  * <p>
- * Handing the selected tool's stack to the same renderer gives the belt exactly the bars the tool
- * would draw in that slot - green durability, blue charge, or both - everywhere GT's bars appear.
+ * Handing the selected stack to the same renderer gives the belt exactly the bars that stack would
+ * draw in that slot - green durability, the blue charge bar, or a spray can's coloured uses bar -
+ * everywhere GT's bars appear: the hotbar, the inventory, and the belt row above them.
  */
 @Mixin(value = RenderItemHooks.class, remap = false)
 public class RenderItemHooksMixin {
@@ -28,8 +30,14 @@ public class RenderItemHooksMixin {
     private static void susy$renderToolbeltBars(ItemStack stack, int xPosition, int yPosition, CallbackInfo ci) {
         if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
         ItemStack selected = belt.getSelectedTool(stack);
-        if (selected.isEmpty() || !(selected.getItem() instanceof IGTTool tool)) return;
-        ToolChargeBarRenderer.renderBarsTool(tool, selected, xPosition, yPosition);
-        ci.cancel();
+        if (selected.isEmpty()) return;
+        if (selected.getItem() instanceof IGTTool tool) {
+            ToolChargeBarRenderer.renderBarsTool(tool, selected, xPosition, yPosition);
+            ci.cancel();
+        } else if (selected.getItem() instanceof MetaItem<?> meta) {
+            // Spray cans and other GT metaitems carry their own uses bar, with their own colours.
+            ToolChargeBarRenderer.renderBarsItem(meta, selected, xPosition, yPosition);
+            ci.cancel();
+        }
     }
 }

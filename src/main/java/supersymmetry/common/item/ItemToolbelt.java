@@ -331,7 +331,11 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         ItemStack selected = getSelectedTool(stack);
         if (selected.isEmpty()) return definition$getDurabilityForDisplay(stack);
         double display = selected.getItem().getDurabilityForDisplay(selected);
-        if (!(selected.getItem() instanceof IGTTool)) display = 1 - display;
+        // GT items (tools and metaitems such as spray cans) report what is left; vanilla items
+        // report what is damaged. Inverting the former showed a full spray can as an empty bar.
+        if (!(selected.getItem() instanceof IGTTool) && !(selected.getItem() instanceof MetaItem)) {
+            display = 1 - display;
+        }
         return display;
     }
 
