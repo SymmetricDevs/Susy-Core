@@ -42,7 +42,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final int burstCount;
     @Getter
     private final int burstIntervalTicks;
-    private final int magazineSize;
+    @Getter
+    private final int maxMagazineSize;
     @Getter
     private final int reloadTicks;
     @Getter
@@ -57,7 +58,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
-                           int burstIntervalTicks, int magazineSize, int reloadTicks, String caliber) {
+                           int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -88,7 +89,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.fireModes = Collections.unmodifiableList(modes);
         this.burstCount = burstCount;
         this.burstIntervalTicks = Math.max(burstIntervalTicks, 1);
-        this.magazineSize = Math.max(magazineSize, 0);
+        this.maxMagazineSize = Math.max(maxMagazineSize, 0);
         this.reloadTicks = reloadTicks;
         this.caliber = caliber;
     }
@@ -110,18 +111,18 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     // magazine
 
     public int getAmmo(ItemStack stack) {
-        if (magazineSize <= 0) return Integer.MAX_VALUE;
+        if (maxMagazineSize <= 0) return Integer.MAX_VALUE;
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null || !tag.hasKey(NBT_AMMO)) return magazineSize;
+        if (tag == null || !tag.hasKey(NBT_AMMO)) return maxMagazineSize;
         return tag.getInteger(NBT_AMMO);
     }
 
     public boolean isFull(ItemStack stack) {
-        return magazineSize <= 0 || getAmmo(stack) >= magazineSize;
+        return maxMagazineSize <= 0 || getAmmo(stack) >= maxMagazineSize;
     }
 
     public boolean consumeRound(ItemStack stack) {
-        if (magazineSize <= 0) return true;
+        if (maxMagazineSize <= 0) return true;
         int ammo = getAmmo(stack);
         if (ammo <= 0) return false;
         getOrCreateTag(stack).setInteger(NBT_AMMO, ammo - 1);
@@ -130,8 +131,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     // TODO: take rounds from the player's inventory instead of refilling for free
     public void refill(ItemStack stack) {
-        if (magazineSize <= 0) return;
-        getOrCreateTag(stack).setInteger(NBT_AMMO, magazineSize);
+        if (maxMagazineSize <= 0) return;
+        getOrCreateTag(stack).setInteger(NBT_AMMO, maxMagazineSize);
     }
 
     private static NBTTagCompound getOrCreateTag(ItemStack stack) {
@@ -146,20 +147,19 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
         if (!getOrCreateTag(itemStack).hasKey(NBT_AMMO)) return 0;
-        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) / magazineSize;
+        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) / maxMagazineSize;
     }
 
-    // balistic
     /// Fires a single bullet from the specified position
     public void fire(World world, Entity shooter, Vec3d firePos, double yaw, double pitch, SuSyAmmoType ammoType) {
         if (world.isRemote) return;
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
         yaw = yaw % 360;
-        // projections of the total speed onto the X, Y and Z axes
 
         double bulletCheckSpeed = 1.0; // distance between checked spots
 
+        // projections of the total speed onto the X, Y and Z axes
         double motionY = MathHelper.sin((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
         double motionX = -MathHelper.sin((float) (yaw * 0.0174532922)) *
                 MathHelper.cos((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
@@ -167,7 +167,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                 MathHelper.cos((float) (-pitch * 0.0174532922)) * bulletCheckSpeed;
         int i = 0;
         // total number of iterations is limited
-        while (i < 10000) {
+        while (i < 2000) {
             currentPos = new Vec3d(currentPos.x + motionX, currentPos.y + motionY, currentPos.z + motionZ);
             motionX *= (1 - muzzleVelocity * 0.000001); // air resistance (tm)
             motionY -= 2 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
@@ -287,6 +287,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         return null;
     }
 
+    // FIXME: yeet this, it was just temporary debug :skull:
     private SuSyAmmoType resolveAmmoType(ItemStack stack) {
         SuSyAmmoType ammoType = getCurrentAmmoType(stack);
         if (ammoType != null) return ammoType;
@@ -345,7 +346,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         lines.add(I18n.format("susy.gun.fire_mode." + getSelectedMode(itemStack).name().toLowerCase(Locale.ROOT)));
         if (fireModes.size() > 1) {
             lines.add(
-                    I18n.format("susy.gun.tooltip.switch_mode", SuSyKeyBind.RELOAD_GUN.toMinecraft().getDisplayName()));
+                    I18n.format("susy.gun.tooltip.switch_mode",
+                            SuSyKeyBind.CYCLE_FIRE_MODE.toMinecraft().getDisplayName()));
         }
     }
 
@@ -357,9 +359,9 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private final int cooldownTicks;
         private int burstCount = 1;
         private int burstIntervalTicks = 1;
-        private int magazineSize = 0;
+        private int maxMagazineSize = 0;
         private int reloadTicks = 0;
-        private String caliber;
+        private final String caliber;
         private final List<GunFireMode> modes = new ArrayList<>();
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
@@ -382,8 +384,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             return this;
         }
 
-        public Builder magazine(int size, int reloadTicks) {
-            this.magazineSize = size;
+        public Builder magazine(int maxSize, int reloadTicks) {
+            this.maxMagazineSize = maxSize;
             this.reloadTicks = reloadTicks;
             return this;
         }
@@ -394,7 +396,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
             return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
-                    burstCount, burstIntervalTicks, magazineSize, reloadTicks, caliber);
+                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber);
         }
     }
 
@@ -421,7 +423,6 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             "armor_piercing_incendiary");
     public static final SuSyAmmoType ARMOR_PIERCING_EXPLOSIVE = new ExplosiveBullet(1.0, 2.5,
             "armor_piercing_explosive");
-    // if adding ammo types make sure to adjust modelamount for magazines
 
     public static final List<SuSyAmmoType> ammoTypes = new ArrayList<>(java.util.Arrays.asList(
             FULL_METAL_JACKET, // gray
