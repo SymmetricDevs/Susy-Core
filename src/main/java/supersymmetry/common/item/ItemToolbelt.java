@@ -391,6 +391,31 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
     }
 
+    /**
+     * Spray cans act through Item.onItemUse, which reads the held stack, so they need the can in
+     * hand. Scoped to spray cans only: tool interactions go through GT's helpers instead, and no
+     * tool is ever swapped, which is what used to lose the belt on shift-right-click.
+     */
+    @Override
+    public @NotNull EnumActionResult onItemUse(@NotNull EntityPlayer player, @NotNull World world,
+                                               @NotNull BlockPos pos, @NotNull EnumHand hand,
+                                               @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack belt = player.getHeldItem(hand);
+        ItemStack selected = getSelectedTool(belt);
+        if (!world.isRemote && !selected.isEmpty() && ToolStackHandler.isSpraycan(selected)) {
+            player.setHeldItem(hand, selected);
+            try {
+                EnumActionResult result = selected.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY,
+                        hitZ);
+                if (result != EnumActionResult.PASS) return result;
+            } finally {
+                getHandler(belt).persist();
+                player.setHeldItem(hand, belt);
+            }
+        }
+        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+    }
+
     /** Runs an action with the selected tool temporarily in hand, then restores the belt. */
 
     // ---------------------------------------------------------------- display
@@ -651,7 +676,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         }
 
         /** Mirrors the fork's ToolHelper.isSpraycan: any metaitem carrying a colour spray behaviour. */
-        private static boolean isSpraycan(@NotNull ItemStack stack) {
+        public static boolean isSpraycan(@NotNull ItemStack stack) {
             if (stack.getItem() instanceof MetaItem<?> meta) {
                 for (IItemBehaviour behaviour : meta.getBehaviours(stack)) {
                     if (behaviour instanceof ColorSprayBehaviour) return true;
