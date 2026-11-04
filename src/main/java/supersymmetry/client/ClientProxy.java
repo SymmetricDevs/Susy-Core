@@ -127,6 +127,7 @@ public class ClientProxy extends CommonProxy {
                     (stack, tint) -> ItemToolbelt.TOOLBELT.getColor(stack, tint), ItemToolbelt.TOOLBELT);
         }
         MinecraftForge.EVENT_BUS.register(new ToolbeltInputHandler());
+        MinecraftForge.EVENT_BUS.register(new ToolbeltHudRenderer());
         SuSyFluidTooltipLoader.registerTooltips();
         MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
     }

@@ -56,6 +56,7 @@ import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
 import gregtech.api.items.toolitem.ToolHelper;
+import gregtech.api.unification.material.properties.ToolProperty;
 import gregtech.api.util.LocalizationUtils;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.utils.TooltipHelper;
@@ -92,7 +93,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     @Override
     public @NotNull ICapabilityProvider initCapabilities(@NotNull ItemStack stack, NBTTagCompound nbt) {
-        return new ToolbeltCapabilityProvider(stack);
+        return new ToolbeltCapabilityProvider(this, stack);
     }
 
     @Override
@@ -117,6 +118,19 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     public @NotNull ItemStack getSelectedTool(@NotNull ItemStack belt) {
         return getHandler(belt).getSelectedStack();
+    }
+
+    /** Slot count grows with the tool material, as in the fork (2 + harvest level, capped at 8). */
+    public int getSlotCount(@NotNull ItemStack stack) {
+        ToolProperty property = getToolProperty(stack);
+        if (property == null) return SLOTS;
+        return Math.min(8, 2 + property.getToolHarvestLevel());
+    }
+
+    public @NotNull ItemStack getToolInSlot(@NotNull ItemStack stack, int slot) {
+        ToolStackHandler handler = getHandler(stack);
+        if (slot < 0 || slot >= handler.getSlots()) return ItemStack.EMPTY;
+        return handler.getStackInSlot(slot);
     }
 
     public void setSelectedSlot(@NotNull ItemStack belt, int slot) {
@@ -614,21 +628,20 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     public static class ToolbeltCapabilityProvider implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
 
+        private final ItemToolbelt belt;
         private final ItemStack stack;
         private ToolStackHandler handler;
 
-        public ToolbeltCapabilityProvider(ItemStack stack) {
+        public ToolbeltCapabilityProvider(ItemToolbelt belt, ItemStack stack) {
+            this.belt = belt;
             this.stack = stack;
         }
 
         private @NotNull ToolStackHandler getHandler() {
-            if (handler == null) handler = new ToolStackHandler(slotCount());
+            int size = belt.getSlotCount(stack);
+            if (handler == null) handler = new ToolStackHandler(size);
+            else if (handler.getSlots() != size) handler.setSize(size);
             return handler;
-        }
-
-        private int slotCount() {
-            // Fixed size for the first pass; the fork derives this from the tool material.
-            return SLOTS;
         }
 
         @Override
