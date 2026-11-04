@@ -9,8 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
@@ -45,6 +48,8 @@ import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
 public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockController {
+
+    private static final int PARALLEL_LIMIT = 32;
 
     /**
      * Identifier used for input hatch base textures -1 for None, 0~15 for normal
@@ -269,5 +274,13 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
     @Override
     public boolean allowsExtendedFacing() {
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        // Parallel
+        tooltip.add(I18n.format("gregtech.universal.tooltip.parallel", PARALLEL_LIMIT));
     }
 }
