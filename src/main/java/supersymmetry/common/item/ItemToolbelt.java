@@ -11,9 +11,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -94,6 +96,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
     @Override
     public void readNBTShareTag(ItemStack stack, NBTTagCompound nbt) {
         stack.setTagCompound(nbt == null ? null : (nbt.hasKey("NBT") ? nbt.getCompoundTag("NBT") : null));
+        if (nbt != null && nbt.hasKey("Cap")) getHandler(stack).deserializeNBT(nbt.getCompoundTag("Cap"));
     }
 
     // ---------------------------------------------------------------- selection
@@ -108,6 +111,38 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
 
     public void setSelectedSlot(@NotNull ItemStack belt, int slot) {
         getHandler(belt).setSelectedSlot(slot);
+    }
+
+    // ---------------------------------------------------------------- crafting
+
+    private static final ThreadLocal<Integer> lastSlot = ThreadLocal.withInitial(() -> -999);
+    private static final ThreadLocal<EntityPlayerMP> lastPlayer = ThreadLocal.withInitial(() -> null);
+
+    /** Called from the container hook while a toolbelt is on the cursor. */
+    public static void setCraftingSlot(int slot, EntityPlayerMP player) {
+        lastSlot.set(slot);
+        lastPlayer.set(player);
+    }
+
+    public static boolean checkIngredientAgainstToolbelt(ItemStack input, Ingredient ingredient) {
+        if (input.getItem() instanceof ItemToolbelt belt && belt.supportsIngredient(input, ingredient)) {
+            belt.setOnCraftIngredient(input, ingredient);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean supportsIngredient(ItemStack stack, Ingredient ingredient) {
+        return getHandler(stack).checkIngredientAgainstTools(ingredient) != -1;
+    }
+
+    public void setOnCraftIngredient(ItemStack stack, Ingredient ingredient) {
+        int match = getHandler(stack).checkIngredientAgainstTools(ingredient);
+        if (match != -1) {
+            getHandler(stack).setSelectedSlot(match);
+            EntityPlayerMP player = lastPlayer.get();
+            if (player != null && player.openContainer != null) player.openContainer.detectAndSendChanges();
+        }
     }
 
     // ---------------------------------------------------------------- delegation
@@ -334,6 +369,17 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
         return false;
     }
 
+    @Override
+    public boolean hasContainerItem(@NotNull ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public @NotNull ItemStack getContainerItem(@NotNull ItemStack stack) {
+        if (getHandler(stack).dealCraftDamageToSelected()) return stack.copy();
+        return super.getContainerItem(stack);
+    }
+
     // ---------------------------------------------------------------- screen
 
     @Override
@@ -394,6 +440,27 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
                 if (selected.getItem() instanceof ItemTool tool) return tool.getToolClasses(selected);
             }
             return EMPTY;
+        }
+
+        public int checkIngredientAgainstTools(Ingredient ingredient) {
+            for (int i = 0; i < getSlots(); i++) {
+                ItemStack stack = getStackInSlot(i);
+                if (!stack.isEmpty() && ingredient.test(stack)) return i;
+            }
+            return -1;
+        }
+
+        public boolean dealCraftDamageToSelected() {
+            if (selectedSlot != -1) {
+                dealCraftDamageToSlot(selectedSlot);
+                return true;
+            }
+            return false;
+        }
+
+        public void dealCraftDamageToSlot(int slot) {
+            ItemStack stack = getStackInSlot(slot);
+            if (!stack.isEmpty()) setStackInSlot(slot, stack.getItem().getContainerItem(stack));
         }
 
         @Override

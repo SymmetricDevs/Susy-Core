@@ -86,6 +86,7 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.item.ItemToolbelt;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.armor.SpaceSuit;
@@ -225,6 +226,13 @@ public class ClientProxy extends CommonProxy {
     public static void registerModels(@NotNull ModelRegistryEvent event) {
         SuSyBlocks.registerItemModels();
         SuSyMetaBlocks.registerItemModels();
+
+        if (ItemToolbelt.TOOLBELT != null) {
+            ModelLoader.setCustomModelResourceLocation(ItemToolbelt.TOOLBELT, 0,
+                    new ModelResourceLocation("susy:toolbelt", "inventory"));
+            net.minecraft.client.Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
+                    (stack, tint) -> ItemToolbelt.TOOLBELT.getColor(stack, tint), ItemToolbelt.TOOLBELT);
+        }
     }
 
     @SubscribeEvent
