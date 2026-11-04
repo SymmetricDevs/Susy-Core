@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.GTInternalTags;
-import gregtech.api.GTValues;
 import li.cil.oc.api.Driver;
 import li.cil.oc.api.FileSystem;
 import li.cil.oc.api.Items;
@@ -86,8 +85,8 @@ public class Supersymmetry {
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
 
-        ItemToolbelt.TOOLBELT = (ItemToolbelt) new ItemToolbelt(GTValues.MODID, "toolbelt")
-                .setRegistryName(GTValues.MODID, "toolbelt");
+        // ItemGTTool's constructor already sets the registry name from domain + id.
+        ItemToolbelt.TOOLBELT = new ItemToolbelt("susy", "toolbelt");
         net.minecraftforge.fml.common.registry.GameRegistry.findRegistry(net.minecraft.item.Item.class)
                 .register(ItemToolbelt.TOOLBELT);
 
