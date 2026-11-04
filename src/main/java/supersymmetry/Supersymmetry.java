@@ -92,6 +92,17 @@ public class Supersymmetry {
         net.minecraftforge.fml.common.registry.GameRegistry.findRegistry(net.minecraft.item.Item.class)
                 .register(ItemToolbelt.TOOLBELT);
 
+        supersymmetry.common.crafting.DyeableRecipes dyeableRecipes = new supersymmetry.common.crafting.DyeableRecipes();
+        net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(dyeableRecipes);
+
+        net.minecraftforge.oredict.ShapedOreRecipe beltRecipe = new net.minecraftforge.oredict.ShapedOreRecipe(null,
+                new net.minecraft.item.ItemStack(ItemToolbelt.TOOLBELT), "SSS", "LLL", "RSR",
+                'L', net.minecraft.init.Items.LEATHER,
+                'S', "screwSteel",
+                'R', "ringSteel");
+        beltRecipe.setRegistryName(new net.minecraft.util.ResourceLocation("susy", "toolbelt"));
+        net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(beltRecipe);
+
         SusyMetaEntities.init();
         SusyCriteriaTriggers.init();
 
