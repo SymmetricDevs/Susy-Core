@@ -371,10 +371,10 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
             selected.getItem().addInformation(selected, world, tooltip, flag);
             return;
         }
-        tooltip.add(I18n.format("item.susy.toolbelt.size", TextFormattingUtil.formatNumbers(handler.getSlots())));
+        tooltip.add(I18n.format("item.gt.tool.toolbelt.size", TextFormattingUtil.formatNumbers(handler.getSlots())));
         tooltip.add("");
         if (TooltipHelper.isShiftDown()) {
-            tooltip.add(I18n.format("item.susy.toolbelt.tooltip"));
+            tooltip.add(I18n.format("item.gt.tool.toolbelt.tooltip"));
         } else {
             tooltip.add(I18n.format("gregtech.tooltip.hold_shift"));
         }
@@ -383,8 +383,8 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack tool = handler.getStackInSlot(i);
                 String name = tool.isEmpty() ? "x" : tool.getDisplayName();
-                tooltip.add(I18n.format(handler.selectedSlot == i ? "item.susy.toolbelt.selected" :
-                        "item.susy.toolbelt.tool", i + 1, name));
+                tooltip.add(I18n.format(handler.selectedSlot == i ? "item.gt.tool.toolbelt.selected" :
+                        "item.gt.tool.toolbelt.tool", i + 1, name));
             }
         } else {
             tooltip.add(I18n.format("gregtech.tooltip.hold_ctrl"));
