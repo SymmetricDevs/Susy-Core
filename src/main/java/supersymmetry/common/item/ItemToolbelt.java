@@ -1,5 +1,7 @@
 package supersymmetry.common.item;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,8 +28,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +55,8 @@ import com.google.common.collect.Multimap;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
+import gregtech.api.capability.GregtechCapabilities;
+import gregtech.api.capability.IElectricItem;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.toolitem.IGTTool;
@@ -117,6 +124,83 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         }
         HANDLERS.put(stack, handler);
         return handler;
+    }
+
+    // ---------------------------------------------------------------- capabilities
+
+    /**
+     * Exposes the selected tool's capabilities through the belt, as the fork's ToolbeltCapabilityProvider
+     * does, and the belt's own inventory when nothing is selected. This is what lets a charger see the
+     * tool's electric item capability through a belt sitting in a slot, and lets item automation fill the
+     * belt.
+     * <p>
+     * The electric capability is wrapped so a charge or discharge through the belt is written back into
+     * the belt's NBT: the tool's charge lives in the tool stack inside that tag, and nothing else would
+     * persist it.
+     */
+    @Override
+    public ICapabilityProvider initCapabilities(@NotNull ItemStack stack, @Nullable NBTTagCompound nbt) {
+        return new ToolbeltCapabilityProvider(stack);
+    }
+
+    public static class ToolbeltCapabilityProvider implements ICapabilityProvider {
+
+        private final ItemStack belt;
+
+        private IElectricItem electricSource;
+        private IElectricItem electricProxy;
+
+        ToolbeltCapabilityProvider(ItemStack belt) {
+            this.belt = belt;
+        }
+
+        private ItemToolbelt item() {
+            return (ItemToolbelt) belt.getItem();
+        }
+
+        @Override
+        public boolean hasCapability(@NotNull Capability<?> capability, @Nullable EnumFacing facing) {
+            ItemStack selected = item().getSelectedTool(belt);
+            if (selected.isEmpty()) return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+            return selected.hasCapability(capability, facing);
+        }
+
+        @Override
+        public <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing facing) {
+            ItemStack selected = item().getSelectedTool(belt);
+            if (selected.isEmpty()) {
+                return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ?
+                        CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(item().getHandler(belt)) : null;
+            }
+            T delegate = selected.getCapability(capability, facing);
+            if (delegate == null) return null;
+            if (capability == GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM) {
+                return GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM.cast(electric(selected));
+            }
+            return delegate;
+        }
+
+        private IElectricItem electric(ItemStack selected) {
+            IElectricItem real = selected.getCapability(GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM, null);
+            if (real == null) return null;
+            if (real != electricSource) {
+                electricSource = real;
+                electricProxy = (IElectricItem) Proxy.newProxyInstance(ItemToolbelt.class.getClassLoader(),
+                        new Class<?>[] { IElectricItem.class }, (proxy, method, args) -> {
+                            Object result;
+                            try {
+                                result = method.invoke(real, args);
+                            } catch (InvocationTargetException e) {
+                                throw e.getCause();
+                            }
+                            if ("charge".equals(method.getName()) || "discharge".equals(method.getName())) {
+                                item().getHandler(belt).persist();
+                            }
+                            return result;
+                        });
+            }
+            return electricProxy;
+        }
     }
 
     // ---------------------------------------------------------------- selection
