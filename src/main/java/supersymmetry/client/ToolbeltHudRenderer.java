@@ -17,13 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import supersymmetry.common.item.ItemToolbelt;
 
 /**
- * Second hotbar above the vanilla one showing the toolbelt's slots and its selection.
- * <p>
- * Runs just after the vanilla hotbar and before the health row, so bumping the left and right
- * heights there moves hearts, food, air and armour up together - the belt row takes the space
- * everything below it leaves. Drawing on the armour row left the hearts behind, since they are
- * rendered before it.
- * <p>
+ * Second hotbar above the vanilla one showing the toolbelt's slots and its selection, bumps status bars.
  * Each slot goes through the same two passes the vanilla hotbar uses. The overlay pass is where
  * GT's ASM hook draws tool bars: durability, and the blue charge bar for electric tools.
  */
