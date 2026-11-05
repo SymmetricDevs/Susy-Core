@@ -122,6 +122,10 @@ public class ClientProxy extends CommonProxy {
     public void load() {
         super.load();
         SuSyMetaBlocks.registerColors();
+        if (ItemToolbelt.TOOLBELT != null) {
+            net.minecraft.client.Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
+                    (stack, tint) -> ItemToolbelt.TOOLBELT.getColor(stack, tint), ItemToolbelt.TOOLBELT);
+        }
         SuSyFluidTooltipLoader.registerTooltips();
         MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
     }
@@ -230,8 +234,6 @@ public class ClientProxy extends CommonProxy {
         if (ItemToolbelt.TOOLBELT != null) {
             ModelLoader.setCustomModelResourceLocation(ItemToolbelt.TOOLBELT, 0,
                     new ModelResourceLocation("susy:toolbelt", "inventory"));
-            net.minecraft.client.Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
-                    (stack, tint) -> ItemToolbelt.TOOLBELT.getColor(stack, tint), ItemToolbelt.TOOLBELT);
         }
     }
 
