@@ -41,7 +41,6 @@
   ],
   "client": [
     "PipeRendererMixin",
-    "RenderItemHooksMixin",
     "WorldSceneRendererMixin"
   ]
 }
