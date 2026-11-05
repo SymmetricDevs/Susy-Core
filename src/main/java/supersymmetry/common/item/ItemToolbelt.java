@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -35,13 +36,22 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.drawable.ColorType;
+import com.cleanroommc.modularui.drawable.UITexture;
+import com.cleanroommc.modularui.factory.HandGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandlers;
+import com.cleanroommc.modularui.widgets.layout.Grid;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.SlotWidget;
-import gregtech.api.items.gui.PlayerInventoryHolder;
+import gregtech.api.GTValues;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
@@ -59,7 +69,7 @@ import supersymmetry.api.items.IDyeableItem;
  * shortcut, no colour-spray passthrough, no keybind/scroll selection. Selection is done
  * in the screen.
  */
-public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
+public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder<HandGuiData> {
 
     public static final int SLOTS = 4;
 
@@ -413,20 +423,58 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
 
     // ---------------------------------------------------------------- screen
 
-    @Override
-    public ModularUI createUI(@NotNull PlayerInventoryHolder holder, @NotNull EntityPlayer player) {
-        ItemStack stack = holder.getCurrentItem();
-        ToolStackHandler handler = getHandler(stack);
+    private static final UITexture SLOT = new UITexture.Builder()
+            .location(GTValues.MODID, "textures/gui/base/slot.png")
+            .imageSize(18, 18)
+            .adaptable(1)
+            .build();
+    private static final UITexture TOOL_SLOT_OVERLAY = UITexture.fullImage(GTValues.MODID,
+            "textures/gui/overlay/tool_slot_overlay.png", ColorType.DEFAULT);
 
-        ModularUI.Builder builder = ModularUI.defaultBuilder();
+    @Override
+    public ModularPanel buildUI(HandGuiData guiData, PanelSyncManager guiSyncManager, UISettings settings) {
+        final ItemStack usedStack = guiData.getUsedItemStack();
+        final ToolStackHandler handler = getHandler(usedStack);
+
+        int heightBonus = (handler.getSlots() / 9) * 18;
+        SlotGroup group = new SlotGroup("toolbelt_inventory", Math.min(handler.getSlots(), 9));
+        guiSyncManager.registerSlotGroup(group);
+
+        List<ItemSlot> slots = new ArrayList<>();
         for (int i = 0; i < handler.getSlots(); i++) {
-            int index = i;
-            builder.widget(new SlotWidget(handler, i, 8 + (i % 4) * 18, 8, true, true));
-            builder.widget(new ClickButtonWidget(8 + (i % 4) * 18, 30, 16, 16, String.valueOf(i + 1),
-                    data -> handler.setSelectedSlot(index)));
+            slots.add(new ItemSlot());
         }
-        builder.bindPlayerInventory(player.inventory, 8 + 18 * 3);
-        return builder.build(holder, player);
+
+        return ModularPanel.defaultPanel(usedStack.getTranslationKey(), 176, 120 + heightBonus + 12)
+                .child(IKey.str(usedStack.getDisplayName()).asWidget().pos(5, 5).height(12))
+                .child(new Grid().margin(0).leftRel(0.5f).top(7 + 12).coverChildren()
+                        .mapTo(group.getRowSize(), slots, (index, value) -> value
+                                .slot(SyncHandlers.itemSlot(handler, index).slotGroup(group)
+                                        .changeListener((newItem, onlyAmountChanged, client, init) -> handler
+                                                .notifyContentsChanged(index)))
+                                .background(SLOT, TOOL_SLOT_OVERLAY)
+                                .name("slot_" + index))
+                        .name("toolbelt_inventory"))
+                .bindPlayerInventory();
+    }
+
+    /** Scroll selection while holding the belt; the fork drives this from a client input handler. */
+    @SideOnly(Side.CLIENT)
+    public void changeSelectedToolMousewheel(int direction, @NotNull ItemStack stack) {
+        ToolStackHandler handler = getHandler(stack);
+        if (direction < 0) handler.incrementSelectedSlot();
+        else handler.decrementSelectedSlot();
+        supersymmetry.network.PacketToolbeltSelectionChange.toServer(handler.getSelectedSlot(), -1);
+    }
+
+    @Override
+    public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World world, @NotNull EntityPlayer player,
+                                                             @NotNull EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (!world.isRemote && player instanceof EntityPlayerMP serverPlayer) {
+            ToolbeltGuiFactory.open(serverPlayer, hand);
+        }
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     // ---------------------------------------------------------------- handler
@@ -511,6 +559,19 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
         public void deserializeNBT(NBTTagCompound nbt) {
             super.deserializeNBT(nbt);
             if (nbt.hasKey("SelectedSlot")) selectedSlot = nbt.getByte("SelectedSlot");
+        }
+
+        public void incrementSelectedSlot() {
+            if ((this.selectedSlot += 1) >= getSlots()) this.selectedSlot = -1;
+        }
+
+        public void decrementSelectedSlot() {
+            if ((this.selectedSlot -= 1) < -1) this.selectedSlot = getSlots() - 1;
+        }
+
+        /** Public hook for the screen's slot change listener. */
+        public void notifyContentsChanged(int slot) {
+            toolClasses.clear();
         }
 
         @Override
