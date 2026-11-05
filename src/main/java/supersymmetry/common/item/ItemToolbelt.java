@@ -81,6 +81,15 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 null, false, new HashSet<>(), "toolbelt", new ArrayList<>(), () -> ItemStack.EMPTY);
     }
 
+    /** Replaces a belt stack with its selected tool, mirroring the fork's ToolHelper.toolbeltPassthrough. */
+    public static @NotNull ItemStack passthrough(@NotNull ItemStack stack) {
+        if (stack.getItem() instanceof ItemToolbelt belt) {
+            ItemStack selected = belt.getSelectedTool(stack);
+            if (!selected.isEmpty()) return selected;
+        }
+        return stack;
+    }
+
     /**
      * The inventory lives in the stack's own NBT, so copies never share it. One handler is cached
      * per ItemStack identity so that damage and NBT changes apply to the stack the belt holds.
