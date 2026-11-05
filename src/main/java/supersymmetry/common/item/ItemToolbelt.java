@@ -92,7 +92,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     public ItemToolbelt(String domain, String id) {
         super(domain, id, -1, new ToolDefinitionBuilder().cannotAttack().attackSpeed(-2.4F).build(),
-                null, false, new HashSet<>(), "toolbelt", new ArrayList<>(), () -> ItemStack.EMPTY);
+                null, false, new HashSet<>(), "toolbelt", new ArrayList<>(), null);
     }
 
     /** Replaces a belt stack with its selected tool, mirroring the fork's ToolHelper.toolbeltPassthrough. */
