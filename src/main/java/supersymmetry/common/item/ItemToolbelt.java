@@ -439,12 +439,21 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     @Override
     public @NotNull String getItemStackDisplayName(@NotNull ItemStack stack) {
-        ItemStack tool = getSelectedTool(stack);
+        ToolStackHandler handler = getHandler(stack);
+        ItemStack tool = handler.getSelectedStack();
+        // The passthrough resolves getToolTag to the selected tool, so the material read here would be
+        // the tool's ("Iron Toolbelt" for a tungsten belt holding an iron pickaxe). The fork switches it
+        // off while naming the belt; do the same.
+        handler.disablePassthrough();
+        String name;
         if (!tool.isEmpty()) {
-            return LocalizationUtils.format(getTranslationKey() + ".select", getToolMaterial(stack).getLocalizedName(),
+            name = LocalizationUtils.format(getTranslationKey() + ".select", getToolMaterial(stack).getLocalizedName(),
                     tool.getDisplayName());
+        } else {
+            name = LocalizationUtils.format(getTranslationKey(), getToolMaterial(stack).getLocalizedName());
         }
-        return LocalizationUtils.format(getTranslationKey(), getToolMaterial(stack).getLocalizedName());
+        handler.enablePassthrough();
+        return name;
     }
 
     @SideOnly(Side.CLIENT)
