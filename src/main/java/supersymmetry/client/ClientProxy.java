@@ -245,6 +245,12 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
         bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
+
+        ModelResourceLocation toolbeltLocation = new ModelResourceLocation("susy:toolbelt", "inventory");
+        IBakedModel toolbeltModel = registry.getObject(toolbeltLocation);
+        if (toolbeltModel != null) {
+            registry.putObject(toolbeltLocation, new supersymmetry.client.renderer.ToolbeltRenderer(toolbeltModel));
+        }
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,
