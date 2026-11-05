@@ -21,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -100,13 +101,20 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     private static final java.util.Map<ItemStack, ToolStackHandler> HANDLERS = new java.util.WeakHashMap<>();
 
     public @NotNull ToolStackHandler getHandler(@NotNull ItemStack stack) {
-        int size = getSlotCount(stack);
+        int size = materialSlotCount(stack);
         ToolStackHandler cached = HANDLERS.get(stack);
-        if (cached != null && cached.getSlots() == size) return cached;
+        // A belt keeps the inventory it was saved with, so a cached handler larger than the material
+        // allows is still the right one: only a smaller cache has to be rebuilt.
+        if (cached != null && cached.getSlots() >= size) return cached;
 
         ToolStackHandler handler = new ToolStackHandler(stack, size);
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag != null && tag.hasKey("Belt")) handler.deserializeNBT(tag.getCompoundTag("Belt"));
+        if (tag != null && tag.hasKey("Belt")) {
+            handler.deserializeNBT(tag.getCompoundTag("Belt"));
+            // The saved size wins over the material: shrinking would delete the tools in the extra
+            // slots, which is what a belt saved under a different slot count would suffer.
+            handler.growTo(Math.max(size, handler.getSlots()));
+        }
         HANDLERS.put(stack, handler);
         return handler;
     }
@@ -121,12 +129,17 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         return getHandler(belt).getSelectedStack();
     }
 
+    /** Slots the belt actually has: its saved inventory size, or the material's if that is larger. */
+    public int getSlotCount(@NotNull ItemStack stack) {
+        return getHandler(stack).getSlots();
+    }
+
     /**
-     * Slot count grows with the tool material, as in the fork (2 + harvest level, capped at 8).
+     * Slots the tool material allows, as in the fork (2 + harvest level, capped at 8).
      * Reads the tool NBT directly: going through getToolProperty would call ToolHelper.getToolTag,
      * which our passthrough mixin routes back here and would recurse.
      */
-    public int getSlotCount(@NotNull ItemStack stack) {
+    public int materialSlotCount(@NotNull ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
         if (tag == null || !tag.hasKey(ToolHelper.TOOL_TAG_KEY)) return SLOTS;
 
@@ -628,7 +641,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
         public @NotNull ItemStack getSelectedStack() {
             int slot = getSelectedSlot();
-            return slot == -1 ? ItemStack.EMPTY : getStackInSlot(slot);
+            return slot < 0 || slot >= getSlots() ? ItemStack.EMPTY : getStackInSlot(slot);
         }
 
         public Set<String> getToolClasses() {
@@ -695,11 +708,39 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         }
 
         public void incrementSelectedSlot() {
-            if ((this.selectedSlot += 1) >= getSlots()) this.selectedSlot = -1;
+            stepSelection(true);
         }
 
         public void decrementSelectedSlot() {
-            if ((this.selectedSlot -= 1) < -1) this.selectedSlot = getSlots() - 1;
+            stepSelection(false);
+        }
+
+        /**
+         * Moves to the next filled slot, wrapping around. Empty slots are never selected: on a full
+         * belt the old cycle also stepped through "nothing selected" and through any gap, which is
+         * the empty slot the scroll appeared to stop on.
+         */
+        private void stepSelection(boolean forward) {
+            int slots = getSlots();
+            int index = this.selectedSlot;
+            for (int step = 0; step < slots; step++) {
+                index = forward ? (index + 1 >= slots ? 0 : index + 1) : (index - 1 < 0 ? slots - 1 : index - 1);
+                if (!getStackInSlot(index).isEmpty()) {
+                    this.selectedSlot = index;
+                    persist();
+                    return;
+                }
+            }
+            this.selectedSlot = -1;
+            persist();
+        }
+
+        /** Grows the handler without dropping the stacks it already holds. */
+        public void growTo(int size) {
+            if (size <= getSlots()) return;
+            NonNullList<ItemStack> previous = this.stacks;
+            setSize(size);
+            for (int i = 0; i < previous.size(); i++) this.stacks.set(i, previous.get(i));
         }
 
         /** Public hook for the screen's slot change listener. */
