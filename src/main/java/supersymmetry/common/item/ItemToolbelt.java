@@ -227,6 +227,14 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     }
 
     @Override
+    public boolean canDisableShield(@NotNull ItemStack stack, @NotNull ItemStack shield,
+                                    @NotNull EntityLivingBase entity, @NotNull EntityLivingBase attacker) {
+        ItemStack selected = getSelectedTool(stack);
+        return !selected.isEmpty() ? selected.getItem().canDisableShield(selected, shield, entity, attacker) :
+                definition$canDisableShield(stack, shield, entity, attacker);
+    }
+
+    @Override
     public boolean onBlockStartBreak(@NotNull ItemStack stack, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
         ItemStack selected = getSelectedTool(stack);
         return !selected.isEmpty() ? selected.getItem().onBlockStartBreak(selected, pos, player) :
