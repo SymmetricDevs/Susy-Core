@@ -1,5 +1,6 @@
 package supersymmetry.mixins.gregtech;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 
@@ -8,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import gregtech.api.items.toolitem.ToolHelper;
@@ -26,6 +28,36 @@ import supersymmetry.common.item.ItemToolbelt;
 public class ToolHelperMixin {
 
     private static final ThreadLocal<ItemStack> SUSY_BELT = new ThreadLocal<>();
+
+    /**
+     * GT's behaviours (wrench, screwdriver, crowbar, {@code onActionDone}) damage
+     * {@code player.getHeldItem(hand)}, which is the belt when a belt is held. Without this branch
+     * the belt's damage path ran against the belt: it read and wrote the *selected tool's*
+     * durability through the tag passthrough without ever touching the tool's charge, and once that
+     * durability passed the tool's maximum it shrank the belt. The fork has the same branch at the
+     * head of damageItem; this is it.
+     */
+    @Inject(method = "damageItem", at = @At("HEAD"), cancellable = true)
+    private static void susy$damageSelectedTool(ItemStack stack, EntityLivingBase entity, int damage,
+                                                CallbackInfo ci) {
+        if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
+        ItemStack selected = belt.getSelectedTool(stack);
+        if (selected.isEmpty()) return;
+        ci.cancel();
+        ToolHelper.damageItem(selected, entity, damage);
+        belt.getHandler(stack).persist();
+    }
+
+    @Inject(method = "damageItemWhenCrafting", at = @At("HEAD"), cancellable = true)
+    private static void susy$damageSelectedToolWhenCrafting(ItemStack stack, EntityLivingBase entity,
+                                                            CallbackInfo ci) {
+        if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
+        ItemStack selected = belt.getSelectedTool(stack);
+        if (selected.isEmpty()) return;
+        ci.cancel();
+        ToolHelper.damageItemWhenCrafting(selected, entity);
+        belt.getHandler(stack).persist();
+    }
 
     @ModifyVariable(method = "getBehaviorsTag", at = @At("HEAD"), argsOnly = true, index = 0)
     private static ItemStack susy$behaviorsTag(ItemStack stack) {
