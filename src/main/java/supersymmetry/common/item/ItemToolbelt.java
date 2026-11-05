@@ -307,10 +307,30 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         }
     }
 
+    /**
+     * GT tools return false from showDurabilityBar because they draw their own bar; the belt has no
+     * such renderer, so surface the selected tool's durability or charge through the vanilla bar.
+     */
+    @Override
+    public boolean showDurabilityBar(@NotNull ItemStack stack) {
+        ItemStack selected = getSelectedTool(stack);
+        if (selected.isEmpty()) return super.showDurabilityBar(stack);
+        if (selected.getItem() instanceof IGTTool tool) {
+            if (tool.isElectric()) return tool.getCharge(selected) < tool.getMaxCharge(selected);
+            return selected.getItem().isDamaged(selected);
+        }
+        return selected.getItem().showDurabilityBar(selected);
+    }
+
     @Override
     public double getDurabilityForDisplay(@NotNull ItemStack stack) {
         ItemStack selected = getSelectedTool(stack);
         if (!selected.isEmpty()) {
+            if (selected.getItem() instanceof IGTTool tool && tool.isElectric()) {
+                long max = tool.getMaxCharge(selected);
+                long charge = tool.getCharge(selected);
+                return max <= 0 ? 0.0 : 1.0 - (double) charge / (double) max;
+            }
             double display = selected.getItem().getDurabilityForDisplay(selected);
             if (selected.getItem() instanceof ItemTool) display = 1 - display;
             return display;
