@@ -30,6 +30,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -149,6 +151,8 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
         private IElectricItem electricSource;
         private IElectricItem electricProxy;
+        private IFluidHandlerItem fluidSource;
+        private IFluidHandlerItem fluidProxy;
 
         ToolbeltCapabilityProvider(ItemStack belt) {
             this.belt = belt;
@@ -177,7 +181,42 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
             if (capability == GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM) {
                 return GregtechCapabilities.CAPABILITY_ELECTRIC_ITEM.cast(electric(selected));
             }
+            if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) {
+                return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.cast(fluid(selected));
+            }
             return delegate;
+        }
+
+        /**
+         * A fluid handler item hands its {@code getContainer()} back to Forge, which stows that stack
+         * into the player's hand. The tool's handler would hand back the tool itself, so the belt was
+         * replaced by the bare plunger - a plunger used from a belt appeared to delete the belt. The
+         * proxy answers with the belt the capability was asked for, and writes the belt's inventory
+         * back after a fill or drain so the wear the tool took survives the copy Forge makes.
+         */
+        private IFluidHandlerItem fluid(ItemStack selected) {
+            IFluidHandlerItem real = selected.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            if (real == null) return null;
+            if (real != fluidSource) {
+                fluidSource = real;
+                fluidProxy = (IFluidHandlerItem) Proxy.newProxyInstance(ItemToolbelt.class.getClassLoader(),
+                        new Class<?>[] { IFluidHandlerItem.class }, (proxy, method, args) -> {
+                            if ("getContainer".equals(method.getName())) return belt;
+                            Object result;
+                            try {
+                                result = method.invoke(real, args);
+                            } catch (InvocationTargetException e) {
+                                throw e.getCause();
+                            }
+                            boolean mutating = args != null && args.length > 1 &&
+                                    Boolean.TRUE.equals(args[args.length - 1]);
+                            if (mutating && ("fill".equals(method.getName()) || "drain".equals(method.getName()))) {
+                                item().getHandler(belt).persist();
+                            }
+                            return result;
+                        });
+            }
+            return fluidProxy;
         }
 
         private IElectricItem electric(ItemStack selected) {
