@@ -54,6 +54,7 @@ import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
 import gregtech.api.items.toolitem.ToolHelper;
+import gregtech.api.items.toolitem.aoe.AoESymmetrical;
 import gregtech.api.unification.material.properties.ToolProperty;
 import gregtech.api.util.LocalizationUtils;
 import gregtech.api.util.TextFormattingUtil;
@@ -80,11 +81,21 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 null, false, new HashSet<>(), "toolbelt", new ArrayList<>(), () -> ItemStack.EMPTY);
     }
 
-    /** The inventory lives in the stack's own NBT, so copies never share it. */
+    /**
+     * The inventory lives in the stack's own NBT, so copies never share it. One handler is cached
+     * per ItemStack identity so that damage and NBT changes apply to the stack the belt holds.
+     */
+    private static final java.util.Map<ItemStack, ToolStackHandler> HANDLERS = new java.util.WeakHashMap<>();
+
     public @NotNull ToolStackHandler getHandler(@NotNull ItemStack stack) {
-        ToolStackHandler handler = new ToolStackHandler(stack, getSlotCount(stack));
+        int size = getSlotCount(stack);
+        ToolStackHandler cached = HANDLERS.get(stack);
+        if (cached != null && cached.getSlots() == size) return cached;
+
+        ToolStackHandler handler = new ToolStackHandler(stack, size);
         NBTTagCompound tag = stack.getTagCompound();
         if (tag != null && tag.hasKey("Belt")) handler.deserializeNBT(tag.getCompoundTag("Belt"));
+        HANDLERS.put(stack, handler);
         return handler;
     }
 
@@ -210,6 +221,28 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     }
 
     @Override
+    public @NotNull AoESymmetrical getMaxAoEDefinition(@NotNull ItemStack stack) {
+        ItemStack selected = getSelectedTool(stack);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool)
+            return tool.getMaxAoEDefinition(selected);
+        return super.getMaxAoEDefinition(stack);
+    }
+
+    @Override
+    public @NotNull AoESymmetrical getAoEDefinition(@NotNull ItemStack stack) {
+        ItemStack selected = getSelectedTool(stack);
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) return tool.getAoEDefinition(selected);
+        return super.getAoEDefinition(stack);
+    }
+
+    @Override
+    public int getMetadata(@NotNull ItemStack stack) {
+        ItemStack selected = getSelectedTool(stack);
+        if (!selected.isEmpty()) return selected.getItem().getMetadata(selected);
+        return super.getMetadata(stack);
+    }
+
+    @Override
     public boolean canHarvestBlock(@NotNull IBlockState state, @NotNull ItemStack stack) {
         ItemStack selected = getSelectedTool(stack);
         return !selected.isEmpty() ? selected.getItem().canHarvestBlock(state, selected) :
@@ -266,8 +299,12 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     @Override
     public void setDamage(@NotNull ItemStack stack, int damage) {
         ItemStack selected = getSelectedTool(stack);
-        if (!selected.isEmpty()) selected.getItem().setDamage(selected, damage);
-        else definition$setDamage(stack, damage);
+        if (!selected.isEmpty()) {
+            selected.getItem().setDamage(selected, damage);
+            getHandler(stack).persist();
+        } else {
+            definition$setDamage(stack, damage);
+        }
     }
 
     @Override
@@ -337,6 +374,8 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         try {
             return action.apply(selected);
         } finally {
+            // the delegated call may have damaged the tool; persist before restoring the belt
+            if (belt.getItem() instanceof ItemToolbelt b) b.getHandler(belt).persist();
             player.setHeldItem(hand, belt);
         }
     }
@@ -526,6 +565,8 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         try {
             return action.apply(selected);
         } finally {
+            // the delegated call may have damaged the tool; persist before restoring the belt
+            if (belt.getItem() instanceof ItemToolbelt b) b.getHandler(belt).persist();
             player.setHeldItem(hand, belt);
         }
     }
@@ -547,7 +588,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
             this.owner = owner;
         }
 
-        private void persist() {
+        public void persist() {
             if (owner == null) return;
             NBTTagCompound tag = owner.getTagCompound();
             if (tag == null) {
