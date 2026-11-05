@@ -103,11 +103,11 @@ public class Supersymmetry {
 
             net.minecraftforge.oredict.ShapedOreRecipe beltRecipe = new net.minecraftforge.oredict.ShapedOreRecipe(null,
                     ItemToolbelt.TOOLBELT.get(material), "SSS", "LLL", "RSR",
-                    'L', net.minecraft.init.Items.LEATHER,
+                    'L', new net.minecraft.item.ItemStack(net.minecraft.init.Items.LEATHER),
                     'S', new gregtech.api.unification.stack.UnificationEntry(
-                            gregtech.api.unification.ore.OrePrefix.screw, material),
+                            gregtech.api.unification.ore.OrePrefix.screw, material).toString(),
                     'R', new gregtech.api.unification.stack.UnificationEntry(
-                            gregtech.api.unification.ore.OrePrefix.ring, material));
+                            gregtech.api.unification.ore.OrePrefix.ring, material).toString());
             beltRecipe.setRegistryName(new net.minecraft.util.ResourceLocation("susy",
                     "toolbelt_" + material.toString()));
             net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(beltRecipe);
