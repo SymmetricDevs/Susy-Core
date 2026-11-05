@@ -191,6 +191,11 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
     // ---------------------------------------------------------------- delegation
 
+    // Behaviour is delegated to the selected tool; its identity is not. Damage, metadata and max
+    // damage stay the belt's own: Forge's ItemStack forwards those to the item, so delegating them
+    // makes the belt's model lookup, stack comparison and damageability change with the selection,
+    // which is what sent a belt holding a spray can to the missing model.
+
     @Override
     public float getDestroySpeed(@NotNull ItemStack stack, @NotNull IBlockState state) {
         ItemStack selected = getSelectedTool(stack);
@@ -305,35 +310,6 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     public boolean shouldCauseReequipAnimation(@NotNull ItemStack oldStack, @NotNull ItemStack newStack,
                                                boolean slotChanged) {
         return false;
-    }
-
-    @Override
-    public boolean isDamaged(@NotNull ItemStack stack) {
-        ItemStack selected = getSelectedTool(stack);
-        return !selected.isEmpty() ? selected.getItem().isDamaged(selected) : definition$isDamaged(stack);
-    }
-
-    @Override
-    public int getDamage(@NotNull ItemStack stack) {
-        ItemStack selected = getSelectedTool(stack);
-        return !selected.isEmpty() ? selected.getItem().getDamage(selected) : definition$getDamage(stack);
-    }
-
-    @Override
-    public int getMaxDamage(@NotNull ItemStack stack) {
-        ItemStack selected = getSelectedTool(stack);
-        return !selected.isEmpty() ? selected.getItem().getMaxDamage(selected) : definition$getMaxDamage(stack);
-    }
-
-    @Override
-    public void setDamage(@NotNull ItemStack stack, int damage) {
-        ItemStack selected = getSelectedTool(stack);
-        if (!selected.isEmpty()) {
-            selected.getItem().setDamage(selected, damage);
-            getHandler(stack).persist();
-        } else {
-            definition$setDamage(stack, damage);
-        }
     }
 
     /**

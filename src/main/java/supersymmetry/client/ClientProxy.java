@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -67,6 +68,7 @@ import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
@@ -103,6 +105,8 @@ public class ClientProxy extends CommonProxy {
 
     public static int titleRenderTimer = -1;
     private static final int TITLE_RENDER_LENGTH = 150;
+    private static final ModelResourceLocation TOOLBELT_MODEL = new ModelResourceLocation("susy:toolbelt",
+            "inventory");
 
     @Override
     public void preLoad() {
@@ -234,8 +238,12 @@ public class ClientProxy extends CommonProxy {
         SuSyMetaBlocks.registerItemModels();
 
         if (ItemToolbelt.TOOLBELT != null) {
-            ModelLoader.setCustomModelResourceLocation(ItemToolbelt.TOOLBELT, 0,
-                    new ModelResourceLocation("susy:toolbelt", "inventory"));
+            // A mesh definition, not a (item, 0) location: the belt forwards metadata and max damage
+            // to the selected tool, so a per-metadata lookup would miss whenever that tool has none
+            // (a spray can reports max damage 0 and its own metadata), and the belt would fall back
+            // to the missing model. The mesh definition pins the belt to one model regardless.
+            ModelLoader.setCustomMeshDefinition(ItemToolbelt.TOOLBELT, stack -> TOOLBELT_MODEL);
+            ModelBakery.registerItemVariants(ItemToolbelt.TOOLBELT, TOOLBELT_MODEL);
         }
     }
 
@@ -247,10 +255,13 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
         bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
 
-        ModelResourceLocation toolbeltLocation = new ModelResourceLocation("susy:toolbelt", "inventory");
+        ModelResourceLocation toolbeltLocation = TOOLBELT_MODEL;
         IBakedModel toolbeltModel = registry.getObject(toolbeltLocation);
         if (toolbeltModel != null) {
             registry.putObject(toolbeltLocation, new supersymmetry.client.renderer.ToolbeltRenderer(toolbeltModel));
+        } else {
+            SusyLog.logger.error("Toolbelt model {} was not baked; the belt will render as the missing model",
+                    toolbeltLocation);
         }
     }
 
