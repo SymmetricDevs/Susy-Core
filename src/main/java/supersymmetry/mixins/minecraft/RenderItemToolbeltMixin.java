@@ -20,8 +20,7 @@ import supersymmetry.common.item.ItemToolbelt;
  * GT draws tool bars from RenderItemHooks.renderElectricBar, which its ASM transformer injects into
  * this very method. That hook asks the stack in the slot, and a belt is neither electric nor has a
  * durability of its own, so a belt only ever got the generic durability bar from
- * getDurabilityForDisplay: no blue charge bar, and no spray can colours.
- * <p>
+ * getDurabilityForDisplay.
  * This runs after GT's pass, so the belt gets exactly the bars the selected stack would draw itself.
  * The hook is on RenderItem rather than on GT's bar classes because GT's transformer loads
  * gregtech.asm.hooks.RenderItemHooks during renderer construction, before the late mixin configs
