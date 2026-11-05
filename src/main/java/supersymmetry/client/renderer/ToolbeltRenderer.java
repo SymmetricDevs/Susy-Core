@@ -37,7 +37,8 @@ public class ToolbeltRenderer implements IItemRenderer {
             RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
             ItemStack selected = toolbelt.getSelectedTool(stack);
             if (!selected.isEmpty()) {
-                IBakedModel selectedModel = renderItem.getItemModelWithOverrides(selected, null, null);
+                IBakedModel selectedModel = renderItem.getItemModelWithOverrides(selected,
+                        Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
                 renderItem.renderItem(selected, selectedModel);
             }
             renderItem.renderItem(stack, toolbeltModel);

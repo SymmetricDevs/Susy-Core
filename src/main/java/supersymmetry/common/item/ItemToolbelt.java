@@ -366,6 +366,8 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     private EnumActionResult withSelectedTool(EntityPlayer player, EnumHand hand,
                                               java.util.function.Function<ItemStack, EnumActionResult> action) {
         ItemStack belt = player.getHeldItem(hand);
+        // client-side swapping desyncs the hand and can drop the belt; the server decides
+        if (player.world.isRemote) return EnumActionResult.PASS;
         if (!(belt.getItem() instanceof ItemToolbelt toolbelt)) return EnumActionResult.PASS;
         ItemStack selected = toolbelt.getSelectedTool(belt);
         if (selected.isEmpty()) return EnumActionResult.PASS;
