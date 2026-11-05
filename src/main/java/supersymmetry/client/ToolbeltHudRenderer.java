@@ -19,17 +19,23 @@ import supersymmetry.common.item.ItemToolbelt;
 /**
  * Second hotbar above the vanilla one showing the toolbelt's slots and its selection.
  * <p>
- * Ported from GTCEu-Reloaded 43140b63f (LGPL-3.0), adapted to render items through
- * RenderItem instead of the access-transformed GuiIngame helper.
+ * Runs just after the vanilla hotbar and before the health row, so bumping the left and right
+ * heights there moves hearts, food, air and armour up together - the belt row takes the space
+ * everything below it leaves. Drawing on the armour row left the hearts behind, since they are
+ * rendered before it.
+ * <p>
+ * Each slot goes through the same two passes the vanilla hotbar uses. The overlay pass is where
+ * GT's ASM hook draws tool bars: durability, and the blue charge bar for electric tools.
  */
 @SideOnly(Side.CLIENT)
 public class ToolbeltHudRenderer {
 
     private static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
+    private static final int OFFSET = 31;
 
     @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR) return;
+    public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
@@ -37,31 +43,29 @@ public class ToolbeltHudRenderer {
 
         ItemStack stack = player.getHeldItemMainhand();
         if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
+        if (!(mc.ingameGUI instanceof GuiIngameForge gui)) return;
 
         ScaledResolution resolution = event.getResolution();
-        int offset = 31;
         int slots = Math.min(9, belt.getSlotCount(stack));
-        GuiIngameForge.left_height += offset - 6;
-        if (slots > 4) GuiIngameForge.right_height += offset - 6;
+        GuiIngameForge.left_height += OFFSET - 6;
+        if (slots > 4) GuiIngameForge.right_height += OFFSET - 6;
 
-        GuiIngameForge gui = (GuiIngameForge) mc.ingameGUI;
+        int center = resolution.getScaledWidth() / 2;
+        int top = resolution.getScaledHeight() - 22 - OFFSET;
+
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.getTextureManager().bindTexture(WIDGETS);
-        int center = resolution.getScaledWidth() / 2;
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
                 GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
                 GlStateManager.DestFactor.ZERO);
 
-        gui.drawTexturedModalRect(center - 91, resolution.getScaledHeight() - 22 - offset, 0, 0, slots * 20 - 18, 22);
-        gui.drawTexturedModalRect(center - 91 + slots * 20 - 18, resolution.getScaledHeight() - 22 - offset, 162, 0, 20,
-                22);
+        gui.drawTexturedModalRect(center - 91, top, 0, 0, slots * 20 - 18, 22);
+        gui.drawTexturedModalRect(center - 91 + slots * 20 - 18, top, 162, 0, 20, 22);
 
         int selected = belt.getSelectedSlot(stack);
         if (selected != -1) {
-            gui.drawTexturedModalRect(center - 91 - 1 + selected * 20, resolution.getScaledHeight() - 22 - 1 - offset,
-                    0,
-                    22, 24, 24);
+            gui.drawTexturedModalRect(center - 91 - 1 + selected * 20, top - 1, 0, 22, 24, 24);
         }
 
         GlStateManager.enableRescaleNormal();
@@ -72,8 +76,9 @@ public class ToolbeltHudRenderer {
             ItemStack tool = belt.getToolInSlot(stack, i);
             if (tool.isEmpty()) continue;
             int x = center - 90 + i * 20 + 2;
-            int y = resolution.getScaledHeight() - 16 - 3 - offset;
+            int y = resolution.getScaledHeight() - 19 - OFFSET;
             renderItem.renderItemAndEffectIntoGUI(tool, x, y);
+            renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, tool, x, y, null);
         }
 
         RenderHelper.disableStandardItemLighting();
