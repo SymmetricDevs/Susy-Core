@@ -305,7 +305,36 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem {
                                                     float hitY, float hitZ, @NotNull EnumHand hand) {
         EnumActionResult dyed = IDyeableItem.super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
         if (dyed != EnumActionResult.PASS) return dyed;
+        EnumActionResult delegated = withSelectedTool(player, hand,
+                tool -> tool.getItem().onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand));
+        if (delegated != EnumActionResult.PASS) return delegated;
         return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+    }
+
+    @Override
+    public @NotNull EnumActionResult onItemUse(@NotNull EntityPlayer player, @NotNull World world,
+                                               @NotNull BlockPos pos, @NotNull EnumHand hand,
+                                               @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        EnumActionResult delegated = withSelectedTool(player, hand,
+                tool -> tool.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ));
+        if (delegated != EnumActionResult.PASS) return delegated;
+        return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+    }
+
+    /** Runs an action with the selected tool temporarily in hand, then restores the belt. */
+    private EnumActionResult withSelectedTool(EntityPlayer player, EnumHand hand,
+                                              java.util.function.Function<ItemStack, EnumActionResult> action) {
+        ItemStack belt = player.getHeldItem(hand);
+        if (!(belt.getItem() instanceof ItemToolbelt toolbelt)) return EnumActionResult.PASS;
+        ItemStack selected = toolbelt.getSelectedTool(belt);
+        if (selected.isEmpty()) return EnumActionResult.PASS;
+
+        player.setHeldItem(hand, selected);
+        try {
+            return action.apply(selected);
+        } finally {
+            player.setHeldItem(hand, belt);
+        }
     }
 
     // ---------------------------------------------------------------- display
