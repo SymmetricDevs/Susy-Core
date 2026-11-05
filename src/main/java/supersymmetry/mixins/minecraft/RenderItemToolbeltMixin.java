@@ -22,8 +22,7 @@ import supersymmetry.common.item.ItemToolbelt;
  * durability of its own, so a belt only ever got the generic durability bar from
  * getDurabilityForDisplay: no blue charge bar, and no spray can colours.
  * <p>
- * This runs after GT's pass, so the belt gets exactly the bars the selected stack would draw itself -
- * green durability plus the blue charge bar for an electric tool, or a spray can's coloured uses bar.
+ * This runs after GT's pass, so the belt gets exactly the bars the selected stack would draw itself.
  * The hook is on RenderItem rather than on GT's bar classes because GT's transformer loads
  * gregtech.asm.hooks.RenderItemHooks during renderer construction, before the late mixin configs
  * exist, so a mixin on that class is never applied.
