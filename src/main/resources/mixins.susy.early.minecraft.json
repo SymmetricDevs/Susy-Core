@@ -20,6 +20,7 @@
     "BlockModelRendererMixin",
     "MinecraftToolbeltMixin",
     "RenderChunkMixin",
+    "RenderItemToolbeltMixin",
     "TileEntityRendererDispatcherMixin",
     "RenderGlobalMixin",
     "WorldMixin"
