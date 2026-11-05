@@ -95,13 +95,25 @@ public class Supersymmetry {
         supersymmetry.common.crafting.DyeableRecipes dyeableRecipes = new supersymmetry.common.crafting.DyeableRecipes();
         net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(dyeableRecipes);
 
-        net.minecraftforge.oredict.ShapedOreRecipe beltRecipe = new net.minecraftforge.oredict.ShapedOreRecipe(null,
-                new net.minecraft.item.ItemStack(ItemToolbelt.TOOLBELT), "SSS", "LLL", "RSR",
-                'L', net.minecraft.init.Items.LEATHER,
-                'S', "screwSteel",
-                'R', "ringSteel");
-        beltRecipe.setRegistryName(new net.minecraft.util.ResourceLocation("susy", "toolbelt"));
-        net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(beltRecipe);
+        // One belt per material, as the fork's ToolRecipeHandler does; the material drives the slot count.
+        for (gregtech.api.unification.material.Material material : gregtech.api.GregTechAPI.materialManager
+                .getRegisteredMaterials()) {
+            if (!material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_BOLT_SCREW) ||
+                    !material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_RING)) {
+                continue;
+            }
+
+            net.minecraftforge.oredict.ShapedOreRecipe beltRecipe = new net.minecraftforge.oredict.ShapedOreRecipe(null,
+                    ItemToolbelt.TOOLBELT.get(material), "SSS", "LLL", "RSR",
+                    'L', net.minecraft.init.Items.LEATHER,
+                    'S', new gregtech.api.unification.stack.UnificationEntry(
+                            gregtech.api.unification.ore.OrePrefix.screw, material),
+                    'R', new gregtech.api.unification.stack.UnificationEntry(
+                            gregtech.api.unification.ore.OrePrefix.ring, material));
+            beltRecipe.setRegistryName(new net.minecraft.util.ResourceLocation("susy",
+                    "toolbelt_" + material.toString()));
+            net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(beltRecipe);
+        }
 
         SusyMetaEntities.init();
         SusyCriteriaTriggers.init();
