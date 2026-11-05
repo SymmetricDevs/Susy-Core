@@ -37,7 +37,9 @@ public class ToolHelperMixin {
      * durability passed the tool's maximum it shrank the belt. The fork has the same branch at the
      * head of damageItem; this is it.
      */
-    @Inject(method = "damageItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "damageItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;I)V",
+            at = @At("HEAD"),
+            cancellable = true)
     private static void susy$damageSelectedTool(ItemStack stack, EntityLivingBase entity, int damage,
                                                 CallbackInfo ci) {
         if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
@@ -48,7 +50,9 @@ public class ToolHelperMixin {
         belt.getHandler(stack).persist();
     }
 
-    @Inject(method = "damageItemWhenCrafting", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "damageItemWhenCrafting(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)V",
+            at = @At("HEAD"),
+            cancellable = true)
     private static void susy$damageSelectedToolWhenCrafting(ItemStack stack, EntityLivingBase entity,
                                                             CallbackInfo ci) {
         if (!(stack.getItem() instanceof ItemToolbelt belt)) return;
