@@ -538,6 +538,14 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         ItemStack selected = getSelectedTool(belt);
         if (selected.isEmpty()) return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 
+        // Sneak with an area tool belongs to that tool's area editor, which GT opens from
+        // onItemRightClick. Passing here on both sides lets the click fall through to it, the same as
+        // it does for the tool in hand.
+        if (player.isSneaking() && selected.getItem() instanceof IGTTool tool &&
+                tool.getMaxAoEDefinition(selected) != AoESymmetrical.none()) {
+            return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+        }
+
         // The client only predicts; the server decides. Returning SUCCESS keeps the belt screen shut.
         if (world.isRemote) return EnumActionResult.SUCCESS;
         if (!ToolStackHandler.isSpraycan(selected)) return EnumActionResult.SUCCESS;
