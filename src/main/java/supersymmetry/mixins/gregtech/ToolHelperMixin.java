@@ -63,6 +63,17 @@ public class ToolHelperMixin {
         belt.getHandler(stack).persist();
     }
 
+    /**
+     * The fork's {@code stack = toolbeltPassthrough(stack)} line at the head of onActionDone: the sound
+     * and the wear of a rotate / plunger / rail action belong to the selected tool, not to the belt.
+     * onActionDone stores the held stack into its first local, so rewriting that local is the exact
+     * equivalent of the fork's assignment.
+     */
+    @ModifyVariable(method = "onActionDone", at = @At("STORE"), index = 3)
+    private static ItemStack susy$actionDoneStack(ItemStack stack) {
+        return ItemToolbelt.passthrough(stack);
+    }
+
     @ModifyVariable(method = "getBehaviorsTag", at = @At("HEAD"), argsOnly = true, index = 0)
     private static ItemStack susy$behaviorsTag(ItemStack stack) {
         return ItemToolbelt.passthrough(stack);
