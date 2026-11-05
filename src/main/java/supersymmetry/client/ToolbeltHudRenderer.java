@@ -1,13 +1,13 @@
 package supersymmetry.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,9 +25,11 @@ import supersymmetry.common.item.ItemToolbelt;
 @SideOnly(Side.CLIENT)
 public class ToolbeltHudRenderer {
 
+    private static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
+
     @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) return;
+    public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ARMOR) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
@@ -42,9 +44,9 @@ public class ToolbeltHudRenderer {
         GuiIngameForge.left_height += offset - 6;
         if (slots > 4) GuiIngameForge.right_height += offset - 6;
 
-        Gui gui = mc.ingameGUI;
+        GuiIngameForge gui = (GuiIngameForge) mc.ingameGUI;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(Gui.ICONS);
+        mc.getTextureManager().bindTexture(WIDGETS);
         int center = resolution.getScaledWidth() / 2;
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
