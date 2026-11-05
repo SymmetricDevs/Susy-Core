@@ -34,4 +34,8 @@ public class SusyConfig {
             "Default: false" })
     @Config.RequiresMcRestart
     public static boolean enableMissingModelGen = false;
+
+    @Config.Comment({ "Hide the row of toolbelt slots above the hotbar.",
+            "Default: false" })
+    public static boolean hideToolbeltHud = false;
 }

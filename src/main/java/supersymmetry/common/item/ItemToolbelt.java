@@ -719,13 +719,20 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         supersymmetry.network.PacketToolbeltSelectionChange.toServer(handler.getSelectedSlot(), -1);
     }
 
+    /** Steps to the next or previous filled slot; the wheel and the keybinds share it. */
+    @SideOnly(Side.CLIENT)
+    public void changeSelectedToolStep(boolean forward, @NotNull ItemStack stack) {
+        ToolStackHandler handler = getHandler(stack);
+        if (forward) handler.incrementSelectedSlot();
+        else handler.decrementSelectedSlot();
+        supersymmetry.network.PacketToolbeltSelectionChange.toServer(handler.getSelectedSlot(), -1);
+    }
+
     /** Scroll selection while holding the belt; the fork drives this from a client input handler. */
     @SideOnly(Side.CLIENT)
     public void changeSelectedToolMousewheel(int direction, @NotNull ItemStack stack) {
-        ToolStackHandler handler = getHandler(stack);
-        if (direction < 0) handler.incrementSelectedSlot();
-        else handler.decrementSelectedSlot();
-        supersymmetry.network.PacketToolbeltSelectionChange.toServer(handler.getSelectedSlot(), -1);
+        // wheel down steps forward, the direction the vanilla hotbar scrolls
+        changeSelectedToolStep(direction < 0, stack);
     }
 
     @Override

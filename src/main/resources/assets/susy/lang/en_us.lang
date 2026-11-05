@@ -2620,3 +2620,8 @@ item.gt.tool.toolbelt.tooltip=Holds tools that can be selected for in-world use,
 item.gt.tool.toolbelt.tool=§aSlot %s: §f%s
 item.gt.tool.toolbelt.selected=- §aSlot %s: §f%s
 item.gt.tool.toolbelt.dye=Can be dyed like leather equipment; the dye is removed with a water cauldron.
+# Toolbelt keybinds, all unbound by default
+key.categories.susy=SUSY
+key.susy.toolbelt_previous=Toolbelt: previous slot
+key.susy.toolbelt_next=Toolbelt: next slot
+key.susy.toolbelt_hud=Toolbelt: hide HUD
