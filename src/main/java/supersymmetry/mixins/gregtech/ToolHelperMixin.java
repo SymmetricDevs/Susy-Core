@@ -48,6 +48,12 @@ public class ToolHelperMixin {
         ci.cancel();
         ToolHelper.damageItem(selected, entity, damage);
         belt.getHandler(stack).persist();
+        supersymmetry.api.SusyLog.logger.info(
+                "[toolbelt/damage-item] belt -> {} x{}, after dmg {} charge {} / {}", selected.getItem()
+                        .getRegistryName(),
+                damage, selected.getItem().getDamage(selected),
+                selected.getItem() instanceof gregtech.api.items.toolitem.IGTTool t ? t.getCharge(selected) : -1,
+                selected.getItem() instanceof gregtech.api.items.toolitem.IGTTool t ? t.getMaxCharge(selected) : -1);
     }
 
     @Inject(method = "damageItemWhenCrafting(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)V",

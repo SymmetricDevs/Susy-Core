@@ -241,15 +241,25 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 definition$onBlockStartBreak(stack, pos, player);
     }
 
+    private static long susy$lastWearLog;
+
     @Override
     public boolean onBlockDestroyed(@NotNull ItemStack stack, @NotNull World world, @NotNull IBlockState state,
                                     @NotNull BlockPos pos, @NotNull EntityLivingBase entity) {
         ItemStack selected = getSelectedTool(stack);
         if (selected.isEmpty()) return definition$onBlockDestroyed(stack, world, state, pos, entity);
+        int damageBefore = selected.getItem().getDamage(selected);
+        long chargeBefore = selected.getItem() instanceof IGTTool tool ? tool.getCharge(selected) : -1;
         boolean result = selected.getItem().onBlockDestroyed(selected, world, state, pos, entity);
         // The tool lives in the belt's NBT: without this write-back the wear stays in memory and the
         // belt's bars only move when something else persists it, which used to mean reselecting.
         getHandler(stack).persist();
+        if (System.currentTimeMillis() - susy$lastWearLog > 500) {
+            susy$lastWearLog = System.currentTimeMillis();
+            supersymmetry.api.SusyLog.logger.info("[toolbelt/block-break] {} dmg {} -> {} charge {} -> {}",
+                    selected.getItem().getRegistryName(), damageBefore, selected.getItem().getDamage(selected),
+                    chargeBefore, selected.getItem() instanceof IGTTool tool ? tool.getCharge(selected) : -1);
+        }
         return result;
     }
 
@@ -364,8 +374,13 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
         ItemStack selected = getSelectedTool(wrench);
         if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            int damageBefore = selected.getItem().getDamage(selected);
+            long chargeBefore = tool.getCharge(selected);
             tool.wrenchUsed(player, hand, selected, rayTrace);
             getHandler(wrench).persist();
+            supersymmetry.api.SusyLog.logger.info("[toolbelt/wrench] {} dmg {} -> {} charge {} -> {}",
+                    selected.getItem().getRegistryName(), damageBefore, selected.getItem().getDamage(selected),
+                    chargeBefore, tool.getCharge(selected));
         } else super.wrenchUsed(player, hand, wrench, rayTrace);
     }
 
