@@ -458,6 +458,14 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
                 .bindPlayerInventory();
     }
 
+    /** Sneak + hotbar key selection; the fork redirects Minecraft's hotbar key handling for this. */
+    @SideOnly(Side.CLIENT)
+    public void changeSelectedToolHotkey(int slot, @NotNull ItemStack stack) {
+        ToolStackHandler handler = getHandler(stack);
+        handler.setSelectedSlot(slot);
+        supersymmetry.network.PacketToolbeltSelectionChange.toServer(handler.getSelectedSlot(), -1);
+    }
+
     /** Scroll selection while holding the belt; the fork drives this from a client input handler. */
     @SideOnly(Side.CLIENT)
     public void changeSelectedToolMousewheel(int direction, @NotNull ItemStack stack) {
@@ -471,10 +479,34 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
     public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World world, @NotNull EntityPlayer player,
                                                              @NotNull EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
+
+        // The fork iterates the selected tool's behaviours before the belt's own OpenGUIBehavior,
+        // so a selected tool gets the click and only a pass opens the screen.
+        if (!getSelectedTool(stack).isEmpty()) {
+            ActionResult<ItemStack> delegated = withSelectedToolResult(player, hand,
+                    tool -> tool.getItem().onItemRightClick(world, player, hand));
+            if (delegated.getType() != EnumActionResult.PASS) return delegated;
+        }
+
         if (!world.isRemote && player instanceof EntityPlayerMP serverPlayer) {
             ToolbeltGuiFactory.open(serverPlayer, hand);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    }
+
+    private ActionResult<ItemStack> withSelectedToolResult(EntityPlayer player, EnumHand hand,
+                                                           java.util.function.Function<ItemStack, ActionResult<ItemStack>> action) {
+        ItemStack belt = player.getHeldItem(hand);
+        if (!(belt.getItem() instanceof ItemToolbelt toolbelt)) return new ActionResult<>(EnumActionResult.PASS, belt);
+        ItemStack selected = toolbelt.getSelectedTool(belt);
+        if (selected.isEmpty()) return new ActionResult<>(EnumActionResult.PASS, belt);
+
+        player.setHeldItem(hand, selected);
+        try {
+            return action.apply(selected);
+        } finally {
+            player.setHeldItem(hand, belt);
+        }
     }
 
     // ---------------------------------------------------------------- handler
