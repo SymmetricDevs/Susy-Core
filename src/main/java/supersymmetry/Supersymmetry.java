@@ -97,7 +97,9 @@ public class Supersymmetry {
         for (gregtech.api.unification.material.Material material : gregtech.api.GregTechAPI.materialManager
                 .getRegisteredMaterials()) {
             if (!material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_BOLT_SCREW) ||
-                    !material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_RING)) {
+                    !material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_RING) ||
+                    material.getProperty(gregtech.api.unification.material.properties.PropertyKey.TOOL) == null) {
+                // IGTTool.get requires a tool property; only tool materials make belts.
                 continue;
             }
 
