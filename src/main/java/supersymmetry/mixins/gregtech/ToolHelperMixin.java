@@ -107,9 +107,7 @@ public class ToolHelperMixin {
 
     /**
      * The routine stops as soon as the item in hand is no longer the stack it is breaking with, so
-     * that a tool that breaks mid-AoE ends the area. A belt in hand is never item-equal to the tool
-     * it stands for, which ended every area after the first block - a 3x3 dug two blocks. The fork
-     * resolves the held stack through its passthrough before comparing; so do we.
+     * that a tool that breaks mid-AoE ends the area. Fixes AoE behaviour passthrough.
      */
     @Redirect(method = "areaOfEffectBlockBreakRoutine",
               remap = true,
