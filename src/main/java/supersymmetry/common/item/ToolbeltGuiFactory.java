@@ -27,6 +27,11 @@ public class ToolbeltGuiFactory extends AbstractUIFactory<HandGuiData> {
         super("susy:toolbelt");
     }
 
+    /** Must run on both sides before any open packet is sent, like GTGuis.registerFactories(). */
+    public static void register() {
+        GuiManager.registerFactory(INSTANCE);
+    }
+
     public static void open(EntityPlayer player, EnumHand hand) {
         Objects.requireNonNull(player);
         Objects.requireNonNull(hand);
