@@ -148,6 +148,13 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         getHandler(belt).setSelectedSlot(slot);
     }
 
+    /** The server rewrites this stack's NBT; drop the cached handler so the client re-reads it. */
+    @Override
+    public void readNBTShareTag(ItemStack stack, NBTTagCompound nbt) {
+        stack.setTagCompound(nbt);
+        HANDLERS.remove(stack);
+    }
+
     // ---------------------------------------------------------------- crafting
 
     private static final ThreadLocal<Integer> lastSlot = ThreadLocal.withInitial(() -> -999);
