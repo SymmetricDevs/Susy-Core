@@ -59,6 +59,7 @@ import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.capability.GregtechCapabilities;
 import gregtech.api.capability.IElectricItem;
+import gregtech.api.items.gui.PlayerInventoryHolder;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.toolitem.IGTTool;
@@ -730,7 +731,18 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         // The fork iterates the selected tool's behaviours before the belt's own OpenGUIBehavior,
         // so a selected tool gets the click and only a pass opens the screen.
         if (!world.isRemote && player instanceof EntityPlayerMP serverPlayer) {
-            com.cleanroommc.modularui.factory.ItemGuiFactory.INSTANCE.open(serverPlayer, hand);
+            ItemStack selected = getSelectedTool(stack);
+            // GT's own rule for tool UI: sneak with an area-mining tool opens its area settings. The
+            // fork's belt hands its screen over to the selected tool; in 2.8.10 the only tool UI is that
+            // MUI1 editor, and it reads and writes through getBehaviorsTag, which the passthrough already
+            // points at the selected tool. The holder's item stays the belt, so edits land in the tool.
+            if (player.isSneaking() && !selected.isEmpty() && selected.getItem() instanceof IGTTool tool &&
+                    tool.getMaxAoEDefinition(selected) != AoESymmetrical.none()) {
+                getHandler(stack).persist();
+                PlayerInventoryHolder.openHandItemUI(player, hand);
+            } else {
+                com.cleanroommc.modularui.factory.ItemGuiFactory.INSTANCE.open(serverPlayer, hand);
+            }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
