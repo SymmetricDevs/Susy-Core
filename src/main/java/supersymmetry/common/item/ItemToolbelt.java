@@ -510,7 +510,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         }
 
         if (!world.isRemote && player instanceof EntityPlayerMP serverPlayer) {
-            ToolbeltGuiFactory.open(serverPlayer, hand);
+            com.cleanroommc.modularui.factory.ItemGuiFactory.INSTANCE.open(serverPlayer, hand);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
