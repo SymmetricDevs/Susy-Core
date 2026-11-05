@@ -65,6 +65,7 @@ public class ToolHelperMixin {
      * resolves the held stack through its passthrough before comparing; so do we.
      */
     @Redirect(method = "areaOfEffectBlockBreakRoutine",
+              remap = true,
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/item/ItemStack;isItemEqualIgnoreDurability(Lnet/minecraft/item/ItemStack;)Z"))
     private static boolean susy$heldToolMatches(ItemStack held, ItemStack tool) {
