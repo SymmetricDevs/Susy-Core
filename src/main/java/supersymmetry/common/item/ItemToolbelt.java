@@ -190,10 +190,7 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
 
         /**
          * A fluid handler item hands its {@code getContainer()} back to Forge, which stows that stack
-         * into the player's hand. The tool's handler would hand back the tool itself, so the belt was
-         * replaced by the bare plunger - a plunger used from a belt appeared to delete the belt. The
-         * proxy answers with the belt the capability was asked for, and writes the belt's inventory
-         * back after a fill or drain so the wear the tool took survives the copy Forge makes.
+         * into the player's hand. Fixing plunger behaviour leaving belt.
          */
         private IFluidHandlerItem fluid(ItemStack selected) {
             IFluidHandlerItem real = selected.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
