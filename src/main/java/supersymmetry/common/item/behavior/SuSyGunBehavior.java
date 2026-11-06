@@ -53,6 +53,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final boolean beltFed;
     @Getter
     private final boolean integralMagazine;
+    @Getter
+    private final float recoilStrength;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
@@ -65,7 +67,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
                            int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber,
-                           boolean beltFed, boolean integralMagazine) {
+                           boolean beltFed, boolean integralMagazine, float recoilStrength) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -101,6 +103,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.caliber = caliber;
         this.beltFed = beltFed;
         this.integralMagazine = integralMagazine;
+        this.recoilStrength = recoilStrength;
     }
 
     public static void init() {}
@@ -443,6 +446,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private final String caliber;
         private boolean beltFed = false;
         private boolean integralMagazine = false;
+        private float recoilStrength = 0;
         private final List<GunFireMode> modes = new ArrayList<>();
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
@@ -481,13 +485,19 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             return this;
         }
 
+        public Builder setRecoil(float recoil) {
+            this.recoilStrength = recoil;
+            return this;
+        }
+
         public SuSyGunBehavior build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
             return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
-                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine);
+                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine,
+                    recoilStrength);
         }
     }
 
@@ -558,6 +568,5 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             CALIBER_8_6x70,
             CALIBER_13x30,
             CALIBER_13x100,
-            CALIBER_6_8x50)
-    );
+            CALIBER_6_8x50));
 }

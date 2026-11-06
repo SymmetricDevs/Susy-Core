@@ -1,6 +1,4 @@
-package supersymmetry.common.item.behavior;
-
-import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
+package supersymmetry.common.guns.server;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +11,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
+import supersymmetry.common.item.behavior.GunFireMode;
+import supersymmetry.common.item.behavior.GunMagazineBehavior;
+import supersymmetry.common.item.behavior.SuSyGunBehavior;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public final class GunServerHandler {
@@ -74,12 +74,11 @@ public final class GunServerHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.side != Side.SERVER ||
-                !(event.player instanceof EntityPlayerMP)) {
+        if (event.phase != TickEvent.Phase.END ||
+                !(event.player instanceof EntityPlayerMP player) || !event.side.isClient()) {
             return;
         }
 
-        EntityPlayerMP player = (EntityPlayerMP) event.player;
         GunState state = playerStates.get(player.getUniqueID());
         if (state == null) {
             return;
@@ -157,7 +156,6 @@ public final class GunServerHandler {
         if (!shoot(player, state, gun, stack)) {
             return;
         }
-
         if (mode == GunFireMode.BURST) {
             state.burstLeft = gun.getBurstCount() - 1;
             state.burstNext = now + gun.getBurstIntervalTicks();
@@ -169,6 +167,7 @@ public final class GunServerHandler {
             return false;
         }
         gun.shootOnce(player, state.hand, stack, state.aim);
+
         return true;
     }
 

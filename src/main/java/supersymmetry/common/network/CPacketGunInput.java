@@ -7,7 +7,7 @@ import net.minecraft.util.EnumHand;
 
 import gregtech.api.network.IPacket;
 import gregtech.api.network.IServerExecutor;
-import supersymmetry.common.item.behavior.GunServerHandler;
+import supersymmetry.common.guns.server.GunServerHandler;
 
 public class CPacketGunInput implements IPacket, IServerExecutor {
 
