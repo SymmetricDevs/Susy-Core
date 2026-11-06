@@ -52,7 +52,13 @@ public class BlocksS24BMRF extends VariantBlock<BlocksS24BMRF.S24BMRFBlockType> 
         S24BMRF7("s24bmrf7", 2),
         S24BMRF8("s24bmrf8", 2),
         S24BMRF9("s24bmrf9", 2),
-        S24BMRF10("s24bmrf10", 2);
+        S24BMRF10("s24bmrf10", 2),
+        S24BMRF11("s24bmrf11", 2),
+        S24BMRF12("s24bmrf12", 2),
+        S24BMRF13("s24bmrf13", 2),
+        S24BMRF14("s24bmrf14", 2),
+        S24BMRF15("s24bmrf15", 2),
+        S24BMRF16("s24bmrf16", 2);
 
         private final String name;
         private final int harvestLevel;

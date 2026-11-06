@@ -4,97 +4,97 @@
     "variant=s19bmrf1": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf343"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf289"
       }
     },
     "variant=s19bmrf2": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf344"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf290"
       }
     },
     "variant=s19bmrf3": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf345"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf291"
       }
     },
     "variant=s19bmrf4": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf346"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf292"
       }
     },
     "variant=s19bmrf5": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf347"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf293"
       }
     },
     "variant=s19bmrf6": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf348"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf294"
       }
     },
     "variant=s19bmrf7": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf349"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf295"
       }
     },
     "variant=s19bmrf8": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf350"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf296"
       }
     },
     "variant=s19bmrf9": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf351"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf297"
       }
     },
     "variant=s19bmrf10": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf352"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf298"
       }
     },
     "variant=s19bmrf11": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf353"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf299"
       }
     },
     "variant=s19bmrf12": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf354"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf300"
       }
     },
     "variant=s19bmrf13": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf355"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf301"
       }
     },
     "variant=s19bmrf14": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf356"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf302"
       }
     },
     "variant=s19bmrf15": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf357"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf303"
       }
     },
     "variant=s19bmrf16": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf358"
+        "all": "gregtech:blocks/bmrf_blocks/bmrf304"
       }
     }
   }
