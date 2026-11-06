@@ -67,6 +67,7 @@ import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolDefinitionBuilder;
 import gregtech.api.items.toolitem.ToolHelper;
 import gregtech.api.items.toolitem.aoe.AoESymmetrical;
+import gregtech.api.items.toolitem.behavior.IToolBehavior;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.material.properties.ToolProperty;
@@ -77,12 +78,8 @@ import gregtech.common.items.behaviors.ColorSprayBehaviour;
 import supersymmetry.api.items.IDyeableItem;
 
 /**
- * Toolbelt: stores tools in NBT and delegates tool behaviour to the selected one.
- * <p>
  * Ported from GTCEu-Reloaded 43140b63f (LGPL-3.0) and reduced to the parts that do not
- * depend on fork-only GT APIs: no crafting-ingredient substitution, no maintenance hatch
- * shortcut, no colour-spray passthrough, no keybind/scroll selection. Selection is done
- * in the screen.
+ * depend on fork-only GT APIs.
  */
 public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder<HandGuiData> {
 
@@ -509,12 +506,48 @@ public class ItemToolbelt extends ItemGTTool implements IDyeableItem, IGuiHolder
         } else super.used(hand, player, pos);
     }
 
+    /**
+     * Ability behaviours hang off the tool's behaviour list, and in 2.8.10 that list is read from the
+     * item's own definition, so the belt has to run the selected tool's behaviours itself. They read
+     * {@code player.getHeldItem(hand)}, which is the belt, and the passthrough resolves the tool tag,
+     * classes and wear through it. This is what the fork gets from its stack-aware behaviour list.
+     * <p>
+     * Meta items such as the spray can keep their uses in their own stack, so they are lent the hand
+     * for the call, the same way {@link #onItemUse} does it.
+     */
     @Override
     public @NotNull EnumActionResult onItemUseFirst(@NotNull EntityPlayer player, @NotNull World world,
                                                     @NotNull BlockPos pos, @NotNull EnumFacing side, float hitX,
                                                     float hitY, float hitZ, @NotNull EnumHand hand) {
         EnumActionResult dyed = IDyeableItem.super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
         if (dyed != EnumActionResult.PASS) return dyed;
+
+        ItemStack belt = player.getHeldItem(hand);
+        ItemStack selected = getSelectedTool(belt);
+
+        if (!selected.isEmpty() && selected.getItem() instanceof IGTTool tool) {
+            for (IToolBehavior behavior : tool.getToolStats().getBehaviors()) {
+                if (behavior.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand) ==
+                        EnumActionResult.SUCCESS) {
+                    if (!world.isRemote) getHandler(belt).persist();
+                    return EnumActionResult.SUCCESS;
+                }
+            }
+        } else if (!selected.isEmpty() && !world.isRemote) {
+            ToolStackHandler handler = getHandler(belt);
+            int slot = handler.getSelectedSlot();
+            player.setHeldItem(hand, selected);
+            try {
+                EnumActionResult result = selected.getItem().onItemUseFirst(player, world, pos, side, hitX, hitY,
+                        hitZ, hand);
+                ItemStack after = player.getHeldItem(hand);
+                if (after != selected && slot >= 0) handler.setStackInSlot(slot, after);
+                if (result != EnumActionResult.PASS) return result;
+            } finally {
+                handler.persist();
+                player.setHeldItem(hand, belt);
+            }
+        }
         return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
     }
 

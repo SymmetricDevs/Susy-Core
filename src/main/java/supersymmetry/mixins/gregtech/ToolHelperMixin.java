@@ -3,6 +3,7 @@ package supersymmetry.mixins.gregtech;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -103,6 +104,29 @@ public class ToolHelperMixin {
         if (beltStack == null) return;
         SUSY_BELT.remove();
         if (beltStack.getItem() instanceof ItemToolbelt belt) belt.getHandler(beltStack).persist();
+    }
+
+    /**
+     * Tree felling breaks its blocks from {@link TreeFellingListener} on later ticks, straight
+     * through this helper, so the wear never passes ItemToolbelt.onBlockDestroyed. The damage lands
+     * on the tool stack inside the belt, and without this write-back the belt's NBT keeps the old
+     * durability - which the client shows - and keeps the tool even after it breaks. The AoE routine
+     * is skipped because it persists once when it returns.
+     */
+    @Inject(method = "breakBlockRoutine(Lnet/minecraft/entity/player/EntityPlayerMP;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/math/BlockPos;)Z",
+            at = @At("RETURN"))
+    private static void susy$persistBeltAfterBreak(EntityPlayerMP player, ItemStack tool, BlockPos pos,
+                                                   CallbackInfoReturnable<Boolean> cir) {
+        if (SUSY_BELT.get() != null) return;
+        ItemStack held = player.getHeldItemMainhand();
+        if (!(held.getItem() instanceof ItemToolbelt belt)) return;
+        ItemToolbelt.ToolStackHandler handler = belt.getHandler(held);
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            if (handler.getStackInSlot(slot) == tool) {
+                handler.persist();
+                return;
+            }
+        }
     }
 
     /**
