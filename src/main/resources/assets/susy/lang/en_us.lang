@@ -240,7 +240,7 @@ tile.grinder_casing.wear_resistant_lined_mill_shell.name=Wear Resistant Lined Mi
 tile.grinder_casing.wear_resistant_lined_shell_head.name=Wear Resistant Lined Shell Head
 tile.grinder_casing.intermediate_diaphragm.name=Intermediate Diaphragm
 tile.girth_gear_tooth.steel.name=Steel Girth Gear Tooth
-title.sealed_door.stainless_steel.name=Stainless Steel Vacuum-Sealed Door
+tile.sealed_door.stainless_steel.name=Stainless Steel Vacuum-Sealed Door
 
 tile.engine_casing.piston_block.name=Engine Block
 
