@@ -3,7 +3,6 @@ package supersymmetry.api.capability.impl;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.recipes.RecipeMap;
-import org.jetbrains.annotations.NotNull;
 
 public class UnpoweredRecipeLogic extends AbstractRecipeLogic {
 

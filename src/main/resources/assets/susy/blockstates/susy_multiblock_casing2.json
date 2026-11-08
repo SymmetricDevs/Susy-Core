@@ -30,9 +30,9 @@
     "variant=electron_beam_casing" : {
       "model": "minecraft:cube_bottom_top",
       "textures" : {
-        "bottom" : "gregtech:blocks/rocketry/guidance_system/soyuz_bottom",
-        "top" : "gregtech:blocks/rocketry/guidance_system/soyuz_top",
-        "side" : "gregtech:blocks/rocketry/guidance_system/soyuz_side"
+        "bottom" : "gregtech:blocks/casings/electron_beam_casing/bottom",
+        "top" : "gregtech:blocks/casings/electron_beam_casing/top",
+        "side" : "gregtech:blocks/casings/electron_beam_casing/side"
       }
     }
   }

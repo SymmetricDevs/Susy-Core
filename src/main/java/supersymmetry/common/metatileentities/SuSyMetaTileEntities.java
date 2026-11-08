@@ -370,7 +370,7 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityDustAgitator[] DUST_AGITATOR = new MetaTileEntityDustAgitator[8];
     public static MetaTileEntityFederationDropBeacon[] FED_BEACON = new MetaTileEntityFederationDropBeacon[8];
     public static MetaTileEntityFederationReinforcementBeacon[] FED_REINFORCER = new MetaTileEntityFederationReinforcementBeacon[8];
-    public static UnpoweredMetaTileEntity[] SUSY_FURNACE  = new SuSyFurnace[1];;
+    public static UnpoweredMetaTileEntity[] SUSY_FURNACE = new SuSyFurnace[1];;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,

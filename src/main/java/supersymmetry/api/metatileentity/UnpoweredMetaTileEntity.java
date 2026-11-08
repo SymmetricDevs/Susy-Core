@@ -1,15 +1,7 @@
 package supersymmetry.api.metatileentity;
 
-import gregtech.api.GTValues;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.widgets.ImageWidget;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.util.GTUtility;
-import gregtech.client.particle.VanillaParticleEffects;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.common.ConfigHolder;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,16 +14,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Nullable;
+import gregtech.api.GTValues;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.GTUtility;
+import gregtech.client.particle.VanillaParticleEffects;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.common.ConfigHolder;
 import supersymmetry.api.capability.impl.UnpoweredRecipeLogic;
-
-import java.util.List;
 
 public abstract class UnpoweredMetaTileEntity extends MetaTileEntity {
 
@@ -40,7 +41,7 @@ public abstract class UnpoweredMetaTileEntity extends MetaTileEntity {
     protected final UnpoweredRecipeLogic workableHandler;
 
     public UnpoweredMetaTileEntity(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap,
-            ICubeRenderer casingRenderer, ICubeRenderer overlayRenderer) {
+                                   ICubeRenderer casingRenderer, ICubeRenderer overlayRenderer) {
         super(metaTileEntityId);
         this.casingRenderer = casingRenderer;
         this.overlayRenderer = overlayRenderer;
