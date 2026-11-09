@@ -2,6 +2,8 @@ package supersymmetry;
 
 import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -19,6 +21,7 @@ import supercritical.common.SCConfigHolder;
 import supersymmetry.api.blocks.SuSyHeatingCoils;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.sound.SusySounds;
+import supersymmetry.client.renderer.CatwalkCache;
 import supersymmetry.client.shaders.ShaderManager;
 import supersymmetry.common.CommonProxy;
 import supersymmetry.common.SusyMetaEntities;
@@ -33,6 +36,8 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.common.worldgen.Indicators;
+import supersymmetry.common.worldgen.WorldgenFixes;
 import supersymmetry.integration.opencomputers.DriverSpeaker;
 import supersymmetry.loaders.SuSyIRLoader;
 import supersymmetry.network.SuSyNetwork;
@@ -92,6 +97,7 @@ public class Supersymmetry {
         }
 
         DimensionBreathabilityHandler.loadConfig();
+        WorldgenFixes.init();
     }
 
     @Mod.EventHandler
@@ -131,6 +137,11 @@ public class Supersymmetry {
     }
 
     @Mod.EventHandler
+    public void onServerStopped(FMLServerStoppedEvent event) {
+        Indicators.clear();
+    }
+
+    @Mod.EventHandler
     public void onServerStarting(@NotNull FMLServerStartingEvent event) {
         CommandHordeBase hordeCommand = new CommandHordeBase();
         CommandRecipemapDump jeidump = new CommandRecipemapDump();
@@ -157,5 +168,6 @@ public class Supersymmetry {
     @Mod.EventHandler
     public void registerRenderers(FMLPreInitializationEvent event) {
         SuSyTileEntities.registerRenderers();
+        if (Loader.isModLoaded("catwalks")) MinecraftForge.EVENT_BUS.register(new CatwalkCache());
     }
 }

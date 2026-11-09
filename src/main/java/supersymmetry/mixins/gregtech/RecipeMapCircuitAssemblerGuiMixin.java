@@ -6,7 +6,6 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -50,16 +49,15 @@ public abstract class RecipeMapCircuitAssemblerGuiMixin {
         }
     }
 
-    @ModifyArg(method = "createUITemplate",
-               at = @At(value = "INVOKE",
-                        target = "Lgregtech/api/gui/ModularUI;defaultBuilder(I)Lgregtech/api/gui/ModularUI$Builder;"),
-               index = 0,
-               remap = false)
-    private int susy$extendCircuitAssemblerBackground(int yOffset, DoubleSupplier progressSupplier,
-                                                      IItemHandlerModifiable importItems,
-                                                      IItemHandlerModifiable exportItems,
-                                                      FluidTankList importFluids,
-                                                      FluidTankList exportFluids, int recipeYOffset) {
+    @ModifyArgs(method = "createUITemplate",
+                at = @At(value = "INVOKE",
+                         target = "Lgregtech/api/gui/ModularUI;defaultBuilder(I)Lgregtech/api/gui/ModularUI$Builder;"),
+                remap = false)
+    private void susy$extendCircuitAssemblerBackground(Args args, DoubleSupplier progressSupplier,
+                                                       IItemHandlerModifiable importItems,
+                                                       IItemHandlerModifiable exportItems,
+                                                       FluidTankList importFluids,
+                                                       FluidTankList exportFluids, int recipeYOffset) {
         RecipeMap<?> recipeMap = (RecipeMap<?>) (Object) this;
         if ("circuit_assembler".equals(recipeMap.unlocalizedName) ||
                 "crystallizer".equals(recipeMap.unlocalizedName)) {
@@ -69,9 +67,9 @@ public abstract class RecipeMapCircuitAssemblerGuiMixin {
                     importItems.getSlots(), importFluids.getTanks(), baseYOffset,
                     MachineGuiLayout.fluidColumns(recipeMap.unlocalizedName, importFluids.getTanks()));
             if (controlsShift > 0) {
-                return baseYOffset + controlsShift;
+                args.set(0, Math.max(recipeYOffset, baseYOffset + controlsShift));
+                return;
             }
         }
-        return yOffset;
     }
 }

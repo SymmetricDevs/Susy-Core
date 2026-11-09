@@ -81,6 +81,6 @@ public final class MachineGuiLayout {
     }
 
     private static int rows(int count, int columns) {
-        return (count + columns - 1) / columns;
+        return count == 0 ? 0 : (count + columns - 1) / columns;
     }
 }

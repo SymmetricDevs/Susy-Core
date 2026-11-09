@@ -36,7 +36,12 @@
     "TileEntityFluidPipeMixin",
     "TileEntityPipeBaseMixin",
     "ToolBuilderAccessor",
-    "ToolItemsMixin"
+    "ToolItemsMixin",
+    "GridMasterMixin",
+    "SurfaceRockMixin",
+    "SurfaceBlockMixin",
+    "SurfaceBlockPopulatorInvoker",
+    "WrenchHitMixin"
   ],
   "client": [
     "PipeRendererMixin",

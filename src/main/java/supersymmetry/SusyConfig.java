@@ -5,6 +5,34 @@ import net.minecraftforge.common.config.Config;
 @Config(modid = Supersymmetry.MODID, name = Supersymmetry.MODID + "/" + Supersymmetry.MODID)
 public class SusyConfig {
 
+    @Config.Name("worldgen")
+    @Config.Comment("World generation and structure placement fixes.")
+    @Config.RequiresMcRestart
+    public static WorldGeneration worldGeneration = new WorldGeneration();
+
+    public static class WorldGeneration {
+
+        @Config.Comment("Enable world generation fixes.")
+        @Config.RequiresMcRestart
+        public boolean enabled = true;
+
+        @Config.Comment("Read saved ore-grid heights without loading the corresponding chunks.")
+        @Config.RequiresMcRestart
+        public boolean gridMetadata = true;
+
+        @Config.Comment("Defer cross-chunk ore indicators until their destination is loaded and populated.")
+        @Config.RequiresMcRestart
+        public boolean deferIndicators = true;
+
+        @Config.Comment("Use transformed destination coordinates for Recurrent Complex placement checks.")
+        @Config.RequiresMcRestart
+        public boolean recurrentComplex = true;
+
+        @Config.Comment("Allocate structure-cache columns lazily and promote dense workloads to flat storage.")
+        @Config.RequiresMcRestart
+        public boolean adaptiveCache = true;
+    }
+
     @Config.Comment({ "Whether or not to disable Long-Distance Item Pipe recipes.", "Default: true" })
     @Config.RequiresMcRestart
     public static boolean disableLdItemPipes = true;
