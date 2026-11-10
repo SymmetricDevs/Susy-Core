@@ -139,6 +139,17 @@ public class SuSyBlocks {
     public static BlocksS14BMRF S14BMRF;
     public static BlocksS15BMRF S15BMRF;
     public static BlocksS16BMRF S16BMRF;
+    public static BlocksS17BMRF S17BMRF;
+    public static BlocksS18BMRF S18BMRF;
+    public static BlocksS19BMRF S19BMRF;
+    public static BlocksS20BMRF S20BMRF;
+    public static BlocksS21BMRF S21BMRF;
+    public static BlocksS22BMRF S22BMRF;
+    public static BlocksS23BMRF S23BMRF;
+    public static BlocksS24BMRF S24BMRF;
+    public static BlocksS25BMRF S25BMRF;
+    public static BlocksS26BMRF S26BMRF;
+    public static BlocksS27BMRF S27BMRF;
     public static BlocksRaidFlare BLOCKBANDITFLARE;
     public static BlockGoog GOOG;
     public static BlockFlammableAir BLOCKRADICALAIR;
