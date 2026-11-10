@@ -1,5 +1,6 @@
 package supersymmetry.mixins.rftools;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.Item;
@@ -18,13 +19,10 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import mcjty.rftools.blocks.storagemonitor.StorageScannerTileEntity;
 import supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate;
 
-import java.util.List;
-
 @Mixin(value = StorageScannerTileEntity.class, remap = false)
 public class StorageScannerTileEntityMixin {
 
-    @Unique
-    private boolean susy$isLockedCrate(BlockPos pos) {
+    @Unique private boolean susy$isLockedCrate(BlockPos pos) {
         TileEntity self = (TileEntity) (Object) this;
         if (self.getWorld() == null || pos == null || pos.getY() < 0) return false;
         // don't force-load chunks
