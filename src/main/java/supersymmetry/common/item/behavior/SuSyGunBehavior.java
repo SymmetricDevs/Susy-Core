@@ -262,7 +262,12 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             motionX *= (1 - muzzleVelocity * 0.000001); // air resistance (tm)
             motionY -= 2 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
             motionZ *= (1 - muzzleVelocity * 0.000001);
-            spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
+            if (DEBUG_TRAJECTORY) {
+                spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
+            }
+            if (i > 3) {
+                ammoType.spawnParticles(world, oldPos, currentPos, i / 10);
+            }
             // check if we hit any blocks
             RayTraceResult rayTraceResult = world.rayTraceBlocks(oldPos, currentPos, false, true, false);
             List<EntityLivingBase> potentialHitEntities = world.getEntitiesWithinAABB(EntityLivingBase.class,
@@ -289,7 +294,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                                 for (EntityLivingBase elb : hitEntities) {
                                     ammoType.onEntityHit(world, elb, entityRTR.hitVec);
                                     elb.attackEntityFrom(SuSyDamageSources.BULLET,
-                                            (float) (10 * ammoType.damageMultiplier));
+                                            (float) (this.damage * ammoType.damageMultiplier));
                                 }
 
                             } else {
@@ -301,9 +306,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                     }
                 }
             }
-            if (i > 2) {
-                ammoType.spawnParticles(world, oldPos, currentPos, i / 10);
-            }
+
             if (rayTraceResult != null) {
                 ammoType.onBlockHit(world, rayTraceResult, rayTraceResult.getBlockPos().offset(rayTraceResult.sideHit));
                 break;

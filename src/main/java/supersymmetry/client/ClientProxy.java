@@ -78,6 +78,9 @@ import supersymmetry.client.event.MissingModelCreator;
 import supersymmetry.client.renderer.block.FlammableAirModelLoader;
 import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
+import supersymmetry.client.renderer.particles.SusyParticleBlueTracer;
+import supersymmetry.client.renderer.particles.SusyParticleGreenTracer;
+import supersymmetry.client.renderer.particles.SusyParticleRedTracer;
 import supersymmetry.client.renderer.particles.SusyParticleRocketFlame;
 import supersymmetry.client.renderer.pipe.TanklessFluidPipeRenderer;
 import supersymmetry.client.renderer.textures.SuSyConnectedTextures;
@@ -261,6 +264,15 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/plume"));
         for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
             map.registerSprite(flame);
+        }
+        for (ResourceLocation tracerR : SusyParticleRedTracer.SPRITE_NAMES) {
+            map.registerSprite(tracerR);
+        }
+        for (ResourceLocation tracerG : SusyParticleGreenTracer.SPRITE_NAMES) {
+            map.registerSprite(tracerG);
+        }
+        for (ResourceLocation tracerB : SusyParticleBlueTracer.SPRITE_NAMES) {
+            map.registerSprite(tracerB);
         }
         SuSyMetaItems.armorItem.registerIngameModels(map);
     }
