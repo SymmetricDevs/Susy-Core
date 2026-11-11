@@ -2,6 +2,7 @@ package supersymmetry.common.guns.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,11 +13,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.GunFireMode;
 import supersymmetry.common.item.behavior.GunMagazineBehavior;
 import supersymmetry.common.item.behavior.SuSyGunBehavior;
+import supersymmetry.common.network.SPacketGunRecoil;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
 public final class GunServerHandler {
@@ -75,7 +78,7 @@ public final class GunServerHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END ||
-                !(event.player instanceof EntityPlayerMP player) || !event.side.isClient()) {
+                !(event.player instanceof EntityPlayerMP player) || event.side.isClient()) {
             return;
         }
 
@@ -104,6 +107,27 @@ public final class GunServerHandler {
         }
 
         long now = player.world.getTotalWorldTime();
+
+        // recoil handling: first jump to (original pitch + 10x recoil), then smoothly bring it down to (original
+        // pitch + recoil) according to the equation: pitch(tick) = originalPitch + 10 * recoil - 0.1 * (tick ^ 2)
+        if (state.recoilTick > 1) {
+            int lastTick = (int) Math.floor(10 * Math.sqrt(state.recoil));
+            if (state.recoilTick >= lastTick) {
+                state.recoilTick = 0;
+            } else {
+                float recoil = -0.1f * state.recoilTick * state.recoilTick;
+                GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil, false), player);
+                state.recoilTick++;
+            }
+        }
+
+        if (state.recoilTick == 1) {
+            Random random = player.getRNG();
+            float recoil = gun.getRecoilStrength() * (random.nextFloat() / 2f + 0.75f);
+            state.recoil = recoil;
+            GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil * 10, true), player);
+            state.recoilTick = 2;
+        }
 
         if (state.reloading) {
             state.fireRequested = false;
@@ -134,6 +158,7 @@ public final class GunServerHandler {
             state.fireRequested = false;
             if (now >= state.burstNext) {
                 if (shoot(player, state, gun, stack)) {
+                    state.recoilTick = 1;
                     state.burstLeft--;
                     state.burstNext = now + gun.getBurstIntervalTicks();
                 } else {
@@ -156,6 +181,7 @@ public final class GunServerHandler {
         if (!shoot(player, state, gun, stack)) {
             return;
         }
+        state.recoilTick = 1;
         if (mode == GunFireMode.BURST) {
             state.burstLeft = gun.getBurstCount() - 1;
             state.burstNext = now + gun.getBurstIntervalTicks();
@@ -224,6 +250,8 @@ public final class GunServerHandler {
         private long nextShot;
         private long burstNext;
         private int burstLeft;
+        private int recoilTick = 0;
+        private float recoil;
 
         private boolean reloading;
         private long reloadEnd;
@@ -235,6 +263,7 @@ public final class GunServerHandler {
             burstLeft = 0;
             reloading = false;
             unloading = false;
+            recoilTick = 0;
         }
     }
 }

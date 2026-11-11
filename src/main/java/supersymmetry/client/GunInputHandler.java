@@ -75,8 +75,7 @@ public final class GunInputHandler {
         boolean pulse = reload || cycleMode || unload;
 
         if (pulse || !current.equals(lastState)) {
-            GregTechAPI.networkHandler.sendToServer(
-                    new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand));
+            GregTechAPI.networkHandler.sendToServer(new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand));
             lastState = current;
         }
     }
