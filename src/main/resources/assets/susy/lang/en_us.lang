@@ -2813,3 +2813,6 @@ susy.creative.particle.nbunches=Number of bunches
 susy.creative.particle.particlesperbunch=Particles per bunch
 susy.creative.particle.emittance=Beam Emittance
 susy.creative.particle.beamsize=Beam Size
+
+susy.creative.activity.on=Active
+susy.creative.activity.off=Inactive

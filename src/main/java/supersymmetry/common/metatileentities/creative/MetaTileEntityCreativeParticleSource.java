@@ -8,6 +8,7 @@ import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IControllable;
 import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.TextFieldWidget2;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -151,6 +152,8 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
                 beamSize = Double.parseDouble(value);
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
+        builder.widget(new CycleButtonWidget(7, 160, 77, 20, () -> active, this::setActive,
+                "susy.creative.activity.off", "susy.creative.activity.on"));
         return builder.build(getHolder(), entityPlayer);
     }
 
