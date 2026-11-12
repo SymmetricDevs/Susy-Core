@@ -11,12 +11,16 @@
     "EntityMinecartMixin",
     "EntityMixin",
     "EntityPlayerMixin",
+    "ContainerToolbeltMixin",
     "EntityTNTPrimedMixin",
+    "OreIngredientMixin",
     "WorldServerPlanetGrowthMixin"
   ],
   "client" : [
     "BlockModelRendererMixin",
+    "MinecraftToolbeltMixin",
     "RenderChunkMixin",
+    "RenderItemToolbeltMixin",
     "TileEntityRendererDispatcherMixin",
     "RenderGlobalMixin",
     "WorldMixin"

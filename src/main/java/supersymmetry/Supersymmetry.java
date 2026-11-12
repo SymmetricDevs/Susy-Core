@@ -28,6 +28,7 @@ import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.command.*;
 import supersymmetry.common.covers.SuSyCoverBehaviors;
 import supersymmetry.common.event.DimensionBreathabilityHandler;
+import supersymmetry.common.item.ItemToolbelt;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
@@ -83,6 +84,36 @@ public class Supersymmetry {
 
         SuSyMetaTileEntities.init();
         SuSyCapabilities.init();
+
+        // ItemGTTool's constructor already sets the registry name from domain + id.
+        ItemToolbelt.TOOLBELT = new ItemToolbelt("susy", "toolbelt");
+        net.minecraftforge.fml.common.registry.GameRegistry.findRegistry(net.minecraft.item.Item.class)
+                .register(ItemToolbelt.TOOLBELT);
+
+        supersymmetry.common.crafting.DyeableRecipes dyeableRecipes = new supersymmetry.common.crafting.DyeableRecipes();
+        net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(dyeableRecipes);
+
+        // One belt per material, as the fork's ToolRecipeHandler does; the material drives the slot count.
+        for (gregtech.api.unification.material.Material material : gregtech.api.GregTechAPI.materialManager
+                .getRegisteredMaterials()) {
+            if (!material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_BOLT_SCREW) ||
+                    !material.hasFlag(gregtech.api.unification.material.info.MaterialFlags.GENERATE_RING) ||
+                    material.getProperty(gregtech.api.unification.material.properties.PropertyKey.TOOL) == null) {
+                // IGTTool.get requires a tool property; only tool materials make belts.
+                continue;
+            }
+
+            net.minecraftforge.oredict.ShapedOreRecipe beltRecipe = new net.minecraftforge.oredict.ShapedOreRecipe(null,
+                    ItemToolbelt.TOOLBELT.get(material), "SSS", "LLL", "RSR",
+                    'L', new net.minecraft.item.ItemStack(net.minecraft.init.Items.LEATHER),
+                    'S', new gregtech.api.unification.stack.UnificationEntry(
+                            gregtech.api.unification.ore.OrePrefix.screw, material).toString(),
+                    'R', new gregtech.api.unification.stack.UnificationEntry(
+                            gregtech.api.unification.ore.OrePrefix.ring, material).toString());
+            beltRecipe.setRegistryName(new net.minecraft.util.ResourceLocation("susy",
+                    "toolbelt_" + material.toString()));
+            net.minecraftforge.fml.common.registry.ForgeRegistries.RECIPES.register(beltRecipe);
+        }
 
         SusyMetaEntities.init();
         SusyCriteriaTriggers.init();

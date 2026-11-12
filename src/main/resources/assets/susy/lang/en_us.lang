@@ -2803,3 +2803,24 @@ susy.machine.tank_valve.monel_400.name=Monel Tank Valve
 susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
 susy.machine.tank_valve.titanium.name=Titanium Tank Valve
 susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve
+
+# Toolbelt
+susy.toolbelt=Toolbelt
+susy.toolbelt.select=%s Toolbelt (%s)
+item.susy.toolbelt.size=Slots: %s
+item.susy.toolbelt.tooltip=Open to store tools. Click a number to select the tool in that slot.
+item.susy.toolbelt.tool=%d: %s
+item.susy.toolbelt.selected=%d: %s (selected)
+# Toolbelt, GT-style keys (the item's translation key is item.gt.tool.toolbelt.name)
+item.gt.tool.toolbelt.name=%s Toolbelt
+item.gt.tool.toolbelt.name.select=%s Toolbelt (%s)
+item.gt.tool.toolbelt.size=§a%s Tool Slots
+item.gt.tool.toolbelt.tooltip=Holds tools that can be selected for in-world use, used automatically for crafting, or stored for maintenance repair.
+item.gt.tool.toolbelt.tool=§aSlot %s: §f%s
+item.gt.tool.toolbelt.selected=- §aSlot %s: §f%s
+item.gt.tool.toolbelt.dye=Can be dyed like leather equipment; the dye is removed with a water cauldron.
+# Toolbelt keybinds, all unbound by default
+key.categories.susy=SUSY
+key.susy.toolbelt_previous=Toolbelt: previous slot
+key.susy.toolbelt_next=Toolbelt: next slot
+key.susy.toolbelt_hud=Toolbelt: hide HUD
