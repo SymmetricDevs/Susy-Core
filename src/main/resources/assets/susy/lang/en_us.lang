@@ -2803,3 +2803,13 @@ susy.machine.tank_valve.monel_400.name=Monel Tank Valve
 susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
 susy.machine.tank_valve.titanium.name=Titanium Tank Valve
 susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve
+
+#creative stuff
+susy.creative.particle.type=Particle Type
+susy.creative.particle.energy=Energy
+susy.creative.particle.bunchspacing=Bunch Spacing
+susy.creative.particle.bunchlength=Bunch Length
+susy.creative.particle.nbunches=Number of bunches
+susy.creative.particle.particlesperbunch=Particles per bunch
+susy.creative.particle.emittance=Beam Emittance
+susy.creative.particle.beamsize=Beam Size

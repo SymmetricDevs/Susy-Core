@@ -99,9 +99,14 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     @Override
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.defaultBuilder();
-        builder.label(7, 32, "susy.creative.particle.type");
-        builder.widget(new ImageWidget(7, 44, 156, 20, GuiTextures.DISPLAY));
-        builder.label(7, 74, "gregtech.creative.particle.energy");
+        builder.label(7, 12, "susy.creative.particle.type");
+        builder.label(7, 22, "susy.creative.particle.energy");
+        builder.label(7, 32, "susy.creative.particle.bunchspacing");
+        builder.label(7, 42, "susy.creative.particle.bunchlength");
+        builder.label(7, 52, "susy.creative.particle.nbunches");
+        builder.label(7, 62, "susy.creative.particle.particlesperbunch");
+        builder.label(7, 72, "susy.creative.particle.emittance");
+        builder.label(7, 82, "susy.creative.particle.beamsize");
         return builder.build(getHolder(), entityPlayer);
     }
 
