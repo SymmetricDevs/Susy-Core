@@ -6,7 +6,8 @@
   "compatibilityLevel" : "JAVA_8",
   "mixins" : [
     "ConnectorBlockMixin",
-    "FacadeItemBlockMixin"
+    "FacadeItemBlockMixin",
+    "ItemChannelSettingsMixin"
   ],
   "client" : [
     "GuiControllerMixin"
