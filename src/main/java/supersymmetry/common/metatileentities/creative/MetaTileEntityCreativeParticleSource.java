@@ -16,11 +16,14 @@ import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.particle.IParticleBeamProvider;
 import supersymmetry.api.particle.ParticleBeam;
@@ -32,14 +35,6 @@ import java.util.function.Function;
 public class MetaTileEntityCreativeParticleSource extends MetaTileEntity implements IParticleBeamProvider, IControllable {
 
     private boolean active = false;
-
-    private double energy = 0;
-    private double bunchSpacing = 1;
-    private double bunchLength = 1;
-    private int nBunches = 1000;
-    private int particlesPerBunch = (int) 1e6;
-    private double emittance = 1.d;
-    private double beamSize = 1.d;
 
     private ParticleBeam particleBeam = new ParticleBeam(
             Particles.electron,
@@ -111,45 +106,45 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
         ModularUI.Builder builder = ModularUI.defaultBuilder();
         builder.label(7, 10, "susy.creative.particle.type");
         builder.label(7, 20, "susy.creative.particle.energy");
-        builder.widget(new TextFieldWidget2(9, 30, 152, 8, () -> String.valueOf(energy), value -> {
+        builder.widget(new TextFieldWidget2(9, 30, 152, 8, () -> String.valueOf(particleBeam.getEnergy()), value -> {
             if (!value.isEmpty()) {
-                energy = Double.parseDouble(value);
+                particleBeam.setEnergy(Double.parseDouble(value));
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 40, "susy.creative.particle.bunchspacing");
-        builder.widget(new TextFieldWidget2(9, 50, 152, 8, () -> String.valueOf(bunchSpacing), value -> {
+        builder.widget(new TextFieldWidget2(9, 50, 152, 8, () -> String.valueOf(particleBeam.getBunchSpacing()), value -> {
             if (!value.isEmpty()) {
-                bunchSpacing = Double.parseDouble(value);
+                particleBeam.setBunchSpacing(Double.parseDouble(value));
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 60, "susy.creative.particle.bunchlength");
-        builder.widget(new TextFieldWidget2(9, 70, 152, 8, () -> String.valueOf(bunchLength), value -> {
+        builder.widget(new TextFieldWidget2(9, 70, 152, 8, () -> String.valueOf(particleBeam.getBunchLength()), value -> {
             if (!value.isEmpty()) {
-                bunchLength = Double.parseDouble(value);
+                particleBeam.setBunchLength(Double.parseDouble(value));
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 80, "susy.creative.particle.nbunches");
-        builder.widget(new TextFieldWidget2(9, 90, 152, 8, () -> String.valueOf(nBunches), value -> {
+        builder.widget(new TextFieldWidget2(9, 90, 152, 8, () -> String.valueOf(particleBeam.getNBunches()), value -> {
             if (!value.isEmpty()) {
-                nBunches = Integer.parseInt(value);
+                particleBeam.setNBunches(Integer.parseInt(value));
             }
         }).setAllowedChars(TextFieldWidget2.NATURAL_NUMS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 100, "susy.creative.particle.particlesperbunch");
-        builder.widget(new TextFieldWidget2(9, 110, 152, 8, () -> String.valueOf(particlesPerBunch), value -> {
+        builder.widget(new TextFieldWidget2(9, 110, 152, 8, () -> String.valueOf(particleBeam.getNParticlesPerBunch()), value -> {
             if (!value.isEmpty()) {
-                particlesPerBunch = Integer.parseInt(value);
+                particleBeam.setNParticlesPerBunch(Integer.parseInt(value));
             }
         }).setAllowedChars(TextFieldWidget2.NATURAL_NUMS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 120, "susy.creative.particle.emittance");
-        builder.widget(new TextFieldWidget2(9, 130, 152, 8, () -> String.valueOf(emittance), value -> {
+        builder.widget(new TextFieldWidget2(9, 130, 152, 8, () -> String.valueOf(particleBeam.getEmittance()), value -> {
             if (!value.isEmpty()) {
-                emittance = Double.parseDouble(value);
+                particleBeam.setEmittance(Double.parseDouble(value));
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 140, "susy.creative.particle.beamsize");
-        builder.widget(new TextFieldWidget2(9, 150, 152, 8, () -> String.valueOf(beamSize), value -> {
+        builder.widget(new TextFieldWidget2(9, 150, 152, 8, () -> String.valueOf(particleBeam.getBeamSize()), value -> {
             if (!value.isEmpty()) {
-                beamSize = Double.parseDouble(value);
+                particleBeam.setBeamSize(Double.parseDouble(value));
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.widget(new CycleButtonWidget(7, 160, 77, 20, () -> active, this::setActive,
@@ -183,5 +178,30 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
             }
             return val;
         };
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        particleBeam.writeToNBT(data);
+        data.setBoolean("Active", active);
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        this.particleBeam.readFromNBT(data);
+        active = data.getBoolean("Active");
+    }
+
+    @Override
+    public void writeInitialSyncData(@NotNull PacketBuffer buf) {
+        super.writeInitialSyncData(buf);
+        buf.writeBoolean(active);
+    }
+
+    @Override
+    public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
+        super.receiveInitialSyncData(buf);
+        this.active = buf.readBoolean();
     }
 }
