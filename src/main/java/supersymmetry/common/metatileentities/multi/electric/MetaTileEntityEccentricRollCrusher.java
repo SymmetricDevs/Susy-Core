@@ -75,6 +75,7 @@ public class MetaTileEntityEccentricRollCrusher extends RecipeMapMultiblockContr
 
     public MetaTileEntityEccentricRollCrusher(ResourceLocation metaTileEntityId, RecipeMap<?> recipeMap) {
         super(metaTileEntityId, recipeMap);
+        this.recipeMapWorkable.setParallelLimit(PARALLEL_LIMIT);
     }
 
     @SideOnly(Side.CLIENT)
