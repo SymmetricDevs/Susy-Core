@@ -5,8 +5,7 @@ import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.IControllable;
+import gregtech.api.capability.*;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.CycleButtonWidget;
 import gregtech.api.gui.widgets.TextFieldWidget2;
@@ -18,6 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -99,6 +99,21 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         setActive(isWorkingAllowed);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (getWorld().isRemote) return;
+        for (EnumFacing facing : EnumFacing.values()) {
+            EnumFacing opposite = facing.getOpposite();
+            TileEntity tile = getNeighbor(facing);
+            if (tile != null) {
+                IParticleBeamProvider provider = tile.getCapability(SuSyCapabilities.PARTICLE_BEAM_PROVIDER, opposite);
+                if (provider == null) continue;
+                provider.insertBeam(particleBeam);
+            }
+        }
     }
 
     @Override
