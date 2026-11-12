@@ -36,6 +36,7 @@ mcjtyLibRefilmed = "5643297"
 travelersBackpack = "3150850"
 bubblesABaublesFork = "5719448"
 barrelsDrumsStorageMore = "2708193"
+findMe = "3748963"
 creativeCore = "4722163"
 littleTiles = "5180387"
 chickenAsm = "1.12-1.0.2.9"
@@ -96,6 +97,7 @@ mcjtyLibRefilmed = { module = "curse.maven:mcjtylib-refilmed-1086841", version.r
 travelersBackpack = { module = "curse.maven:travelers-backpack-321117", version.ref = "travelersBackpack" }
 bubblesABaublesFork = { module = "curse.maven:bubbles-a-baubles-fork-995393", version.ref = "bubblesABaublesFork" }
 barrelsDrumsStorageMore = { module = "curse.maven:barrels-drums-storage-more-319404", version.ref = "barrelsDrumsStorageMore" }
+findMe = { module = "curse.maven:findme-610085", version.ref = "findMe" }
 creativeCore = { module = "curse.maven:creativecore-257814", version.ref = "creativeCore" }
 littleTiles = { module = "curse.maven:littletiles-257818", version.ref = "littleTiles" }
 chickenAsm = { module = "codechicken:ChickenASM", version.ref = "chickenAsm" }
