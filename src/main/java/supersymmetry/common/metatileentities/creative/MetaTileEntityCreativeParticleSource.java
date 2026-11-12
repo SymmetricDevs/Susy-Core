@@ -18,13 +18,29 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import supersymmetry.api.capability.SuSyCapabilities;
+import supersymmetry.api.particle.IParticleBeamProvider;
+import supersymmetry.api.particle.ParticleBeam;
+import supersymmetry.api.particle.Particles;
 import supersymmetry.api.util.SuSyUtility;
 
-public class MetaTileEntityCreativeParticleSource extends MetaTileEntity implements IControllable {
+public class MetaTileEntityCreativeParticleSource extends MetaTileEntity implements IParticleBeamProvider, IControllable {
 
     private boolean active = false;
+
+    private ParticleBeam particleBeam = new ParticleBeam(
+            Particles.electron,
+            1.d,
+            1.d,
+            1.d,
+            1000,
+            (int) 1e6,
+            1.d,
+            1.d
+    );
 
     public MetaTileEntityCreativeParticleSource() {
         super(SuSyUtility.susyId("infinite_particles"));
@@ -62,6 +78,15 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     }
 
     @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+        if (capability == SuSyCapabilities.PARTICLE_BEAM_PROVIDER) {
+            return SuSyCapabilities.PARTICLE_BEAM_PROVIDER.cast(this);
+        } else {
+            return super.getCapability(capability, side);
+        }
+    }
+
+    @Override
     public boolean isWorkingEnabled() {
         return active;
     }
@@ -78,5 +103,15 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
         builder.widget(new ImageWidget(7, 44, 156, 20, GuiTextures.DISPLAY));
         builder.label(7, 74, "gregtech.creative.particle.energy");
         return builder.build(getHolder(), entityPlayer);
+    }
+
+    @Override
+    public ParticleBeam getParticleBeam() {
+        return particleBeam;
+    }
+
+    @Override
+    public ParticleBeam insertBeam(ParticleBeam beam) {
+        return null;
     }
 }
