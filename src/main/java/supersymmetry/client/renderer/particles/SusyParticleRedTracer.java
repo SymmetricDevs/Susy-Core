@@ -31,7 +31,7 @@ import supersymmetry.Supersymmetry;
 
 public class SusyParticleRedTracer extends GTBloomParticle {
 
-    public static final int realMaxAge = 2; // the amount of time the particle will be actually visible
+    public static final int realMaxAge = 3; // the amount of time the particle will be actually visible
 
     public static final ResourceLocation[] SPRITE_NAMES = {
             new ResourceLocation(Supersymmetry.MODID, "fx/tracer_empty"),
