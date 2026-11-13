@@ -24,8 +24,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.particle.IParticleBeamProvider;
+import supersymmetry.api.particle.Particle;
 import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.util.SuSyUtility;
@@ -35,6 +37,7 @@ import java.util.function.Function;
 public class MetaTileEntityCreativeParticleSource extends MetaTileEntity implements IParticleBeamProvider, IControllable {
 
     private boolean active = false;
+    private String particleName = "electron";
 
     private ParticleBeam particleBeam = new ParticleBeam(
             Particles.electron,
@@ -120,6 +123,16 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     protected ModularUI createUI(EntityPlayer entityPlayer) {
         ModularUI.Builder builder = ModularUI.defaultBuilder();
         builder.label(7, 10, "susy.creative.particle.type");
+        builder.widget(new TextFieldWidget2(86, 10, 128, 8, () -> String.valueOf(particleName), value -> {
+            if (!value.isEmpty()) {
+                Particle particle = Particles.getByName(value);
+                if (particle != null) {
+                    SusyLog.logger.info(particle.getName());
+                    this.particleName = value;
+                    this.particleBeam.setParticle(particle);
+                }
+            }
+        }).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 20, "susy.creative.particle.energy");
         builder.widget(new TextFieldWidget2(9, 30, 152, 8, () -> String.valueOf(particleBeam.getEnergy()), value -> {
             if (!value.isEmpty()) {
@@ -198,6 +211,7 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         particleBeam.writeToNBT(data);
+        data.setString("ParticleName", particleName);
         data.setBoolean("Active", active);
         return data;
     }
@@ -205,6 +219,7 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
     @Override
     public void readFromNBT(NBTTagCompound data) {
         this.particleBeam.readFromNBT(data);
+        particleName = data.getString("ParticleName");
         active = data.getBoolean("Active");
     }
 
