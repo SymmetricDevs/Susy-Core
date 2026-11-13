@@ -1,5 +1,20 @@
 package supersymmetry.common.metatileentities.creative;
 
+import java.util.function.Function;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.ColourMultiplier;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -13,17 +28,6 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.texture.Textures;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 import supersymmetry.api.SusyLog;
 import supersymmetry.api.capability.SuSyCapabilities;
 import supersymmetry.api.particle.IParticleBeamProvider;
@@ -32,9 +36,8 @@ import supersymmetry.api.particle.ParticleBeam;
 import supersymmetry.api.particle.Particles;
 import supersymmetry.api.util.SuSyUtility;
 
-import java.util.function.Function;
-
-public class MetaTileEntityCreativeParticleSource extends MetaTileEntity implements IParticleBeamProvider, IControllable {
+public class MetaTileEntityCreativeParticleSource extends MetaTileEntity
+                                                  implements IParticleBeamProvider, IControllable {
 
     private boolean active = false;
     private String particleName = "electron";
@@ -47,8 +50,7 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
             1000,
             (int) 1e6,
             1.d,
-            1.d
-    );
+            1.d);
 
     public MetaTileEntityCreativeParticleSource() {
         super(SuSyUtility.susyId("infinite_particles"));
@@ -140,17 +142,19 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
             }
         }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 40, "susy.creative.particle.bunchspacing");
-        builder.widget(new TextFieldWidget2(9, 50, 152, 8, () -> String.valueOf(particleBeam.getBunchSpacing()), value -> {
-            if (!value.isEmpty()) {
-                particleBeam.setBunchSpacing(Double.parseDouble(value));
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
+        builder.widget(
+                new TextFieldWidget2(9, 50, 152, 8, () -> String.valueOf(particleBeam.getBunchSpacing()), value -> {
+                    if (!value.isEmpty()) {
+                        particleBeam.setBunchSpacing(Double.parseDouble(value));
+                    }
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 60, "susy.creative.particle.bunchlength");
-        builder.widget(new TextFieldWidget2(9, 70, 152, 8, () -> String.valueOf(particleBeam.getBunchLength()), value -> {
-            if (!value.isEmpty()) {
-                particleBeam.setBunchLength(Double.parseDouble(value));
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
+        builder.widget(
+                new TextFieldWidget2(9, 70, 152, 8, () -> String.valueOf(particleBeam.getBunchLength()), value -> {
+                    if (!value.isEmpty()) {
+                        particleBeam.setBunchLength(Double.parseDouble(value));
+                    }
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 80, "susy.creative.particle.nbunches");
         builder.widget(new TextFieldWidget2(9, 90, 152, 8, () -> String.valueOf(particleBeam.getNBunches()), value -> {
             if (!value.isEmpty()) {
@@ -158,17 +162,20 @@ public class MetaTileEntityCreativeParticleSource extends MetaTileEntity impleme
             }
         }).setAllowedChars(TextFieldWidget2.NATURAL_NUMS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 100, "susy.creative.particle.particlesperbunch");
-        builder.widget(new TextFieldWidget2(9, 110, 152, 8, () -> String.valueOf(particleBeam.getNParticlesPerBunch()), value -> {
-            if (!value.isEmpty()) {
-                particleBeam.setNParticlesPerBunch(Integer.parseInt(value));
-            }
-        }).setAllowedChars(TextFieldWidget2.NATURAL_NUMS).setMaxLength(19).setValidator(getTextFieldValidator()));
+        builder.widget(new TextFieldWidget2(9, 110, 152, 8, () -> String.valueOf(particleBeam.getNParticlesPerBunch()),
+                value -> {
+                    if (!value.isEmpty()) {
+                        particleBeam.setNParticlesPerBunch(Integer.parseInt(value));
+                    }
+                }).setAllowedChars(TextFieldWidget2.NATURAL_NUMS).setMaxLength(19)
+                .setValidator(getTextFieldValidator()));
         builder.label(7, 120, "susy.creative.particle.emittance");
-        builder.widget(new TextFieldWidget2(9, 130, 152, 8, () -> String.valueOf(particleBeam.getEmittance()), value -> {
-            if (!value.isEmpty()) {
-                particleBeam.setEmittance(Double.parseDouble(value));
-            }
-        }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
+        builder.widget(
+                new TextFieldWidget2(9, 130, 152, 8, () -> String.valueOf(particleBeam.getEmittance()), value -> {
+                    if (!value.isEmpty()) {
+                        particleBeam.setEmittance(Double.parseDouble(value));
+                    }
+                }).setAllowedChars(TextFieldWidget2.DECIMALS).setMaxLength(19).setValidator(getTextFieldValidator()));
         builder.label(7, 140, "susy.creative.particle.beamsize");
         builder.widget(new TextFieldWidget2(9, 150, 152, 8, () -> String.valueOf(particleBeam.getBeamSize()), value -> {
             if (!value.isEmpty()) {

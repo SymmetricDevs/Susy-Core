@@ -954,7 +954,7 @@ public class SuSyMetaTileEntities {
                 new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),
                         SusyTextures.FEDERATION_DROP_OVERLAY, 1));
 
-        //Leave a small gap for creative sources of stuff please, I suggest 18900 - 18950
+        // Leave a small gap for creative sources of stuff please, I suggest 18900 - 18950
         CREATIVE_PARTICLE_SOURCE = registerMetaTileEntity(18900, new MetaTileEntityCreativeParticleSource());
     }
 
