@@ -41,6 +41,7 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.blocks.BlockTurbineRotor;
 import supersymmetry.common.blocks.SuSyBlocks;
+import supersymmetry.common.metatileentities.creative.MetaTileEntityCreativeParticleSource;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityBridge;
 import supersymmetry.common.metatileentities.logistics.MetaTileEntityExtender;
 import supersymmetry.common.metatileentities.multi.electric.*;
@@ -368,6 +369,9 @@ public class SuSyMetaTileEntities {
     public static MetaTileEntityDustAgitator[] DUST_AGITATOR = new MetaTileEntityDustAgitator[8];
     public static MetaTileEntityFederationDropBeacon[] FED_BEACON = new MetaTileEntityFederationDropBeacon[8];
     public static MetaTileEntityFederationReinforcementBeacon[] FED_REINFORCER = new MetaTileEntityFederationReinforcementBeacon[8];
+
+    // CREATIVE STUFF
+    public static MetaTileEntityCreativeParticleSource CREATIVE_PARTICLE_SOURCE;
 
     public static void init() {
         MAGNETIC_REFRIGERATOR = registerMetaTileEntity(14500,
@@ -949,6 +953,9 @@ public class SuSyMetaTileEntities {
         FED_REINFORCER[0] = registerMetaTileEntity(18660,
                 new MetaTileEntityFederationReinforcementBeacon(susyId("fed_reinforcer.lv"),
                         SusyTextures.FEDERATION_DROP_OVERLAY, 1));
+
+        //Leave a small gap for creative sources of stuff please, I suggest 18900 - 18950
+        CREATIVE_PARTICLE_SOURCE = registerMetaTileEntity(18900, new MetaTileEntityCreativeParticleSource());
     }
 
     private static void registerSimpleSteamMTE(SuSySimpleSteamMetaTileEntity[] machines, int startId, String name,
