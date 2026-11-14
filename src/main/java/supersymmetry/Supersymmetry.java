@@ -33,6 +33,7 @@ import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 import supersymmetry.common.metatileentities.single.electric.MetaTileEntityDefoliator;
 import supersymmetry.common.rocketry.SusyRocketComponents;
 import supersymmetry.common.tileentities.SuSyTileEntities;
+import supersymmetry.integration.immersiverailroading.gui.SuSyIRGUITypes;
 import supersymmetry.integration.opencomputers.DriverSpeaker;
 import supersymmetry.loaders.SuSyIRLoader;
 import supersymmetry.network.SuSyNetwork;
@@ -61,6 +62,7 @@ public class Supersymmetry {
         // GTValues.HT = true;
         SuSyIRLoader.initDefinitions();
         SuSyIRLoader.initEntities();
+        SuSyIRGUITypes.init();
 
         // Very annoying config
         SCConfigHolder.misc.enableMaterialModifications = false;
