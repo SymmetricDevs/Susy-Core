@@ -33,7 +33,7 @@ public class SusyMetaEntities {
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "earth_landing_system"),
                 EntityEarthLandingSystem.class, "Earth Landing System", 7, Supersymmetry.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(Supersymmetry.MODID, "kirov_airship"), EntityKirov.class,
-                "Drop Pod", 8, Supersymmetry.instance, 64, 3, true);
+                "Kirov Airship", 8, Supersymmetry.instance, 64, 3, true);
     }
 
     @SideOnly(Side.CLIENT)
