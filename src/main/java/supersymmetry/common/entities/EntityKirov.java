@@ -12,12 +12,14 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import supersymmetry.client.renderer.handler.IAlwaysRender;
 
-public class EntityKirov extends EntityLiving implements IAnimatable {
+public class EntityKirov extends EntityLiving implements IAnimatable, IAlwaysRender {
 
     public EntityKirov(World worldIn) {
         super(worldIn);
         this.deathTime = 0;
+        this.ignoreFrustumCheck = true;
     }
 
     public EntityKirov(World worldIn, double x, double y, double z) {
