@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -52,5 +53,4 @@ public class EntityKirov extends EntityLiving implements IAnimatable, IAlwaysRen
     public AnimationFactory getFactory() {
         return this.factory;
     }
-
 }
