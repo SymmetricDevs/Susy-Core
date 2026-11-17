@@ -119,6 +119,8 @@ dependencies {
     compileOnly(deps.travelersBackpack.deobf())
     compileOnly(deps.bubblesABaublesFork.deobf())
     compileOnly(deps.barrelsDrumsStorageMore.deobf())
+    // FindMe 1.0.0
+    compileOnly(deps.findMe.deobf())
     // LittleTiles
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
