@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.lwjgl.input.Keyboard;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -22,13 +24,12 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import supersymmetry.Supersymmetry;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 
 public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRender {
 
-    private float momentum = 0.95F;
-    private float deltaRotation = 0.0F;
+    private double momentum = 0.95F;
+    private double deltaRotation = 0.0F;
 
     private boolean leftInputDown;
     private boolean rightInputDown;
@@ -83,23 +84,12 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
         this.momentum = 0.95F;
 
         this.motionX *= this.momentum;
+        this.motionY *= this.verticalMomentum;
         this.motionZ *= this.momentum;
 
         this.deltaRotation *= this.momentum;
 
-        if (this.ascendInputDown) {
-            this.motionY += this.verticalAcceleration;
-        }
-
-        if (this.descendInputDown) {
-            this.motionY -= this.verticalAcceleration;
-        }
-
         this.motionY = MathHelper.clamp(this.motionY, -this.maxVerticalSpeed, this.maxVerticalSpeed);
-
-        if (!this.ascendInputDown && !this.descendInputDown) {
-            this.motionY *= this.verticalMomentum;
-        }
     }
 
     private void controlAirship() {
@@ -114,7 +104,15 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
                 this.deltaRotation += 1.0F;
             }
 
-            this.rotationYaw += this.deltaRotation;
+            if (this.ascendInputDown) {
+                this.motionY += this.verticalAcceleration;
+            }
+
+            if (this.descendInputDown) {
+                this.motionY -= this.verticalAcceleration;
+            }
+
+            this.rotationYaw += (float)this.deltaRotation;
 
             if (this.forwardInputDown) {
                 acceleration += 0.04F;
@@ -150,6 +148,10 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
 
     @Override
     public void onUpdate() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+
         super.onUpdate();
 
         if (this.canPassengerSteer()) {
@@ -217,8 +219,18 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
         super.setAir(300);
     }
 
+    @Nullable
+    public Entity getControllingPassenger() {
+        return this.getPassengers().isEmpty() ? null : (Entity)this.getPassengers().getFirst();
+    }
+
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean canBeSteered() {
+        return !this.isDead && this.getControllingPassenger() instanceof EntityPlayer;
+    }
+
+    @Override
+    public boolean processInteract(EntityPlayer player, @NonNull EnumHand hand) {
         if (player.isSneaking()) {
             return false;
         } else {
@@ -230,7 +242,7 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
     }
 
     @Override
-    public void updatePassenger(Entity passenger) {
+    public void updatePassenger(@NonNull Entity passenger) {
         if (this.isPassenger(passenger)) {
             float f = MathHelper.cos(this.renderYawOffset * 0.017453292F);
             float f1 = MathHelper.sin(this.renderYawOffset * 0.017453292F);
