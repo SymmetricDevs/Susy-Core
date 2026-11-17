@@ -119,6 +119,8 @@ dependencies {
     compileOnly(deps.travelersBackpack.deobf())
     compileOnly(deps.bubblesABaublesFork.deobf())
     compileOnly(deps.barrelsDrumsStorageMore.deobf())
+    // Industrial Renewal 0.21.8
+    compileOnly(deps.industrialRenewal.deobf())
     // LittleTiles
     compileOnly(deps.creativeCore.deobf())
     compileOnly(deps.littleTiles.deobf())
