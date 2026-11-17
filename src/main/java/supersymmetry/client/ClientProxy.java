@@ -76,6 +76,7 @@ import supersymmetry.api.util.SuSyUtility;
 import supersymmetry.client.event.ActiveFluidVisualHandler;
 import supersymmetry.client.event.MissingModelCreator;
 import supersymmetry.client.renderer.block.FlammableAirModelLoader;
+import supersymmetry.client.renderer.gun.GunItemStackRenderer;
 import supersymmetry.client.renderer.handler.DustFogRenderer;
 import supersymmetry.client.renderer.handler.VariantCoverableBlockRenderer;
 import supersymmetry.client.renderer.particles.SusyParticleBlueTracer;
@@ -128,6 +129,7 @@ public class ClientProxy extends CommonProxy {
         SuSyMetaBlocks.registerColors();
         SuSyFluidTooltipLoader.registerTooltips();
         MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
+        GunItemStackRenderer.registerGuns();
     }
 
     @Override

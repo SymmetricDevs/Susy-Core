@@ -505,13 +505,11 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     }
 
     @SideOnly(Side.CLIENT)
-    public void spawnWorkingParticles(World world, Vec3d pos) { // debug
+    public void spawnWorkingParticles(World world, Vec3d pos) { // temp debug, will be removed
         SusyParticleFlame spark = new SusyParticleFlame(world,
                 pos.x, pos.y, pos.z,
                 0, 0, 0);
         Minecraft.getMinecraft().effectRenderer.addEffect(spark);
-        // Minecraft.getMinecraft().effectRenderer.addEffect(new SusyParticleFlareSmoke(world, pos.x, pos.y, pos.z, 1,
-        // 0, 1));
     }
 
     public static final SuSyAmmoType FULL_METAL_JACKET = new SuSyAmmoType(1.0, 1.0, 0.5, 1, "full_metal_jacket");

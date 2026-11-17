@@ -44,6 +44,11 @@ public class SuSyMetaItems {
 
     private static StandardMetaItem metaItem;
     public static SuSyArmorItem armorItem;
+
+    public static StandardMetaItem getMetaItem() {
+        return metaItem;
+    }
+
     public static MetaOreDictItem oreDictItem;
     public static MetaValueItem CATALYST_BED_SUPPORT_GRID;
     public static MetaValueItem CONVEYOR_STEAM;
@@ -89,35 +94,41 @@ public class SuSyMetaItems {
     public static MetaValueItem FLINTLOCK_PISTOL;
     public static MetaValueItem MUSKET;
     public static MetaValueItem BLUNDERBUSS;
-    public static MetaValueItem REVOLVER;
-    public static MetaValueItem BREECHLOADING_RIFLE;
+
+    public static MetaValueItem REVOLVER; // Colt SAA (black powder version)
+    public static MetaValueItem BREECHLOADING_RIFLE; // Sharps rifle
     public static MetaValueItem DOUBLE_BARREL_SHOTGUN;
-    public static MetaValueItem BASIC_PISTOL;
-    public static MetaValueItem BOLT_ACTION_RIFLE;
-    public static MetaValueItem PUMP_SHOTGUN;
-    public static MetaValueItem IMPROVED_PISTOL;
-    public static MetaValueItem SEMI_AUTO_RIFLE;
-    public static MetaValueItem BASIC_SMG;
-    public static MetaValueItem ADVANCED_PISTOL;
-    public static MetaValueItem AUTOMATIC_BATTLE_RIFLE;
-    public static MetaValueItem SEMI_AUTO_SHOTGUN;
-    public static MetaValueItem ADVANCED_SMG;
-    public static MetaValueItem BASIC_ASSAULT_RIFLE;
-    public static MetaValueItem BASIC_SNIPER_RIFLE;
-    public static MetaValueItem HEAVY_PISTOL;
-    public static MetaValueItem BASIC_DMR;
-    public static MetaValueItem AUTO_SHOTGUN;
-    public static MetaValueItem IMPROVED_ASSAULT_RIFLE;
-    public static MetaValueItem IMPROVED_SNIPER_RIFLE;
-    public static MetaValueItem BASIC_ANTI_MATERIEL_RIFLE;
-    public static MetaValueItem BASIC_LMG;
-    public static MetaValueItem IMPROVED_DMR;
-    public static MetaValueItem PDW;
-    public static MetaValueItem ADVANCED_ASSAULT_RIFLE;
-    public static MetaValueItem ADVANCED_SNIPER_RIFLE;
-    public static MetaValueItem IMPROVED_ANTI_MATERIEL_RIFLE;
-    public static MetaValueItem IMPROVED_LMG;
-    public static MetaValueItem BASIC_GPMG;
+
+    public static MetaValueItem BASIC_PISTOL; // Colt M1911
+    public static MetaValueItem BOLT_ACTION_RIFLE; // M1903 Springfield, Lee-Enfield, Karabiner 98k, Mosin-Nagant, etc
+    public static MetaValueItem PUMP_SHOTGUN; // Winchester Model 1897
+
+    public static MetaValueItem IMPROVED_PISTOL; // Browning Hi-Power (except in .45 ACP)
+    public static MetaValueItem SEMI_AUTO_RIFLE; // M1 Garand, SVT-40, Gewehr 43
+    public static MetaValueItem BASIC_SMG; // Thompson SMG, PPSh-41, Sten, MP40, etc
+
+    public static MetaValueItem ADVANCED_PISTOL; // FN Five-seven (ignore the anachronism)
+    public static MetaValueItem AUTOMATIC_BATTLE_RIFLE; // FN FAL, M14, H&K G3
+    public static MetaValueItem SEMI_AUTO_SHOTGUN; // SPAS-12, Benelli M4
+    public static MetaValueItem ADVANCED_SMG; // MP5, Uzi
+    public static MetaValueItem BASIC_ASSAULT_RIFLE; // AK-47, StG 44
+    public static MetaValueItem BASIC_SNIPER_RIFLE; // vaguely resembling L42A1 except in .338 Lapua Magnum
+
+    public static MetaValueItem HEAVY_PISTOL; // Desert Eagle
+    public static MetaValueItem BASIC_DMR; // SVD-ish
+    public static MetaValueItem AUTO_SHOTGUN; // AA-12
+    public static MetaValueItem IMPROVED_ASSAULT_RIFLE; // M16, Steyr AUG, FAMAS, AK-74
+    public static MetaValueItem IMPROVED_SNIPER_RIFLE; // AWM
+    public static MetaValueItem BASIC_ANTI_MATERIEL_RIFLE; // M82
+    public static MetaValueItem BASIC_LMG; // M249
+
+    public static MetaValueItem IMPROVED_DMR; // SCAR-H
+    public static MetaValueItem PDW; // FN P90, MP7
+    public static MetaValueItem ADVANCED_ASSAULT_RIFLE; // SIG MCX SPEAR
+    public static MetaValueItem ADVANCED_SNIPER_RIFLE; // Barrett MRAD, M2010
+    public static MetaValueItem IMPROVED_ANTI_MATERIEL_RIFLE; // AS50
+    public static MetaValueItem IMPROVED_LMG; // M250
+    public static MetaValueItem BASIC_GPMG; // M240
 
     public static MetaValueItem PAPER_CARTRIDGE;
     public static MetaValueItem GUNPOWDER_CARTRIDGE;

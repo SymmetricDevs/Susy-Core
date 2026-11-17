@@ -1,10 +1,10 @@
 package supersymmetry.common.guns.bullettypes;
 
-import gregtech.client.particle.GTParticleManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import gregtech.client.particle.GTParticleManager;
 import supersymmetry.api.guns.SuSyAmmoType;
 import supersymmetry.client.renderer.particles.SusyParticleBlueTracer;
 import supersymmetry.client.renderer.particles.SusyParticleGreenTracer;

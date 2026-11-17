@@ -1,18 +1,24 @@
-package supersymmetry.client;
+package supersymmetry.client.renderer.gun;
 
+import java.nio.FloatBuffer;
 import java.util.Objects;
+
+import javax.vecmath.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import org.lwjgl.BufferUtils;
 
 import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
@@ -21,25 +27,13 @@ import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.network.CPacketGunInput;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
-public final class GunInputHandler {
+public final class GunClientHandler {
 
     private static InputState lastState = null;
 
-    // X, Y, Z, Scale
-    private static final float[] DEFAULT = new float[] { -0.56f, 0.19f, 0.10f, 1.0f };
-    private static final float[][] SPECIFIC = new float[100][4];
+    private static final FloatBuffer MATRIX_BUFFER = BufferUtils.createFloatBuffer(16);
 
-    static {
-        for (int i = 0; i < SPECIFIC.length; i++) {
-            SPECIFIC[i] = DEFAULT;
-        }
-        SPECIFIC[31] = new float[] { -0.56f, 0.19f, 0.10f, 1.0f };
-        SPECIFIC[33] = new float[] { -0.60f, 0.28f, 0.12f, 1.1f };
-        SPECIFIC[35] = new float[] { -0.58f, 0.25f, 0.10f, 1.0f };
-        SPECIFIC[37] = new float[] { -0.56f, 0.19f, 0.08f, 1.0f };
-    }
-
-    private GunInputHandler() {}
+    private GunClientHandler() {}
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -90,18 +84,43 @@ public final class GunInputHandler {
         if (SuSyMetaItems.getGunBehaviour(stack) == null)
             return;
 
-        if (SuSyKeyBind.AIM.isKeyDown() && mc.currentScreen == null) {
-            int meta = stack.getMetadata();
-            float[] value = (meta >= 0 && meta < SPECIFIC.length) ? SPECIFIC[meta] : DEFAULT;
+        if (event.getHand() != EnumHand.MAIN_HAND || mc.player.isInvisible())
+            return;
 
-            float handSide = (event.getHand() == EnumHand.MAIN_HAND) ? 1.0F : -1.0F;
-
-            if (value[3] != 1.0F) {
-                GlStateManager.scale(value[3], value[3], value[3]);
-            }
-
-            GlStateManager.translate(value[0] * handSide, value[1], value[2]);
+        // The vanilla arm chain is replaced by the ones the model holds, so both arms are drawn with the gun, which
+        // is drawn by the main hand event this runs inside of.
+        EnumHandSide primary = mc.player.getPrimaryHand();
+        renderArm(mc, event, primary, primary);
+        if (mc.player.getHeldItemOffhand().isEmpty()) {
+            renderArm(mc, event, primary, primary.opposite());
         }
+    }
+
+    // draw the arm exactly where it is in blockbench relative to the gun
+    private static void renderArm(Minecraft mc, RenderSpecificHandEvent event, EnumHandSide primary,
+                                  EnumHandSide side) {
+        Matrix4f transform = GunItemStackRenderer.firstPersonArmTransform(event.getItemStack(), side, primary,
+                event.getEquipProgress());
+        if (transform == null)
+            return;
+
+        // renderArmFirstPerson applies its own transforms without pushing, and it runs before the item's own push, so
+        // the state has to be restored here or the gun would inherit the arm's transforms.
+        GlStateManager.pushMatrix();
+        multMatrix(transform);
+        mc.getItemRenderer().renderArmFirstPerson(event.getEquipProgress(), 0, side);
+        GlStateManager.popMatrix();
+    }
+
+    private static void multMatrix(Matrix4f matrix) {
+        MATRIX_BUFFER.clear();
+        float[] column = new float[4];
+        for (int i = 0; i < 4; i++) {
+            matrix.getColumn(i, column);
+            MATRIX_BUFFER.put(column);
+        }
+        MATRIX_BUFFER.flip();
+        GlStateManager.multMatrix(MATRIX_BUFFER);
     }
 
     @SubscribeEvent
