@@ -1,10 +1,10 @@
 package supersymmetry.common.entities;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityFlying;
-import net.minecraft.entity.MoverType;
+import net.minecraft.entity.*;
+import net.minecraft.entity.boss.dragon.phase.PhaseList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import supersymmetry.client.renderer.handler.IAlwaysRender;
 
-public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRender {
+public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRender, IEntityMultiPart {
 
     private double momentum = 0.95F;
     private double deltaRotation = 0.0F;
@@ -42,11 +42,27 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
     private double maxVerticalSpeed = 0.3D;
     private double verticalMomentum = 0.90D;
 
+    public MultiPartEntityPart[] parts;
+
     public EntityKirov(World worldIn) {
         super(worldIn);
         this.deathTime = 0;
         this.ignoreFrustumCheck = true;
         this.setNoGravity(true);
+        this.setSize(8.0F, 8.0F);
+
+        this.noClip = true;
+
+        parts = new MultiPartEntityPart[8];
+
+        for (int i = 0; i < 8; i++) {
+            parts[i] = new MultiPartEntityPart(
+                    this,
+                    "part" + i,
+                    12.0F,
+                    12.0F
+            );
+        }
     }
 
     public EntityKirov(World worldIn, double x, double y, double z) {
@@ -78,6 +94,40 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    @Override
+    public Entity[] getParts() {
+        return parts;
+    }
+
+    private void updateParts() {
+        float yaw = this.rotationYaw * 0.017453292F;
+
+        double forwardX = -MathHelper.sin(yaw);
+        double forwardZ = MathHelper.cos(yaw);
+
+        for (int i = 0; i < 8; i++) {
+
+            double offset = (i * 12.0D) - 40.0D;
+
+            double x = this.posX - forwardX * offset;
+            double y = this.posY - 8;
+            double z = this.posZ - forwardZ * offset;
+
+            parts[i].setLocationAndAngles(x, y, z, this.rotationYaw, 0.0F);
+        }
+    }
+
+    @Override
+    @NonNull
+    public World getWorld() {
+        return this.world;
+    }
+
+    @Override
+    public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
+        return false;
     }
 
     private void updateMotion() {
@@ -179,6 +229,8 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
         }
+
+        this.updateParts();
     }
 
     @Override
