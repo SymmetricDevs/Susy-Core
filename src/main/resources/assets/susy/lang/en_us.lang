@@ -2112,6 +2112,7 @@ entity.Rocket.name=Soyuz FG Rocket
 entity.Lander.name=Moon Lander
 entity.Lunar Rocket.name=Lunar-sized Rocket
 entity.Earth Landing System.name=Earth Landing System
+entity.Kirov Airship.name=Kirov Airship
 
 susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
 susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
