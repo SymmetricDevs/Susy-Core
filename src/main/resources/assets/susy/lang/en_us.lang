@@ -2112,6 +2112,7 @@ entity.Rocket.name=Soyuz FG Rocket
 entity.Lander.name=Moon Lander
 entity.Lunar Rocket.name=Lunar-sized Rocket
 entity.Earth Landing System.name=Earth Landing System
+entity.Kirov Airship.name=Kirov Airship
 
 susy.machine.large_railroad_engineering_station.name=Large Railroad Engineering Station
 susy.machine.large_railroad_engineering_station.description=A massive facility for constructing and maintaining railroad rolling stock
@@ -2803,6 +2804,10 @@ susy.machine.tank_valve.monel_400.name=Monel Tank Valve
 susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
 susy.machine.tank_valve.titanium.name=Titanium Tank Valve
 susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve
+
+#Vehicle blocks
+tile.kirov_block.hull.name=Kirov Hull
+tile.kirov_block.strut.name=Kirov Strut
 
 #creative stuff
 susy.creative.particle.type=Particle Type
