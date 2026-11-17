@@ -2805,6 +2805,10 @@ susy.machine.tank_valve.stainless_steel.name=Stainless Steel Tank Valve
 susy.machine.tank_valve.titanium.name=Titanium Tank Valve
 susy.machine.tank_valve.tungsten_steel.name=Tungstensteel Tank Valve
 
+#Vehicle blocks
+tile.kirov_block.hull.name=Kirov Hull
+tile.kirov_block.strut.name=Kirov Strut
+
 #creative stuff
 susy.creative.particle.type=Particle Type
 susy.creative.particle.energy=Energy

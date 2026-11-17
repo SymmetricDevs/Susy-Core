@@ -4,13 +4,13 @@
     "variant=hull": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+        "all": "gregtech:blocks/vehicles/kirov_hull"
       }
     },
     "variant=strut": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+        "all": "gregtech:blocks/vehicles/kirov_strut"
       }
     }
   }
