@@ -97,11 +97,11 @@ public class EntityKirov extends EntityFlying implements IAnimatable, IAlwaysRen
             float acceleration = 0.0F;
 
             if (this.leftInputDown) {
-                this.deltaRotation -= 1.0F;
+                this.deltaRotation -= 0.1F;
             }
 
             if (this.rightInputDown) {
-                this.deltaRotation += 1.0F;
+                this.deltaRotation += 0.1F;
             }
 
             if (this.ascendInputDown) {
