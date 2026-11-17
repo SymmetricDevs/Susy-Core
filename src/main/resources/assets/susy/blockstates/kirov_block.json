@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "variant=hull": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf17"
+      }
+    },
+    "variant=strut": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gregtech:blocks/bmrf_blocks/bmrf18"
+      }
+    }
+  }
+}
