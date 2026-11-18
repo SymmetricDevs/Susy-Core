@@ -1,23 +1,26 @@
 package supersymmetry.client.renderer.gun;
 
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
+import javax.vecmath.Point3f;
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.BufferUtils;
 
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
@@ -40,6 +43,8 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
 
     private static final String RIGHT_ARM_BONE = "rightarm_pos";
     private static final String LEFT_ARM_BONE = "leftarm_pos";
+    private static final String IDLE_VIEW_BONE = "idle_view";
+    private static final String SIGHT_VIEW_BONE = "sight_view";
 
     // rotation point of player arm
     private static final float ARM_PIVOT_X = 5f;
@@ -49,10 +54,11 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
     private static final float ARM_BOX_MIN_X_LEFT = -1f;
     private static final float ARM_BOX_MIN_Y = -2f;
     private static final float ARM_BOX_MIN_Z = -2f;
-    private static final float ITEM_CENTER = -0.5f;
 
     private static final GeoModelLoader MODEL_LOADER = new GeoModelLoader();
     private static final Map<MetaValueItem, GunModel> MODELS = new HashMap<>();
+    // created on demand so the class can be loaded (and its matrix maths tested) without LWJGL
+    private static FloatBuffer matrixBuffer;
 
     private GunItemStackRenderer() {}
 
@@ -101,14 +107,43 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         GlStateManager.popMatrix();
     }
 
-    public static Matrix4f firstPersonArmTransform(ItemStack stack, EnumHandSide side, EnumHandSide primary,
-                                                   float equipProgress) {
+    public static void renderFirstPerson(ItemStack stack, EnumHandSide primary, float equipProgress,
+                                         float partialTicks, float aimProgress) {
+        GunModel gun = getGun(stack);
+        if (gun == null) {
+            return;
+        }
+
+        Matrix4f pose = firstPersonPose(gun, equipProgress, aimProgress);
+        if (pose == null) {
+            return;
+        }
+
+        GlStateManager.pushMatrix();
+        multMatrix(pose);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(gun.texture);
+        INSTANCE.render(gun.getModel(), stack, partialTicks, 1, 1, 1, 1);
+        GlStateManager.popMatrix();
+    }
+
+    public static boolean hasViewNodes(ItemStack stack) {
+        GunModel gun = getGun(stack);
+        return gun != null && gun.hasViews();
+    }
+
+    public static Matrix4f firstPersonArmTransform(ItemStack stack, EnumHandSide side,
+                                                   float equipProgress, float aimProgress) {
         GunModel gun = getGun(stack);
         if (gun == null) {
             return null;
         }
 
-        Matrix4f target = gun.getArmTransform(side, primary, stack, equipProgress);
+        Matrix4f pose = firstPersonPose(gun, equipProgress, aimProgress);
+        if (pose == null) {
+            return null;
+        }
+
+        Matrix4f target = gun.getArmTransform(side, pose);
         if (target == null) {
             return null;
         }
@@ -117,6 +152,36 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         vanilla.invert();
         target.mul(vanilla);
         return target;
+    }
+
+    private static Matrix4f firstPersonPose(GunModel gun, float equipProgress,
+                                            float aimProgress) {
+        Matrix4f view = gun.getViewPose(aimProgress);
+        if (view == null) {
+            return null;
+        }
+
+        Matrix4f matrix = new Matrix4f();
+        matrix.setIdentity();
+
+        translate(matrix, 0, equipProgress * -0.6f, 0);
+
+        matrix.mul(view);
+        return matrix;
+    }
+
+    public static void multMatrix(Matrix4f matrix) {
+        if (matrixBuffer == null) {
+            matrixBuffer = BufferUtils.createFloatBuffer(16);
+        }
+        matrixBuffer.clear();
+        float[] column = new float[4];
+        for (int i = 0; i < 4; i++) {
+            matrix.getColumn(i, column);
+            matrixBuffer.put(column);
+        }
+        matrixBuffer.flip();
+        GlStateManager.multMatrix(matrixBuffer);
     }
 
     @Override
@@ -158,28 +223,41 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         return model;
     }
 
-    private static void collectArmMarkers(GeoBone bone, Matrix4f parent, Map<String, ArmMarker> markers) {
+    private static void collectNodes(GeoBone bone, Matrix4f parent, Map<String, ArmMarker> markers,
+                                     Map<String, ViewNode> views) {
         Matrix4f matrix = new Matrix4f(parent);
         transform(matrix, bone);
 
         if (!bone.childCubes.isEmpty()) {
             GeoCube cube = bone.childCubes.get(0);
             Matrix4f marker = new Matrix4f(matrix);
-            if (cube.pivot != null) {
-                translate(marker, cube.pivot.x / 16, cube.pivot.y / 16, cube.pivot.z / 16);
-            }
-            if (cube.rotation != null) {
-                rotate(marker, cube.rotation.x, cube.rotation.y, cube.rotation.z);
-            }
-            if (cube.pivot != null) {
-                translate(marker, -cube.pivot.x / 16, -cube.pivot.y / 16, -cube.pivot.z / 16);
-            }
+            transform(marker, cube);
             markers.put(bone.getName(), new ArmMarker(marker, cubeMin(cube)));
         }
 
-        for (GeoBone child : bone.childBones) {
-            collectArmMarkers(child, matrix, markers);
+        if (IDLE_VIEW_BONE.equals(bone.getName()) || SIGHT_VIEW_BONE.equals(bone.getName())) {
+            // The camera sits on the bone's pivot, looking where the bone points. A bone with no rotation
+            // points back up the -Z axis, which is away from the gun, so a node that has not been rotated
+            // is not usable as a view node; it still gives a position, so fall back to looking along +Z.
+            Vector3f position = nodePosition(matrix, bone);
+            Matrix3f rotation = new Matrix3f();
+            matrix.getRotationScale(rotation);
+            rotation.normalize();
+            boolean authored = !isIdentity(rotation);
+            views.put(bone.getName(), new ViewNode(position, authored ? rotation : forwardRotation(), authored));
         }
+
+        for (GeoBone child : bone.childBones) {
+            collectNodes(child, matrix, markers, views);
+        }
+    }
+
+    static Vector3f nodePosition(Matrix4f matrix, GeoBone bone) {
+        Point3f pivot = new Point3f(bone.rotationPointX / 16, bone.rotationPointY / 16,
+                bone.rotationPointZ / 16);
+        Point3f origin = new Point3f();
+        matrix.transform(pivot, origin);
+        return new Vector3f(origin.x, origin.y, origin.z);
     }
 
     // smallest corner of a cube
@@ -198,13 +276,28 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         return min;
     }
 
-    private static void transform(Matrix4f matrix, GeoBone bone) {
+    static void transform(Matrix4f matrix, GeoBone bone) {
         translate(matrix, -bone.getPositionX() / 16, bone.getPositionY() / 16, bone.getPositionZ() / 16);
         translate(matrix, bone.rotationPointX / 16, bone.rotationPointY / 16, bone.rotationPointZ / 16);
         rotate(matrix, bone.getRotationX(), bone.getRotationY(), bone.getRotationZ());
         scale(matrix, bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
         translate(matrix, -bone.rotationPointX / 16, -bone.rotationPointY / 16,
                 -bone.rotationPointZ / 16);
+    }
+
+    static void transform(Matrix4f matrix, GeoCube cube) {
+        if (cube.pivot != null) {
+            translate(matrix, cube.pivot.x / 16, cube.pivot.y / 16, cube.pivot.z / 16);
+        }
+        if (cube.rotation != null) {
+            // GeoCube rotations are already radians; only bone rotations are degrees in the model file
+            rotateZRadians(matrix, cube.rotation.z);
+            rotateYRadians(matrix, cube.rotation.y);
+            rotateXRadians(matrix, cube.rotation.x);
+        }
+        if (cube.pivot != null) {
+            translate(matrix, -cube.pivot.x / 16, -cube.pivot.y / 16, -cube.pivot.z / 16);
+        }
     }
 
     private static void rotate(Matrix4f matrix, float x, float y, float z) {
@@ -259,46 +352,41 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         matrix.mul(scale);
     }
 
-    private static Matrix4f itemPlacement(EnumHandSide primary, float equipProgress) {
-        float sideMult = primary == EnumHandSide.RIGHT ? 1f : -1f;
+    private static Matrix3f interpolate(Matrix3f from, Matrix3f to, float progress) {
+        Quat4f start = new Quat4f();
+        start.set(from);
+        Quat4f end = new Quat4f();
+        end.set(to);
+        if (start.x * end.x + start.y * end.y + start.z * end.z + start.w * end.w < 0) {
+            end.negate();
+        }
 
-        Matrix4f matrix = new Matrix4f();
-        matrix.setIdentity();
+        Quat4f mixed = new Quat4f();
+        mixed.interpolate(start, end, progress);
+        mixed.normalize();
 
-        translate(matrix, sideMult * 0.56f, -0.52f + equipProgress * -0.6f, -0.72f);
-        rotateY(matrix, sideMult * 45f);
-        rotateY(matrix, sideMult * -45f);
-        return matrix;
+        Matrix3f rotation = new Matrix3f();
+        rotation.set(mixed);
+        return rotation;
     }
 
-    private static Matrix4f displayTransform(ItemStack stack, EnumHandSide primary) {
-        Matrix4f matrix = new Matrix4f();
-        matrix.setIdentity();
-
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack);
-        if (model == null) {
-            return matrix;
+    private static boolean isIdentity(Matrix3f matrix) {
+        for (int column = 0; column < 3; column++) {
+            for (int row = 0; row < 3; row++) {
+                float expected = column == row ? 1f : 0f;
+                if (Math.abs(matrix.getElement(column, row) - expected) > 1.0e-6f) {
+                    return false;
+                }
+            }
         }
+        return true;
+    }
 
-        ItemCameraTransforms.TransformType type = primary == EnumHandSide.RIGHT ?
-                ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND :
-                ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
-        Pair<? extends IBakedModel, Matrix4f> perspective = model.handlePerspective(type);
-        if (perspective != null && perspective.getRight() != null) {
-            matrix.set(perspective.getRight());
-        }
-
-        if (primary != EnumHandSide.RIGHT) {
-            matrix.m01 = -matrix.m01;
-            matrix.m02 = -matrix.m02;
-            matrix.m03 = -matrix.m03;
-            matrix.m10 = -matrix.m10;
-            matrix.m20 = -matrix.m20;
-            matrix.m30 = -matrix.m30;
-        }
-
-        translate(matrix, ITEM_CENTER, ITEM_CENTER, ITEM_CENTER);
-        return matrix;
+    // camera basis that looks along +Z, the way gun models face in the model file
+    private static Matrix3f forwardRotation() {
+        Matrix3f rotation = new Matrix3f();
+        rotation.rotY((float) Math.PI);
+        return rotation;
     }
 
     private static final class GunModel {
@@ -309,6 +397,9 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
         private final float scale;
 
         private final Map<String, ArmMarker> armMarkers = new HashMap<>();
+
+        private ViewNode idleView;
+        private ViewNode sightView;
 
         private GeoModel model;
         private GeoBone gunBone;
@@ -327,10 +418,19 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
                     this.model = loadModel(this);
                     this.gunBone = this.model.getBone("gun").orElse(null);
                     this.armMarkers.clear();
+                    Map<String, ViewNode> views = new HashMap<>();
                     Matrix4f root = new Matrix4f();
                     root.setIdentity();
                     for (GeoBone bone : this.model.topLevelBones) {
-                        collectArmMarkers(bone, root, this.armMarkers);
+                        collectNodes(bone, root, this.armMarkers, views);
+                    }
+                    this.idleView = views.get(IDLE_VIEW_BONE);
+                    this.sightView = views.get(SIGHT_VIEW_BONE);
+                    if (this.idleView != null && !this.idleView.authored) {
+                        warnUnauthored(IDLE_VIEW_BONE);
+                    }
+                    if (this.sightView != null && !this.sightView.authored) {
+                        warnUnauthored(SIGHT_VIEW_BONE);
                     }
                 } catch (RuntimeException e) {
                     this.loadFailed = true;
@@ -344,24 +444,47 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
             return this.getModel() == null ? null : this.gunBone;
         }
 
-        private Matrix4f getArmTransform(EnumHandSide side, EnumHandSide primary, ItemStack stack, float equipProgress) {
-            if (this.getModel() == null || this.gunBone == null) {
+        private void warnUnauthored(String boneName) {
+            SusyLog.logger.warn(
+                    "Gun model {}: the {} bone has no rotation, so its camera has no direction. " +
+                            "In blockbench rotate that bone 180 degrees around Y so it looks down the barrel.",
+                    this.modelLocation, boneName);
+        }
+
+        private boolean hasViews() {
+            return this.getModel() != null && this.idleView != null;
+        }
+
+        /**
+         * Camera space transform for the model: the inverse of the view node, scaled down to the gun's display size.
+         * Aiming slides and turns the model between the two view nodes, so the camera ends up on the sight node.
+         */
+        private Matrix4f getViewPose(float aimProgress) {
+            if (!this.hasViews()) {
                 return null;
             }
 
+            float progress = MathHelper.clamp(aimProgress, 0f, 1f);
+            ViewNode target = this.sightView == null ? this.idleView : this.sightView;
+
+            Vector3f position = new Vector3f();
+            position.interpolate(this.idleView.position, target.position, progress);
+            Matrix3f rotation = target == this.idleView ? this.idleView.rotation :
+                    interpolate(this.idleView.rotation, target.rotation, progress);
+
+            // the scale only dollies the model around the eye, so the view stays the same either way
+            return viewPose(position, rotation, this.scale);
+        }
+
+        private Matrix4f getArmTransform(EnumHandSide side, Matrix4f pose) {
             ArmMarker marker = this.armMarkers.get(side == EnumHandSide.RIGHT ? RIGHT_ARM_BONE : LEFT_ARM_BONE);
             if (marker == null) {
                 return null;
             }
 
-            float sideMult = side == EnumHandSide.RIGHT ? 1f : -1f ;
+            float sideMult = side == EnumHandSide.RIGHT ? 1f : -1f;
 
-            // Everything the gun itself is drawn inside of, in the order ItemRenderer applies it.
-            Matrix4f matrix = itemPlacement(primary, equipProgress);
-            matrix.mul(displayTransform(stack, primary));
-            translate(matrix, this.gunBone.getPositionX(), this.gunBone.getPositionY(), this.gunBone.getPositionZ());
-            rotateY(matrix, this.yaw);
-            scale(matrix, this.scale, this.scale, this.scale);
+            Matrix4f matrix = new Matrix4f(pose);
             matrix.mul(marker.matrix);
             // The arm is drawn as a box around its rotation point, so it is moved by the difference between the
             // smallest corners of the arm box and of the marker cube. That puts the arm exactly on the marker,
@@ -370,6 +493,36 @@ public final class GunItemStackRenderer extends TileEntityItemStackRenderer impl
             translate(matrix, marker.min.x - armMinX, marker.min.y - ARM_BOX_MIN_Y / 16,
                     marker.min.z - ARM_BOX_MIN_Z / 16);
             return matrix;
+        }
+    }
+
+    // inverse of the camera frame (position and rotation) in model space, scaled to display size
+    private static Matrix4f viewPose(Vector3f position, Matrix3f rotation, float scale) {
+        Matrix3f inverse = new Matrix3f(rotation);
+        inverse.transpose();
+
+        Matrix4f pose = new Matrix4f();
+        pose.setIdentity();
+        pose.setRotation(inverse);
+
+        Vector3f offset = new Vector3f(-position.x, -position.y, -position.z);
+        inverse.transform(offset);
+        pose.setTranslation(offset);
+
+        scale(pose, scale, scale, scale);
+        return pose;
+    }
+
+    private static final class ViewNode {
+
+        private final Vector3f position;
+        private final Matrix3f rotation;
+        private final boolean authored;
+
+        private ViewNode(Vector3f position, Matrix3f rotation, boolean authored) {
+            this.position = position;
+            this.rotation = rotation;
+            this.authored = authored;
         }
     }
 

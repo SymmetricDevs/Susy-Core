@@ -55,6 +55,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final boolean integralMagazine;
     @Getter
     private final float recoilStrength;
+    @Getter
+    private double aimTime; // in ticks
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
@@ -62,12 +64,14 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public static final String NBT_CALIBER = "SuSyCaliber";
     public static final String NBT_MAGAZINE_SIZE = "SuSyMagazineSize";
 
+    public static final float IRON_SIGHT_ZOOM = 1.2f;
+
     private static final boolean DEBUG_TRAJECTORY = false;
 
     public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
                            int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber,
-                           boolean beltFed, boolean integralMagazine, float recoilStrength) {
+                           boolean beltFed, boolean integralMagazine, float recoilStrength, double aimTime) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -104,6 +108,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.beltFed = beltFed;
         this.integralMagazine = integralMagazine;
         this.recoilStrength = recoilStrength;
+        this.aimTime = aimTime;
     }
 
     public static void init() {}
@@ -403,7 +408,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                 "susy.gun.fire_mode." + fireModes.get(next).name().toLowerCase(Locale.ROOT)));
     }
 
-    // item behaviour
+    // item behavior
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
@@ -451,6 +456,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private boolean integralMagazine = false;
         private float recoilStrength = 0;
         private final List<GunFireMode> modes = new ArrayList<>();
+        private double aimTime = 0;
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
             this.muzzleVelocity = muzzleVelocity;
@@ -493,6 +499,11 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             return this;
         }
 
+        public Builder aimTime(double aimTime) {
+            this.aimTime = aimTime;
+            return this;
+        }
+
         public SuSyGunBehavior build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
@@ -500,7 +511,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             }
             return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
                     burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine,
-                    recoilStrength);
+                    recoilStrength, aimTime);
         }
     }
 

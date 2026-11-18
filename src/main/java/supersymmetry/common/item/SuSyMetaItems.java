@@ -112,7 +112,7 @@ public class SuSyMetaItems {
     public static MetaValueItem SEMI_AUTO_SHOTGUN; // SPAS-12, Benelli M4
     public static MetaValueItem ADVANCED_SMG; // MP5, Uzi
     public static MetaValueItem BASIC_ASSAULT_RIFLE; // AK-47, StG 44
-    public static MetaValueItem BASIC_SNIPER_RIFLE; // vaguely resembling L42A1 except in .338 Lapua Magnum
+    public static MetaValueItem BASIC_SNIPER_RIFLE; // M21, M40 or L42A1 except in .338 Lapua Magnum
 
     public static MetaValueItem HEAVY_PISTOL; // Desert Eagle
     public static MetaValueItem BASIC_DMR; // SVD-ish
@@ -330,8 +330,8 @@ public class SuSyMetaItems {
                 .addComponents(gun(270, 6, 6.5f, 4, CALIBER_11x24).modes(SEMI_AUTO).magazine(15, 100).setRecoil(0.09f)
                         .build());
         SEMI_AUTO_RIFLE = metaItem.addItem(110, "semi_auto_rifle").setMaxStackSize(1)
-                .addComponents(gun(850, 1, 12f, 25, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.4f).magazine(10, 100)
-                        .build());
+                .addComponents(gun(850, 1, 12f, 25, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.32f).magazine(10, 100)
+                        .aimTime(9).build());
         BASIC_SMG = metaItem.addItem(111, "basic_smg").setMaxStackSize(1)
                 .addComponents(gun(350, 6, 5f, 3, CALIBER_11x24).modes(FULL_AUTO, SEMI_AUTO).setRecoil(0.1f)
                         .magazine(30, 100).build());
