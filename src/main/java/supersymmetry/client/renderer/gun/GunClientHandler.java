@@ -141,7 +141,7 @@ public final class GunClientHandler {
         // The vanilla arm chain is replaced by the ones the model holds, so both arms are drawn with the gun.
         renderArm(mc, event, primary, aim);
         if (mc.player.getHeldItemOffhand().isEmpty()) {
-            renderArm(mc, event, primary, aim);
+            renderArm(mc, event, primary.opposite(), aim);
         }
     }
 
