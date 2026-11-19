@@ -78,7 +78,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
 
     protected BlockPattern createStructurePattern() {
         // May want to force the input to be underneath the pipe casings
-        return FactoryBlockPattern.start(FRONT, RIGHT, UP).aisle("S").aisle("P").setRepeatable(3, 7).aisle("F")
+        return FactoryBlockPattern.start(FRONT, RIGHT, UP).aisle("S").aisle("P").setRepeatable(3, 14).aisle("F")
                 .where('S', this.selfPredicate())
                 .where('P',
                         states(this.getFireboxCasingState())
