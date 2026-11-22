@@ -576,6 +576,38 @@ susy.gun.tooltip.bullet_type=Ammunition Type: %s
 susy.gun.tooltip.magazine.bullet_type=Ammunition Type: %s
 susy.gun.tooltip.magazine.caliber=Caliber: %s
 
+susy.key.attachments=Weapon attachments
+
+susy.gun.attachment.tooltip.slot=Fits: %s
+susy.gun.attachment.tooltip.damage=Damage: %+d%%
+susy.gun.attachment.tooltip.spread=Spread: %+d%%
+susy.gun.attachment.tooltip.recoil=Recoil: %+d%%
+susy.gun.attachment.tooltip.aim_time=Aim time: %+d%%
+susy.gun.attachment.tooltip.zoom=Zoom: %+d%%
+susy.gun.attachment.tooltip.deployed=While crouching:
+
+susy.gui.gun_attachments.title=Weapon Attachments
+susy.gui.gun_attachments.stats=Effective stats
+susy.gui.gun_attachments.slot.optics=Optics
+susy.gui.gun_attachments.slot.underside=Underside
+susy.gui.gun_attachments.slot.muzzle=Muzzle
+susy.gui.gun_attachments.slot.lateral=Lateral
+susy.gui.gun_attachments.slot.stock=Stock
+susy.gui.gun_attachments.stat.damage=Damage: %s
+susy.gui.gun_attachments.stat.spread=Spread: %s
+susy.gui.gun_attachments.stat.recoil=Recoil: %s
+susy.gui.gun_attachments.stat.aim_time=Aim time: %s
+susy.gui.gun_attachments.stat.zoom=Zoom: %s
+susy.gui.gun_attachments.stat.magazine=Magazine size: %s
+
+metaitem.red_dot.name=Red Dot Sight
+metaitem.scope.name=Rifle Scope
+metaitem.vertical_grip.name=Vertical Grip
+metaitem.suppressor.name=Suppressor
+metaitem.laser_sight.name=Laser Sight
+metaitem.heavy_stock.name=Heavy Stock
+metaitem.bipod.name=Bipod
+
 susy.machine.magnetic_refrigerator.name=Magnetic Refrigerator
 susy.multiblock.magnetic_refrigerator.min_temperature=§bTemperature Limit: %s
 

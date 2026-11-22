@@ -20,10 +20,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.cleanroommc.modularui.factory.PlayerInventoryGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+
+import dev.tianmi.sussypatches.api.item.IMui2Factory;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.items.gui.ItemUIFactory;
+import gregtech.api.items.gui.PlayerInventoryHolder;
 import gregtech.api.items.metaitem.stats.IItemBehaviour;
 import gregtech.api.items.metaitem.stats.IItemDurabilityManager;
 import lombok.Getter;
 import supersymmetry.api.guns.SuSyAmmoType;
+import supersymmetry.api.guns.attachment.AttachmentSlot;
+import supersymmetry.api.guns.attachment.AttachmentStats;
 import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
@@ -32,7 +43,7 @@ import supersymmetry.common.guns.bullettypes.IncendiaryBullet;
 import supersymmetry.common.guns.bullettypes.TracerBullet;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
+public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager, IMui2Factory, ItemUIFactory {
 
     private final double muzzleVelocity;
     private final double spread;
@@ -57,6 +68,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     private final float recoilStrength;
     @Getter
     private double aimTime; // in ticks
+    @Getter
+    private final Set<AttachmentSlot> attachmentSlots;
 
     private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
@@ -68,10 +81,11 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     private static final boolean DEBUG_TRAJECTORY = false;
 
-    public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
+    public SuSyGunBehaviour(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
                            int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber,
-                           boolean beltFed, boolean integralMagazine, float recoilStrength, double aimTime) {
+                           boolean beltFed, boolean integralMagazine, float recoilStrength, double aimTime,
+                           Set<AttachmentSlot> attachmentSlots) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
         }
@@ -109,6 +123,9 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         this.integralMagazine = integralMagazine;
         this.recoilStrength = recoilStrength;
         this.aimTime = aimTime;
+        Set<AttachmentSlot> slots = EnumSet.noneOf(AttachmentSlot.class);
+        slots.addAll(Objects.requireNonNull(attachmentSlots, "attachmentSlots"));
+        this.attachmentSlots = Collections.unmodifiableSet(slots);
     }
 
     public static void init() {}
@@ -123,6 +140,34 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
 
     private int burstDuration() {
         return (burstCount - 1) * burstIntervalTicks + 1;
+    }
+
+    // stats
+    public AttachmentStats getBaseStats() {
+        return new AttachmentStats(damage, spread, recoilStrength, aimTime, IRON_SIGHT_ZOOM, maxMagazineSize);
+    }
+
+    public boolean supportsAttachment(AttachmentSlot slot) {
+        return attachmentSlots.contains(slot);
+    }
+
+    public AttachmentStats getStats(ItemStack stack) {
+        return getStats(stack, false);
+    }
+
+    public AttachmentStats getStats(ItemStack stack, boolean crouching) {
+        return getBaseStats().apply(SuSyAttachmentData.getModifiers(stack, crouching));
+    }
+
+    /** Vanilla hitbox heights are 1.8 standing and 1.65 sneaking; a crawling player stays well below this */
+    private static final double CRAWLING_BOX_HEIGHT = 1.5;
+    /** Vanilla eye heights are 1.62 standing and 1.54 sneaking; a crawling player looks out from much lower */
+    private static final float CRAWLING_EYE_HEIGHT = 1.0f;
+
+    public static boolean isBraced(EntityPlayer player) {
+        if (player.isSneaking()) return true;
+        double boxHeight = player.getEntityBoundingBox().maxY - player.getEntityBoundingBox().minY;
+        return boxHeight < CRAWLING_BOX_HEIGHT || player.getEyeHeight() < CRAWLING_EYE_HEIGHT;
     }
 
     // magazine
@@ -153,7 +198,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         unload(player, gun);
         if (!magazine.hasTagCompound()) return;
         NBTTagCompound magTag = magazine.getTagCompound();
-        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        SuSyGunBehaviour gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
         if (!gunBehavior.isIntegralMagazine()) {
             if (!magTag.hasKey(NBT_AMMO) || !magTag.hasKey(NBT_AMMO_TYPE) || !magTag.hasKey(NBT_CALIBER)) return;
             if (GunMagazineBehavior.getMagBehavior(magazine) == null) return;
@@ -185,7 +230,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     public void unload(EntityPlayer player, ItemStack gun) {
         if (!gun.hasTagCompound()) return;
         NBTTagCompound gunTag = gun.getTagCompound();
-        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        SuSyGunBehaviour gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
         if (gunBehavior == null) return;
         if (!gunBehavior.isIntegralMagazine()) {
             if (!gunTag.hasKey(NBT_AMMO) || !gunTag.hasKey(NBT_AMMO_TYPE) || !gunTag.hasKey(NBT_MAGAZINE_SIZE)) return;
@@ -246,7 +291,8 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     }
 
     /// Fires a single bullet from the specified position
-    public void fire(World world, Entity shooter, Vec3d firePos, double yaw, double pitch, SuSyAmmoType ammoType) {
+    public void fire(World world, Entity shooter, Vec3d firePos, double yaw, double pitch, SuSyAmmoType ammoType,
+                     float damage) {
         if (world.isRemote) return;
         Vec3d currentPos = firePos;
         Vec3d oldPos = currentPos;
@@ -299,7 +345,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
                                 for (EntityLivingBase elb : hitEntities) {
                                     ammoType.onEntityHit(world, elb, entityRTR.hitVec);
                                     elb.attackEntityFrom(SuSyDamageSources.BULLET,
-                                            (float) (this.damage * ammoType.damageMultiplier));
+                                            (float) (damage * ammoType.damageMultiplier));
                                 }
 
                             } else {
@@ -325,6 +371,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         SuSyAmmoType ammoType = getCurrentAmmoType(stack);
         if (ammoType == null)
             ammoType = FULL_METAL_JACKET;
+        AttachmentStats stats = getStats(stack, isBraced(player));
 
         double yaw = player.rotationYaw % 360;
 
@@ -361,14 +408,15 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         }
 
         for (int i = 0; i < ammoType.numPellets; i++) {
-            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 *
+            double yawOffset = Math.clamp(random.nextGaussian(), -2, 2) * stats.getSpread() / 2 *
                     Math.max(0.1, 1 + spreadModifier);
-            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * spread / 2 *
+            double pitchOffset = Math.clamp(random.nextGaussian(), -2, 2) * stats.getSpread() / 2 *
                     Math.max(0.1, 1 + spreadModifier);
 
             fire(player.getEntityWorld(), player,
                     new Vec3d(player.posX + handXOffset, player.posY + 1.45, player.posZ + handZOffset),
-                    player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType);
+                    player.rotationYaw + yawOffset, player.rotationPitch + pitchOffset, ammoType,
+                    stats.getDamage());
         }
     }
 
@@ -417,8 +465,22 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
     }
 
     @Override
+    public ModularPanel buildUI(PlayerInventoryGuiData guiData, PanelSyncManager syncManager, UISettings settings) {
+        ItemStack stack = guiData.getUsedItemStack();
+        // the stats follow the slots: the supplier is read again whenever the screen refreshes them
+        return SuSyAttachmentUI.builder(stack, () -> getStats(stack), syncManager)
+                .changeable(attachmentSlots)
+                .build();
+    }
+
+    @Override
+    public ModularUI createUI(PlayerInventoryHolder holder, EntityPlayer entityPlayer) {
+        return null;
+    }
+
+    @Override
     public void addInformation(ItemStack itemStack, List<String> lines) {
-        lines.add(I18n.format("susy.gun.tooltip.damage", damage));
+        lines.add(I18n.format("susy.gun.tooltip.damage", getStats(itemStack).getDamage()));
         lines.add(I18n.format("susy.gun.tooltip.caliber", I18n.format("susy.caliber." + caliber)));
         if (itemStack.hasTagCompound()) {
             NBTTagCompound tag = itemStack.getTagCompound();
@@ -457,6 +519,7 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
         private float recoilStrength = 0;
         private final List<GunFireMode> modes = new ArrayList<>();
         private double aimTime = 0;
+        private final Set<AttachmentSlot> attachmentSlots = EnumSet.allOf(AttachmentSlot.class);
 
         private Builder(double muzzleVelocity, double spread, float damage, int cooldownTicks, String caliber) {
             this.muzzleVelocity = muzzleVelocity;
@@ -504,14 +567,23 @@ public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager {
             return this;
         }
 
-        public SuSyGunBehavior build() {
+        // attachment
+        public Builder attachments(AttachmentSlot... slots) {
+            this.attachmentSlots.clear();
+            for (AttachmentSlot slot : slots) {
+                this.attachmentSlots.add(Objects.requireNonNull(slot, "slot"));
+            }
+            return this;
+        }
+
+        public SuSyGunBehaviour build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
-            return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
+            return new SuSyGunBehaviour(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
                     burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine,
-                    recoilStrength, aimTime);
+                    recoilStrength, aimTime, attachmentSlots);
         }
     }
 

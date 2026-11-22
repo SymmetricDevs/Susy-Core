@@ -1,7 +1,7 @@
 package supersymmetry.common.item.behavior;
 
 import static supersymmetry.common.item.SuSyMetaItems.*;
-import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
+import static supersymmetry.common.item.behavior.SuSyGunBehaviour.*;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class GunMagazineBehavior implements IItemBehaviour, IItemDurabilityManag
     /// with an NBT_CALIBER tag matching the gun if the gun has an integral magazine.
     @Nullable public static ItemStack findValidMagazine(EntityPlayer player, ItemStack gun) {
         if (gun.getItem() instanceof MetaItem metaItem) {
-            if (metaItem.getBehaviours(gun).getFirst() instanceof SuSyGunBehavior gunBehavior) {
+            if (metaItem.getBehaviours(gun).getFirst() instanceof SuSyGunBehaviour gunBehavior) {
                 int maxMagSize = gunBehavior.getMaxMagazineSize();
                 String caliber = gunBehavior.getCaliber();
                 if (!gunBehavior.isIntegralMagazine()) {

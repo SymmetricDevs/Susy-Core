@@ -2,7 +2,7 @@ package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 import static supersymmetry.common.item.behavior.GunFireMode.*;
-import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
+import static supersymmetry.common.item.behavior.SuSyGunBehaviour.*;
 import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 
@@ -34,6 +34,8 @@ import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 import gregtech.common.items.behaviors.TooltipBehavior;
 import supersymmetry.SuSyValues;
+import supersymmetry.api.guns.attachment.AttachmentSlot;
+import supersymmetry.api.guns.attachment.AttachmentStats;
 import supersymmetry.api.unification.ore.SusyOrePrefix;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.item.armor.SuSyMetaArmor;
@@ -139,6 +141,15 @@ public class SuSyMetaItems {
     public static MetaValueItem MAGAZINE_30;
     public static MetaValueItem MAGAZINE_50;
     public static MetaValueItem BELT_200;
+
+    // 300-306: gun attachments
+    public static MetaValueItem RED_DOT;
+    public static MetaValueItem SCOPE;
+    public static MetaValueItem VERTICAL_GRIP;
+    public static MetaValueItem SUPPRESSOR;
+    public static MetaValueItem LASER_SIGHT;
+    public static MetaValueItem HEAVY_STOCK;
+    public static MetaValueItem BIPOD;
 
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
@@ -301,7 +312,8 @@ public class SuSyMetaItems {
         // 100-200: guns
         FLINTLOCK_PISTOL = metaItem.addItem(100, "flintlock_pistol").setMaxStackSize(1)
                 .addComponents(gun(100, 20, 6f, 1, CALIBER_PAPER_CARTRIDGE).magazine(1, 400)
-                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.2f).build());
+                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.2f).attachments(SIDEARM_SLOTS)
+                        .build());
         MUSKET = metaItem.addItem(101, "musket").setMaxStackSize(1)
                 .addComponents(gun(200, 12, 9f, 1, CALIBER_PAPER_CARTRIDGE).magazine(1, 600)
                         .integralMagazine().modes(BOLT_ACTION).setRecoil(0.5f).build());
@@ -310,7 +322,7 @@ public class SuSyMetaItems {
                         .integralMagazine().modes(BOLT_ACTION).setRecoil(0.7f).build());
         REVOLVER = metaItem.addItem(103, "revolver").setMaxStackSize(1)
                 .addComponents(gun(180, 15, 5f, 6, CALIBER_11x24_BP).magazine(6, 300).integralMagazine()
-                        .modes(SEMI_AUTO).setRecoil(0.15f).build());
+                        .modes(SEMI_AUTO).setRecoil(0.15f).attachments(SIDEARM_SLOTS).build());
         BREECHLOADING_RIFLE = metaItem.addItem(104, "breechloading_rifle").setMaxStackSize(1)
                 .addComponents(gun(370, 5, 10f, 1, CALIBER_13x45_BP).magazine(1, 200).integralMagazine()
                         .modes(BOLT_ACTION).setRecoil(0.3f).build());
@@ -319,7 +331,8 @@ public class SuSyMetaItems {
                         .integralMagazine().modes(BOLT_ACTION).setRecoil(0.4f).build());
         BASIC_PISTOL = metaItem.addItem(106, "basic_pistol").setMaxStackSize(1)
                 .addComponents(
-                        gun(250, 9, 6f, 5, CALIBER_11x24).modes(SEMI_AUTO).magazine(10, 5).setRecoil(0.1f).build());
+                        gun(250, 9, 6f, 5, CALIBER_11x24).modes(SEMI_AUTO).magazine(10, 5).setRecoil(0.1f)
+                                .attachments(SIDEARM_SLOTS).build());
         BOLT_ACTION_RIFLE = metaItem.addItem(107, "bolt_action_rifle").setMaxStackSize(1)
                 .addComponents(gun(850, 1, 12f, 50, CALIBER_7_5x55).magazine(5, 200).setRecoil(0.4f).modes(BOLT_ACTION)
                         .build());
@@ -328,7 +341,7 @@ public class SuSyMetaItems {
                         .modes(BOLT_ACTION).build());
         IMPROVED_PISTOL = metaItem.addItem(109, "improved_pistol").setMaxStackSize(1)
                 .addComponents(gun(270, 6, 6.5f, 4, CALIBER_11x24).modes(SEMI_AUTO).magazine(15, 100).setRecoil(0.09f)
-                        .build());
+                        .attachments(SIDEARM_SLOTS).build());
         SEMI_AUTO_RIFLE = metaItem.addItem(110, "semi_auto_rifle").setMaxStackSize(1)
                 .addComponents(gun(850, 1, 12f, 25, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.32f).magazine(10, 100)
                         .aimTime(9).build());
@@ -337,7 +350,8 @@ public class SuSyMetaItems {
                         .magazine(30, 100).build());
         ADVANCED_PISTOL = metaItem.addItem(112, "advanced_pistol").setMaxStackSize(1)
                 .addComponents(
-                        gun(300, 4, 7f, 4, CALIBER_5_5x30).magazine(30, 60).setRecoil(0.05f).modes(SEMI_AUTO).build());
+                        gun(300, 4, 7f, 4, CALIBER_5_5x30).magazine(30, 60).setRecoil(0.05f).modes(SEMI_AUTO)
+                                .attachments(SIDEARM_SLOTS).build());
         AUTOMATIC_BATTLE_RIFLE = metaItem.addItem(113, "automatic_battle_rifle").setMaxStackSize(1)
                 .addComponents(gun(850, 1.5, 12f, 2, CALIBER_7_5x55).modes(FULL_AUTO, SEMI_AUTO)
                         .magazine(30, 100).setRecoil(0.35f).build());
@@ -355,7 +369,8 @@ public class SuSyMetaItems {
                         .magazine(5, 100).build());
         HEAVY_PISTOL = metaItem.addItem(118, "heavy_pistol").setMaxStackSize(1)
                 .addComponents(
-                        gun(500, 3, 12f, 5, CALIBER_13x30).modes(SEMI_AUTO).setRecoil(0.4f).magazine(15, 100).build());
+                        gun(500, 3, 12f, 5, CALIBER_13x30).modes(SEMI_AUTO).setRecoil(0.4f).magazine(15, 100)
+                                .attachments(SIDEARM_SLOTS).build());
         BASIC_DMR = metaItem.addItem(119, "basic_dmr").setMaxStackSize(1)
                 .addComponents(gun(850, 0.7, 22f, 15, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.4f).magazine(20, 100)
                         .build());
@@ -418,7 +433,37 @@ public class SuSyMetaItems {
         // 207-214: reserved for bigger belts
         PAPER_CARTRIDGE = metaItem.addItem(215, "paper_cartridge");
         GUNPOWDER_CARTRIDGE = metaItem.addItem(216, "gunpowder_cartridge").addComponents(new BulletTooltipBehavior());
+
+        // 300-306: gun attachments
+        // TODO: suppressors do not change the firing sound yet
+        RED_DOT = metaItem.addItem(300, "red_dot").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.TOP,
+                        new AttachmentStats.Modifiers(1f, 0.97f, 1f, 0.8f, 1.1f)));
+        SCOPE = metaItem.addItem(301, "scope").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.TOP,
+                        new AttachmentStats.Modifiers(1f, 0.9f, 1f, 1.5f, 3f)));
+        VERTICAL_GRIP = metaItem.addItem(302, "vertical_grip").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.UNDERSIDE,
+                        new AttachmentStats.Modifiers(1f, 0.8f, 0.75f, 1f, 1f)));
+        SUPPRESSOR = metaItem.addItem(303, "suppressor").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.MUZZLE,
+                        new AttachmentStats.Modifiers(0.9f, 0.95f, 0.9f, 1f, 1f)));
+        LASER_SIGHT = metaItem.addItem(304, "laser_sight").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.LATERAL,
+                        new AttachmentStats.Modifiers(1f, 0.85f, 1f, 1f, 1f)));
+        HEAVY_STOCK = metaItem.addItem(305, "heavy_stock").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.STOCK,
+                        new AttachmentStats.Modifiers(1f, 0.85f, 0.6f, 0.9f, 1f)));
+        BIPOD = metaItem.addItem(306, "bipod").setMaxStackSize(1)
+                .addComponents(new SuSyAttachmentBehaviour(AttachmentSlot.UNDERSIDE,
+                        AttachmentStats.Modifiers.NONE,
+                        // a bipod is only braced while crouching, so these only count then
+                        new AttachmentStats.Modifiers(1f, 0.6f, 0.4f, 0.8f, 1f)));
     }
+
+    /** Slots a sidearm takes: everything but a stock, which is what the screen crosses out on pistols. */
+    private static final AttachmentSlot[] SIDEARM_SLOTS = { AttachmentSlot.TOP, AttachmentSlot.UNDERSIDE,
+            AttachmentSlot.MUZZLE, AttachmentSlot.LATERAL };
 
     private static void addExtraBehaviours() {
         MetaItems.SPRAY_SOLVENT.addComponents(new PipeNetPainterBehavior(1024, SPRAY_EMPTY.getStackForm(), -1));
@@ -436,7 +481,7 @@ public class SuSyMetaItems {
         }
     }
 
-    public static SuSyGunBehavior getGunBehaviour(ItemStack stack) {
+    public static SuSyGunBehaviour getGunBehaviour(ItemStack stack) {
         if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof MetaItem)) {
             return null;
         }
@@ -445,8 +490,8 @@ public class SuSyMetaItems {
             return null;
         }
         for (IItemBehaviour behaviour : valueItem.getBehaviours()) {
-            if (behaviour instanceof SuSyGunBehavior) {
-                return (SuSyGunBehavior) behaviour;
+            if (behaviour instanceof SuSyGunBehaviour) {
+                return (SuSyGunBehaviour) behaviour;
             }
         }
         return null;

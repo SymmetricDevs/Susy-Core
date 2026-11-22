@@ -1,6 +1,6 @@
 package supersymmetry.client.renderer.gun;
 
-import static supersymmetry.common.item.behavior.SuSyGunBehavior.IRON_SIGHT_ZOOM;
+import static supersymmetry.common.item.behavior.SuSyGunBehaviour.IRON_SIGHT_ZOOM;
 
 import java.util.Objects;
 
@@ -24,9 +24,10 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
+import supersymmetry.api.guns.attachment.AttachmentStats;
 import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.item.behavior.SuSyGunBehavior;
+import supersymmetry.common.item.behavior.SuSyGunBehaviour;
 import supersymmetry.common.network.CPacketGunInput;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
@@ -36,6 +37,9 @@ public final class GunClientHandler {
 
     private static float aimProgress = 0f;
     private static float lastAimProgress = 0f;
+    private static float aimZoom = IRON_SIGHT_ZOOM;
+    /** Below this the projection breaks up, so no sight is allowed to narrow the view any further. */
+    private static final float MIN_FOV = 1f;
 
     private GunClientHandler() {}
 
@@ -55,6 +59,7 @@ public final class GunClientHandler {
         boolean unloadPressed = SuSyKeyBind.UNLOAD_GUN.isPressed();
         boolean reloadPressed = SuSyKeyBind.RELOAD_GUN.isPressed();
         boolean cyclePressed = SuSyKeyBind.CYCLE_FIRE_MODE.isPressed();
+        boolean attachmentsPressed = SuSyKeyBind.OPEN_ATTACHMENTS.isPressed();
 
         EnumHand hand = findGunHand(player);
 
@@ -72,12 +77,13 @@ public final class GunClientHandler {
         boolean unload = inputAllowed && unloadPressed;
         boolean reload = inputAllowed && reloadPressed;
         boolean cycleMode = inputAllowed && cyclePressed;
+        boolean openAttachments = inputAllowed && attachmentsPressed;
 
         InputState current = new InputState(trigger, aim, unload, hand);
-        boolean pulse = reload || cycleMode || unload;
+        boolean pulse = reload || cycleMode || unload || openAttachments;
 
         if (pulse || !current.equals(lastState)) {
-            GregTechAPI.networkHandler.sendToServer(new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand));
+            GregTechAPI.networkHandler.sendToServer(new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand, openAttachments));
             lastState = current;
         }
 
@@ -87,8 +93,10 @@ public final class GunClientHandler {
     private static void updateAim(ItemStack stack, boolean aiming) {
         lastAimProgress = aimProgress;
 
-        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
-        double aimTicks = gun == null ? 0 : gun.getAimTime();
+        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
+        AttachmentStats stats = gun == null ? null : gun.getStats(stack);
+        double aimTicks = stats == null ? 0 : stats.getAimTime();
+        aimZoom = stats == null ? IRON_SIGHT_ZOOM : stats.getZoom();
         float step = aimTicks > 0 ? (float) (1.0 / aimTicks) : 1f;
 
         if (aiming) {
@@ -101,6 +109,7 @@ public final class GunClientHandler {
     private static void resetAim() {
         aimProgress = 0f;
         lastAimProgress = 0f;
+        aimZoom = IRON_SIGHT_ZOOM;
     }
 
     private static float renderAimProgress(float partialTicks) {
@@ -189,14 +198,15 @@ public final class GunClientHandler {
     @SubscribeEvent
     public static void onFOVModifier(EntityViewRenderEvent.FOVModifier event) {
         float progress = renderAimProgress((float) event.getRenderPartialTicks());
-        event.setFOV(event.getFOV() * (1 - (IRON_SIGHT_ZOOM - 1) * progress));
+        float zoom = 1f + (aimZoom - 1f) * progress;
+        event.setFOV((float) Math.max(event.getFOV() / zoom, MIN_FOV));
     }
 
     private static void releaseIfNeeded() {
         if (lastState == null)
             return;
         GregTechAPI.networkHandler.sendToServer(
-                new CPacketGunInput(false, false, false, false, false, lastState.hand));
+                new CPacketGunInput(false, false, false, false, false, lastState.hand, false));
         lastState = null;
     }
 

@@ -13,12 +13,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import dev.tianmi.sussypatches.api.mui2.factory.MetaItemGuiFactory;
 import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.GunFireMode;
 import supersymmetry.common.item.behavior.GunMagazineBehavior;
-import supersymmetry.common.item.behavior.SuSyGunBehavior;
+import supersymmetry.common.item.behavior.SuSyGunBehaviour;
 import supersymmetry.common.network.SPacketGunRecoil;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -29,17 +30,23 @@ public final class GunServerHandler {
     private GunServerHandler() {}
 
     public static void onInput(EntityPlayerMP player, boolean trigger, boolean aim, boolean reload,
-                               boolean cycleMode, boolean unload, EnumHand hand) {
+                               boolean cycleMode, boolean unload, boolean openAttachments, EnumHand hand) {
         if (player == null || !player.isEntityAlive() || player.isSpectator()) {
             return;
         }
 
         UUID id = player.getUniqueID();
         ItemStack stack = player.getHeldItem(hand);
-        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
+        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
 
         if (gun == null) {
             playerStates.remove(id);
+            return;
+        }
+
+        // opening the attachment screen is a one-off action
+        if (openAttachments) {
+            MetaItemGuiFactory.openFromHand(player, hand);
             return;
         }
 
@@ -93,7 +100,7 @@ public final class GunServerHandler {
         }
 
         ItemStack stack = player.getHeldItem(state.hand);
-        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
+        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
         if (gun == null) {
             playerStates.remove(player.getUniqueID());
             return;
@@ -123,7 +130,8 @@ public final class GunServerHandler {
 
         if (state.recoilTick == 1) {
             Random random = player.getRNG();
-            float recoil = gun.getRecoilStrength() * (random.nextFloat() / 2f + 0.75f);
+            float recoil = gun.getStats(stack, SuSyGunBehaviour.isBraced(player)).getRecoil() *
+                    (random.nextFloat() / 2f + 0.75f);
             state.recoil = recoil;
             GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil * 10, true), player);
             state.recoilTick = 2;
@@ -188,7 +196,7 @@ public final class GunServerHandler {
         }
     }
 
-    private static boolean shoot(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
+    private static boolean shoot(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
         if (!gun.consumeRound(stack)) {
             return false;
         }
@@ -197,7 +205,7 @@ public final class GunServerHandler {
         return true;
     }
 
-    private static void startReload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
+    private static void startReload(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
         if (gun.getReloadTicks() <= 0) {
             ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
             if (mag != null) {
@@ -217,7 +225,7 @@ public final class GunServerHandler {
         }
     }
 
-    private static void startUnload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
+    private static void startUnload(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
         if (gun.getReloadTicks() <= 0) {
             gun.unload(player, stack);
             return;
