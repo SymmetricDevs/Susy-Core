@@ -33,7 +33,8 @@ public class SuSyLateMixinLoader implements ILateMixinLoader {
             "gcym",
             "opencomputers",
             "gcym",
-            "immersiverailroading");
+            "immersiverailroading",
+            "rftools");
 
     @Override
     public List<String> getMixinConfigs() {
