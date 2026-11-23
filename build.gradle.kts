@@ -145,6 +145,8 @@ dependencies {
 
     //DO NOT PUSH THIS SHIT TO GIT
     //implementation(deps.techguns.deobf())
+    // Optional client mixin target: compile-only, never bundled and never a runtime dependency
+    compileOnly(deps.techguns.deobf())
 
     // Ladylib
     compileOnly("com.github.Ladysnake:Ladylib:2.3.0")
