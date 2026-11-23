@@ -143,9 +143,10 @@ dependencies {
     //temporary dep, will replace once we have our own missiles
     implementation(deps.icbm.deobf())
 
+    // TechGuns
     //DO NOT PUSH THIS SHIT TO GIT
     //implementation(deps.techguns.deobf())
-    // Optional client mixin target: compile-only, never bundled and never a runtime dependency
+    //This is probably ok :3c
     compileOnly(deps.techguns.deobf())
 
     // Ladylib
