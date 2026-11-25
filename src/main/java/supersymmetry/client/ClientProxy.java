@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -67,6 +68,7 @@ import software.bernie.geckolib3.GeckoLib;
 import supersymmetry.SuSyValues;
 import supersymmetry.Supersymmetry;
 import supersymmetry.SusyConfig;
+import supersymmetry.api.SusyLog;
 import supersymmetry.api.items.CargoItemStackHandler;
 import supersymmetry.api.recipes.catalysts.CatalystGroup;
 import supersymmetry.api.recipes.catalysts.CatalystInfo;
@@ -86,6 +88,7 @@ import supersymmetry.common.blocks.SheetedFrameItemBlock;
 import supersymmetry.common.blocks.SuSyBlocks;
 import supersymmetry.common.blocks.SuSyMetaBlocks;
 import supersymmetry.common.entities.EntityAbstractRocket;
+import supersymmetry.common.item.ItemToolbelt;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.armor.AdvancedBreathingApparatus;
 import supersymmetry.common.item.armor.SpaceSuit;
@@ -102,6 +105,8 @@ public class ClientProxy extends CommonProxy {
 
     public static int titleRenderTimer = -1;
     private static final int TITLE_RENDER_LENGTH = 150;
+    private static final ModelResourceLocation TOOLBELT_MODEL = new ModelResourceLocation("susy:toolbelt",
+            "inventory");
 
     @Override
     public void preLoad() {
@@ -121,6 +126,12 @@ public class ClientProxy extends CommonProxy {
     public void load() {
         super.load();
         SuSyMetaBlocks.registerColors();
+        if (ItemToolbelt.TOOLBELT != null) {
+            net.minecraft.client.Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
+                    (stack, tint) -> ItemToolbelt.TOOLBELT.getColor(stack, tint), ItemToolbelt.TOOLBELT);
+        }
+        MinecraftForge.EVENT_BUS.register(new ToolbeltInputHandler());
+        MinecraftForge.EVENT_BUS.register(new ToolbeltHudRenderer());
         SuSyFluidTooltipLoader.registerTooltips();
         MinecraftForge.EVENT_BUS.register(DustFogRenderer.class);
     }
@@ -225,6 +236,15 @@ public class ClientProxy extends CommonProxy {
     public static void registerModels(@NotNull ModelRegistryEvent event) {
         SuSyBlocks.registerItemModels();
         SuSyMetaBlocks.registerItemModels();
+
+        if (ItemToolbelt.TOOLBELT != null) {
+            // A mesh definition, not a (item, 0) location: the belt forwards metadata and max damage
+            // to the selected tool, so a per-metadata lookup would miss whenever that tool has none
+            // (a spray can reports max damage 0 and its own metadata), and the belt would fall back
+            // to the missing model. The mesh definition pins the belt to one model regardless.
+            ModelLoader.setCustomMeshDefinition(ItemToolbelt.TOOLBELT, stack -> TOOLBELT_MODEL);
+            ModelBakery.registerItemVariants(ItemToolbelt.TOOLBELT, TOOLBELT_MODEL);
+        }
     }
 
     @SubscribeEvent
@@ -234,6 +254,15 @@ public class ClientProxy extends CommonProxy {
         bakeEntityModel(registry, "models/entity/icbm.obj", SuSyValues.modelICBM);
         bakeEntityModel(registry, "models/entity/lunar_rocket.obj", SuSyValues.modelLunarRocket);
         bakeEntityModel(registry, "models/entity/earth_landing_system.obj", SuSyValues.modelEarthLandingSystem);
+
+        ModelResourceLocation toolbeltLocation = TOOLBELT_MODEL;
+        IBakedModel toolbeltModel = registry.getObject(toolbeltLocation);
+        if (toolbeltModel != null) {
+            registry.putObject(toolbeltLocation, new supersymmetry.client.renderer.ToolbeltRenderer(toolbeltModel));
+        } else {
+            SusyLog.logger.error("Toolbelt model {} was not baked; the belt will render as the missing model",
+                    toolbeltLocation);
+        }
     }
 
     private static void bakeEntityModel(IRegistry<ModelResourceLocation, IBakedModel> registry, String path,

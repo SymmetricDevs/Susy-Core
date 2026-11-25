@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "susy:items/tools/toolbelt_belt",
+    "layer1": "susy:items/tools/toolbelt_loops"
+  }
+}
