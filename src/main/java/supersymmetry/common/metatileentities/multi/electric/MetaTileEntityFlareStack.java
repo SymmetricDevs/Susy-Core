@@ -112,7 +112,7 @@ public class MetaTileEntityFlareStack extends VoidingMultiblockBase {
         EnumFacing relativeUp = UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
 
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(getPos().offset(relativeUp, height - 2));
-        for (; height < 10; height++) {
+        for (; height < 16; height++) {
             if (isBlockMuffler(world, pos.move(relativeUp)))
                 break;
         }
