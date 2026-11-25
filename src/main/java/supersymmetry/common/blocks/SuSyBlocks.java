@@ -52,6 +52,7 @@ import supersymmetry.common.blocks.active.BlockInvertedActiveSinteringBrick;
 import supersymmetry.common.blocks.active.BlockInvertedActiveWireCoil;
 import supersymmetry.common.blocks.bmrf.*;
 import supersymmetry.common.blocks.rocketry.*;
+import supersymmetry.common.blocks.vehicles.BlockKirovInterior;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.tileentities.SuSyTileEntities;
 
@@ -199,6 +200,9 @@ public class SuSyBlocks {
     public static BlockLunarConcrete LUNAR_CONCRETE;
     public static BlockSuSyMultiblockCasing2 MULTIBLOCK_CASING_2;
     public static BlockAirlockDoor AIRLOCK_DOOR;
+
+    public static BlockKirovInterior KIROV_INTERIOR;
+
     public static ArrayList<VariantBlock<?>> susyBlocks;
 
     public static void init() {
