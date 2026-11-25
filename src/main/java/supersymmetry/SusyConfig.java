@@ -35,7 +35,8 @@ public class SusyConfig {
     @Config.RequiresMcRestart
     public static boolean enableMissingModelGen = false;
 
-    // Remove this with Techguns. Techguns particle culling distance. This is a client-side only config, but it is stored in the server config file.        
+    // Remove this with Techguns. Techguns particle culling distance. This is a client-side only config, but it is
+    // stored in the server config file.
     @Config.Comment({
             "Distance in blocks beyond which Techguns' client-side particles are not drawn.",
             "Techguns draws its whole particle list every frame without distance culling, and its trail effects keep",
