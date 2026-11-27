@@ -1,6 +1,6 @@
 package supersymmetry.client.renderer.gun;
 
-import static supersymmetry.common.item.behavior.SuSyGunBehaviour.IRON_SIGHT_ZOOM;
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.IRON_SIGHT_ZOOM;
 
 import java.util.Objects;
 
@@ -9,6 +9,8 @@ import javax.vecmath.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -27,7 +29,7 @@ import supersymmetry.Supersymmetry;
 import supersymmetry.api.guns.attachment.AttachmentStats;
 import supersymmetry.api.input.SuSyKeyBind;
 import supersymmetry.common.item.SuSyMetaItems;
-import supersymmetry.common.item.behavior.SuSyGunBehaviour;
+import supersymmetry.common.item.behavior.SuSyGunBehavior;
 import supersymmetry.common.network.CPacketGunInput;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID, value = Side.CLIENT)
@@ -38,8 +40,16 @@ public final class GunClientHandler {
     private static float aimProgress = 0f;
     private static float lastAimProgress = 0f;
     private static float aimZoom = IRON_SIGHT_ZOOM;
-    /** Below this the projection breaks up, so no sight is allowed to narrow the view any further. */
+    // below this the projection breaks
     private static final float MIN_FOV = 1f;
+
+    private static final GunAnimationPlayer animation = new GunAnimationPlayer();
+
+    // the gun that was held on the previous tick, so a switch can start the draw animation immediately
+    private static EnumHand lastGunHand;
+    private static int lastGunSlot = Integer.MIN_VALUE;
+    private static Item lastGunItem;
+    private static int lastGunMeta;
 
     private GunClientHandler() {}
 
@@ -53,6 +63,8 @@ public final class GunClientHandler {
         if (player == null || mc.world == null) {
             lastState = null;
             resetAim();
+            animation.reset();
+            forgetHeldGun();
             return;
         }
 
@@ -66,13 +78,20 @@ public final class GunClientHandler {
         if (hand == null) {
             releaseIfNeeded();
             resetAim();
+            animation.reset();
+            forgetHeldGun();
             return;
         }
 
+        startEquipIfSwitched(player, hand);
+
         boolean inputAllowed = mc.currentScreen == null;
         boolean trigger = inputAllowed && mc.gameSettings.keyBindAttack.isKeyDown();
+        // the gun is unusable while it is being drawn, and it cannot be aimed either
+        boolean equipping = animation.isPlaying(GunAnimation.GunAnimationNames.EQUIP);
+        boolean reloading = animation.isPlaying(GunAnimation.GunAnimationNames.RELOAD);
         // right click aims, and the gun takes its aim time to get all the way to the sight view node
-        boolean aim = inputAllowed &&
+        boolean aim = inputAllowed && !equipping && !reloading &&
                 (mc.gameSettings.keyBindUseItem.isKeyDown() || SuSyKeyBind.AIM.isKeyDown());
         boolean unload = inputAllowed && unloadPressed;
         boolean reload = inputAllowed && reloadPressed;
@@ -83,17 +102,19 @@ public final class GunClientHandler {
         boolean pulse = reload || cycleMode || unload || openAttachments;
 
         if (pulse || !current.equals(lastState)) {
-            GregTechAPI.networkHandler.sendToServer(new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand, openAttachments));
+            GregTechAPI.networkHandler
+                    .sendToServer(new CPacketGunInput(trigger, aim, reload, cycleMode, unload, hand, openAttachments));
             lastState = current;
         }
 
         updateAim(player.getHeldItem(hand), aim);
+        animation.update(player.getHeldItem(hand));
     }
 
     private static void updateAim(ItemStack stack, boolean aiming) {
         lastAimProgress = aimProgress;
 
-        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
+        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
         AttachmentStats stats = gun == null ? null : gun.getStats(stack);
         double aimTicks = stats == null ? 0 : stats.getAimTime();
         aimZoom = stats == null ? IRON_SIGHT_ZOOM : stats.getZoom();
@@ -110,6 +131,58 @@ public final class GunClientHandler {
         aimProgress = 0f;
         lastAimProgress = 0f;
         aimZoom = IRON_SIGHT_ZOOM;
+    }
+
+    // start the equip animation as soon as the client sees the switch (if it was triggered by the server,
+    // there would be a 1-2 tick delay where the default model would be visible)
+    private static void startEquipIfSwitched(EntityPlayerSP player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        int slot = hand == EnumHand.MAIN_HAND ? player.inventory.currentItem : -1;
+        boolean sameGun = lastGunHand == hand && lastGunSlot == slot &&
+                lastGunItem == stack.getItem() && lastGunMeta == stack.getMetadata();
+        if (sameGun) {
+            return;
+        }
+
+        lastGunHand = hand;
+        lastGunSlot = slot;
+        lastGunItem = stack.getItem();
+        lastGunMeta = stack.getMetadata();
+
+        if (GunItemStackRenderer.animationLength(stack, GunAnimation.GunAnimationNames.EQUIP) > 0f) {
+            playAnimation(GunAnimation.GunAnimationNames.EQUIP);
+        }
+    }
+
+    private static void forgetHeldGun() {
+        lastGunHand = null;
+        lastGunSlot = Integer.MIN_VALUE;
+        lastGunItem = null;
+        lastGunMeta = 0;
+    }
+
+    // magazineSize is used to determine which magazine to insert
+    public static void playAnimation(String name, int magazineSize) {
+        if (GunAnimation.GunAnimationNames.EQUIP.equals(name) && animation.isPlaying(name)) {
+            return;
+        }
+        animation.play(name, magazineSize);
+        if (GunAnimation.GunAnimationNames.EQUIP.equals(name)) {
+            // the gun has just been drawn: drop the aim immediately instead of sliding back out of the sights
+            resetAim();
+        }
+    }
+
+    public static void playAnimation(String name) {
+        playAnimation(name, 0);
+    }
+
+    public static void stopAnimation(String name) {
+        animation.stop(name);
+    }
+
+    public static void onGunFired() {
+        playAnimation(GunAnimation.GunAnimationNames.FIRE);
     }
 
     private static float renderAimProgress(float partialTicks) {
@@ -144,21 +217,24 @@ public final class GunClientHandler {
         EnumHandSide primary = mc.player.getPrimaryHand();
         float partialTicks = event.getPartialTicks();
         float aim = renderAimProgress(partialTicks);
+        String clip = animation.getClip();
+        float clipTicks = animation.renderTicks(partialTicks);
 
-        GunItemStackRenderer.renderFirstPerson(stack, primary, event.getEquipProgress(), partialTicks, aim);
+        GunItemStackRenderer.renderFirstPerson(stack, primary, partialTicks, aim, clip, clipTicks,
+                animation.pendingMagazine());
 
         // The vanilla arm chain is replaced by the ones the model holds, so both arms are drawn with the gun.
-        renderArm(mc, event, primary, aim);
+        renderArm(mc, event, primary, aim, clip, clipTicks);
         if (mc.player.getHeldItemOffhand().isEmpty()) {
-            renderArm(mc, event, primary.opposite(), aim);
+            renderArm(mc, event, primary.opposite(), aim, clip, clipTicks);
         }
     }
 
     // draw the arm exactly where it is in blockbench relative to the gun
     private static void renderArm(Minecraft mc, RenderSpecificHandEvent event,
-                                  EnumHandSide side, float aim) {
-        Matrix4f transform = GunItemStackRenderer.firstPersonArmTransform(event.getItemStack(), side,
-                event.getEquipProgress(), aim);
+                                  EnumHandSide side, float aim, String clip, float clipTicks) {
+        Matrix4f transform = GunItemStackRenderer.firstPersonArmTransform(event.getItemStack(), side, aim, clip,
+                clipTicks);
         if (transform == null)
             return;
 
@@ -210,6 +286,11 @@ public final class GunClientHandler {
         lastState = null;
     }
 
+    public static boolean isHoldingGun(EntityPlayer player) {
+        return player != null &&
+                (isGun(player.getHeldItem(EnumHand.MAIN_HAND)) || isGun(player.getHeldItem(EnumHand.OFF_HAND)));
+    }
+
     private static EnumHand findGunHand(EntityPlayerSP player) {
         if (isGun(player.getHeldItem(EnumHand.MAIN_HAND)))
             return EnumHand.MAIN_HAND;
@@ -218,7 +299,7 @@ public final class GunClientHandler {
         return null;
     }
 
-    private static boolean isGun(ItemStack stack) {
+    public static boolean isGun(ItemStack stack) {
         return stack != null && !stack.isEmpty() && SuSyMetaItems.getGunBehaviour(stack) != null;
     }
 

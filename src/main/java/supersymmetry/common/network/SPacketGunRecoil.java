@@ -9,17 +9,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.network.IClientExecutor;
 import gregtech.api.network.IPacket;
+import supersymmetry.client.renderer.gun.GunClientHandler;
 
 public class SPacketGunRecoil implements IPacket, IClientExecutor {
 
     private float recoil;
-    private boolean doHorizontal;
+    private float horizontalModifier;
+    private boolean fired;
 
     public SPacketGunRecoil() {}
 
-    public SPacketGunRecoil(float recoil, boolean doHorizontal) {
+    public SPacketGunRecoil(float recoil, float horizontalModifier) {
+        this(recoil, horizontalModifier, false);
+    }
+
+    public SPacketGunRecoil(float recoil, float horizontalModifier, boolean fired) {
         this.recoil = recoil;
-        this.doHorizontal = doHorizontal;
+        this.horizontalModifier = horizontalModifier;
+        this.fired = fired;
     }
 
     @SideOnly(Side.CLIENT)
@@ -28,22 +35,26 @@ public class SPacketGunRecoil implements IPacket, IClientExecutor {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player != null) {
             player.rotationPitch = Math.clamp(player.rotationPitch - recoil, -90.0f, 90.0f);
-            if (doHorizontal) {
+            if (horizontalModifier > 0) {
                 player.rotationYaw += recoil * 0.4f * (player.getRNG().nextFloat() - 0.5f);
             }
-
+            if (fired) {
+                GunClientHandler.onGunFired();
+            }
         }
     }
 
     @Override
     public void encode(PacketBuffer buf) {
         buf.writeFloat(recoil);
-        buf.writeBoolean(doHorizontal);
+        buf.writeFloat(horizontalModifier);
+        buf.writeBoolean(fired);
     }
 
     @Override
     public void decode(PacketBuffer buf) {
         recoil = buf.readFloat();
-        doHorizontal = buf.readBoolean();
+        horizontalModifier = buf.readFloat();
+        fired = buf.readBoolean();
     }
 }

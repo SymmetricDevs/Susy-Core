@@ -10,10 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -36,14 +33,13 @@ import supersymmetry.api.guns.SuSyAmmoType;
 import supersymmetry.api.guns.attachment.AttachmentSlot;
 import supersymmetry.api.guns.attachment.AttachmentStats;
 import supersymmetry.api.input.SuSyKeyBind;
-import supersymmetry.api.util.SuSyDamageSources;
 import supersymmetry.client.renderer.particles.SusyParticleFlame;
 import supersymmetry.common.guns.bullettypes.ExplosiveBullet;
 import supersymmetry.common.guns.bullettypes.IncendiaryBullet;
 import supersymmetry.common.guns.bullettypes.TracerBullet;
 import supersymmetry.common.item.SuSyMetaItems;
 
-public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager, IMui2Factory, ItemUIFactory {
+public class SuSyGunBehavior implements IItemBehaviour, IItemDurabilityManager, IMui2Factory, ItemUIFactory {
 
     private final double muzzleVelocity;
     private final double spread;
@@ -61,9 +57,7 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
     @Getter
     private final String caliber;
     @Getter
-    private final boolean beltFed;
-    @Getter
-    private final boolean integralMagazine;
+    private final GunReloadMode reloadMode;
     @Getter
     private final float recoilStrength;
     @Getter
@@ -71,20 +65,22 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
     @Getter
     private final Set<AttachmentSlot> attachmentSlots;
 
-    private static final String NBT_FIRE_MODE = "SuSyGunFireMode";
+    public static final String NBT_FIRE_MODE = "SuSyGunFireMode";
     public static final String NBT_AMMO = "SuSyGunAmmo";
     public static final String NBT_AMMO_TYPE = "SuSyGunAmmoType";
     public static final String NBT_CALIBER = "SuSyCaliber";
     public static final String NBT_MAGAZINE_SIZE = "SuSyMagazineSize";
 
+    public static final int STRIPPER_CLIP_SIZE = 5;
+
     public static final float IRON_SIGHT_ZOOM = 1.2f;
 
     private static final boolean DEBUG_TRAJECTORY = false;
 
-    public SuSyGunBehaviour(double muzzleVelocity, double spread, float damage,
+    public SuSyGunBehavior(double muzzleVelocity, double spread, float damage,
                            int cooldownTicks, List<GunFireMode> fireModes, int burstCount,
                            int burstIntervalTicks, int maxMagazineSize, int reloadTicks, String caliber,
-                           boolean beltFed, boolean integralMagazine, float recoilStrength, double aimTime,
+                           GunReloadMode reloadMode, float recoilStrength, double aimTime,
                            Set<AttachmentSlot> attachmentSlots) {
         if (fireModes == null || fireModes.isEmpty()) {
             throw new IllegalArgumentException("gun needs at least one fire mode");
@@ -119,8 +115,7 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
         this.maxMagazineSize = Math.max(maxMagazineSize, 0);
         this.reloadTicks = reloadTicks;
         this.caliber = caliber;
-        this.beltFed = beltFed;
-        this.integralMagazine = integralMagazine;
+        this.reloadMode = reloadMode;
         this.recoilStrength = recoilStrength;
         this.aimTime = aimTime;
         Set<AttachmentSlot> slots = EnumSet.noneOf(AttachmentSlot.class);
@@ -195,11 +190,11 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
     }
 
     public void reload(EntityPlayer player, ItemStack gun, ItemStack magazine) {
-        unload(player, gun);
         if (!magazine.hasTagCompound()) return;
         NBTTagCompound magTag = magazine.getTagCompound();
-        SuSyGunBehaviour gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
-        if (!gunBehavior.isIntegralMagazine()) {
+        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        if (!(gunBehavior.getReloadMode() == GunReloadMode.INTEGRAL_MAGAZINE ||
+                gunBehavior.getReloadMode() == GunReloadMode.STRIPPER_CLIP)) {
             if (!magTag.hasKey(NBT_AMMO) || !magTag.hasKey(NBT_AMMO_TYPE) || !magTag.hasKey(NBT_CALIBER)) return;
             if (GunMagazineBehavior.getMagBehavior(magazine) == null) return;
             GunMagazineBehavior magBehavior = GunMagazineBehavior.getMagBehavior(magazine);
@@ -207,11 +202,21 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             String caliber = magTag.getString(NBT_CALIBER);
             if (SuSyMetaItems.getGunBehaviour(gun) == null) return;
             if (!SuSyMetaItems.getGunBehaviour(gun).getCaliber().equals(caliber)) return;
+            unload(player, gun);
             String ammoType = magTag.getString(NBT_AMMO_TYPE);
             NBTTagCompound gunTag = getOrCreateTag(gun);
             gunTag.setInteger(NBT_AMMO, ammo);
             gunTag.setString(NBT_AMMO_TYPE, ammoType);
             gunTag.setInteger(NBT_MAGAZINE_SIZE, magBehavior.getMaxCapacity());
+            magazine.shrink(1);
+        } else if (gunBehavior.getReloadMode() == GunReloadMode.STRIPPER_CLIP) {
+            if (!magTag.hasKey(NBT_CALIBER)) return;
+            if (!magTag.getString(NBT_CALIBER).equals(gunBehavior.getCaliber())) return;
+            unload(player, gun);
+            NBTTagCompound gunTag = getOrCreateTag(gun);
+            gunTag.setInteger(NBT_AMMO, STRIPPER_CLIP_SIZE);
+            gunTag.setString(NBT_AMMO_TYPE, FULL_METAL_JACKET.name);
+            gunTag.setInteger(NBT_MAGAZINE_SIZE, gunBehavior.getMaxMagazineSize());
             magazine.shrink(1);
         } else {
             if (!magTag.hasKey(NBT_CALIBER)) return;
@@ -230,15 +235,16 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
     public void unload(EntityPlayer player, ItemStack gun) {
         if (!gun.hasTagCompound()) return;
         NBTTagCompound gunTag = gun.getTagCompound();
-        SuSyGunBehaviour gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
+        SuSyGunBehavior gunBehavior = SuSyMetaItems.getGunBehaviour(gun);
         if (gunBehavior == null) return;
-        if (!gunBehavior.isIntegralMagazine()) {
+        if (gunBehavior.getReloadMode() != GunReloadMode.INTEGRAL_MAGAZINE &&
+                gunBehavior.getReloadMode() != GunReloadMode.STRIPPER_CLIP) {
             if (!gunTag.hasKey(NBT_AMMO) || !gunTag.hasKey(NBT_AMMO_TYPE) || !gunTag.hasKey(NBT_MAGAZINE_SIZE)) return;
             String caliber = gunBehavior.getCaliber();
             int ammo = gunTag.getInteger(NBT_AMMO);
             String ammoType = gunTag.getString(NBT_AMMO_TYPE);
             int magSize = gunTag.getInteger(NBT_MAGAZINE_SIZE);
-            if (!gunBehavior.isBeltFed() || ammo > 0) {
+            if (gunBehavior.getReloadMode() != GunReloadMode.BELT || ammo > 0) {
                 ItemStack mag = GunMagazineBehavior.getMagFromSize(magSize);
                 if (mag == null) return;
                 NBTTagCompound magTag = getOrCreateTag(mag);
@@ -284,10 +290,16 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
 
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
-        if (!getOrCreateTag(itemStack).hasKey(NBT_AMMO) || !getOrCreateTag(itemStack).hasKey(NBT_MAGAZINE_SIZE))
-            return 0;
-        return (double) getOrCreateTag(itemStack).getInteger(NBT_AMMO) /
-                getOrCreateTag(itemStack).getInteger(NBT_MAGAZINE_SIZE);
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag == null) return 0;
+        if (!tag.hasKey(NBT_AMMO) || !tag.hasKey(NBT_MAGAZINE_SIZE)) return 0;
+        if (tag.getInteger(NBT_MAGAZINE_SIZE) <= 0) return 0;
+        return (double) tag.getInteger(NBT_AMMO) / tag.getInteger(NBT_MAGAZINE_SIZE);
+    }
+
+    @Override
+    public boolean showEmptyBar(ItemStack itemStack) {
+        return false;
     }
 
     /// Fires a single bullet from the specified position
@@ -313,6 +325,7 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             motionX *= (1 - muzzleVelocity * 0.000001); // air resistance (tm)
             motionY -= 2 * (bulletCheckSpeed / muzzleVelocity); // gravity dropoff (tm)
             motionZ *= (1 - muzzleVelocity * 0.000001);
+            boolean onBlockHitDone = false;
             if (DEBUG_TRAJECTORY) {
                 spawnWorkingParticles(world, currentPos); // debug, spawns particles in checked spots
             }
@@ -326,31 +339,22 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
                                                             // between old and new pos
             if (!potentialHitEntities.isEmpty()) {
                 for (EntityLivingBase potentialHitEntity : potentialHitEntities) {
-                    if (potentialHitEntity != shooter || i > 1) { // prevent hitting yourself
+                    if (potentialHitEntity != shooter || i > 1) { // prevent hitting yourself initially
                         RayTraceResult entityRTR = potentialHitEntity.getEntityBoundingBox().calculateIntercept(oldPos,
                                 currentPos);
                         // this is used to check if the entity was actually hit and find the exact hit position
                         if (entityRTR != null) {
                             // check for obstructing blocks to prevent shooting through walls
-                            if (world.rayTraceBlocks(oldPos, entityRTR.hitVec) == null) {
-
-                                // this is kinda dumb :skull:
-                                List<EntityLivingBase> hitEntities = world.getEntitiesWithinAABB(EntityLivingBase.class,
-                                        new AxisAlignedBB(
-                                                new Vec3d(entityRTR.hitVec.x - 0.0001, entityRTR.hitVec.y - 0.0001,
-                                                        entityRTR.hitVec.z - 0.0001),
-                                                new Vec3d(entityRTR.hitVec.x + 0.0001,
-                                                        entityRTR.hitVec.y + 0.0001, entityRTR.hitVec.z + 0.0001)));
-
-                                for (EntityLivingBase elb : hitEntities) {
-                                    ammoType.onEntityHit(world, elb, entityRTR.hitVec);
-                                    elb.attackEntityFrom(SuSyDamageSources.BULLET,
-                                            (float) (damage * ammoType.damageMultiplier));
-                                }
-
+                            RayTraceResult finalRTR = world.rayTraceBlocks(oldPos, entityRTR.hitVec);
+                            if (finalRTR == null) {
+                                ammoType.onEntityHit(world, potentialHitEntity, entityRTR.hitVec);
+                                potentialHitEntity.attackEntityFrom(
+                                        new EntityDamageSource("bullet", shooter).setProjectile(),
+                                        (float) (damage * ammoType.damageMultiplier));
                             } else {
-                                ammoType.onBlockHit(world, rayTraceResult,
-                                        world.rayTraceBlocks(oldPos, currentPos, false, true, true).getBlockPos());
+                                onBlockHitDone = true;
+                                ammoType.onBlockHit(world, finalRTR,
+                                        finalRTR.getBlockPos());
                                 break;
                             }
                         }
@@ -358,7 +362,7 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
                 }
             }
 
-            if (rayTraceResult != null) {
+            if (rayTraceResult != null && !onBlockHitDone) {
                 ammoType.onBlockHit(world, rayTraceResult, rayTraceResult.getBlockPos().offset(rayTraceResult.sideHit));
                 break;
             }
@@ -460,7 +464,6 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
         return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
@@ -514,10 +517,9 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
         private int maxMagazineSize = 0;
         private int reloadTicks = 0;
         private final String caliber;
-        private boolean beltFed = false;
-        private boolean integralMagazine = false;
         private float recoilStrength = 0;
         private final List<GunFireMode> modes = new ArrayList<>();
+        private GunReloadMode reloadMode = GunReloadMode.MAGAZINE;
         private double aimTime = 0;
         private final Set<AttachmentSlot> attachmentSlots = EnumSet.allOf(AttachmentSlot.class);
 
@@ -547,13 +549,8 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             return this;
         }
 
-        public Builder beltFed() {
-            this.beltFed = true;
-            return this;
-        }
-
-        public Builder integralMagazine() {
-            this.integralMagazine = true;
+        public Builder setReloadMode(GunReloadMode mode) {
+            this.reloadMode = mode;
             return this;
         }
 
@@ -576,13 +573,13 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             return this;
         }
 
-        public SuSyGunBehaviour build() {
+        public SuSyGunBehavior build() {
             List<GunFireMode> resolvedModes = new ArrayList<>(modes);
             if (resolvedModes.isEmpty()) {
                 resolvedModes.add(burstCount > 1 ? GunFireMode.BURST : GunFireMode.SEMI_AUTO);
             }
-            return new SuSyGunBehaviour(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
-                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, beltFed, integralMagazine,
+            return new SuSyGunBehavior(muzzleVelocity, spread, damage, cooldownTicks, resolvedModes,
+                    burstCount, burstIntervalTicks, maxMagazineSize, reloadTicks, caliber, reloadMode,
                     recoilStrength, aimTime, attachmentSlots);
         }
     }
@@ -593,6 +590,14 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
                 pos.x, pos.y, pos.z,
                 0, 0, 0);
         Minecraft.getMinecraft().effectRenderer.addEffect(spark);
+    }
+
+    public enum GunReloadMode {
+        MAGAZINE,
+        INTEGRAL_MAGAZINE,
+        BELT,
+        STRIPPER_CLIP
+
     }
 
     public static final SuSyAmmoType FULL_METAL_JACKET = new SuSyAmmoType(1.0, 1.0, 0.5, 1, "full_metal_jacket");
@@ -623,21 +628,37 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             ARMOR_PIERCING_EXPLOSIVE // red
     ));
 
-    public static final String CALIBER_PAPER_CARTRIDGE = "paper_cartridge"; // generic umbrella for all pre-metal
-                                                                            // cartridge firearms
-    public static final String CALIBER_11x24_BP = "11x24mm_bp"; // .45 ACP (black powder)
-    public static final String CALIBER_13x45_BP = "13x45mmR_bp"; // .50-70 Government (black powder)
-    public static final String CALIBER_18_SHOTGUN_BP = "18mm_shotgun_bp"; // 12-gauge shotgun (black powder)
-    public static final String CALIBER_11x24 = "11x24mm"; // .45 ACP
-    public static final String CALIBER_7_5x55 = "7.5x55mm"; // 7.62x51mm NATO, .308 Winchester, .30-06 Springfield,
-                                                            // 7.62x54mmR, etc
-    public static final String CALIBER_18_SHOTGUN = "18mm_shotgun"; // 12-gauge shotgun
-    public static final String CALIBER_5_5x30 = "5.5x30mm"; // FN 5.7x28
-    public static final String CALIBER_5_5x45 = "5.5x45mm"; // 5.56x45mm NATO, 5.45x39mm
-    public static final String CALIBER_8_6x70 = "8.6x70mm"; // .338 Lapua Magnum
-    public static final String CALIBER_13x30 = "13x30mm"; // .50 AE
-    public static final String CALIBER_13x100 = "13x100mm"; // .50 BMG
-    public static final String CALIBER_6_8x50 = "6.8x50mm"; // .277 Fury
+    /// generic umbrella for all pre-metal cartridge firearms
+    public static final String CALIBER_PAPER_CARTRIDGE = "paper_cartridge";
+
+    /// .45 ACP (black powder)
+    public static final String CALIBER_11x24_BP = "11x24mm_bp";
+    /// .50-70 Government (black powder)
+    public static final String CALIBER_13x45_BP = "13x45mmR_bp";
+    /// 12-gauge shotgun (black powder)
+    public static final String CALIBER_18_SHOTGUN_BP = "18mm_shotgun_bp";
+
+    /// .45 ACP
+    public static final String CALIBER_11x24 = "11x24mm";
+    /// 7.62x51mm NATO, .308 Winchester, .30-06 Springfield, 7.62x54mmR, 7.92x57mm, etc
+    public static final String CALIBER_7_5x55 = "7.5x55mm";
+    /// 12-gauge shotgun
+    public static final String CALIBER_18_SHOTGUN = "18mm_shotgun";
+
+    /// FN 5.7x28
+    public static final String CALIBER_5_7x30 = "5.7x30mm";
+    /// 5.56x45mm NATO, 5.45x39mm
+    public static final String CALIBER_5_5x45 = "5.5x45mm";
+    /// .338 Lapua/Norma Magnum
+    public static final String CALIBER_8_6x70 = "8.6x70mm";
+
+    /// .50 AE
+    public static final String CALIBER_13x30 = "13x30mm";
+    /// .50 BMG
+    public static final String CALIBER_13x100 = "13x100mm";
+
+    /// .277 Fury
+    public static final String CALIBER_6_8x50 = "6.8x50mm";
 
     public static final List<String> calibers = new ArrayList<>(Arrays.asList(
             CALIBER_PAPER_CARTRIDGE,
@@ -647,7 +668,7 @@ public class SuSyGunBehaviour implements IItemBehaviour, IItemDurabilityManager,
             CALIBER_11x24,
             CALIBER_7_5x55,
             CALIBER_18_SHOTGUN,
-            CALIBER_5_5x30,
+            CALIBER_5_7x30,
             CALIBER_5_5x45,
             CALIBER_8_6x70,
             CALIBER_13x30,

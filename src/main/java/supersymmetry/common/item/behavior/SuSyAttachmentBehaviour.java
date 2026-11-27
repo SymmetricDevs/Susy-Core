@@ -75,8 +75,7 @@ public class SuSyAttachmentBehaviour implements IItemBehaviour {
         lines.add(I18n.format("susy.gun.attachment.tooltip." + stat, Math.round((multiplier - 1f) * 100f)));
     }
 
-    @Nullable
-    public static SuSyAttachmentBehaviour getAttachmentBehaviour(ItemStack stack) {
+    @Nullable public static SuSyAttachmentBehaviour getAttachmentBehaviour(ItemStack stack) {
         if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof MetaItem metaItem)) {
             return null;
         }

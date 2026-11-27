@@ -264,6 +264,7 @@ public class ClientProxy extends CommonProxy {
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "armor/jet_wingpack"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/bubble"));
         map.registerSprite(new ResourceLocation(Supersymmetry.MODID, "particle/plume"));
+        map.registerSprite(GunItemStackRenderer.MUZZLE_FLASH_SPRITE);
         for (ResourceLocation flame : SusyParticleRocketFlame.SPRITE_NAMES) {
             map.registerSprite(flame);
         }

@@ -138,5 +138,86 @@
         "stream" : false
       }
     ]
+  },
+  "semi_auto_rifle.fire": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/semi_auto_rifle.fire",
+        "stream": false
+      }
+    ]
+  },
+  "semi_auto_rifle.equip": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/semi_auto_rifle.equip",
+        "stream": false
+      }
+    ]
+  },
+  "magazine_insert": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/magazine_insert",
+        "stream": false
+      }
+    ]
+  },
+  "magazine_extract": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/magazine_extract",
+        "stream": false
+      }
+    ]
+  },
+  "bolt_action_rifle.fire": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/bolt_action_rifle.fire",
+        "stream": false
+      }
+    ]
+  },
+  "bolt_action_rifle.equip": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/bolt_action_rifle.equip",
+        "stream": false
+      }
+    ]
+  },
+  "bolt_action_rifle.reload": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/bolt_action_rifle.reload",
+        "stream": false
+      }
+    ]
+  },
+  "bolt_action_rifle.bolt_open": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/bolt_action_rifle.bolt_open",
+        "stream": false
+      }
+    ]
+  },
+  "bolt_action_rifle.bolt_close": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "susy:guns/bolt_action_rifle.bolt_close",
+        "stream": false
+      }
+    ]
   }
 }

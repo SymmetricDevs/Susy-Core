@@ -1,8 +1,7 @@
 package supersymmetry.common.item.behavior;
 
-import static supersymmetry.common.item.behavior.SuSyGunBehaviour.NBT_AMMO_TYPE;
-import static supersymmetry.common.item.behavior.SuSyGunBehaviour.NBT_CALIBER;
-import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.NBT_AMMO_TYPE;
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.NBT_CALIBER;
 
 import java.util.List;
 

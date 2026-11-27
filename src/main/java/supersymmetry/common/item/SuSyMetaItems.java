@@ -2,7 +2,7 @@ package supersymmetry.common.item;
 
 import static gregtech.common.items.MetaItems.SPRAY_EMPTY;
 import static supersymmetry.common.item.behavior.GunFireMode.*;
-import static supersymmetry.common.item.behavior.SuSyGunBehaviour.*;
+import static supersymmetry.common.item.behavior.SuSyGunBehavior.*;
 import static supersymmetry.common.metatileentities.multi.electric.MetaTileEntityCargoDronePad.*;
 import static supersymmetry.common.metatileentities.storage.MetaTileEntityLockedCrate.BREACH_DURABILITY;
 
@@ -75,14 +75,6 @@ public class SuSyMetaItems {
     public static MetaValueItem ENTITY_PROMOTER;
     public static MetaValueItem HYPER_DEFOLIANT;
     public static MetaValueItem SKYWATCH_CHIP;
-    public static MetaValueItem PISTOL;
-    public static MetaValueItem PISTOL_AMMO;
-    public static MetaValueItem RIFLE;
-    public static MetaValueItem RIFLE_AMMO;
-    public static MetaValueItem SHOTGUN;
-    public static MetaValueItem SHOTGUN_AMMO;
-    public static MetaValueItem SMG;
-    public static MetaValueItem SMG_AMMO;
 
     public static MetaValueItem DATA_CARD;
     public static MetaValueItem DATA_CARD_ACTIVE;
@@ -98,12 +90,12 @@ public class SuSyMetaItems {
     public static MetaValueItem BLUNDERBUSS;
 
     public static MetaValueItem REVOLVER; // Colt SAA (black powder version)
-    public static MetaValueItem BREECHLOADING_RIFLE; // Sharps rifle
+    public static MetaValueItem BREECHLOADING_RIFLE; // Gras rifle, Mauser Model 1871, Martini-Henry, Berdan rifle, etc
     public static MetaValueItem DOUBLE_BARREL_SHOTGUN;
 
     public static MetaValueItem BASIC_PISTOL; // Colt M1911
     public static MetaValueItem BOLT_ACTION_RIFLE; // M1903 Springfield, Lee-Enfield, Karabiner 98k, Mosin-Nagant, etc
-    public static MetaValueItem PUMP_SHOTGUN; // Winchester Model 1897
+    public static MetaValueItem PUMP_SHOTGUN; // Winchester Model 1897/1912
 
     public static MetaValueItem IMPROVED_PISTOL; // Browning Hi-Power (except in .45 ACP)
     public static MetaValueItem SEMI_AUTO_RIFLE; // M1 Garand, SVT-40, Gewehr 43
@@ -124,7 +116,7 @@ public class SuSyMetaItems {
     public static MetaValueItem BASIC_ANTI_MATERIEL_RIFLE; // M82
     public static MetaValueItem BASIC_LMG; // M249
 
-    public static MetaValueItem IMPROVED_DMR; // SCAR-H
+    public static MetaValueItem IMPROVED_DMR; // SCAR-H, Mk14 EBR
     public static MetaValueItem PDW; // FN P90, MP7
     public static MetaValueItem ADVANCED_ASSAULT_RIFLE; // SIG MCX SPEAR
     public static MetaValueItem ADVANCED_SNIPER_RIFLE; // Barrett MRAD, M2010
@@ -134,6 +126,9 @@ public class SuSyMetaItems {
 
     public static MetaValueItem PAPER_CARTRIDGE;
     public static MetaValueItem GUNPOWDER_CARTRIDGE;
+    public static MetaValueItem STRIPPER_CLIP;
+    public static MetaValueItem SHOTGUN_SHELL;
+    public static MetaValueItem BASIC_CARTRIDGE;
     public static MetaValueItem MAGAZINE_5;
     public static MetaValueItem MAGAZINE_10;
     public static MetaValueItem MAGAZINE_15;
@@ -294,126 +289,114 @@ public class SuSyMetaItems {
                 .addComponents(new HyperDefoliantBehavior());
         SKYWATCH_CHIP = metaItem.addItem(30, "skywatch_chip").setMaxStackSize(1)
                 .addComponents(SkywatchChipBehaviour.INSTANCE);
-        PISTOL = metaItem.addItem(31, "pistol").setMaxStackSize(1)
-                .addComponents(gun(1000, 1.5, 6f, 8, "test1").build());
-        PISTOL_AMMO = metaItem.addItem(32, "pistol_ammo");
-
-        RIFLE = metaItem.addItem(33, "rifle").setMaxStackSize(1)
-                .addComponents(gun(2500, 0.13, 12f, 20, "test2").modes(BOLT_ACTION).build());
-        RIFLE_AMMO = metaItem.addItem(34, "rifle_ammo");
-
-        SHOTGUN = metaItem.addItem(35, "shotgun").setMaxStackSize(1)
-                .addComponents(gun(750, 10, 4f, 20, "test3").build());
-        SHOTGUN_AMMO = metaItem.addItem(36, "shotgun_ammo");
-        SMG = metaItem.addItem(37, "smg").setMaxStackSize(1)
-                .addComponents(gun(1500, 1, 4f, 4, "test1").burst(3, 2).modes(FULL_AUTO, BURST, SEMI_AUTO).build());
-        SMG_AMMO = metaItem.addItem(38, "smg_ammo");
 
         // 100-200: guns
         FLINTLOCK_PISTOL = metaItem.addItem(100, "flintlock_pistol").setMaxStackSize(1)
-                .addComponents(gun(100, 20, 6f, 1, CALIBER_PAPER_CARTRIDGE).magazine(1, 400)
-                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.2f).attachments(SIDEARM_SLOTS)
-                        .build());
+                .addComponents(gun(100, 20, 6f, 1, CALIBER_PAPER_CARTRIDGE)
+                        .magazine(1, 400).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(BOLT_ACTION)
+                        .setRecoil(0.2f).build());
         MUSKET = metaItem.addItem(101, "musket").setMaxStackSize(1)
-                .addComponents(gun(200, 12, 9f, 1, CALIBER_PAPER_CARTRIDGE).magazine(1, 600)
-                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.5f).build());
+                .addComponents(gun(200, 12, 9f, 1, CALIBER_PAPER_CARTRIDGE)
+                        .magazine(1, 600).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(BOLT_ACTION)
+                        .setRecoil(0.5f).build());
         BLUNDERBUSS = metaItem.addItem(102, "blunderbuss").setMaxStackSize(1)
-                .addComponents(gun(50, 40, 12f, 1, CALIBER_PAPER_CARTRIDGE).magazine(1, 600)
-                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.7f).build());
+                .addComponents(gun(50, 40, 12f, 1, CALIBER_PAPER_CARTRIDGE)
+                        .magazine(1, 600).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(BOLT_ACTION)
+                        .setRecoil(0.7f).build());
         REVOLVER = metaItem.addItem(103, "revolver").setMaxStackSize(1)
-                .addComponents(gun(180, 15, 5f, 6, CALIBER_11x24_BP).magazine(6, 300).integralMagazine()
-                        .modes(SEMI_AUTO).setRecoil(0.15f).attachments(SIDEARM_SLOTS).build());
+                .addComponents(gun(180, 15, 5f, 6, CALIBER_11x24_BP)
+                        .magazine(6, 300).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(SEMI_AUTO)
+                        .setRecoil(0.15f).attachments(SIDEARM_SLOTS).build());
         BREECHLOADING_RIFLE = metaItem.addItem(104, "breechloading_rifle").setMaxStackSize(1)
-                .addComponents(gun(370, 5, 10f, 1, CALIBER_13x45_BP).magazine(1, 200).integralMagazine()
-                        .modes(BOLT_ACTION).setRecoil(0.3f).build());
+                .addComponents(gun(370, 5, 10f, 1, CALIBER_13x45_BP)
+                        .magazine(1, 200).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(BOLT_ACTION)
+                        .setRecoil(0.3f).build());
         DOUBLE_BARREL_SHOTGUN = metaItem.addItem(105, "double_barrel_shotgun").setMaxStackSize(1)
-                .addComponents(gun(300, 30, 15f, 1, CALIBER_18_SHOTGUN_BP).magazine(2, 250)
-                        .integralMagazine().modes(BOLT_ACTION).setRecoil(0.4f).build());
+                .addComponents(gun(300, 30, 15f, 1, CALIBER_18_SHOTGUN_BP)
+                        .magazine(2, 250).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).modes(BOLT_ACTION)
+                        .setRecoil(0.4f).build());
         BASIC_PISTOL = metaItem.addItem(106, "basic_pistol").setMaxStackSize(1)
-                .addComponents(
-                        gun(250, 9, 6f, 5, CALIBER_11x24).modes(SEMI_AUTO).magazine(10, 5).setRecoil(0.1f)
-                                .attachments(SIDEARM_SLOTS).build());
+                .addComponents(gun(250, 9, 6f, 5, CALIBER_11x24)
+                        .attachments(SIDEARM_SLOTS).modes(SEMI_AUTO).magazine(10, 5).setRecoil(0.1f).build());
         BOLT_ACTION_RIFLE = metaItem.addItem(107, "bolt_action_rifle").setMaxStackSize(1)
-                .addComponents(gun(850, 1, 12f, 50, CALIBER_7_5x55).magazine(5, 200).setRecoil(0.4f).modes(BOLT_ACTION)
-                        .build());
+                .addComponents(gun(850, 1, 12f, 37, CALIBER_7_5x55)
+                        .magazine(5, 104).setReloadMode(GunReloadMode.STRIPPER_CLIP).setRecoil(0.4f).modes(BOLT_ACTION)
+                        .aimTime(11).build());
         PUMP_SHOTGUN = metaItem.addItem(108, "pump_shotgun").setMaxStackSize(1)
-                .addComponents(gun(350, 25, 20f, 50, CALIBER_18_SHOTGUN).magazine(5, 200).setRecoil(0.35f)
+                .addComponents(gun(350, 25, 20f, 50, CALIBER_18_SHOTGUN)
+                        .magazine(5, 200).setReloadMode(GunReloadMode.INTEGRAL_MAGAZINE).setRecoil(0.35f)
                         .modes(BOLT_ACTION).build());
         IMPROVED_PISTOL = metaItem.addItem(109, "improved_pistol").setMaxStackSize(1)
-                .addComponents(gun(270, 6, 6.5f, 4, CALIBER_11x24).modes(SEMI_AUTO).magazine(15, 100).setRecoil(0.09f)
-                        .attachments(SIDEARM_SLOTS).build());
+                .addComponents(gun(270, 6, 6.5f, 4, CALIBER_11x24)
+                        .modes(SEMI_AUTO).attachments(SIDEARM_SLOTS).magazine(15, 100).setRecoil(0.09f).build());
         SEMI_AUTO_RIFLE = metaItem.addItem(110, "semi_auto_rifle").setMaxStackSize(1)
-                .addComponents(gun(850, 1, 12f, 25, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.32f).magazine(10, 100)
-                        .aimTime(9).build());
+                .addComponents(gun(850, 1, 12f, 7, CALIBER_7_5x55)
+                        .modes(SEMI_AUTO).setRecoil(0.32f).magazine(10, 59).aimTime(9).build());
         BASIC_SMG = metaItem.addItem(111, "basic_smg").setMaxStackSize(1)
-                .addComponents(gun(350, 6, 5f, 3, CALIBER_11x24).modes(FULL_AUTO, SEMI_AUTO).setRecoil(0.1f)
-                        .magazine(30, 100).build());
+                .addComponents(gun(350, 6, 5f, 3, CALIBER_11x24)
+                        .modes(FULL_AUTO, SEMI_AUTO).setRecoil(0.1f).magazine(30, 100).build());
         ADVANCED_PISTOL = metaItem.addItem(112, "advanced_pistol").setMaxStackSize(1)
-                .addComponents(
-                        gun(300, 4, 7f, 4, CALIBER_5_5x30).magazine(30, 60).setRecoil(0.05f).modes(SEMI_AUTO)
-                                .attachments(SIDEARM_SLOTS).build());
+                .addComponents(gun(300, 4, 7f, 4, CALIBER_5_7x30)
+                        .magazine(30, 60).setRecoil(0.05f).attachments(SIDEARM_SLOTS).modes(SEMI_AUTO).build());
         AUTOMATIC_BATTLE_RIFLE = metaItem.addItem(113, "automatic_battle_rifle").setMaxStackSize(1)
-                .addComponents(gun(850, 1.5, 12f, 2, CALIBER_7_5x55).modes(FULL_AUTO, SEMI_AUTO)
-                        .magazine(30, 100).setRecoil(0.35f).build());
+                .addComponents(gun(850, 1.5, 12f, 2, CALIBER_7_5x55)
+                        .modes(FULL_AUTO, SEMI_AUTO).magazine(30, 100).setRecoil(0.35f).build());
         SEMI_AUTO_SHOTGUN = metaItem.addItem(114, "semi_auto_shotgun").setMaxStackSize(1)
-                .addComponents(gun(350, 25, 22f, 6, CALIBER_18_SHOTGUN).modes(SEMI_AUTO).setRecoil(0.3f)
-                        .magazine(15, 100).build());
+                .addComponents(gun(350, 25, 22f, 6, CALIBER_18_SHOTGUN)
+                        .modes(SEMI_AUTO).setRecoil(0.3f).magazine(15, 100).build());
         ADVANCED_SMG = metaItem.addItem(115, "advanced_smg").setMaxStackSize(1)
-                .addComponents(gun(400, 4, 7f, 2, CALIBER_11x24).modes(FULL_AUTO, SEMI_AUTO, BURST)
-                        .magazine(50, 65).burst(3, 2).setRecoil(0.06f).build());
+                .addComponents(gun(400, 4, 7f, 2, CALIBER_11x24)
+                        .modes(FULL_AUTO, SEMI_AUTO, BURST).magazine(50, 65).burst(3, 2).setRecoil(0.06f).build());
         BASIC_ASSAULT_RIFLE = metaItem.addItem(116, "basic_assault_rifle").setMaxStackSize(1)
-                .addComponents(gun(700, 3, 9f, 2, CALIBER_5_5x45).modes(FULL_AUTO, SEMI_AUTO).setRecoil(0.15f)
-                        .magazine(50, 65).build());
+                .addComponents(gun(700, 3, 9f, 2, CALIBER_5_5x45)
+                        .modes(FULL_AUTO, SEMI_AUTO).setRecoil(0.15f).magazine(50, 65).build());
         BASIC_SNIPER_RIFLE = metaItem.addItem(117, "basic_sniper_rifle").setMaxStackSize(1)
-                .addComponents(gun(900, 0.3, 30f, 45, CALIBER_8_6x70).modes(BOLT_ACTION).setRecoil(0.5f)
-                        .magazine(5, 100).build());
+                .addComponents(gun(900, 0.3, 30f, 45, CALIBER_8_6x70)
+                        .modes(BOLT_ACTION).setRecoil(0.5f).magazine(5, 100).build());
         HEAVY_PISTOL = metaItem.addItem(118, "heavy_pistol").setMaxStackSize(1)
-                .addComponents(
-                        gun(500, 3, 12f, 5, CALIBER_13x30).modes(SEMI_AUTO).setRecoil(0.4f).magazine(15, 100)
-                                .attachments(SIDEARM_SLOTS).build());
+                .addComponents(gun(500, 3, 12f, 5, CALIBER_13x30)
+                        .modes(SEMI_AUTO).setRecoil(0.4f).magazine(15, 100).attachments(SIDEARM_SLOTS).build());
         BASIC_DMR = metaItem.addItem(119, "basic_dmr").setMaxStackSize(1)
-                .addComponents(gun(850, 0.7, 22f, 15, CALIBER_7_5x55).modes(SEMI_AUTO).setRecoil(0.4f).magazine(20, 100)
-                        .build());
+                .addComponents(gun(850, 0.7, 22f, 15, CALIBER_7_5x55)
+                        .modes(SEMI_AUTO).setRecoil(0.4f).magazine(20, 100).build());
         AUTO_SHOTGUN = metaItem.addItem(120, "auto_shotgun").setMaxStackSize(1)
-                .addComponents(gun(370, 25, 24f, 5, CALIBER_18_SHOTGUN).modes(FULL_AUTO).setRecoil(0.3f)
-                        .magazine(30, 100).build());
+                .addComponents(gun(370, 25, 24f, 5, CALIBER_18_SHOTGUN)
+                        .modes(FULL_AUTO).setRecoil(0.3f).magazine(30, 100).build());
         IMPROVED_ASSAULT_RIFLE = metaItem.addItem(121, "improved_assault_rifle").setMaxStackSize(1)
-                .addComponents(gun(900, 2, 10f, 2, CALIBER_5_5x45).modes(FULL_AUTO, SEMI_AUTO, BURST)
-                        .magazine(50, 60).burst(3, 3).setRecoil(0.12f).build());
+                .addComponents(gun(900, 2, 10f, 2, CALIBER_5_5x45)
+                        .modes(FULL_AUTO, SEMI_AUTO, BURST).magazine(50, 60).burst(3, 3).setRecoil(0.12f).build());
         IMPROVED_SNIPER_RIFLE = metaItem.addItem(122, "improved_sniper_rifle").setMaxStackSize(1)
-                .addComponents(gun(900, 0.2, 35f, 40, CALIBER_8_6x70).setRecoil(0.45f).magazine(10, 100)
-                        .modes(BOLT_ACTION).build());
+                .addComponents(gun(900, 0.2, 35f, 40, CALIBER_8_6x70)
+                        .setRecoil(0.45f).magazine(10, 100).modes(BOLT_ACTION).build());
         BASIC_ANTI_MATERIEL_RIFLE = metaItem.addItem(123, "basic_anti_materiel_rifle").setMaxStackSize(1)
-                .addComponents(
-                        gun(850, 1, 50f, 20, CALIBER_13x100).setRecoil(0.65f).magazine(5, 100).modes(SEMI_AUTO)
-                                .build());
+                .addComponents(gun(850, 1, 50f, 20, CALIBER_13x100)
+                        .setRecoil(0.65f).magazine(5, 100).modes(SEMI_AUTO).build());
         BASIC_LMG = metaItem.addItem(124, "basic_lmg").setMaxStackSize(1)
-                .addComponents(
-                        gun(900, 2, 9f, 1, CALIBER_5_5x45).magazine(200, 100).setRecoil(0.12f).beltFed()
-                                .modes(FULL_AUTO).build());
+                .addComponents(gun(900, 2, 9f, 1, CALIBER_5_5x45)
+                        .magazine(200, 100).setRecoil(0.12f).setReloadMode(GunReloadMode.BELT).modes(FULL_AUTO)
+                        .build());
         IMPROVED_DMR = metaItem.addItem(125, "improved_dmr").setMaxStackSize(1)
-                .addComponents(gun(850, 0.5, 25f, 12, CALIBER_7_5x55).magazine(30, 100)
-                        .modes(SEMI_AUTO, BURST).burst(2, 12).setRecoil(0.32f).build());
+                .addComponents(gun(850, 0.5, 25f, 12, CALIBER_7_5x55)
+                        .magazine(30, 100).modes(SEMI_AUTO, BURST).burst(2, 12).setRecoil(0.32f).build());
         PDW = metaItem.addItem(126, "pdw").setMaxStackSize(1)
-                .addComponents(gun(750, 1.5, 8f, 1, CALIBER_5_5x30).magazine(50, 50)
-                        .modes(FULL_AUTO, SEMI_AUTO, BURST).burst(3, 2).setRecoil(0.05f).build());
+                .addComponents(gun(750, 1.5, 8f, 1, CALIBER_5_7x30)
+                        .magazine(50, 50).modes(FULL_AUTO, SEMI_AUTO, BURST).burst(3, 2).setRecoil(0.05f).build());
         ADVANCED_ASSAULT_RIFLE = metaItem.addItem(127, "advanced_assault_rifle").setMaxStackSize(1)
-                .addComponents(gun(950, 0.9, 13f, 2, CALIBER_6_8x50).magazine(50, 50)
-                        .modes(FULL_AUTO, SEMI_AUTO, BURST).burst(3, 2).setRecoil(0.13f).build());
+                .addComponents(gun(950, 0.9, 13f, 2, CALIBER_6_8x50)
+                        .magazine(50, 50).modes(FULL_AUTO, SEMI_AUTO, BURST).burst(3, 2).setRecoil(0.13f).build());
         ADVANCED_SNIPER_RIFLE = metaItem.addItem(128, "advanced_sniper_rifle").setMaxStackSize(1)
-                .addComponents(gun(850, 0.05, 40f, 35, CALIBER_8_6x70).setRecoil(0.4f).magazine(20, 100)
-                        .modes(BOLT_ACTION).build());
+                .addComponents(gun(850, 0.05, 40f, 35, CALIBER_8_6x70)
+                        .setRecoil(0.4f).magazine(20, 100).modes(BOLT_ACTION).build());
         IMPROVED_ANTI_MATERIEL_RIFLE = metaItem.addItem(129, "improved_anti_materiel_rifle").setMaxStackSize(1)
-                .addComponents(gun(900, 0.35, 60f, 15, CALIBER_13x100).setRecoil(0.6f).magazine(10, 100)
-                        .modes(SEMI_AUTO).build());
+                .addComponents(gun(900, 0.35, 60f, 15, CALIBER_13x100)
+                        .setRecoil(0.6f).magazine(10, 100).modes(SEMI_AUTO).build());
         IMPROVED_LMG = metaItem.addItem(130, "improved_lmg").setMaxStackSize(1)
-                .addComponents(
-                        gun(900, 1.5, 11f, 1, CALIBER_6_8x50).setRecoil(0.1f).magazine(200, 100).beltFed()
-                                .modes(FULL_AUTO).build());
+                .addComponents(gun(900, 1.5, 11f, 1, CALIBER_6_8x50)
+                        .setRecoil(0.1f).magazine(200, 100).setReloadMode(GunReloadMode.BELT).modes(FULL_AUTO).build());
         BASIC_GPMG = metaItem.addItem(131, "basic_gpmg").setMaxStackSize(1)
-                .addComponents(
-                        gun(850, 1.5, 15f, 1, CALIBER_7_5x55).setRecoil(0.25f).magazine(200, 100).beltFed()
-                                .modes(FULL_AUTO).build());
+                .addComponents(gun(850, 1.5, 15f, 1, CALIBER_7_5x55)
+                        .setRecoil(0.25f).magazine(200, 100).setReloadMode(GunReloadMode.BELT).modes(FULL_AUTO)
+                        .build());
 
         // 200-300: ammo
         MAGAZINE_5 = metaItem.addItem(200, "magazine_5").setMaxStackSize(1)
@@ -433,6 +416,10 @@ public class SuSyMetaItems {
         // 207-214: reserved for bigger belts
         PAPER_CARTRIDGE = metaItem.addItem(215, "paper_cartridge");
         GUNPOWDER_CARTRIDGE = metaItem.addItem(216, "gunpowder_cartridge").addComponents(new BulletTooltipBehavior());
+        STRIPPER_CLIP = metaItem.addItem(217, "stripper_clip").addComponents(new BulletTooltipBehavior())
+                .setMaxStackSize(4);
+        SHOTGUN_SHELL = metaItem.addItem(218, "shotgun_shell").addComponents(new BulletTooltipBehavior());
+        BASIC_CARTRIDGE = metaItem.addItem(219, "basic_cartridge").addComponents(new BulletTooltipBehavior());
 
         // 300-306: gun attachments
         // TODO: suppressors do not change the firing sound yet
@@ -481,7 +468,7 @@ public class SuSyMetaItems {
         }
     }
 
-    public static SuSyGunBehaviour getGunBehaviour(ItemStack stack) {
+    public static SuSyGunBehavior getGunBehaviour(ItemStack stack) {
         if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof MetaItem)) {
             return null;
         }
@@ -490,8 +477,8 @@ public class SuSyMetaItems {
             return null;
         }
         for (IItemBehaviour behaviour : valueItem.getBehaviours()) {
-            if (behaviour instanceof SuSyGunBehaviour) {
-                return (SuSyGunBehaviour) behaviour;
+            if (behaviour instanceof SuSyGunBehavior) {
+                return (SuSyGunBehavior) behaviour;
             }
         }
         return null;

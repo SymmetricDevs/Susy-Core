@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.Mod;
@@ -16,10 +17,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import dev.tianmi.sussypatches.api.mui2.factory.MetaItemGuiFactory;
 import gregtech.api.GregTechAPI;
 import supersymmetry.Supersymmetry;
+import supersymmetry.client.renderer.gun.GunAnimation;
+import supersymmetry.common.guns.GunClipLengths;
 import supersymmetry.common.item.SuSyMetaItems;
 import supersymmetry.common.item.behavior.GunFireMode;
 import supersymmetry.common.item.behavior.GunMagazineBehavior;
-import supersymmetry.common.item.behavior.SuSyGunBehaviour;
+import supersymmetry.common.item.behavior.SuSyGunBehavior;
+import supersymmetry.common.network.SPacketGunAnimation;
 import supersymmetry.common.network.SPacketGunRecoil;
 
 @Mod.EventBusSubscriber(modid = Supersymmetry.MODID)
@@ -37,9 +41,10 @@ public final class GunServerHandler {
 
         UUID id = player.getUniqueID();
         ItemStack stack = player.getHeldItem(hand);
-        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
+        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
 
         if (gun == null) {
+            stopReloadAnimation(player);
             playerStates.remove(id);
             return;
         }
@@ -50,19 +55,16 @@ public final class GunServerHandler {
             return;
         }
 
-        GunState state = playerStates.get(id);
-        if (state == null) {
-            state = new GunState();
-            playerStates.put(id, state);
-        }
-        int slot = slotOf(player, hand);
-        if (state.slot != slot || state.hand != hand) {
-            state.reset();
-        }
-        state.hand = hand;
-        state.slot = slot;
+        GunState state = syncHeld(player, playerStates.get(id), stack, hand);
         state.aim = aim;
         state.unload = unload;
+
+        // the gun cannot be used until it has been drawn
+        if (state.equipping) {
+            state.fireRequested = false;
+            state.trigger = false;
+            return;
+        }
 
         if (cycleMode && !state.reloading && state.burstLeft == 0) {
             gun.cycleMode(player, stack);
@@ -90,50 +92,73 @@ public final class GunServerHandler {
         }
 
         GunState state = playerStates.get(player.getUniqueID());
-        if (state == null) {
-            return;
-        }
 
         if (!player.isEntityAlive() || player.isSpectator()) {
-            playerStates.remove(player.getUniqueID());
+            if (state != null) {
+                state.reset(player);
+                playerStates.remove(player.getUniqueID());
+            }
             return;
         }
 
-        ItemStack stack = player.getHeldItem(state.hand);
-        SuSyGunBehaviour gun = SuSyMetaItems.getGunBehaviour(stack);
+        EnumHand hand = activeGunHand(player);
+        if (hand == null) {
+            if (state != null) {
+                state.reset(player);
+                playerStates.remove(player.getUniqueID());
+            }
+            return;
+        }
+
+        ItemStack stack = player.getHeldItem(hand);
+        SuSyGunBehavior gun = SuSyMetaItems.getGunBehaviour(stack);
         if (gun == null) {
-            playerStates.remove(player.getUniqueID());
-            return;
-        }
-
-        int slot = slotOf(player, state.hand);
-        if (slot != state.slot) {
-            state.reset();
-            state.slot = slot;
+            if (state != null) {
+                state.reset(player);
+                playerStates.remove(player.getUniqueID());
+            }
             return;
         }
 
         long now = player.world.getTotalWorldTime();
+        state = syncHeld(player, state, stack, hand);
+
+        if (state.equipping) {
+            state.fireRequested = false;
+            state.trigger = false;
+            if (now < state.equipEnd) {
+                return;
+            }
+            state.equipping = false;
+        }
 
         // recoil handling: first jump to (original pitch + 10x recoil), then smoothly bring it down to (original
         // pitch + recoil) according to the equation: pitch(tick) = originalPitch + 10 * recoil - 0.1 * (tick ^ 2)
+
+        if (state.recoilTick <= 0) {
+            state.handFatigue -= 0.5f;
+        }
+
         if (state.recoilTick > 1) {
-            int lastTick = (int) Math.floor(10 * Math.sqrt(state.recoil));
+            int lastTick = (int) Math.floor(10 * Math.sqrt(gun.getRecoilStrength() * state.recoilRNG));
             if (state.recoilTick >= lastTick) {
                 state.recoilTick = 0;
             } else {
-                float recoil = -0.1f * state.recoilTick * state.recoilTick;
-                GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil, false), player);
+                float recoil = -0.1f * state.recoilTick * state.recoilTick * state.recoilRNG;
+                GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil, 0), player);
                 state.recoilTick++;
             }
         }
 
         if (state.recoilTick == 1) {
             Random random = player.getRNG();
-            float recoil = gun.getStats(stack, SuSyGunBehaviour.isBraced(player)).getRecoil() *
-                    (random.nextFloat() / 2f + 0.75f);
-            state.recoil = recoil;
-            GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(recoil * 10, true), player);
+            state.recoilRNG = random.nextFloat() / 2f + 0.75f;
+            GregTechAPI.networkHandler
+                    .sendTo(new SPacketGunRecoil(gun.getStats(stack, SuSyGunBehavior.isBraced(player)).getRecoil() * 10,
+                            gun.getStats(stack, SuSyGunBehavior.isBraced(player)).getRecoil() * state.recoilRNG *
+                                    Math.min(1 + state.handFatigue, 5)),
+                            player);
+            state.handFatigue += gun.getRecoilStrength();
             state.recoilTick = 2;
         }
 
@@ -146,9 +171,10 @@ public final class GunServerHandler {
                     state.reloading = false;
                 } else {
                     state.reloading = false;
+                    stopReloadAnimation(player);
                     return;
                 }
-
+                stopReloadAnimation(player);
             }
             return;
         }
@@ -196,44 +222,118 @@ public final class GunServerHandler {
         }
     }
 
-    private static boolean shoot(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
+    private static boolean shoot(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
         if (!gun.consumeRound(stack)) {
             return false;
         }
         gun.shootOnce(player, state.hand, stack, state.aim);
+        GregTechAPI.networkHandler.sendTo(new SPacketGunRecoil(0f, 0f, true), player);
 
         return true;
     }
 
-    private static void startReload(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
-        if (gun.getReloadTicks() <= 0) {
-            ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
-            if (mag != null) {
-                gun.reload(player, stack, mag);
-            } else {
-                return;
-            }
+    private static EnumHand activeGunHand(EntityPlayerMP player) {
+        if (SuSyMetaItems.getGunBehaviour(player.getHeldItem(EnumHand.MAIN_HAND)) != null) {
+            return EnumHand.MAIN_HAND;
+        }
+        if (SuSyMetaItems.getGunBehaviour(player.getHeldItem(EnumHand.OFF_HAND)) != null) {
+            return EnumHand.OFF_HAND;
+        }
+        return null;
+    }
 
+    /**
+     * Keeps the state pointing at the gun that is actually held. Drawing a gun (switching to it, or to another slot
+     * or hand) starts its equip animation, so exactly the switch does that, without having to wait for any input.
+     */
+    private static GunState syncHeld(EntityPlayerMP player, GunState state, ItemStack stack, EnumHand hand) {
+        int slot = slotOf(player, hand);
+        boolean sameGun = state != null && state.hand == hand && state.slot == slot &&
+                state.item == stack.getItem() && state.meta == stack.getMetadata();
+        if (sameGun) {
+            return state;
+        }
+
+        if (state == null) {
+            state = new GunState();
+            playerStates.put(player.getUniqueID(), state);
+        } else {
+            state.reset(player);
+        }
+
+        state.hand = hand;
+        state.slot = slot;
+        state.item = stack.getItem();
+        state.meta = stack.getMetadata();
+        startEquip(player, state, stack);
+        return state;
+    }
+
+    private static void startEquip(EntityPlayerMP player, GunState state, ItemStack stack) {
+        float length = GunClipLengths.of(stack, GunAnimation.GunAnimationNames.EQUIP);
+        if (length <= 0f) {
             return;
         }
+        state.equipping = true;
+        state.burstLeft = 0;
+        state.fireRequested = false;
+        state.equipEnd = player.world.getTotalWorldTime() + (long) Math.ceil(length);
+        sendAnimation(player, GunAnimation.GunAnimationNames.EQUIP, true);
+    }
+
+    private static void startReload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
         ItemStack mag = GunMagazineBehavior.findValidMagazine(player, stack);
-        if (mag != null) {
-            state.reloading = true;
-            state.burstLeft = 0;
-            state.fireRequested = false;
-            state.reloadEnd = player.world.getTotalWorldTime() + gun.getReloadTicks();
+        if (mag == null) {
+            return;
+        }
+
+        float length = GunClipLengths.of(stack, GunAnimation.GunAnimationNames.RELOAD);
+        // guns without a reload animation fall back to the set reloadTicks
+        long duration = length > 0f ? (long) Math.ceil(length) : gun.getReloadTicks();
+        if (duration <= 0) {
+            gun.reload(player, stack, mag);
+            return;
+        }
+
+        state.reloading = true;
+        state.burstLeft = 0;
+        state.fireRequested = false;
+        state.reloadEnd = player.world.getTotalWorldTime() + duration;
+        if (length > 0f) {
+            sendAnimation(player, GunAnimation.GunAnimationNames.RELOAD, true, incomingMagazineSize(gun, mag));
         }
     }
 
-    private static void startUnload(EntityPlayerMP player, GunState state, SuSyGunBehaviour gun, ItemStack stack) {
-        if (gun.getReloadTicks() <= 0) {
+    private static int incomingMagazineSize(SuSyGunBehavior gun, ItemStack mag) {
+        GunMagazineBehavior magBehavior = GunMagazineBehavior.getMagBehavior(mag);
+        int size = magBehavior == null ? gun.getMaxMagazineSize() : magBehavior.getMaxCapacity();
+        return size > gun.getMaxMagazineSize() ? gun.getMaxMagazineSize() : size;
+    }
+
+    private static void startUnload(EntityPlayerMP player, GunState state, SuSyGunBehavior gun, ItemStack stack) {
+        // FIXME: real unload animations
+        float length = GunClipLengths.of(stack, GunAnimation.GunAnimationNames.RELOAD);
+        long duration = length > 0f ? (long) Math.ceil(length) / 2 : gun.getReloadTicks() / 2;
+        if (duration <= 0) {
             gun.unload(player, stack);
             return;
         }
         state.unloading = true;
         state.burstLeft = 0;
         state.fireRequested = false;
-        state.unloadEnd = player.world.getTotalWorldTime() + gun.getReloadTicks() / 2;
+        state.unloadEnd = player.world.getTotalWorldTime() + duration;
+    }
+
+    private static void sendAnimation(EntityPlayerMP player, String animation, boolean start) {
+        sendAnimation(player, animation, start, 0);
+    }
+
+    private static void sendAnimation(EntityPlayerMP player, String animation, boolean start, int magazineSize) {
+        GregTechAPI.networkHandler.sendTo(new SPacketGunAnimation(animation, start, magazineSize), player);
+    }
+
+    private static void stopReloadAnimation(EntityPlayerMP player) {
+        sendAnimation(player, GunAnimation.GunAnimationNames.RELOAD, false);
     }
 
     private static int slotOf(EntityPlayerMP player, EnumHand hand) {
@@ -249,6 +349,8 @@ public final class GunServerHandler {
 
         private EnumHand hand = EnumHand.MAIN_HAND;
         private int slot = -2;
+        private Item item;
+        private int meta;
 
         private boolean trigger;
         private boolean aim;
@@ -259,19 +361,27 @@ public final class GunServerHandler {
         private long burstNext;
         private int burstLeft;
         private int recoilTick = 0;
-        private float recoil;
+        private float recoilRNG;
+        private float handFatigue;
 
         private boolean reloading;
         private long reloadEnd;
         private boolean unloading;
         private long unloadEnd;
+        private boolean equipping;
+        private long equipEnd;
 
-        private void reset() {
+        private void reset(EntityPlayerMP player) {
+            boolean wasReloading = reloading;
             fireRequested = false;
             burstLeft = 0;
             reloading = false;
             unloading = false;
+            equipping = false;
             recoilTick = 0;
+            if (wasReloading) {
+                stopReloadAnimation(player);
+            }
         }
     }
 }

@@ -22,9 +22,9 @@
             "scale": [ 1, 1, 1 ]
         },
         "gui": {
-            "rotation": [ 0, -90, 0 ],
+            "rotation": [ 30, -45, 0 ],
             "translation": [ 0, 0, 0 ],
-            "scale": [ 0.85, 0.85, 0.85 ]
+            "scale": [ 0.45, 0.45, 0.45 ]
         },
         "ground": {
             "rotation": [ 0, -90, 0 ],

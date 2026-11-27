@@ -36,5 +36,6 @@ public class SuSyCoreModule implements IGregTechModule {
         GregTechAPI.networkHandler.registerPacket(SPacketDustFog.class);
         GregTechAPI.networkHandler.registerPacket(CPacketGunInput.class);
         GregTechAPI.networkHandler.registerPacket(SPacketGunRecoil.class);
+        GregTechAPI.networkHandler.registerPacket(SPacketGunAnimation.class);
     }
 }

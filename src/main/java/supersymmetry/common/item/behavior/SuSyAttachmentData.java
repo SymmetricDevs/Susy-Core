@@ -24,8 +24,7 @@ public final class SuSyAttachmentData {
     }
 
     /** null when the slot is empty. */
-    @Nullable
-    public static ItemStack getAttachment(ItemStack gun, AttachmentSlot slot) {
+    @Nullable public static ItemStack getAttachment(ItemStack gun, AttachmentSlot slot) {
         Objects.requireNonNull(slot, "slot");
         NBTTagCompound attachments = getAttachments(gun, false);
         if (attachments == null || !attachments.hasKey(slot.getSerializedName(), Constants.NBT.TAG_COMPOUND)) {
@@ -46,8 +45,7 @@ public final class SuSyAttachmentData {
         getAttachments(gun, true).setTag(slot.getSerializedName(), single.writeToNBT(new NBTTagCompound()));
     }
 
-    @Nullable
-    public static ItemStack removeAttachment(ItemStack gun, AttachmentSlot slot) {
+    @Nullable public static ItemStack removeAttachment(ItemStack gun, AttachmentSlot slot) {
         ItemStack removed = getAttachment(gun, slot);
         if (removed == null) return null;
         NBTTagCompound attachments = getAttachments(gun, false);
@@ -71,13 +69,12 @@ public final class SuSyAttachmentData {
         return modifiers;
     }
 
-    @Nullable
-    private static NBTTagCompound getAttachments(ItemStack gun, boolean create) {
+    @Nullable private static NBTTagCompound getAttachments(ItemStack gun, boolean create) {
         Objects.requireNonNull(gun, "gun");
         NBTTagCompound tag = gun.getTagCompound();
         if (tag == null) {
             if (!create) return null;
-            tag = SuSyGunBehaviour.getOrCreateTag(gun);
+            tag = SuSyGunBehavior.getOrCreateTag(gun);
         }
         if (!tag.hasKey(NBT_ATTACHMENTS, Constants.NBT.TAG_COMPOUND)) {
             if (!create) return null;
