@@ -143,8 +143,11 @@ dependencies {
     //temporary dep, will replace once we have our own missiles
     implementation(deps.icbm.deobf())
 
+    // TechGuns
     //DO NOT PUSH THIS SHIT TO GIT
     //implementation(deps.techguns.deobf())
+    //This is probably ok :3c
+    compileOnly(deps.techguns.deobf())
 
     // Ladylib
     compileOnly("com.github.Ladysnake:Ladylib:2.3.0")

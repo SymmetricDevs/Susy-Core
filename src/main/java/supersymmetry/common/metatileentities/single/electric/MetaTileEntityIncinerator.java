@@ -129,7 +129,7 @@ public class MetaTileEntityIncinerator extends TieredMetaTileEntity implements I
     }
 
     public void checkClogged() {
-        for (BlockPos pos : BlockPos.getAllInBox(getPos().up(1), getPos().up(8))) {
+        for (BlockPos pos : BlockPos.getAllInBox(getPos().up(1), getPos().up(3))) {
             IBlockState state = getWorld().getBlockState(pos);
             if (!state.getBlock().isAir(state, getWorld(), pos)) {
                 setClogged(true);
