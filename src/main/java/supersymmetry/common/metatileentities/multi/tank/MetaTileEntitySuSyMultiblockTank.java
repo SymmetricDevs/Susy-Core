@@ -32,7 +32,6 @@ import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.LabelWidget;
-import gregtech.api.gui.widgets.TankWidget;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -43,6 +42,7 @@ import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.util.GTUtility;
 import gregtech.client.renderer.ICubeRenderer;
+import supersymmetry.api.fluids.LargeCapacityTankWidget;
 import supersymmetry.client.renderer.textures.SusyTextures;
 import supersymmetry.common.metatileentities.SuSyMetaTileEntities;
 
@@ -453,7 +453,7 @@ public class MetaTileEntitySuSyMultiblockTank extends MultiblockWithDisplayBase 
     protected ModularUI.Builder createUITemplate(EntityPlayer player) {
         return ModularUI.builder(GuiTextures.BACKGROUND, 176, 166)
                 .widget(new LabelWidget(6, 6, getMetaFullName()))
-                .widget(new TankWidget(importFluids.getTankAt(0), 52, 18, 72, 61)
+                .widget(new LargeCapacityTankWidget(importFluids.getTankAt(0), 52, 18, 72, 61)
                         .setBackgroundTexture(GuiTextures.SLOT)
                         .setContainerClicking(true, true))
                 .bindPlayerInventory(player.inventory, GuiTextures.SLOT, 0);
